@@ -2,7 +2,6 @@
 
 import dynamic from "next/dynamic";
 import "maplibre-gl/dist/maplibre-gl.css";
-import { EllipsisIcon } from "lucide-react";
 
 import { MapControls } from "@/components/map-controls";
 
@@ -11,8 +10,10 @@ const MapGL = dynamic(
   {
     ssr: false,
     loading: () => (
-      <div className="flex h-full w-full items-center justify-center">
-        <EllipsisIcon className="size-6 loading-dots" />
+      <div className="flex h-full w-full items-center justify-center gap-2">
+        <div className="size-2 bg-accent rounded-full animate-pulse" />
+        <div className="size-2 bg-accent rounded-full animate-pulse [animation-delay:0.2s]" />
+        <div className="size-2 bg-accent rounded-full animate-pulse [animation-delay:0.4s]" />
       </div>
     ),
   },
