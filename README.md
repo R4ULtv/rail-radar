@@ -1,135 +1,226 @@
-# Turborepo starter
+# Rail Radar
 
-This Turborepo starter is maintained by the Turborepo core team.
+A real-time Italian railway tracking application featuring an interactive map interface and live train information powered by official RFI data.
 
-## Using this example
+## Overview
 
-Run the following command:
+Rail Radar is a full-stack TypeScript monorepo that provides real-time train arrivals and departures for Italian railway stations. The application combines a Cloudflare Workers API backend with a Next.js frontend featuring an interactive MapLibre GL map.
 
-```sh
-npx create-turbo@latest
+## Features
+
+- **Interactive Map** - Full-screen map with dark theme, zoom controls, and user geolocation
+- **Real-time Train Data** - Live arrivals and departures scraped from official RFI sources
+- **1600+ Stations** - Comprehensive coverage of Italian railway stations
+- **User Location** - Automatic geolocation with animated position marker
+- **Responsive Design** - Mobile-friendly interface with accessible controls
+
+## Tech Stack
+
+### Frontend (apps/web)
+- **Next.js 16** with React 19
+- **MapLibre GL** via react-map-gl for mapping
+- **Tailwind CSS v4** for styling
+- **shadcn/ui** component library
+- **Lucide** icons
+
+### Backend (apps/api)
+- **Cloudflare Workers** for serverless deployment
+- **Hono** lightweight web framework
+- **Cheerio** for HTML parsing
+
+### Shared
+- **TypeScript** with strict mode
+- **Turborepo** for monorepo orchestration
+- **pnpm** workspaces
+
+## Project Structure
+
+```
+rail-radar/
+├── apps/
+│   ├── api/                    # Cloudflare Workers API
+│   │   └── src/
+│   │       ├── index.ts        # API routes
+│   │       └── scraper.ts      # RFI data scraper
+│   └── web/                    # Next.js frontend
+│       ├── app/                # App router pages
+│       ├── components/
+│       │   ├── map.tsx         # Map component
+│       │   ├── map-controls.tsx # Zoom, locate, compass
+│       │   └── ui/             # UI components
+│       └── lib/                # Utilities
+├── packages/
+│   ├── data/                   # Shared station data & types
+│   ├── eslint-config/          # ESLint configurations
+│   └── typescript-config/      # TypeScript configurations
+└── turbo.json                  # Turbo configuration
 ```
 
-## What's inside?
+## Getting Started
 
-This Turborepo includes the following packages/apps:
+### Prerequisites
 
-### Apps and Packages
+- Node.js >= 20
+- pnpm >= 10
 
-- `docs`: a [Next.js](https://nextjs.org/) app
-- `web`: another [Next.js](https://nextjs.org/) app
-- `@repo/ui`: a stub React component library shared by both `web` and `docs` applications
-- `@repo/eslint-config`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
-- `@repo/typescript-config`: `tsconfig.json`s used throughout the monorepo
+### Installation
 
-Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
+```bash
+# Clone the repository
+git clone https://github.com/R4ULtv/rail-radar.git
+cd rail-radar
 
-### Utilities
+# Install dependencies
+pnpm install
+```
 
-This Turborepo has some additional tools already setup for you:
+### Development
 
-- [TypeScript](https://www.typescriptlang.org/) for static type checking
-- [ESLint](https://eslint.org/) for code linting
-- [Prettier](https://prettier.io) for code formatting
+```bash
+# Run all apps in development mode
+pnpm dev
+
+# Run specific app
+pnpm dev --filter=web
+pnpm dev --filter=api
+```
 
 ### Build
 
-To build all apps and packages, run the following command:
+```bash
+# Build all packages
+pnpm build
 
-```
-cd my-turborepo
+# Type check
+pnpm check-types
 
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo build
+# Lint
+pnpm lint
 
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo build
-yarn dlx turbo build
-pnpm exec turbo build
-```
-
-You can build a specific package by using a [filter](https://turborepo.com/docs/crafting-your-repository/running-tasks#using-filters):
-
-```
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo build --filter=docs
-
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo build --filter=docs
-yarn exec turbo build --filter=docs
-pnpm exec turbo build --filter=docs
+# Format
+pnpm format
 ```
 
-### Develop
+### Deployment
 
-To develop all apps and packages, run the following command:
-
-```
-cd my-turborepo
-
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo dev
-
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo dev
-yarn exec turbo dev
-pnpm exec turbo dev
+```bash
+# Deploy API to Cloudflare Workers
+cd apps/api
+pnpm deploy
 ```
 
-You can develop a specific package by using a [filter](https://turborepo.com/docs/crafting-your-repository/running-tasks#using-filters):
+## API Endpoints
 
-```
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo dev --filter=web
+### GET /stations
+Returns all stations or filter by query.
 
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo dev --filter=web
-yarn exec turbo dev --filter=web
-pnpm exec turbo dev --filter=web
-```
+```bash
+# Get all stations
+curl https://api.example.com/stations
 
-### Remote Caching
-
-> [!TIP]
-> Vercel Remote Cache is free for all plans. Get started today at [vercel.com](https://vercel.com/signup?/signup?utm_source=remote-cache-sdk&utm_campaign=free_remote_cache).
-
-Turborepo can use a technique known as [Remote Caching](https://turborepo.com/docs/core-concepts/remote-caching) to share cache artifacts across machines, enabling you to share build caches with your team and CI/CD pipelines.
-
-By default, Turborepo will cache locally. To enable Remote Caching you will need an account with Vercel. If you don't have an account you can [create one](https://vercel.com/signup?utm_source=turborepo-examples), then enter the following commands:
-
-```
-cd my-turborepo
-
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo login
-
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo login
-yarn exec turbo login
-pnpm exec turbo login
+# Search stations
+curl https://api.example.com/stations?q=roma
 ```
 
-This will authenticate the Turborepo CLI with your [Vercel account](https://vercel.com/docs/concepts/personal-accounts/overview).
+### GET /trains/:stationId
+Returns train arrivals/departures for a station.
 
-Next, you can link your Turborepo to your Remote Cache by running the following command from the root of your Turborepo:
+```bash
+# Get trains (defaults to departures)
+curl https://api.example.com/trains/1234
 
-```
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo link
-
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo link
-yarn exec turbo link
-pnpm exec turbo link
+# Get arrivals
+curl https://api.example.com/trains/1234?type=arrivals
 ```
 
-## Useful Links
+**Response:**
+```json
+{
+  "brand": "Trenitalia",
+  "category": "REG",
+  "trainNumber": "12345",
+  "origin": "Roma Termini",
+  "destination": "Milano Centrale",
+  "scheduledTime": "14:30",
+  "delay": 5,
+  "platform": "3",
+  "status": "departing",
+  "info": "Stops at: Firenze, Bologna"
+}
+```
 
-Learn more about the power of Turborepo:
+## Data Types
 
-- [Tasks](https://turborepo.com/docs/crafting-your-repository/running-tasks)
-- [Caching](https://turborepo.com/docs/crafting-your-repository/caching)
-- [Remote Caching](https://turborepo.com/docs/core-concepts/remote-caching)
-- [Filtering](https://turborepo.com/docs/crafting-your-repository/running-tasks#using-filters)
-- [Configuration Options](https://turborepo.com/docs/reference/configuration)
-- [CLI Usage](https://turborepo.com/docs/reference/command-line-reference)
+```typescript
+interface Station {
+  id: number
+  name: string
+  lat?: number
+  lon?: number
+}
+
+interface Train {
+  brand: string | null
+  category: string | null
+  trainNumber: string
+  origin?: string
+  destination?: string
+  scheduledTime: string
+  delay: number | null
+  platform: string | null
+  status: "incoming" | "departing" | "cancelled" | null
+  info: string | null
+}
+```
+
+## Package Scripts
+
+| Command | Description |
+|---------|-------------|
+| `pnpm install` | Install all dependencies |
+| `pnpm dev` | Start development servers |
+| `pnpm build` | Build all packages |
+| `pnpm lint` | Lint all packages |
+| `pnpm format` | Format code with Prettier |
+| `pnpm check-types` | Run TypeScript type checking |
+
+### Adding Dependencies
+
+```bash
+# Add to web app
+pnpm add <package> --filter=web
+
+# Add to api app
+pnpm add <package> --filter=api
+
+# Add to data package
+pnpm add <package> --filter=@repo/data
+```
+
+## Configuration
+
+### Environment Variables
+
+The API uses Cloudflare Workers environment bindings configured in `wrangler.jsonc`.
+
+### Map Style
+
+The web app uses Stadia Maps' Alidade Smooth Dark theme. The style URL can be changed in `apps/web/components/map.tsx`.
+
+## Contributing
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+## License
+
+This project is licensed under the MIT License.
+
+## Acknowledgments
+
+- Train data sourced from [RFI](https://www.rfi.it/) (Rete Ferroviaria Italiana)
+- Map tiles by [Stadia Maps](https://stadiamaps.com/)
+- Map rendering by [MapLibre](https://maplibre.org/)
