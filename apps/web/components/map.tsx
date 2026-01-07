@@ -28,7 +28,7 @@ export function Map() {
         zoom: 5,
       }}
       style={{ width: "100%", height: "100%" }}
-      mapStyle="https://tiles.stadiamaps.com/styles/alidade_smooth_dark.json"
+      mapStyle="https://tiles-eu.stadiamaps.com/styles/alidade_smooth_dark.json"
       maxPitch={0}
     >
       <MapControls />
