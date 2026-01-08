@@ -1,14 +1,12 @@
 import stationsData from "./stations.json" with { type: "json" };
+import stationsWithCoordinatesData from "./stations-with-coords.json" with { type: "json" };
 import type { Station } from "./types";
 
 const toTitleCase = (str: string) =>
   str.toLowerCase().replace(/\b\w/g, (c) => c.toUpperCase());
 
-/** Original station data (names in CAPS) */
-export const stationsRaw: Station[] = stationsData;
+/** Original station data */
+export const stations: Station[] = stationsData;
 
-/** Station data with formatted names (Title Case) */
-export const stations: Station[] = stationsData.map((s) => ({
-  ...s,
-  name: toTitleCase(s.name),
-}));
+/** Station data with coordinates */
+export const stationsCoords: Station[] = stationsWithCoordinatesData;

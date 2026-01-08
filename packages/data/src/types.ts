@@ -1,8 +1,10 @@
 export interface Station {
   id: number;
   name: string;
-  lat?: number;
-  lon?: number;
+  geo?: {
+    lat: number;
+    lng: number;
+  };
 }
 
 export interface Train {
