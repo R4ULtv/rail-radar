@@ -7,7 +7,18 @@ import { scrapeTrains } from "./scraper.js";
 
 const app = new Hono();
 
-app.use("*", cors());
+app.use(
+  "*",
+  cors({
+    origin: [
+      "http://localhost",
+      "http://localhost:3000",
+      "http://127.0.0.1",
+      "http://127.0.0.1:3000",
+      "https://rail-radar-web.vercel.app",
+    ],
+  }),
+);
 
 app.get("/", (c) => {
   return c.redirect("https://rail-radar-web.vercel.app");
