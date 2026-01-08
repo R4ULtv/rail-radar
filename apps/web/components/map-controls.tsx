@@ -41,16 +41,12 @@ export function MapControls() {
       (position) => {
         const { longitude, latitude } = position.coords;
         setUserLocation({ longitude, latitude });
-        map?.flyTo({
-          center: [longitude, latitude],
-          zoom: 12,
-        });
       },
       () => {
-        // Permission denied or error - silently ignore on initial load
+        // Permission denied or error - silently ignore
       },
     );
-  }, [map]);
+  }, []);
 
   const handleZoomIn = useCallback(() => {
     map?.zoomIn();
