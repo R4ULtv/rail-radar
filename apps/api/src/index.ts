@@ -9,6 +9,10 @@ const app = new Hono();
 
 app.use("*", cors());
 
+app.get("/", (c) => {
+  return c.redirect("https://rail-radar-web.vercel.app");
+});
+
 app.get("/stations", (c) => {
   const query = c.req.query("q");
 
