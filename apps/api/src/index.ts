@@ -2,7 +2,7 @@ import { Hono } from "hono";
 import { cache } from "hono/cache";
 import { cors } from "hono/cors";
 
-import { stations } from "@repo/data";
+import { stationsCoords as stations } from "@repo/data";
 import { scrapeTrains } from "./scraper.js";
 
 const app = new Hono();
@@ -42,6 +42,22 @@ app.get("/stations", (c) => {
     .slice(0, 20);
 
   return c.json(filtered);
+});
+
+app.get("/stations/:id", (c) => {
+  const id = parseInt(c.req.param("id"), 10);
+
+  if (isNaN(id)) {
+    return c.json({ error: "Invalid station ID" }, 400);
+  }
+
+  const station = stations.find((s) => s.id === id);
+
+  if (!station) {
+    return c.json({ error: "Station not found" }, 404);
+  }
+
+  return c.json(station);
 });
 
 app.get(
