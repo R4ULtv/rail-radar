@@ -17,12 +17,14 @@ app.get("/stations", (c) => {
   }
 
   const q = query.toLowerCase();
-  const filtered = stations.filter((station) =>
-    station.name
-      .toLowerCase()
-      .split(/\s+/)
-      .some((word) => word.startsWith(q)),
-  );
+  const filtered = stations
+    .filter((station) =>
+      station.name
+        .toLowerCase()
+        .split(/\s+/)
+        .some((word) => word.startsWith(q)),
+    )
+    .slice(0, 20);
 
   return c.json(filtered);
 });
