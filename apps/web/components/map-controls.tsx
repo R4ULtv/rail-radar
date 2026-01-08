@@ -41,12 +41,16 @@ export function MapControls() {
       (position) => {
         const { longitude, latitude } = position.coords;
         setUserLocation({ longitude, latitude });
+        map?.flyTo({
+          center: [longitude, latitude],
+          zoom: 12,
+        });
       },
       () => {
         // Permission denied or error - silently ignore on initial load
       },
     );
-  }, []);
+  }, [map]);
 
   const handleZoomIn = useCallback(() => {
     map?.zoomIn();
@@ -87,8 +91,8 @@ export function MapControls() {
           anchor="center"
         >
           <div className="relative flex items-center justify-center">
-            <div className="absolute size-8 rounded-full bg-accent/30 motion-safe:animate-pulse" />
-            <div className="size-4 rounded-full border-2 border-white bg-accent shadow-md" />
+            <div className="absolute size-7 rounded-full bg-accent/30 motion-safe:animate-pulse" />
+            <div className="size-3.5 rounded-full border-2 border-white bg-accent shadow-md" />
           </div>
         </Marker>
       )}
