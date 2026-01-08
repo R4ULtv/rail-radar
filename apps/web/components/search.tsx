@@ -19,7 +19,9 @@ import type { Station } from "@repo/data";
 const POPULAR_STATIONS: Station[] = [
   { id: 1728, name: "Milano Centrale" },
   { id: 2416, name: "Roma Termini" },
-  { id: 683, name: "Bologna Centrale" },
+  { id: 1325, name: "Firenze Santa Maria Novella" },
+  { id: 1888, name: "Napoli Centrale" },
+  { id: 3009, name: "Venezia S.Lucia" },
 ];
 
 function StationList({ stations }: { stations: Station[] }) {
