@@ -45,6 +45,11 @@ export function MapControls() {
       () => {
         // Permission denied or error - silently ignore
       },
+      {
+        enableHighAccuracy: true,
+        timeout: 10000,
+        maximumAge: 60000,
+      },
     );
   }, []);
 
@@ -70,6 +75,11 @@ export function MapControls() {
       },
       (error) => {
         console.error("Geolocation error:", error);
+      },
+      {
+        enableHighAccuracy: true,
+        timeout: 10000,
+        maximumAge: 60000,
       },
     );
   }, [map]);
