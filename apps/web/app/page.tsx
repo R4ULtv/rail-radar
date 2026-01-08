@@ -2,7 +2,7 @@ import { Map } from "@/components/map";
 
 export default function Home() {
   return (
-    <main className="h-screen w-screen">
+    <main className="h-svh w-svw">
       <Map />
     </main>
   );
