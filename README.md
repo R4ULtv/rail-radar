@@ -10,25 +10,32 @@ Rail Radar is a full-stack TypeScript monorepo that provides real-time train arr
 
 - **Interactive Map** - Full-screen map with dark theme, zoom controls, and user geolocation
 - **Real-time Train Data** - Live arrivals and departures scraped from official RFI sources
-- **1600+ Stations** - Comprehensive coverage of Italian railway stations
+- **1600+ Stations** - Comprehensive coverage of Italian railway stations with marker clustering
+- **Station Search** - Search for stations by name with keyboard shortcuts
+- **URL State Sync** - Map position and zoom level synced with URL for easy sharing
 - **User Location** - Automatic geolocation with animated position marker
 - **Responsive Design** - Mobile-friendly interface with accessible controls
 
 ## Tech Stack
 
 ### Frontend (apps/web)
+
 - **Next.js 16** with React 19
 - **MapLibre GL** via react-map-gl for mapping
+- **Supercluster** for marker clustering
 - **Tailwind CSS v4** for styling
-- **shadcn/ui** component library
+- **Base UI** (@base-ui/react) component primitives
+- **nuqs** for URL query state management
 - **Lucide** icons
 
 ### Backend (apps/api)
+
 - **Cloudflare Workers** for serverless deployment
 - **Hono** lightweight web framework
 - **Cheerio** for HTML parsing
 
 ### Shared
+
 - **TypeScript** with strict mode
 - **Turborepo** for monorepo orchestration
 - **pnpm** workspaces
@@ -45,8 +52,10 @@ rail-radar/
 │   └── web/                    # Next.js frontend
 │       ├── app/                # App router pages
 │       ├── components/
-│       │   ├── map.tsx         # Map component
+│       │   ├── map.tsx         # Main map component
 │       │   ├── map-controls.tsx # Zoom, locate, compass
+│       │   ├── map-loading.tsx # Loading state
+│       │   ├── search.tsx      # Station search
 │       │   └── ui/             # UI components
 │       └── lib/                # Utilities
 ├── packages/
@@ -109,79 +118,15 @@ cd apps/api
 pnpm deploy
 ```
 
-## API Endpoints
-
-### GET /stations
-Returns all stations or filter by query.
-
-```bash
-# Get all stations
-curl https://api.example.com/stations
-
-# Search stations
-curl https://api.example.com/stations?q=roma
-```
-
-### GET /trains/:stationId
-Returns train arrivals/departures for a station.
-
-```bash
-# Get trains (defaults to departures)
-curl https://api.example.com/trains/1234
-
-# Get arrivals
-curl https://api.example.com/trains/1234?type=arrivals
-```
-
-**Response:**
-```json
-{
-  "brand": "Trenitalia",
-  "category": "REG",
-  "trainNumber": "12345",
-  "origin": "Roma Termini",
-  "destination": "Milano Centrale",
-  "scheduledTime": "14:30",
-  "delay": 5,
-  "platform": "3",
-  "status": "departing",
-  "info": "Stops at: Firenze, Bologna"
-}
-```
-
-## Data Types
-
-```typescript
-interface Station {
-  id: number
-  name: string
-  lat?: number
-  lon?: number
-}
-
-interface Train {
-  brand: string | null
-  category: string | null
-  trainNumber: string
-  origin?: string
-  destination?: string
-  scheduledTime: string
-  delay: number | null
-  platform: string | null
-  status: "incoming" | "departing" | "cancelled" | null
-  info: string | null
-}
-```
-
 ## Package Scripts
 
-| Command | Description |
-|---------|-------------|
-| `pnpm install` | Install all dependencies |
-| `pnpm dev` | Start development servers |
-| `pnpm build` | Build all packages |
-| `pnpm lint` | Lint all packages |
-| `pnpm format` | Format code with Prettier |
+| Command            | Description                  |
+| ------------------ | ---------------------------- |
+| `pnpm install`     | Install all dependencies     |
+| `pnpm dev`         | Start development servers    |
+| `pnpm build`       | Build all packages           |
+| `pnpm lint`        | Lint all packages            |
+| `pnpm format`      | Format code with Prettier    |
 | `pnpm check-types` | Run TypeScript type checking |
 
 ### Adding Dependencies
