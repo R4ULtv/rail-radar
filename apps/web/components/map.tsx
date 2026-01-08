@@ -4,6 +4,7 @@ import dynamic from "next/dynamic";
 import "maplibre-gl/dist/maplibre-gl.css";
 
 import { MapControls } from "@/components/map-controls";
+import { Search } from "@/components/search";
 
 const MapGL = dynamic(
   () => import("react-map-gl/maplibre").then((mod) => mod.Map),
@@ -32,6 +33,7 @@ export function Map() {
       mapStyle="https://tiles-eu.stadiamaps.com/styles/alidade_smooth_dark.json"
       maxPitch={0}
     >
+      <Search />
       <MapControls />
     </MapGL>
   );
