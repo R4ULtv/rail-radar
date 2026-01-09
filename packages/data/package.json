@@ -8,8 +8,7 @@
     "./stations": "./src/stations.ts"
   },
   "scripts": {
-    "check-types": "tsc --noEmit",
-    "add-coordinates": "npx tsx scripts/add-coordinates.ts"
+    "check-types": "tsc --noEmit"
   },
   "devDependencies": {
     "@repo/typescript-config": "workspace:*",
