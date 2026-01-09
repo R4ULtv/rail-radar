@@ -10,6 +10,7 @@ import {
   TrendingUpIcon,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useIsMobile } from "@/hooks/use-mobile";
 import { useSelectedStation } from "@/hooks/use-selected-station";
 import {
   InputGroup,
@@ -82,6 +83,7 @@ function StationList({
 }
 
 export function Search() {
+  const isMobile = useIsMobile();
   const { selectStation, recentStations } = useSelectedStation();
   const inputRef = useRef<HTMLInputElement>(null);
   const [query, setQuery] = useState("");
@@ -89,6 +91,7 @@ export function Search() {
   const [isSearching, setIsSearching] = useState(false);
   const [hasSearched, setHasSearched] = useState(false);
   const [focusedIndex, setFocusedIndex] = useState<number>(-1);
+  const [isFocused, setIsFocused] = useState(false);
 
   const isSearchActive = query.trim().length > 0;
 
@@ -210,7 +213,11 @@ export function Search() {
           placeholder="Search..."
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          onBlur={() => setFocusedIndex(-1)}
+          onFocus={() => setIsFocused(true)}
+          onBlur={() => {
+            setIsFocused(false);
+            setFocusedIndex(-1);
+          }}
           role="combobox"
           aria-expanded={visibleStations.length > 0}
           aria-haspopup="listbox"
@@ -232,7 +239,8 @@ export function Search() {
       <Card
         className={cn(
           "py-2 gap-0 rounded-md transition-opacity duration-200",
-          isSearchActive && !hasSearched && "opacity-0 pointer-events-none",
+          ((isMobile && !isFocused) || (isSearchActive && !hasSearched)) &&
+            "opacity-0 pointer-events-none",
         )}
       >
         <CardContent className="p-0">
