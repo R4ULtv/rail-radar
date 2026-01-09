@@ -103,46 +103,36 @@ export function MapControls() {
         </Marker>
       )}
       <div className="absolute bottom-4 right-4 flex flex-col gap-2">
-        <ButtonGroup
-          orientation="vertical"
-          className="bg-background rounded-md"
+        <Button
+          variant="outline"
+          size="icon-sm"
+          onClick={handleResetBearing}
+          aria-label="Reset bearing"
+          className="bg-card hover:bg-muted dark:bg-card dark:hover:bg-muted"
         >
-          <Button
-            variant="outline"
-            size="icon-sm"
-            onClick={handleResetBearing}
-            aria-label="Reset bearing"
-          >
-            <CompassIcon
-              style={{ transform: `rotate(${-bearing - 45}deg)` }}
-              className="transition-transform"
-            />
-          </Button>
-        </ButtonGroup>
+          <CompassIcon
+            style={{ transform: `rotate(${-bearing - 45}deg)` }}
+            className="transition-transform"
+          />
+        </Button>
 
-        <ButtonGroup
-          orientation="vertical"
-          className="bg-background rounded-md"
+        <Button
+          variant="outline"
+          size="icon-sm"
+          onClick={handleLocate}
+          aria-label="Locate me"
+          className="bg-card hover:bg-muted dark:bg-card dark:hover:bg-muted"
         >
-          <Button
-            variant="outline"
-            size="icon-sm"
-            onClick={handleLocate}
-            aria-label="Locate me"
-          >
-            {userLocation ? <LocateFixedIcon /> : <LocateIcon />}
-          </Button>
-        </ButtonGroup>
+          {userLocation ? <LocateFixedIcon /> : <LocateIcon />}
+        </Button>
 
-        <ButtonGroup
-          orientation="vertical"
-          className="bg-background rounded-md"
-        >
+        <ButtonGroup orientation="vertical">
           <Button
             variant="outline"
             size="icon-sm"
             onClick={handleZoomIn}
             aria-label="Zoom in"
+            className="bg-card hover:bg-muted dark:bg-card dark:hover:bg-muted"
           >
             <PlusIcon />
           </Button>
@@ -151,6 +141,7 @@ export function MapControls() {
             size="icon-sm"
             onClick={handleZoomOut}
             aria-label="Zoom out"
+            className="bg-card hover:bg-muted dark:bg-card dark:hover:bg-muted"
           >
             <MinusIcon />
           </Button>

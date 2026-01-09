@@ -108,27 +108,25 @@ export function Search() {
 
   return (
     <div className="absolute top-4 left-4 flex flex-col gap-2 md:w-80 w-[calc(100vw-32px)]">
-      <div className="bg-background rounded-md">
-        <InputGroup className="h-10">
-          <InputGroupInput
-            ref={inputRef}
-            placeholder="Search..."
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-          />
-          <InputGroupAddon>
-            {isSearching ? (
-              <LoaderIcon className="animate-spin" />
-            ) : (
-              <SearchIcon />
-            )}
-          </InputGroupAddon>
-          <InputGroupAddon align="inline-end" className="hidden md:flex">
-            <Kbd>⌘</Kbd>
-            <Kbd>K</Kbd>
-          </InputGroupAddon>
-        </InputGroup>
-      </div>
+      <InputGroup className="h-10 bg-card dark:bg-card">
+        <InputGroupInput
+          ref={inputRef}
+          placeholder="Search..."
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+        />
+        <InputGroupAddon>
+          {isSearching ? (
+            <LoaderIcon className="animate-spin" />
+          ) : (
+            <SearchIcon />
+          )}
+        </InputGroupAddon>
+        <InputGroupAddon align="inline-end" className="hidden md:flex">
+          <Kbd>⌘</Kbd>
+          <Kbd>K</Kbd>
+        </InputGroupAddon>
+      </InputGroup>
       <Card className="py-2 gap-0 rounded-md">
         <CardHeader className="px-4 py-2">
           <CardDescription>
