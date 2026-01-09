@@ -90,7 +90,6 @@ export function Search() {
   const inputRef = React.useRef<HTMLInputElement>(null);
   const [query, setQuery] = React.useState("");
   const [searchResults, setSearchResults] = React.useState<Station[]>([]);
-  const [isSearching, setIsSearching] = React.useState(false);
   const [hasSearched, setHasSearched] = React.useState(false);
   const [focusedIndex, setFocusedIndex] = React.useState<number>(-1);
   const [isFocused, setIsFocused] = React.useState(false);
@@ -135,7 +134,6 @@ export function Search() {
     setHasSearched(false);
     const controller = new AbortController();
     const timeoutId = setTimeout(async () => {
-      setIsSearching(true);
       try {
         const res = await fetch(
           `https://rail-radar.r-carini2003.workers.dev/stations?q=${encodeURIComponent(query)}`,
@@ -150,8 +148,6 @@ export function Search() {
         if (e instanceof Error && e.name !== "AbortError") {
           console.error("Search failed:", e);
         }
-      } finally {
-        setIsSearching(false);
       }
     }, 300);
 
