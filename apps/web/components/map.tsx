@@ -84,7 +84,7 @@ export function Map() {
     );
 
     return () => clearTimeout(timeout);
-  }, [hasUrlParams, initialPosition]);
+  }, [hasUrlParams, initialPosition, setParams]);
 
   const handleMoveEnd = (e: ViewStateChangeEvent) => {
     startTransition(() => {
