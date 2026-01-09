@@ -206,7 +206,7 @@ export function Search() {
   }, [focusedIndex, visibleStations, selectStation]);
 
   return (
-    <div className="absolute top-4 left-4 flex flex-col gap-2 md:w-80 w-[calc(100vw-32px)]">
+    <div className="absolute z-50 top-4 left-4 flex flex-col gap-2 md:w-80 w-[calc(100vw-32px)]">
       <InputGroup className="h-10 bg-card dark:bg-card">
         <InputGroupInput
           ref={inputRef}

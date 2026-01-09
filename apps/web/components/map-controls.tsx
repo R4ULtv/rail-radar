@@ -9,11 +9,12 @@ import {
   MinusIcon,
   PlusIcon,
 } from "lucide-react";
-
 import { Button } from "@/components/ui/button";
 import { ButtonGroup } from "@/components/ui/button-group";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 export function MapControls() {
+  const isMobile = useIsMobile();
   const { current: map } = useMap();
   const [bearing, setBearing] = useState(0);
   const [userLocation, setUserLocation] = useState<{
@@ -105,7 +106,7 @@ export function MapControls() {
       <div className="absolute bottom-4 right-4 flex flex-col gap-2">
         <Button
           variant="outline"
-          size="icon-sm"
+          size={isMobile ? "icon-lg" : "icon-sm"}
           onClick={handleResetBearing}
           aria-label="Reset bearing"
           className="bg-card hover:bg-muted dark:bg-card dark:hover:bg-muted"
@@ -118,7 +119,7 @@ export function MapControls() {
 
         <Button
           variant="outline"
-          size="icon-sm"
+          size={isMobile ? "icon-lg" : "icon-sm"}
           onClick={handleLocate}
           aria-label="Locate me"
           className="bg-card hover:bg-muted dark:bg-card dark:hover:bg-muted"
@@ -129,7 +130,7 @@ export function MapControls() {
         <ButtonGroup orientation="vertical">
           <Button
             variant="outline"
-            size="icon-sm"
+            size={isMobile ? "icon-lg" : "icon-sm"}
             onClick={handleZoomIn}
             aria-label="Zoom in"
             className="bg-card hover:bg-muted dark:bg-card dark:hover:bg-muted"
@@ -138,7 +139,7 @@ export function MapControls() {
           </Button>
           <Button
             variant="outline"
-            size="icon-sm"
+            size={isMobile ? "icon-lg" : "icon-sm"}
             onClick={handleZoomOut}
             aria-label="Zoom out"
             className="bg-card hover:bg-muted dark:bg-card dark:hover:bg-muted"
