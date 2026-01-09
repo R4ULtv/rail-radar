@@ -206,11 +206,11 @@ export function Search() {
   }, [focusedIndex, visibleStations, selectStation]);
 
   return (
-    <div className="absolute z-50 top-4 left-4 flex flex-col gap-2 md:w-80 w-[calc(100vw-32px)] pointer-events-none">
+    <div className="absolute z-50 top-4 left-4 flex flex-col gap-2 md:w-80 w-[calc(100vw-32px)] pointer-events-none font-sans">
       <InputGroup className="h-10 bg-card dark:bg-card pointer-events-auto">
         <InputGroupInput
           ref={inputRef}
-          placeholder="Search..."
+          placeholder="Search Station..."
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           onFocus={() => setIsFocused(true)}
@@ -240,7 +240,7 @@ export function Search() {
         className={cn(
           "py-2 gap-0 rounded-md transition-opacity duration-200 pointer-events-auto",
           ((isMobile && !isFocused) || (isSearchActive && !hasSearched)) &&
-            "opacity-0 !pointer-events-none",
+            "opacity-0 pointer-events-none!",
         )}
       >
         <CardContent className="p-0">

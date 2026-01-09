@@ -37,9 +37,14 @@ interface SelectedStationContextValue {
   recentStations: Station[];
 }
 
-const SelectedStationContext = createContext<SelectedStationContextValue | null>(null);
+const SelectedStationContext =
+  createContext<SelectedStationContextValue | null>(null);
 
-export function SelectedStationProvider({ children }: { children: React.ReactNode }) {
+export function SelectedStationProvider({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   const { current: map } = useMap();
   const [selectedStation, setSelectedStation] = useState<Station | null>(null);
   const [recentStations, setRecentStations] = useState<Station[]>([]);
@@ -61,10 +66,10 @@ export function SelectedStationProvider({ children }: { children: React.ReactNod
       // Update recent stations
       setRecentStations((prev) => {
         const filtered = prev.filter((s) => s.id !== station.id);
-        const updated = [{ id: station.id, name: station.name }, ...filtered].slice(
-          0,
-          MAX_RECENT_STATIONS,
-        );
+        const updated = [
+          { id: station.id, name: station.name },
+          ...filtered,
+        ].slice(0, MAX_RECENT_STATIONS);
         saveRecentStations(updated);
         return updated;
       });
@@ -78,7 +83,9 @@ export function SelectedStationProvider({ children }: { children: React.ReactNod
   );
 
   return (
-    <SelectedStationContext.Provider value={{ selectedStation, selectStation, recentStations }}>
+    <SelectedStationContext.Provider
+      value={{ selectedStation, selectStation, recentStations }}
+    >
       {children}
     </SelectedStationContext.Provider>
   );
@@ -87,7 +94,9 @@ export function SelectedStationProvider({ children }: { children: React.ReactNod
 export function useSelectedStation() {
   const context = useContext(SelectedStationContext);
   if (!context) {
-    throw new Error("useSelectedStation must be used within a SelectedStationProvider");
+    throw new Error(
+      "useSelectedStation must be used within a SelectedStationProvider",
+    );
   }
   return context;
 }
