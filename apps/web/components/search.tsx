@@ -1,7 +1,15 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import { SearchIcon, TrainFrontIcon } from "lucide-react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import {
+  HistoryIcon,
+  ListIcon,
+  SearchIcon,
+  SearchXIcon,
+  TrainFrontIcon,
+  TrendingUpIcon,
+} from "lucide-react";
+import { cn } from "@/lib/utils";
 import { useSelectedStation } from "@/hooks/use-selected-station";
 import {
   InputGroup,
@@ -29,25 +37,46 @@ const POPULAR_STATIONS: Station[] = [
 function StationList({
   stations,
   onSelect,
+  focusedIndex = -1,
+  startIndex = 0,
+  onFocusIndex,
 }: {
   stations: Station[];
   onSelect: (station: Station) => void;
+  focusedIndex?: number;
+  startIndex?: number;
+  onFocusIndex?: (index: number) => void;
 }) {
   if (stations.length === 0) return null;
 
   return (
-    <ul className="flex flex-col">
-      {stations.map((station) => (
-        <li key={station.id}>
-          <button
-            onClick={() => onSelect(station)}
-            className="w-full px-4 py-2 text-left text-sm hover:bg-muted transition-colors duration-75 ease-out flex items-center gap-2"
+    <ul role="listbox" className="flex flex-col">
+      {stations.map((station, index) => {
+        const globalIndex = startIndex + index;
+        const isFocused = globalIndex === focusedIndex;
+
+        return (
+          <li
+            key={station.id}
+            id={`station-option-${station.id}`}
+            role="option"
+            aria-selected={isFocused}
           >
-            <TrainFrontIcon className="size-4 text-muted-foreground" />
-            {station.name}
-          </button>
-        </li>
-      ))}
+            <button
+              onClick={() => onSelect(station)}
+              onMouseEnter={() => onFocusIndex?.(globalIndex)}
+              tabIndex={-1}
+              className={cn(
+                "w-full px-4 py-2 text-left text-sm transition-colors duration-75 ease-out flex items-center gap-2",
+                isFocused && "bg-muted",
+              )}
+            >
+              <TrainFrontIcon className="size-4 text-muted-foreground" />
+              {station.name}
+            </button>
+          </li>
+        );
+      })}
     </ul>
   );
 }
@@ -59,6 +88,26 @@ export function Search() {
   const [searchResults, setSearchResults] = useState<Station[]>([]);
   const [isSearching, setIsSearching] = useState(false);
   const [hasSearched, setHasSearched] = useState(false);
+  const [focusedIndex, setFocusedIndex] = useState<number>(-1);
+
+  const isSearchActive = query.trim().length > 0;
+
+  const noResults = isSearchActive && hasSearched && searchResults.length === 0;
+
+  const visibleStations = useMemo(() => {
+    if (isSearchActive && searchResults.length > 0) {
+      return searchResults.slice(0, 10);
+    }
+    if (!isSearchActive || noResults) {
+      return [...recentStations, ...POPULAR_STATIONS];
+    }
+    return [];
+  }, [isSearchActive, searchResults, recentStations, noResults]);
+
+  // Reset focused index when list changes
+  useEffect(() => {
+    setFocusedIndex(-1);
+  }, [query, searchResults.length]);
 
   useEffect(() => {
     if (!query.trim()) {
@@ -98,6 +147,7 @@ export function Search() {
 
   useEffect(() => {
     function handleKeyDown(e: KeyboardEvent) {
+      // Cmd/Ctrl+K to toggle focus
       if ((e.metaKey || e.ctrlKey) && e.key === "k") {
         e.preventDefault();
         if (document.activeElement === inputRef.current) {
@@ -105,18 +155,52 @@ export function Search() {
         } else {
           inputRef.current?.focus();
         }
+        return;
       }
 
+      // Escape to blur
       if (e.key === "Escape" && document.activeElement === inputRef.current) {
         inputRef.current?.blur();
+        return;
+      }
+
+      // Arrow/Enter navigation only when input is focused
+      if (document.activeElement !== inputRef.current) return;
+
+      if (e.key === "ArrowDown") {
+        e.preventDefault();
+        setFocusedIndex((prev) => {
+          if (visibleStations.length === 0) return -1;
+          if (prev < visibleStations.length - 1) return prev + 1;
+          return prev;
+        });
+        return;
+      }
+
+      if (e.key === "ArrowUp") {
+        e.preventDefault();
+        setFocusedIndex((prev) => {
+          if (prev > 0) return prev - 1;
+          return 0;
+        });
+        return;
+      }
+
+      if (e.key === "Enter") {
+        e.preventDefault();
+        const station = visibleStations[focusedIndex];
+        if (station) {
+          selectStation(station);
+          setQuery("");
+          inputRef.current?.blur();
+        }
+        return;
       }
     }
 
     document.addEventListener("keydown", handleKeyDown);
     return () => document.removeEventListener("keydown", handleKeyDown);
-  }, []);
-
-  const isSearchActive = query.trim().length > 0;
+  }, [focusedIndex, visibleStations, selectStation]);
 
   return (
     <div className="absolute top-4 left-4 flex flex-col gap-2 md:w-80 w-[calc(100vw-32px)]">
@@ -126,6 +210,16 @@ export function Search() {
           placeholder="Search..."
           value={query}
           onChange={(e) => setQuery(e.target.value)}
+          onBlur={() => setFocusedIndex(-1)}
+          role="combobox"
+          aria-expanded={visibleStations.length > 0}
+          aria-haspopup="listbox"
+          aria-controls="station-listbox"
+          aria-activedescendant={
+            focusedIndex >= 0 && visibleStations[focusedIndex]
+              ? `station-option-${visibleStations[focusedIndex].id}`
+              : undefined
+          }
         />
         <InputGroupAddon>
           {isSearching ? <Spinner /> : <SearchIcon />}
@@ -135,7 +229,12 @@ export function Search() {
           <Kbd>K</Kbd>
         </InputGroupAddon>
       </InputGroup>
-      <Card className="py-2 gap-0 rounded-md">
+      <Card
+        className={cn(
+          "py-2 gap-0 rounded-md transition-opacity duration-200",
+          isSearchActive && !hasSearched && "opacity-0 pointer-events-none",
+        )}
+      >
         <CardContent className="p-0">
           {/* Search Results */}
           <div
@@ -147,11 +246,17 @@ export function Search() {
           >
             <div className="overflow-hidden min-h-0">
               <CardHeader className="px-4 py-2">
-                <CardDescription>Search Results</CardDescription>
+                <CardDescription className="flex items-center gap-2">
+                  <ListIcon className="size-3.5" />
+                  Search Results
+                </CardDescription>
               </CardHeader>
               <StationList
                 stations={searchResults.slice(0, 10)}
                 onSelect={selectStation}
+                focusedIndex={isSearchActive ? focusedIndex : -1}
+                startIndex={0}
+                onFocusIndex={setFocusedIndex}
               />
             </div>
           </div>
@@ -164,42 +269,62 @@ export function Search() {
             }`}
           >
             <div className="overflow-hidden min-h-0">
-              <p className="px-4 py-2 text-sm text-muted-foreground">
-                No stations found
-              </p>
+              <div className="px-4 py-3 flex items-center gap-3 text-muted-foreground">
+                <SearchXIcon className="size-5 shrink-0" />
+                <div className="flex flex-col gap-0.5">
+                  <p className="text-sm font-medium text-foreground">
+                    No stations found
+                  </p>
+                  <p className="text-xs">Try a different search term</p>
+                </div>
+              </div>
             </div>
           </div>
           {/* Recent Stations */}
           <div
             className={`grid transition-[grid-template-rows] duration-200 ease-out ${
-              !isSearchActive && recentStations.length > 0
+              (!isSearchActive || noResults) && recentStations.length > 0
                 ? "grid-rows-[1fr]"
                 : "grid-rows-[0fr]"
             }`}
           >
             <div className="overflow-hidden min-h-0">
               <CardHeader className="px-4 py-2">
-                <CardDescription>Recent Stations</CardDescription>
+                <CardDescription className="flex items-center gap-2">
+                  <HistoryIcon className="size-3.5" />
+                  Recent Stations
+                </CardDescription>
               </CardHeader>
               <StationList
                 stations={recentStations}
                 onSelect={selectStation}
+                focusedIndex={!isSearchActive || noResults ? focusedIndex : -1}
+                startIndex={0}
+                onFocusIndex={setFocusedIndex}
               />
             </div>
           </div>
           {/* Popular Stations */}
           <div
             className={`grid transition-[grid-template-rows] duration-200 ease-out ${
-              !isSearchActive ? "grid-rows-[1fr]" : "grid-rows-[0fr]"
+              !isSearchActive || noResults
+                ? "grid-rows-[1fr]"
+                : "grid-rows-[0fr]"
             }`}
           >
             <div className="overflow-hidden min-h-0">
               <CardHeader className="px-4 py-2">
-                <CardDescription>Popular Stations</CardDescription>
+                <CardDescription className="flex items-center gap-2">
+                  <TrendingUpIcon className="size-3.5" />
+                  Popular Stations
+                </CardDescription>
               </CardHeader>
               <StationList
                 stations={POPULAR_STATIONS}
                 onSelect={selectStation}
+                focusedIndex={!isSearchActive || noResults ? focusedIndex : -1}
+                startIndex={recentStations.length}
+                onFocusIndex={setFocusedIndex}
               />
             </div>
           </div>
