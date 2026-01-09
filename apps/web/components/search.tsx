@@ -240,7 +240,7 @@ export function Search() {
           }
         />
         <InputGroupAddon>
-          {isSearching ? <Spinner /> : <SearchIcon />}
+          {isSearchActive && !hasSearched ? <Spinner /> : <SearchIcon />}
         </InputGroupAddon>
         <InputGroupAddon align="inline-end" className="hidden md:flex">
           <Kbd>⌘</Kbd>
