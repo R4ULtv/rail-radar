@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { LoaderIcon, SearchIcon, TrainFrontIcon } from "lucide-react";
+import { SearchIcon, TrainFrontIcon } from "lucide-react";
+import { useSelectedStation } from "@/hooks/use-selected-station";
 import {
   InputGroup,
   InputGroupAddon,
@@ -14,6 +15,7 @@ import {
   CardDescription,
   CardHeader,
 } from "@/components/ui/card";
+import { Spinner } from "@/components/ui/spinner";
 import type { Station } from "@repo/data";
 
 const POPULAR_STATIONS: Station[] = [
@@ -24,14 +26,23 @@ const POPULAR_STATIONS: Station[] = [
   { id: 3009, name: "Venezia S.Lucia" },
 ];
 
-function StationList({ stations }: { stations: Station[] }) {
+function StationList({
+  stations,
+  onSelect,
+}: {
+  stations: Station[];
+  onSelect: (station: Station) => void;
+}) {
   if (stations.length === 0) return null;
 
   return (
     <ul className="flex flex-col">
       {stations.map((station) => (
         <li key={station.id}>
-          <button className="w-full px-4 py-2 text-left text-sm hover:bg-muted transition-colors duration-75 ease-out flex items-center gap-2">
+          <button
+            onClick={() => onSelect(station)}
+            className="w-full px-4 py-2 text-left text-sm hover:bg-muted transition-colors duration-75 ease-out flex items-center gap-2"
+          >
             <TrainFrontIcon className="size-4 text-muted-foreground" />
             {station.name}
           </button>
@@ -42,6 +53,7 @@ function StationList({ stations }: { stations: Station[] }) {
 }
 
 export function Search() {
+  const { selectStation, recentStations } = useSelectedStation();
   const inputRef = useRef<HTMLInputElement>(null);
   const [query, setQuery] = useState("");
   const [searchResults, setSearchResults] = useState<Station[]>([]);
@@ -116,11 +128,7 @@ export function Search() {
           onChange={(e) => setQuery(e.target.value)}
         />
         <InputGroupAddon>
-          {isSearching ? (
-            <LoaderIcon className="animate-spin" />
-          ) : (
-            <SearchIcon />
-          )}
+          {isSearching ? <Spinner /> : <SearchIcon />}
         </InputGroupAddon>
         <InputGroupAddon align="inline-end" className="hidden md:flex">
           <Kbd>⌘</Kbd>
@@ -128,12 +136,8 @@ export function Search() {
         </InputGroupAddon>
       </InputGroup>
       <Card className="py-2 gap-0 rounded-md">
-        <CardHeader className="px-4 py-2">
-          <CardDescription>
-            {isSearchActive ? "Search Results" : "Popular Stations"}
-          </CardDescription>
-        </CardHeader>
         <CardContent className="p-0">
+          {/* Search Results */}
           <div
             className={`grid transition-[grid-template-rows] duration-200 ease-out ${
               isSearchActive && searchResults.length > 0
@@ -142,9 +146,16 @@ export function Search() {
             }`}
           >
             <div className="overflow-hidden min-h-0">
-              <StationList stations={searchResults.slice(0, 10)} />
+              <CardHeader className="px-4 py-2">
+                <CardDescription>Search Results</CardDescription>
+              </CardHeader>
+              <StationList
+                stations={searchResults.slice(0, 10)}
+                onSelect={selectStation}
+              />
             </div>
           </div>
+          {/* No Results */}
           <div
             className={`grid transition-[grid-template-rows] duration-300 ease-out ${
               isSearchActive && hasSearched && searchResults.length === 0
@@ -158,13 +169,38 @@ export function Search() {
               </p>
             </div>
           </div>
+          {/* Recent Stations */}
+          <div
+            className={`grid transition-[grid-template-rows] duration-200 ease-out ${
+              !isSearchActive && recentStations.length > 0
+                ? "grid-rows-[1fr]"
+                : "grid-rows-[0fr]"
+            }`}
+          >
+            <div className="overflow-hidden min-h-0">
+              <CardHeader className="px-4 py-2">
+                <CardDescription>Recent Stations</CardDescription>
+              </CardHeader>
+              <StationList
+                stations={recentStations}
+                onSelect={selectStation}
+              />
+            </div>
+          </div>
+          {/* Popular Stations */}
           <div
             className={`grid transition-[grid-template-rows] duration-200 ease-out ${
               !isSearchActive ? "grid-rows-[1fr]" : "grid-rows-[0fr]"
             }`}
           >
             <div className="overflow-hidden min-h-0">
-              <StationList stations={POPULAR_STATIONS} />
+              <CardHeader className="px-4 py-2">
+                <CardDescription>Popular Stations</CardDescription>
+              </CardHeader>
+              <StationList
+                stations={POPULAR_STATIONS}
+                onSelect={selectStation}
+              />
             </div>
           </div>
         </CardContent>

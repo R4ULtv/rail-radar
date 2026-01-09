@@ -8,7 +8,9 @@ import "maplibre-gl/dist/maplibre-gl.css";
 
 import { MapControls } from "@/components/map-controls";
 import { Search } from "@/components/search";
+import { StationMarkers } from "@/components/station-markers";
 import MapLoading from "@/components/map-loading";
+import { SelectedStationProvider } from "@/hooks/use-selected-station";
 
 const MapGL = dynamic(
   () => import("react-map-gl/maplibre").then((mod) => mod.Map),
@@ -113,8 +115,11 @@ export function Map() {
       minZoom={1}
       maxZoom={18}
     >
-      <Search />
-      <MapControls />
+      <SelectedStationProvider>
+        <StationMarkers />
+        <Search />
+        <MapControls />
+      </SelectedStationProvider>
     </MapGL>
   );
 }
