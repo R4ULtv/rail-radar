@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import * as React from "react";
 import { Marker, useMap } from "react-map-gl/maplibre";
 import {
   CompassIcon,
@@ -16,13 +16,13 @@ import { useIsMobile } from "@/hooks/use-mobile";
 export function MapControls() {
   const isMobile = useIsMobile();
   const { current: map } = useMap();
-  const [bearing, setBearing] = useState(0);
-  const [userLocation, setUserLocation] = useState<{
+  const [bearing, setBearing] = React.useState(0);
+  const [userLocation, setUserLocation] = React.useState<{
     longitude: number;
     latitude: number;
   } | null>(null);
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (!map) return;
 
     const handleRotate = () => {
@@ -35,7 +35,7 @@ export function MapControls() {
     };
   }, [map]);
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (!navigator.geolocation) return;
 
     navigator.geolocation.getCurrentPosition(
@@ -54,15 +54,15 @@ export function MapControls() {
     );
   }, []);
 
-  const handleZoomIn = useCallback(() => {
+  const handleZoomIn = React.useCallback(() => {
     map?.zoomIn();
   }, [map]);
 
-  const handleZoomOut = useCallback(() => {
+  const handleZoomOut = React.useCallback(() => {
     map?.zoomOut();
   }, [map]);
 
-  const handleLocate = useCallback(() => {
+  const handleLocate = React.useCallback(() => {
     if (!navigator.geolocation) return;
 
     navigator.geolocation.getCurrentPosition(
@@ -85,7 +85,7 @@ export function MapControls() {
     );
   }, [map]);
 
-  const handleResetBearing = useCallback(() => {
+  const handleResetBearing = React.useCallback(() => {
     map?.easeTo({ bearing: 0, pitch: 0 });
   }, [map]);
 
@@ -127,7 +127,7 @@ export function MapControls() {
           {userLocation ? <LocateFixedIcon /> : <LocateIcon />}
         </Button>
 
-        <ButtonGroup orientation="vertical">
+        <ButtonGroup orientation="vertical" className="hidden md:flex">
           <Button
             variant="outline"
             size={isMobile ? "icon-lg" : "icon-sm"}
