@@ -89,6 +89,36 @@ export function MapControls() {
     map?.easeTo({ bearing: 0, pitch: 0 });
   }, [map]);
 
+  React.useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      const target = event.target as HTMLElement;
+      if (target.tagName === "INPUT" || target.tagName === "TEXTAREA") {
+        return;
+      }
+
+      switch (event.key) {
+        case "+":
+        case "=":
+          handleZoomIn();
+          break;
+        case "-":
+          handleZoomOut();
+          break;
+        case "l":
+        case "L":
+          handleLocate();
+          break;
+        case "n":
+        case "N":
+          handleResetBearing();
+          break;
+      }
+    };
+
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, [handleZoomIn, handleZoomOut, handleLocate, handleResetBearing]);
+
   return (
     <>
       {userLocation && (
