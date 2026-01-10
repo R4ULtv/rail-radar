@@ -80,7 +80,10 @@ app.get(
 
     try {
       const trains = await scrapeTrains(stationId, type);
-      return c.json(trains);
+      return c.json({
+        timestamp: new Date().toISOString(),
+        trains,
+      });
     } catch (error) {
       return c.json({ error: "Failed to fetch train data" }, 500);
     }
