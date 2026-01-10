@@ -136,7 +136,7 @@ export function Search() {
     const timeoutId = setTimeout(async () => {
       try {
         const res = await fetch(
-          `https://rail-radar.r-carini2003.workers.dev/stations?q=${encodeURIComponent(query)}`,
+          `${process.env.NEXT_PUBLIC_API_URL}/stations?q=${encodeURIComponent(query)}`,
           { signal: controller.signal },
         );
         if (res.ok) {
