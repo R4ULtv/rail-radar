@@ -68,6 +68,7 @@ function StationList({
               onMouseDown={(e) => e.preventDefault()}
               onClick={() => onSelect(station)}
               onMouseEnter={() => onFocusIndex?.(globalIndex)}
+              onMouseLeave={() => onFocusIndex?.(-1)}
               tabIndex={-1}
               className={cn(
                 "w-full px-4 py-2 text-left text-sm transition-colors duration-75 ease-out flex items-center gap-2",
