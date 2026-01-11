@@ -14,6 +14,8 @@ const brandIcons: Record<string, ComponentType<BrandIconProps>> = {
   ntv: Italo,
   trenitalia: Trenitalia,
   frecciarossa: Trenitalia,
+  frecciabianca: Trenitalia,
+  frecciaargento: Trenitalia,
   "trenitalia tper": Tper,
   intercity: InterCity,
   "intercity notte": InterCity,
