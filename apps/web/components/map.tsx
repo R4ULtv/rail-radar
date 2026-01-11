@@ -1,15 +1,16 @@
 "use client";
 
+import "maplibre-gl/dist/maplibre-gl.css";
 import dynamic from "next/dynamic";
 import { parseAsFloat, useQueryStates } from "nuqs";
 import { startTransition, useEffect, useState } from "react";
 import type { ViewStateChangeEvent } from "react-map-gl/maplibre";
-import "maplibre-gl/dist/maplibre-gl.css";
 
 import { MapControls } from "@/components/map-controls";
-import { Search } from "@/components/search";
-import { StationMarkers } from "@/components/station-markers";
 import MapLoading from "@/components/map-loading";
+import { Search } from "@/components/search";
+import StationInfo from "@/components/station-info";
+import { StationMarkers } from "@/components/station-markers";
 import { SelectedStationProvider } from "@/hooks/use-selected-station";
 
 const MapGL = dynamic(
@@ -122,6 +123,7 @@ export function Map() {
         <StationMarkers />
         <Search />
         <MapControls />
+        <StationInfo />
       </SelectedStationProvider>
     </MapGL>
   );
