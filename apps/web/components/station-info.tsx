@@ -1,7 +1,13 @@
 "use client";
 
 import type { Train } from "@repo/data";
-import { ArrowDownLeftIcon, ArrowUpRightIcon, XIcon } from "lucide-react";
+import {
+  ArrowDownLeftIcon,
+  ArrowUpRightIcon,
+  CheckIcon,
+  ShareIcon,
+  XIcon,
+} from "lucide-react";
 import { useState } from "react";
 
 import { TrainRow, TrainRowSkeleton } from "@/components/train-row";
@@ -145,9 +151,33 @@ export default function StationInfo() {
   const [snap, setSnap] = useState<number | string | null>(
     snapPoints[0] as string,
   );
+  const [copied, setCopied] = useState(false);
 
   // Derive open state from selectedStation
   const isOpen = !!selectedStation;
+
+  const handleShare = async () => {
+    if (!selectedStation) return;
+
+    const shareUrl = window.location.href;
+    const shareData = {
+      title: selectedStation.name,
+      text: `Check out ${selectedStation.name} on Rail Radar`,
+      url: shareUrl,
+    };
+
+    if (navigator.share) {
+      try {
+        await navigator.share(shareData);
+      } catch (err) {
+        // User cancelled or share failed, ignore
+      }
+    } else {
+      await navigator.clipboard.writeText(shareUrl);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    }
+  };
 
   const {
     data: trainData,
@@ -159,17 +189,30 @@ export default function StationInfo() {
   // Desktop view
   if (!isMobile && isOpen) {
     return (
-      <div className="absolute z-50 top-4 right-4 flex flex-col gap-2 md:w-96 w-[calc(100vw-32px)] font-sans">
-        <Card className="pt-4 pb-0 gap-4 rounded-md flex flex-col">
+      <div className="absolute z-50 top-4 right-4 flex gap-2 font-sans">
+        <Button
+          variant="outline"
+          size="icon-sm"
+          onClick={clearStation}
+          className="shrink-0 self-start bg-card hover:bg-muted dark:bg-card dark:hover:bg-muted"
+          aria-label="Close"
+        >
+          <XIcon className="size-4" />
+        </Button>
+        <Card className="pt-4 pb-0 gap-4 rounded-md flex flex-col flex-1 w-96">
           <CardHeader className="relative px-4">
             <Button
               variant="ghost"
-              size="icon-xs"
-              onClick={clearStation}
-              className="absolute top-0 right-2"
-              aria-label="Close"
+              size="icon-sm"
+              onClick={handleShare}
+              className="absolute top-0 right-4"
+              aria-label="Share"
             >
-              <XIcon className="size-4" />
+              {copied ? (
+                <CheckIcon className="size-4" />
+              ) : (
+                <ShareIcon className="size-4" />
+              )}
             </Button>
             <CardTitle className="pr-6">{selectedStation.name}</CardTitle>
             <CardDescription>
@@ -202,12 +245,25 @@ export default function StationInfo() {
       noBodyStyles
     >
       <DrawerContent className="h-full max-h-full! -mx-px outline-none bg-card">
-        <DrawerHeader className="pb-3">
+        <DrawerHeader className="pb-3 relative group-data-[vaul-drawer-direction=bottom]/drawer-content:text-left">
           <DrawerTitle className="text-xl">{selectedStation?.name}</DrawerTitle>
           <p className="text-sm text-muted-foreground h-5">
             <UpdatedStatus isLoading={isLoading} lastUpdated={lastUpdated} />
           </p>
           <StationTabs type={type} onTypeChange={setType} />
+          <Button
+            variant="ghost"
+            size="icon-sm"
+            onClick={handleShare}
+            aria-label="Share"
+            className="absolute top-3.5 right-4"
+          >
+            {copied ? (
+              <CheckIcon className="size-4" />
+            ) : (
+              <ShareIcon className="size-4" />
+            )}
+          </Button>
         </DrawerHeader>
 
         <div
