@@ -201,7 +201,7 @@ export default function StationInfo() {
       onClose={clearStation}
       noBodyStyles
     >
-      <DrawerContent className="h-full max-h-full! -mx-px outline-none">
+      <DrawerContent className="h-full max-h-full! -mx-px outline-none bg-card">
         <DrawerHeader className="pb-3">
           <DrawerTitle className="text-xl">{selectedStation?.name}</DrawerTitle>
           <p className="text-sm text-muted-foreground h-5">
