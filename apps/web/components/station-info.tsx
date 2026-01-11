@@ -82,7 +82,7 @@ function TrainListContent({
 
   if (scrollable) {
     return (
-      <ScrollArea className="max-h-[calc(100vh-176px)]">{trainList}</ScrollArea>
+      <ScrollArea className="max-h-[calc(100vh-164px)]">{trainList}</ScrollArea>
     );
   }
 
