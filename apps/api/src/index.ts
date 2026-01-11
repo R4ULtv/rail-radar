@@ -3,7 +3,9 @@ import { cache } from "hono/cache";
 import { cors } from "hono/cors";
 
 import { stationsCoords as stations } from "@repo/data";
+import { vtStations } from "@repo/data/vt";
 import { scrapeTrains } from "./scraper.js";
+import { fetchVTTrains } from "./vt-scraper.js";
 
 const app = new Hono();
 
@@ -80,6 +82,70 @@ app.get(
 
     try {
       const trains = await scrapeTrains(stationId, type);
+      return c.json({
+        timestamp: new Date().toISOString(),
+        trains,
+      });
+    } catch (error) {
+      return c.json({ error: "Failed to fetch train data" }, 500);
+    }
+  },
+);
+
+// ============================================
+// ViaggiaTreno API endpoints (test implementation)
+// ============================================
+
+app.get("/vt/stations", (c) => {
+  const query = c.req.query("q");
+
+  if (!query) {
+    return c.json(vtStations);
+  }
+
+  const q = query.toLowerCase();
+  const filtered = vtStations
+    .filter((station) =>
+      station.name
+        .toLowerCase()
+        .split(/\s+/)
+        .some((word) => word.startsWith(q)),
+    )
+    .slice(0, 20);
+
+  return c.json(filtered);
+});
+
+app.get("/vt/stations/:id", (c) => {
+  const id = c.req.param("id");
+
+  const station = vtStations.find((s) => s.id === id);
+
+  if (!station) {
+    return c.json({ error: "Station not found" }, 404);
+  }
+
+  return c.json(station);
+});
+
+app.get(
+  "/vt/trains/:stationId",
+  cache({
+    cacheName: "vt-trains-cache",
+    cacheControl: "public, max-age=30, stale-while-revalidate=60",
+  }),
+  async (c) => {
+    const stationId = c.req.param("stationId");
+
+    const stationExists = vtStations.some((s) => s.id === stationId);
+    if (!stationExists) {
+      return c.json({ error: "Station not found" }, 404);
+    }
+
+    const type = c.req.query("type") === "arrivals" ? "arrivals" : "departures";
+
+    try {
+      const trains = await fetchVTTrains(stationId, type);
       return c.json({
         timestamp: new Date().toISOString(),
         trains,
