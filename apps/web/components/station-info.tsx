@@ -169,8 +169,8 @@ export default function StationInfo() {
     if (navigator.share) {
       try {
         await navigator.share(shareData);
-      } catch (err) {
-        // User cancelled or share failed, ignore
+      } catch (_error) {
+        console.log(_error);
       }
     } else {
       await navigator.clipboard.writeText(shareUrl);
