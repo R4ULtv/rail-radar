@@ -5,7 +5,8 @@
   "type": "module",
   "exports": {
     ".": "./src/index.ts",
-    "./stations": "./src/stations.ts"
+    "./stations": "./src/stations.ts",
+    "./vt": "./src/vt-index.ts"
   },
   "scripts": {
     "check-types": "tsc --noEmit"
