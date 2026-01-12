@@ -2,6 +2,17 @@ import * as cheerio from "cheerio";
 import type { CheerioAPI, Cheerio } from "cheerio";
 import type { Element } from "domhandler";
 import type { Train } from "@repo/data";
+import type { ContentfulStatusCode } from "hono/utils/http-status";
+
+export class ScraperError extends Error {
+  constructor(
+    message: string,
+    public statusCode: ContentfulStatusCode,
+  ) {
+    super(message);
+    this.name = "ScraperError";
+  }
+}
 
 const BASE_URL =
   "https://iechub.rfi.it/ArriviPartenze/en/ArrivalsDepartures/Monitor";
@@ -66,7 +77,10 @@ export async function scrapeTrains(
 
   const response = await fetch(url);
   if (!response.ok) {
-    throw new Error(`Failed to fetch: ${response.status}`);
+    throw new ScraperError(
+      response.statusText || `HTTP ${response.status}`,
+      response.status as ContentfulStatusCode,
+    );
   }
 
   const html = await response.text();

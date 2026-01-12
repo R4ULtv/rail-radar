@@ -4,7 +4,7 @@ import { cors } from "hono/cors";
 
 import { stations } from "@repo/data";
 import { fuzzySearch } from "./fuzzy.js";
-import { scrapeTrains } from "./scraper.js";
+import { scrapeTrains, ScraperError } from "./scraper.js";
 
 type Bindings = {
   RATE_LIMITER: RateLimit;
@@ -101,6 +101,9 @@ app.get(
         trains,
       });
     } catch (error) {
+      if (error instanceof ScraperError) {
+        return c.json({ error: error.message }, error.statusCode);
+      }
       return c.json({ error: "Failed to fetch train data" }, 500);
     }
   },
