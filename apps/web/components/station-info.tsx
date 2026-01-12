@@ -146,8 +146,13 @@ function UpdatedStatus({
   }
 
   if (lastUpdated) {
+    const minutesAgo = Math.floor(secondsAgo / 60);
     const timeText =
-      secondsAgo < 5 ? "Updated just now" : `Updated ${secondsAgo}s ago`;
+      secondsAgo < 5
+        ? "Updated just now"
+        : minutesAgo >= 1
+          ? `Updated ${minutesAgo}m ago`
+          : `Updated ${secondsAgo}s ago`;
     return `${timeText} · Refreshes every ~30s`;
   }
 
