@@ -51,7 +51,7 @@ function TrainListContent({
   if (isLoading) {
     return (
       <div>
-        {Array.from({ length: 6 }).map((_, i) => (
+        {Array.from({ length: 8 }).map((_, i) => (
           <TrainRowSkeleton key={i} />
         ))}
       </div>
@@ -146,7 +146,7 @@ function UpdatedStatus({
   }
 
   if (lastUpdated) {
-    if (secondsAgo < 10) {
+    if (secondsAgo < 5) {
       return "Updated just now";
     }
     return `Updated ${secondsAgo}s ago`;
