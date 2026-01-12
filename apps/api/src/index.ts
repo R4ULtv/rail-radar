@@ -5,7 +5,22 @@ import { cors } from "hono/cors";
 import { stationsCoords as stations } from "@repo/data";
 import { scrapeTrains } from "./scraper.js";
 
-const app = new Hono();
+type Bindings = {
+  RATE_LIMITER: RateLimit;
+};
+
+const app = new Hono<{ Bindings: Bindings }>();
+
+app.use("*", async (c, next) => {
+  const ip = c.req.header("cf-connecting-ip") ?? "unknown";
+  const { success } = await c.env.RATE_LIMITER.limit({ key: ip });
+
+  if (!success) {
+    return c.json({ error: "Rate limit exceeded" }, 429);
+  }
+
+  await next();
+});
 
 app.use(
   "*",
