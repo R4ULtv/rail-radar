@@ -8,7 +8,7 @@ import {
   ShareIcon,
   XIcon,
 } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { TrainRow, TrainRowSkeleton } from "@/components/train-row";
 import {
@@ -33,16 +33,6 @@ import { useTrainData } from "@/hooks/use-train-data";
 
 import { cn } from "@/lib/utils";
 import { Button } from "./ui/button";
-
-function formatTime(date: Date | null): string {
-  if (!date) return "";
-  return date.toLocaleTimeString([], {
-    hour: "numeric",
-    minute: "numeric",
-    second: "numeric",
-    hour12: false,
-  });
-}
 
 // Shared component for train list content (loading, error, empty, list states)
 function TrainListContent({
@@ -133,12 +123,35 @@ function UpdatedStatus({
   isLoading: boolean;
   lastUpdated: Date | null;
 }) {
+  const [secondsAgo, setSecondsAgo] = useState(0);
+
+  useEffect(() => {
+    if (!lastUpdated) return;
+
+    const calculateSecondsAgo = () => {
+      return Math.floor((Date.now() - lastUpdated.getTime()) / 1000);
+    };
+
+    setSecondsAgo(calculateSecondsAgo());
+
+    const interval = setInterval(() => {
+      setSecondsAgo(calculateSecondsAgo());
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [lastUpdated]);
+
   if (isLoading && !lastUpdated) {
     return "Updating...";
   }
+
   if (lastUpdated) {
-    return `Updated ${formatTime(lastUpdated)}`;
+    if (secondsAgo < 10) {
+      return "Updated just now";
+    }
+    return `Updated ${secondsAgo}s ago`;
   }
+
   return null;
 }
 
