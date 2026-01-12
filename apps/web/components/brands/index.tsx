@@ -5,6 +5,7 @@ import Italo from "./italo";
 import Trenitalia from "./trenitalia";
 import Tper from "./tper";
 import InterCity from "./intercity";
+import FrecciaRossa from "./frecciarossa";
 
 type BrandIconProps = SVGProps<SVGSVGElement>;
 
@@ -13,7 +14,7 @@ const brandIcons: Record<string, ComponentType<BrandIconProps>> = {
   italo: Italo,
   ntv: Italo,
   trenitalia: Trenitalia,
-  frecciarossa: Trenitalia,
+  frecciarossa: FrecciaRossa,
   frecciabianca: Trenitalia,
   frecciargento: Trenitalia,
   fse: Trenitalia,
