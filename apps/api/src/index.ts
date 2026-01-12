@@ -3,6 +3,7 @@ import { cache } from "hono/cache";
 import { cors } from "hono/cors";
 
 import { stationsCoords as stations } from "@repo/data";
+import { fuzzySearch } from "./fuzzy.js";
 import { scrapeTrains } from "./scraper.js";
 
 type Bindings = {
@@ -43,16 +44,7 @@ app.get("/stations", (c) => {
     return c.json(stations);
   }
 
-  const q = query.toLowerCase();
-  const filtered = stations
-    .filter((station) =>
-      station.name
-        .toLowerCase()
-        .split(/\s+/)
-        .some((word) => word.startsWith(q)),
-    )
-    .slice(0, 20);
-
+  const filtered = fuzzySearch(stations, query, 20);
   return c.json(filtered);
 });
 
