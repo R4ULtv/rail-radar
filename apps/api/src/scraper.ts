@@ -46,15 +46,15 @@ function parseInfo(text: string | undefined): string | null {
   return null;
 }
 
-function parseStatus($cell: Cheerio<Element>, $: CheerioAPI): Train["status"] {
+function parseStatus(
+  $cell: Cheerio<Element>,
+  isArrivals: boolean,
+): Train["status"] {
   const img = $cell.find("img");
   const src = img.attr("src") || "";
-  if (src.includes("LampeggioGold") || src.includes("lampeggio")) {
-    return "departing";
+  if (src.includes("LampeggioGold") || src.includes("LampeggioGrey")) {
+    return isArrivals ? "incoming" : "departing";
   }
-  const text = $cell.text().trim().toLowerCase();
-  if (text.includes("departing")) return "departing";
-  if (text.includes("incoming") || text.includes("arriving")) return "incoming";
   return null;
 }
 
@@ -85,7 +85,7 @@ export async function scrapeTrains(
     const rawCategory =
       cells.eq(1).find("img").attr("alt") || cells.eq(1).text().trim() || null;
     const delayResult = parseDelay(cells.eq(5).text());
-    const statusFromImage = parseStatus(cells.eq(7), $);
+    const statusFromImage = parseStatus(cells.eq(7), type === "arrivals");
 
     const train: Train = {
       brand: cells.eq(0).find("img").attr("alt") || null,
