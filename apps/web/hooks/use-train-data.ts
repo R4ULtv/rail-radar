@@ -23,9 +23,9 @@ export function useTrainData(
       : null,
     fetcher,
     {
-      refreshInterval: enabled ? 30000 : 0,
+      refreshInterval: enabled ? 20000 : 0,
       revalidateOnFocus: false,
-      dedupingInterval: 30000,
+      dedupingInterval: 20000,
     },
   );
 
