@@ -34,7 +34,17 @@ app.use(
 );
 
 app.get("/", (c) => {
-  return c.redirect("https://www.railradar24.com");
+  return c.json({
+    name: "Rail Radar API",
+    version: "1.0.0",
+    endpoints: {
+      "GET /": "API structure and documentation",
+      "GET /stations": "List all stations (optional: ?q=search query)",
+      "GET /stations/:id": "Get station by ID",
+      "GET /trains/:stationId":
+        "Get trains for a station (optional: ?type=arrivals|departures)",
+    },
+  });
 });
 
 app.get("/stations", (c) => {
