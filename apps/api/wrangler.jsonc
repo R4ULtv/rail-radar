@@ -7,6 +7,12 @@
     "enabled": true,
     "head_sampling_rate": 1,
   },
+  "routes": [
+    {
+      "pattern": "api.railradar24.com",
+      "custom_domain": true,
+    },
+  ],
   "ratelimits": [
     {
       "name": "RATE_LIMITER",

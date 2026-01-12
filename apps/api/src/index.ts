@@ -28,13 +28,13 @@ app.use(
     origin: [
       "http://localhost:3000",
       "http://127.0.0.1:3000",
-      "https://rail-radar-web.vercel.app",
+      "https://www.railradar24.com",
     ],
   }),
 );
 
 app.get("/", (c) => {
-  return c.redirect("https://rail-radar-web.vercel.app");
+  return c.redirect("https://www.railradar24.com");
 });
 
 app.get("/stations", (c) => {
