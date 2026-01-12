@@ -77,7 +77,7 @@ app.get(
   "/trains/:stationId",
   cache({
     cacheName: "trains-cache",
-    cacheControl: "public, max-age=30, stale-while-revalidate=30",
+    cacheControl: "public, max-age=25, stale-while-revalidate=5",
   }),
   async (c) => {
     const stationId = parseInt(c.req.param("stationId"), 10);
