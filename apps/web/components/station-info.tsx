@@ -146,10 +146,9 @@ function UpdatedStatus({
   }
 
   if (lastUpdated) {
-    if (secondsAgo < 5) {
-      return "Updated just now";
-    }
-    return `Updated ${secondsAgo}s ago`;
+    const timeText =
+      secondsAgo < 5 ? "Updated just now" : `Updated ${secondsAgo}s ago`;
+    return `${timeText} · Refreshes every ~30s`;
   }
 
   return null;
