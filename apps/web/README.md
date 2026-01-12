@@ -1,36 +1,63 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/create-next-app).
+# Rail Radar Web
 
-## Getting Started
+Next.js frontend for real-time Italian railway tracking with an interactive map interface.
 
-First, run the development server:
+## Tech Stack
+
+- [Next.js 16](https://nextjs.org/) + React 19
+- [MapLibre GL](https://maplibre.org/) via react-map-gl - Interactive mapping
+- [Supercluster](https://github.com/mapbox/supercluster) - Marker clustering
+- [SWR](https://swr.vercel.app/) - Data fetching with auto-refresh
+- [nuqs](https://nuqs.47ng.com/) - URL query state sync
+- [Tailwind CSS v4](https://tailwindcss.com/) - Styling
+- [Base UI](https://base-ui.com/) - Component primitives
+
+## Features
+
+- Interactive full-screen map with 2400+ station markers
+- Real-time train arrivals/departures with 30s polling
+- Fuzzy station search with keyboard shortcuts
+- URL-synced map state for shareable links
+- User geolocation with animated marker
+- Responsive design for mobile and desktop
+
+## Environment Variables
+
+| Variable | Description |
+|----------|-------------|
+| `NEXT_PUBLIC_API_URL` | API endpoint URL (e.g., `https://api.railradar24.com`) |
+
+## Development
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+# Install dependencies
+pnpm install
+
+# Start development server (localhost:3000)
+pnpm dev --filter=web
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Project Structure
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```
+apps/web/
+├── app/                  # Next.js App Router
+├── components/
+│   ├── map.tsx           # Main map component
+│   ├── map-controls.tsx  # Zoom, locate, compass controls
+│   ├── search.tsx        # Station search
+│   ├── station-info.tsx  # Station details drawer
+│   ├── station-markers.tsx # GeoJSON marker layer
+│   ├── train-row.tsx     # Train list item
+│   ├── brands/           # Train brand logos
+│   └── ui/               # Base UI components
+└── lib/                  # Utilities and hooks
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load Inter, a custom Google Font.
+## Deployment
 
-## Learn More
+Deploy to [Vercel](https://vercel.com) or any platform that supports Next.js.
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```bash
+pnpm build
+```
