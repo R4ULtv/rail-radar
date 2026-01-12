@@ -17,7 +17,7 @@ export function useTrainData(
   type: "arrivals" | "departures",
   enabled: boolean = true,
 ) {
-  const { data, error, isLoading } = useSWR<TrainResponse>(
+  const { data, error, isLoading, isValidating } = useSWR<TrainResponse>(
     stationId
       ? `${process.env.NEXT_PUBLIC_API_URL}/trains/${stationId}?type=${type}`
       : null,
@@ -31,6 +31,7 @@ export function useTrainData(
   return {
     data: data?.trains ?? null,
     isLoading,
+    isValidating,
     error: error?.message ?? null,
     lastUpdated: data?.timestamp ? new Date(data.timestamp) : null,
   };

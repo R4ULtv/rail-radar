@@ -118,12 +118,15 @@ function StationTabs({
 // Updated status text
 function UpdatedStatus({
   isLoading,
+  isValidating,
   lastUpdated,
 }: {
   isLoading: boolean;
+  isValidating: boolean;
   lastUpdated: Date | null;
 }) {
   const [secondsAgo, setSecondsAgo] = useState(0);
+  const [showUpdating, setShowUpdating] = useState(false);
 
   useEffect(() => {
     if (!lastUpdated) return;
@@ -141,8 +144,22 @@ function UpdatedStatus({
     return () => clearInterval(interval);
   }, [lastUpdated]);
 
+  // Show "Updating..." only if validating takes more than 150ms
+  useEffect(() => {
+    if (isValidating) {
+      const timer = setTimeout(() => setShowUpdating(true), 150);
+      return () => clearTimeout(timer);
+    } else {
+      setShowUpdating(false);
+    }
+  }, [isValidating]);
+
   if (isLoading && !lastUpdated) {
-    return "Updating...";
+    return "Updating... · Refreshes every ~30s";
+  }
+
+  if (showUpdating) {
+    return "Updating... · Refreshes every ~30s";
   }
 
   if (lastUpdated) {
@@ -199,6 +216,7 @@ export default function StationInfo() {
   const {
     data: trainData,
     isLoading,
+    isValidating,
     error,
     lastUpdated,
   } = useTrainData(selectedStation?.id ?? null, type, isOpen);
@@ -233,7 +251,11 @@ export default function StationInfo() {
             </Button>
             <CardTitle className="pr-6">{selectedStation.name}</CardTitle>
             <CardDescription>
-              <UpdatedStatus isLoading={isLoading} lastUpdated={lastUpdated} />
+              <UpdatedStatus
+                isLoading={isLoading}
+                isValidating={isValidating}
+                lastUpdated={lastUpdated}
+              />
             </CardDescription>
             <StationTabs type={type} onTypeChange={setType} />
           </CardHeader>
@@ -265,7 +287,11 @@ export default function StationInfo() {
         <DrawerHeader className="pb-3 relative group-data-[vaul-drawer-direction=bottom]/drawer-content:text-left">
           <DrawerTitle className="text-xl">{selectedStation?.name}</DrawerTitle>
           <p className="text-sm text-muted-foreground h-5">
-            <UpdatedStatus isLoading={isLoading} lastUpdated={lastUpdated} />
+            <UpdatedStatus
+              isLoading={isLoading}
+              isValidating={isValidating}
+              lastUpdated={lastUpdated}
+            />
           </p>
           <StationTabs type={type} onTypeChange={setType} />
           <Button
