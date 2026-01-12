@@ -11,17 +11,6 @@ type Bindings = {
 
 const app = new Hono<{ Bindings: Bindings }>();
 
-app.use("*", async (c, next) => {
-  const ip = c.req.header("cf-connecting-ip") ?? "unknown";
-  const { success } = await c.env.RATE_LIMITER.limit({ key: ip });
-
-  if (!success) {
-    return c.json({ error: "Rate limit exceeded" }, 429);
-  }
-
-  await next();
-});
-
 app.use(
   "*",
   cors({
@@ -89,6 +78,16 @@ app.get(
     cacheName: "trains-cache",
     cacheControl: "public, max-age=25, stale-while-revalidate=5",
   }),
+  async (c, next) => {
+    const ip = c.req.header("cf-connecting-ip") ?? "unknown";
+    const { success } = await c.env.RATE_LIMITER.limit({ key: ip });
+
+    if (!success) {
+      return c.json({ error: "Rate limit exceeded" }, 429);
+    }
+
+    await next();
+  },
   async (c) => {
     const stationId = parseInt(c.req.param("stationId"), 10);
 
