@@ -2,7 +2,7 @@ import { Hono } from "hono";
 import { cache } from "hono/cache";
 import { cors } from "hono/cors";
 
-import { stationsCoords as stations } from "@repo/data";
+import { stations } from "@repo/data";
 import { fuzzySearch } from "./fuzzy.js";
 import { scrapeTrains } from "./scraper.js";
 
