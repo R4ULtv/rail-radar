@@ -154,12 +154,8 @@ function UpdatedStatus({
     }
   }, [isValidating]);
 
-  if (isLoading && !lastUpdated) {
-    return "Updating... · Refreshes every ~30s";
-  }
-
-  if (showUpdating) {
-    return "Updating... · Refreshes every ~30s";
+  if ((isLoading && !lastUpdated) || showUpdating) {
+    return "Updating...";
   }
 
   if (lastUpdated) {
@@ -170,7 +166,7 @@ function UpdatedStatus({
         : minutesAgo >= 1
           ? `Updated ${minutesAgo}m ago`
           : `Updated ${secondsAgo}s ago`;
-    return `${timeText} · Refreshes every ~30s`;
+    return `${timeText}`;
   }
 
   return null;
