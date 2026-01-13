@@ -219,7 +219,7 @@ export default function StationInfo() {
 
     const url = isApple
       ? `https://maps.apple.com/?daddr=${lat},${lng}`
-      : `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`;
+      : `https://www.google.com/maps/dir/?api=1&origin=Current+Location&destination=${lat},${lng}`;
 
     window.open(url, "_blank");
   };
