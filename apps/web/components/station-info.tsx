@@ -303,7 +303,12 @@ export default function StationInfo() {
       onClose={clearStation}
       noBodyStyles
     >
-      <DrawerContent className="h-full max-h-full! -mx-px outline-none bg-card">
+      <DrawerContent
+        className={cn(
+          "h-full max-h-full! -mx-px outline-none bg-card",
+          snap === 1 && "data-[vaul-drawer-direction=bottom]:rounded-t-none",
+        )}
+      >
         <DrawerHeader className="pb-3 relative group-data-[vaul-drawer-direction=bottom]/drawer-content:text-left">
           <DrawerTitle className="text-xl">{selectedStation?.name}</DrawerTitle>
           <p className="text-sm text-muted-foreground h-5">
