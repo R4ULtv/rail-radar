@@ -14,11 +14,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL(
-    process.env.VERCEL_PROJECT_PRODUCTION_URL
-      ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
-      : "http://localhost:3000",
-  ),
+  metadataBase: new URL("https://www.railradar24.com"),
   title: "Rail Radar - Live Train Tracker for Italy",
   description:
     "Track Italian trains in real time. Get live delays, platform numbers, and departure info for all train stations across Italy.",
