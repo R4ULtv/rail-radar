@@ -8,25 +8,29 @@ import {
   SearchXIcon,
   TrainFrontIcon,
   TrendingUpIcon,
+  XIcon,
 } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
-import { useAnimatedHeight } from "@/hooks/use-animated-height";
-import { cn } from "@/lib/utils";
-import { useIsMobile } from "@/hooks/use-mobile";
-import { useSelectedStation } from "@/hooks/use-selected-station";
-import {
-  InputGroup,
-  InputGroupAddon,
-  InputGroupInput,
-} from "@/components/ui/input-group";
-import { Kbd } from "@/components/ui/kbd";
+
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
 } from "@/components/ui/card";
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupButton,
+  InputGroupInput,
+} from "@/components/ui/input-group";
 import { Spinner } from "@/components/ui/spinner";
+
+import { useAnimatedHeight } from "@/hooks/use-animated-height";
+import { useIsMobile } from "@/hooks/use-mobile";
+import { useSelectedStation } from "@/hooks/use-selected-station";
+
+import { cn } from "@/lib/utils";
 import type { Station } from "@repo/data";
 
 const POPULAR_STATIONS: Station[] = [
@@ -240,10 +244,33 @@ export function Search() {
         <InputGroupAddon>
           {isSearchActive && !hasSearched ? <Spinner /> : <SearchIcon />}
         </InputGroupAddon>
-        <InputGroupAddon align="inline-end" className="hidden md:flex">
-          <Kbd>⌘</Kbd>
-          <Kbd>K</Kbd>
-        </InputGroupAddon>
+        <AnimatePresence>
+          {isSearchActive && (
+            <motion.div
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.8 }}
+              transition={{ duration: 0.2 }}
+            >
+              <InputGroupAddon align="inline-end">
+                <InputGroupButton
+                  aria-label="Clear search"
+                  title="Clear search"
+                  size="icon-xs"
+                  onMouseDown={(e) => e.preventDefault()}
+                  onClick={() => {
+                    setQuery("");
+                    if (isMobile) {
+                      inputRef.current?.blur();
+                    }
+                  }}
+                >
+                  <XIcon />
+                </InputGroupButton>
+              </InputGroupAddon>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </InputGroup>
       <AnimatePresence>
         {(!isMobile || isFocused) && (!isSearchActive || hasSearched) && (
