@@ -2,9 +2,11 @@ import { Hono } from "hono";
 import { cache } from "hono/cache";
 import { cors } from "hono/cors";
 
-import { stations } from "@repo/data";
+import { stationsCoords } from "@repo/data/stations";
 import { fuzzySearch } from "./fuzzy.js";
 import { scrapeTrains, ScraperError } from "./scraper.js";
+
+const stations = stationsCoords.filter((s) => s.geo);
 
 type Bindings = {
   RATE_LIMITER: RateLimit;
