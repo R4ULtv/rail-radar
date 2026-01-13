@@ -13,10 +13,10 @@ Real-time Italian railway tracking with an interactive map interface and live tr
 
 ## Project Structure
 
-| Directory | Description |
-|-----------|-------------|
-| [apps/api](./apps/api) | Cloudflare Workers API for train data |
-| [apps/web](./apps/web) | Next.js frontend with interactive map |
+| Directory                        | Description                              |
+| -------------------------------- | ---------------------------------------- |
+| [apps/api](./apps/api)           | Cloudflare Workers API for train data    |
+| [apps/web](./apps/web)           | Next.js frontend with interactive map    |
 | [packages/data](./packages/data) | Shared station data and TypeScript types |
 
 ## Quick Start
@@ -35,12 +35,12 @@ pnpm dev --filter=api    # API server
 
 ## Scripts
 
-| Command | Description |
-|---------|-------------|
-| `pnpm dev` | Start development servers |
-| `pnpm build` | Build all packages |
-| `pnpm lint` | Lint all packages |
-| `pnpm format` | Format code with Prettier |
+| Command            | Description                  |
+| ------------------ | ---------------------------- |
+| `pnpm dev`         | Start development servers    |
+| `pnpm build`       | Build all packages           |
+| `pnpm lint`        | Lint all packages            |
+| `pnpm format`      | Format code with Prettier    |
 | `pnpm check-types` | Run TypeScript type checking |
 
 ## Contributing

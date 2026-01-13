@@ -10,12 +10,12 @@ Cloudflare Workers API that provides real-time Italian railway data by scraping 
 
 ## Endpoints
 
-| Method | Path | Description |
-|--------|------|-------------|
-| `GET` | `/` | API info and endpoint documentation |
-| `GET` | `/stations` | List all stations (optional: `?q=search`) |
-| `GET` | `/stations/:id` | Get station by ID |
-| `GET` | `/trains/:stationId` | Get arrivals/departures (optional: `?type=arrivals\|departures`) |
+| Method | Path                 | Description                                                      |
+| ------ | -------------------- | ---------------------------------------------------------------- |
+| `GET`  | `/`                  | API info and endpoint documentation                              |
+| `GET`  | `/stations`          | List all stations (optional: `?q=search`)                        |
+| `GET`  | `/stations/:id`      | Get station by ID                                                |
+| `GET`  | `/trains/:stationId` | Get arrivals/departures (optional: `?type=arrivals\|departures`) |
 
 ### Caching
 
