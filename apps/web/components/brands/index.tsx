@@ -7,6 +7,7 @@ import Tper from "./tper";
 import InterCity from "./intercity";
 import FrecciaRossa from "./frecciarossa";
 import InterCityNotte from "./intercity-notte";
+import Sncf from "./sncf";
 
 type BrandIconProps = SVGProps<SVGSVGElement>;
 
@@ -22,6 +23,7 @@ const brandIcons: Record<string, ComponentType<BrandIconProps>> = {
   "trenitalia tper": Tper,
   intercity: InterCity,
   "intercity notte": InterCityNotte,
+  sncf: Sncf,
 };
 
 interface BrandLogoProps extends BrandIconProps {
