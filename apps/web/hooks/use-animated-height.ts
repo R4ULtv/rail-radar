@@ -1,47 +1,57 @@
 import * as React from "react";
+import {
+  useMotionValue,
+  animate,
+  type MotionValue,
+  type Easing,
+} from "motion/react";
 
 interface UseAnimatedHeightOptions {
-  /** Duration of the animation in ms */
   duration?: number;
-  /** Easing function for the animation */
-  easing?: string;
+  shrinkDuration?: number;
+  ease?: Easing;
 }
 
 interface UseAnimatedHeightReturn {
-  /** Ref to attach to the content wrapper (inner element that gets measured) */
-  contentRef: React.RefCallback<HTMLElement>;
-  /** Style props to apply to the animated container (outer element) */
-  style: React.CSSProperties;
+  contentRef: (node: HTMLElement | null) => void;
+  height: MotionValue<number>;
 }
 
 export function useAnimatedHeight(
   options: UseAnimatedHeightOptions = {},
 ): UseAnimatedHeightReturn {
-  const { duration = 200, easing = "ease-out" } = options;
+  const { duration = 0.2, shrinkDuration = 0.1, ease = "easeOut" } = options;
 
-  const [height, setHeight] = React.useState<number>(0);
+  const height = useMotionValue(0);
   const observerRef = React.useRef<ResizeObserver | null>(null);
 
-  const contentRef = React.useCallback((node: HTMLElement | null) => {
-    // Cleanup previous observer
-    if (observerRef.current) {
-      observerRef.current.disconnect();
-      observerRef.current = null;
-    }
+  const contentRef = React.useCallback(
+    (node: HTMLElement | null) => {
+      if (observerRef.current) {
+        observerRef.current.disconnect();
+        observerRef.current = null;
+      }
 
-    if (node) {
-      // Measure initial height
-      setHeight(node.offsetHeight);
+      if (node) {
+        // Set initial height without animation
+        height.jump(node.offsetHeight);
 
-      // Observe for size changes
-      observerRef.current = new ResizeObserver(() => {
-        setHeight(node.offsetHeight);
-      });
-      observerRef.current.observe(node);
-    }
-  }, []);
+        observerRef.current = new ResizeObserver(() => {
+          const currentHeight = height.get();
+          const targetHeight = node.offsetHeight;
+          const isShrinking = targetHeight < currentHeight;
 
-  // Cleanup observer on unmount
+          animate(height, targetHeight, {
+            duration: isShrinking ? shrinkDuration : duration,
+            ease,
+          });
+        });
+        observerRef.current.observe(node);
+      }
+    },
+    [height, duration, shrinkDuration, ease],
+  );
+
   React.useEffect(() => {
     return () => {
       if (observerRef.current) {
@@ -50,11 +60,5 @@ export function useAnimatedHeight(
     };
   }, []);
 
-  const style: React.CSSProperties = {
-    height,
-    overflow: "hidden",
-    transition: `height, ${duration}ms ${easing}, opacity ${duration}ms ${easing}`,
-  };
-
-  return { contentRef, style };
+  return { contentRef, height };
 }

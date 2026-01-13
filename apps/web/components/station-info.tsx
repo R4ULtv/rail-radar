@@ -29,6 +29,8 @@ import {
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
+import { AnimatePresence, motion } from "motion/react";
+import { useAnimatedHeight } from "@/hooks/use-animated-height";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { useSelectedStation } from "@/hooks/use-selected-station";
 import { useTrainData } from "@/hooks/use-train-data";
@@ -184,6 +186,7 @@ export default function StationInfo() {
     snapPoints[0] as string,
   );
   const [copied, setCopied] = useState(false);
+  const cardHeight = useAnimatedHeight();
 
   // Derive open state from selectedStation
   const isOpen = !!selectedStation;
@@ -233,63 +236,83 @@ export default function StationInfo() {
   } = useTrainData(selectedStation?.id ?? null, type, isOpen);
 
   // Desktop view
-  if (!isMobile && isOpen) {
+  if (!isMobile) {
     return (
-      <div className="absolute z-50 top-4 right-4 flex gap-2 font-sans">
-        <Button
-          variant="outline"
-          size="icon-sm"
-          onClick={clearStation}
-          className="shrink-0 self-start bg-card hover:bg-muted dark:bg-card dark:hover:bg-muted"
-          aria-label="Close"
-        >
-          <XIcon className="size-4" />
-        </Button>
-        <Card className="pt-4 pb-0 gap-4 rounded-md flex flex-col flex-1 w-96">
-          <CardHeader className="relative px-4">
-            <CardAction className="space-x-1">
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={handleDirections}
-                aria-label="Directions"
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            initial={{ opacity: 0, x: 30 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: 30 }}
+            transition={{ duration: 0.2 }}
+            className="absolute z-50 top-4 right-4 flex gap-2 font-sans"
+          >
+            <Button
+              variant="outline"
+              size="icon-sm"
+              onClick={clearStation}
+              className="shrink-0 self-start bg-card hover:bg-muted dark:bg-card dark:hover:bg-muted"
+              aria-label="Close"
+            >
+              <XIcon className="size-4" />
+            </Button>
+            <motion.div
+              style={{ height: cardHeight.height }}
+              className="overflow-hidden rounded-md"
+            >
+              <Card
+                ref={cardHeight.contentRef}
+                className="pt-4 pb-0 gap-4 rounded-md flex flex-col flex-1 w-96"
               >
-                <CornerUpRightIcon className="size-4" />
-              </Button>
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={handleShare}
-                aria-label="Share"
-              >
-                {copied ? (
-                  <CheckIcon className="size-4" />
-                ) : (
-                  <ShareIcon className="size-4" />
-                )}
-              </Button>
-            </CardAction>
-            <CardTitle className="pr-14">{selectedStation.name}</CardTitle>
-            <CardDescription>
-              <UpdatedStatus
-                isLoading={isLoading}
-                isValidating={isValidating}
-                lastUpdated={lastUpdated}
-              />
-            </CardDescription>
-            <StationTabs type={type} onTypeChange={setType} />
-          </CardHeader>
-          <CardContent className="flex-1 px-0">
-            <TrainListContent
-              trainData={trainData}
-              isLoading={isLoading}
-              error={error}
-              type={type}
-              scrollable
-            />
-          </CardContent>
-        </Card>
-      </div>
+                <CardHeader className="relative px-4">
+                  <CardAction className="space-x-1">
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onClick={handleDirections}
+                      aria-label="Directions"
+                    >
+                      <CornerUpRightIcon className="size-4" />
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onClick={handleShare}
+                      aria-label="Share"
+                    >
+                      {copied ? (
+                        <CheckIcon className="size-4" />
+                      ) : (
+                        <ShareIcon className="size-4" />
+                      )}
+                    </Button>
+                  </CardAction>
+                  <CardTitle className="pr-14">
+                    {selectedStation?.name}
+                  </CardTitle>
+                  <CardDescription>
+                    <UpdatedStatus
+                      isLoading={isLoading}
+                      isValidating={isValidating}
+                      lastUpdated={lastUpdated}
+                    />
+                  </CardDescription>
+                  <StationTabs type={type} onTypeChange={setType} />
+                </CardHeader>
+                <CardContent className="flex-1 px-0">
+                  <TrainListContent
+                    trainData={trainData}
+                    isLoading={isLoading}
+                    error={error}
+                    type={type}
+                    scrollable
+                  />
+                </CardContent>
+              </Card>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     );
   }
 

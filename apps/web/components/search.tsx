@@ -9,8 +9,9 @@ import {
   TrainFrontIcon,
   TrendingUpIcon,
 } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { AnimatePresence, motion } from "motion/react";
 import { useAnimatedHeight } from "@/hooks/use-animated-height";
+import { cn } from "@/lib/utils";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { useSelectedStation } from "@/hooks/use-selected-station";
 import {
@@ -244,85 +245,89 @@ export function Search() {
           <Kbd>K</Kbd>
         </InputGroupAddon>
       </InputGroup>
-      <div
-        className={cn(
-          "rounded-md pointer-events-auto",
-          ((isMobile && !isFocused) || (isSearchActive && !hasSearched)) &&
-            "opacity-0 pointer-events-none!",
+      <AnimatePresence>
+        {(!isMobile || isFocused) && (!isSearchActive || hasSearched) && (
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            transition={{ duration: 0.15 }}
+            style={{ height: cardHeight.height }}
+            className="rounded-md pointer-events-auto overflow-hidden"
+          >
+            <Card ref={cardHeight.contentRef} className="py-2 gap-0 rounded-md">
+              <CardContent className="p-0">
+                {/* Search Results */}
+                {isSearchActive && searchResults.length > 0 && (
+                  <>
+                    <CardHeader className="px-4 py-2">
+                      <CardDescription className="flex items-center gap-2">
+                        <ListIcon className="size-3.5" />
+                        Search Results
+                      </CardDescription>
+                    </CardHeader>
+                    <StationList
+                      stations={searchResults.slice(0, 10)}
+                      onSelect={handleSelectStation}
+                      focusedIndex={focusedIndex}
+                      startIndex={0}
+                      onFocusIndex={setFocusedIndex}
+                    />
+                  </>
+                )}
+                {/* No Results */}
+                {noResults && (
+                  <div className="px-4 py-3 flex items-center gap-3 text-muted-foreground">
+                    <SearchXIcon className="size-5 shrink-0" />
+                    <div className="flex flex-col gap-0.5">
+                      <p className="text-sm font-medium text-foreground">
+                        No stations found
+                      </p>
+                      <p className="text-xs">Try a different search term</p>
+                    </div>
+                  </div>
+                )}
+                {/* Recent Stations */}
+                {showRecentAndPopular && recentStations.length > 0 && (
+                  <>
+                    <CardHeader className="px-4 py-2">
+                      <CardDescription className="flex items-center gap-2">
+                        <HistoryIcon className="size-3.5" />
+                        Recent Stations
+                      </CardDescription>
+                    </CardHeader>
+                    <StationList
+                      stations={recentStations}
+                      onSelect={handleSelectStation}
+                      focusedIndex={focusedIndex}
+                      startIndex={0}
+                      onFocusIndex={setFocusedIndex}
+                    />
+                  </>
+                )}
+                {/* Popular Stations */}
+                {showRecentAndPopular && (
+                  <>
+                    <CardHeader className="px-4 py-2">
+                      <CardDescription className="flex items-center gap-2">
+                        <TrendingUpIcon className="size-3.5" />
+                        Popular Stations
+                      </CardDescription>
+                    </CardHeader>
+                    <StationList
+                      stations={POPULAR_STATIONS}
+                      onSelect={handleSelectStation}
+                      focusedIndex={focusedIndex}
+                      startIndex={recentStations.length}
+                      onFocusIndex={setFocusedIndex}
+                    />
+                  </>
+                )}
+              </CardContent>
+            </Card>
+          </motion.div>
         )}
-        style={cardHeight.style}
-      >
-        <Card ref={cardHeight.contentRef} className="py-2 gap-0 rounded-md">
-          <CardContent className="p-0">
-            {/* Search Results */}
-            {isSearchActive && searchResults.length > 0 && (
-              <>
-                <CardHeader className="px-4 py-2">
-                  <CardDescription className="flex items-center gap-2">
-                    <ListIcon className="size-3.5" />
-                    Search Results
-                  </CardDescription>
-                </CardHeader>
-                <StationList
-                  stations={searchResults.slice(0, 10)}
-                  onSelect={handleSelectStation}
-                  focusedIndex={focusedIndex}
-                  startIndex={0}
-                  onFocusIndex={setFocusedIndex}
-                />
-              </>
-            )}
-            {/* No Results */}
-            {noResults && (
-              <div className="px-4 py-3 flex items-center gap-3 text-muted-foreground">
-                <SearchXIcon className="size-5 shrink-0" />
-                <div className="flex flex-col gap-0.5">
-                  <p className="text-sm font-medium text-foreground">
-                    No stations found
-                  </p>
-                  <p className="text-xs">Try a different search term</p>
-                </div>
-              </div>
-            )}
-            {/* Recent Stations */}
-            {showRecentAndPopular && recentStations.length > 0 && (
-              <>
-                <CardHeader className="px-4 py-2">
-                  <CardDescription className="flex items-center gap-2">
-                    <HistoryIcon className="size-3.5" />
-                    Recent Stations
-                  </CardDescription>
-                </CardHeader>
-                <StationList
-                  stations={recentStations}
-                  onSelect={handleSelectStation}
-                  focusedIndex={focusedIndex}
-                  startIndex={0}
-                  onFocusIndex={setFocusedIndex}
-                />
-              </>
-            )}
-            {/* Popular Stations */}
-            {showRecentAndPopular && (
-              <>
-                <CardHeader className="px-4 py-2">
-                  <CardDescription className="flex items-center gap-2">
-                    <TrendingUpIcon className="size-3.5" />
-                    Popular Stations
-                  </CardDescription>
-                </CardHeader>
-                <StationList
-                  stations={POPULAR_STATIONS}
-                  onSelect={handleSelectStation}
-                  focusedIndex={focusedIndex}
-                  startIndex={recentStations.length}
-                  onFocusIndex={setFocusedIndex}
-                />
-              </>
-            )}
-          </CardContent>
-        </Card>
-      </div>
+      </AnimatePresence>
     </div>
   );
 }
