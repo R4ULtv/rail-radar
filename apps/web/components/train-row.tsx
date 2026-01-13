@@ -2,6 +2,7 @@ import type { Train } from "@repo/data";
 import { cn } from "@/lib/utils";
 import { Skeleton } from "@/components/ui/skeleton";
 import { BrandLogo } from "@/components/brands";
+import { ArrowRightIcon, ArrowDownIcon, BanIcon } from "lucide-react";
 
 interface TrainRowProps {
   train: Train;
@@ -13,7 +14,14 @@ export function TrainRow({ train, type }: TrainRowProps) {
   const hasDelay = train.delay !== null && train.delay > 0;
 
   return (
-    <div className="flex gap-3 py-3 px-4 border-b border-border last:border-b-0">
+    <div
+      className={cn(
+        "flex gap-3 py-3 px-4 border-b border-border last:border-b-0",
+        train.status === "departing" && "border-l-2 border-l-blue-500",
+        train.status === "incoming" && "border-l-2 border-l-green-500",
+        train.status === "cancelled" && "border-l-2 border-l-red-500",
+      )}
+    >
       {/* Platform badge */}
       <div className="shrink-0 min-w-12 h-12 px-2 bg-muted rounded-md flex items-center justify-center">
         <span
@@ -61,7 +69,7 @@ export function TrainRow({ train, type }: TrainRowProps) {
           {train.status && (
             <span
               className={cn(
-                "text-xs font-medium capitalize shrink-0",
+                "text-xs font-medium capitalize shrink-0 inline-flex items-center gap-1",
                 train.status === "incoming" &&
                   "text-green-600 dark:text-green-400",
                 train.status === "departing" &&
@@ -70,6 +78,13 @@ export function TrainRow({ train, type }: TrainRowProps) {
                   "text-red-600 dark:text-red-400",
               )}
             >
+              {train.status === "departing" && (
+                <ArrowRightIcon className="size-3" />
+              )}
+              {train.status === "incoming" && (
+                <ArrowDownIcon className="size-3" />
+              )}
+              {train.status === "cancelled" && <BanIcon className="size-3" />}
               {train.status}
             </span>
           )}
