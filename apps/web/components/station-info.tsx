@@ -5,6 +5,7 @@ import {
   ArrowDownLeftIcon,
   ArrowUpRightIcon,
   CheckIcon,
+  CornerUpRightIcon,
   ShareIcon,
   XIcon,
 } from "lucide-react";
@@ -13,6 +14,7 @@ import { useEffect, useState } from "react";
 import { TrainRow, TrainRowSkeleton } from "@/components/train-row";
 import {
   Card,
+  CardAction,
   CardContent,
   CardDescription,
   CardHeader,
@@ -209,6 +211,19 @@ export default function StationInfo() {
     }
   };
 
+  const handleDirections = () => {
+    if (!selectedStation?.geo) return;
+
+    const { lat, lng } = selectedStation.geo;
+    const isApple = /iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent);
+
+    const url = isApple
+      ? `https://maps.apple.com/?daddr=${lat},${lng}`
+      : `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`;
+
+    window.open(url, "_blank");
+  };
+
   const {
     data: trainData,
     isLoading,
@@ -232,20 +247,29 @@ export default function StationInfo() {
         </Button>
         <Card className="pt-4 pb-0 gap-4 rounded-md flex flex-col flex-1 w-96">
           <CardHeader className="relative px-4">
-            <Button
-              variant="ghost"
-              size="icon-sm"
-              onClick={handleShare}
-              className="absolute top-0 right-4"
-              aria-label="Share"
-            >
-              {copied ? (
-                <CheckIcon className="size-4" />
-              ) : (
-                <ShareIcon className="size-4" />
-              )}
-            </Button>
-            <CardTitle className="pr-6">{selectedStation.name}</CardTitle>
+            <CardAction className="space-x-1">
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={handleDirections}
+                aria-label="Directions"
+              >
+                <CornerUpRightIcon className="size-4" />
+              </Button>
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={handleShare}
+                aria-label="Share"
+              >
+                {copied ? (
+                  <CheckIcon className="size-4" />
+                ) : (
+                  <ShareIcon className="size-4" />
+                )}
+              </Button>
+            </CardAction>
+            <CardTitle className="pr-14">{selectedStation.name}</CardTitle>
             <CardDescription>
               <UpdatedStatus
                 isLoading={isLoading}
@@ -290,19 +314,28 @@ export default function StationInfo() {
             />
           </p>
           <StationTabs type={type} onTypeChange={setType} />
-          <Button
-            variant="ghost"
-            size="icon-sm"
-            onClick={handleShare}
-            aria-label="Share"
-            className="absolute top-3.5 right-4"
-          >
-            {copied ? (
-              <CheckIcon className="size-4" />
-            ) : (
-              <ShareIcon className="size-4" />
-            )}
-          </Button>
+          <div className="absolute top-3.5 right-4 flex gap-1">
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={handleDirections}
+              aria-label="Directions"
+            >
+              <CornerUpRightIcon className="size-4" />
+            </Button>
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={handleShare}
+              aria-label="Share"
+            >
+              {copied ? (
+                <CheckIcon className="size-4" />
+              ) : (
+                <ShareIcon className="size-4" />
+              )}
+            </Button>
+          </div>
         </DrawerHeader>
 
         <div
