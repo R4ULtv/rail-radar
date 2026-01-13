@@ -69,10 +69,25 @@ function parseStatus(
   return null;
 }
 
+export interface ScrapeResult {
+  trains: Train[];
+  info: string | null;
+}
+
+function parseStationInfo($: CheerioAPI): string | null {
+  // Look for the station info bar with marquee containing supplementary info
+  const marquee = $(".barrainfostazione .marqueeinfosupp");
+  if (marquee.length > 0) {
+    const text = marquee.text().trim();
+    return text || null;
+  }
+  return null;
+}
+
 export async function scrapeTrains(
   stationId: number,
   type: "arrivals" | "departures" = "departures",
-): Promise<Train[]> {
+): Promise<ScrapeResult> {
   const url = buildUrl(stationId, type === "arrivals");
 
   const response = await fetch(url);
@@ -121,5 +136,7 @@ export async function scrapeTrains(
     }
   });
 
-  return trains;
+  const info = parseStationInfo($);
+
+  return { trains, info };
 }

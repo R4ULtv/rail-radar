@@ -32,7 +32,7 @@ app.get("/", (c) => {
       "GET /stations": "List all stations (optional: ?q=search query)",
       "GET /stations/:id": "Get station by ID",
       "GET /trains/:stationId":
-        "Get trains for a station (optional: ?type=arrivals|departures)",
+        "Get trains for a station (optional: ?type=arrivals|departures). Returns trains array and stationInfo (announcements).",
     },
   });
 });
@@ -95,9 +95,10 @@ app.get(
     const type = c.req.query("type") === "arrivals" ? "arrivals" : "departures";
 
     try {
-      const trains = await scrapeTrains(stationId, type);
+      const { trains, info } = await scrapeTrains(stationId, type);
       return c.json({
         timestamp: new Date().toISOString(),
+        info,
         trains,
       });
     } catch (error) {

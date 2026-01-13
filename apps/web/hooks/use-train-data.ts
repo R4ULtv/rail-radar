@@ -2,8 +2,9 @@ import useSWR from "swr";
 import type { Train } from "@repo/data";
 
 interface TrainResponse {
-  trains: Train[];
   timestamp: string;
+  info: string | null;
+  trains: Train[];
 }
 
 const fetcher = (url: string) =>
@@ -34,5 +35,6 @@ export function useTrainData(
     isValidating,
     error: error?.message ?? null,
     lastUpdated: data?.timestamp ? new Date(data.timestamp) : null,
+    info: data?.info ?? null,
   };
 }
