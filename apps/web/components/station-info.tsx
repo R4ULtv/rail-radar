@@ -101,7 +101,7 @@ function StationTabs({
       onValueChange={(value) =>
         onTypeChange(value as "arrivals" | "departures")
       }
-      className="mt-3"
+      className="mt-3 col-span-2"
     >
       <TabsList className="w-full">
         <TabsTrigger value="departures">
