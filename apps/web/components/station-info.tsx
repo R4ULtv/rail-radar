@@ -287,9 +287,7 @@ export default function StationInfo() {
                       )}
                     </Button>
                   </CardAction>
-                  <CardTitle className="pr-14">
-                    {selectedStation?.name}
-                  </CardTitle>
+                  <CardTitle>{selectedStation?.name}</CardTitle>
                   <CardDescription>
                     <UpdatedStatus
                       isLoading={isLoading}
@@ -333,7 +331,9 @@ export default function StationInfo() {
         )}
       >
         <DrawerHeader className="pb-3 relative group-data-[vaul-drawer-direction=bottom]/drawer-content:text-left">
-          <DrawerTitle className="text-xl">{selectedStation?.name}</DrawerTitle>
+          <DrawerTitle className="text-xl pr-20">
+            {selectedStation?.name}
+          </DrawerTitle>
           <p className="text-sm text-muted-foreground h-5">
             <UpdatedStatus
               isLoading={isLoading}
