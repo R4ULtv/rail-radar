@@ -17,9 +17,12 @@ export function TrainRow({ train, type }: TrainRowProps) {
     <div
       className={cn(
         "flex gap-3 py-3 px-4 border-b border-border last:border-b-0",
-        train.status === "departing" && "border-l-2 border-l-blue-500",
-        train.status === "incoming" && "border-l-2 border-l-green-500",
-        train.status === "cancelled" && "border-l-2 border-l-red-500",
+        train.status === "departing" &&
+          "border-l-3 md:border-l-2 border-l-blue-500",
+        train.status === "incoming" &&
+          "border-l-3 md:border-l-2 border-l-green-500",
+        train.status === "cancelled" &&
+          "border-l-3 md:border-l-2 border-l-red-500",
       )}
     >
       {/* Platform badge */}
