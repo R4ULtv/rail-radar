@@ -1,13 +1,6 @@
 "use client";
 
-import {
-  createContext,
-  useCallback,
-  useContext,
-  useEffect,
-  useMemo,
-  useState,
-} from "react";
+import * as React from "react";
 import { useQueryState, parseAsInteger } from "nuqs";
 import { useMap } from "react-map-gl/maplibre";
 import { stationsCoords } from "@repo/data/stations";
@@ -41,7 +34,7 @@ interface SelectedStationContextValue {
 }
 
 const SelectedStationContext =
-  createContext<SelectedStationContextValue | null>(null);
+  React.createContext<SelectedStationContextValue | null>(null);
 
 export function SelectedStationProvider({
   children,
@@ -53,20 +46,20 @@ export function SelectedStationProvider({
     "station",
     parseAsInteger.withOptions({ history: "push", shallow: true }),
   );
-  const [recentStations, setRecentStations] = useState<Station[]>([]);
+  const [recentStations, setRecentStations] = React.useState<Station[]>([]);
 
   // Derive selected station from URL parameter (includes coordinates)
-  const selectedStation = useMemo(() => {
+  const selectedStation = React.useMemo(() => {
     if (!stationId) return null;
     const station = stationsCoords.find((s) => s.id === stationId);
     return station ?? null;
   }, [stationId]);
 
-  useEffect(() => {
+  React.useEffect(() => {
     setRecentStations(getRecentStations());
   }, []);
 
-  const selectStation = useCallback(
+  const selectStation = React.useCallback(
     (station: Station) => {
       // Use provided geo or look it up from stationsCoords
       const geo =
@@ -94,7 +87,7 @@ export function SelectedStationProvider({
     [map, setStationId],
   );
 
-  const clearStation = useCallback(() => {
+  const clearStation = React.useCallback(() => {
     setStationId(null);
   }, [setStationId]);
 
@@ -108,7 +101,7 @@ export function SelectedStationProvider({
 }
 
 export function useSelectedStation() {
-  const context = useContext(SelectedStationContext);
+  const context = React.useContext(SelectedStationContext);
   if (!context) {
     throw new Error(
       "useSelectedStation must be used within a SelectedStationProvider",
