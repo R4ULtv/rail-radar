@@ -6,7 +6,6 @@ import {
   useContext,
   useEffect,
   useMemo,
-  useRef,
   useState,
 } from "react";
 import { useQueryState, parseAsInteger } from "nuqs";
@@ -55,56 +54,40 @@ export function SelectedStationProvider({
     parseAsInteger.withOptions({ history: "push", shallow: true }),
   );
   const [recentStations, setRecentStations] = useState<Station[]>([]);
-  const hasFlownToInitial = useRef(false);
 
-  // Derive selected station from URL parameter
+  // Derive selected station from URL parameter (includes coordinates)
   const selectedStation = useMemo(() => {
     if (!stationId) return null;
     const station = stationsCoords.find((s) => s.id === stationId);
-    return station ? { id: station.id, name: station.name } : null;
+    return station ?? null;
   }, [stationId]);
 
   useEffect(() => {
     setRecentStations(getRecentStations());
   }, []);
 
-  // Fly to station when loaded from URL (initial load only)
-  useEffect(() => {
-    if (!map || hasFlownToInitial.current) return;
-    if (!stationId) return;
-
-    const station = stationsCoords.find((s) => s.id === stationId);
-    if (station?.geo) {
-      map.flyTo({
-        center: [station.geo.lng, station.geo.lat],
-        zoom: 14,
-      });
-      hasFlownToInitial.current = true;
-    }
-  }, [map, stationId]);
-
   const selectStation = useCallback(
     (station: Station) => {
-      const stationWithCoords = stationsCoords.find((s) => s.id === station.id);
-      if (!stationWithCoords?.geo) return;
-
-      const { lat, lng } = stationWithCoords.geo;
+      // Use provided geo or look it up from stationsCoords
+      const geo =
+        station.geo ?? stationsCoords.find((s) => s.id === station.id)?.geo;
+      if (!geo) return;
 
       setStationId(station.id);
 
-      // Update recent stations
+      // Update recent stations (store with geo for future use)
       setRecentStations((prev) => {
         const filtered = prev.filter((s) => s.id !== station.id);
-        const updated = [
-          { id: station.id, name: station.name },
-          ...filtered,
-        ].slice(0, MAX_RECENT_STATIONS);
+        const updated = [{ ...station, geo }, ...filtered].slice(
+          0,
+          MAX_RECENT_STATIONS,
+        );
         saveRecentStations(updated);
         return updated;
       });
 
       map?.flyTo({
-        center: [lng, lat],
+        center: [geo.lng, geo.lat],
         zoom: 14,
       });
     },
