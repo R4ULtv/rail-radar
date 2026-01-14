@@ -324,9 +324,6 @@ export default function StationInfo() {
       setActiveSnapPoint={setSnap}
       open={isOpen}
       onClose={clearStation}
-      modal={false}
-      key="non-modal"
-      noBodyStyles
     >
       <DrawerContent
         className={cn(
