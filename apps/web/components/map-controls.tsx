@@ -128,8 +128,12 @@ export function MapControls() {
           anchor="center"
         >
           <div className="relative flex items-center justify-center">
-            <div className="absolute size-7 rounded-full bg-accent/30 motion-safe:animate-pulse" />
-            <div className="size-3.5 rounded-full border-2 border-white bg-accent shadow-md" />
+            <div className="absolute rounded-full bg-accent/20 size-8" />
+            <div
+              className="absolute rounded-full bg-accent/40 size-5 motion-safe:animate-ping"
+              style={{ animationDuration: "2s" }}
+            />
+            <div className="size-4 rounded-full border-2 border-white bg-accent shadow-md z-10" />
           </div>
         </Marker>
       )}
