@@ -23,4 +23,10 @@
       },
     },
   ],
+  "kv_namespaces": [
+    {
+      "binding": "STATION_VISITS",
+      "id": "15700977bb054bfb81a04a51b8fa82e6",
+    },
+  ],
 }

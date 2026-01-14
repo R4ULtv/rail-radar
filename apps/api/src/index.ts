@@ -5,11 +5,17 @@ import { cors } from "hono/cors";
 import { stationsCoords } from "@repo/data/stations";
 import { fuzzySearch } from "./fuzzy.js";
 import { scrapeTrains, ScraperError } from "./scraper.js";
+import {
+  incrementVisitCount,
+  getVisitCount,
+  getTopStations,
+} from "./visits.js";
 
 const stations = stationsCoords.filter((s) => s.geo);
 
 type Bindings = {
   RATE_LIMITER: RateLimit;
+  STATION_VISITS: KVNamespace;
 };
 
 const app = new Hono<{ Bindings: Bindings }>();
@@ -32,7 +38,9 @@ app.get("/", (c) => {
     endpoints: {
       "GET /": "API structure and documentation",
       "GET /stations": "List all stations (optional: ?q=search query)",
+      "GET /stations/top": "Get top 5 most visited stations",
       "GET /stations/:id": "Get station by ID",
+      "GET /stations/:id/visits": "Get visit count for a station",
       "GET /trains/:stationId":
         "Get trains for a station (optional: ?type=arrivals|departures). Returns trains array and stationInfo (announcements).",
     },
@@ -50,6 +58,18 @@ app.get("/stations", (c) => {
   return c.json(filtered);
 });
 
+app.get(
+  "/stations/top",
+  cache({
+    cacheName: "visits-cache",
+    cacheControl: "public, max-age=300, stale-while-revalidate=60",
+  }),
+  async (c) => {
+    const topStations = await getTopStations(c.env.STATION_VISITS, stations);
+    return c.json(topStations);
+  },
+);
+
 app.get("/stations/:id", (c) => {
   const id = parseInt(c.req.param("id"), 10);
 
@@ -65,6 +85,35 @@ app.get("/stations/:id", (c) => {
 
   return c.json(station);
 });
+
+app.get(
+  "/stations/:id/visits",
+  cache({
+    cacheName: "visits-cache",
+    cacheControl: "public, max-age=300, stale-while-revalidate=60",
+  }),
+  async (c) => {
+    const id = parseInt(c.req.param("id"), 10);
+
+    if (isNaN(id)) {
+      return c.json({ error: "Invalid station ID" }, 400);
+    }
+
+    const station = stations.find((s) => s.id === id);
+
+    if (!station) {
+      return c.json({ error: "Station not found" }, 404);
+    }
+
+    const visits = await getVisitCount(c.env.STATION_VISITS, id);
+
+    return c.json({
+      stationId: id,
+      stationName: station.name,
+      visits,
+    });
+  },
+);
 
 app.get(
   "/trains/:stationId",
@@ -93,6 +142,11 @@ app.get(
     if (!stationExists) {
       return c.json({ error: "Station not found" }, 404);
     }
+
+    // Increment visit count asynchronously (non-blocking)
+    c.executionCtx.waitUntil(
+      incrementVisitCount(c.env.STATION_VISITS, stationId),
+    );
 
     const type = c.req.query("type") === "arrivals" ? "arrivals" : "departures";
 
