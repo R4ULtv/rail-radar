@@ -61,7 +61,10 @@ app.get(
     const { success } = await c.env.RATE_LIMITER.limit({ key: ip });
 
     if (!success) {
-      return c.json({ error: "Rate limit exceeded" }, 429);
+      return c.json(
+        { error: "Too many requests. Please wait a moment and try again." },
+        429,
+      );
     }
 
     await next();
@@ -70,13 +73,24 @@ app.get(
     const id = parseInt(c.req.param("id"), 10);
 
     if (isNaN(id)) {
-      return c.json({ error: "Invalid station ID" }, 400);
+      return c.json(
+        {
+          error:
+            "Invalid station. Please try searching for a different station.",
+        },
+        400,
+      );
     }
 
     const station = stations.find((s) => s.id === id);
 
     if (!station) {
-      return c.json({ error: "Station not found" }, 404);
+      return c.json(
+        {
+          error: "Station not found. Please try searching for another station.",
+        },
+        404,
+      );
     }
 
     const type = c.req.query("type") === "arrivals" ? "arrivals" : "departures";
@@ -95,7 +109,10 @@ app.get(
       if (error instanceof ScraperError) {
         return c.json({ error: error.message }, error.statusCode);
       }
-      return c.json({ error: "Failed to fetch train data" }, 500);
+      return c.json(
+        { error: "Unable to load train data. Please try again in a moment." },
+        500,
+      );
     }
   },
 );
