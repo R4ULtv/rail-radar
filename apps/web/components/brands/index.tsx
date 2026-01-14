@@ -8,22 +8,30 @@ import InterCity from "./intercity";
 import FrecciaRossa from "./frecciarossa";
 import InterCityNotte from "./intercity-notte";
 import Sncf from "./sncf";
+import Sad from "./sad";
+import Obb from "./obb";
 
 type BrandIconProps = SVGProps<SVGSVGElement>;
 
 const brandIcons: Record<string, ComponentType<BrandIconProps>> = {
-  trenord: Trenord,
+  trenitalia: Trenitalia,
+  intercity: InterCity,
+  "intercity notte": InterCityNotte,
+  // High-speed
   italo: Italo,
   ntv: Italo,
-  trenitalia: Trenitalia,
   frecciarossa: FrecciaRossa,
   frecciabianca: Trenitalia,
   frecciargento: Trenitalia,
-  fse: Trenitalia,
-  "trenitalia tper": Tper,
-  intercity: InterCity,
-  "intercity notte": InterCityNotte,
-  sncf: Sncf,
+  // Regional
+  trenord: Trenord, // Lombardia
+  "trenitalia tper": Tper, // Emilia-Romagna
+  sad: Sad, // Trentino
+  fse: Trenitalia, // Puglia
+  // Other
+  sncf: Sncf, // France
+  obb: Obb, // Austria
+  "obb railjet": Obb,
 };
 
 interface BrandLogoProps extends BrandIconProps {
