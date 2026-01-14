@@ -152,13 +152,4 @@ app.get(
   },
 );
 
-app.get("/trains/:stationId", (c) => {
-  const stationId = c.req.param("stationId");
-  const type = c.req.query("type");
-  const url = type
-    ? `/stations/${stationId}?type=${type}`
-    : `/stations/${stationId}`;
-  return c.redirect(url);
-});
-
 export default app;

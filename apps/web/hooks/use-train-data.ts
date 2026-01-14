@@ -20,7 +20,7 @@ export function useTrainData(
 ) {
   const { data, error, isLoading, isValidating } = useSWR<TrainResponse>(
     stationId
-      ? `${process.env.NEXT_PUBLIC_API_URL}/trains/${stationId}?type=${type}`
+      ? `${process.env.NEXT_PUBLIC_API_URL}/stations/${stationId}?type=${type}`
       : null,
     fetcher,
     {
