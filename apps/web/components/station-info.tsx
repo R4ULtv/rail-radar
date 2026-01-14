@@ -64,7 +64,9 @@ function TrainListContent({
 
   if (error) {
     return (
-      <div className="px-4 py-8 text-center text-sm text-red-500">{error}</div>
+      <div className="px-4 py-8 text-center text-sm text-muted-foreground">
+        {error}
+      </div>
     );
   }
 

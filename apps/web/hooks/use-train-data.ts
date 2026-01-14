@@ -7,11 +7,28 @@ interface TrainResponse {
   trains: Train[];
 }
 
-const fetcher = (url: string) =>
-  fetch(url).then((res) => {
-    if (!res.ok) throw new Error("Failed to fetch train data");
-    return res.json();
-  });
+const fetcher = async (url: string) => {
+  const res = await fetch(url);
+
+  if (!res.ok) {
+    // Try to parse error message from API response
+    try {
+      const errorData = await res.json();
+      if (errorData.error) {
+        throw new Error(errorData.error);
+      }
+    } catch (e) {
+      // If there's an error message, use it; otherwise generic
+      if (e instanceof Error && e.message) {
+        throw e;
+      }
+    }
+    // Fallback generic error
+    throw new Error("Unable to load train data");
+  }
+
+  return res.json();
+};
 
 export function useTrainData(
   stationId: number | null,
