@@ -39,10 +39,10 @@ app.get("/", (c) => {
       "GET /": "API structure and documentation",
       "GET /stations": "List all stations (optional: ?q=search query)",
       "GET /stations/top": "Get top 5 most visited stations",
-      "GET /stations/:id": "Get station by ID",
+      "GET /stations/:id":
+        "Get station info with trains (optional: ?type=arrivals|departures)",
       "GET /stations/:id/visits": "Get visit count for a station",
-      "GET /trains/:stationId":
-        "Get trains for a station (optional: ?type=arrivals|departures). Returns trains array and stationInfo (announcements).",
+      "GET /trains/:stationId": "Alias for /stations/:id (redirects)",
     },
   });
 });
@@ -70,21 +70,58 @@ app.get(
   },
 );
 
-app.get("/stations/:id", (c) => {
-  const id = parseInt(c.req.param("id"), 10);
+app.get(
+  "/stations/:id",
+  cache({
+    cacheName: "stations-cache",
+    cacheControl: "public, max-age=25, stale-while-revalidate=5",
+  }),
+  async (c, next) => {
+    const ip = c.req.header("cf-connecting-ip") ?? "unknown";
+    const { success } = await c.env.RATE_LIMITER.limit({ key: ip });
 
-  if (isNaN(id)) {
-    return c.json({ error: "Invalid station ID" }, 400);
-  }
+    if (!success) {
+      return c.json({ error: "Rate limit exceeded" }, 429);
+    }
 
-  const station = stations.find((s) => s.id === id);
+    await next();
+  },
+  async (c) => {
+    const id = parseInt(c.req.param("id"), 10);
 
-  if (!station) {
-    return c.json({ error: "Station not found" }, 404);
-  }
+    if (isNaN(id)) {
+      return c.json({ error: "Invalid station ID" }, 400);
+    }
 
-  return c.json(station);
-});
+    const station = stations.find((s) => s.id === id);
+
+    if (!station) {
+      return c.json({ error: "Station not found" }, 404);
+    }
+
+    // Increment visit count asynchronously (non-blocking)
+    c.executionCtx.waitUntil(incrementVisitCount(c.env.STATION_VISITS, id));
+
+    const type = c.req.query("type") === "arrivals" ? "arrivals" : "departures";
+
+    try {
+      const { trains, info } = await scrapeTrains(id, type);
+      return c.json({
+        id: station.id,
+        name: station.name,
+        geo: station.geo,
+        timestamp: new Date().toISOString(),
+        info,
+        trains,
+      });
+    } catch (error) {
+      if (error instanceof ScraperError) {
+        return c.json({ error: error.message }, error.statusCode);
+      }
+      return c.json({ error: "Failed to fetch train data" }, 500);
+    }
+  },
+);
 
 app.get(
   "/stations/:id/visits",
@@ -115,55 +152,13 @@ app.get(
   },
 );
 
-app.get(
-  "/trains/:stationId",
-  cache({
-    cacheName: "trains-cache",
-    cacheControl: "public, max-age=25, stale-while-revalidate=5",
-  }),
-  async (c, next) => {
-    const ip = c.req.header("cf-connecting-ip") ?? "unknown";
-    const { success } = await c.env.RATE_LIMITER.limit({ key: ip });
-
-    if (!success) {
-      return c.json({ error: "Rate limit exceeded" }, 429);
-    }
-
-    await next();
-  },
-  async (c) => {
-    const stationId = parseInt(c.req.param("stationId"), 10);
-
-    if (isNaN(stationId)) {
-      return c.json({ error: "Invalid station ID" }, 400);
-    }
-
-    const stationExists = stations.some((s) => s.id === stationId);
-    if (!stationExists) {
-      return c.json({ error: "Station not found" }, 404);
-    }
-
-    // Increment visit count asynchronously (non-blocking)
-    c.executionCtx.waitUntil(
-      incrementVisitCount(c.env.STATION_VISITS, stationId),
-    );
-
-    const type = c.req.query("type") === "arrivals" ? "arrivals" : "departures";
-
-    try {
-      const { trains, info } = await scrapeTrains(stationId, type);
-      return c.json({
-        timestamp: new Date().toISOString(),
-        info,
-        trains,
-      });
-    } catch (error) {
-      if (error instanceof ScraperError) {
-        return c.json({ error: error.message }, error.statusCode);
-      }
-      return c.json({ error: "Failed to fetch train data" }, 500);
-    }
-  },
-);
+app.get("/trains/:stationId", (c) => {
+  const stationId = c.req.param("stationId");
+  const type = c.req.query("type");
+  const url = type
+    ? `/stations/${stationId}?type=${type}`
+    : `/stations/${stationId}`;
+  return c.redirect(url);
+});
 
 export default app;
