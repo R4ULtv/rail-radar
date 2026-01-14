@@ -25,7 +25,7 @@ export function useTrainData(
     fetcher,
     {
       refreshInterval: enabled ? 10_000 : 0,
-      revalidateOnFocus: false,
+      revalidateOnFocus: true,
     },
   );
 
