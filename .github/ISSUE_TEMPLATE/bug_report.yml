@@ -16,6 +16,7 @@ body:
       label: Short summary
       description: A concise, descriptive title for the bug
       placeholder: A clear bug summary
+    validations:
       required: true
 
   - type: textarea
@@ -23,6 +24,7 @@ body:
     attributes:
       label: Steps to reproduce
       description: Describe exactly how to reproduce the issue
+    validations:
       required: true
 
   - type: textarea
