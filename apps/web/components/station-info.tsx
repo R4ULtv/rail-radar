@@ -6,6 +6,7 @@ import {
   ArrowUpRightIcon,
   CheckIcon,
   CornerUpRightIcon,
+  MegaphoneIcon,
   ShareIcon,
   XIcon,
 } from "lucide-react";
@@ -235,6 +236,7 @@ export default function StationInfo() {
     isValidating,
     error,
     lastUpdated,
+    info,
   } = useTrainData(selectedStation?.id ?? null, type, isOpen);
 
   // Desktop view
@@ -247,21 +249,18 @@ export default function StationInfo() {
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: 30 }}
             transition={{ duration: 0.2 }}
-            className="absolute z-50 top-4 right-4 flex gap-2 font-sans"
+            className="absolute z-50 top-4 right-4 font-sans"
           >
             <Button
               variant="outline"
               size="icon-sm"
               onClick={clearStation}
-              className="shrink-0 self-start bg-card hover:bg-muted dark:bg-card dark:hover:bg-muted"
+              className="bg-card hover:bg-muted dark:bg-card dark:hover:bg-muted absolute -left-11"
               aria-label="Close"
             >
               <XIcon className="size-4" />
             </Button>
-            <motion.div
-              style={{ height: cardHeight.height }}
-              className="overflow-hidden rounded-md"
-            >
+            <motion.div style={{ height: cardHeight.height }}>
               <Card
                 ref={cardHeight.contentRef}
                 className="pt-4 pb-0 gap-4 rounded-md flex flex-col flex-1 w-96"
@@ -342,6 +341,12 @@ export default function StationInfo() {
               lastUpdated={lastUpdated}
             />
           </p>
+          {info && snap === 1 && (
+            <div className="text-sm text-muted-foreground bg-muted px-2 py-1 rounded mt-2">
+              <MegaphoneIcon className="size-4 inline mr-1" />
+              <span className="font-normal">{info}</span>
+            </div>
+          )}
           <StationTabs type={type} onTypeChange={setType} />
           <div className="absolute top-3.5 right-4 flex gap-1">
             <Button
