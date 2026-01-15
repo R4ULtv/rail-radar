@@ -1,0 +1,50 @@
+name: "🐞 Bug Report"
+description: "Report a bug — something isn’t working as expected"
+title: "[BUG] "
+labels: ["bug"]
+assignees: []
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to report an issue! Please fill out the details below.
+
+  - type: input
+    id: summary
+    attributes:
+      label: Short summary
+      description: A concise, descriptive title for the bug
+      placeholder: A clear bug summary
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      description: Describe exactly how to reproduce the issue
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+      description: What you expected to happen
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior
+      description: What happened instead
+
+  - type: input
+    id: env
+    attributes:
+      label: Environment
+      placeholder: e.g., browser, OS
+
+  - type: textarea
+    id: additional
+    attributes:
+      label: Additional context
+      description: Any other details (logs, screenshots, etc.)

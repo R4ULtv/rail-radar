@@ -1,0 +1,12 @@
+name: "🧹 Chore / Documentation"
+description: "Requests for cleanup or doc improvements"
+title: "[CHORE] "
+labels: ["documentation"]
+assignees: []
+body:
+  - type: textarea
+    id: details
+    attributes:
+      label: Description
+      description: Describe what needs to be cleaned up or documented
+      required: true
