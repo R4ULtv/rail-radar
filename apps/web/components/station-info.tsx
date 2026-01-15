@@ -24,6 +24,7 @@ import {
 import {
   Drawer,
   DrawerContent,
+  DrawerDescription,
   DrawerHeader,
   DrawerTitle,
 } from "@/components/ui/drawer";
@@ -334,13 +335,13 @@ export default function StationInfo() {
           <DrawerTitle className="text-xl pr-20">
             {selectedStation?.name}
           </DrawerTitle>
-          <p className="text-sm text-muted-foreground h-5">
+          <DrawerDescription className="text-sm text-muted-foreground h-5">
             <UpdatedStatus
               isLoading={isLoading}
               isValidating={isValidating}
               lastUpdated={lastUpdated}
             />
-          </p>
+          </DrawerDescription>
           {info && snap === 1 && (
             <div className="text-sm text-muted-foreground bg-muted px-2 py-1 rounded mt-2">
               <MegaphoneIcon className="size-4 inline mr-1" />
