@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import useSWR from "swr";
 import {
   HistoryIcon,
   ListIcon,
@@ -27,6 +28,7 @@ import {
 import { Spinner } from "@/components/ui/spinner";
 
 import { useAnimatedHeight } from "@/hooks/use-animated-height";
+import { useDebounce } from "@/hooks/use-debounce";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { useSelectedStation } from "@/hooks/use-selected-station";
 
@@ -41,7 +43,7 @@ const POPULAR_STATIONS: Station[] = [
   { id: 3009, name: "Venezia S.Lucia" },
 ];
 
-function StationList({
+const StationList = React.memo(function StationList({
   stations,
   onSelect,
   focusedIndex = -1,
@@ -88,19 +90,31 @@ function StationList({
       })}
     </ul>
   );
-}
+});
 
 export function Search() {
   const isMobile = useIsMobile();
   const { selectStation, recentStations } = useSelectedStation();
   const inputRef = React.useRef<HTMLInputElement>(null);
   const [query, setQuery] = React.useState("");
-  const [searchResults, setSearchResults] = React.useState<Station[]>([]);
-  const [hasSearched, setHasSearched] = React.useState(false);
+  const debouncedQuery = useDebounce(query.trim(), 300);
   const [focusedIndex, setFocusedIndex] = React.useState<number>(-1);
   const [isFocused, setIsFocused] = React.useState(false);
 
+  // Fetch search results with SWR
+  const { data: searchResults = [], isLoading } = useSWR<Station[]>(
+    debouncedQuery
+      ? `/stations?q=${encodeURIComponent(debouncedQuery)}`
+      : null,
+    async (url: string) => {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}${url}`);
+      if (!res.ok) throw new Error("Search failed");
+      return res.json();
+    },
+  );
+
   const isSearchActive = query.trim().length > 0;
+  const hasSearched = isSearchActive && query.trim() === debouncedQuery && !isLoading;
 
   const noResults = isSearchActive && hasSearched && searchResults.length === 0;
   const showRecentAndPopular = !isSearchActive || noResults;
@@ -135,39 +149,6 @@ export function Search() {
   React.useEffect(() => {
     setFocusedIndex(-1);
   }, [query, searchResults.length]);
-
-  React.useEffect(() => {
-    if (!query.trim()) {
-      setSearchResults([]);
-      setHasSearched(false);
-      return;
-    }
-
-    setHasSearched(false);
-    const controller = new AbortController();
-    const timeoutId = setTimeout(async () => {
-      try {
-        const res = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/stations?q=${encodeURIComponent(query)}`,
-          { signal: controller.signal },
-        );
-        if (res.ok) {
-          const data = await res.json();
-          setSearchResults(data);
-          setHasSearched(true);
-        }
-      } catch (e) {
-        if (e instanceof Error && e.name !== "AbortError") {
-          console.error("Search failed:", e);
-        }
-      }
-    }, 300);
-
-    return () => {
-      clearTimeout(timeoutId);
-      controller.abort();
-    };
-  }, [query]);
 
   React.useEffect(() => {
     function handleKeyDown(e: KeyboardEvent) {
