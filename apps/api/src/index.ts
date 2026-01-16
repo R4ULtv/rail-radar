@@ -195,6 +195,7 @@ app.get(
           stationId: station.id,
           stationName: station.name,
           ip,
+          type,
         }),
       );
 

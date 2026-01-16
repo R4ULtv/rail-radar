@@ -14,11 +14,11 @@ async function hashIP(ip: string): Promise<string> {
  */
 export async function recordStationVisit(
   analytics: AnalyticsEngineDataset,
-  data: { stationId: number; stationName: string; ip: string },
+  data: { stationId: number; stationName: string; ip: string; type: string },
 ): Promise<void> {
   const hashedIP = await hashIP(data.ip);
   analytics.writeDataPoint({
-    blobs: [data.stationName, hashedIP],
+    blobs: [data.stationName, hashedIP, data.type],
     doubles: [data.stationId],
     indexes: [data.stationId.toString()],
   });
