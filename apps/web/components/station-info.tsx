@@ -20,25 +20,25 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
+} from "@repo/ui/components/card";
 import {
   Drawer,
   DrawerContent,
   DrawerDescription,
   DrawerHeader,
   DrawerTitle,
-} from "@/components/ui/drawer";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+} from "@repo/ui/components/drawer";
+import { ScrollArea } from "@repo/ui/components/scroll-area";
+import { Tabs, TabsList, TabsTrigger } from "@repo/ui/components/tabs";
 
 import { AnimatePresence, motion } from "motion/react";
 import { useAnimatedHeight } from "@/hooks/use-animated-height";
-import { useIsMobile } from "@/hooks/use-mobile";
+import { useIsMobile } from "@repo/ui/hooks/use-mobile";
 import { useSelectedStation } from "@/hooks/use-selected-station";
 import { useTrainData } from "@/hooks/use-train-data";
 
-import { cn } from "@/lib/utils";
-import { Button } from "./ui/button";
+import { cn } from "@repo/ui/lib/utils";
+import { Button } from "@repo/ui/components/button";
 
 // Shared component for train list content (loading, error, empty, list states)
 function TrainListContent({

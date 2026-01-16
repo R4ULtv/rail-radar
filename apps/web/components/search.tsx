@@ -18,21 +18,21 @@ import {
   CardContent,
   CardDescription,
   CardHeader,
-} from "@/components/ui/card";
+} from "@repo/ui/components/card";
 import {
   InputGroup,
   InputGroupAddon,
   InputGroupButton,
   InputGroupInput,
-} from "@/components/ui/input-group";
-import { Spinner } from "@/components/ui/spinner";
+} from "@repo/ui/components/input-group";
+import { Spinner } from "@repo/ui/components/spinner";
 
 import { useAnimatedHeight } from "@/hooks/use-animated-height";
-import { useDebounce } from "@/hooks/use-debounce";
-import { useIsMobile } from "@/hooks/use-mobile";
+import { useDebounce } from "@repo/ui/hooks/use-debounce";
+import { useIsMobile } from "@repo/ui/hooks/use-mobile";
 import { useSelectedStation } from "@/hooks/use-selected-station";
 
-import { cn } from "@/lib/utils";
+import { cn } from "@repo/ui/lib/utils";
 import type { Station } from "@repo/data";
 
 const POPULAR_STATIONS: Station[] = [
@@ -103,9 +103,7 @@ export function Search() {
 
   // Fetch search results with SWR
   const { data: searchResults = [], isLoading } = useSWR<Station[]>(
-    debouncedQuery
-      ? `/stations?q=${encodeURIComponent(debouncedQuery)}`
-      : null,
+    debouncedQuery ? `/stations?q=${encodeURIComponent(debouncedQuery)}` : null,
     async (url: string) => {
       const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}${url}`);
       if (!res.ok) throw new Error("Search failed");
@@ -114,7 +112,8 @@ export function Search() {
   );
 
   const isSearchActive = query.trim().length > 0;
-  const hasSearched = isSearchActive && query.trim() === debouncedQuery && !isLoading;
+  const hasSearched =
+    isSearchActive && query.trim() === debouncedQuery && !isLoading;
 
   const noResults = isSearchActive && hasSearched && searchResults.length === 0;
   const showRecentAndPopular = !isSearchActive || noResults;

@@ -9,9 +9,9 @@ import {
   MinusIcon,
   PlusIcon,
 } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { ButtonGroup } from "@/components/ui/button-group";
-import { useIsMobile } from "@/hooks/use-mobile";
+import { Button } from "@repo/ui/components/button";
+import { ButtonGroup } from "@repo/ui/components/button-group";
+import { useIsMobile } from "@repo/ui/hooks/use-mobile";
 
 export function MapControls() {
   const isMobile = useIsMobile();

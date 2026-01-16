@@ -1,6 +1,6 @@
 import type { Train } from "@repo/data";
-import { cn } from "@/lib/utils";
-import { Skeleton } from "@/components/ui/skeleton";
+import { cn } from "@repo/ui/lib/utils";
+import { Skeleton } from "@repo/ui/components/skeleton";
 import { BrandLogo } from "@/components/brands";
 import { ArrowRightIcon, ArrowDownIcon, BanIcon } from "lucide-react";
 
