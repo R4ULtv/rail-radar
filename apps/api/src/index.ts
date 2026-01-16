@@ -60,71 +60,85 @@ app.get("/stations", (c) => {
   return c.json(filtered);
 });
 
-app.get("/stations/top", async (c) => {
-  try {
-    const topStations = await getTopStations(
-      c.env.CLOUDFLARE_ACCOUNT_ID,
-      c.env.CLOUDFLARE_API_TOKEN,
-      5,
-    );
+app.get(
+  "/stations/top",
+  cache({
+    cacheName: "analytics-cache",
+    cacheControl: "public, max-age=600, stale-while-revalidate=60", // 10 minutes
+  }),
+  async (c) => {
+    try {
+      const topStations = await getTopStations(
+        c.env.CLOUDFLARE_ACCOUNT_ID,
+        c.env.CLOUDFLARE_API_TOKEN,
+        5,
+      );
 
-    return c.json({
-      timestamp: new Date().toISOString(),
-      stations: topStations,
-    });
-  } catch {
-    return c.json(
-      { error: "Unable to fetch analytics data. Please try again later." },
-      500,
-    );
-  }
-});
+      return c.json({
+        timestamp: new Date().toISOString(),
+        stations: topStations,
+      });
+    } catch {
+      return c.json(
+        { error: "Unable to fetch analytics data. Please try again later." },
+        500,
+      );
+    }
+  },
+);
 
-app.get("/stations/:id/visits", async (c) => {
-  const id = parseInt(c.req.param("id"), 10);
+app.get(
+  "/stations/:id/visits",
+  cache({
+    cacheName: "analytics-cache",
+    cacheControl: "public, max-age=600, stale-while-revalidate=60", // 10 minutes
+  }),
+  async (c) => {
+    const id = parseInt(c.req.param("id"), 10);
 
-  if (isNaN(id)) {
-    return c.json(
-      {
-        error:
-          "Invalid station. Please try searching for a different station.",
-      },
-      400,
-    );
-  }
+    if (isNaN(id)) {
+      return c.json(
+        {
+          error:
+            "Invalid station. Please try searching for a different station.",
+        },
+        400,
+      );
+    }
 
-  const station = stations.find((s) => s.id === id);
+    const station = stations.find((s) => s.id === id);
 
-  if (!station) {
-    return c.json(
-      {
-        error: "Station not found. Please try searching for another station.",
-      },
-      404,
-    );
-  }
+    if (!station) {
+      return c.json(
+        {
+          error: "Station not found. Please try searching for another station.",
+        },
+        404,
+      );
+    }
 
-  try {
-    const { visits, uniqueVisitors } = await getStationVisits(
-      c.env.CLOUDFLARE_ACCOUNT_ID,
-      c.env.CLOUDFLARE_API_TOKEN,
-      id,
-    );
+    try {
+      const { visits, uniqueVisitors } = await getStationVisits(
+        c.env.CLOUDFLARE_ACCOUNT_ID,
+        c.env.CLOUDFLARE_API_TOKEN,
+        id,
+      );
 
-    return c.json({
-      id: station.id,
-      name: station.name,
-      visits,
-      uniqueVisitors,
-      timestamp: new Date().toISOString(),
-    });
-  } catch {
-    return c.json(
-      { error: "Unable to fetch analytics data. Please try again later." },
-      500,
-    );
-  }
-});
+      return c.json({
+        id: station.id,
+        name: station.name,
+        visits,
+        uniqueVisitors,
+        timestamp: new Date().toISOString(),
+      });
+    } catch {
+      return c.json(
+        { error: "Unable to fetch analytics data. Please try again later." },
+        500,
+      );
+    }
+  },
+);
 
 app.get(
   "/stations/:id",
