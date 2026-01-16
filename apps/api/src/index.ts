@@ -4,8 +4,8 @@ import { cors } from "hono/cors";
 
 import { stationsCoords } from "@repo/data/stations";
 import {
-  getStationVisits,
-  getTopStations,
+  getAnalyticsOverview,
+  getTrendingStations,
   recordStationVisit,
 } from "./analytics.js";
 import { fuzzySearch } from "./fuzzy.js";
@@ -40,10 +40,11 @@ app.get("/", (c) => {
     endpoints: {
       "GET /": "API structure and documentation",
       "GET /stations": "List all stations (optional: ?q=search query)",
-      "GET /stations/top": "Get top 5 most visited stations",
+      "GET /stations/trending":
+        "Get trending stations (optional: ?period=hour|day|week, default: day)",
       "GET /stations/:id":
         "Get station info with trains (optional: ?type=arrivals|departures)",
-      "GET /stations/:id/visits": "Get visit count for a specific station",
+      "GET /analytics/overview": "Get global analytics overview",
       "GET /trains/:stationId": "Alias for /stations/:id (redirects)",
     },
   });
@@ -61,22 +62,29 @@ app.get("/stations", (c) => {
 });
 
 app.get(
-  "/stations/top",
+  "/stations/trending",
   cache({
     cacheName: "analytics-cache",
     cacheControl: "public, max-age=600, stale-while-revalidate=60", // 10 minutes
   }),
   async (c) => {
+    const period = c.req.query("period") as "hour" | "day" | "week" | undefined;
+    const validPeriod = ["hour", "day", "week"].includes(period ?? "")
+      ? period!
+      : "day";
+
     try {
-      const topStations = await getTopStations(
+      const trending = await getTrendingStations(
         c.env.CLOUDFLARE_ACCOUNT_ID,
         c.env.CLOUDFLARE_API_TOKEN,
+        validPeriod,
         5,
       );
 
       return c.json({
         timestamp: new Date().toISOString(),
-        stations: topStations,
+        period: validPeriod,
+        stations: trending,
       });
     } catch {
       return c.json(
@@ -88,48 +96,21 @@ app.get(
 );
 
 app.get(
-  "/stations/:id/visits",
+  "/analytics/overview",
   cache({
     cacheName: "analytics-cache",
     cacheControl: "public, max-age=600, stale-while-revalidate=60", // 10 minutes
   }),
   async (c) => {
-    const id = parseInt(c.req.param("id"), 10);
-
-    if (isNaN(id)) {
-      return c.json(
-        {
-          error:
-            "Invalid station. Please try searching for a different station.",
-        },
-        400,
-      );
-    }
-
-    const station = stations.find((s) => s.id === id);
-
-    if (!station) {
-      return c.json(
-        {
-          error: "Station not found. Please try searching for another station.",
-        },
-        404,
-      );
-    }
-
     try {
-      const { visits, uniqueVisitors } = await getStationVisits(
+      const overview = await getAnalyticsOverview(
         c.env.CLOUDFLARE_ACCOUNT_ID,
         c.env.CLOUDFLARE_API_TOKEN,
-        id,
       );
 
       return c.json({
-        id: station.id,
-        name: station.name,
-        visits,
-        uniqueVisitors,
         timestamp: new Date().toISOString(),
+        ...overview,
       });
     } catch {
       return c.json(
