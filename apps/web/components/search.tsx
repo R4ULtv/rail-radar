@@ -125,6 +125,12 @@ export function Search() {
     return [];
   }, [isSearchActive, searchResults, recentStations, noResults]);
 
+  const focusedIndexRef = React.useRef(focusedIndex);
+  const visibleStationsRef = React.useRef(visibleStations);
+
+  focusedIndexRef.current = focusedIndex;
+  visibleStationsRef.current = visibleStations;
+
   // Reset focused index when list changes
   React.useEffect(() => {
     setFocusedIndex(-1);
@@ -188,8 +194,8 @@ export function Search() {
       if (e.key === "ArrowDown") {
         e.preventDefault();
         setFocusedIndex((prev) => {
-          if (visibleStations.length === 0) return -1;
-          if (prev < visibleStations.length - 1) return prev + 1;
+          if (visibleStationsRef.current.length === 0) return -1;
+          if (prev < visibleStationsRef.current.length - 1) return prev + 1;
           return prev;
         });
         return;
@@ -206,7 +212,7 @@ export function Search() {
 
       if (e.key === "Enter") {
         e.preventDefault();
-        const station = visibleStations[focusedIndex];
+        const station = visibleStationsRef.current[focusedIndexRef.current];
         if (station) {
           handleSelectStation(station);
         }
@@ -216,7 +222,7 @@ export function Search() {
 
     document.addEventListener("keydown", handleKeyDown);
     return () => document.removeEventListener("keydown", handleKeyDown);
-  }, [focusedIndex, visibleStations, handleSelectStation]);
+  }, [handleSelectStation]);
 
   return (
     <div className="absolute z-50 top-4 left-4 flex flex-col gap-2 md:w-80 w-[calc(100vw-32px)] pointer-events-none font-sans">
