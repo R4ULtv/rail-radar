@@ -55,8 +55,10 @@ export function Map() {
       : null,
   );
 
+  const hasInitialPosition = initialPosition !== null;
+
   useEffect(() => {
-    if (hasUrlParams || initialPosition) return;
+    if (hasUrlParams || hasInitialPosition) return;
 
     const timeout = setTimeout(() => {
       setInitialPosition({
@@ -85,7 +87,7 @@ export function Map() {
     );
 
     return () => clearTimeout(timeout);
-  }, [hasUrlParams, initialPosition, setParams]);
+  }, [hasUrlParams, hasInitialPosition, setParams]);
 
   const handleMoveEnd = (e: ViewStateChangeEvent) => {
     startTransition(() => {
