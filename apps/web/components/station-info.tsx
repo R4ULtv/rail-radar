@@ -342,7 +342,7 @@ export default function StationInfo() {
               lastUpdated={lastUpdated}
             />
           </DrawerDescription>
-          {info && snap === 1 && (
+          {info != null && snap === 1 && (
             <div className="text-sm text-muted-foreground bg-muted px-2 py-1 rounded mt-2">
               <MegaphoneIcon className="size-4 inline mr-1" />
               <span className="font-normal">{info}</span>
