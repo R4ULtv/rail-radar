@@ -105,7 +105,7 @@ app.get("/stations/:id/visits", async (c) => {
   }
 
   try {
-    const visits = await getStationVisits(
+    const { visits, uniqueVisitors } = await getStationVisits(
       c.env.CLOUDFLARE_ACCOUNT_ID,
       c.env.CLOUDFLARE_API_TOKEN,
       id,
@@ -115,6 +115,7 @@ app.get("/stations/:id/visits", async (c) => {
       id: station.id,
       name: station.name,
       visits,
+      uniqueVisitors,
       timestamp: new Date().toISOString(),
     });
   } catch {
@@ -174,10 +175,12 @@ app.get(
       const { trains, info } = await scrapeTrains(id, type);
 
       // Record visit after successful response (non-blocking)
+      const ip = c.req.header("cf-connecting-ip") ?? "unknown";
       c.executionCtx.waitUntil(
         recordStationVisit(c.env.STATION_ANALYTICS, {
           stationId: station.id,
           stationName: station.name,
+          ip,
         }),
       );
 
