@@ -50,7 +50,7 @@ export function TrainRow({ train, type }: TrainRowProps) {
             )}
             <span className="font-medium">{train.trainNumber}</span>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 tabular-nums">
             <span className="font-medium">{train.scheduledTime}</span>
             {hasDelay && (
               <span className="text-xs font-medium text-red-600 dark:text-red-400">
