@@ -3,6 +3,11 @@ import { cache } from "hono/cache";
 import { cors } from "hono/cors";
 
 import { stationsCoords } from "@repo/data/stations";
+import {
+  getStationVisits,
+  getTopStations,
+  recordStationVisit,
+} from "./analytics.js";
 import { fuzzySearch } from "./fuzzy.js";
 import { scrapeTrains, ScraperError } from "./scraper.js";
 
@@ -10,6 +15,9 @@ const stations = stationsCoords.filter((s) => s.geo);
 
 type Bindings = {
   RATE_LIMITER: RateLimit;
+  STATION_ANALYTICS: AnalyticsEngineDataset;
+  CLOUDFLARE_ACCOUNT_ID: string;
+  CLOUDFLARE_API_TOKEN: string;
 };
 
 const app = new Hono<{ Bindings: Bindings }>();
@@ -32,8 +40,10 @@ app.get("/", (c) => {
     endpoints: {
       "GET /": "API structure and documentation",
       "GET /stations": "List all stations (optional: ?q=search query)",
+      "GET /stations/top": "Get top 5 most visited stations",
       "GET /stations/:id":
         "Get station info with trains (optional: ?type=arrivals|departures)",
+      "GET /stations/:id/visits": "Get visit count for a specific station",
       "GET /trains/:stationId": "Alias for /stations/:id (redirects)",
     },
   });
@@ -48,6 +58,71 @@ app.get("/stations", (c) => {
 
   const filtered = fuzzySearch(stations, query, 20);
   return c.json(filtered);
+});
+
+app.get("/stations/top", async (c) => {
+  try {
+    const topStations = await getTopStations(
+      c.env.CLOUDFLARE_ACCOUNT_ID,
+      c.env.CLOUDFLARE_API_TOKEN,
+      5,
+    );
+
+    return c.json({
+      timestamp: new Date().toISOString(),
+      stations: topStations,
+    });
+  } catch {
+    return c.json(
+      { error: "Unable to fetch analytics data. Please try again later." },
+      500,
+    );
+  }
+});
+
+app.get("/stations/:id/visits", async (c) => {
+  const id = parseInt(c.req.param("id"), 10);
+
+  if (isNaN(id)) {
+    return c.json(
+      {
+        error:
+          "Invalid station. Please try searching for a different station.",
+      },
+      400,
+    );
+  }
+
+  const station = stations.find((s) => s.id === id);
+
+  if (!station) {
+    return c.json(
+      {
+        error: "Station not found. Please try searching for another station.",
+      },
+      404,
+    );
+  }
+
+  try {
+    const visits = await getStationVisits(
+      c.env.CLOUDFLARE_ACCOUNT_ID,
+      c.env.CLOUDFLARE_API_TOKEN,
+      id,
+    );
+
+    return c.json({
+      id: station.id,
+      name: station.name,
+      visits,
+      timestamp: new Date().toISOString(),
+    });
+  } catch {
+    return c.json(
+      { error: "Unable to fetch analytics data. Please try again later." },
+      500,
+    );
+  }
 });
 
 app.get(
@@ -97,6 +172,15 @@ app.get(
 
     try {
       const { trains, info } = await scrapeTrains(id, type);
+
+      // Record visit after successful response (non-blocking)
+      c.executionCtx.waitUntil(
+        recordStationVisit(c.env.STATION_ANALYTICS, {
+          stationId: station.id,
+          stationName: station.name,
+        }),
+      );
+
       return c.json({
         id: station.id,
         name: station.name,
