@@ -10,20 +10,25 @@ Cloudflare Workers API that provides real-time Italian railway data by scraping 
 
 ## Endpoints
 
-| Method | Path                 | Description                                                      |
-| ------ | -------------------- | ---------------------------------------------------------------- |
-| `GET`  | `/`                  | API info and endpoint documentation                              |
-| `GET`  | `/stations`          | List all stations (optional: `?q=search`)                        |
-| `GET`  | `/stations/:id`      | Get station by ID                                                |
-| `GET`  | `/trains/:stationId` | Get arrivals/departures (optional: `?type=arrivals\|departures`) |
+| Method | Path                  | Description                                                        |
+| ------ | --------------------- | ------------------------------------------------------------------ |
+| `GET`  | `/`                   | API info and endpoint documentation                                |
+| `GET`  | `/stations`           | List all stations (optional: `?q=search`)                          |
+| `GET`  | `/stations/trending`  | Get trending stations (`?period=hour\|day\|week`, default: `day`)  |
+| `GET`  | `/stations/:id`       | Get station with trains (`?type=arrivals\|departures`)             |
+| `GET`  | `/analytics/overview` | Get global analytics (total visits, unique visitors, etc.)         |
 
 ### Caching
 
-Train data is cached for 30 seconds with stale-while-revalidate to reduce load on upstream sources.
+Responses are cached to reduce load on upstream sources:
+
+- `/stations/:id`: 25s cache, 5s stale-while-revalidate
+- `/stations/trending`: 10min cache, 1min stale-while-revalidate
+- `/analytics/overview`: 10min cache, 1min stale-while-revalidate
 
 ### Rate Limiting
 
-The `/trains/:stationId` endpoint is rate-limited per IP using Cloudflare's Rate Limiting.
+The `/stations/:id` endpoint is rate-limited per IP using Cloudflare's Rate Limiting.
 
 ## Development
 
