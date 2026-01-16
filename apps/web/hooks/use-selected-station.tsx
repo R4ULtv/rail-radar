@@ -9,15 +9,6 @@ import type { Station } from "@repo/data";
 const RECENT_STATIONS_KEY = "recent-stations";
 const MAX_RECENT_STATIONS = 5;
 
-function getRecentStations(): Station[] {
-  try {
-    const stored = localStorage.getItem(RECENT_STATIONS_KEY);
-    return stored ? JSON.parse(stored) : [];
-  } catch {
-    return [];
-  }
-}
-
 function saveRecentStations(stations: Station[]) {
   try {
     localStorage.setItem(RECENT_STATIONS_KEY, JSON.stringify(stations));
@@ -46,18 +37,20 @@ export function SelectedStationProvider({
     "station",
     parseAsInteger.withOptions({ history: "push", shallow: true }),
   );
-  const [recentStations, setRecentStations] = React.useState<Station[]>([]);
+  const [recentStations, setRecentStations] = React.useState<Station[]>(() => {
+    try {
+      const stored = localStorage.getItem(RECENT_STATIONS_KEY);
+      return stored ? JSON.parse(stored) : [];
+    } catch {
+      return [];
+    }
+  });
 
-  // Derive selected station from URL parameter (includes coordinates)
   const selectedStation = React.useMemo(() => {
     if (!stationId) return null;
     const station = stationsCoords.find((s) => s.id === stationId);
     return station ?? null;
   }, [stationId]);
-
-  React.useEffect(() => {
-    setRecentStations(getRecentStations());
-  }, []);
 
   const selectStation = React.useCallback(
     (station: Station) => {
