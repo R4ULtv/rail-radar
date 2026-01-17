@@ -6,16 +6,21 @@ import { useStations } from "./hooks/use-stations";
 import { StationSidebar } from "./components/station-sidebar";
 import { StationMap } from "./components/station-map";
 import { StationEditPanel } from "./components/station-edit-panel";
+import { ContributionProvider, useContribution } from "./contexts/contribution-context";
+import { ContributionBanner } from "./components/contribution-banner";
+import { ContributionPanel } from "./components/contribution-panel";
 
-export default function Home() {
+function StudioContent() {
   const { stations, isLoading, createStation, updateStation, deleteStation } =
     useStations();
+  const { recordChange, changedStationIds } = useContribution();
 
   const [selectedStationId, setSelectedStationId] = useState<number | null>(
-    null,
+    null
   );
   const [isAddingStation, setIsAddingStation] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
+  const [contributionPanelOpen, setContributionPanelOpen] = useState(false);
 
   const selectedStation = stations.find((s) => s.id === selectedStationId);
 
@@ -37,69 +42,82 @@ export default function Home() {
       try {
         setIsSaving(true);
         const station = await createStation(name, { lat, lng });
+        recordChange("created", station);
         setSelectedStationId(station.id);
         setIsAddingStation(false);
         toast.success("Station created");
       } catch (error) {
         toast.error(
-          error instanceof Error ? error.message : "Failed to create station",
+          error instanceof Error ? error.message : "Failed to create station"
         );
       } finally {
         setIsSaving(false);
       }
     },
-    [isAddingStation, createStation],
+    [isAddingStation, createStation, recordChange]
   );
 
   const handleMarkerDragEnd = useCallback(
     async (id: number, lat: number, lng: number) => {
+      const previousStation = stations.find((s) => s.id === id);
+      if (!previousStation) return;
+
       try {
-        await updateStation(id, { geo: { lat, lng } });
+        const updated = await updateStation(id, { geo: { lat, lng } });
+        recordChange("updated", updated, previousStation);
         toast.success("Position updated");
       } catch (error) {
         toast.error(
-          error instanceof Error ? error.message : "Failed to update position",
+          error instanceof Error ? error.message : "Failed to update position"
         );
       }
     },
-    [updateStation],
+    [updateStation, stations, recordChange]
   );
 
   const handleSave = useCallback(
     async (updates: { name: string; geo?: { lat: number; lng: number } }) => {
       if (!selectedStationId) return;
 
+      const previousStation = stations.find((s) => s.id === selectedStationId);
+      if (!previousStation) return;
+
       try {
         setIsSaving(true);
-        await updateStation(selectedStationId, updates);
+        const updated = await updateStation(selectedStationId, updates);
+        recordChange("updated", updated, previousStation);
         toast.success("Station updated");
       } catch (error) {
         toast.error(
-          error instanceof Error ? error.message : "Failed to update station",
+          error instanceof Error ? error.message : "Failed to update station"
         );
       } finally {
         setIsSaving(false);
       }
     },
-    [selectedStationId, updateStation],
+    [selectedStationId, updateStation, stations, recordChange]
   );
 
   const handleDelete = useCallback(async () => {
     if (!selectedStationId) return;
 
+    const station = stations.find((s) => s.id === selectedStationId);
+    if (!station) return;
+
     try {
       setIsSaving(true);
       await deleteStation(selectedStationId);
+      recordChange("deleted", station);
       setSelectedStationId(null);
       toast.success("Station deleted");
     } catch (error) {
       toast.error(
-        error instanceof Error ? error.message : "Failed to delete station",
+        error instanceof Error ? error.message : "Failed to delete station"
       );
     } finally {
       setIsSaving(false);
     }
-  }, [selectedStationId, deleteStation]);
+  }, [selectedStationId, deleteStation, stations, recordChange]);
 
   const handleCloseEditPanel = useCallback(() => {
     setSelectedStationId(null);
@@ -119,8 +137,14 @@ export default function Home() {
         stations={stations}
         selectedStationId={selectedStationId}
         isAddingStation={isAddingStation}
+        changedStationIds={changedStationIds}
         onSelectStation={handleSelectStation}
         onAddStationClick={handleAddStationClick}
+        contributionBanner={
+          <ContributionBanner
+            onReviewClick={() => setContributionPanelOpen(true)}
+          />
+        }
       />
       <div className="relative flex-1">
         <StationMap
@@ -143,6 +167,28 @@ export default function Home() {
           </div>
         )}
       </div>
+      <ContributionPanel
+        open={contributionPanelOpen}
+        onOpenChange={setContributionPanelOpen}
+      />
     </main>
+  );
+}
+
+export default function Home() {
+  const { stations, isLoading } = useStations();
+
+  if (isLoading) {
+    return (
+      <main className="flex h-screen items-center justify-center bg-background text-foreground">
+        Loading stations...
+      </main>
+    );
+  }
+
+  return (
+    <ContributionProvider stations={stations}>
+      <StudioContent />
+    </ContributionProvider>
   );
 }
