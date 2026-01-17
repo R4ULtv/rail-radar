@@ -1,0 +1,76 @@
+name: Station Data Check
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - "packages/data/src/stations-with-coords.json"
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  validate-and-report:
+    name: Validate Station Changes
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: Checkout PR head
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: "pnpm"
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Get base branch file
+        run: |
+          git show origin/${{ github.base_ref }}:packages/data/src/stations-with-coords.json > /tmp/stations-base.json
+
+      - name: Run validation and diff
+        id: validate
+        run: |
+          npx tsx .github/scripts/validate-stations.ts \
+            --base=/tmp/stations-base.json \
+            --head=packages/data/src/stations-with-coords.json \
+            --output=/tmp/report.md
+
+      - name: Read report
+        id: report
+        run: |
+          {
+            echo "report<<EOF"
+            cat /tmp/report.md
+            echo "EOF"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Find existing comment
+        uses: peter-evans/find-comment@v3
+        id: find-comment
+        with:
+          issue-number: ${{ github.event.pull_request.number }}
+          comment-author: "github-actions[bot]"
+          body-includes: "<!-- station-data-check -->"
+
+      - name: Create or update PR comment
+        uses: peter-evans/create-or-update-comment@v4
+        with:
+          comment-id: ${{ steps.find-comment.outputs.comment-id }}
+          issue-number: ${{ github.event.pull_request.number }}
+          body: ${{ steps.report.outputs.report }}
+          edit-mode: replace
+
+      - name: Fail if validation errors
+        if: steps.validate.outputs.has_errors == 'true'
+        run: exit 1
