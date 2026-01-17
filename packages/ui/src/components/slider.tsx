@@ -1,9 +1,9 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import { Slider as SliderPrimitive } from "@base-ui/react/slider"
+import * as React from "react";
+import { Slider as SliderPrimitive } from "@base-ui/react/slider";
 
-import { cn } from "@repo/ui/lib/utils"
+import { cn } from "@repo/ui/lib/utils";
 
 function Slider({
   className,
@@ -20,8 +20,8 @@ function Slider({
         : Array.isArray(defaultValue)
           ? defaultValue
           : [min, max],
-    [value, defaultValue, min, max]
-  )
+    [value, defaultValue, min, max],
+  );
 
   return (
     <SliderPrimitive.Root
@@ -37,7 +37,7 @@ function Slider({
       <SliderPrimitive.Control
         className={cn(
           "data-vertical:min-h-40 relative flex w-full touch-none items-center select-none data-disabled:opacity-50 data-vertical:h-full data-vertical:w-auto data-vertical:flex-col",
-          className
+          className,
         )}
       >
         <SliderPrimitive.Track
@@ -58,7 +58,7 @@ function Slider({
         ))}
       </SliderPrimitive.Control>
     </SliderPrimitive.Root>
-  )
+  );
 }
 
-export { Slider }
+export { Slider };
