@@ -5,31 +5,31 @@ export function generatePRTitle(stats: ContributionStats): string {
 
   if (stats.coordinatesAdded > 0) {
     parts.push(
-      `add ${stats.coordinatesAdded} coordinate${stats.coordinatesAdded !== 1 ? "s" : ""}`
+      `add ${stats.coordinatesAdded} coordinate${stats.coordinatesAdded !== 1 ? "s" : ""}`,
     );
   }
 
   if (stats.coordinatesUpdated > 0) {
     parts.push(
-      `update ${stats.coordinatesUpdated} coordinate${stats.coordinatesUpdated !== 1 ? "s" : ""}`
+      `update ${stats.coordinatesUpdated} coordinate${stats.coordinatesUpdated !== 1 ? "s" : ""}`,
     );
   }
 
   if (stats.stationsRenamed > 0) {
     parts.push(
-      `rename ${stats.stationsRenamed} station${stats.stationsRenamed !== 1 ? "s" : ""}`
+      `rename ${stats.stationsRenamed} station${stats.stationsRenamed !== 1 ? "s" : ""}`,
     );
   }
 
   if (stats.stationsCreated > 0) {
     parts.push(
-      `create ${stats.stationsCreated} station${stats.stationsCreated !== 1 ? "s" : ""}`
+      `create ${stats.stationsCreated} station${stats.stationsCreated !== 1 ? "s" : ""}`,
     );
   }
 
   if (stats.stationsDeleted > 0) {
     parts.push(
-      `delete ${stats.stationsDeleted} station${stats.stationsDeleted !== 1 ? "s" : ""}`
+      `delete ${stats.stationsDeleted} station${stats.stationsDeleted !== 1 ? "s" : ""}`,
     );
   }
 
@@ -59,11 +59,11 @@ function formatChangeDescription(change: StationChange): string {
 
   if (details.coordinatesAdded && details.newGeo) {
     updates.push(
-      `Added coordinates (${details.newGeo.lat.toFixed(4)}, ${details.newGeo.lng.toFixed(4)})`
+      `Added coordinates (${details.newGeo.lat.toFixed(4)}, ${details.newGeo.lng.toFixed(4)})`,
     );
   } else if (details.coordinatesUpdated && details.newGeo) {
     updates.push(
-      `Updated coordinates to (${details.newGeo.lat.toFixed(4)}, ${details.newGeo.lng.toFixed(4)})`
+      `Updated coordinates to (${details.newGeo.lat.toFixed(4)}, ${details.newGeo.lng.toFixed(4)})`,
     );
   }
 
@@ -76,7 +76,7 @@ function formatChangeDescription(change: StationChange): string {
 
 export function generatePRBody(
   changes: StationChange[],
-  stats: ContributionStats
+  stats: ContributionStats,
 ): string {
   const lines: string[] = [];
 
@@ -86,27 +86,27 @@ export function generatePRBody(
 
   if (stats.coordinatesAdded > 0) {
     summaryParts.push(
-      `Added coordinates for ${stats.coordinatesAdded} station${stats.coordinatesAdded !== 1 ? "s" : ""}`
+      `Added coordinates for ${stats.coordinatesAdded} station${stats.coordinatesAdded !== 1 ? "s" : ""}`,
     );
   }
   if (stats.coordinatesUpdated > 0) {
     summaryParts.push(
-      `Updated coordinates for ${stats.coordinatesUpdated} station${stats.coordinatesUpdated !== 1 ? "s" : ""}`
+      `Updated coordinates for ${stats.coordinatesUpdated} station${stats.coordinatesUpdated !== 1 ? "s" : ""}`,
     );
   }
   if (stats.stationsRenamed > 0) {
     summaryParts.push(
-      `Renamed ${stats.stationsRenamed} station${stats.stationsRenamed !== 1 ? "s" : ""}`
+      `Renamed ${stats.stationsRenamed} station${stats.stationsRenamed !== 1 ? "s" : ""}`,
     );
   }
   if (stats.stationsCreated > 0) {
     summaryParts.push(
-      `Created ${stats.stationsCreated} new station${stats.stationsCreated !== 1 ? "s" : ""}`
+      `Created ${stats.stationsCreated} new station${stats.stationsCreated !== 1 ? "s" : ""}`,
     );
   }
   if (stats.stationsDeleted > 0) {
     summaryParts.push(
-      `Deleted ${stats.stationsDeleted} station${stats.stationsDeleted !== 1 ? "s" : ""}`
+      `Deleted ${stats.stationsDeleted} station${stats.stationsDeleted !== 1 ? "s" : ""}`,
     );
   }
 
@@ -136,7 +136,7 @@ export function generatePRBody(
         : "";
 
   lines.push(
-    `- Coverage: ${stats.initialCoverage.toFixed(1)}% -> ${stats.currentCoverage.toFixed(1)}%${coverageChangeText}`
+    `- Coverage: ${stats.initialCoverage.toFixed(1)}% -> ${stats.currentCoverage.toFixed(1)}%${coverageChangeText}`,
   );
   lines.push("");
 
@@ -152,7 +152,7 @@ export function generateGitHubPRUrl(
   repo: string,
   title: string,
   body: string,
-  baseBranch = "main"
+  baseBranch = "main",
 ): string {
   const params = new URLSearchParams({
     title,

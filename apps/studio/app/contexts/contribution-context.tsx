@@ -27,14 +27,14 @@ interface ContributionContextValue {
   recordChange: (
     type: ChangeType,
     station: Station,
-    previousStation?: Station
+    previousStation?: Station,
   ) => void;
   clearSession: () => void;
   isSessionActive: boolean;
 }
 
 const ContributionContext = createContext<ContributionContextValue | null>(
-  null
+  null,
 );
 
 function calculateCoverage(stations: Station[]): number {
@@ -45,7 +45,7 @@ function calculateCoverage(stations: Station[]): number {
 
 function calculateStats(
   session: ContributionSession,
-  currentStations: Station[]
+  currentStations: Station[],
 ): ContributionStats {
   const changes = session.changes;
 
@@ -230,7 +230,7 @@ export function ContributionProvider({
         };
       });
     },
-    []
+    [],
   );
 
   const clearSession = useCallback(() => {
@@ -277,7 +277,7 @@ export function useContribution() {
   const context = useContext(ContributionContext);
   if (!context) {
     throw new Error(
-      "useContribution must be used within a ContributionProvider"
+      "useContribution must be used within a ContributionProvider",
     );
   }
   return context;

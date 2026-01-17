@@ -6,7 +6,10 @@ import { useStations } from "./hooks/use-stations";
 import { StationSidebar } from "./components/station-sidebar";
 import { StationMap } from "./components/station-map";
 import { StationEditPanel } from "./components/station-edit-panel";
-import { ContributionProvider, useContribution } from "./contexts/contribution-context";
+import {
+  ContributionProvider,
+  useContribution,
+} from "./contexts/contribution-context";
 import { ContributionBanner } from "./components/contribution-banner";
 import { ContributionPanel } from "./components/contribution-panel";
 
@@ -16,7 +19,7 @@ function StudioContent() {
   const { recordChange, changedStationIds } = useContribution();
 
   const [selectedStationId, setSelectedStationId] = useState<number | null>(
-    null
+    null,
   );
   const [isAddingStation, setIsAddingStation] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
@@ -48,13 +51,13 @@ function StudioContent() {
         toast.success("Station created");
       } catch (error) {
         toast.error(
-          error instanceof Error ? error.message : "Failed to create station"
+          error instanceof Error ? error.message : "Failed to create station",
         );
       } finally {
         setIsSaving(false);
       }
     },
-    [isAddingStation, createStation, recordChange]
+    [isAddingStation, createStation, recordChange],
   );
 
   const handleMarkerDragEnd = useCallback(
@@ -68,11 +71,11 @@ function StudioContent() {
         toast.success("Position updated");
       } catch (error) {
         toast.error(
-          error instanceof Error ? error.message : "Failed to update position"
+          error instanceof Error ? error.message : "Failed to update position",
         );
       }
     },
-    [updateStation, stations, recordChange]
+    [updateStation, stations, recordChange],
   );
 
   const handleSetStationLocation = useCallback(
@@ -82,16 +85,18 @@ function StudioContent() {
       const previousStation = { ...selectedStation };
 
       try {
-        const updated = await updateStation(selectedStation.id, { geo: { lat, lng } });
+        const updated = await updateStation(selectedStation.id, {
+          geo: { lat, lng },
+        });
         recordChange("updated", updated, previousStation);
         toast.success(`Location set for ${selectedStation.name}`);
       } catch (error) {
         toast.error(
-          error instanceof Error ? error.message : "Failed to set location"
+          error instanceof Error ? error.message : "Failed to set location",
         );
       }
     },
-    [selectedStation, updateStation, recordChange]
+    [selectedStation, updateStation, recordChange],
   );
 
   const handleSave = useCallback(
@@ -108,13 +113,13 @@ function StudioContent() {
         toast.success("Station updated");
       } catch (error) {
         toast.error(
-          error instanceof Error ? error.message : "Failed to update station"
+          error instanceof Error ? error.message : "Failed to update station",
         );
       } finally {
         setIsSaving(false);
       }
     },
-    [selectedStationId, updateStation, stations, recordChange]
+    [selectedStationId, updateStation, stations, recordChange],
   );
 
   const handleDelete = useCallback(async () => {
@@ -131,7 +136,7 @@ function StudioContent() {
       toast.success("Station deleted");
     } catch (error) {
       toast.error(
-        error instanceof Error ? error.message : "Failed to delete station"
+        error instanceof Error ? error.message : "Failed to delete station",
       );
     } finally {
       setIsSaving(false);
