@@ -209,7 +209,7 @@ export function StationMap({
                 draggable
                 onDragEnd={handleDragEnd}
               >
-                <div className="size-6 cursor-grab rounded-full border-3 border-white bg-blue-500 active:cursor-grabbing" />
+                <div className="size-5 cursor-grab rounded-full border-2 border-white bg-accent active:cursor-grabbing" />
               </Marker>
             )}
           </>

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { ExternalLinkIcon, XIcon } from "lucide-react";
+import { ExternalLinkIcon, SaveIcon, Trash2Icon, XIcon } from "lucide-react";
 import { Button, buttonVariants } from "@repo/ui/components/button";
 import { Input } from "@repo/ui/components/input";
 import { Label } from "@repo/ui/components/label";
@@ -130,9 +130,11 @@ export function StationEditPanel({
             disabled={!name.trim() || isSaving || !hasChanges}
             className="flex-1"
           >
+            <SaveIcon className="size-4" />
             {isSaving ? "Saving..." : "Save"}
           </Button>
           <Button variant="destructive" onClick={onDelete} disabled={isSaving}>
+            <Trash2Icon className="size-4" />
             Delete
           </Button>
         </div>
