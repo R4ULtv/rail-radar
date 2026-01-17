@@ -22,7 +22,6 @@ import {
 import { ScrollArea } from "@repo/ui/components/scroll-area";
 import { Separator } from "@repo/ui/components/separator";
 import { Input } from "@repo/ui/components/input";
-import { Textarea } from "@repo/ui/components/textarea";
 import { Label } from "@repo/ui/components/label";
 import { toast } from "sonner";
 import { useContribution } from "../contexts/contribution-context";
@@ -138,13 +137,13 @@ export function ContributionPanel({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-xl">
+      <DialogContent className="flex max-h-[85vh] flex-col sm:max-w-xl">
         <DialogHeader>
           <DialogTitle>Contribution Session</DialogTitle>
           <DialogDescription>Review your changes</DialogDescription>
         </DialogHeader>
 
-        <div className="space-y-4">
+        <div className="min-h-0 flex-1 space-y-4">
           {stats && (
             <>
               <div className="grid grid-cols-3 gap-4 text-sm">
@@ -270,12 +269,14 @@ export function ContributionPanel({
                     )}
                   </Button>
                 </div>
-                <Textarea
-                  id="pr-body"
-                  value={body}
-                  readOnly
-                  className="h-40 resize-none font-mono text-xs"
-                />
+                <ScrollArea className="max-h-40 rounded-md border border-input bg-input/30">
+                  <pre
+                    id="pr-body"
+                    className="whitespace-pre-wrap p-3 font-mono text-xs"
+                  >
+                    {body}
+                  </pre>
+                </ScrollArea>
               </div>
             </>
           )}

@@ -1,5 +1,24 @@
 import type { StationChange, ContributionStats } from "../types/contribution";
 
+function generateGoogleMapsLink(lat: number, lng: number): string {
+  return `https://www.google.com/maps?q=${lat},${lng}`;
+}
+
+function generateRfiLink(stationId: number): string {
+  return `https://iechub.rfi.it/ArriviPartenze/en/ArrivalsDepartures/Monitor?placeId=${stationId}&arrivals=False`;
+}
+
+function getTypeBadge(type: StationChange["type"]): string {
+  switch (type) {
+    case "created":
+      return "➕ Added";
+    case "updated":
+      return "🔄 Changed";
+    case "deleted":
+      return "➖ Removed";
+  }
+}
+
 export function generatePRTitle(stats: ContributionStats): string {
   const parts: string[] = [];
 
@@ -40,38 +59,52 @@ export function generatePRTitle(stats: ContributionStats): string {
   return `feat(data): ${parts.join(", ")}`;
 }
 
-function formatChangeDescription(change: StationChange): string {
+interface FormattedChange {
+  details: string;
+  mapLink: string | null;
+}
+
+function formatChangeDescription(change: StationChange): FormattedChange {
   const { type, details } = change;
 
   if (type === "created") {
     if (details.newGeo) {
-      return `Created with coordinates (${details.newGeo.lat.toFixed(4)}, ${details.newGeo.lng.toFixed(4)})`;
+      return {
+        details: `Created at (${details.newGeo.lat.toFixed(4)}, ${details.newGeo.lng.toFixed(4)})`,
+        mapLink: generateGoogleMapsLink(details.newGeo.lat, details.newGeo.lng),
+      };
     }
-    return "Created";
+    return { details: "Created", mapLink: null };
   }
 
   if (type === "deleted") {
-    return "Deleted";
+    return { details: "Deleted", mapLink: null };
   }
 
   // Updated
   const updates: string[] = [];
+  let mapLink: string | null = null;
 
   if (details.coordinatesAdded && details.newGeo) {
     updates.push(
       `Added coordinates (${details.newGeo.lat.toFixed(4)}, ${details.newGeo.lng.toFixed(4)})`,
     );
+    mapLink = generateGoogleMapsLink(details.newGeo.lat, details.newGeo.lng);
   } else if (details.coordinatesUpdated && details.newGeo) {
     updates.push(
-      `Updated coordinates to (${details.newGeo.lat.toFixed(4)}, ${details.newGeo.lng.toFixed(4)})`,
+      `Updated to (${details.newGeo.lat.toFixed(4)}, ${details.newGeo.lng.toFixed(4)})`,
     );
+    mapLink = generateGoogleMapsLink(details.newGeo.lat, details.newGeo.lng);
   }
 
   if (details.nameChanged && details.previousName && details.newName) {
     updates.push(`Renamed from "${details.previousName}"`);
   }
 
-  return updates.join(", ") || "Updated";
+  return {
+    details: updates.join(", ") || "Updated",
+    mapLink,
+  };
 }
 
 export function generatePRBody(
@@ -115,12 +148,15 @@ export function generatePRBody(
 
   // Changes table
   lines.push("## Changes");
-  lines.push("| Station | Change |");
-  lines.push("|---------|--------|");
+  lines.push("| Station | Type | Details | Map | RFI |");
+  lines.push("|---------|------|---------|-----|-----|");
 
   for (const change of changes) {
-    const description = formatChangeDescription(change);
-    lines.push(`| ${change.stationName} | ${description} |`);
+    const { details, mapLink } = formatChangeDescription(change);
+    const typeBadge = getTypeBadge(change.type);
+    const mapCell = mapLink ? `[📍 View](${mapLink})` : "-";
+    const rfiCell = change.type !== "deleted" ? `[🚉 Check](${generateRfiLink(change.id)})` : "-";
+    lines.push(`| ${change.stationName} | ${typeBadge} | ${details} | ${mapCell} | ${rfiCell} |`);
   }
 
   lines.push("");
