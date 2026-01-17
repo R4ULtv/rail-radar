@@ -61,6 +61,16 @@ export function StationEditPanel({
     lat !== (station.geo?.lat?.toString() ?? "") ||
     lng !== (station.geo?.lng?.toString() ?? "");
 
+  const handleLatPaste = (e: React.ClipboardEvent<HTMLInputElement>) => {
+    const pasted = e.clipboardData.getData("text");
+    const match = pasted.match(/^\s*(-?\d+\.?\d*)\s*,\s*(-?\d+\.?\d*)\s*$/);
+    if (match && match[1] && match[2]) {
+      e.preventDefault();
+      setLat(match[1]);
+      setLng(match[2]);
+    }
+  };
+
   return (
     <div className="rounded-lg border bg-card p-4 shadow-lg">
       <div className="mb-4 border-b pb-3">
@@ -101,6 +111,7 @@ export function StationEditPanel({
               step="0.000001"
               value={lat}
               onChange={(e) => setLat(e.target.value)}
+              onPaste={handleLatPaste}
               placeholder="41.901"
             />
           </div>
