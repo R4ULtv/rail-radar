@@ -15,7 +15,7 @@ async function readStations(): Promise<Station[]> {
 }
 
 async function writeStations(stations: Station[]): Promise<void> {
-  const content = JSON.stringify(stations, null, 2);
+  const content = JSON.stringify(stations);
   await fs.writeFile(DATA_FILE_PATH, content, "utf-8");
 }
 
