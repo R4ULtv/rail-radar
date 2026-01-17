@@ -1,36 +1,70 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Rail Radar Studio
+
+Admin tool for managing Italian railway station data. Add missing coordinates, fix station names, and identify duplicates.
+
+## Tech Stack
+
+- Next.js 16 + React 19
+- MapLibre GL (interactive map)
+- Sonner (toast notifications)
+- localStorage for session persistence
 
 ## Getting Started
 
-First, run the development server:
-
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+pnpm dev --filter=studio
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Runs on [http://localhost:3001](http://localhost:3001)
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Features
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- Interactive map with 2400+ stations
+- Station search and filtering (All / Missing coordinates / Duplicates)
+- Click-to-place coordinates for stations missing location
+- Drag markers to fine-tune positions
+- Edit station names
+- Add new stations
+- Delete stations
+- **Contribution tracking with auto-generated PRs**
 
-## Learn More
+## How to Contribute Changes
 
-To learn more about Next.js, take a look at the following resources:
+### Making Changes
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+1. Open the studio at `localhost:3001`
+2. Browse stations via sidebar (use tabs: All, Missing, Duplicates)
+3. Make changes:
+   - **Add coordinates**: Select station → Click on map to set location
+   - **Move station**: Drag the marker to correct position
+   - **Rename station**: Edit name in the side panel
+   - **Add new station**: Click "Add Station" → Click on map
+   - **Delete station**: Open edit panel → Click delete
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### Reviewing Your Changes
 
-## Deploy on Vercel
+1. Changes are tracked automatically (green banner appears)
+2. Click "Review" to open the contribution panel
+3. See all your changes with statistics:
+   - Coordinates added/updated
+   - Stations renamed/created/deleted
+   - Coverage % change
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### Submitting a Pull Request
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+1. In the contribution panel, review the auto-generated PR content
+2. Click "Open in GitHub" button
+3. GitHub opens with pre-filled PR title and description
+4. Create a new branch with the auto-suggested name (format: `studio/YYYY-MM-DD-description`)
+5. Commit your changes and submit the PR
+
+**Note**: Changes are saved to localStorage, so you can close the browser and continue later.
+
+### Clearing Your Session
+
+- Click "Clear Session" in the contribution panel to start fresh
+- This removes all tracked changes from localStorage
+
+## Data Files
+
+Station data is managed in `packages/data/src/stations-with-coords.json`.
