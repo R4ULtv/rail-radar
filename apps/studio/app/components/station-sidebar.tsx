@@ -14,6 +14,7 @@ import { ScrollArea } from "@repo/ui/components/scroll-area";
 import { Tabs, TabsList, TabsTrigger } from "@repo/ui/components/tabs";
 import type { Station } from "@repo/data";
 import { cn } from "@repo/ui/lib/utils";
+import { Separator } from "@repo/ui/components/separator";
 
 type FilterType = "all" | "missing" | "duplicates";
 
@@ -137,9 +138,10 @@ export function StationSidebar({
 
       <ScrollArea className="min-h-0 flex-1 [&_[data-slot=scroll-area-viewport]]:h-full">
         {filter === "duplicates" ? (
-          <div className="flex flex-col gap-3 px-2 pb-4">
+          <div className="flex flex-col px-2 pb-4">
             {duplicateGroups.map((group, groupIndex) => (
               <div key={groupIndex} className="flex flex-col gap-0.5">
+                <Separator className="my-1 mb-2" />
                 <div className="px-2 text-xs font-medium text-muted-foreground">
                   {group[0]?.geo?.lat}, {group[0]?.geo?.lng}
                 </div>

@@ -12,7 +12,7 @@ export default function Home() {
     useStations();
 
   const [selectedStationId, setSelectedStationId] = useState<number | null>(
-    null
+    null,
   );
   const [isAddingStation, setIsAddingStation] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
@@ -42,13 +42,13 @@ export default function Home() {
         toast.success("Station created");
       } catch (error) {
         toast.error(
-          error instanceof Error ? error.message : "Failed to create station"
+          error instanceof Error ? error.message : "Failed to create station",
         );
       } finally {
         setIsSaving(false);
       }
     },
-    [isAddingStation, createStation]
+    [isAddingStation, createStation],
   );
 
   const handleMarkerDragEnd = useCallback(
@@ -58,11 +58,11 @@ export default function Home() {
         toast.success("Position updated");
       } catch (error) {
         toast.error(
-          error instanceof Error ? error.message : "Failed to update position"
+          error instanceof Error ? error.message : "Failed to update position",
         );
       }
     },
-    [updateStation]
+    [updateStation],
   );
 
   const handleSave = useCallback(
@@ -75,13 +75,13 @@ export default function Home() {
         toast.success("Station updated");
       } catch (error) {
         toast.error(
-          error instanceof Error ? error.message : "Failed to update station"
+          error instanceof Error ? error.message : "Failed to update station",
         );
       } finally {
         setIsSaving(false);
       }
     },
-    [selectedStationId, updateStation]
+    [selectedStationId, updateStation],
   );
 
   const handleDelete = useCallback(async () => {
@@ -94,7 +94,7 @@ export default function Home() {
       toast.success("Station deleted");
     } catch (error) {
       toast.error(
-        error instanceof Error ? error.message : "Failed to delete station"
+        error instanceof Error ? error.message : "Failed to delete station",
       );
     } finally {
       setIsSaving(false);

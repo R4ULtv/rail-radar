@@ -6,7 +6,7 @@ import type { Station } from "@repo/data";
 const DATA_FILE_PATH = path.join(
   process.cwd(),
   "../..",
-  "packages/data/src/stations-with-coords.json"
+  "packages/data/src/stations-with-coords.json",
 );
 
 async function readStations(): Promise<Station[]> {
@@ -27,7 +27,10 @@ export async function PUT(request: Request, { params }: RouteParams) {
     const stationId = parseInt(id, 10);
 
     if (isNaN(stationId)) {
-      return NextResponse.json({ error: "Invalid station ID" }, { status: 400 });
+      return NextResponse.json(
+        { error: "Invalid station ID" },
+        { status: 400 },
+      );
     }
 
     const body = await request.json();
@@ -60,7 +63,7 @@ export async function PUT(request: Request, { params }: RouteParams) {
     console.error("Failed to update station:", error);
     return NextResponse.json(
       { error: "Failed to update station" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -71,7 +74,10 @@ export async function DELETE(_request: Request, { params }: RouteParams) {
     const stationId = parseInt(id, 10);
 
     if (isNaN(stationId)) {
-      return NextResponse.json({ error: "Invalid station ID" }, { status: 400 });
+      return NextResponse.json(
+        { error: "Invalid station ID" },
+        { status: 400 },
+      );
     }
 
     const stations = await readStations();
@@ -90,7 +96,7 @@ export async function DELETE(_request: Request, { params }: RouteParams) {
     console.error("Failed to delete station:", error);
     return NextResponse.json(
       { error: "Failed to delete station" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

@@ -6,7 +6,7 @@ import type { Station } from "@repo/data";
 const DATA_FILE_PATH = path.join(
   process.cwd(),
   "../..",
-  "packages/data/src/stations-with-coords.json"
+  "packages/data/src/stations-with-coords.json",
 );
 
 async function readStations(): Promise<Station[]> {
@@ -28,7 +28,7 @@ export async function GET() {
     console.error("Failed to read stations:", error);
     return NextResponse.json(
       { error: "Failed to read stations" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -39,10 +39,7 @@ export async function POST(request: Request) {
     const { name, geo } = body;
 
     if (!name || typeof name !== "string") {
-      return NextResponse.json(
-        { error: "Name is required" },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: "Name is required" }, { status: 400 });
     }
 
     const stations = await readStations();
@@ -68,7 +65,7 @@ export async function POST(request: Request) {
     console.error("Failed to create station:", error);
     return NextResponse.json(
       { error: "Failed to create station" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

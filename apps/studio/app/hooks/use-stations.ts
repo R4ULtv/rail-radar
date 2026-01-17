@@ -8,12 +8,12 @@ const fetcher = (url: string) => fetch(url).then((res) => res.json());
 export function useStations() {
   const { data, error, isLoading, mutate } = useSWR<Station[]>(
     API_URL,
-    fetcher
+    fetcher,
   );
 
   const createStation = async (
     name: string,
-    geo?: { lat: number; lng: number }
+    geo?: { lat: number; lng: number },
   ): Promise<Station> => {
     const response = await fetch(API_URL, {
       method: "POST",
@@ -32,9 +32,11 @@ export function useStations() {
     mutate(
       (current) =>
         current
-          ? [...current, newStation].sort((a, b) => a.name.localeCompare(b.name))
+          ? [...current, newStation].sort((a, b) =>
+              a.name.localeCompare(b.name),
+            )
           : [newStation],
-      { revalidate: false }
+      { revalidate: false },
     );
 
     return newStation;
@@ -42,7 +44,7 @@ export function useStations() {
 
   const updateStation = async (
     id: number,
-    updates: { name?: string; geo?: { lat: number; lng: number } }
+    updates: { name?: string; geo?: { lat: number; lng: number } },
   ): Promise<Station> => {
     const response = await fetch(`${API_URL}/${id}`, {
       method: "PUT",
@@ -65,7 +67,7 @@ export function useStations() {
               .map((s) => (s.id === id ? updatedStation : s))
               .sort((a, b) => a.name.localeCompare(b.name))
           : current,
-      { revalidate: false }
+      { revalidate: false },
     );
 
     return updatedStation;
@@ -86,7 +88,7 @@ export function useStations() {
     // Optimistic update
     mutate(
       (current) => (current ? current.filter((s) => s.id !== id) : current),
-      { revalidate: false }
+      { revalidate: false },
     );
 
     return deletedStation;

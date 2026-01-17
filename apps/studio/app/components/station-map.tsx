@@ -16,12 +16,12 @@ import type { MapLayerMouseEvent } from "maplibre-gl";
 
 const MapGL = dynamic(
   () => import("react-map-gl/maplibre").then((mod) => mod.Map),
-  { ssr: false }
+  { ssr: false },
 );
 
 const Marker = dynamic(
   () => import("react-map-gl/maplibre").then((mod) => mod.Marker),
-  { ssr: false }
+  { ssr: false },
 );
 
 const LAYER_ID = "stations-layer";
@@ -32,9 +32,9 @@ const stationLayerStyle: LayerProps = {
   type: "circle",
   paint: {
     "circle-radius": ["interpolate", ["linear"], ["zoom"], 5, 4, 10, 6, 15, 8],
-    "circle-color": "#ef4444",
+    "circle-color": "#d14b4b",
     "circle-stroke-color": "#ffffff",
-    "circle-stroke-width": 2,
+    "circle-stroke-width": 1.5,
   },
 };
 
@@ -153,7 +153,7 @@ export function StationMap({
       const lng = Math.round(e.lngLat.lng * 1e6) / 1e6;
       onMapClick(lat, lng);
     },
-    [isAddingStation, onMapClick]
+    [isAddingStation, onMapClick],
   );
 
   const handleDragEnd = useCallback(
@@ -164,7 +164,7 @@ export function StationMap({
         onMarkerDragEnd(selectedStationId, lat, lng);
       }
     },
-    [selectedStationId, onMarkerDragEnd]
+    [selectedStationId, onMarkerDragEnd],
   );
 
   // Get selected station for the draggable marker
