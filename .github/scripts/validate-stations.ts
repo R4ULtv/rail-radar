@@ -109,7 +109,7 @@ function validateStations(stations: Station[]): ValidationError[] {
     }
 
     // Validate geo coordinates if present
-    if (station.geo !== undefined) {
+    if (station.geo !== undefined && station.geo !== null) {
       if (typeof station.geo.lat !== "number" || station.geo.lat < -90 || station.geo.lat > 90) {
         errors.push({
           stationId: station.id,
@@ -188,16 +188,33 @@ function compareStations(
   const baseGeo = base.geo;
   const headGeo = head.geo;
 
-  if (!baseGeo && headGeo) {
-    changes.push({ field: "geo", oldValue: undefined, newValue: headGeo });
-  } else if (baseGeo && !headGeo) {
-    changes.push({ field: "geo", oldValue: baseGeo, newValue: undefined });
-  } else if (baseGeo && headGeo) {
-    if (baseGeo.lat !== headGeo.lat) {
-      changes.push({ field: "geo.lat", oldValue: baseGeo.lat, newValue: headGeo.lat });
+  // Helper to check if geo has valid coordinates
+  // Handles edge cases like geo: {}, geo: null, geo: {lat: null, lng: null}
+  const hasValidGeo = (geo: Station["geo"]): boolean => {
+    return (
+      geo !== undefined &&
+      geo !== null &&
+      typeof geo.lat === "number" &&
+      typeof geo.lng === "number"
+    );
+  };
+
+  const baseHasGeo = hasValidGeo(baseGeo);
+  const headHasGeo = hasValidGeo(headGeo);
+
+  if (!baseHasGeo && headHasGeo) {
+    // Geo added
+    changes.push({ field: "geo", oldValue: baseGeo, newValue: headGeo });
+  } else if (baseHasGeo && !headHasGeo) {
+    // Geo removed
+    changes.push({ field: "geo", oldValue: baseGeo, newValue: headGeo });
+  } else if (baseHasGeo && headHasGeo) {
+    // Both have valid geo - compare coordinates
+    if (baseGeo!.lat !== headGeo!.lat) {
+      changes.push({ field: "geo.lat", oldValue: baseGeo!.lat, newValue: headGeo!.lat });
     }
-    if (baseGeo.lng !== headGeo.lng) {
-      changes.push({ field: "geo.lng", oldValue: baseGeo.lng, newValue: headGeo.lng });
+    if (baseGeo!.lng !== headGeo!.lng) {
+      changes.push({ field: "geo.lng", oldValue: baseGeo!.lng, newValue: headGeo!.lng });
     }
   }
 
@@ -209,34 +226,13 @@ function compareStations(
 function generateReport(
   diff: DiffResult,
   errors: ValidationError[],
-  baseCount: number,
-  headCount: number
+  _baseCount: number,
+  _headCount: number
 ): string {
   const lines: string[] = [];
 
   lines.push("<!-- station-data-check -->");
   lines.push("## Station Data Change Report");
-  lines.push("");
-
-  // Summary statistics
-  lines.push("### Summary");
-  lines.push("");
-  lines.push("| Metric | Value |");
-  lines.push("|--------|-------|");
-  lines.push(`| Total stations (before) | ${baseCount} |`);
-  lines.push(`| Total stations (after) | ${headCount} |`);
-  lines.push(`| Stations added | ${diff.added.length} |`);
-  lines.push(`| Stations removed | ${diff.removed.length} |`);
-  lines.push(`| Stations modified | ${diff.modified.length} |`);
-  lines.push(`| Validation errors | ${errors.length} |`);
-  lines.push("");
-
-  // Status badge
-  if (errors.length > 0) {
-    lines.push("> **Status:** :x: Validation failed");
-  } else {
-    lines.push("> **Status:** :white_check_mark: All validations passed");
-  }
   lines.push("");
 
   // Validation errors
