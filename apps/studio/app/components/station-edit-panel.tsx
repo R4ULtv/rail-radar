@@ -1,11 +1,19 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { ExternalLinkIcon, SaveIcon, Trash2Icon, XIcon } from "lucide-react";
+import {
+  MapIcon,
+  RadioTowerIcon,
+  SaveIcon,
+  Trash2Icon,
+  XIcon,
+} from "lucide-react";
 import { Button, buttonVariants } from "@repo/ui/components/button";
 import { Input } from "@repo/ui/components/input";
 import { Label } from "@repo/ui/components/label";
 import type { Station } from "@repo/data";
+
+import { cn } from "@repo/ui/lib/utils";
 
 interface StationEditPanelProps {
   station: Station;
@@ -112,19 +120,38 @@ export function StationEditPanel({
           </div>
         </div>
 
-        {lat && lng && (
-          <a
-            href={`https://www.google.com/maps?q=${lat},${lng}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            className={buttonVariants({ variant: "outline", size: "sm" })}
-          >
-            <ExternalLinkIcon className="size-4" />
-            View on Google Maps
-          </a>
-        )}
+        <div className="flex items-center gap-2 w-full border-t border-border pt-4">
+          {lat && lng && (
+            <a
+              href={`https://www.google.com/maps?q=${lat},${lng}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={cn(
+                buttonVariants({ variant: "outline", size: "sm" }),
+                "flex-1",
+              )}
+            >
+              <MapIcon className="size-4" />
+              Google Maps
+            </a>
+          )}
+          {station.id && (
+            <a
+              href={`https://iechub.rfi.it/ArriviPartenze/en/ArrivalsDepartures/Monitor?placeId=${station.id}&arrivals=False`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={cn(
+                buttonVariants({ variant: "outline", size: "sm" }),
+                "flex-1",
+              )}
+            >
+              <RadioTowerIcon className="size-4" />
+              RFI Data
+            </a>
+          )}
+        </div>
 
-        <div className="flex gap-2 pt-2">
+        <div className="flex gap-2 pt-2 border-t border-border">
           <Button
             onClick={handleSave}
             disabled={!name.trim() || isSaving || !hasChanges}
