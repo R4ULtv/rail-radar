@@ -75,6 +75,25 @@ function StudioContent() {
     [updateStation, stations, recordChange]
   );
 
+  const handleSetStationLocation = useCallback(
+    async (lat: number, lng: number) => {
+      if (!selectedStation) return;
+
+      const previousStation = { ...selectedStation };
+
+      try {
+        const updated = await updateStation(selectedStation.id, { geo: { lat, lng } });
+        recordChange("updated", updated, previousStation);
+        toast.success(`Location set for ${selectedStation.name}`);
+      } catch (error) {
+        toast.error(
+          error instanceof Error ? error.message : "Failed to set location"
+        );
+      }
+    },
+    [selectedStation, updateStation, recordChange]
+  );
+
   const handleSave = useCallback(
     async (updates: { name: string; geo?: { lat: number; lng: number } }) => {
       if (!selectedStationId) return;
@@ -154,6 +173,7 @@ function StudioContent() {
           onSelectStation={handleSelectStation}
           onMarkerDragEnd={handleMarkerDragEnd}
           onMapClick={handleMapClick}
+          onSetStationLocation={handleSetStationLocation}
         />
         {selectedStation && (
           <div className="absolute left-4 top-4 z-10">

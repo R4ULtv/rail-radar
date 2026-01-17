@@ -51,6 +51,7 @@ interface StationMapProps {
   onSelectStation: (id: number) => void;
   onMarkerDragEnd: (id: number, lat: number, lng: number) => void;
   onMapClick: (lat: number, lng: number) => void;
+  onSetStationLocation?: (lat: number, lng: number) => void;
 }
 
 interface StationLayersProps {
@@ -129,9 +130,16 @@ export function StationMap({
   onSelectStation,
   onMarkerDragEnd,
   onMapClick,
+  onSetStationLocation,
 }: StationMapProps) {
   const mapRef = useRef<MapRef>(null);
   const [isMapLoaded, setIsMapLoaded] = useState(false);
+
+  // Check if we're placing a station (selected station without coordinates)
+  const selectedStation = selectedStationId
+    ? stations.find((s) => s.id === selectedStationId)
+    : null;
+  const isPlacingStation = selectedStation && !selectedStation.geo;
 
   // Center map on selected station
   useEffect(() => {
@@ -148,12 +156,16 @@ export function StationMap({
 
   const handleMapClick = useCallback(
     (e: maplibregl.MapMouseEvent) => {
-      if (!isAddingStation) return;
       const lat = Math.round(e.lngLat.lat * 1e6) / 1e6;
       const lng = Math.round(e.lngLat.lng * 1e6) / 1e6;
-      onMapClick(lat, lng);
+
+      if (isAddingStation) {
+        onMapClick(lat, lng);
+      } else if (isPlacingStation && onSetStationLocation) {
+        onSetStationLocation(lat, lng);
+      }
     },
-    [isAddingStation, onMapClick],
+    [isAddingStation, isPlacingStation, onMapClick, onSetStationLocation],
   );
 
   const handleDragEnd = useCallback(
@@ -167,10 +179,8 @@ export function StationMap({
     [selectedStationId, onMarkerDragEnd],
   );
 
-  // Get selected station for the draggable marker
-  const selectedStation = selectedStationId
-    ? stations.find((s) => s.id === selectedStationId && s.geo)
-    : null;
+  // Determine if we should show crosshair cursor
+  const showCrosshair = isAddingStation || isPlacingStation;
 
   return (
     <div className="relative h-full w-full">
@@ -185,7 +195,7 @@ export function StationMap({
         }}
         onLoad={() => setIsMapLoaded(true)}
         onClick={handleMapClick}
-        cursor={isAddingStation ? "crosshair" : undefined}
+        cursor={showCrosshair ? "crosshair" : undefined}
         attributionControl={false}
         style={{ width: "100%", height: "100%" }}
         mapStyle="https://tiles-eu.stadiamaps.com/styles/alidade_smooth_dark.json"
@@ -216,10 +226,12 @@ export function StationMap({
         )}
       </MapGL>
 
-      {isAddingStation && (
+      {(isAddingStation || isPlacingStation) && (
         <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
           <div className="rounded-md bg-black/70 px-4 py-2 text-sm text-white">
-            Click on the map to place the new station
+            {isAddingStation
+              ? "Click on the map to place the new station"
+              : "Click on the map to set location"}
           </div>
         </div>
       )}

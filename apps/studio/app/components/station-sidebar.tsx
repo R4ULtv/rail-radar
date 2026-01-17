@@ -137,7 +137,7 @@ export function StationSidebar({
   };
 
   return (
-    <div className="flex h-full w-72 shrink-0 flex-col overflow-hidden border-r border-border bg-card">
+    <div className="flex h-full w-80 shrink-0 flex-col overflow-hidden border-r border-border bg-card">
       <div className="flex shrink-0 flex-col gap-3 p-4">
         {contributionBanner}
         <div className="relative">
