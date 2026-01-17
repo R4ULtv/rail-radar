@@ -19,7 +19,7 @@ interface StationEditPanelProps {
   station: Station;
   onSave: (updates: {
     name: string;
-    geo?: { lat: number; lng: number };
+    geo: { lat: number; lng: number } | null;
   }) => void;
   onDelete: () => void;
   onClose: () => void;
@@ -51,7 +51,7 @@ export function StationEditPanel({
     const geo =
       !isNaN(parsedLat) && !isNaN(parsedLng)
         ? { lat: parsedLat, lng: parsedLng }
-        : undefined;
+        : null;
 
     onSave({ name, geo });
   };

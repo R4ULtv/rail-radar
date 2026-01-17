@@ -100,7 +100,7 @@ function StudioContent() {
   );
 
   const handleSave = useCallback(
-    async (updates: { name: string; geo?: { lat: number; lng: number } }) => {
+    async (updates: { name: string; geo: { lat: number; lng: number } | null }) => {
       if (!selectedStationId) return;
 
       const previousStation = stations.find((s) => s.id === selectedStationId);

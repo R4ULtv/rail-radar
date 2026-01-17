@@ -44,7 +44,7 @@ export function useStations() {
 
   const updateStation = async (
     id: number,
-    updates: { name?: string; geo?: { lat: number; lng: number } },
+    updates: { name?: string; geo?: { lat: number; lng: number } | null },
   ): Promise<Station> => {
     const response = await fetch(`${API_URL}/${id}`, {
       method: "PUT",
