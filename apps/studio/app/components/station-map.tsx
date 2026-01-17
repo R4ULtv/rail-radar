@@ -141,7 +141,7 @@ export function StationMap({
 
     mapRef.current.flyTo({
       center: [station.geo.lng, station.geo.lat],
-      zoom: Math.max(mapRef.current.getZoom(), 10),
+      zoom: Math.max(mapRef.current.getZoom(), 14),
       duration: 500,
     });
   }, [selectedStationId, stations]);
