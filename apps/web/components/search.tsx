@@ -14,12 +14,6 @@ import {
 import { AnimatePresence, motion } from "motion/react";
 
 import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-} from "@repo/ui/components/card";
-import {
   Drawer,
   DrawerContent,
   DrawerDescription,
@@ -271,12 +265,12 @@ export function Search() {
       {/* Search Results */}
       {isSearchActive && searchResults.length > 0 && (
         <>
-          <CardHeader className="px-4 py-2">
-            <CardDescription className="flex items-center gap-2">
+          <div className="px-4 py-2">
+            <p className="text-muted-foreground text-sm flex items-center gap-2">
               <ListIcon className="size-3.5" />
               Search Results
-            </CardDescription>
-          </CardHeader>
+            </p>
+          </div>
           <StationList
             stations={limit ? searchResults.slice(0, limit) : searchResults}
             onSelect={handleSelectStation}
@@ -301,12 +295,12 @@ export function Search() {
       {/* Recent Stations */}
       {showRecentAndPopular && recentStations.length > 0 && (
         <>
-          <CardHeader className="px-4 py-2">
-            <CardDescription className="flex items-center gap-2">
+          <div className="px-4 py-2">
+            <p className="text-muted-foreground text-sm flex items-center gap-2">
               <HistoryIcon className="size-3.5" />
               Recent Stations
-            </CardDescription>
-          </CardHeader>
+            </p>
+          </div>
           <StationList
             stations={recentStations}
             onSelect={handleSelectStation}
@@ -319,12 +313,12 @@ export function Search() {
       {/* Trending Stations */}
       {showRecentAndPopular && trendingStations.length > 0 && (
         <>
-          <CardHeader className="px-4 py-2">
-            <CardDescription className="flex items-center gap-2">
+          <div className="px-4 py-2">
+            <p className="text-muted-foreground text-sm flex items-center gap-2">
               <TrendingUpIcon className="size-3.5" />
               Trending Stations
-            </CardDescription>
-          </CardHeader>
+            </p>
+          </div>
           <StationList
             stations={trendingStations}
             onSelect={handleSelectStation}
@@ -476,11 +470,12 @@ export function Search() {
             style={{ height: cardHeight.height }}
             className="rounded-md pointer-events-auto overflow-hidden"
           >
-            <Card ref={cardHeight.contentRef} className="py-2 gap-0 rounded-md">
-              <CardContent className="p-0">
-                {renderSearchContent(10)}
-              </CardContent>
-            </Card>
+            <div
+              ref={cardHeight.contentRef}
+              className="bg-card text-card-foreground rounded-md py-2 shadow-xs ring-1 ring-foreground/10 flex flex-col"
+            >
+              <div>{renderSearchContent(10)}</div>
+            </div>
           </motion.div>
         )}
       </AnimatePresence>
