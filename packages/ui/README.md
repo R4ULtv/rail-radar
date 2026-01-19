@@ -30,28 +30,28 @@ This package is designed to be consumed as a workspace package in a pnpm monorep
 ### Importing Components
 
 ```tsx
-import { Button } from "@repo/ui/components/button"
-import { Dialog } from "@repo/ui/components/dialog"
-import { Card } from "@repo/ui/components/card"
+import { Button } from "@repo/ui/components/button";
+import { Dialog } from "@repo/ui/components/dialog";
+import { Card } from "@repo/ui/components/card";
 ```
 
 ### Importing Hooks
 
 ```tsx
-import { useIsMobile } from "@repo/ui/hooks/use-is-mobile"
-import { useDebounce } from "@repo/ui/hooks/use-debounce"
+import { useIsMobile } from "@repo/ui/hooks/use-is-mobile";
+import { useDebounce } from "@repo/ui/hooks/use-debounce";
 ```
 
 ### Importing Utilities
 
 ```tsx
-import { cn } from "@repo/ui/lib/utils"
+import { cn } from "@repo/ui/lib/utils";
 ```
 
 ### Importing Styles
 
 ```tsx
-import "@repo/ui/styles/globals.css"
+import "@repo/ui/styles/globals.css";
 ```
 
 ## Custom Hooks
@@ -61,16 +61,12 @@ import "@repo/ui/styles/globals.css"
 Detects if the viewport is mobile-sized (< 768px).
 
 ```tsx
-import { useIsMobile } from "@repo/ui/hooks/use-is-mobile"
+import { useIsMobile } from "@repo/ui/hooks/use-is-mobile";
 
 export function ResponsiveComponent() {
-  const isMobile = useIsMobile()
-  
-  return (
-    <div>
-      {isMobile ? <MobileView /> : <DesktopView />}
-    </div>
-  )
+  const isMobile = useIsMobile();
+
+  return <div>{isMobile ? <MobileView /> : <DesktopView />}</div>;
 }
 ```
 
@@ -79,20 +75,15 @@ export function ResponsiveComponent() {
 Generic debounce hook with configurable delay.
 
 ```tsx
-import { useDebounce } from "@repo/ui/hooks/use-debounce"
-import { useState } from "react"
+import { useDebounce } from "@repo/ui/hooks/use-debounce";
+import { useState } from "react";
 
 export function SearchComponent() {
-  const [search, setSearch] = useState("")
-  const debouncedSearch = useDebounce(search, 300)
-  
+  const [search, setSearch] = useState("");
+  const debouncedSearch = useDebounce(search, 300);
+
   // Use debouncedSearch for API calls
-  return (
-    <input
-      value={search}
-      onChange={(e) => setSearch(e.target.value)}
-    />
-  )
+  return <input value={search} onChange={(e) => setSearch(e.target.value)} />;
 }
 ```
 
@@ -103,14 +94,10 @@ export function SearchComponent() {
 Combines `clsx` and `tailwind-merge` for safe className merging, preventing Tailwind class conflicts.
 
 ```tsx
-import { cn } from "@repo/ui/lib/utils"
+import { cn } from "@repo/ui/lib/utils";
 
 export function Component({ className }) {
-  return (
-    <div className={cn("text-sm font-medium", className)}>
-      Content
-    </div>
-  )
+  return <div className={cn("text-sm font-medium", className)}>Content</div>;
 }
 ```
 
@@ -147,49 +134,50 @@ Component configuration is managed in `components.json`:
 
 ### Production Dependencies
 
-| Package | Purpose |
-|---------|---------|
-| **@base-ui/react** | Headless component primitives (accessibility & behavior) |
-| **tailwindcss** | Utility-first CSS framework |
-| **next-themes** | Theme management (light/dark mode) |
-| **lucide-react** | Icon library |
-| **class-variance-authority** | Type-safe component variants |
-| **clsx** | Conditional className utility |
-| **tailwind-merge** | Merge Tailwind classes without conflicts |
-| **sonner** | Toast notifications |
-| **vaul** | Drawer primitives |
-| **tw-animate-css** | Custom Tailwind animations |
+| Package                      | Purpose                                                  |
+| ---------------------------- | -------------------------------------------------------- |
+| **@base-ui/react**           | Headless component primitives (accessibility & behavior) |
+| **tailwindcss**              | Utility-first CSS framework                              |
+| **next-themes**              | Theme management (light/dark mode)                       |
+| **lucide-react**             | Icon library                                             |
+| **class-variance-authority** | Type-safe component variants                             |
+| **clsx**                     | Conditional className utility                            |
+| **tailwind-merge**           | Merge Tailwind classes without conflicts                 |
+| **sonner**                   | Toast notifications                                      |
+| **vaul**                     | Drawer primitives                                        |
+| **tw-animate-css**           | Custom Tailwind animations                               |
 
 ### Key Architecture Decisions
 
 **Why Base UI?**
+
 - Headless architecture separates behavior from presentation
 - Production-ready accessibility (ARIA, keyboard navigation, focus management)
 - Unstyled primitives allow complete design control
 - Smaller bundle size (no opinionated styles)
 
 **Why shadcn patterns?**
+
 - Well-tested component composition patterns
 - Modern design system conventions
 - Community-standard approach to variants and styling
 
 **Why Tailwind CSS 4?**
+
 - Modern CSS features (container queries, OKLch colors)
 - Faster build times with new engine
 - Better developer experience
 
 **Component Composition Pattern:**
+
 ```tsx
 // Base UI provides the primitive
-import * as Dialog from "@base-ui/react/Dialog"
+import * as Dialog from "@base-ui/react/Dialog";
 
 // We add styling and variants
 export const DialogTitle = ({ className, ...props }) => (
-  <Dialog.Title
-    className={cn("text-lg font-semibold", className)}
-    {...props}
-  />
-)
+  <Dialog.Title className={cn("text-lg font-semibold", className)} {...props} />
+);
 ```
 
 ## Path Aliases
