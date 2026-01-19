@@ -65,7 +65,7 @@ app.get(
   "/stations/trending",
   cache({
     cacheName: "analytics-cache",
-    cacheControl: "public, max-age=600, stale-while-revalidate=60", // 10 minutes
+    cacheControl: "public, max-age=300, stale-while-revalidate=60",
   }),
   async (c) => {
     const period = c.req.query("period") as "hour" | "day" | "week" | undefined;
@@ -99,7 +99,7 @@ app.get(
   "/analytics/overview",
   cache({
     cacheName: "analytics-cache",
-    cacheControl: "public, max-age=600, stale-while-revalidate=60", // 10 minutes
+    cacheControl: "public, max-age=300, stale-while-revalidate=60",
   }),
   async (c) => {
     try {
