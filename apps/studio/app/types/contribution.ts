@@ -12,6 +12,7 @@ export interface ChangeDetails {
   newGeo?: GeoCoordinates | null;
   coordinatesAdded?: boolean;
   coordinatesUpdated?: boolean;
+  coordinatesRemoved?: boolean;
   nameChanged?: boolean;
 }
 
@@ -33,6 +34,7 @@ export interface ContributionStats {
   changesCount: number;
   coordinatesAdded: number;
   coordinatesUpdated: number;
+  coordinatesRemoved: number;
   stationsRenamed: number;
   stationsCreated: number;
   stationsDeleted: number;

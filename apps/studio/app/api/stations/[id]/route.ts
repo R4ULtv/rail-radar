@@ -55,6 +55,13 @@ export async function PUT(request: Request, { params }: RouteParams) {
         : geo === null
           ? undefined
           : existingStation.geo,
+
+      ...(geo && {
+        geo: {
+          lat: Math.round(Number(geo.lat) * 1e6) / 1e6,
+          lng: Math.round(Number(geo.lng) * 1e6) / 1e6,
+        },
+      }),
     };
 
     stations[index] = updatedStation;

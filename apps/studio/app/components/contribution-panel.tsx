@@ -56,6 +56,10 @@ function formatChangeDetails(change: StationChange): string {
     updates.push(
       `Added coordinates (${details.newGeo.lat.toFixed(4)}, ${details.newGeo.lng.toFixed(4)})`,
     );
+  } else if (details.coordinatesRemoved && details.previousGeo) {
+    updates.push(
+      `Removed coordinates (was ${details.previousGeo.lat.toFixed(4)}, ${details.previousGeo.lng.toFixed(4)})`,
+    );
   } else if (details.coordinatesUpdated && details.newGeo) {
     updates.push(
       `Moved to (${details.newGeo.lat.toFixed(4)}, ${details.newGeo.lng.toFixed(4)})`,

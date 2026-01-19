@@ -51,6 +51,7 @@ function calculateStats(
 
   let coordinatesAdded = 0;
   let coordinatesUpdated = 0;
+  let coordinatesRemoved = 0;
   let stationsRenamed = 0;
   let stationsCreated = 0;
   let stationsDeleted = 0;
@@ -70,6 +71,9 @@ function calculateStats(
       if (change.details.coordinatesUpdated) {
         coordinatesUpdated++;
       }
+      if (change.details.coordinatesRemoved) {
+        coordinatesRemoved++;
+      }
       if (change.details.nameChanged) {
         stationsRenamed++;
       }
@@ -80,6 +84,7 @@ function calculateStats(
     changesCount: changes.length,
     coordinatesAdded,
     coordinatesUpdated,
+    coordinatesRemoved,
     stationsRenamed,
     stationsCreated,
     stationsDeleted,
@@ -203,6 +208,7 @@ export function ContributionProvider({
           const hadGeo = !!previousStation.geo;
           const hasGeo = !!station.geo;
           const coordinatesAdded = !hadGeo && hasGeo;
+          const coordinatesRemoved = hadGeo && !hasGeo;
           const coordinatesUpdated =
             hadGeo &&
             hasGeo &&
@@ -217,6 +223,7 @@ export function ContributionProvider({
             newGeo: station.geo ?? null,
             coordinatesAdded,
             coordinatesUpdated,
+            coordinatesRemoved,
             nameChanged,
           };
         }
