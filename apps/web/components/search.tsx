@@ -67,7 +67,7 @@ const StationList = React.memo(function StationList({
   if (stations.length === 0) return null;
 
   return (
-    <ul role="listbox" className="flex flex-col gap-1 md:gap-0">
+    <ul role="listbox" className="flex flex-col">
       {stations.map((station, index) => {
         const globalIndex = startIndex + index;
         const isFocused = globalIndex === focusedIndex;
@@ -265,7 +265,7 @@ export function Search() {
       {/* Search Results */}
       {isSearchActive && searchResults.length > 0 && (
         <>
-          <div className="px-4 py-2">
+          <div className="px-4 py-2 not-first:mt-1">
             <p className="text-muted-foreground text-sm flex items-center gap-2">
               <ListIcon className="size-3.5" />
               Search Results
@@ -295,7 +295,7 @@ export function Search() {
       {/* Recent Stations */}
       {showRecentAndPopular && recentStations.length > 0 && (
         <>
-          <div className="px-4 py-2">
+          <div className="px-4 py-2 not-first:mt-1">
             <p className="text-muted-foreground text-sm flex items-center gap-2">
               <HistoryIcon className="size-3.5" />
               Recent Stations
@@ -313,7 +313,7 @@ export function Search() {
       {/* Trending Stations */}
       {showRecentAndPopular && trendingStations.length > 0 && (
         <>
-          <div className="px-4 py-2">
+          <div className="px-4 py-2 not-first:mt-1">
             <p className="text-muted-foreground text-sm flex items-center gap-2">
               <TrendingUpIcon className="size-3.5" />
               Trending Stations
