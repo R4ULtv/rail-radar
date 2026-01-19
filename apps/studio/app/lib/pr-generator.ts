@@ -155,8 +155,13 @@ export function generatePRBody(
     const { details, mapLink } = formatChangeDescription(change);
     const typeBadge = getTypeBadge(change.type);
     const mapCell = mapLink ? `[📍 View](${mapLink})` : "-";
-    const rfiCell = change.type !== "deleted" ? `[🚉 Check](${generateRfiLink(change.id)})` : "-";
-    lines.push(`| ${change.stationName} | ${typeBadge} | ${details} | ${mapCell} | ${rfiCell} |`);
+    const rfiCell =
+      change.type !== "deleted"
+        ? `[🚉 Check](${generateRfiLink(change.id)})`
+        : "-";
+    lines.push(
+      `| ${change.stationName} | ${typeBadge} | ${details} | ${mapCell} | ${rfiCell} |`,
+    );
   }
 
   lines.push("");
