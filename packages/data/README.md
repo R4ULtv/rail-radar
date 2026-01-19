@@ -2,6 +2,17 @@
 
 Shared station data and TypeScript types for Rail Radar.
 
+## Package Structure
+
+```
+src/
+├── index.ts                  # Main entry point
+├── stations.ts               # Station data exports
+├── types.ts                  # TypeScript type definitions
+├── stations.json             # Raw station data
+└── stations-with-coords.json # Stations with coordinates
+```
+
 ## Installation
 
 This package is internal to the monorepo. To use it in an app:
@@ -12,19 +23,27 @@ pnpm add @repo/data --filter=<app>
 
 ## Exports
 
+The package provides two import paths:
+
+### Default Import (`@repo/data`)
+
+```ts
+import { stations, stationsCoords, type Station, type Train } from "@repo/data";
+```
+
+## Data
+
+### `stations`
+
+Array of Italian railway stations (raw data).
+
 ### `stationsCoords`
 
 Array of 2400+ Italian railway stations with geographic coordinates.
 
-```ts
-import { stationsCoords } from "@repo/data";
+## Types
 
-// Each station has: id, name, and optional geo (lat/lng)
-```
-
-### Types
-
-#### `Station`
+### `Station`
 
 ```ts
 interface Station {
@@ -37,7 +56,7 @@ interface Station {
 }
 ```
 
-#### `Train`
+### `Train`
 
 ```ts
 interface Train {
@@ -56,12 +75,30 @@ interface Train {
 
 ## Usage
 
+### Import types only
+
 ```ts
-import { stationsCoords, type Station, type Train } from "@repo/data";
+import type { Station, Train } from "@repo/data";
+```
 
-// Get all stations
+### Get all stations with coordinates
+
+```ts
+import { stationsCoords } from "@repo/data";
+
 const allStations = stationsCoords;
+```
 
-// Filter stations with coordinates
+### Filter stations with coordinates
+
+```ts
 const withCoords = stationsCoords.filter((s) => s.geo);
+```
+
+### Use in API routes (subpath import)
+
+```ts
+import { stationsCoords } from "@repo/data/stations";
+
+const stations = stationsCoords.filter((s) => s.geo);
 ```
