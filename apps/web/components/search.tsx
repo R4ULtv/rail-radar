@@ -35,13 +35,18 @@ import { useSelectedStation } from "@/hooks/use-selected-station";
 import { cn } from "@repo/ui/lib/utils";
 import type { Station } from "@repo/data";
 
-const POPULAR_STATIONS: Station[] = [
-  { id: 1728, name: "Milano Centrale" },
-  { id: 2416, name: "Roma Termini" },
-  { id: 1325, name: "Firenze Santa Maria Novella" },
-  { id: 1888, name: "Napoli Centrale" },
-  { id: 3009, name: "Venezia S.Lucia" },
-];
+interface TrendingStation {
+  stationId: number;
+  stationName: string;
+  visits: number;
+  uniqueVisitors: number;
+}
+
+interface TrendingResponse {
+  timestamp: string;
+  period: string;
+  stations: TrendingStation[];
+}
 
 const StationList = React.memo(function StationList({
   stations,
@@ -49,12 +54,14 @@ const StationList = React.memo(function StationList({
   focusedIndex = -1,
   startIndex = 0,
   onFocusIndex,
+  visits,
 }: {
   stations: Station[];
   onSelect: (station: Station) => void;
   focusedIndex?: number;
   startIndex?: number;
   onFocusIndex?: (index: number) => void;
+  visits?: Map<number, number>;
 }) {
   if (stations.length === 0) return null;
 
@@ -63,6 +70,7 @@ const StationList = React.memo(function StationList({
       {stations.map((station, index) => {
         const globalIndex = startIndex + index;
         const isFocused = globalIndex === focusedIndex;
+        const visitCount = visits?.get(station.id);
 
         return (
           <li
@@ -83,7 +91,14 @@ const StationList = React.memo(function StationList({
               )}
             >
               <TrainFrontIcon className="size-4 text-muted-foreground" />
-              {station.name}
+              <span className={cn(visitCount !== undefined && "flex-1")}>
+                {station.name}
+              </span>
+              {visitCount !== undefined && (
+                <span className="text-xs text-muted-foreground tabular-nums">
+                  {visitCount}
+                </span>
+              )}
             </button>
           </li>
         );
@@ -111,6 +126,34 @@ export function Search() {
     },
   );
 
+  // Fetch trending stations with SWR (5 minute revalidation)
+  const { data: trendingData } = useSWR<TrendingResponse>(
+    "/stations/trending?period=week",
+    async (url: string) => {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}${url}`);
+      if (!res.ok) throw new Error("Failed to fetch trending stations");
+      return res.json();
+    },
+    { refreshInterval: 5 * 60 * 1000, revalidateOnFocus: false },
+  );
+
+  const { trendingStations, trendingVisits } = React.useMemo(() => {
+    if (!trendingData?.stations) {
+      return {
+        trendingStations: [] as Station[],
+        trendingVisits: new Map<number, number>(),
+      };
+    }
+    const stations = trendingData.stations.map((s) => ({
+      id: s.stationId,
+      name: s.stationName,
+    }));
+    const visits = new Map(
+      trendingData.stations.map((s) => [s.stationId, s.visits]),
+    );
+    return { trendingStations: stations, trendingVisits: visits };
+  }, [trendingData]);
+
   const isSearchActive = query.trim().length > 0;
   const hasSearched =
     isSearchActive && query.trim() === debouncedQuery && !isLoading;
@@ -133,10 +176,16 @@ export function Search() {
       return searchResults.slice(0, 10);
     }
     if (!isSearchActive || noResults) {
-      return [...recentStations, ...POPULAR_STATIONS];
+      return [...recentStations, ...trendingStations];
     }
     return [];
-  }, [isSearchActive, searchResults, recentStations, noResults]);
+  }, [
+    isSearchActive,
+    searchResults,
+    recentStations,
+    noResults,
+    trendingStations,
+  ]);
 
   const focusedIndexRef = React.useRef(focusedIndex);
   const visibleStationsRef = React.useRef(visibleStations);
@@ -318,21 +367,22 @@ export function Search() {
                     />
                   </>
                 )}
-                {/* Popular Stations */}
-                {showRecentAndPopular && (
+                {/* Trending Stations */}
+                {showRecentAndPopular && trendingStations.length > 0 && (
                   <>
                     <CardHeader className="px-4 py-2">
                       <CardDescription className="flex items-center gap-2">
                         <TrendingUpIcon className="size-3.5" />
-                        Popular Stations
+                        Trending Stations
                       </CardDescription>
                     </CardHeader>
                     <StationList
-                      stations={POPULAR_STATIONS}
+                      stations={trendingStations}
                       onSelect={handleSelectStation}
                       focusedIndex={focusedIndex}
                       startIndex={recentStations.length}
                       onFocusIndex={setFocusedIndex}
+                      visits={trendingVisits}
                     />
                   </>
                 )}
