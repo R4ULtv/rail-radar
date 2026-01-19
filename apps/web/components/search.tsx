@@ -20,6 +20,13 @@ import {
   CardHeader,
 } from "@repo/ui/components/card";
 import {
+  Drawer,
+  DrawerContent,
+  DrawerDescription,
+  DrawerHeader,
+  DrawerTitle,
+} from "@repo/ui/components/drawer";
+import {
   InputGroup,
   InputGroupAddon,
   InputGroupButton,
@@ -66,7 +73,7 @@ const StationList = React.memo(function StationList({
   if (stations.length === 0) return null;
 
   return (
-    <ul role="listbox" className="flex flex-col">
+    <ul role="listbox" className="flex flex-col gap-1 md:gap-0">
       {stations.map((station, index) => {
         const globalIndex = startIndex + index;
         const isFocused = globalIndex === focusedIndex;
@@ -86,7 +93,7 @@ const StationList = React.memo(function StationList({
               onMouseLeave={() => onFocusIndex?.(-1)}
               tabIndex={-1}
               className={cn(
-                "w-full px-4 py-2 text-left text-sm transition-colors duration-75 ease-out flex items-center gap-2",
+                "w-full px-4 py-2.5 md:py-2 text-left text-sm transition-colors duration-75 ease-out flex items-center gap-2",
                 isFocused && "bg-muted",
               )}
             >
@@ -114,7 +121,7 @@ export function Search() {
   const [query, setQuery] = React.useState("");
   const debouncedQuery = useDebounce(query.trim(), 300);
   const [focusedIndex, setFocusedIndex] = React.useState<number>(-1);
-  const [isFocused, setIsFocused] = React.useState(false);
+  const [isDrawerOpen, setIsDrawerOpen] = React.useState(false);
 
   // Fetch search results with SWR
   const { data: searchResults = [], isLoading } = useSWR<Station[]>(
@@ -166,9 +173,14 @@ export function Search() {
   const handleSelectStation = React.useCallback(
     (station: Station) => {
       selectStation(station);
-      inputRef.current?.blur();
+      if (isMobile) {
+        setIsDrawerOpen(false);
+        setQuery("");
+      } else {
+        inputRef.current?.blur();
+      }
     },
-    [selectStation],
+    [selectStation, isMobile],
   );
 
   const visibleStations = React.useMemo(() => {
@@ -253,19 +265,171 @@ export function Search() {
     return () => document.removeEventListener("keydown", handleKeyDown);
   }, [handleSelectStation]);
 
+  // Search content shared between desktop dropdown and mobile drawer
+  const renderSearchContent = (limit?: number) => (
+    <>
+      {/* Search Results */}
+      {isSearchActive && searchResults.length > 0 && (
+        <>
+          <CardHeader className="px-4 py-2">
+            <CardDescription className="flex items-center gap-2">
+              <ListIcon className="size-3.5" />
+              Search Results
+            </CardDescription>
+          </CardHeader>
+          <StationList
+            stations={limit ? searchResults.slice(0, limit) : searchResults}
+            onSelect={handleSelectStation}
+            focusedIndex={focusedIndex}
+            startIndex={0}
+            onFocusIndex={setFocusedIndex}
+          />
+        </>
+      )}
+      {/* No Results */}
+      {noResults && (
+        <div className="px-4 py-3 flex items-center gap-3 text-muted-foreground">
+          <SearchXIcon className="size-5 shrink-0" />
+          <div className="flex flex-col gap-0.5">
+            <p className="text-sm font-medium text-foreground">
+              No stations found
+            </p>
+            <p className="text-xs">Try a different search term</p>
+          </div>
+        </div>
+      )}
+      {/* Recent Stations */}
+      {showRecentAndPopular && recentStations.length > 0 && (
+        <>
+          <CardHeader className="px-4 py-2">
+            <CardDescription className="flex items-center gap-2">
+              <HistoryIcon className="size-3.5" />
+              Recent Stations
+            </CardDescription>
+          </CardHeader>
+          <StationList
+            stations={recentStations}
+            onSelect={handleSelectStation}
+            focusedIndex={focusedIndex}
+            startIndex={0}
+            onFocusIndex={setFocusedIndex}
+          />
+        </>
+      )}
+      {/* Trending Stations */}
+      {showRecentAndPopular && trendingStations.length > 0 && (
+        <>
+          <CardHeader className="px-4 py-2">
+            <CardDescription className="flex items-center gap-2">
+              <TrendingUpIcon className="size-3.5" />
+              Trending Stations
+            </CardDescription>
+          </CardHeader>
+          <StationList
+            stations={trendingStations}
+            onSelect={handleSelectStation}
+            focusedIndex={focusedIndex}
+            startIndex={recentStations.length}
+            onFocusIndex={setFocusedIndex}
+            visits={trendingVisits}
+          />
+        </>
+      )}
+    </>
+  );
+
+  // Mobile view - trigger input + full-screen drawer
+  if (isMobile) {
+    return (
+      <>
+        {/* Trigger input on the map */}
+        <div className="absolute z-50 top-4 left-4 w-[calc(100vw-32px)] pointer-events-none font-sans">
+          <InputGroup
+            className="h-10 bg-card dark:bg-card pointer-events-auto cursor-pointer"
+            onClick={() => setIsDrawerOpen(true)}
+          >
+            <InputGroupInput
+              placeholder="Search Station..."
+              value=""
+              readOnly
+              className="cursor-pointer"
+              onFocus={(e) => {
+                e.target.blur();
+                setIsDrawerOpen(true);
+              }}
+              onChange={() => {}}
+            />
+            <InputGroupAddon>
+              <SearchIcon />
+            </InputGroupAddon>
+          </InputGroup>
+        </div>
+
+        {/* Full-screen search drawer */}
+        <Drawer open={isDrawerOpen} onOpenChange={setIsDrawerOpen} modal>
+          <DrawerContent className="h-full max-h-[calc(100svh-4.5rem)]! -mx-px outline-none bg-card">
+            <DrawerHeader className="pb-0">
+              <DrawerTitle className="sr-only">Search Stations</DrawerTitle>
+              <DrawerDescription className="sr-only">
+                Search and select a train station from the list
+              </DrawerDescription>
+              <InputGroup className="h-10 bg-background">
+                <InputGroupInput
+                  placeholder="Search Station..."
+                  value={query}
+                  onChange={(e) => setQuery(e.target.value)}
+                  autoFocus
+                />
+                <InputGroupAddon>
+                  {isSearchActive && !hasSearched ? (
+                    <Spinner />
+                  ) : (
+                    <SearchIcon />
+                  )}
+                </InputGroupAddon>
+                <AnimatePresence>
+                  {isSearchActive && (
+                    <motion.div
+                      initial={{ opacity: 0, scale: 0.8 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      exit={{ opacity: 0, scale: 0.8 }}
+                      transition={{ duration: 0.2 }}
+                    >
+                      <InputGroupAddon align="inline-end">
+                        <InputGroupButton
+                          aria-label="Clear search"
+                          title="Clear search"
+                          size="icon-xs"
+                          onClick={() => setQuery("")}
+                        >
+                          <XIcon />
+                        </InputGroupButton>
+                      </InputGroupAddon>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </InputGroup>
+            </DrawerHeader>
+
+            <div className="flex-1 overflow-auto pt-2">
+              {(!isSearchActive || hasSearched) && renderSearchContent()}
+            </div>
+          </DrawerContent>
+        </Drawer>
+      </>
+    );
+  }
+
+  // Desktop view - floating card with dropdown
   return (
-    <div className="absolute z-50 top-4 left-4 flex flex-col gap-2 md:w-80 w-[calc(100vw-32px)] pointer-events-none font-sans">
+    <div className="absolute z-50 top-4 left-4 flex flex-col gap-2 md:w-80 w-[calc(100svw-32px)] pointer-events-none font-sans">
       <InputGroup className="h-10 bg-card dark:bg-card pointer-events-auto">
         <InputGroupInput
           ref={inputRef}
           placeholder="Search Station..."
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          onFocus={() => setIsFocused(true)}
-          onBlur={() => {
-            setIsFocused(false);
-            setFocusedIndex(-1);
-          }}
+          onBlur={() => setFocusedIndex(-1)}
           role="combobox"
           aria-expanded={visibleStations.length > 0}
           aria-haspopup="listbox"
@@ -293,12 +457,7 @@ export function Search() {
                   title="Clear search"
                   size="icon-xs"
                   onMouseDown={(e) => e.preventDefault()}
-                  onClick={() => {
-                    setQuery("");
-                    if (isMobile) {
-                      inputRef.current?.blur();
-                    }
-                  }}
+                  onClick={() => setQuery("")}
                 >
                   <XIcon />
                 </InputGroupButton>
@@ -308,7 +467,7 @@ export function Search() {
         </AnimatePresence>
       </InputGroup>
       <AnimatePresence>
-        {(!isMobile || isFocused) && (!isSearchActive || hasSearched) && (
+        {(!isSearchActive || hasSearched) && (
           <motion.div
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
@@ -319,73 +478,7 @@ export function Search() {
           >
             <Card ref={cardHeight.contentRef} className="py-2 gap-0 rounded-md">
               <CardContent className="p-0">
-                {/* Search Results */}
-                {isSearchActive && searchResults.length > 0 && (
-                  <>
-                    <CardHeader className="px-4 py-2">
-                      <CardDescription className="flex items-center gap-2">
-                        <ListIcon className="size-3.5" />
-                        Search Results
-                      </CardDescription>
-                    </CardHeader>
-                    <StationList
-                      stations={searchResults.slice(0, 10)}
-                      onSelect={handleSelectStation}
-                      focusedIndex={focusedIndex}
-                      startIndex={0}
-                      onFocusIndex={setFocusedIndex}
-                    />
-                  </>
-                )}
-                {/* No Results */}
-                {noResults && (
-                  <div className="px-4 py-3 flex items-center gap-3 text-muted-foreground">
-                    <SearchXIcon className="size-5 shrink-0" />
-                    <div className="flex flex-col gap-0.5">
-                      <p className="text-sm font-medium text-foreground">
-                        No stations found
-                      </p>
-                      <p className="text-xs">Try a different search term</p>
-                    </div>
-                  </div>
-                )}
-                {/* Recent Stations */}
-                {showRecentAndPopular && recentStations.length > 0 && (
-                  <>
-                    <CardHeader className="px-4 py-2">
-                      <CardDescription className="flex items-center gap-2">
-                        <HistoryIcon className="size-3.5" />
-                        Recent Stations
-                      </CardDescription>
-                    </CardHeader>
-                    <StationList
-                      stations={recentStations}
-                      onSelect={handleSelectStation}
-                      focusedIndex={focusedIndex}
-                      startIndex={0}
-                      onFocusIndex={setFocusedIndex}
-                    />
-                  </>
-                )}
-                {/* Trending Stations */}
-                {showRecentAndPopular && trendingStations.length > 0 && (
-                  <>
-                    <CardHeader className="px-4 py-2">
-                      <CardDescription className="flex items-center gap-2">
-                        <TrendingUpIcon className="size-3.5" />
-                        Trending Stations
-                      </CardDescription>
-                    </CardHeader>
-                    <StationList
-                      stations={trendingStations}
-                      onSelect={handleSelectStation}
-                      focusedIndex={focusedIndex}
-                      startIndex={recentStations.length}
-                      onFocusIndex={setFocusedIndex}
-                      visits={trendingVisits}
-                    />
-                  </>
-                )}
+                {renderSearchContent(10)}
               </CardContent>
             </Card>
           </motion.div>
