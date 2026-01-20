@@ -15,13 +15,29 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://www.railradar24.com"),
-  title: "Rail Radar - Live Train Tracker for Italy",
-  description:
-    "Track Italian trains in real time. Get live delays, platform numbers, and departure info for all train stations across Italy.",
-  openGraph: {
-    images: [{ url: "/og-image.webp", width: 1200, height: 630 }],
-    type: "website",
+  title: {
+    default: "Rail Radar - Live Train Tracker for Italy",
+    template: "%s | Rail Radar",
   },
+  description:
+    "Track Italian trains in real time. Get live delays, platform numbers, and departure info for all 2400+ train stations across Italy.",
+  openGraph: {
+    type: "website",
+    url: "https://www.railradar24.com",
+    siteName: "Rail Radar",
+    images: [
+      {
+        url: "/og-image.webp",
+        width: 1200,
+        height: 630,
+        alt: "Rail Radar - Live Italian Train Tracking Map",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+  },
+  category: "travel",
 };
 
 export default function RootLayout({
