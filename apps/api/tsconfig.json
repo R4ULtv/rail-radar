@@ -1,14 +1,16 @@
 {
+  "extends": "@repo/typescript-config/base.json",
   "compilerOptions": {
     "target": "ESNext",
     "module": "ESNext",
     "moduleResolution": "Bundler",
     "strict": true,
     "skipLibCheck": true,
-    "lib": [
-      "ESNext"
-    ],
+    "lib": ["ESNext"],
     "jsx": "react-jsx",
-    "jsxImportSource": "hono/jsx"
+    "jsxImportSource": "hono/jsx",
+    "types": ["./worker-configuration.d.ts"],
   },
+  "include": ["src", "worker-configuration.d.ts"],
+  "exclude": ["node_modules", "dist"],
 }
