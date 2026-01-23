@@ -51,7 +51,7 @@ function parseInfo(text: string | undefined): string | null {
   if (!text) return null;
   // Extract just the stops, remove "Train XXX" and "Next stops" prefixes
   const match = text.match(/STOPS AT:\s*(.+)/i);
-  if (match) {
+  if (match?.[1]) {
     return match[1].trim();
   }
   return null;

@@ -17,7 +17,7 @@ function damerauLevenshtein(a: string, b: string): number {
 
   // Initialize first row
   for (let j = 0; j <= a.length; j++) {
-    matrix[0][j] = j;
+    matrix[0]![j] = j;
   }
 
   // Fill in the rest of the matrix
@@ -25,10 +25,10 @@ function damerauLevenshtein(a: string, b: string): number {
     for (let j = 1; j <= a.length; j++) {
       const cost = b.charAt(i - 1) === a.charAt(j - 1) ? 0 : 1;
 
-      matrix[i][j] = Math.min(
-        matrix[i - 1][j - 1] + cost, // substitution
-        matrix[i][j - 1] + 1, // insertion
-        matrix[i - 1][j] + 1, // deletion
+      matrix[i]![j] = Math.min(
+        matrix[i - 1]![j - 1]! + cost, // substitution
+        matrix[i]![j - 1]! + 1, // insertion
+        matrix[i - 1]![j]! + 1, // deletion
       );
 
       // Transposition
@@ -38,12 +38,12 @@ function damerauLevenshtein(a: string, b: string): number {
         b.charAt(i - 1) === a.charAt(j - 2) &&
         b.charAt(i - 2) === a.charAt(j - 1)
       ) {
-        matrix[i][j] = Math.min(matrix[i][j], matrix[i - 2][j - 2] + cost);
+        matrix[i]![j] = Math.min(matrix[i]![j]!, matrix[i - 2]![j - 2]! + cost);
       }
     }
   }
 
-  return matrix[b.length][a.length];
+  return matrix[b.length]![a.length]!;
 }
 
 /**
