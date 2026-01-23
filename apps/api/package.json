@@ -5,7 +5,7 @@
     "dev": "wrangler dev",
     "deploy": "wrangler deploy --minify",
     "lint": "eslint . --max-warnings 0",
-    "check-types": "tsc --noEmit",
+    "check-types": "wrangler types --env-interface CloudflareBindings && tsc --noEmit",
     "cf-typegen": "wrangler types --env-interface CloudflareBindings"
   },
   "dependencies": {
