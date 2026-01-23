@@ -30,9 +30,18 @@ importers:
         specifier: ^4.11.4
         version: 4.11.4
     devDependencies:
+      '@repo/eslint-config':
+        specifier: workspace:*
+        version: link:../../packages/eslint-config
+      '@repo/typescript-config':
+        specifier: workspace:*
+        version: link:../../packages/typescript-config
       domhandler:
         specifier: ^5.0.3
         version: 5.0.3
+      eslint:
+        specifier: ^9.39.2
+        version: 9.39.2(jiti@2.6.1)
       wrangler:
         specifier: ^4.59.2
         version: 4.59.2
@@ -5456,7 +5465,7 @@ snapshots:
 
   '@types/minimatch@6.0.0':
     dependencies:
-      minimatch: 9.0.0
+      minimatch: 10.1.1
 
   '@types/node@20.19.30':
     dependencies:
