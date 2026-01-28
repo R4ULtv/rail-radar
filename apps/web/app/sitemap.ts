@@ -1,9 +1,10 @@
 import { MetadataRoute } from "next";
+import { stationsCoords } from "@repo/data";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = "https://www.railradar24.com";
 
-  // Add homepage
+  // Homepage
   const routes: MetadataRoute.Sitemap = [
     {
       url: baseUrl,
@@ -13,5 +14,15 @@ export default function sitemap(): MetadataRoute.Sitemap {
     },
   ];
 
-  return [...routes];
+  // Station pages
+  const stationRoutes: MetadataRoute.Sitemap = stationsCoords.map(
+    (station) => ({
+      url: `${baseUrl}/station/${station.id}`,
+      lastModified: new Date(),
+      changeFrequency: "daily" as const,
+      priority: 0.7,
+    })
+  );
+
+  return [...routes, ...stationRoutes];
 }
