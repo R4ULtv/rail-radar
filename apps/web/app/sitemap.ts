@@ -14,15 +14,15 @@ export default function sitemap(): MetadataRoute.Sitemap {
     },
   ];
 
-  // Station pages
-  const stationRoutes: MetadataRoute.Sitemap = stationsCoords.map(
-    (station) => ({
+  // Station pages (only stations with coordinates)
+  const stationRoutes: MetadataRoute.Sitemap = stationsCoords
+    .filter((station) => station.geo)
+    .map((station) => ({
       url: `${baseUrl}/station/${station.id}`,
       lastModified: new Date(),
       changeFrequency: "daily" as const,
       priority: 0.7,
-    })
-  );
+    }));
 
   return [...routes, ...stationRoutes];
 }
