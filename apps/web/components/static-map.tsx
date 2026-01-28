@@ -47,7 +47,7 @@ export function StaticMap({ lat, lng, zoom = 14, className }: StaticMapProps) {
         </Marker>
       </MapGL>
       {/* Gradient overlay for visual appeal */}
-      <div className="absolute inset-0 bg-gradient-to-t from-background/80 via-background/20 to-transparent pointer-events-none" />
+      <div className="absolute inset-0 bg-linear-to-t from-background/80 via-background/20 to-transparent pointer-events-none" />
     </div>
   );
 }
