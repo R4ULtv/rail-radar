@@ -32,6 +32,11 @@ export function StationStats({ stationId }: StationStatsProps) {
   const trendingStation = data?.stations.find((s) => s.stationId === stationId);
   const rank = data?.stations.findIndex((s) => s.stationId === stationId);
   const isRanked = rank !== undefined && rank !== -1;
+  const topStation = data?.stations[0];
+  const relativeTraffic =
+    isRanked && trendingStation && topStation
+      ? (trendingStation.visits / topStation.visits) * 100
+      : null;
 
   if (isLoading) {
     return (
@@ -48,7 +53,7 @@ export function StationStats({ stationId }: StationStatsProps) {
   }
 
   return (
-    <div className="space-y-3">
+    <section className="space-y-3">
       <h2 className="text-sm font-medium text-muted-foreground">
         Station Statistics
       </h2>
@@ -64,7 +69,9 @@ export function StationStats({ stationId }: StationStatsProps) {
           <div className="flex items-center gap-2 text-sm text-muted-foreground">
             <BarChart3Icon className="size-4" />
             <span>
-              {trendingStation.visits.toLocaleString()} visits ({trendingStation.uniqueVisitors.toLocaleString()} unique) in the last 7 days
+              {trendingStation.visits.toLocaleString()} visits (
+              {trendingStation.uniqueVisitors.toLocaleString()} unique) in the
+              last 7 days
             </span>
           </div>
         </div>
@@ -73,6 +80,28 @@ export function StationStats({ stationId }: StationStatsProps) {
           No trending data available
         </p>
       )}
-    </div>
+
+      {relativeTraffic !== null && topStation && (
+        <div className="space-y-2 border-t pt-3">
+          <p className="text-xs text-muted-foreground">
+            This station has{" "}
+            <span className="font-medium text-foreground">
+              {relativeTraffic.toFixed(1)}%
+            </span>{" "}
+            of the traffic of the{" "}
+            <span className="font-medium text-foreground">
+              #{1} {topStation.stationName}
+            </span>{" "}
+            station this week.
+          </p>
+          <div className="h-1.5 rounded-full bg-muted overflow-hidden">
+            <div
+              className="h-full rounded-full bg-emerald-500"
+              style={{ width: `${Math.min(relativeTraffic, 100)}%` }}
+            />
+          </div>
+        </div>
+      )}
+    </section>
   );
 }
