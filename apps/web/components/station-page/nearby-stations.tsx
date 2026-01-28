@@ -60,12 +60,14 @@ export function NearbyStations({
   allStations,
   limit = 4,
 }: NearbyStationsProps) {
-  if (!currentStation.geo || allStations.length === 0) {
-    return null;
-  }
-
   const nearbyStations = useMemo(
-    () => calculateNearbyStations(currentStation, allStations, limit),
+    () => {
+      if (!currentStation.geo || allStations.length === 0) {
+        return [];
+      }
+
+      return calculateNearbyStations(currentStation, allStations, limit);
+    },
     [currentStation, allStations, limit],
   );
 
