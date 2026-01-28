@@ -17,6 +17,22 @@ interface StationHeaderProps {
   info?: string | null;
 }
 
+function formatDms(value: number, type: "lat" | "lng") {
+  const abs = Math.abs(value);
+  const degrees = Math.floor(abs);
+  const minutesFloat = (abs - degrees) * 60;
+  const minutes = Math.floor(minutesFloat);
+  const seconds = (minutesFloat - minutes) * 60;
+
+  const hemisphere =
+    type === "lat" ? (value >= 0 ? "N" : "S") : value >= 0 ? "E" : "W";
+
+  const paddedMinutes = String(minutes).padStart(2, "0");
+  const paddedSeconds = seconds.toFixed(1).padStart(4, "0");
+
+  return `${degrees}°${paddedMinutes}'${paddedSeconds}"${hemisphere}`;
+}
+
 export function StationHeader({ station, info }: StationHeaderProps) {
   const [copied, setCopied] = useState(false);
 
@@ -66,8 +82,9 @@ export function StationHeader({ station, info }: StationHeaderProps) {
             {station.name}
           </h1>
           {station.geo && (
-            <p className="text-sm text-muted-foreground mt-1 tabular-nums">
-              {station.geo.lat.toFixed(5)}, {station.geo.lng.toFixed(5)}
+            <p className="text-sm text-muted-foreground mt-2 tabular-nums">
+              {formatDms(station.geo.lat, "lat")}{" "}
+              {formatDms(station.geo.lng, "lng")}
             </p>
           )}
         </div>
