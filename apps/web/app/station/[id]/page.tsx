@@ -15,15 +15,21 @@ interface StationPageProps {
 }
 
 function getStation(id: string) {
+  // Ensure ID is purely numeric
+  if (!/^\d+$/.test(id)) return null;
   const stationId = parseInt(id, 10);
-  if (isNaN(stationId)) return null;
-  return stationsCoords.find((s) => s.id === stationId) ?? null;
+  const station = stationsCoords.find((s) => s.id === stationId);
+  // Only return stations with coordinates
+  if (!station?.geo) return null;
+  return station;
 }
 
 export async function generateStaticParams() {
-  return stationsCoords.map((station) => ({
-    id: station.id.toString(),
-  }));
+  return stationsCoords
+    .filter((station) => station.geo)
+    .map((station) => ({
+      id: station.id.toString(),
+    }));
 }
 
 export async function generateMetadata({
@@ -81,7 +87,7 @@ export default async function StationPage({ params }: StationPageProps) {
       )}
 
       {/* Main content */}
-      <div className="container mx-auto px-4 py-6 space-y-8 max-w-6xl">
+      <div className="mx-auto px-4 py-6 space-y-8 max-w-7xl">
         {/* Station header */}
         <StationHeader station={station} />
 
@@ -96,7 +102,7 @@ export default async function StationPage({ params }: StationPageProps) {
       </div>
 
       {/* Train board - edge-to-edge on mobile */}
-      <div className="md:container md:mx-auto md:px-4 md:pb-6 max-w-6xl">
+      <div className="md:mx-auto md:px-4 md:pb-6 max-w-7xl">
         <TrainBoard stationId={station.id} />
       </div>
     </div>
