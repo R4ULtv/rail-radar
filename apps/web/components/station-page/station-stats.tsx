@@ -61,7 +61,7 @@ export function StationStats({ stationId }: StationStatsProps) {
       {isRanked && trendingStation ? (
         <div className="space-y-2">
           <div className="flex items-center gap-2">
-            <TrendingUpIcon className="size-4 text-green-500" />
+            <TrendingUpIcon className="size-4 text-emerald-500" />
             <span className="text-sm font-medium">
               #{rank + 1} Trending Station
             </span>
