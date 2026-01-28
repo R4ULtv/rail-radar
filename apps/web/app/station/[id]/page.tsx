@@ -1,6 +1,9 @@
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
+import Link from "next/link";
 import { stationsCoords } from "@repo/data";
+import { Button } from "@repo/ui/components/button";
+import { ArrowLeftIcon } from "lucide-react";
 import { StaticMap } from "@/components/static-map";
 import { StationHeader } from "@/components/station-page/station-header";
 import { StationStats } from "@/components/station-page/station-stats";
@@ -58,6 +61,16 @@ export default async function StationPage({ params }: StationPageProps) {
             zoom={14}
             className="absolute inset-0"
           />
+          <div className="absolute top-2 left-2 md:top-4 md:left-4 bg-background rounded-md">
+            <Button
+              variant="outline"
+              size="icon-sm"
+              nativeButton={false}
+              render={<Link href="/" aria-label="Back to map" />}
+            >
+              <ArrowLeftIcon className="size-4" />
+            </Button>
+          </div>
         </div>
       )}
 
