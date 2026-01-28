@@ -58,7 +58,7 @@ function calculateNearbyStations(
 export function NearbyStations({
   currentStation,
   allStations,
-  limit = 5,
+  limit = 4,
 }: NearbyStationsProps) {
   if (!currentStation.geo || allStations.length === 0) {
     return null;
@@ -74,7 +74,7 @@ export function NearbyStations({
   }
 
   return (
-    <section className="space-y-3" aria-label="Nearby stations">
+    <section className="space-y-3">
       <h2 className="text-sm font-medium text-muted-foreground">Nearby Stations</h2>
       <ul className="space-y-2">
         {nearbyStations.map((station) => (
