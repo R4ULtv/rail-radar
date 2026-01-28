@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import Link from "next/link";
-import { stationsCoords } from "@repo/data";
+import { stationsCoords, type Station } from "@repo/data";
 import { Button } from "@repo/ui/components/button";
 import { ArrowLeftIcon } from "lucide-react";
 import { StaticMap } from "@/components/static-map";
@@ -18,6 +18,56 @@ function getStation(id: string) {
   const stationId = parseInt(id, 10);
   if (isNaN(stationId)) return null;
   return stationsCoords.find((s) => s.id === stationId) ?? null;
+}
+
+export async function generateStaticParams() {
+  return stationsCoords.map((station) => ({
+    id: station.id.toString(),
+  }));
+}
+
+function generateJsonLd(station: Station) {
+  const baseUrl = "https://www.railradar24.com";
+
+  return {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "TrainStation",
+        "@id": `${baseUrl}/station/${station.id}#station`,
+        name: station.name,
+        url: `${baseUrl}/station/${station.id}`,
+        ...(station.geo && {
+          geo: {
+            "@type": "GeoCoordinates",
+            latitude: station.geo.lat,
+            longitude: station.geo.lng,
+          },
+        }),
+        address: {
+          "@type": "PostalAddress",
+          addressCountry: "IT",
+        },
+      },
+      {
+        "@type": "BreadcrumbList",
+        itemListElement: [
+          {
+            "@type": "ListItem",
+            position: 1,
+            name: "Home",
+            item: baseUrl,
+          },
+          {
+            "@type": "ListItem",
+            position: 2,
+            name: station.name,
+            item: `${baseUrl}/station/${station.id}`,
+          },
+        ],
+      },
+    ],
+  };
 }
 
 export async function generateMetadata({
@@ -50,8 +100,14 @@ export default async function StationPage({ params }: StationPageProps) {
     notFound();
   }
 
+  const jsonLd = generateJsonLd(station);
+
   return (
     <div className="min-h-screen bg-background">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       {/* Static map hero */}
       {station.geo && (
         <div className="relative h-48 md:h-64 w-full">
