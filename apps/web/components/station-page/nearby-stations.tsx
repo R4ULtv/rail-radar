@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { useMemo } from "react";
 import type { Station } from "@repo/data";
 import { MapPinIcon } from "lucide-react";
 
@@ -9,22 +8,25 @@ interface NearbyStationsProps {
   limit?: number;
 }
 
+const DEG_TO_RAD = Math.PI / 180;
+const EARTH_RADIUS_KM = 6371;
+
 function haversineDistance(
   lat1: number,
   lng1: number,
   lat2: number,
   lng2: number,
 ): number {
-  const toRad = (deg: number) => (deg * Math.PI) / 180;
-  const R = 6371; // Earth's radius in kilometers
+  const dLat = (lat2 - lat1) * DEG_TO_RAD;
+  const dLng = (lng2 - lng1) * DEG_TO_RAD;
+  const lat1Rad = lat1 * DEG_TO_RAD;
+  const lat2Rad = lat2 * DEG_TO_RAD;
 
-  const dLat = toRad(lat2 - lat1);
-  const dLng = toRad(lng2 - lng1);
   const a =
     Math.sin(dLat / 2) ** 2 +
-    Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * Math.sin(dLng / 2) ** 2;
+    Math.cos(lat1Rad) * Math.cos(lat2Rad) * Math.sin(dLng / 2) ** 2;
   const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-  return R * c;
+  return EARTH_RADIUS_KM * c;
 }
 
 function formatDistance(km: number): string {
@@ -34,25 +36,43 @@ function formatDistance(km: number): string {
   return `${km.toFixed(1)} km`;
 }
 
+type StationWithDistance = Station & { distance: number };
+
 function calculateNearbyStations(
   currentStation: Station,
   allStations: Station[],
   limit: number,
-) {
+): StationWithDistance[] {
   if (!currentStation.geo) {
     return [];
   }
 
   const { lat, lng } = currentStation.geo;
+  const result: StationWithDistance[] = [];
 
-  return allStations
-    .filter((station) => station.id !== currentStation.id && station.geo)
-    .map((station) => ({
-      ...station,
-      distance: haversineDistance(lat, lng, station.geo!.lat, station.geo!.lng),
-    }))
-    .sort((a, b) => a.distance - b.distance)
-    .slice(0, limit);
+  for (const station of allStations) {
+    if (station.id === currentStation.id || !station.geo) continue;
+
+    const distance = haversineDistance(
+      lat,
+      lng,
+      station.geo.lat,
+      station.geo.lng,
+    );
+
+    if (result.length < limit) {
+      result.push({ ...station, distance });
+      result.sort((a, b) => a.distance - b.distance);
+    } else {
+      const lastStation = result[limit - 1];
+      if (lastStation && distance < lastStation.distance) {
+        result[limit - 1] = { ...station, distance };
+        result.sort((a, b) => a.distance - b.distance);
+      }
+    }
+  }
+
+  return result;
 }
 
 export function NearbyStations({
@@ -60,15 +80,14 @@ export function NearbyStations({
   allStations,
   limit = 4,
 }: NearbyStationsProps) {
-  const nearbyStations = useMemo(
-    () => {
-      if (!currentStation.geo || allStations.length === 0) {
-        return [];
-      }
+  if (!currentStation.geo || allStations.length === 0) {
+    return null;
+  }
 
-      return calculateNearbyStations(currentStation, allStations, limit);
-    },
-    [currentStation, allStations, limit],
+  const nearbyStations = calculateNearbyStations(
+    currentStation,
+    allStations,
+    limit,
   );
 
   if (nearbyStations.length === 0) {
@@ -77,7 +96,9 @@ export function NearbyStations({
 
   return (
     <section className="space-y-3">
-      <h2 className="text-sm font-medium text-muted-foreground">Nearby Stations</h2>
+      <h2 className="text-sm font-medium text-muted-foreground">
+        Nearby Stations
+      </h2>
       <ul className="space-y-2">
         {nearbyStations.map((station) => (
           <li key={station.id}>
