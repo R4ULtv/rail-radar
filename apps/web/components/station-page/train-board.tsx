@@ -4,13 +4,6 @@ import { useState, useEffect } from "react";
 import { useTrainData } from "@/hooks/use-train-data";
 import { TrainColumn } from "./train-column";
 import { useIsMobile } from "@repo/ui/hooks/use-mobile";
-import {
-  Tabs,
-  TabsList,
-  TabsTrigger,
-  TabsContent,
-} from "@repo/ui/components/tabs";
-import { ArrowDownLeftIcon, ArrowUpRightIcon } from "lucide-react";
 
 interface TrainBoardProps {
   stationId: number;
@@ -60,46 +53,20 @@ export function TrainBoard({ stationId }: TrainBoardProps) {
     );
   }
 
-  // Mobile: Tabbed view
+  // Mobile: Single column with toggle in header
+  const currentData = type === "departures" ? departures : arrivals;
+
   return (
-    <Tabs
-      value={type}
-      onValueChange={(value) => setType(value as "arrivals" | "departures")}
-    >
-      <div className="px-4">
-        <TabsList className="w-full">
-          <TabsTrigger value="departures">
-            <ArrowUpRightIcon className="size-4" />
-            Departures
-          </TabsTrigger>
-          <TabsTrigger value="arrivals">
-            <ArrowDownLeftIcon className="size-4" />
-            Arrivals
-          </TabsTrigger>
-        </TabsList>
-      </div>
-      <TabsContent value="departures">
-        <TrainColumn
-          title="Departures"
-          type="departures"
-          trainData={departures.data}
-          isLoading={departures.isLoading}
-          isValidating={departures.isValidating}
-          error={departures.error}
-          lastUpdated={departures.lastUpdated}
-        />
-      </TabsContent>
-      <TabsContent value="arrivals">
-        <TrainColumn
-          title="Arrivals"
-          type="arrivals"
-          trainData={arrivals.data}
-          isLoading={arrivals.isLoading}
-          isValidating={arrivals.isValidating}
-          error={arrivals.error}
-          lastUpdated={arrivals.lastUpdated}
-        />
-      </TabsContent>
-    </Tabs>
+    <TrainColumn
+      title={type === "departures" ? "Departures" : "Arrivals"}
+      type={type}
+      trainData={currentData.data}
+      isLoading={currentData.isLoading}
+      isValidating={currentData.isValidating}
+      error={currentData.error}
+      lastUpdated={currentData.lastUpdated}
+      showTypeToggle
+      onTypeChange={setType}
+    />
   );
 }

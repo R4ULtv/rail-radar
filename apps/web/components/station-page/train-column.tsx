@@ -8,6 +8,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@repo/ui/components/card";
+import { ToggleGroup, ToggleGroupItem } from "@repo/ui/components/toggle-group";
 import { TrainRow, TrainRowSkeleton } from "@/components/train-row";
 import { ArrowDownLeftIcon, ArrowUpRightIcon } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -20,6 +21,8 @@ interface TrainColumnProps {
   isValidating: boolean;
   error: string | null;
   lastUpdated: Date | null;
+  showTypeToggle?: boolean;
+  onTypeChange?: (type: "arrivals" | "departures") => void;
 }
 
 function UpdatedStatus({
@@ -85,16 +88,51 @@ export function TrainColumn({
   isValidating,
   error,
   lastUpdated,
+  showTypeToggle,
+  onTypeChange,
 }: TrainColumnProps) {
   const Icon = type === "departures" ? ArrowUpRightIcon : ArrowDownLeftIcon;
 
   return (
     <Card className="flex flex-col h-full pt-4 pb-0 md:py-4 gap-4 rounded-none ring-0 shadow-none md:rounded-xl md:ring-1 md:shadow-xs">
       <CardHeader className="px-4">
-        <CardTitle className="flex items-center gap-2">
-          <Icon className="size-4" />
-          {title}
-        </CardTitle>
+        <div className="flex items-center justify-between gap-2">
+          <CardTitle className="flex items-center gap-2 text-base">
+            <Icon className="size-4" />
+            {title}
+          </CardTitle>
+          {showTypeToggle && onTypeChange && (
+            <ToggleGroup
+              value={[type]}
+              onValueChange={(value) => {
+                const selected = value[0];
+                if (selected)
+                  onTypeChange(selected as "arrivals" | "departures");
+              }}
+              size="sm"
+              variant="outline"
+            >
+              <ToggleGroupItem
+                value="departures"
+                className="gap-1 px-2 py-1 h-7 text-xs"
+              >
+                <ArrowUpRightIcon className="size-3.5" />
+                <span className={type === "departures" ? "" : "hidden"}>
+                  Departures
+                </span>
+              </ToggleGroupItem>
+              <ToggleGroupItem
+                value="arrivals"
+                className="gap-1 px-2 py-1 h-7 text-xs"
+              >
+                <ArrowDownLeftIcon className="size-3.5" />
+                <span className={type === "arrivals" ? "" : "hidden"}>
+                  Arrivals
+                </span>
+              </ToggleGroupItem>
+            </ToggleGroup>
+          )}
+        </div>
         <CardDescription>
           <UpdatedStatus
             isLoading={isLoading}
