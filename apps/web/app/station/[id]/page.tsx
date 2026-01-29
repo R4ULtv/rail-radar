@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import Link from "next/link";
-import { stationsCoords } from "@repo/data";
+import { stationsCoords, type Station } from "@repo/data";
 import { Button } from "@repo/ui/components/button";
 import { ArrowLeftIcon } from "lucide-react";
 import { StaticMap } from "@/components/static-map";
@@ -14,14 +14,16 @@ interface StationPageProps {
   params: Promise<{ id: string }>;
 }
 
-function getStation(id: string) {
+type StationWithGeo = Station & { geo: { lat: number; lng: number } };
+
+function getStation(id: string): StationWithGeo | null {
   // Ensure ID is purely numeric
   if (!/^\d+$/.test(id)) return null;
   const stationId = parseInt(id, 10);
   const station = stationsCoords.find((s) => s.id === stationId);
   // Only return stations with coordinates
   if (!station?.geo) return null;
-  return station;
+  return station as StationWithGeo;
 }
 
 export async function generateStaticParams() {
@@ -65,26 +67,24 @@ export default async function StationPage({ params }: StationPageProps) {
   return (
     <div className="min-h-screen bg-background">
       {/* Static map hero */}
-      {station.geo && (
-        <div className="relative h-48 md:h-64 w-full">
-          <StaticMap
-            lat={station.geo.lat}
-            lng={station.geo.lng}
-            zoom={14}
-            className="absolute inset-0"
-          />
-          <div className="absolute top-2 left-2 md:top-4 md:left-4 bg-background rounded-md">
-            <Button
-              variant="outline"
-              size="icon-sm"
-              nativeButton={false}
-              render={<Link href="/" aria-label="Back to map" />}
-            >
-              <ArrowLeftIcon className="size-4" />
-            </Button>
-          </div>
+      <div className="relative h-48 md:h-64 w-full">
+        <StaticMap
+          lat={station.geo.lat}
+          lng={station.geo.lng}
+          zoom={14}
+          className="absolute inset-0"
+        />
+        <div className="absolute top-2 left-2 md:top-4 md:left-4 bg-background rounded-md">
+          <Button
+            variant="outline"
+            size="icon-sm"
+            nativeButton={false}
+            render={<Link href="/" aria-label="Back to map" />}
+          >
+            <ArrowLeftIcon className="size-4" />
+          </Button>
         </div>
-      )}
+      </div>
 
       {/* Main content */}
       <div className="mx-auto px-4 py-6 space-y-8 max-w-7xl">
