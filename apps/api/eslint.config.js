@@ -4,6 +4,6 @@ import { config } from "@repo/eslint-config/base";
 export default [
   ...config,
   {
-    ignores: ["worker-configuration.d.ts"],
+    ignores: ["worker-configuration.d.ts", ".wrangler/**"],
   },
 ];

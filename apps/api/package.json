@@ -4,6 +4,7 @@
   "scripts": {
     "dev": "wrangler dev",
     "deploy": "wrangler deploy --minify",
+    "versions": "wrangler versions upload",
     "lint": "eslint . --max-warnings 0",
     "check-types": "wrangler types --env-interface CloudflareBindings && tsc --noEmit",
     "cf-typegen": "wrangler types --env-interface CloudflareBindings"
