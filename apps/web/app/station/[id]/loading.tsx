@@ -1,4 +1,11 @@
 import { Skeleton } from "@repo/ui/components/skeleton";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@repo/ui/components/card";
 
 export default function StationLoading() {
   return (
@@ -55,39 +62,79 @@ export default function StationLoading() {
         </div>
       </div>
 
-      {/* Train board skeleton - edge-to-edge on mobile, centered on desktop */}
+      {/* Train board skeleton - matches the real TrainBoard component */}
       <div className="md:mx-auto md:px-4 md:pb-6 max-w-7xl">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {Array.from({ length: 2 }).map((_, columnIndex) => (
-            <div
-              key={columnIndex}
-              className="flex flex-col h-full pt-4 pb-0 md:py-4 gap-4 rounded-none ring-0 shadow-none md:rounded-xl md:ring-1 md:shadow-xs"
-            >
-              <div className="px-4 space-y-1">
+        {/* Mobile: show tabs placeholder + single column */}
+        <div className="md:hidden flex flex-col gap-4">
+          <div className="px-4">
+            <Skeleton className="h-10 w-full" />
+          </div>
+          <Card className="flex flex-col h-[500px] pt-4 pb-0 gap-4 rounded-none ring-0 shadow-none">
+            <CardHeader className="px-4">
+              <CardTitle className="flex items-center gap-2">
+                <Skeleton className="h-4 w-4" />
                 <Skeleton className="h-5 w-24" />
+              </CardTitle>
+              <CardDescription>
                 <Skeleton className="h-4 w-32" />
-              </div>
-              <div className="flex-1 px-0 overflow-hidden">
-                {Array.from({ length: 8 }).map((_, i) => (
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="flex-1 px-0 overflow-auto">
+              <div>
+                {Array.from({ length: 6 }).map((_, i) => (
                   <div
                     key={i}
-                    className="flex gap-3 px-4 py-3 border-b border-border last:border-b-0"
+                    className="flex items-center gap-3 px-4 py-3 border-b"
                   >
-                    <Skeleton className="shrink-0 w-12 h-12 rounded-md" />
-                    <div className="flex-1 space-y-2">
-                      <div className="flex justify-between">
-                        <Skeleton className="h-5 w-24" />
-                        <Skeleton className="h-5 w-12" />
-                      </div>
-                      <div className="flex justify-between">
-                        <Skeleton className="h-4 w-32" />
-                        <Skeleton className="h-4 w-16" />
-                      </div>
+                    <Skeleton className="h-4 w-12" />
+                    <Skeleton className="h-8 w-8 rounded-full" />
+                    <div className="flex-1">
+                      <Skeleton className="h-4 w-32 mb-1" />
+                      <Skeleton className="h-3 w-24" />
                     </div>
+                    <Skeleton className="h-4 w-16" />
                   </div>
                 ))}
               </div>
-            </div>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Desktop: two columns side by side */}
+        <div className="hidden md:grid grid-cols-2 gap-6">
+          {Array.from({ length: 2 }).map((_, columnIndex) => (
+            <Card
+              key={columnIndex}
+              className="flex flex-col h-[500px] py-4 gap-4 rounded-xl ring-1 shadow-xs"
+            >
+              <CardHeader className="px-4">
+                <CardTitle className="flex items-center gap-2">
+                  <Skeleton className="h-4 w-4" />
+                  <Skeleton className="h-5 w-24" />
+                </CardTitle>
+                <CardDescription>
+                  <Skeleton className="h-4 w-32" />
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="flex-1 px-0 overflow-auto">
+                <div>
+                  {Array.from({ length: 6 }).map((_, i) => (
+                    <div
+                      key={i}
+                      className="flex items-center gap-3 px-4 py-3 border-b"
+                    >
+                      <Skeleton className="h-4 w-12" />
+                      <Skeleton className="h-8 w-8 rounded-full" />
+                      <div className="flex-1">
+                        <Skeleton className="h-4 w-32 mb-1" />
+                        <Skeleton className="h-3 w-24" />
+                      </div>
+                      <Skeleton className="h-4 w-16" />
+                    </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
           ))}
         </div>
       </div>
