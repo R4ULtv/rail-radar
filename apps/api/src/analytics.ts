@@ -111,6 +111,47 @@ export async function getTrendingStations(
   }));
 }
 
+export async function getStationStats(
+  accountId: string,
+  apiToken: string,
+  stationId: number,
+  period: "hour" | "day" | "week" = "day",
+): Promise<{ station: TopStation | null; topStation: TopStation | null }> {
+  const intervalValue = { hour: 1, day: 1, week: 7 }[period];
+  const intervalUnit = period === "week" ? "DAY" : period.toUpperCase();
+
+  const stationQuery = `
+    SELECT
+      double1 as stationId,
+      blob1 as stationName,
+      count() as count,
+      count(DISTINCT blob2) as uniqueVisitors
+    FROM station_visits
+    WHERE timestamp > NOW() - INTERVAL '${intervalValue}' ${intervalUnit}
+      AND double1 = ${stationId}
+    GROUP BY double1, blob1
+  `;
+
+  const [stationResult, trendingResult] = await Promise.all([
+    queryAnalytics<AnalyticsQueryResult>(accountId, apiToken, stationQuery),
+    getTrendingStations(accountId, apiToken, period, 1),
+  ]);
+
+  const stationData = stationResult.data[0];
+  const station = stationData
+    ? {
+        stationId: stationData.stationId,
+        stationName: stationData.stationName,
+        visits: stationData.count,
+        uniqueVisitors: stationData.uniqueVisitors,
+      }
+    : null;
+
+  const topStation = trendingResult[0] ?? null;
+
+  return { station, topStation };
+}
+
 export async function getAnalyticsOverview(
   accountId: string,
   apiToken: string,

@@ -5,6 +5,7 @@ import { cors } from "hono/cors";
 import { stationsCoords } from "@repo/data/stations";
 import {
   getAnalyticsOverview,
+  getStationStats,
   getTrendingStations,
   recordStationVisit,
 } from "./analytics.js";
@@ -42,6 +43,8 @@ app.get("/", (c) => {
       "GET /stations": "List all stations (optional: ?q=search query)",
       "GET /stations/trending":
         "Get trending stations (optional: ?period=hour|day|week, default: day)",
+      "GET /stations/:id/stats":
+        "Get station visit stats (optional: ?period=hour|day|week, default: day)",
       "GET /stations/:id":
         "Get station info with trains (optional: ?type=arrivals|departures)",
       "GET /analytics/overview": "Get global analytics overview",
@@ -111,6 +114,78 @@ app.get(
       return c.json({
         timestamp: new Date().toISOString(),
         ...overview,
+      });
+    } catch {
+      return c.json(
+        { error: "Unable to fetch analytics data. Please try again later." },
+        500,
+      );
+    }
+  },
+);
+
+app.get(
+  "/stations/:id/stats",
+  cache({
+    cacheName: "analytics-cache",
+    cacheControl: "public, max-age=300, stale-while-revalidate=60",
+  }),
+  async (c) => {
+    const id = parseInt(c.req.param("id"), 10);
+
+    if (isNaN(id)) {
+      return c.json(
+        {
+          error:
+            "Invalid station. Please try searching for a different station.",
+        },
+        400,
+      );
+    }
+
+    const station = stations.find((s) => s.id === id);
+
+    if (!station) {
+      return c.json(
+        {
+          error: "Station not found. Please try searching for another station.",
+        },
+        404,
+      );
+    }
+
+    const period = c.req.query("period") as "hour" | "day" | "week" | undefined;
+    const validPeriod = ["hour", "day", "week"].includes(period ?? "")
+      ? period!
+      : "day";
+
+    try {
+      const { station: stationStats, topStation } = await getStationStats(
+        c.env.CLOUDFLARE_ACCOUNT_ID,
+        c.env.CLOUDFLARE_API_TOKEN,
+        id,
+        validPeriod,
+      );
+
+      const isTopStation =
+        stationStats && topStation
+          ? stationStats.stationId === topStation.stationId
+          : false;
+
+      const percentage =
+        stationStats && topStation && topStation.visits > 0
+          ? Math.round((stationStats.visits / topStation.visits) * 10000) / 100
+          : null;
+
+      return c.json({
+        timestamp: new Date().toISOString(),
+        period: validPeriod,
+        station: stationStats,
+        topStation,
+        comparison: {
+          percentage,
+          isTopStation,
+        },
       });
     } catch {
       return c.json(
