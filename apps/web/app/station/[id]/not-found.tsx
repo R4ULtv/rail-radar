@@ -19,7 +19,11 @@ export default function StationNotFound() {
             <MapIcon className="size-4" />
             Back to Map
           </Button>
-          <Button variant="outline" nativeButton={false} render={<Link href="/?search=true" />}>
+          <Button
+            variant="outline"
+            nativeButton={false}
+            render={<Link href="/?search=true" />}
+          >
             <SearchIcon className="size-4" />
             Search Stations
           </Button>
