@@ -117,8 +117,15 @@ export async function getStationStats(
   stationId: number,
   period: "hour" | "day" | "week" = "day",
 ): Promise<{ station: TopStation | null; topStation: TopStation | null }> {
-  const intervalValue = { hour: 1, day: 1, week: 7 }[period];
-  const intervalUnit = period === "week" ? "DAY" : period.toUpperCase();
+  // Validate stationId is a safe integer (defense in depth)
+  if (!Number.isInteger(stationId) || stationId < 0) {
+    throw new Error("Invalid station ID");
+  }
+
+  const intervals = { hour: 1, day: 1, week: 7 } as const;
+  const units = { hour: "HOUR", day: "DAY", week: "DAY" } as const;
+  const intervalValue = intervals[period];
+  const intervalUnit = units[period];
 
   const stationQuery = `
     SELECT

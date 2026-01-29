@@ -71,10 +71,12 @@ app.get(
     cacheControl: "public, max-age=300, stale-while-revalidate=60",
   }),
   async (c) => {
-    const period = c.req.query("period") as "hour" | "day" | "week" | undefined;
-    const validPeriod = ["hour", "day", "week"].includes(period ?? "")
-      ? period!
-      : "day";
+    const period = c.req.query("period");
+    const validPeriods = ["hour", "day", "week"] as const;
+    const validPeriod: "hour" | "day" | "week" =
+      validPeriods.includes(period as "hour" | "day" | "week")
+        ? (period as "hour" | "day" | "week")
+        : "day";
 
     try {
       const trending = await getTrendingStations(
@@ -154,10 +156,12 @@ app.get(
       );
     }
 
-    const period = c.req.query("period") as "hour" | "day" | "week" | undefined;
-    const validPeriod = ["hour", "day", "week"].includes(period ?? "")
-      ? period!
-      : "day";
+    const period = c.req.query("period");
+    const validPeriods = ["hour", "day", "week"] as const;
+    const validPeriod: "hour" | "day" | "week" =
+      validPeriods.includes(period as "hour" | "day" | "week")
+        ? (period as "hour" | "day" | "week")
+        : "day";
 
     try {
       const { station: stationStats, topStation } = await getStationStats(
