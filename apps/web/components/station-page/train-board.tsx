@@ -14,20 +14,14 @@ import { ArrowDownLeftIcon, ArrowUpRightIcon } from "lucide-react";
 
 interface TrainBoardProps {
   stationId: number;
-  onInfoChange?: (info: string | null) => void;
 }
 
-export function TrainBoard({ stationId, onInfoChange }: TrainBoardProps) {
+export function TrainBoard({ stationId }: TrainBoardProps) {
   const isMobile = useIsMobile();
   const [type, setType] = useState<"arrivals" | "departures">("departures");
 
   const departures = useTrainData(stationId, "departures", true);
   const arrivals = useTrainData(stationId, "arrivals", true);
-
-  // Pass info to parent (use departures info as primary)
-  if (onInfoChange && departures.info !== null) {
-    onInfoChange(departures.info);
-  }
 
   // Desktop: Two columns side by side
   if (!isMobile) {
