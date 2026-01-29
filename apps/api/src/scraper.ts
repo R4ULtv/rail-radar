@@ -1,6 +1,3 @@
-import * as cheerio from "cheerio";
-import type { CheerioAPI, Cheerio } from "cheerio";
-import type { Element } from "domhandler";
 import type { Train } from "@repo/data";
 import type { ContentfulStatusCode } from "hono/utils/http-status";
 
@@ -29,8 +26,7 @@ interface DelayResult {
   cancelled: boolean;
 }
 
-function parseDelay(text: string | undefined): DelayResult {
-  if (!text) return { delay: null, cancelled: false };
+function parseDelay(text: string): DelayResult {
   const trimmed = text.trim();
   if (trimmed === "" || trimmed.toLowerCase() === "on time") {
     return { delay: 0, cancelled: false };
@@ -47,26 +43,14 @@ function parseCategory(text: string | null): string | null {
   return text.replace(/^Categoria\s+/i, "").trim() || null;
 }
 
-function parseInfo(text: string | undefined): string | null {
-  if (!text) return null;
-  // Extract just the stops, remove "Train XXX" and "Next stops" prefixes
-  const match = text.match(/STOPS AT:\s*(.+)/i);
+function parseInfo(text: string): string | null {
+  const trimmed = text.trim();
+  if (!trimmed) return null;
+  const match = trimmed.match(/STOPS AT:\s*(.+)/i);
   if (match?.[1]) {
     return match[1].trim();
   }
-  return null;
-}
-
-function parseStatus(
-  $cell: Cheerio<Element>,
-  isArrivals: boolean,
-): Train["status"] {
-  const img = $cell.find("img");
-  const src = img.attr("src") || "";
-  if (src.includes("LampeggioGold") || src.includes("LampeggioGrey")) {
-    return isArrivals ? "incoming" : "departing";
-  }
-  return null;
+  return trimmed || null;
 }
 
 export interface ScrapeResult {
@@ -74,14 +58,124 @@ export interface ScrapeResult {
   info: string | null;
 }
 
-function parseStationInfo($: CheerioAPI): string | null {
-  // Look for the station info bar with marquee containing supplementary info
-  const marquee = $(".barrainfostazione .marqueeinfosupp");
-  if (marquee.length > 0) {
-    const text = marquee.text().trim();
-    return text || null;
+// State class to manage parsing state across HTMLRewriter handlers
+class ParserState {
+  trains: Train[] = [];
+  stationInfo = "";
+  type: "arrivals" | "departures";
+
+  // Row parsing state
+  inTbody = false;
+  currentTrain: Partial<Train & { cancelled: boolean }> = {};
+  cellIndex = -1;
+  cellText = "";
+  cellImgAlts: string[] = [];
+  cellImgSrc = "";
+  cellInfoText = ""; // Text from .testoinfoaggiuntive
+
+  constructor(type: "arrivals" | "departures") {
+    this.type = type;
   }
-  return null;
+
+  processCellData(): void {
+    const text = this.cellText.trim();
+    const imgAlts = this.cellImgAlts;
+    const imgSrc = this.cellImgSrc;
+    const train = this.currentTrain;
+
+    switch (this.cellIndex) {
+      case 0: // Brand (from img alt)
+        train.brand = imgAlts[0] || null;
+        break;
+      case 1: {
+        // Category (from img alt or text)
+        const rawCat = imgAlts[0] || text;
+        train.category = parseCategory(rawCat);
+        break;
+      }
+      case 2: // Train number
+        train.trainNumber = text;
+        break;
+      case 3: // Origin/Destination
+        if (this.type === "departures") {
+          train.destination = text;
+        } else {
+          train.origin = text;
+        }
+        break;
+      case 4: // Scheduled time
+        train.scheduledTime = text;
+        break;
+      case 5: {
+        // Delay
+        const delayResult = parseDelay(text);
+        train.delay = delayResult.delay;
+        train.cancelled = delayResult.cancelled;
+        break;
+      }
+      case 6: // Platform
+        train.platform = text || null;
+        break;
+      case 7: // Status (from img src - check for Lampeggio)
+        if (
+          imgSrc.includes("LampeggioGold") ||
+          imgSrc.includes("LampeggioGrey")
+        ) {
+          train.status = this.type === "arrivals" ? "incoming" : "departing";
+        }
+        break;
+      case 8: // Info (from .testoinfoaggiuntive div)
+        train.info = parseInfo(this.cellInfoText);
+        break;
+    }
+  }
+
+  finalizeRow(): void {
+    // Process the last cell if we have one
+    if (this.cellIndex >= 0) {
+      this.processCellData();
+    }
+
+    // Only add if we have a train number
+    if (this.currentTrain.trainNumber) {
+      const train: Train = {
+        brand: this.currentTrain.brand ?? null,
+        category: this.currentTrain.category ?? null,
+        trainNumber: this.currentTrain.trainNumber,
+        ...(this.type === "departures"
+          ? { destination: this.currentTrain.destination ?? "" }
+          : { origin: this.currentTrain.origin ?? "" }),
+        scheduledTime: this.currentTrain.scheduledTime ?? "",
+        delay: this.currentTrain.delay ?? null,
+        platform: this.currentTrain.platform ?? null,
+        status: this.currentTrain.cancelled
+          ? "cancelled"
+          : (this.currentTrain.status ?? null),
+        info: this.currentTrain.info ?? null,
+      };
+      this.trains.push(train);
+    }
+
+    // Reset for next row
+    this.currentTrain = {};
+    this.cellIndex = -1;
+    this.cellText = "";
+    this.cellImgAlts = [];
+    this.cellImgSrc = "";
+    this.cellInfoText = "";
+  }
+
+  startNewCell(): void {
+    // Process previous cell if we have one
+    if (this.cellIndex >= 0) {
+      this.processCellData();
+    }
+    this.cellIndex++;
+    this.cellText = "";
+    this.cellImgAlts = [];
+    this.cellImgSrc = "";
+    this.cellInfoText = "";
+  }
 }
 
 export async function scrapeTrains(
@@ -98,45 +192,64 @@ export async function scrapeTrains(
     );
   }
 
-  const html = await response.text();
-  const $ = cheerio.load(html);
+  const state = new ParserState(type);
 
-  const trains: Train[] = [];
+  const rewriter = new HTMLRewriter()
+    .on("table tbody", {
+      element() {
+        state.inTbody = true;
+      },
+    })
+    .on("table tbody tr", {
+      element() {
+        // Finalize previous row when starting a new one
+        if (state.cellIndex >= 0) {
+          state.finalizeRow();
+        }
+        state.currentTrain = {};
+        state.cellIndex = -1;
+        state.cellText = "";
+        state.cellImgAlts = [];
+        state.cellImgSrc = "";
+      },
+    })
+    .on("table tbody tr td", {
+      element() {
+        state.startNewCell();
+      },
+      text(chunk) {
+        state.cellText += chunk.text;
+      },
+    })
+    .on("table tbody tr td img", {
+      element(el) {
+        const alt = el.getAttribute("alt");
+        if (alt) state.cellImgAlts.push(alt);
+        const src = el.getAttribute("src");
+        if (src) state.cellImgSrc = src;
+      },
+    })
+    .on("table tbody tr td .testoinfoaggiuntive", {
+      text(chunk) {
+        state.cellInfoText += chunk.text;
+      },
+    })
+    .on(".barrainfostazione .marqueeinfosupp", {
+      text(chunk) {
+        state.stationInfo += chunk.text;
+      },
+    });
 
-  // The page uses table rows for train data
-  // Selectors may need adjustment based on actual HTML structure
-  $("table tbody tr").each((_, row) => {
-    const $row = $(row);
-    const cells = $row.find("td");
+  // Consume the transformed response to trigger parsing
+  await rewriter.transform(response).text();
 
-    if (cells.length < 5) return; // Skip header or invalid rows
+  // Finalize the last row
+  if (state.cellIndex >= 0) {
+    state.finalizeRow();
+  }
 
-    const rawCategory =
-      cells.eq(1).find("img").attr("alt") || cells.eq(1).text().trim() || null;
-    const delayResult = parseDelay(cells.eq(5).text());
-    const statusFromImage = parseStatus(cells.eq(7), type === "arrivals");
-
-    const train: Train = {
-      brand: cells.eq(0).find("img").attr("alt") || null,
-      category: parseCategory(rawCategory),
-      trainNumber: cells.eq(2).text().trim(),
-      ...(type === "departures"
-        ? { destination: cells.eq(3).text().trim() }
-        : { origin: cells.eq(3).text().trim() }),
-      scheduledTime: cells.eq(4).text().trim(),
-      delay: delayResult.delay,
-      platform: cells.eq(6).text().trim() || null,
-      status: delayResult.cancelled ? "cancelled" : statusFromImage,
-      info: parseInfo(cells.eq(8).text()),
-    };
-
-    // Only add if we have a train number
-    if (train.trainNumber) {
-      trains.push(train);
-    }
-  });
-
-  const info = parseStationInfo($);
-
-  return { trains, info };
+  return {
+    trains: state.trains,
+    info: state.stationInfo.trim() || null,
+  };
 }
