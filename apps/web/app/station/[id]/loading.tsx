@@ -64,17 +64,17 @@ export default function StationLoading() {
 
       {/* Train board skeleton - matches the real TrainBoard component */}
       <div className="md:mx-auto md:px-4 md:pb-6 max-w-7xl">
-        {/* Mobile: show tabs placeholder + single column */}
-        <div className="md:hidden flex flex-col gap-4">
-          <div className="px-4">
-            <Skeleton className="h-10 w-full" />
-          </div>
+        {/* Mobile: single column with toggle in header */}
+        <div className="md:hidden">
           <Card className="flex flex-col h-[500px] pt-4 pb-0 gap-4 rounded-none ring-0 shadow-none">
             <CardHeader className="px-4">
-              <CardTitle className="flex items-center gap-2">
-                <Skeleton className="h-4 w-4" />
-                <Skeleton className="h-5 w-24" />
-              </CardTitle>
+              <div className="flex items-center justify-between gap-2">
+                <CardTitle className="flex items-center gap-2 text-base">
+                  <Skeleton className="h-4 w-4" />
+                  <Skeleton className="h-5 w-24" />
+                </CardTitle>
+                <Skeleton className="h-7 w-32 rounded-md" />
+              </div>
               <CardDescription>
                 <Skeleton className="h-4 w-32" />
               </CardDescription>
@@ -108,7 +108,7 @@ export default function StationLoading() {
               className="flex flex-col h-[500px] py-4 gap-4 rounded-xl ring-1 shadow-xs"
             >
               <CardHeader className="px-4">
-                <CardTitle className="flex items-center gap-2">
+                <CardTitle className="flex items-center gap-2 text-base">
                   <Skeleton className="h-4 w-4" />
                   <Skeleton className="h-5 w-24" />
                 </CardTitle>
