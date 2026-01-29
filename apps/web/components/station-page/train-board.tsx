@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useTrainData } from "@/hooks/use-train-data";
 import { TrainColumn } from "./train-column";
 import { useIsMobile } from "@repo/ui/hooks/use-mobile";
@@ -18,10 +18,21 @@ interface TrainBoardProps {
 
 export function TrainBoard({ stationId }: TrainBoardProps) {
   const isMobile = useIsMobile();
+  const [mounted, setMounted] = useState(false);
   const [type, setType] = useState<"arrivals" | "departures">("departures");
 
+  // Must call hooks before any early returns
   const departures = useTrainData(stationId, "departures", true);
   const arrivals = useTrainData(stationId, "arrivals", true);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  // Prevent hydration mismatch - loading skeleton is handled by loading.tsx
+  if (!mounted) {
+    return null;
+  }
 
   // Desktop: Two columns side by side
   if (!isMobile) {
