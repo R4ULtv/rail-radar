@@ -27,12 +27,34 @@ function getStation(id: string): StationWithGeo | null {
 }
 
 export async function generateStaticParams() {
-  return stationsCoords
-    .filter((station) => station.geo)
-    .map((station) => ({
-      id: station.id.toString(),
-    }));
+  return [
+    2416, // Roma Termini
+    2385, // Roma Tiburtina
+    2379, // Roma Ostiense
+    1728, // Milano Centrale
+    1720, // Milano Rogoredo
+    1888, // Napoli Centrale
+    4020, // Napoli Afragola
+    683, // Bologna Centrale
+    1325, // Firenze Santa Maria Novella
+    2876, // Torino Porta Nuova
+    2855, // Torino Lingotto
+    3009, // Venezia S.Lucia
+    3025, // Verona Porta Nuova
+    245, // Genova Brignole
+    257, // Genova Piazza Principe
+    595, // Bari Centrale
+    2018, // Palermo Centrale
+    1032, // Catania Centrale
+    1700, // Messina Centrale
+    2156, // Pisa Centrale
+    275, // La Spezia Centrale
+    2925, // Trieste Centrale
+    2922, // Treviso Centrale
+  ].map((id) => ({ id: id.toString() }));
 }
+export const dynamicParams = true;
+export const revalidate = 86400;
 
 export async function generateMetadata({
   params,
