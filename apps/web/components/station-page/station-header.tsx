@@ -71,8 +71,8 @@ export function StationHeader({ station, info }: StationHeaderProps) {
   };
 
   const mapUrl = station.geo
-    ? `/?station=${station.id}&lat=${station.geo.lat}&lng=${station.geo.lng}&zoom=14`
-    : `/?station=${station.id}`;
+    ? `/?lat=${station.geo.lat}&lng=${station.geo.lng}&zoom=14`
+    : `/`;
 
   return (
     <div className="space-y-4">

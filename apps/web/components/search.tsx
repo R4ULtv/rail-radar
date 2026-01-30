@@ -106,10 +106,9 @@ export function Search() {
   const [isDrawerOpen, setIsDrawerOpen] = React.useState(false);
 
   // Fetch search results
-  const {
-    stations: searchResults,
-    isLoading,
-  } = useStationSearch(debouncedQuery || null);
+  const { stations: searchResults, isLoading } = useStationSearch(
+    debouncedQuery || null,
+  );
 
   // Fetch trending stations
   const { data: trendingData } = useTrendingStations("week");
