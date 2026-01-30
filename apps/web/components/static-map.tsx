@@ -60,7 +60,7 @@ export function StaticMap({ lat, lng, zoom = 14, className }: StaticMapProps) {
         </Marker>
       </MapGL>
       {/* Gradient overlay for visual appeal */}
-      <div className="absolute inset-0 bg-linear-to-t from-background/80 via-background/20 to-transparent pointer-events-none" />
+      <div className="absolute inset-0 bg-linear-to-t from-background/70 via-background/30 via-25% to-transparent to-80% pointer-events-none" />
     </div>
   );
 }
