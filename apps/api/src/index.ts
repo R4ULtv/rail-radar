@@ -275,6 +275,12 @@ app.get(
         trains,
       });
     } catch (error) {
+      console.error(`[/stations/${id}] Error fetching trains:`, {
+        type,
+        error: error instanceof Error ? error.message : String(error),
+        stack: error instanceof Error ? error.stack : undefined,
+      });
+
       if (error instanceof ScraperError) {
         return c.json({ error: error.message }, error.statusCode);
       }

@@ -217,6 +217,12 @@ export async function scrapeTrains(
   try {
     response = await fetch(url, { signal: controller.signal });
   } catch (error) {
+    console.error(`[scraper] Fetch failed:`, {
+      url,
+      error: error instanceof Error ? error.message : String(error),
+      name: error instanceof Error ? error.name : undefined,
+    });
+
     if (error instanceof Error && error.name === "AbortError") {
       throw new ScraperError(
         "The train data source is taking too long to respond. Please try again.",
