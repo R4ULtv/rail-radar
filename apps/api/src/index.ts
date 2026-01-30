@@ -193,7 +193,12 @@ app.get(
           isTopStation,
         },
       });
-    } catch {
+    } catch (error) {
+      console.error(`Error details:`, {
+        message: error instanceof Error ? error.message : "Unknown error",
+        stack: error instanceof Error ? error.stack : undefined,
+        error: String(error),
+      });
       return c.json(
         { error: "Unable to fetch analytics data. Please try again later." },
         500,
