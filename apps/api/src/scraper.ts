@@ -48,6 +48,20 @@ function parseCategory(text: string | null): string | null {
   );
 }
 
+function decodeHtmlEntities(text: string): string {
+  return text
+    .replace(/&#(\d+);/g, (_, code) => String.fromCharCode(parseInt(code, 10)))
+    .replace(/&#x([0-9a-fA-F]+);/g, (_, code) =>
+      String.fromCharCode(parseInt(code, 16)),
+    )
+    .replace(/&nbsp;/gi, " ")
+    .replace(/&amp;/gi, "&")
+    .replace(/&lt;/gi, "<")
+    .replace(/&gt;/gi, ">")
+    .replace(/&quot;/gi, '"')
+    .replace(/&apos;/gi, "'");
+}
+
 function parseInfo(text: string): string | null {
   const trimmed = text.trim();
   if (!trimmed) return null;
@@ -258,8 +272,9 @@ export async function scrapeTrains(
     state.finalizeRow();
   }
 
+  const stationInfo = decodeHtmlEntities(state.stationInfo).trim();
   return {
     trains: state.trains,
-    info: state.stationInfo.trim() || null,
+    info: stationInfo || null,
   };
 }
