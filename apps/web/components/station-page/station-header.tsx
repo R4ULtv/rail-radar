@@ -1,13 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
 import type { Station } from "@repo/data";
 import { Button } from "@repo/ui/components/button";
 import {
   CheckIcon,
   CornerUpRightIcon,
-  MapIcon,
   MegaphoneIcon,
   ShareIcon,
 } from "lucide-react";
@@ -70,10 +68,6 @@ export function StationHeader({ station, info }: StationHeaderProps) {
     window.open(url, "_blank");
   };
 
-  const mapUrl = station.geo
-    ? `/?lat=${station.geo.lat}&lng=${station.geo.lng}&zoom=14`
-    : `/`;
-
   return (
     <div className="space-y-4">
       <div className="flex items-start justify-between gap-4">
@@ -90,14 +84,6 @@ export function StationHeader({ station, info }: StationHeaderProps) {
         </div>
 
         <div className="flex gap-2 shrink-0">
-          <Button
-            variant="ghost"
-            size="icon-sm"
-            nativeButton={false}
-            render={<Link href={mapUrl} aria-label="Open on Map" />}
-          >
-            <MapIcon className="size-4" />
-          </Button>
           {station.geo && (
             <Button
               variant="ghost"

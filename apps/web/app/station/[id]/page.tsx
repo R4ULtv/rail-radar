@@ -101,10 +101,15 @@ export default async function StationPage({ params }: StationPageProps) {
             variant="outline"
             size="icon-sm"
             nativeButton={false}
-            render={<Link href="/" aria-label="Back to map" />}
-          >
-            <ArrowLeftIcon className="size-4" />
-          </Button>
+            render={
+              <Link
+                href={`/?lat=${station.geo.lat}&lng=${station.geo.lng}&zoom=14&station=${station.id}`}
+                aria-label="Back to map"
+              >
+                <ArrowLeftIcon className="size-4" />
+              </Link>
+            }
+          />
         </div>
       </div>
 

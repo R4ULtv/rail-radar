@@ -293,11 +293,14 @@ export default function StationInfo() {
                     <Button
                       variant="ghost"
                       size="icon"
-                      render={<Link href={`/station/${selectedStation?.id}`} />}
+                      nativeButton={false}
+                      render={
+                        <Link href={`/station/${selectedStation?.id}`}>
+                          <InfoIcon className="size-4" />
+                        </Link>
+                      }
                       aria-label="View station details"
-                    >
-                      <InfoIcon className="size-4" />
-                    </Button>
+                    />
                   </CardAction>
                   <CardTitle>{selectedStation?.name}</CardTitle>
                   <CardDescription>
@@ -383,11 +386,14 @@ export default function StationInfo() {
             <Button
               variant="ghost"
               size="icon"
-              render={<Link href={`/station/${selectedStation?.id}`} />}
+              nativeButton={false}
+              render={
+                <Link href={`/station/${selectedStation?.id}`}>
+                  <InfoIcon className="size-4" />
+                </Link>
+              }
               aria-label="View station details"
-            >
-              <InfoIcon className="size-4" />
-            </Button>
+            />
           </div>
         </DrawerHeader>
 
