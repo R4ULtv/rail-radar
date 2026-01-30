@@ -202,13 +202,35 @@ class ParserState {
   }
 }
 
+const FETCH_TIMEOUT_MS = 30_000;
+
 export async function scrapeTrains(
   stationId: number,
   type: "arrivals" | "departures" = "departures",
 ): Promise<ScrapeResult> {
   const url = buildUrl(stationId, type === "arrivals");
 
-  const response = await fetch(url);
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), FETCH_TIMEOUT_MS);
+
+  let response: Response;
+  try {
+    response = await fetch(url, { signal: controller.signal });
+  } catch (error) {
+    if (error instanceof Error && error.name === "AbortError") {
+      throw new ScraperError(
+        "The train data source is taking too long to respond. Please try again.",
+        504,
+      );
+    }
+    throw new ScraperError(
+      "Unable to connect to the train data source. Please try again.",
+      502,
+    );
+  } finally {
+    clearTimeout(timeoutId);
+  }
+
   if (!response.ok) {
     throw new ScraperError(
       response.statusText || `HTTP ${response.status}`,
