@@ -6,10 +6,12 @@ import {
   ArrowUpRightIcon,
   CheckIcon,
   CornerUpRightIcon,
+  InfoIcon,
   MegaphoneIcon,
   ShareIcon,
   XIcon,
 } from "lucide-react";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 
 import { TrainRow, TrainRowSkeleton } from "@/components/train-row";
@@ -288,6 +290,14 @@ export default function StationInfo() {
                         <ShareIcon className="size-4" />
                       )}
                     </Button>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      render={<Link href={`/station/${selectedStation?.id}`} />}
+                      aria-label="View station details"
+                    >
+                      <InfoIcon className="size-4" />
+                    </Button>
                   </CardAction>
                   <CardTitle>{selectedStation?.name}</CardTitle>
                   <CardDescription>
@@ -369,6 +379,14 @@ export default function StationInfo() {
               ) : (
                 <ShareIcon className="size-4" />
               )}
+            </Button>
+            <Button
+              variant="ghost"
+              size="icon"
+              render={<Link href={`/station/${selectedStation?.id}`} />}
+              aria-label="View station details"
+            >
+              <InfoIcon className="size-4" />
             </Button>
           </div>
         </DrawerHeader>
