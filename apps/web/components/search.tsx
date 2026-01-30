@@ -1,7 +1,6 @@
 "use client";
 
 import * as React from "react";
-import useSWR from "swr";
 import {
   HistoryIcon,
   ListIcon,
@@ -32,22 +31,11 @@ import { useAnimatedHeight } from "@/hooks/use-animated-height";
 import { useDebounce } from "@repo/ui/hooks/use-debounce";
 import { useIsMobile } from "@repo/ui/hooks/use-mobile";
 import { useSelectedStation } from "@/hooks/use-selected-station";
+import { useStationSearch } from "@/hooks/use-station-search";
+import { useTrendingStations } from "@/hooks/use-trending-stations";
 
 import { cn } from "@repo/ui/lib/utils";
 import type { Station } from "@repo/data";
-
-interface TrendingStation {
-  stationId: number;
-  stationName: string;
-  visits: number;
-  uniqueVisitors: number;
-}
-
-interface TrendingResponse {
-  timestamp: string;
-  period: string;
-  stations: TrendingStation[];
-}
 
 const StationList = React.memo(function StationList({
   stations,
@@ -117,26 +105,14 @@ export function Search() {
   const [focusedIndex, setFocusedIndex] = React.useState<number>(-1);
   const [isDrawerOpen, setIsDrawerOpen] = React.useState(false);
 
-  // Fetch search results with SWR
-  const { data: searchResults = [], isLoading } = useSWR<Station[]>(
-    debouncedQuery ? `/stations?q=${encodeURIComponent(debouncedQuery)}` : null,
-    async (url: string) => {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}${url}`);
-      if (!res.ok) throw new Error("Search failed");
-      return res.json();
-    },
-  );
+  // Fetch search results
+  const {
+    stations: searchResults,
+    isLoading,
+  } = useStationSearch(debouncedQuery || null);
 
-  // Fetch trending stations with SWR (5 minute revalidation)
-  const { data: trendingData } = useSWR<TrendingResponse>(
-    "/stations/trending?period=week",
-    async (url: string) => {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}${url}`);
-      if (!res.ok) throw new Error("Failed to fetch trending stations");
-      return res.json();
-    },
-    { refreshInterval: 5 * 60 * 1000, revalidateOnFocus: false },
-  );
+  // Fetch trending stations
+  const { data: trendingData } = useTrendingStations("week");
 
   const { trendingStations, trendingVisits } = React.useMemo(() => {
     if (!trendingData?.stations) {

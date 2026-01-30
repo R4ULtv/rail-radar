@@ -1,45 +1,15 @@
 import useSWR from "swr";
-import type { Train } from "@repo/data";
-
-interface TrainResponse {
-  timestamp: string;
-  info: string | null;
-  trains: Train[];
-}
-
-const fetcher = async (url: string) => {
-  const res = await fetch(url);
-
-  if (!res.ok) {
-    // Try to parse error message from API response
-    try {
-      const errorData = await res.json();
-      if (errorData.error) {
-        throw new Error(errorData.error);
-      }
-    } catch (e) {
-      // If there's an error message, use it; otherwise generic
-      if (e instanceof Error && e.message) {
-        throw e;
-      }
-    }
-    // Fallback generic error
-    throw new Error("Unable to load train data");
-  }
-
-  return res.json();
-};
+import { apiFetcher, buildApiUrl, endpoints, APIError } from "@/lib/api";
+import type { TrainDataResponse } from "@/lib/api";
 
 export function useTrainData(
   stationId: number | null,
   type: "arrivals" | "departures",
   enabled: boolean = true,
 ) {
-  const { data, error, isLoading, isValidating } = useSWR<TrainResponse>(
-    stationId
-      ? `${process.env.NEXT_PUBLIC_API_URL}/stations/${stationId}?type=${type}`
-      : null,
-    fetcher,
+  const { data, error, isLoading, isValidating } = useSWR<TrainDataResponse>(
+    stationId ? buildApiUrl(endpoints.stationTrains(stationId, type)) : null,
+    apiFetcher,
     {
       refreshInterval: enabled ? 10_000 : 0,
       revalidateOnFocus: true,
@@ -50,7 +20,7 @@ export function useTrainData(
     data: data?.trains ?? null,
     isLoading,
     isValidating,
-    error: error?.message ?? null,
+    error: error instanceof APIError ? error.message : (error?.message ?? null),
     lastUpdated: data?.timestamp ? new Date(data.timestamp) : null,
     info: data?.info ?? null,
   };

@@ -1,38 +1,15 @@
 "use client";
 
-import useSWR from "swr";
 import { TrendingUpIcon, BarChart3Icon } from "lucide-react";
 import { Skeleton } from "@repo/ui/components/skeleton";
-
-interface StationData {
-  stationId: number;
-  stationName: string;
-  visits: number;
-  uniqueVisitors: number;
-}
-
-interface StatsResponse {
-  station: StationData | null;
-  topStation: StationData | null;
-  comparison: {
-    percentage: number | null;
-    isTopStation: boolean;
-  };
-  period: string;
-}
-
-const fetcher = (url: string) => fetch(url).then((res) => res.json());
+import { useStationStats } from "@/hooks/use-station-stats";
 
 interface StationStatsProps {
   stationId: number;
 }
 
 export function StationStats({ stationId }: StationStatsProps) {
-  const { data, isLoading } = useSWR<StatsResponse>(
-    `${process.env.NEXT_PUBLIC_API_URL}/stations/${stationId}/stats?period=week`,
-    fetcher,
-    { revalidateOnFocus: false },
-  );
+  const { data, isLoading } = useStationStats(stationId, "week");
 
   if (isLoading) {
     return (
