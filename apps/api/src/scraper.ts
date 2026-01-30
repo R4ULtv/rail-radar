@@ -40,7 +40,10 @@ function parseDelay(text: string): DelayResult {
 
 function parseCategory(text: string | null): string | null {
   if (!text) return null;
-  return text.replace(/^Categoria\s+/i, "").trim() || null;
+  return text
+    .replace(/^Categoria\s+/i, "")
+    .replace(/&#?\w+;/g, "") // Remove HTML entities like &#39; &nbsp; etc.
+    .trim() || null;
 }
 
 function parseInfo(text: string): string | null {
