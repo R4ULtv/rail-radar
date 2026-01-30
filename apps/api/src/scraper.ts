@@ -40,10 +40,12 @@ function parseDelay(text: string): DelayResult {
 
 function parseCategory(text: string | null): string | null {
   if (!text) return null;
-  return text
-    .replace(/^Categoria\s+/i, "")
-    .replace(/&#?\w+;/g, "") // Remove HTML entities like &#39; &nbsp; etc.
-    .trim() || null;
+  return (
+    text
+      .replace(/^Categoria\s+/i, "")
+      .replace(/&#?\w+;/g, "") // Remove HTML entities like &#39; &nbsp; etc.
+      .trim() || null
+  );
 }
 
 function parseInfo(text: string): string | null {
@@ -141,6 +143,13 @@ class ParserState {
 
     // Only add if we have a train number
     if (this.currentTrain.trainNumber) {
+      // Check if info contains "CANCELLATO" and update status accordingly
+      let isCancelled = this.currentTrain.cancelled ?? false;
+      const info = this.currentTrain.info ?? null;
+      if (info && info.toUpperCase().includes("CANCELLATO")) {
+        isCancelled = true;
+      }
+
       const train: Train = {
         brand: this.currentTrain.brand ?? null,
         category: this.currentTrain.category ?? null,
@@ -151,10 +160,8 @@ class ParserState {
         scheduledTime: this.currentTrain.scheduledTime ?? "",
         delay: this.currentTrain.delay ?? null,
         platform: this.currentTrain.platform ?? null,
-        status: this.currentTrain.cancelled
-          ? "cancelled"
-          : (this.currentTrain.status ?? null),
-        info: this.currentTrain.info ?? null,
+        status: isCancelled ? "cancelled" : (this.currentTrain.status ?? null),
+        info: info,
       };
       this.trains.push(train);
     }
