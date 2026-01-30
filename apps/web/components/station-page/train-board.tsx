@@ -14,9 +14,17 @@ export function TrainBoard({ stationId }: TrainBoardProps) {
   const [mounted, setMounted] = useState(false);
   const [type, setType] = useState<"arrivals" | "departures">("departures");
 
-  // Must call hooks before any early returns
-  const departures = useTrainData(stationId, "departures", true);
-  const arrivals = useTrainData(stationId, "arrivals", true);
+  // Desktop: fetch both; Mobile: only fetch active tab
+  const departures = useTrainData(
+    stationId,
+    "departures",
+    mounted && (isMobile === false || type === "departures"),
+  );
+  const arrivals = useTrainData(
+    stationId,
+    "arrivals",
+    mounted && (isMobile === false || type === "arrivals"),
+  );
 
   useEffect(() => {
     setMounted(true);
