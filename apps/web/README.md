@@ -41,17 +41,25 @@ pnpm dev --filter=web
 
 ```
 apps/web/
-├── app/                  # Next.js App Router
+├── app/                    # Next.js App Router
 ├── components/
-│   ├── map.tsx           # Main map component
-│   ├── map-controls.tsx  # Zoom, locate, compass controls
-│   ├── search.tsx        # Station search
-│   ├── station-info.tsx  # Station details drawer
+│   ├── map.tsx             # Main map component
+│   ├── map-controls.tsx    # Zoom, locate, compass controls
+│   ├── map-loading.tsx     # Map loading skeleton
+│   ├── search.tsx          # Station search
+│   ├── static-map.tsx      # Static Mapbox image component
+│   ├── station-info.tsx    # Station details drawer
 │   ├── station-markers.tsx # GeoJSON marker layer
-│   ├── train-row.tsx     # Train list item
-│   ├── brands/           # Train brand logos
-│   └── ui/               # Base UI components
-└── lib/                  # Utilities and hooks
+│   ├── train-row.tsx       # Train list item
+│   ├── brands/             # Train brand logos
+│   └── station-page/       # Station detail page components
+│       ├── nearby-stations.tsx
+│       ├── station-header.tsx
+│       ├── station-stats.tsx
+│       ├── train-board.tsx
+│       └── train-column.tsx
+└── lib/
+    └── api/                # API client and types
 ```
 
 ## Deployment
