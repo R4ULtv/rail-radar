@@ -13,13 +13,13 @@ Real-time Italian railway tracking with an interactive map interface and live tr
 
 ## Project Structure
 
-| Directory                                                  | Description                              |
-| ---------------------------------------------------------- | ---------------------------------------- |
-| [apps/api](./apps/api)                                     | Cloudflare Workers API for train data    |
-| [apps/studio](./apps/studio)                               | Admin tool for station data management   |
-| [apps/web](./apps/web)                                     | Next.js frontend with interactive map    |
-| [packages/data](./packages/data)                           | Shared station data and TypeScript types |
-| [packages/ui](./packages/ui)                               | Shared React component library           |
+| Directory                        | Description                              |
+| -------------------------------- | ---------------------------------------- |
+| [apps/api](./apps/api)           | Cloudflare Workers API for train data    |
+| [apps/studio](./apps/studio)     | Admin tool for station data management   |
+| [apps/web](./apps/web)           | Next.js frontend with interactive map    |
+| [packages/data](./packages/data) | Shared station data and TypeScript types |
+| [packages/ui](./packages/ui)     | Shared React component library           |
 
 ## Quick Start
 
