@@ -22,10 +22,10 @@ Next.js frontend for real-time Italian railway tracking with an interactive map 
 
 ## Environment Variables
 
-| Variable              | Description                                            |
-| --------------------- | ------------------------------------------------------ |
-| `NEXT_PUBLIC_API_URL` | API endpoint URL (e.g., `https://api.railradar24.com`) |
-| `NEXT_PUBLIC_SITE_URL` | Website URL (e.g., `https://www.railradar24.com`)     |
+| Variable               | Description                                            |
+| ---------------------- | ------------------------------------------------------ |
+| `NEXT_PUBLIC_API_URL`  | API endpoint URL (e.g., `https://api.railradar24.com`) |
+| `NEXT_PUBLIC_SITE_URL` | Website URL (e.g., `https://www.railradar24.com`)      |
 
 ## Development
 
