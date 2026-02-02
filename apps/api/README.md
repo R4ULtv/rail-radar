@@ -6,7 +6,6 @@ Cloudflare Workers API that provides real-time Italian railway data by scraping 
 
 - [Hono](https://hono.dev/) - Lightweight web framework
 - [Cloudflare Workers](https://workers.cloudflare.com/) - Serverless deployment
-- [Cheerio](https://cheerio.js.org/) - HTML parsing for scraping
 
 ## Endpoints
 
