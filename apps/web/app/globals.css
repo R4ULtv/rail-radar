@@ -4,3 +4,8 @@
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
+
+/* Hide Mapbox logo */
+.mapboxgl-ctrl-logo {
+  display: none !important;
+}
