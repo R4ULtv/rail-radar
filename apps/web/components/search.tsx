@@ -336,7 +336,12 @@ export function Search() {
         </div>
 
         {/* Full-screen search drawer */}
-        <Drawer open={isDrawerOpen} onOpenChange={setIsDrawerOpen} modal>
+        <Drawer
+          open={isDrawerOpen}
+          onOpenChange={setIsDrawerOpen}
+          modal
+          repositionInputs={false}
+        >
           <DrawerContent className="h-full data-[vaul-drawer-direction=bottom]:max-h-svh -mx-px outline-none bg-card data-[vaul-drawer-direction=bottom]:mt-0 data-[vaul-drawer-direction=bottom]:rounded-none data-[vaul-drawer-direction=bottom]:border-t-0">
             <DrawerHeader className="pb-0">
               <DrawerTitle className="sr-only">Search Stations</DrawerTitle>
