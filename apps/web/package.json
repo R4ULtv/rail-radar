@@ -15,7 +15,7 @@
     "@repo/ui": "workspace:^",
     "@vercel/analytics": "^1.6.1",
     "lucide-react": "^0.562.0",
-    "maplibre-gl": "^5.16.0",
+    "mapbox-gl": "^3.18.1",
     "motion": "^12.29.2",
     "next": "16.1.5",
     "nuqs": "^2.8.6",

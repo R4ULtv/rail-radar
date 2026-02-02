@@ -1,10 +1,10 @@
 "use client";
 
-import "maplibre-gl/dist/maplibre-gl.css";
+import "mapbox-gl/dist/mapbox-gl.css";
 import dynamic from "next/dynamic";
 import { parseAsFloat, useQueryStates } from "nuqs";
 import { startTransition, useEffect, useState } from "react";
-import type { ViewStateChangeEvent } from "react-map-gl/maplibre";
+import type { ViewStateChangeEvent } from "react-map-gl/mapbox";
 
 import { MapControls } from "@/components/map-controls";
 import MapLoading from "@/components/map-loading";
@@ -14,7 +14,7 @@ import { StationMarkers } from "@/components/station-markers";
 import { SelectedStationProvider } from "@/hooks/use-selected-station";
 
 const MapGL = dynamic(
-  () => import("react-map-gl/maplibre").then((mod) => mod.Map),
+  () => import("react-map-gl/mapbox").then((mod) => mod.Map),
   {
     ssr: false,
     loading: () => <MapLoading />,
@@ -116,9 +116,10 @@ export function Map() {
         width: "100%",
         height: "100%",
       }}
-      mapStyle="https://tiles-eu.stadiamaps.com/styles/alidade_smooth_dark.json"
+      mapboxAccessToken={process.env.NEXT_PUBLIC_MAPBOX_TOKEN}
+      mapStyle="mapbox://styles/mapbox/dark-v11"
       maxPitch={0}
-      minZoom={1}
+      minZoom={4}
       maxZoom={18}
     >
       <SelectedStationProvider>

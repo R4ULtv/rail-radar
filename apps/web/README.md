@@ -5,8 +5,7 @@ Next.js frontend for real-time Italian railway tracking with an interactive map 
 ## Tech Stack
 
 - [Next.js 16](https://nextjs.org/) + React 19
-- [MapLibre GL](https://maplibre.org/) via react-map-gl - Interactive mapping
-- [Supercluster](https://github.com/mapbox/supercluster) - Marker clustering
+- [MapBox GL](https://www.mapbox.com/mapbox-gljs) via react-map-gl - Interactive mapping
 - [SWR](https://swr.vercel.app/) - Data fetching with auto-refresh
 - [nuqs](https://nuqs.47ng.com/) - URL query state sync
 - [Tailwind CSS v4](https://tailwindcss.com/) - Styling
@@ -26,6 +25,7 @@ Next.js frontend for real-time Italian railway tracking with an interactive map 
 | Variable              | Description                                            |
 | --------------------- | ------------------------------------------------------ |
 | `NEXT_PUBLIC_API_URL` | API endpoint URL (e.g., `https://api.railradar24.com`) |
+| `NEXT_PUBLIC_SITE_URL` | Website URL (e.g., `https://www.railradar24.com`)     |
 
 ## Development
 

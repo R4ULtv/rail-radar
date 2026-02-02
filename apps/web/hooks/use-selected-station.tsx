@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { useQueryState, parseAsInteger } from "nuqs";
-import { useMap } from "react-map-gl/maplibre";
+import { useMap } from "react-map-gl/mapbox";
 import { stationsCoords } from "@repo/data/stations";
 import type { Station } from "@repo/data";
 

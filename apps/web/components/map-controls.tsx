@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Marker, useMap } from "react-map-gl/maplibre";
+import { Marker, useMap } from "react-map-gl/mapbox";
 import {
   CompassIcon,
   LocateFixedIcon,
