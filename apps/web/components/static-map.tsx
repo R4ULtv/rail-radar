@@ -26,6 +26,35 @@ export function StaticMap({ lat, lng, zoom = 15, className }: StaticMapProps) {
       />
       {/* Gradient overlay for visual appeal */}
       <div className="absolute inset-0 bg-linear-to-t from-background/70 via-background/30 via-25% to-transparent to-80% pointer-events-none" />
+
+      <div className="absolute bottom-1.5 right-2 text-[10px] text-white/60">
+        <a
+          href="https://www.mapbox.com/about/maps/"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="hover:underline"
+        >
+          © Mapbox
+        </a>
+        ,{" "}
+        <a
+          href="http://www.openstreetmap.org/copyright"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="hover:underline"
+        >
+          © OpenStreetMap
+        </a>
+        ,{" "}
+        <a
+          href="https://www.mapbox.com/map-feedback/"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="font-semibold hover:underline"
+        >
+          Improve this map
+        </a>
+      </div>
     </div>
   );
 }
