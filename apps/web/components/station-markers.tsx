@@ -46,6 +46,58 @@ const stationLabelStyle: LayerProps = {
   },
 };
 
+const railwayLineStyle: LayerProps = {
+  id: "railway-lines",
+  type: "line",
+  source: "composite",
+  "source-layer": "road",
+  filter: [
+    "all",
+    ["==", ["get", "class"], "major_rail"],
+    ["match", ["get", "structure"], ["none", "ford"], true, false],
+  ],
+  paint: {
+    "line-color": "#4B61D1",
+    "line-width": ["interpolate", ["linear"], ["zoom"], 6, 0.5, 10, 1, 14, 2],
+    "line-opacity": 0.6,
+  },
+};
+
+const railwayBridgeStyle: LayerProps = {
+  id: "railway-lines-bridge",
+  type: "line",
+  source: "composite",
+  "source-layer": "road",
+  filter: [
+    "all",
+    ["==", ["get", "structure"], "bridge"],
+    ["==", ["get", "class"], "major_rail"],
+  ],
+  paint: {
+    "line-color": "#4B61D1",
+    "line-width": ["interpolate", ["linear"], ["zoom"], 6, 0.5, 10, 1, 14, 2],
+    "line-opacity": 0.6,
+  },
+};
+
+const railwayTunnelStyle: LayerProps = {
+  id: "railway-lines-tunnel",
+  type: "line",
+  source: "composite",
+  "source-layer": "road",
+  filter: [
+    "all",
+    ["==", ["get", "structure"], "tunnel"],
+    ["==", ["get", "class"], "major_rail"],
+  ],
+  paint: {
+    "line-color": "#4B61D1",
+    "line-width": ["interpolate", ["linear"], ["zoom"], 6, 0.5, 10, 1, 14, 2],
+    "line-opacity": 0.4,
+    "line-dasharray": [2, 2],
+  },
+};
+
 function createStationsGeoJSON(): GeoJSON.FeatureCollection {
   return {
     type: "FeatureCollection",
@@ -122,9 +174,16 @@ export function StationMarkers() {
   }, [map, selectStation]);
 
   return (
-    <Source id="stations-source" type="geojson" data={geojsonData}>
-      <Layer {...stationLayerStyle} />
-      <Layer {...stationLabelStyle} />
-    </Source>
+    <>
+      {/* Railway tracks */}
+      <Layer {...railwayTunnelStyle} />
+      <Layer {...railwayLineStyle} />
+      <Layer {...railwayBridgeStyle} />
+
+      <Source id="stations-source" type="geojson" data={geojsonData}>
+        <Layer {...stationLayerStyle} />
+        <Layer {...stationLabelStyle} />
+      </Source>
+    </>
   );
 }
