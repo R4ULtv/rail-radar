@@ -7,6 +7,7 @@ import {
   MapPinOffIcon,
   PlusIcon,
   SearchIcon,
+  XIcon,
 } from "lucide-react";
 import { Button } from "@repo/ui/components/button";
 import { Input } from "@repo/ui/components/input";
@@ -101,6 +102,17 @@ export function StationSidebar({
     return result;
   }, [stations, search, filter, duplicateIds]);
 
+  // Filter duplicate groups by search term
+  const filteredDuplicateGroups = useMemo(() => {
+    if (!search.trim()) return duplicateGroups;
+    const lowerSearch = search.toLowerCase();
+    return duplicateGroups
+      .map((group) =>
+        group.filter((s) => s.name.toLowerCase().includes(lowerSearch)),
+      )
+      .filter((group) => group.length > 0);
+  }, [duplicateGroups, search]);
+
   const renderStationItem = (station: Station) => {
     const changeType = changedStationIds?.get(station.id);
     const changeIndicatorColor = getChangeIndicatorColor(changeType);
@@ -146,8 +158,16 @@ export function StationSidebar({
             placeholder="Search stations..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="pl-9"
+            className={cn("pl-9", search && "pr-9")}
           />
+          {search && (
+            <button
+              onClick={() => setSearch("")}
+              className="absolute right-2.5 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+            >
+              <XIcon className="size-4" />
+            </button>
+          )}
         </div>
         <Button
           variant={isAddingStation ? "secondary" : "outline"}
@@ -186,7 +206,7 @@ export function StationSidebar({
       <ScrollArea className="min-h-0 flex-1 [&_[data-slot=scroll-area-viewport]]:h-full">
         {filter === "duplicates" ? (
           <div className="flex flex-col px-2 pb-4">
-            {duplicateGroups.map((group, groupIndex) => (
+            {filteredDuplicateGroups.map((group, groupIndex) => (
               <div key={groupIndex} className="flex flex-col gap-0.5">
                 <Separator className="my-1 mb-2" />
                 <div className="px-2 text-xs font-medium text-muted-foreground">
