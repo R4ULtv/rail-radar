@@ -32,9 +32,45 @@ const stationLayerStyle: LayerProps = {
   type: "circle",
   paint: {
     "circle-radius": ["interpolate", ["linear"], ["zoom"], 5, 4, 10, 6, 15, 8],
-    "circle-color": "#d14b4b",
+    "circle-color": "#4B61D1",
     "circle-stroke-color": "#ffffff",
     "circle-stroke-width": 1.5,
+  },
+};
+
+// Railway track styles (OpenMapTiles schema used by StadiaMaps)
+const railwayLineStyle: LayerProps = {
+  id: "railway-lines",
+  type: "line",
+  source: "openmaptiles",
+  "source-layer": "transportation",
+  filter: [
+    "all",
+    ["==", ["get", "class"], "rail"],
+    ["!=", ["get", "brunnel"], "tunnel"],
+  ],
+  paint: {
+    "line-color": "#4B61D1",
+    "line-width": ["interpolate", ["linear"], ["zoom"], 6, 0.5, 10, 1, 14, 2],
+    "line-opacity": 0.6,
+  },
+};
+
+const railwayTunnelStyle: LayerProps = {
+  id: "railway-lines-tunnel",
+  type: "line",
+  source: "openmaptiles",
+  "source-layer": "transportation",
+  filter: [
+    "all",
+    ["==", ["get", "class"], "rail"],
+    ["==", ["get", "brunnel"], "tunnel"],
+  ],
+  paint: {
+    "line-color": "#4B61D1",
+    "line-width": ["interpolate", ["linear"], ["zoom"], 6, 0.5, 10, 1, 14, 2],
+    "line-opacity": 0.4,
+    "line-dasharray": [2, 2],
   },
 };
 
@@ -117,9 +153,15 @@ function StationLayers({
   }, [map, onSelectStation]);
 
   return (
-    <Source id={SOURCE_ID} type="geojson" data={geojson}>
-      <Layer {...stationLayerStyle} />
-    </Source>
+    <>
+      {/* Railway tracks */}
+      <Layer {...railwayTunnelStyle} />
+      <Layer {...railwayLineStyle} />
+
+      <Source id={SOURCE_ID} type="geojson" data={geojson}>
+        <Layer {...stationLayerStyle} />
+      </Source>
+    </>
   );
 }
 
