@@ -37,8 +37,8 @@ importers:
         specifier: ^9.39.2
         version: 9.39.2(jiti@2.6.1)
       wrangler:
-        specifier: ^4.61.1
-        version: 4.61.1
+        specifier: ^4.62.0
+        version: 4.62.0
 
   apps/studio:
     dependencies:
@@ -86,8 +86,8 @@ importers:
         specifier: ^4.1.18
         version: 4.1.18
       '@types/node':
-        specifier: ^20.19.30
-        version: 20.19.30
+        specifier: ^20.19.31
+        version: 20.19.31
       '@types/react':
         specifier: ^19.2.10
         version: 19.2.10
@@ -119,14 +119,14 @@ importers:
         specifier: ^3.18.1
         version: 3.18.1
       motion:
-        specifier: ^12.29.3
-        version: 12.29.3(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
+        specifier: ^12.31.0
+        version: 12.31.0(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
       next:
         specifier: 16.1.6
         version: 16.1.6(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
       nuqs:
-        specifier: ^2.8.7
-        version: 2.8.7(next@16.1.6(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(react@19.2.4)
+        specifier: ^2.8.8
+        version: 2.8.8(next@16.1.6(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(react@19.2.4)
       react:
         specifier: ^19.2.4
         version: 19.2.4
@@ -150,8 +150,8 @@ importers:
         specifier: ^4.1.18
         version: 4.1.18
       '@types/node':
-        specifier: ^22.19.7
-        version: 22.19.7
+        specifier: ^22.19.8
+        version: 22.19.8
       '@types/react':
         specifier: 19.2.10
         version: 19.2.10
@@ -243,7 +243,7 @@ importers:
         version: 19.2.4(react@19.2.4)
       shadcn:
         specifier: ^3.7.0
-        version: 3.7.0(@types/node@20.19.30)(hono@4.11.7)(typescript@5.9.3)
+        version: 3.7.0(@types/node@22.19.8)(hono@4.11.7)(typescript@5.9.3)
       sonner:
         specifier: ^2.0.7
         version: 2.0.7(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
@@ -268,10 +268,10 @@ importers:
         version: 4.1.18
       '@turbo/gen':
         specifier: ^2.7.5
-        version: 2.7.5(@types/node@20.19.30)(typescript@5.9.3)
+        version: 2.7.5(@types/node@22.19.8)(typescript@5.9.3)
       '@types/node':
-        specifier: ^20.19.30
-        version: 20.19.30
+        specifier: ^22.19.8
+        version: 22.19.8
       '@types/react':
         specifier: ^19.2.10
         version: 19.2.10
@@ -469,32 +469,32 @@ packages:
       workerd:
         optional: true
 
-  '@cloudflare/workerd-darwin-64@1.20260128.0':
-    resolution: {integrity: sha512-XJN8zWWNG3JwAUqqwMLNKJ9fZfdlQkx/zTTHW/BB8wHat9LjKD6AzxqCu432YmfjR+NxEKCzUOxMu1YOxlVxmg==}
+  '@cloudflare/workerd-darwin-64@1.20260131.0':
+    resolution: {integrity: sha512-+1X4qErc715NUhJZNhtlpuCxajhD5YNre7Cz50WPMmj+BMUrh9h7fntKEadtrUo5SM2YONY7CDzK7wdWbJJBVA==}
     engines: {node: '>=16'}
     cpu: [x64]
     os: [darwin]
 
-  '@cloudflare/workerd-darwin-arm64@1.20260128.0':
-    resolution: {integrity: sha512-vKnRcmnm402GQ5DOdfT5H34qeR2m07nhnTtky8mTkNWP+7xmkz32AMdclwMmfO/iX9ncyKwSqmml2wPG32eq/w==}
+  '@cloudflare/workerd-darwin-arm64@1.20260131.0':
+    resolution: {integrity: sha512-M84mXR8WEMEBuX4/dL2IQ4wHV/ALwYjx9if5ePZR8rdbD7if/fkEEoMBq0bGS/1gMLRqqCZLstabxHV+g92NNg==}
     engines: {node: '>=16'}
     cpu: [arm64]
     os: [darwin]
 
-  '@cloudflare/workerd-linux-64@1.20260128.0':
-    resolution: {integrity: sha512-RiaR+Qugof/c6oI5SagD2J5wJmIfI8wQWaV2Y9905Raj6sAYOFaEKfzkKnoLLLNYb4NlXicBrffJi1j7R/ypUA==}
+  '@cloudflare/workerd-linux-64@1.20260131.0':
+    resolution: {integrity: sha512-SWzr48bCL9y5wjkj23tXS6t/6us99EAH9T5TAscMV0hfJFZQt97RY/gaHKyRRjFv6jfJZvk7d4g+OmGeYBnwcg==}
     engines: {node: '>=16'}
     cpu: [x64]
     os: [linux]
 
-  '@cloudflare/workerd-linux-arm64@1.20260128.0':
-    resolution: {integrity: sha512-U39U9vcXLXYDbrJ112Q7D0LDUUnM54oXfAxPgrL2goBwio7Z6RnsM25TRvm+Q06F4+FeDOC4D51JXlFHb9t1OA==}
+  '@cloudflare/workerd-linux-arm64@1.20260131.0':
+    resolution: {integrity: sha512-mL0kLPGIBJRPeHS3+erJ2t5dJT3ODhsKvR9aA4BcsY7M30/QhlgJIF6wsgwNisTJ23q8PbobZNHBUKIe8l/E9A==}
     engines: {node: '>=16'}
     cpu: [arm64]
     os: [linux]
 
-  '@cloudflare/workerd-windows-64@1.20260128.0':
-    resolution: {integrity: sha512-fdJwSqRkJsAJFJ7+jy0th2uMO6fwaDA8Ny6+iFCssfzlNkc4dP/twXo+3F66FMLMe/6NIqjzVts0cpiv7ERYbQ==}
+  '@cloudflare/workerd-windows-64@1.20260131.0':
+    resolution: {integrity: sha512-hoQqTFBpP1zntP2OQSpt5dEWbd9vSBliK+G7LmDXjKitPkmkRFo2PB4P9aBRE1edPAIO/fpdoJv928k2HaAn4A==}
     engines: {node: '>=16'}
     cpu: [x64]
     os: [win32]
@@ -1000,8 +1000,8 @@ packages:
     resolution: {integrity: sha512-UKhA4qv1h30XT768ccSv5NjNCX+dgfoq2qlLVmKejspPcSQTYD4SrVucgqegmYcKcmwf06wcNAa/kRd0NHWbUg==}
     hasBin: true
 
-  '@maplibre/mlt@1.1.4':
-    resolution: {integrity: sha512-ZT45XMOQKXEXzi/GnXu9QaC3Lh0yocXLXZHL+ztJiBzjqZ9qTWUx6G5xXXtSBvNs0VHds8nR0alfndiFVwoOAg==}
+  '@maplibre/mlt@1.1.5':
+    resolution: {integrity: sha512-HjoAIOYAfZo2El/tHBnvWpCRlodWgWLZ/tyO4Wrw0LVY2bkQz1+pwAwDvmgSRvfkSkSzWnqJJd1JwgCrq/60HQ==}
 
   '@maplibre/vt-pbf@4.2.1':
     resolution: {integrity: sha512-IxZBGq/+9cqf2qdWlFuQ+ZfoMhWpxDUGQZ/poPHOJBvwMUT1GuxLo6HgYTou+xxtsOsjfbcjI8PZaPCtmt97rA==}
@@ -1454,11 +1454,11 @@ packages:
     resolution: {integrity: sha512-zmPitbQ8+6zNutpwgcQuLcsEpn/Cj54Kbn7L5pX0Os5kdWplB7xPgEh/g+SWOB/qmows2gpuCaPyduq8ZZRnxA==}
     deprecated: This is a stub types definition. minimatch provides its own type definitions, so you do not need this installed.
 
-  '@types/node@20.19.30':
-    resolution: {integrity: sha512-WJtwWJu7UdlvzEAUm484QNg5eAoq5QR08KDNx7g45Usrs2NtOPiX8ugDqmKdXkyL03rBqU5dYNYVQetEpBHq2g==}
+  '@types/node@20.19.31':
+    resolution: {integrity: sha512-5jsi0wpncvTD33Sh1UCgacK37FFwDn+EG7wCmEvs62fCvBL+n8/76cAYDok21NF6+jaVWIqKwCZyX7Vbu8eB3A==}
 
-  '@types/node@22.19.7':
-    resolution: {integrity: sha512-MciR4AKGHWl7xwxkBa6xUGxQJ4VBOmPTF7sL+iGzuahOFaO0jHCsuEfS80pan1ef4gWId1oWOweIhrDEYLuaOw==}
+  '@types/node@22.19.8':
+    resolution: {integrity: sha512-ebO/Yl+EAvVe8DnMfi+iaAyIqYdK0q/q0y0rw82INWEKJOBe6b/P3YWE8NW7oOlF/nXFNrHwhARrN/hdgDkraA==}
 
   '@types/pbf@3.0.5':
     resolution: {integrity: sha512-j3pOPiEcWZ34R6a6mN07mUkM4o4Lwf6hPNt8eilOeZhTFbxFXmKhvXl9Y28jotFPaI1bpPDJsbCprUoNke6OrA==}
@@ -2386,8 +2386,8 @@ packages:
     resolution: {integrity: sha512-buRG0fpBtRHSTCOASe6hD258tEubFoRLb4ZNA6NxMVHNw2gOcwHo9wyablzMzOA5z9xA9L1KNjk/Nt6MT9aYow==}
     engines: {node: '>= 0.6'}
 
-  framer-motion@12.29.3:
-    resolution: {integrity: sha512-naVvtFA7IiRTU5n7w7Nj51QFVWu955bU0p9H0gGC4AbhHDQR0TcohoEYwdOZXWEkXrEYNTl95EDOxsjDqn1AvQ==}
+  framer-motion@12.31.0:
+    resolution: {integrity: sha512-Tnd0FU05zGRFI3JJmBegXonF1rfuzYeuXd1QSdQ99Ysnppk0yWBWSW2wUsqzRpS5nv0zPNx+y0wtDj4kf0q5RQ==}
     peerDependencies:
       '@emotion/is-prop-valid': '*'
       react: ^18.0.0 || ^19.0.0
@@ -3143,8 +3143,8 @@ packages:
     resolution: {integrity: sha512-VP79XUPxV2CigYP3jWwAUFSku2aKqBH7uTAapFWCBqutsbmDo96KY5o8uh6U+/YSIn5OxJnXp73beVkpqMIGhA==}
     engines: {node: '>=18'}
 
-  miniflare@4.20260128.0:
-    resolution: {integrity: sha512-AVCn3vDRY+YXu1sP4mRn81ssno6VUqxo29uY2QVfgxXU2TMLvhRIoGwm7RglJ3Gzfuidit5R86CMQ6AvdFTGAw==}
+  miniflare@4.20260131.0:
+    resolution: {integrity: sha512-CtObRzlAzOUpCFH+MgImykxmDNKthrgIYtC+oLC3UGpve6bGLomKUW4u4EorTvzlQFHe66/9m/+AYbBbpzG0mQ==}
     engines: {node: '>=18.0.0'}
     hasBin: true
 
@@ -3170,14 +3170,14 @@ packages:
     resolution: {integrity: sha512-FP+p8RB8OWpF3YZBCrP5gtADmtXApB5AMLn+vdyA+PyxCjrCs00mjyUozssO33cwDeT3wNGdLxJ5M//YqtHAJw==}
     hasBin: true
 
-  motion-dom@12.29.2:
-    resolution: {integrity: sha512-/k+NuycVV8pykxyiTCoFzIVLA95Nb1BFIVvfSu9L50/6K6qNeAYtkxXILy/LRutt7AzaYDc2myj0wkCVVYAPPA==}
+  motion-dom@12.30.1:
+    resolution: {integrity: sha512-QXB+iFJRzZTqL+Am4a1CRoHdH+0Nq12wLdqQQZZsfHlp9AMt6PA098L/61oVZsDA+Ep3QSGudzpViyRrhYhGcQ==}
 
   motion-utils@12.29.2:
     resolution: {integrity: sha512-G3kc34H2cX2gI63RqU+cZq+zWRRPSsNIOjpdl9TN4AQwC4sgwYPl/Q/Obf/d53nOm569T0fYK+tcoSV50BWx8A==}
 
-  motion@12.29.3:
-    resolution: {integrity: sha512-susHRkAolcmJQNy7xkV8UJ1DrB2Rg9IDTHnGR2ASXBCzc1L9eC5GVLj08zUU6ZnNLNX6Jb7urD6N0IJjOSGQBQ==}
+  motion@12.31.0:
+    resolution: {integrity: sha512-KpZQik3LLFdsiaLdFXQGnty84KcDvvdvBCHSvA9aH+RjQTP6jkJGyngRPSngau13ARUI6TbPphf/Vv/QxwxRJQ==}
     peerDependencies:
       '@emotion/is-prop-valid': '*'
       react: ^18.0.0 || ^19.0.0
@@ -3286,8 +3286,8 @@ packages:
     resolution: {integrity: sha512-9qny7Z9DsQU8Ou39ERsPU4OZQlSTP47ShQzuKZ6PRXpYLtIFgl/DEBYEXKlvcEa+9tHVcK8CF81Y2V72qaZhWA==}
     engines: {node: '>=18'}
 
-  nuqs@2.8.7:
-    resolution: {integrity: sha512-wxzRUKn9ENnhX2jU5fBjpekaZZOSxmTzUqS4U2yMrpOaPU6ee7VUqSyHx81c/3FRyDFnFETTLjdsA+ZNKq2jhg==}
+  nuqs@2.8.8:
+    resolution: {integrity: sha512-LF5sw9nWpHyPWzMMu9oho3r9C5DvkpmBIg4LQN78sexIzGaeRx8DWr0uy3YiFx5i2QGZN1Qqcb+OAtEVRa2bnA==}
     peerDependencies:
       '@remix-run/react': '>=2'
       '@tanstack/react-router': ^1
@@ -4333,17 +4333,17 @@ packages:
   wordwrap@1.0.0:
     resolution: {integrity: sha512-gvVzJFlPycKc5dZN4yPkP8w7Dc37BtP1yczEneOb4uq34pXZcvrtRTmWV8W+Ume+XCxKgbjM+nevkyFPMybd4Q==}
 
-  workerd@1.20260128.0:
-    resolution: {integrity: sha512-EhLJGptSGFi8AEErLiamO3PoGpbRqL+v4Ve36H2B38VxmDgFOSmDhfepBnA14sCQzGf1AEaoZX2DCwZsmO74yQ==}
+  workerd@1.20260131.0:
+    resolution: {integrity: sha512-4zZxOdWeActbRfydQQlj7vZ2ay01AjjNC4K3stjmWC3xZHeXeN3EAROwsWE83SZHhtw4rn18srrhtXoQvQMw3Q==}
     engines: {node: '>=16'}
     hasBin: true
 
-  wrangler@4.61.1:
-    resolution: {integrity: sha512-hfYQ16VLPkNi8xE1/V3052S2stM5e+vq3Idpt83sXoDC3R7R1CLgMkK6M6+Qp3G+9GVDNyHCkvohMPdfFTaD4Q==}
+  wrangler@4.62.0:
+    resolution: {integrity: sha512-DogP9jifqw85g33BqwF6m21YBW5J7+Ep9IJLgr6oqHU0RkA79JMN5baeWXdmnIWZl+VZh6bmtNtR+5/Djd32tg==}
     engines: {node: '>=20.0.0'}
     hasBin: true
     peerDependencies:
-      '@cloudflare/workers-types': ^4.20260128.0
+      '@cloudflare/workers-types': ^4.20260131.0
     peerDependenciesMeta:
       '@cloudflare/workers-types':
         optional: true
@@ -4650,25 +4650,25 @@ snapshots:
 
   '@cloudflare/kv-asset-handler@0.4.2': {}
 
-  '@cloudflare/unenv-preset@2.12.0(unenv@2.0.0-rc.24)(workerd@1.20260128.0)':
+  '@cloudflare/unenv-preset@2.12.0(unenv@2.0.0-rc.24)(workerd@1.20260131.0)':
     dependencies:
       unenv: 2.0.0-rc.24
     optionalDependencies:
-      workerd: 1.20260128.0
+      workerd: 1.20260131.0
 
-  '@cloudflare/workerd-darwin-64@1.20260128.0':
+  '@cloudflare/workerd-darwin-64@1.20260131.0':
     optional: true
 
-  '@cloudflare/workerd-darwin-arm64@1.20260128.0':
+  '@cloudflare/workerd-darwin-arm64@1.20260131.0':
     optional: true
 
-  '@cloudflare/workerd-linux-64@1.20260128.0':
+  '@cloudflare/workerd-linux-64@1.20260131.0':
     optional: true
 
-  '@cloudflare/workerd-linux-arm64@1.20260128.0':
+  '@cloudflare/workerd-linux-arm64@1.20260131.0':
     optional: true
 
-  '@cloudflare/workerd-windows-64@1.20260128.0':
+  '@cloudflare/workerd-windows-64@1.20260131.0':
     optional: true
 
   '@cspotcode/source-map-support@0.8.1':
@@ -4950,31 +4950,31 @@ snapshots:
 
   '@inquirer/ansi@1.0.2': {}
 
-  '@inquirer/confirm@5.1.21(@types/node@20.19.30)':
+  '@inquirer/confirm@5.1.21(@types/node@22.19.8)':
     dependencies:
-      '@inquirer/core': 10.3.2(@types/node@20.19.30)
-      '@inquirer/type': 3.0.10(@types/node@20.19.30)
+      '@inquirer/core': 10.3.2(@types/node@22.19.8)
+      '@inquirer/type': 3.0.10(@types/node@22.19.8)
     optionalDependencies:
-      '@types/node': 20.19.30
+      '@types/node': 22.19.8
 
-  '@inquirer/core@10.3.2(@types/node@20.19.30)':
+  '@inquirer/core@10.3.2(@types/node@22.19.8)':
     dependencies:
       '@inquirer/ansi': 1.0.2
       '@inquirer/figures': 1.0.15
-      '@inquirer/type': 3.0.10(@types/node@20.19.30)
+      '@inquirer/type': 3.0.10(@types/node@22.19.8)
       cli-width: 4.1.0
       mute-stream: 2.0.0
       signal-exit: 4.1.0
       wrap-ansi: 6.2.0
       yoctocolors-cjs: 2.1.3
     optionalDependencies:
-      '@types/node': 20.19.30
+      '@types/node': 22.19.8
 
   '@inquirer/figures@1.0.15': {}
 
-  '@inquirer/type@3.0.10(@types/node@20.19.30)':
+  '@inquirer/type@3.0.10(@types/node@22.19.8)':
     optionalDependencies:
-      '@types/node': 20.19.30
+      '@types/node': 22.19.8
 
   '@isaacs/balanced-match@4.0.1': {}
 
@@ -5050,7 +5050,7 @@ snapshots:
       rw: 1.3.3
       tinyqueue: 3.0.0
 
-  '@maplibre/mlt@1.1.4':
+  '@maplibre/mlt@1.1.5':
     dependencies:
       '@mapbox/point-geometry': 1.1.0
 
@@ -5408,7 +5408,7 @@ snapshots:
 
   '@tsconfig/node16@1.0.4': {}
 
-  '@turbo/gen@2.7.5(@types/node@20.19.30)(typescript@5.9.3)':
+  '@turbo/gen@2.7.5(@types/node@22.19.8)(typescript@5.9.3)':
     dependencies:
       '@turbo/workspaces': 2.7.5
       commander: 10.0.0
@@ -5418,7 +5418,7 @@ snapshots:
       node-plop: 0.26.3
       picocolors: 1.0.1
       proxy-agent: 6.5.0
-      ts-node: 10.9.2(@types/node@20.19.30)(typescript@5.9.3)
+      ts-node: 10.9.2(@types/node@22.19.8)(typescript@5.9.3)
       update-check: 1.5.4
       validate-npm-package-name: 5.0.0
     transitivePeerDependencies:
@@ -5453,7 +5453,7 @@ snapshots:
   '@types/glob@7.2.0':
     dependencies:
       '@types/minimatch': 6.0.0
-      '@types/node': 20.19.30
+      '@types/node': 22.19.8
 
   '@types/inquirer@6.5.0':
     dependencies:
@@ -5468,11 +5468,11 @@ snapshots:
     dependencies:
       minimatch: 10.1.1
 
-  '@types/node@20.19.30':
+  '@types/node@20.19.31':
     dependencies:
       undici-types: 6.21.0
 
-  '@types/node@22.19.7':
+  '@types/node@22.19.8':
     dependencies:
       undici-types: 6.21.0
 
@@ -5494,7 +5494,7 @@ snapshots:
 
   '@types/through@0.0.33':
     dependencies:
-      '@types/node': 20.19.30
+      '@types/node': 22.19.8
 
   '@types/tinycolor2@1.4.6': {}
 
@@ -6580,9 +6580,9 @@ snapshots:
 
   forwarded@0.2.0: {}
 
-  framer-motion@12.29.3(react-dom@19.2.4(react@19.2.4))(react@19.2.4):
+  framer-motion@12.31.0(react-dom@19.2.4(react@19.2.4))(react@19.2.4):
     dependencies:
-      motion-dom: 12.29.2
+      motion-dom: 12.30.1
       motion-utils: 12.29.2
       tslib: 2.8.1
     optionalDependencies:
@@ -7268,7 +7268,7 @@ snapshots:
       '@mapbox/whoots-js': 3.1.0
       '@maplibre/geojson-vt': 5.0.4
       '@maplibre/maplibre-gl-style-spec': 24.4.1
-      '@maplibre/mlt': 1.1.4
+      '@maplibre/mlt': 1.1.5
       '@maplibre/vt-pbf': 4.2.1
       '@types/geojson': 7946.0.16
       '@types/supercluster': 7.1.3
@@ -7313,12 +7313,12 @@ snapshots:
 
   mimic-function@5.0.1: {}
 
-  miniflare@4.20260128.0:
+  miniflare@4.20260131.0:
     dependencies:
       '@cspotcode/source-map-support': 0.8.1
       sharp: 0.34.5
       undici: 7.18.2
-      workerd: 1.20260128.0
+      workerd: 1.20260131.0
       ws: 8.18.0
       youch: 4.1.0-beta.10
     transitivePeerDependencies:
@@ -7347,15 +7347,15 @@ snapshots:
     dependencies:
       minimist: 1.2.8
 
-  motion-dom@12.29.2:
+  motion-dom@12.30.1:
     dependencies:
       motion-utils: 12.29.2
 
   motion-utils@12.29.2: {}
 
-  motion@12.29.3(react-dom@19.2.4(react@19.2.4))(react@19.2.4):
+  motion@12.31.0(react-dom@19.2.4(react@19.2.4))(react@19.2.4):
     dependencies:
-      framer-motion: 12.29.3(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
+      framer-motion: 12.31.0(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
       tslib: 2.8.1
     optionalDependencies:
       react: 19.2.4
@@ -7363,9 +7363,9 @@ snapshots:
 
   ms@2.1.3: {}
 
-  msw@2.12.7(@types/node@20.19.30)(typescript@5.9.3):
+  msw@2.12.7(@types/node@22.19.8)(typescript@5.9.3):
     dependencies:
-      '@inquirer/confirm': 5.1.21(@types/node@20.19.30)
+      '@inquirer/confirm': 5.1.21(@types/node@22.19.8)
       '@mswjs/interceptors': 0.40.0
       '@open-draft/deferred-promise': 2.2.0
       '@types/statuses': 2.0.6
@@ -7470,7 +7470,7 @@ snapshots:
       path-key: 4.0.0
       unicorn-magic: 0.3.0
 
-  nuqs@2.8.7(next@16.1.6(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(react@19.2.4):
+  nuqs@2.8.8(next@16.1.6(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(react@19.2.4):
     dependencies:
       '@standard-schema/spec': 1.0.0
       react: 19.2.4
@@ -8031,7 +8031,7 @@ snapshots:
 
   setprototypeof@1.2.0: {}
 
-  shadcn@3.7.0(@types/node@20.19.30)(hono@4.11.7)(typescript@5.9.3):
+  shadcn@3.7.0(@types/node@22.19.8)(hono@4.11.7)(typescript@5.9.3):
     dependencies:
       '@antfu/ni': 25.0.0
       '@babel/core': 7.28.6
@@ -8053,7 +8053,7 @@ snapshots:
       fuzzysort: 3.1.0
       https-proxy-agent: 7.0.6
       kleur: 4.1.5
-      msw: 2.12.7(@types/node@20.19.30)(typescript@5.9.3)
+      msw: 2.12.7(@types/node@22.19.8)(typescript@5.9.3)
       node-fetch: 3.3.2
       open: 11.0.0
       ora: 8.2.0
@@ -8386,14 +8386,14 @@ snapshots:
       '@ts-morph/common': 0.27.0
       code-block-writer: 13.0.3
 
-  ts-node@10.9.2(@types/node@20.19.30)(typescript@5.9.3):
+  ts-node@10.9.2(@types/node@22.19.8)(typescript@5.9.3):
     dependencies:
       '@cspotcode/source-map-support': 0.8.1
       '@tsconfig/node10': 1.0.12
       '@tsconfig/node12': 1.0.11
       '@tsconfig/node14': 1.0.3
       '@tsconfig/node16': 1.0.4
-      '@types/node': 20.19.30
+      '@types/node': 22.19.8
       acorn: 8.15.0
       acorn-walk: 8.3.4
       arg: 4.1.3
@@ -8664,24 +8664,24 @@ snapshots:
 
   wordwrap@1.0.0: {}
 
-  workerd@1.20260128.0:
+  workerd@1.20260131.0:
     optionalDependencies:
-      '@cloudflare/workerd-darwin-64': 1.20260128.0
-      '@cloudflare/workerd-darwin-arm64': 1.20260128.0
-      '@cloudflare/workerd-linux-64': 1.20260128.0
-      '@cloudflare/workerd-linux-arm64': 1.20260128.0
-      '@cloudflare/workerd-windows-64': 1.20260128.0
+      '@cloudflare/workerd-darwin-64': 1.20260131.0
+      '@cloudflare/workerd-darwin-arm64': 1.20260131.0
+      '@cloudflare/workerd-linux-64': 1.20260131.0
+      '@cloudflare/workerd-linux-arm64': 1.20260131.0
+      '@cloudflare/workerd-windows-64': 1.20260131.0
 
-  wrangler@4.61.1:
+  wrangler@4.62.0:
     dependencies:
       '@cloudflare/kv-asset-handler': 0.4.2
-      '@cloudflare/unenv-preset': 2.12.0(unenv@2.0.0-rc.24)(workerd@1.20260128.0)
+      '@cloudflare/unenv-preset': 2.12.0(unenv@2.0.0-rc.24)(workerd@1.20260131.0)
       blake3-wasm: 2.1.5
       esbuild: 0.27.0
-      miniflare: 4.20260128.0
+      miniflare: 4.20260131.0
       path-to-regexp: 6.3.0
       unenv: 2.0.0-rc.24
-      workerd: 1.20260128.0
+      workerd: 1.20260131.0
     optionalDependencies:
       fsevents: 2.3.3
     transitivePeerDependencies:
