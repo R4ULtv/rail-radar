@@ -11,10 +11,9 @@ import {
 } from "lucide-react";
 import { Button } from "@repo/ui/components/button";
 import { ButtonGroup } from "@repo/ui/components/button-group";
-import { useIsMobile } from "@repo/ui/hooks/use-mobile";
+import { GitHub } from "@repo/ui/icons/github";
 
 export function MapControls() {
-  const isMobile = useIsMobile();
   const { current: map } = useMap();
   const [bearing, setBearing] = React.useState(0);
   const [userLocation, setUserLocation] = React.useState<{
@@ -137,13 +136,13 @@ export function MapControls() {
           </div>
         </Marker>
       )}
-      <div className="absolute bottom-4 right-4 flex flex-col gap-2">
+      <div className="absolute bottom-3 right-3 flex flex-col gap-2">
         <Button
           variant="outline"
-          size={isMobile ? "icon-lg" : "icon-sm"}
+          size="icon-sm"
           onClick={handleResetBearing}
           aria-label="Reset bearing"
-          className="bg-card hover:bg-muted dark:bg-card dark:hover:bg-muted"
+          className="bg-card hover:bg-muted dark:bg-card dark:hover:bg-muted size-9 md:size-8"
         >
           <CompassIcon
             style={{ transform: `rotate(${-bearing - 45}deg)` }}
@@ -153,10 +152,10 @@ export function MapControls() {
 
         <Button
           variant="outline"
-          size={isMobile ? "icon-lg" : "icon-sm"}
+          size="icon-sm"
           onClick={handleLocate}
           aria-label="Locate me"
-          className="bg-card hover:bg-muted dark:bg-card dark:hover:bg-muted"
+          className="bg-card hover:bg-muted dark:bg-card dark:hover:bg-muted size-9 md:size-8"
         >
           {userLocation ? <LocateFixedIcon /> : <LocateIcon />}
         </Button>
@@ -164,7 +163,7 @@ export function MapControls() {
         <ButtonGroup orientation="vertical" className="hidden md:flex">
           <Button
             variant="outline"
-            size={isMobile ? "icon-lg" : "icon-sm"}
+            size="icon-sm"
             onClick={handleZoomIn}
             aria-label="Zoom in"
             className="bg-card hover:bg-muted dark:bg-card dark:hover:bg-muted"
@@ -173,7 +172,7 @@ export function MapControls() {
           </Button>
           <Button
             variant="outline"
-            size={isMobile ? "icon-lg" : "icon-sm"}
+            size="icon-sm"
             onClick={handleZoomOut}
             aria-label="Zoom out"
             className="bg-card hover:bg-muted dark:bg-card dark:hover:bg-muted"
@@ -181,6 +180,22 @@ export function MapControls() {
             <MinusIcon />
           </Button>
         </ButtonGroup>
+        <Button
+          variant="outline"
+          size="icon-sm"
+          aria-label="GitHub"
+          className="bg-card hover:bg-muted dark:bg-card dark:hover:bg-muted size-9 md:size-8"
+          nativeButton={false}
+          render={
+            <a
+              href="https://github.com/R4ULtv/rail-radar"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <GitHub />
+            </a>
+          }
+        />
       </div>
     </>
   );
