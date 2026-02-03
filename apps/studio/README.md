@@ -14,8 +14,8 @@ Admin tool for managing Italian railway station data. Add missing coordinates, f
 For contribution work, build and run the production version:
 
 ```bash
-pnpm build --filter=studio
-cd apps/studio && pnpm run start
+pnpm --filter=studio build
+pnpm --filter=studio start
 ```
 
 For development with hot-reload:
