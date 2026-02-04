@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
 import "./globals.css";
 import { Analytics } from "@vercel/analytics/next";
+import { ServiceWorkerRegistration } from "@/components/ServiceWorkerRegistration";
 
 const geistSans = Geist({
   subsets: ["latin"],
@@ -38,6 +39,11 @@ export const metadata: Metadata = {
     card: "summary_large_image",
   },
   category: "travel",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "black-translucent",
+    title: "Rail Radar",
+  },
 };
 
 export default function RootLayout({
@@ -51,6 +57,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <NuqsAdapter>{children}</NuqsAdapter>
+        <ServiceWorkerRegistration />
         <Analytics />
       </body>
     </html>
