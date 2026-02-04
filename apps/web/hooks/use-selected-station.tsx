@@ -32,12 +32,7 @@ export function SelectedStationProvider({
   );
 
   // Use the standalone saved stations hook
-  const {
-    savedStations,
-    isSaved,
-    toggleSaved,
-    maxSaved,
-  } = useSavedStations();
+  const { savedStations, isSaved, toggleSaved, maxSaved } = useSavedStations();
 
   const selectedStation = React.useMemo(() => {
     if (!stationId) return null;

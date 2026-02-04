@@ -271,7 +271,9 @@ export default function StationInfo() {
               >
                 <CardHeader className="relative px-4">
                   <CardAction className="space-x-1">
-                    {selectedStation && <SaveButton station={selectedStation} />}
+                    {selectedStation && (
+                      <SaveButton station={selectedStation} />
+                    )}
                     <Button
                       variant="ghost"
                       size="icon"

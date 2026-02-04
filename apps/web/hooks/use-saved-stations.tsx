@@ -65,7 +65,7 @@ export function useSavedStations() {
     (stationId: number) => {
       return savedIds.includes(stationId);
     },
-    [savedIds]
+    [savedIds],
   );
 
   const toggleSaved = React.useCallback((stationId: number) => {

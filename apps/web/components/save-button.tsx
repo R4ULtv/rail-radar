@@ -32,15 +32,12 @@ export function SaveButton({
       disabled={isAtLimit}
       aria-label={saved ? "Remove from saved" : "Save station"}
       title={
-        isAtLimit ? `Maximum ${MAX_SAVED_STATIONS} saved stations reached` : undefined
+        isAtLimit
+          ? `Maximum ${MAX_SAVED_STATIONS} saved stations reached`
+          : undefined
       }
     >
-      <BookmarkIcon
-        className={cn(
-          "size-4",
-          saved && "fill-current"
-        )}
-      />
+      <BookmarkIcon className={cn("size-4", saved && "fill-current")} />
     </Button>
   );
 }
