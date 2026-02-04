@@ -57,7 +57,9 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <NuqsAdapter>{children}</NuqsAdapter>
-        <ServiceWorkerRegistration />
+        {process.env.VERCEL_TARGET_ENV === "production" && (
+          <ServiceWorkerRegistration />
+        )}
         <Analytics />
       </body>
     </html>
