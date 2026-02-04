@@ -28,10 +28,12 @@ const brandIcons: Record<string, ComponentType<BrandIconProps>> = {
   "trenitalia tper": Tper, // Emilia-Romagna
   sad: Sad, // Trentino
   fse: Trenitalia, // Puglia
+  "leonardo express": Trenitalia,
   // Other
   sncf: Sncf, // France
   obb: Obb, // Austria
   "obb railjet": Obb,
+  // BLS (Switz)
 };
 
 interface BrandLogoProps extends BrandIconProps {
