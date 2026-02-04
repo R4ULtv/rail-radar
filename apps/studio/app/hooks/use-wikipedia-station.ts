@@ -230,7 +230,10 @@ async function fetchWikidataCoordinates(
     const coordClaim = entity.claims?.P625?.[0];
     const coordValue = coordClaim?.mainsnak?.datavalue?.value;
 
-    if (coordValue?.latitude !== undefined && coordValue?.longitude !== undefined) {
+    if (
+      coordValue?.latitude !== undefined &&
+      coordValue?.longitude !== undefined
+    ) {
       return {
         lat: coordValue.latitude,
         lng: coordValue.longitude,
