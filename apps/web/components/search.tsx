@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import {
-  HistoryIcon,
+  BookmarkIcon,
   ListIcon,
   SearchIcon,
   SearchXIcon,
@@ -98,7 +98,7 @@ const StationList = React.memo(function StationList({
 
 export function Search() {
   const isMobile = useIsMobile();
-  const { selectStation, recentStations } = useSelectedStation();
+  const { selectStation, savedStations } = useSelectedStation();
   const inputRef = React.useRef<HTMLInputElement>(null);
   const [query, setQuery] = React.useState("");
   const debouncedQuery = useDebounce(query.trim(), 300);
@@ -135,7 +135,7 @@ export function Search() {
     isSearchActive && query.trim() === debouncedQuery && !isLoading;
 
   const noResults = isSearchActive && hasSearched && searchResults.length === 0;
-  const showRecentAndPopular =
+  const showDefaultLists =
     !isSearchActive || noResults || (isSearchActive && !hasSearched);
 
   const cardHeight = useAnimatedHeight();
@@ -158,13 +158,13 @@ export function Search() {
       return searchResults.slice(0, 10);
     }
     if (!isSearchActive || noResults) {
-      return [...recentStations, ...trendingStations];
+      return [...savedStations, ...trendingStations];
     }
     return [];
   }, [
     isSearchActive,
     searchResults,
-    recentStations,
+    savedStations,
     noResults,
     trendingStations,
   ]);
@@ -268,17 +268,17 @@ export function Search() {
           </div>
         </div>
       )}
-      {/* Recent Stations */}
-      {showRecentAndPopular && recentStations.length > 0 && (
+      {/* Saved Stations */}
+      {showDefaultLists && savedStations.length > 0 && (
         <>
           <div className="px-4 py-2 not-first:mt-1">
             <p className="text-muted-foreground text-sm flex items-center gap-2">
-              <HistoryIcon className="size-3.5" />
-              Recent Stations
+              <BookmarkIcon className="size-3.5" />
+              Saved Stations
             </p>
           </div>
           <StationList
-            stations={recentStations}
+            stations={savedStations}
             onSelect={handleSelectStation}
             focusedIndex={focusedIndex}
             startIndex={0}
@@ -287,7 +287,7 @@ export function Search() {
         </>
       )}
       {/* Trending Stations */}
-      {showRecentAndPopular && trendingStations.length > 0 && (
+      {showDefaultLists && trendingStations.length > 0 && (
         <>
           <div className="px-4 py-2 not-first:mt-1">
             <p className="text-muted-foreground text-sm flex items-center gap-2">
@@ -299,7 +299,7 @@ export function Search() {
             stations={trendingStations}
             onSelect={handleSelectStation}
             focusedIndex={focusedIndex}
-            startIndex={recentStations.length}
+            startIndex={savedStations.length}
             onFocusIndex={setFocusedIndex}
             visits={trendingVisits}
           />

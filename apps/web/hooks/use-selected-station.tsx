@@ -5,23 +5,16 @@ import { useQueryState, parseAsInteger } from "nuqs";
 import { useMap } from "react-map-gl/mapbox";
 import { stationsCoords } from "@repo/data/stations";
 import type { Station } from "@repo/data";
-
-const RECENT_STATIONS_KEY = "recent-stations";
-const MAX_RECENT_STATIONS = 5;
-
-function saveRecentStations(stations: Station[]) {
-  try {
-    localStorage.setItem(RECENT_STATIONS_KEY, JSON.stringify(stations));
-  } catch {
-    // Ignore localStorage errors
-  }
-}
+import { useSavedStations } from "./use-saved-stations";
 
 interface SelectedStationContextValue {
   selectedStation: Station | null;
   selectStation: (station: Station) => void;
   clearStation: () => void;
-  recentStations: Station[];
+  savedStations: Station[];
+  isSaved: (stationId: number) => boolean;
+  toggleSaved: (stationId: number) => void;
+  maxSaved: number;
 }
 
 const SelectedStationContext =
@@ -37,14 +30,14 @@ export function SelectedStationProvider({
     "station",
     parseAsInteger.withOptions({ history: "push", shallow: true }),
   );
-  const [recentStations, setRecentStations] = React.useState<Station[]>(() => {
-    try {
-      const stored = localStorage.getItem(RECENT_STATIONS_KEY);
-      return stored ? JSON.parse(stored) : [];
-    } catch {
-      return [];
-    }
-  });
+
+  // Use the standalone saved stations hook
+  const {
+    savedStations,
+    isSaved,
+    toggleSaved,
+    maxSaved,
+  } = useSavedStations();
 
   const selectedStation = React.useMemo(() => {
     if (!stationId) return null;
@@ -61,17 +54,6 @@ export function SelectedStationProvider({
 
       setStationId(station.id);
 
-      // Update recent stations (store with geo for future use)
-      setRecentStations((prev) => {
-        const filtered = prev.filter((s) => s.id !== station.id);
-        const updated = [{ ...station, geo }, ...filtered].slice(
-          0,
-          MAX_RECENT_STATIONS,
-        );
-        saveRecentStations(updated);
-        return updated;
-      });
-
       map?.flyTo({
         center: [geo.lng, geo.lat],
         zoom: 14,
@@ -86,7 +68,15 @@ export function SelectedStationProvider({
 
   return (
     <SelectedStationContext.Provider
-      value={{ selectedStation, selectStation, clearStation, recentStations }}
+      value={{
+        selectedStation,
+        selectStation,
+        clearStation,
+        savedStations,
+        isSaved,
+        toggleSaved,
+        maxSaved,
+      }}
     >
       {children}
     </SelectedStationContext.Provider>

@@ -14,6 +14,7 @@ import {
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
+import { SaveButton } from "@/components/save-button";
 import { TrainRow, TrainRowSkeleton } from "@/components/train-row";
 import {
   Card,
@@ -270,6 +271,7 @@ export default function StationInfo() {
               >
                 <CardHeader className="relative px-4">
                   <CardAction className="space-x-1">
+                    {selectedStation && <SaveButton station={selectedStation} />}
                     <Button
                       variant="ghost"
                       size="icon"
@@ -363,6 +365,7 @@ export default function StationInfo() {
           )}
           <StationTabs type={type} onTypeChange={setType} />
           <div className="absolute top-3.5 right-4 flex gap-1">
+            {selectedStation && <SaveButton station={selectedStation} />}
             <Button
               variant="ghost"
               size="icon"

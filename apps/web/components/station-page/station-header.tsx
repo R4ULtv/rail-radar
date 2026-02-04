@@ -9,6 +9,7 @@ import {
   MegaphoneIcon,
   ShareIcon,
 } from "lucide-react";
+import { SaveButton } from "@/components/save-button";
 
 interface StationHeaderProps {
   station: Station;
@@ -84,6 +85,7 @@ export function StationHeader({ station, info }: StationHeaderProps) {
         </div>
 
         <div className="flex gap-2 shrink-0">
+          <SaveButton station={station} size="icon-sm" />
           {station.geo && (
             <Button
               variant="ghost"
