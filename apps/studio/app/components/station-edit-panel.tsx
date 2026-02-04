@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from "react";
 import {
+  BookOpenIcon,
+  ChevronDownIcon,
   MapIcon,
   RadioTowerIcon,
   SaveIcon,
@@ -9,11 +11,17 @@ import {
   XIcon,
 } from "lucide-react";
 import { Button, buttonVariants } from "@repo/ui/components/button";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@repo/ui/components/collapsible";
 import { Input } from "@repo/ui/components/input";
 import { Label } from "@repo/ui/components/label";
 import type { Station } from "@repo/data";
 
 import { cn } from "@repo/ui/lib/utils";
+import { WikipediaInfo } from "./wikipedia-info";
 
 interface StationEditPanelProps {
   station: Station;
@@ -81,7 +89,7 @@ export function StationEditPanel({
           </Button>
         </div>
         <p className="mt-1 text-sm text-muted-foreground">
-          Update station details and coordinates
+          ID: <span className="font-mono">{station.id}</span>
         </p>
       </div>
 
@@ -161,6 +169,30 @@ export function StationEditPanel({
             </a>
           )}
         </div>
+
+        <Collapsible defaultOpen className="border-t border-border pt-4">
+          <CollapsibleTrigger className="flex w-full items-center justify-between text-sm font-medium">
+            <span className="flex items-center gap-2">
+              <BookOpenIcon className="size-4" />
+              Wikipedia Info
+            </span>
+            <ChevronDownIcon className="size-4 transition-transform in-data-panel-open:rotate-180" />
+          </CollapsibleTrigger>
+          <CollapsibleContent>
+            <WikipediaInfo
+              stationName={station.name}
+              currentCoordinates={
+                lat && lng
+                  ? { lat: parseFloat(lat), lng: parseFloat(lng) }
+                  : null
+              }
+              onUseCoordinates={(wikiLat, wikiLng) => {
+                setLat(wikiLat.toString());
+                setLng(wikiLng.toString());
+              }}
+            />
+          </CollapsibleContent>
+        </Collapsible>
 
         <div className="flex gap-2 pt-2 border-t border-border">
           <Button
