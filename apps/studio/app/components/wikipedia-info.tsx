@@ -131,14 +131,14 @@ function WikipediaContent({
           {distance !== null && (
             <div className="mt-2 text-xs text-muted-foreground">
               {distance < 1 ? (
-                <span className="text-green-600">Coordinates match</span>
+                <span className="text-emerald-400">Coordinates match</span>
               ) : (
                 <span>
                   Distance from current:{" "}
                   <span
                     className={cn(
                       "font-medium",
-                      distance > 1000 ? "text-amber-600" : "text-foreground",
+                      distance > 1000 ? "text-amber-400" : "text-foreground",
                     )}
                   >
                     {formatDistance(distance)}
@@ -177,10 +177,10 @@ function StatusBadge({
   label: string;
 }) {
   const statusColors: Record<StationStatus, string> = {
-    attiva: "bg-green-500/20 text-green-700 border-green-500/30",
-    soppressa: "bg-red-500/20 text-red-700 border-red-500/30",
-    chiusa: "bg-red-500/20 text-red-700 border-red-500/30",
-    unknown: "bg-gray-500/20 text-gray-300 border-gray-500/30",
+    attiva: "bg-emerald-500/20 text-emerald-400 border-emerald-500/40",
+    soppressa: "bg-red-500/20 text-red-400 border-red-500/40",
+    chiusa: "bg-amber-500/20 text-amber-400 border-amber-500/40",
+    unknown: "bg-zinc-500/20 text-zinc-400 border-zinc-500/40",
   };
 
   return (

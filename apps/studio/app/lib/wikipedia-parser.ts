@@ -202,40 +202,119 @@ function mapFieldsToInfobox(
 function inferStationStatus(wikitext: string): string {
   const lowerText = wikitext.toLowerCase();
 
-  if (
-    lowerText.includes("stazione soppressa") ||
-    lowerText.includes("è stata soppressa") ||
-    lowerText.includes("venne soppressa") ||
-    lowerText.includes("fu soppressa")
-  ) {
-    return "Soppressa";
+  // Check for "soppressa" (abolished) - strongest indicators first
+  const soppressaPatterns = [
+    "stazione soppressa",
+    "fermata soppressa",
+    "è stata soppressa",
+    "venne soppressa",
+    "fu soppressa",
+    "definitivamente soppressa",
+    "soppressione della stazione",
+    "soppressione della fermata",
+    "categoria:stazioni ferroviarie soppresse",
+    "|stato=soppressa",
+    "|stato = soppressa",
+  ];
+
+  for (const pattern of soppressaPatterns) {
+    if (lowerText.includes(pattern)) {
+      return "Soppressa";
+    }
   }
 
-  if (
-    lowerText.includes("stazione chiusa") ||
-    lowerText.includes("è stata chiusa") ||
-    lowerText.includes("venne chiusa") ||
-    lowerText.includes("fu chiusa") ||
-    lowerText.includes("stazione dismessa")
-  ) {
-    return "Chiusa";
+  // Check for "dismessa" (decommissioned) - similar to soppressa
+  const dismessaPatterns = [
+    "stazione dismessa",
+    "fermata dismessa",
+    "è stata dismessa",
+    "venne dismessa",
+    "fu dismessa",
+    "ormai dismessa",
+    "attualmente dismessa",
+  ];
+
+  for (const pattern of dismessaPatterns) {
+    if (lowerText.includes(pattern)) {
+      return "Soppressa";
+    }
   }
 
-  if (
-    lowerText.includes("== movimento ==") ||
-    lowerText.includes("è servita da treni") ||
-    lowerText.includes("trenitalia") ||
-    lowerText.includes("trenord") ||
-    lowerText.includes("italo")
-  ) {
-    return "Attiva";
+  // Check for "chiusa" (closed) - may be temporary
+  const chiusaPatterns = [
+    "stazione chiusa",
+    "fermata chiusa",
+    "è stata chiusa",
+    "venne chiusa",
+    "fu chiusa",
+    "attualmente chiusa",
+    "temporaneamente chiusa",
+    "chiusa al traffico",
+    "chiusa al servizio",
+    "|stato=chiusa",
+    "|stato = chiusa",
+  ];
+
+  for (const pattern of chiusaPatterns) {
+    if (lowerText.includes(pattern)) {
+      return "Chiusa";
+    }
   }
 
-  if (lowerText.includes("== interscambi ==")) {
-    return "Attiva";
+  // Check for "impresenziata" (unstaffed but active)
+  const impresenziataPatterns = [
+    "stazione impresenziata",
+    "fermata impresenziata",
+    "|stato=impresenziata",
+    "|stato = impresenziata",
+  ];
+
+  for (const pattern of impresenziataPatterns) {
+    if (lowerText.includes(pattern)) {
+      return "Attiva (impresenziata)";
+    }
   }
 
-  return "Attiva";
+  // Check for active indicators
+  const attivaPatterns = [
+    "== movimento ==",
+    "== servizi ==",
+    "== interscambi ==",
+    "è servita da treni",
+    "effettuano fermata",
+    "fermano i treni",
+    "treni regionali",
+    "servizio viaggiatori",
+    "|stato=attiva",
+    "|stato = attiva",
+    "|stato=in uso",
+    "|stato = in uso",
+  ];
+
+  for (const pattern of attivaPatterns) {
+    if (lowerText.includes(pattern)) {
+      return "Attiva";
+    }
+  }
+
+  // Check for train operators as active indicators (weaker signal)
+  const operatorPatterns = [
+    "trenitalia",
+    "trenord",
+    "italo",
+    "thello",
+    "tper",
+    "ferrovie dello stato",
+  ];
+
+  for (const pattern of operatorPatterns) {
+    if (lowerText.includes(pattern)) {
+      return "Attiva";
+    }
+  }
+
+  // Default to unknown if we can't determine
+  return "Sconosciuto";
 }
 
 /**
@@ -246,21 +325,41 @@ export function getStationStatus(stato?: string): StationStatus {
 
   const normalized = stato.toLowerCase().trim();
 
+  // Check for soppressa/dismessa (abolished/decommissioned)
   if (
     normalized.includes("soppress") ||
     normalized.includes("dismess") ||
     normalized.includes("non in uso") ||
-    normalized.includes("fuori uso")
+    normalized.includes("fuori uso") ||
+    normalized.includes("abbandonat") ||
+    normalized.includes("demolit")
   ) {
     return "soppressa";
   }
 
-  if (normalized.includes("attiv") || normalized.includes("in uso")) {
+  // Check for chiusa (closed)
+  if (
+    normalized.includes("chius") ||
+    normalized.includes("inattiv") ||
+    normalized.includes("sospeso")
+  ) {
+    return "chiusa";
+  }
+
+  // Check for attiva (active) - including impresenziata (unstaffed but active)
+  if (
+    normalized.includes("attiv") ||
+    normalized.includes("in uso") ||
+    normalized.includes("impresenziat") ||
+    normalized.includes("funzionante") ||
+    normalized.includes("operativ")
+  ) {
     return "attiva";
   }
 
-  if (normalized.includes("chius")) {
-    return "chiusa";
+  // "Sconosciuto" from inferStationStatus
+  if (normalized.includes("sconosciu")) {
+    return "unknown";
   }
 
   return "unknown";
