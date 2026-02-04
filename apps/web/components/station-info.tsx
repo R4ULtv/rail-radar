@@ -349,7 +349,7 @@ export default function StationInfo() {
         )}
       >
         <DrawerHeader className="pb-3 relative group-data-[vaul-drawer-direction=bottom]/drawer-content:text-left">
-          <DrawerTitle className="text-xl pr-20">
+          <DrawerTitle className="text-xl pr-39">
             {selectedStation?.name}
           </DrawerTitle>
           <DrawerDescription className="text-sm text-muted-foreground h-5">
