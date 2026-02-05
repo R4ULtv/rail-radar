@@ -3,9 +3,22 @@ import { Suspense } from "react";
 import { Map } from "@/components/map";
 import MapLoading from "@/components/map-loading";
 
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  name: "Rail Radar",
+  url: "https://www.railradar24.com",
+  description:
+    "Track Italian trains in real time. Get live delays, platform numbers, and departure info for all 2400+ train stations across Italy.",
+};
+
 export default function Home() {
   return (
     <main className="h-svh w-svw">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <Suspense fallback={<MapLoading />}>
         <Map />
         <div className="absolute bottom-2 left-3 text-[10px] text-white/60">

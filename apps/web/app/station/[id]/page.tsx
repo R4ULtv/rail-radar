@@ -71,6 +71,9 @@ export async function generateMetadata({
   return {
     title: station.name,
     description: `Live train departures and arrivals at ${station.name}. Real-time delays, platforms, and schedules.`,
+    alternates: {
+      canonical: `/station/${id}`,
+    },
     openGraph: {
       title: `${station.name} | Rail Radar`,
       description: `Live train departures and arrivals at ${station.name}. Real-time delays, platforms, and schedules.`,
@@ -86,8 +89,28 @@ export default async function StationPage({ params }: StationPageProps) {
     notFound();
   }
 
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "TrainStation",
+    name: station.name,
+    geo: {
+      "@type": "GeoCoordinates",
+      latitude: station.geo.lat,
+      longitude: station.geo.lng,
+    },
+    address: {
+      "@type": "PostalAddress",
+      addressCountry: "IT",
+    },
+    isAccessibleForFree: true,
+  };
+
   return (
     <div className="min-h-screen bg-background">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       {/* Static map hero */}
       <div className="relative h-48 md:h-64 w-full">
         <StaticMap
