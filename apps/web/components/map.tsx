@@ -60,33 +60,41 @@ export function Map() {
   useEffect(() => {
     if (hasUrlParams || hasInitialPosition) return;
 
-    const timeout = setTimeout(() => {
+    const setDefaultPosition = () => {
       setInitialPosition({
         latitude: DEFAULT_VIEW.lat,
         longitude: DEFAULT_VIEW.lng,
         zoom: DEFAULT_VIEW.zoom,
       });
-    }, 3000);
+    };
 
-    navigator.geolocation?.getCurrentPosition(
-      (pos) => {
-        clearTimeout(timeout);
-        const latitude = Math.round(pos.coords.latitude * 1000000) / 1000000;
-        const longitude = Math.round(pos.coords.longitude * 1000000) / 1000000;
-        setInitialPosition({ latitude, longitude, zoom: 12 });
-        setParams({ lat: latitude, lng: longitude, zoom: 12 });
-      },
-      () => {
-        clearTimeout(timeout);
-        setInitialPosition({
-          latitude: DEFAULT_VIEW.lat,
-          longitude: DEFAULT_VIEW.lng,
-          zoom: DEFAULT_VIEW.zoom,
-        });
-      },
-    );
-
-    return () => clearTimeout(timeout);
+    // Check if geolocation permission is already granted (without prompting)
+    if (navigator.permissions && navigator.geolocation) {
+      navigator.permissions
+        .query({ name: "geolocation" })
+        .then((result) => {
+          if (result.state === "granted") {
+            // Permission already granted, get location immediately
+            navigator.geolocation.getCurrentPosition(
+              (pos) => {
+                const latitude =
+                  Math.round(pos.coords.latitude * 1000000) / 1000000;
+                const longitude =
+                  Math.round(pos.coords.longitude * 1000000) / 1000000;
+                setInitialPosition({ latitude, longitude, zoom: 12 });
+                setParams({ lat: latitude, lng: longitude, zoom: 12 });
+              },
+              () => setDefaultPosition(),
+            );
+          } else {
+            // Permission not granted, use default view (don't prompt)
+            setDefaultPosition();
+          }
+        })
+        .catch(() => setDefaultPosition());
+    } else {
+      setDefaultPosition();
+    }
   }, [hasUrlParams, hasInitialPosition, setParams]);
 
   const handleMoveEnd = (e: ViewStateChangeEvent) => {

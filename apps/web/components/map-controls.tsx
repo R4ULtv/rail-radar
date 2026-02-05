@@ -35,22 +35,32 @@ export function MapControls() {
   }, [map]);
 
   React.useEffect(() => {
-    if (!navigator.geolocation) return;
+    if (!navigator.geolocation || !navigator.permissions) return;
 
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        const { longitude, latitude } = position.coords;
-        setUserLocation({ longitude, latitude });
-      },
-      () => {
-        // Permission denied or error - silently ignore
-      },
-      {
-        enableHighAccuracy: true,
-        timeout: 10000,
-        maximumAge: 60000,
-      },
-    );
+    // Only get location on mount if permission is already granted (don't prompt)
+    navigator.permissions
+      .query({ name: "geolocation" })
+      .then((result) => {
+        if (result.state === "granted") {
+          navigator.geolocation.getCurrentPosition(
+            (position) => {
+              const { longitude, latitude } = position.coords;
+              setUserLocation({ longitude, latitude });
+            },
+            () => {
+              // Error getting location - silently ignore
+            },
+            {
+              enableHighAccuracy: true,
+              timeout: 10000,
+              maximumAge: 60000,
+            },
+          );
+        }
+      })
+      .catch(() => {
+        // Permissions API not supported or error - silently ignore
+      });
   }, []);
 
   const handleZoomIn = React.useCallback(() => {
