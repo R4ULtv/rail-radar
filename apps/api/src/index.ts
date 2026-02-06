@@ -5,8 +5,10 @@ import { cors } from "hono/cors";
 import { stationsCoords } from "@repo/data/stations";
 import {
   getAnalyticsOverview,
+  getRfiStatus,
   getStationStats,
   getTrendingStations,
+  recordRfiRequest,
   recordStationVisit,
 } from "./analytics.js";
 import { fuzzySearch } from "./fuzzy.js";
@@ -48,6 +50,7 @@ app.get("/", (c) => {
       "GET /stations/:id":
         "Get station info with trains (optional: ?type=arrivals|departures)",
       "GET /analytics/overview": "Get global analytics overview",
+      "GET /rfi/status": "Get RFI request timing statistics",
       "GET /trains/:stationId": "Alias for /stations/:id (redirects)",
     },
   });
@@ -121,6 +124,42 @@ app.get(
     } catch {
       return c.json(
         { error: "Unable to fetch analytics data. Please try again later." },
+        500,
+      );
+    }
+  },
+);
+
+app.get(
+  "/rfi/status",
+  cache({
+    cacheName: "rfi-status-cache",
+    cacheControl: "public, max-age=60, stale-while-revalidate=30",
+  }),
+  async (c) => {
+    const period = c.req.query("period");
+    const validPeriods = ["hour", "day", "week"] as const;
+    const validPeriod: "hour" | "day" | "week" = validPeriods.includes(
+      period as "hour" | "day" | "week",
+    )
+      ? (period as "hour" | "day" | "week")
+      : "day";
+
+    try {
+      const status = await getRfiStatus(
+        c.env.CLOUDFLARE_ACCOUNT_ID,
+        c.env.CLOUDFLARE_API_TOKEN,
+        validPeriod,
+      );
+
+      return c.json({
+        timestamp: new Date().toISOString(),
+        period: validPeriod,
+        ...status,
+      });
+    } catch {
+      return c.json(
+        { error: "Unable to fetch RFI status data. Please try again later." },
         500,
       );
     }
@@ -253,7 +292,7 @@ app.get(
     const type = c.req.query("type") === "arrivals" ? "arrivals" : "departures";
 
     try {
-      const { trains, info } = await scrapeTrains(id, type);
+      const { trains, info, timing } = await scrapeTrains(id, type);
 
       // Record visit after successful response (non-blocking)
       const ip = c.req.header("cf-connecting-ip") ?? "unknown";
@@ -263,6 +302,14 @@ app.get(
           stationName: station.name,
           ip,
           type,
+        }),
+      );
+
+      // Record RFI request timing (non-blocking)
+      c.executionCtx.waitUntil(
+        recordRfiRequest(c.env.STATION_ANALYTICS, {
+          fetchMs: timing.fetchMs,
+          success: true,
         }),
       );
 
@@ -282,6 +329,14 @@ app.get(
       });
 
       if (error instanceof ScraperError) {
+        // Record RFI request timing for error case (non-blocking)
+        c.executionCtx.waitUntil(
+          recordRfiRequest(c.env.STATION_ANALYTICS, {
+            fetchMs: error.timing?.fetchMs ?? 0,
+            success: false,
+          }),
+        );
+
         return c.json({ error: error.message }, error.statusCode);
       }
       return c.json(

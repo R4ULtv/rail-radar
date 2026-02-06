@@ -1,10 +1,15 @@
 import type { Train } from "@repo/data";
 import type { ContentfulStatusCode } from "hono/utils/http-status";
 
+export interface ScraperTiming {
+  fetchMs: number;
+}
+
 export class ScraperError extends Error {
   constructor(
     message: string,
     public statusCode: ContentfulStatusCode,
+    public timing?: ScraperTiming,
   ) {
     super(message);
     this.name = "ScraperError";
@@ -75,6 +80,9 @@ function parseInfo(text: string): string | null {
 export interface ScrapeResult {
   trains: Train[];
   info: string | null;
+  timing: {
+    fetchMs: number;
+  };
 }
 
 // State class to manage parsing state across HTMLRewriter handlers
@@ -209,38 +217,47 @@ export async function scrapeTrains(
   type: "arrivals" | "departures" = "departures",
 ): Promise<ScrapeResult> {
   const url = buildUrl(stationId, type === "arrivals");
+  const startTime = performance.now();
 
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), FETCH_TIMEOUT_MS);
 
   let response: Response;
+  let fetchError: Error | null = null;
   try {
     response = await fetch(url, { signal: controller.signal });
   } catch (error) {
+    fetchError = error instanceof Error ? error : new Error(String(error));
     console.error(`[scraper] Fetch failed:`, {
       url,
-      error: error instanceof Error ? error.message : String(error),
-      name: error instanceof Error ? error.name : undefined,
+      error: fetchError.message,
+      name: fetchError.name,
     });
 
-    if (error instanceof Error && error.name === "AbortError") {
+    const fetchMs = performance.now() - startTime;
+    clearTimeout(timeoutId);
+
+    if (fetchError.name === "AbortError") {
       throw new ScraperError(
         "The train data source is taking too long to respond. Please try again.",
         504,
+        { fetchMs },
       );
     }
     throw new ScraperError(
       "Unable to connect to the train data source. Please try again.",
       502,
+      { fetchMs },
     );
-  } finally {
-    clearTimeout(timeoutId);
   }
+  const fetchMs = performance.now() - startTime;
+  clearTimeout(timeoutId);
 
   if (!response.ok) {
     throw new ScraperError(
       response.statusText || `HTTP ${response.status}`,
       response.status as ContentfulStatusCode,
+      { fetchMs },
     );
   }
 
@@ -304,5 +321,8 @@ export async function scrapeTrains(
   return {
     trains: state.trains,
     info: stationInfo || null,
+    timing: {
+      fetchMs,
+    },
   };
 }
