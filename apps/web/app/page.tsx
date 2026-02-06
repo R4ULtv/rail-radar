@@ -17,7 +17,9 @@ export default function Home() {
     <main className="h-svh w-svw">
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c"),
+        }}
       />
       <Suspense fallback={<MapLoading />}>
         <Map />

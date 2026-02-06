@@ -109,7 +109,9 @@ export default async function StationPage({ params }: StationPageProps) {
     <div className="min-h-screen bg-background">
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c"),
+        }}
       />
       {/* Static map hero */}
       <div className="relative h-48 md:h-64 w-full">
