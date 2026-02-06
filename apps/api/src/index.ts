@@ -19,6 +19,7 @@ const stations = stationsCoords.filter((s) => s.geo);
 type Bindings = {
   RATE_LIMITER: RateLimit;
   STATION_ANALYTICS: AnalyticsEngineDataset;
+  RFI_ANALYTICS: AnalyticsEngineDataset;
   CLOUDFLARE_ACCOUNT_ID: string;
   CLOUDFLARE_API_TOKEN: string;
 };
@@ -307,7 +308,7 @@ app.get(
 
       // Record RFI request timing (non-blocking)
       c.executionCtx.waitUntil(
-        recordRfiRequest(c.env.STATION_ANALYTICS, {
+        recordRfiRequest(c.env.RFI_ANALYTICS, {
           fetchMs: timing.fetchMs,
           success: true,
         }),
@@ -331,7 +332,7 @@ app.get(
       if (error instanceof ScraperError) {
         // Record RFI request timing for error case (non-blocking)
         c.executionCtx.waitUntil(
-          recordRfiRequest(c.env.STATION_ANALYTICS, {
+          recordRfiRequest(c.env.RFI_ANALYTICS, {
             fetchMs: error.timing?.fetchMs ?? 0,
             success: false,
           }),
