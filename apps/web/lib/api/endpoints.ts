@@ -42,3 +42,11 @@ export function stationStats(
 ): string {
   return `/stations/${stationId}/stats?period=${period}`;
 }
+
+/**
+ * Build URL for RFI status endpoint
+ * @param period - Time period for status data (default: "day")
+ */
+export function rfiStatus(period: string = "day"): string {
+  return `/rfi/status?period=${period}`;
+}
