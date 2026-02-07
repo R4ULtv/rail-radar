@@ -4,16 +4,58 @@ import type { MapMouseEvent } from "mapbox-gl";
 import { useEffect, useMemo } from "react";
 import { Layer, Source, useMap } from "react-map-gl/mapbox";
 import type { LayerProps } from "react-map-gl/mapbox";
-import { stationsCoords } from "@repo/data/stations";
+import { stationsCoords, metroStations } from "@repo/data/stations";
 import { useSelectedStation } from "@/hooks/use-selected-station";
 
 const LAYER_ID = "stations";
 const ICON_ID = "station-icon";
+const METRO_ICON_ID = "metro-icon";
 
-const ICON_SVG = `<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 512 512" fill="none">
-  <rect id="a" width="464" height="464" x="24" y="24" fill="#4B61D1" stroke="#FFF" stroke-opacity="100%" stroke-width="48" paint-order="stroke" rx="112"/>
-  <svg xmlns="http://www.w3.org/2000/svg" width="352" height="352" x="80" y="80" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" alignment-baseline="middle" viewBox="0 0 24 24"><path d="M8 3.1V7a4 4 0 0 0 8 0V3.1M9 15l-1-1M15 15l1-1"/><path d="M9 19c-2.8 0-5-2.2-5-5v-4a8 8 0 0 1 16 0v4c0 2.8-2.2 5-5 5ZM8 19l-2 3M16 19l2 3"/>
-  </svg></svg>`;
+const ICON_SVG = `<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" fill="none" viewBox="0 0 512 512">
+  <rect width="464" height="464" x="24" y="24" fill="#4b61d1" stroke="#fff" stroke-opacity="100%" stroke-width="48" paint-order="stroke" rx="112"/>
+  <svg xmlns="http://www.w3.org/2000/svg" width="352" height="352" x="80" y="80" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" alignment-baseline="middle" viewBox="0 0 24 24">
+    <path d="M8 3.1V7a4 4 0 0 0 8 0V3.1M9 15l-1-1m7 1 1-1"/>
+    <path d="M9 19c-2.8 0-5-2.2-5-5v-4a8 8 0 0 1 16 0v4c0 2.8-2.2 5-5 5Zm-1 0-2 3m10-3 2 3"/>
+  </svg>
+</svg>`;
+
+const METRO_ICON_SVG = `<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" fill="none" viewBox="0 0 512 512">
+  <rect width="464" height="464" x="24" y="24" fill="#f22a18" stroke="#fff" stroke-opacity="100%" stroke-width="48" paint-order="stroke" rx="112"/>
+  <svg xmlns="http://www.w3.org/2000/svg" width="452" height="452" x="30" y="30" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" alignment-baseline="middle" viewBox="0 0 24 24">
+    <path d="M8 16V8.5a.5.5 0 0 1 .9-.3l2.7 3.599a.5.5 0 0 0 .8 0l2.7-3.6a.5.5 0 0 1 .9.3V16"/>
+  </svg>
+</svg>`;
+
+const metroLayerStyle: LayerProps = {
+  id: "metro-stations",
+  type: "symbol",
+  minzoom: 13,
+  layout: {
+    "icon-image": METRO_ICON_ID,
+    "icon-size": ["interpolate", ["linear"], ["zoom"], 14, 0.25, 16, 0.35],
+    "icon-allow-overlap": false,
+    "icon-anchor": "center",
+  },
+};
+
+const metroLabelStyle: LayerProps = {
+  id: "metro-labels",
+  type: "symbol",
+  minzoom: 15,
+  layout: {
+    "text-field": ["get", "name"],
+    "text-size": 12,
+    "text-offset": [0, 1.3],
+    "text-anchor": "top",
+    "text-optional": true,
+  },
+  paint: {
+    "text-color": "#ffffff",
+    "text-halo-color": "rgba(0,0,0,0.5)",
+    "text-halo-width": 1.5,
+    "text-halo-blur": 1,
+  },
+};
 
 const stationLayerStyle: LayerProps = {
   id: LAYER_ID,
@@ -118,27 +160,49 @@ function createStationsGeoJSON(): GeoJSON.FeatureCollection {
   };
 }
 
+function createMetroGeoJSON(): GeoJSON.FeatureCollection {
+  return {
+    type: "FeatureCollection",
+    features: metroStations
+      .filter((station) => station.geo)
+      .map((station) => ({
+        type: "Feature" as const,
+        id: station.id,
+        properties: {
+          id: station.id,
+          name: station.name,
+        },
+        geometry: {
+          type: "Point" as const,
+          coordinates: [station.geo!.lng, station.geo!.lat],
+        },
+      })),
+  };
+}
+
 export function StationMarkers() {
   const { current: map } = useMap();
   const { selectStation } = useSelectedStation();
 
   const geojsonData = useMemo(() => createStationsGeoJSON(), []);
+  const metroGeojsonData = useMemo(() => createMetroGeoJSON(), []);
 
   useEffect(() => {
     if (!map) return;
 
-    const loadIcon = () => {
-      if (map.hasImage(ICON_ID)) return;
+    const loadIcon = (id: string, svg: string) => {
+      if (map.hasImage(id)) return;
       const img = new Image(64, 64);
       img.onload = () => {
-        if (!map.hasImage(ICON_ID)) {
-          map.addImage(ICON_ID, img);
+        if (!map.hasImage(id)) {
+          map.addImage(id, img);
         }
       };
-      img.src = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(ICON_SVG)}`;
+      img.src = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`;
     };
 
-    loadIcon();
+    loadIcon(ICON_ID, ICON_SVG);
+    loadIcon(METRO_ICON_ID, METRO_ICON_SVG);
 
     const handleClick = (
       e: MapMouseEvent & { features?: GeoJSON.Feature[] },
@@ -179,6 +243,11 @@ export function StationMarkers() {
       <Layer {...railwayTunnelStyle} />
       <Layer {...railwayLineStyle} />
       <Layer {...railwayBridgeStyle} />
+
+      <Source id="metro-source" type="geojson" data={metroGeojsonData}>
+        <Layer {...metroLayerStyle} />
+        <Layer {...metroLabelStyle} />
+      </Source>
 
       <Source id="stations-source" type="geojson" data={geojsonData}>
         <Layer {...stationLayerStyle} />
