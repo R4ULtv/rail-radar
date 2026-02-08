@@ -41,7 +41,7 @@ const metroLayerStyle: LayerProps = {
 const metroLabelStyle: LayerProps = {
   id: "metro-labels",
   type: "symbol",
-  minzoom: 15,
+  minzoom: 14.5,
   layout: {
     "text-field": ["get", "name"],
     "text-size": 12,
