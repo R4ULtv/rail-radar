@@ -10,6 +10,8 @@ import InterCityNotte from "./intercity-notte";
 import Sncf from "./sncf";
 import Sad from "./sad";
 import Obb from "./obb";
+import Bls from "./bls";
+import Tua from "./tua";
 
 type BrandIconProps = SVGProps<SVGSVGElement>;
 
@@ -27,13 +29,14 @@ const brandIcons: Record<string, ComponentType<BrandIconProps>> = {
   trenord: Trenord, // Lombardia
   "trenitalia tper": Tper, // Emilia-Romagna
   sad: Sad, // Trentino
+  tua: Tua, // Abruzzo
   fse: Trenitalia, // Puglia
   "leonardo express": Trenitalia,
   // Other
   sncf: Sncf, // France
   obb: Obb, // Austria
   "obb railjet": Obb,
-  // BLS (Switz)
+  bls: Bls, // Switzerland
 };
 
 interface BrandLogoProps extends BrandIconProps {
