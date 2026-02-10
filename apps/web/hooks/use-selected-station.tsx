@@ -1,9 +1,9 @@
 "use client";
 
 import * as React from "react";
-import { useQueryState, parseAsInteger } from "nuqs";
+import { useQueryState, parseAsString } from "nuqs";
 import { useMap } from "react-map-gl/mapbox";
-import { stationsCoords } from "@repo/data/stations";
+import { stations } from "@repo/data/stations";
 import type { Station } from "@repo/data";
 import { useSavedStations } from "./use-saved-stations";
 
@@ -12,8 +12,8 @@ interface SelectedStationContextValue {
   selectStation: (station: Station) => void;
   clearStation: () => void;
   savedStations: Station[];
-  isSaved: (stationId: number) => boolean;
-  toggleSaved: (stationId: number) => void;
+  isSaved: (stationId: string) => boolean;
+  toggleSaved: (stationId: string) => void;
   maxSaved: number;
 }
 
@@ -28,7 +28,7 @@ export function SelectedStationProvider({
   const { current: map } = useMap();
   const [stationId, setStationId] = useQueryState(
     "station",
-    parseAsInteger.withOptions({ history: "push", shallow: true }),
+    parseAsString.withOptions({ history: "push", shallow: true }),
   );
 
   // Use the standalone saved stations hook
@@ -36,22 +36,23 @@ export function SelectedStationProvider({
 
   const selectedStation = React.useMemo(() => {
     if (!stationId) return null;
-    const station = stationsCoords.find((s) => s.id === stationId);
+    const station = stations.find((s) => s.id === stationId);
     return station ?? null;
   }, [stationId]);
 
   const selectStation = React.useCallback(
     (station: Station) => {
-      // Use provided geo or look it up from stationsCoords
-      const geo =
-        station.geo ?? stationsCoords.find((s) => s.id === station.id)?.geo;
+      // Use provided geo or look it up from stations
+      const geo = station.geo ?? stations.find((s) => s.id === station.id)?.geo;
       if (!geo) return;
 
-      setStationId(station.id);
+      if (station.type === "rail") {
+        setStationId(station.id);
+      }
 
       map?.flyTo({
         center: [geo.lng, geo.lat],
-        zoom: 14,
+        zoom: station.type === "rail" ? 14 : 15,
       });
     },
     [map, setStationId],

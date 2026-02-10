@@ -1,13 +1,13 @@
 "use client";
 
 import * as React from "react";
-import { stationsCoords } from "@repo/data/stations";
+import { stations } from "@repo/data/stations";
 import type { Station } from "@repo/data";
 
 const SAVED_STATIONS_KEY = "saved-stations";
 export const MAX_SAVED_STATIONS = 10;
 
-function saveSavedStationIds(ids: number[]) {
+function saveSavedStationIds(ids: string[]) {
   try {
     localStorage.setItem(SAVED_STATIONS_KEY, JSON.stringify(ids));
   } catch {
@@ -15,7 +15,7 @@ function saveSavedStationIds(ids: number[]) {
   }
 }
 
-function loadSavedStationIds(): number[] {
+function loadSavedStationIds(): string[] {
   try {
     const stored = localStorage.getItem(SAVED_STATIONS_KEY);
     return stored ? JSON.parse(stored) : [];
@@ -28,12 +28,12 @@ function loadSavedStationIds(): number[] {
 const SAVED_CHANGED_EVENT = "saved-stations-changed";
 
 export function useSavedStations() {
-  const [savedIds, setSavedIds] = React.useState<number[]>([]);
+  const [savedIds, setSavedIds] = React.useState<string[]>([]);
 
   // Derive full station objects from IDs
   const savedStations = React.useMemo(() => {
     return savedIds
-      .map((id) => stationsCoords.find((s) => s.id === id))
+      .map((id) => stations.find((s) => s.id === id))
       .filter((s): s is Station => s !== undefined);
   }, [savedIds]);
 
@@ -62,16 +62,16 @@ export function useSavedStations() {
   }, []);
 
   const isSaved = React.useCallback(
-    (stationId: number) => {
+    (stationId: string) => {
       return savedIds.includes(stationId);
     },
     [savedIds],
   );
 
-  const toggleSaved = React.useCallback((stationId: number) => {
+  const toggleSaved = React.useCallback((stationId: string) => {
     const currentIds = loadSavedStationIds();
     const exists = currentIds.includes(stationId);
-    let updated: number[];
+    let updated: string[];
 
     if (exists) {
       updated = currentIds.filter((id) => id !== stationId);
