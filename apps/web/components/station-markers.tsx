@@ -4,7 +4,7 @@ import type { MapMouseEvent } from "mapbox-gl";
 import { useEffect, useMemo } from "react";
 import { Layer, Source, useMap } from "react-map-gl/mapbox";
 import type { LayerProps } from "react-map-gl/mapbox";
-import { stationsCoords, metroStations } from "@repo/data/stations";
+import { stations } from "@repo/data/stations";
 import { useSelectedStation } from "@/hooks/use-selected-station";
 
 const LAYER_ID = "stations";
@@ -140,43 +140,42 @@ const railwayTunnelStyle: LayerProps = {
   },
 };
 
+const railStations = stations.filter((s) => s.type === "rail" && s.geo);
+const metroStations = stations.filter((s) => s.type === "metro" && s.geo);
+
 function createStationsGeoJSON(): GeoJSON.FeatureCollection {
   return {
     type: "FeatureCollection",
-    features: stationsCoords
-      .filter((station) => station.geo)
-      .map((station) => ({
-        type: "Feature" as const,
+    features: railStations.map((station) => ({
+      type: "Feature" as const,
+      properties: {
         id: station.id,
-        properties: {
-          id: station.id,
-          name: station.name,
-        },
-        geometry: {
-          type: "Point" as const,
-          coordinates: [station.geo!.lng, station.geo!.lat],
-        },
-      })),
+        name: station.name,
+        type: station.type,
+      },
+      geometry: {
+        type: "Point" as const,
+        coordinates: [station.geo!.lng, station.geo!.lat],
+      },
+    })),
   };
 }
 
 function createMetroGeoJSON(): GeoJSON.FeatureCollection {
   return {
     type: "FeatureCollection",
-    features: metroStations
-      .filter((station) => station.geo)
-      .map((station) => ({
-        type: "Feature" as const,
+    features: metroStations.map((station) => ({
+      type: "Feature" as const,
+      properties: {
         id: station.id,
-        properties: {
-          id: station.id,
-          name: station.name,
-        },
-        geometry: {
-          type: "Point" as const,
-          coordinates: [station.geo!.lng, station.geo!.lat],
-        },
-      })),
+        name: station.name,
+        type: station.type,
+      },
+      geometry: {
+        type: "Point" as const,
+        coordinates: [station.geo!.lng, station.geo!.lat],
+      },
+    })),
   };
 }
 
@@ -210,12 +209,13 @@ export function StationMarkers() {
       const feature = e.features?.[0];
       if (!feature?.properties) return;
 
-      const id = feature.properties.id as number | undefined;
+      const id = feature.properties.id as string | undefined;
       const name = feature.properties.name as string | undefined;
+      const type = feature.properties.type as "rail" | "metro" | undefined;
 
       if (id === undefined || name === undefined) return;
 
-      selectStation({ id, name });
+      selectStation({ id, name, type: type ?? "rail" });
     };
 
     const handleMouseEnter = () => {

@@ -5,7 +5,7 @@ import { Skeleton } from "@repo/ui/components/skeleton";
 import { useStationStats } from "@/hooks/use-station-stats";
 
 interface StationStatsProps {
-  stationId: number;
+  stationId: string;
 }
 
 export function StationStats({ stationId }: StationStatsProps) {

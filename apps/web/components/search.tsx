@@ -50,7 +50,7 @@ const StationList = React.memo(function StationList({
   focusedIndex?: number;
   startIndex?: number;
   onFocusIndex?: (index: number) => void;
-  visits?: Map<number, number>;
+  visits?: Map<string, number>;
 }) {
   if (stations.length === 0) return null;
 
@@ -117,17 +117,18 @@ export function Search() {
     if (!trendingData?.stations) {
       return {
         trendingStations: [] as Station[],
-        trendingVisits: new Map<number, number>(),
+        trendingVisits: new Map<string, number>(),
       };
     }
-    const stations = trendingData.stations.map((s) => ({
+    const trendingStations: Station[] = trendingData.stations.map((s) => ({
       id: s.stationId,
       name: s.stationName,
+      type: "rail" as const,
     }));
     const visits = new Map(
       trendingData.stations.map((s) => [s.stationId, s.visits]),
     );
-    return { trendingStations: stations, trendingVisits: visits };
+    return { trendingStations, trendingVisits: visits };
   }, [trendingData]);
 
   const isSearchActive = query.trim().length > 0;

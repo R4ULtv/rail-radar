@@ -6,7 +6,7 @@ import { TrainColumn } from "./train-column";
 import { useIsMobile } from "@repo/ui/hooks/use-mobile";
 
 interface TrainBoardProps {
-  stationId: number;
+  stationId: string;
 }
 
 export function TrainBoard({ stationId }: TrainBoardProps) {
