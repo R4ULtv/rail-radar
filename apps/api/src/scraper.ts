@@ -1,7 +1,7 @@
 import type { Train } from "@repo/data";
 import type { ContentfulStatusCode } from "hono/utils/http-status";
 
-export interface ScraperTiming {
+export interface FetchTiming {
   fetchMs: number;
 }
 
@@ -9,75 +9,119 @@ export class ScraperError extends Error {
   constructor(
     message: string,
     public statusCode: ContentfulStatusCode,
-    public timing?: ScraperTiming,
+    public timing?: FetchTiming,
   ) {
     super(message);
     this.name = "ScraperError";
   }
 }
 
-const BASE_URL =
-  "https://iechub.rfi.it/ArriviPartenze/en/ArrivalsDepartures/Monitor";
+const BASE_URL = "http://www.viaggiatreno.it/infomobilita/resteasy/viaggiatreno";
+const FETCH_TIMEOUT_MS = 30_000;
 
-function buildUrl(stationId: number, arrivals: boolean): string {
-  if (arrivals) {
-    return `${BASE_URL}?placeId=${stationId}&arrivals=True`;
+function buildDateTime(): string {
+  const now = new Date();
+  return now.toString().replace(/\s/g, "%20").replace(/\+/g, "%2B");
+}
+
+interface VTTrain {
+  compNumeroTreno?: string;
+  numeroTreno?: number;
+  categoriaDescrizione?: string;
+  compTipologiaTreno?: string;
+  categoria?: string;
+  codiceCliente?: number;
+  origine?: string;
+  destinazione?: string;
+  compOrarioPartenza?: string;
+  compOrarioArrivo?: string;
+  ritardo?: number;
+  binarioProgrammatoPartenzaDescrizione?: string;
+  binarioEffettivoPartenzaDescrizione?: string;
+  binarioProgrammatoArrivoDescrizione?: string;
+  binarioEffettivoArrivoDescrizione?: string;
+  compRitpiuInfo?: string;
+  provpiuInfo?: string;
+  cirpiuInfo?: boolean;
+  subTitle?: string;
+  inStazione?: boolean;
+  nonPartito?: boolean;
+}
+
+function mapCategory(vt: VTTrain): string | null {
+  return vt.categoriaDescrizione?.trim() || vt.compTipologiaTreno?.trim() || vt.categoria?.trim() || null;
+}
+
+// Map codiceCliente to operator brand names (matching BrandLogo keys)
+const brandByClientCode: Record<number, string> = {
+  1: "Trenitalia",       // Trenitalia AV (Frecce)
+  2: "Trenitalia",       // Trenitalia Regionale
+  4: "Intercity",        // Trenitalia IC
+  18: "Trenitalia Tper", // TPER
+  63: "Trenord",         // Trenord
+  64: "OBB",             // ÖBB
+};
+
+function mapBrand(vt: VTTrain): string | null {
+  const brand = vt.codiceCliente != null ? brandByClientCode[vt.codiceCliente] : undefined;
+  if (brand) {
+    const cat = vt.categoria?.trim() || vt.categoriaDescrizione?.trim() || "";
+    // For Trenitalia AV, refine based on category
+    if (vt.codiceCliente === 1) {
+      if (cat === "FR") return "Frecciarossa";
+      if (cat === "FA") return "Frecciargento";
+      if (cat === "FB") return "Frecciabianca";
+    }
+    // For Trenitalia IC, distinguish notte
+    if (vt.codiceCliente === 4) {
+      if (cat === "ICN") return "Intercity Notte";
+    }
+    return brand;
   }
-  return `${BASE_URL}?Arrivals=False&Search=&PlaceId=${stationId}`;
+  return null;
 }
 
-interface DelayResult {
-  delay: number | null;
-  cancelled: boolean;
+function mapStatus(vt: VTTrain, type: "arrivals" | "departures"): Train["status"] {
+  if (vt.subTitle?.toLowerCase().includes("cancellato")) return "cancelled";
+  if (vt.provpiuInfo?.toLowerCase().includes("cancellato")) return "cancelled";
+  if (vt.cirpiuInfo === false) return "cancelled";
+  if (vt.inStazione) return type === "arrivals" ? "incoming" : "departing";
+  if (vt.nonPartito === false && type === "departures") return "departing";
+  return null;
 }
 
-function parseDelay(text: string): DelayResult {
-  const trimmed = text.trim();
-  if (trimmed === "" || trimmed.toLowerCase() === "on time") {
-    return { delay: 0, cancelled: false };
+function mapTrain(vt: VTTrain, type: "arrivals" | "departures"): Train {
+  const isDeparture = type === "departures";
+
+  const platform = isDeparture
+    ? (vt.binarioEffettivoPartenzaDescrizione?.trim() || vt.binarioProgrammatoPartenzaDescrizione?.trim() || null)
+    : (vt.binarioEffettivoArrivoDescrizione?.trim() || vt.binarioProgrammatoArrivoDescrizione?.trim() || null);
+
+  const scheduledTime = isDeparture
+    ? (vt.compOrarioPartenza?.trim() ?? "")
+    : (vt.compOrarioArrivo?.trim() ?? "");
+
+  const train: Train = {
+    brand: mapBrand(vt),
+    category: mapCategory(vt),
+    trainNumber: vt.compNumeroTreno?.trim() || String(vt.numeroTreno ?? ""),
+    scheduledTime,
+    delay: vt.ritardo ?? null,
+    platform,
+    status: mapStatus(vt, type),
+    info: vt.compRitpiuInfo?.trim() || null,
+  };
+
+  if (isDeparture) {
+    train.destination = vt.destinazione?.trim() ?? "";
+  } else {
+    train.origin = vt.origine?.trim() ?? "";
   }
-  if (trimmed.toLowerCase() === "cancelled") {
-    return { delay: null, cancelled: true };
-  }
-  const num = parseInt(trimmed, 10);
-  return { delay: isNaN(num) ? null : num, cancelled: false };
+
+  return train;
 }
 
-function parseCategory(text: string | null): string | null {
-  if (!text) return null;
-  return (
-    text
-      .replace(/^Categoria\s+/i, "")
-      .replace(/&#?\w+;/g, "") // Remove HTML entities like &#39; &nbsp; etc.
-      .trim() || null
-  );
-}
-
-function decodeHtmlEntities(text: string): string {
-  return text
-    .replace(/&#(\d+);/g, (_, code) => String.fromCharCode(parseInt(code, 10)))
-    .replace(/&#x([0-9a-fA-F]+);/g, (_, code) =>
-      String.fromCharCode(parseInt(code, 16)),
-    )
-    .replace(/&nbsp;/gi, " ")
-    .replace(/&amp;/gi, "&")
-    .replace(/&lt;/gi, "<")
-    .replace(/&gt;/gi, ">")
-    .replace(/&quot;/gi, '"')
-    .replace(/&apos;/gi, "'");
-}
-
-function parseInfo(text: string): string | null {
-  const trimmed = text.trim();
-  if (!trimmed) return null;
-  const match = trimmed.match(/STOPS AT:\s*(.+)/i);
-  if (match?.[1]) {
-    return match[1].trim();
-  }
-  return trimmed || null;
-}
-
-export interface ScrapeResult {
+export interface FetchResult {
   trains: Train[];
   info: string | null;
   timing: {
@@ -85,159 +129,27 @@ export interface ScrapeResult {
   };
 }
 
-// State class to manage parsing state across HTMLRewriter handlers
-class ParserState {
-  trains: Train[] = [];
-  stationInfo = "";
-  type: "arrivals" | "departures";
-
-  // Row parsing state
-  inTbody = false;
-  currentTrain: Partial<Train & { cancelled: boolean }> = {};
-  cellIndex = -1;
-  cellText = "";
-  cellImgAlts: string[] = [];
-  cellImgSrc = "";
-  cellInfoText = ""; // Text from .testoinfoaggiuntive
-
-  constructor(type: "arrivals" | "departures") {
-    this.type = type;
-  }
-
-  processCellData(): void {
-    const text = this.cellText.trim();
-    const imgAlts = this.cellImgAlts;
-    const imgSrc = this.cellImgSrc;
-    const train = this.currentTrain;
-
-    switch (this.cellIndex) {
-      case 0: // Brand (from img alt)
-        train.brand = imgAlts[0] || null;
-        break;
-      case 1: {
-        // Category (from img alt or text)
-        const rawCat = imgAlts[0] || text;
-        train.category = parseCategory(rawCat);
-        break;
-      }
-      case 2: // Train number
-        train.trainNumber = text;
-        break;
-      case 3: // Origin/Destination
-        if (this.type === "departures") {
-          train.destination = text;
-        } else {
-          train.origin = text;
-        }
-        break;
-      case 4: // Scheduled time
-        train.scheduledTime = text;
-        break;
-      case 5: {
-        // Delay
-        const delayResult = parseDelay(text);
-        train.delay = delayResult.delay;
-        train.cancelled = delayResult.cancelled;
-        break;
-      }
-      case 6: // Platform
-        train.platform = text || null;
-        break;
-      case 7: // Status (from img src - check for Lampeggio)
-        if (
-          imgSrc.includes("LampeggioGold") ||
-          imgSrc.includes("LampeggioGrey")
-        ) {
-          train.status = this.type === "arrivals" ? "incoming" : "departing";
-        }
-        break;
-      case 8: // Info (from .testoinfoaggiuntive div)
-        train.info = parseInfo(this.cellInfoText);
-        break;
-    }
-  }
-
-  finalizeRow(): void {
-    // Process the last cell if we have one
-    if (this.cellIndex >= 0) {
-      this.processCellData();
-    }
-
-    // Only add if we have a train number
-    if (this.currentTrain.trainNumber) {
-      // Check if info contains "CANCELLATO" and update status accordingly
-      let isCancelled = this.currentTrain.cancelled ?? false;
-      const info = this.currentTrain.info ?? null;
-      if (info && info.toUpperCase().includes("CANCELLATO")) {
-        isCancelled = true;
-      }
-
-      const train: Train = {
-        brand: this.currentTrain.brand ?? null,
-        category: this.currentTrain.category ?? null,
-        trainNumber: this.currentTrain.trainNumber,
-        ...(this.type === "departures"
-          ? { destination: this.currentTrain.destination ?? "" }
-          : { origin: this.currentTrain.origin ?? "" }),
-        scheduledTime: this.currentTrain.scheduledTime ?? "",
-        delay: this.currentTrain.delay ?? null,
-        platform: this.currentTrain.platform ?? null,
-        status: isCancelled ? "cancelled" : (this.currentTrain.status ?? null),
-        info: info,
-      };
-      this.trains.push(train);
-    }
-
-    // Reset for next row
-    this.currentTrain = {};
-    this.cellIndex = -1;
-    this.cellText = "";
-    this.cellImgAlts = [];
-    this.cellImgSrc = "";
-    this.cellInfoText = "";
-  }
-
-  startNewCell(): void {
-    // Process previous cell if we have one
-    if (this.cellIndex >= 0) {
-      this.processCellData();
-    }
-    this.cellIndex++;
-    this.cellText = "";
-    this.cellImgAlts = [];
-    this.cellImgSrc = "";
-    this.cellInfoText = "";
-  }
-}
-
-const FETCH_TIMEOUT_MS = 30_000;
-
-export async function scrapeTrains(
-  stationId: number,
+export async function fetchTrains(
+  stationCode: string,
   type: "arrivals" | "departures" = "departures",
-): Promise<ScrapeResult> {
-  const url = buildUrl(stationId, type === "arrivals");
+): Promise<FetchResult> {
+  const endpoint = type === "arrivals" ? "arrivi" : "partenze";
+  const datetime = buildDateTime();
+  const url = `${BASE_URL}/${endpoint}/${stationCode}/${datetime}`;
   const startTime = performance.now();
 
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), FETCH_TIMEOUT_MS);
 
   let response: Response;
-  let fetchError: Error | null = null;
   try {
     response = await fetch(url, { signal: controller.signal });
   } catch (error) {
-    fetchError = error instanceof Error ? error : new Error(String(error));
-    console.error(`[scraper] Fetch failed:`, {
-      url,
-      error: fetchError.message,
-      name: fetchError.name,
-    });
-
     const fetchMs = performance.now() - startTime;
     clearTimeout(timeoutId);
 
-    if (fetchError.name === "AbortError") {
+    const err = error instanceof Error ? error : new Error(String(error));
+    if (err.name === "AbortError") {
       throw new ScraperError(
         "The train data source is taking too long to respond. Please try again.",
         504,
@@ -250,6 +162,7 @@ export async function scrapeTrains(
       { fetchMs },
     );
   }
+
   const fetchMs = performance.now() - startTime;
   clearTimeout(timeoutId);
 
@@ -261,68 +174,27 @@ export async function scrapeTrains(
     );
   }
 
-  const state = new ParserState(type);
-
-  const rewriter = new HTMLRewriter()
-    .on("table tbody", {
-      element() {
-        state.inTbody = true;
-      },
-    })
-    .on("table tbody tr", {
-      element() {
-        // Finalize previous row when starting a new one
-        if (state.cellIndex >= 0) {
-          state.finalizeRow();
-        }
-        state.currentTrain = {};
-        state.cellIndex = -1;
-        state.cellText = "";
-        state.cellImgAlts = [];
-        state.cellImgSrc = "";
-      },
-    })
-    .on("table tbody tr td", {
-      element() {
-        state.startNewCell();
-      },
-      text(chunk) {
-        state.cellText += chunk.text;
-      },
-    })
-    .on("table tbody tr td img", {
-      element(el) {
-        const alt = el.getAttribute("alt");
-        if (alt) state.cellImgAlts.push(alt);
-        const src = el.getAttribute("src");
-        if (src) state.cellImgSrc = src;
-      },
-    })
-    .on("table tbody tr td .testoinfoaggiuntive", {
-      text(chunk) {
-        state.cellInfoText += chunk.text;
-      },
-    })
-    .on(".barrainfostazione .marqueeinfosupp", {
-      text(chunk) {
-        state.stationInfo += chunk.text;
-      },
-    });
-
-  // Consume the transformed response to trigger parsing
-  await rewriter.transform(response).text();
-
-  // Finalize the last row
-  if (state.cellIndex >= 0) {
-    state.finalizeRow();
+  const text = await response.text();
+  if (!text.trim()) {
+    return { trains: [], info: null, timing: { fetchMs } };
   }
 
-  const stationInfo = decodeHtmlEntities(state.stationInfo).trim();
+  let vtTrains: VTTrain[];
+  try {
+    vtTrains = JSON.parse(text);
+  } catch {
+    throw new ScraperError("Invalid response from train data source.", 502, { fetchMs });
+  }
+
+  if (!Array.isArray(vtTrains)) {
+    return { trains: [], info: null, timing: { fetchMs } };
+  }
+
+  const trains = vtTrains.map((vt) => mapTrain(vt, type));
+
   return {
-    trains: state.trains,
-    info: stationInfo || null,
-    timing: {
-      fetchMs,
-    },
+    trains,
+    info: null,
+    timing: { fetchMs },
   };
 }
