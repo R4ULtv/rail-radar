@@ -24,9 +24,7 @@ function getStation(id: string): StationWithGeo | null {
 
 export async function generateStaticParams() {
   return stations
-    .filter((s) => s.type === "rail" && s.geo)
-    .sort((a, b) => a.importance - b.importance)
-    .slice(0, 50)
+    .filter((s) => s.type === "rail" && s.geo && s.importance <= 2)
     .map((s) => ({ id: s.id }));
 }
 export const dynamicParams = true;
