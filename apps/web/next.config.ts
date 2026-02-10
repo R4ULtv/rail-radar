@@ -11,6 +11,15 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  async redirects() {
+    return [
+      {
+        source: "/station/:id(\\d+)",
+        destination: "/station/IT:id",
+        permanent: true,
+      },
+    ];
+  },
   async headers() {
     return [
       {

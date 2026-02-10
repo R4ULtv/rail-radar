@@ -1,11 +1,11 @@
 import { MetadataRoute } from "next";
-import { stationsCoords } from "@repo/data";
+import { stations } from "@repo/data";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = "https://www.railradar24.com";
 
-  const stationRoutes: MetadataRoute.Sitemap = stationsCoords
-    .filter((station) => station.geo)
+  const stationRoutes: MetadataRoute.Sitemap = stations
+    .filter((station) => station.type === "rail" && station.geo)
     .map((station) => ({
       url: `${baseUrl}/station/${station.id}`,
       lastModified: new Date(),
