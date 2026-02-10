@@ -1,7 +1,8 @@
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import Link from "next/link";
-import { stationsCoords, type Station } from "@repo/data";
+import { stations } from "@repo/data/stations";
+import type { Station } from "@repo/data";
 import { Button } from "@repo/ui/components/button";
 import { ArrowLeftIcon } from "lucide-react";
 import { StaticMap } from "@/components/static-map";
@@ -17,41 +18,37 @@ interface StationPageProps {
 type StationWithGeo = Station & { geo: { lat: number; lng: number } };
 
 function getStation(id: string): StationWithGeo | null {
-  // Ensure ID is purely numeric
-  if (!/^\d+$/.test(id)) return null;
-  const stationId = parseInt(id, 10);
-  const station = stationsCoords.find((s) => s.id === stationId);
-  // Only return stations with coordinates
-  if (!station?.geo) return null;
+  const station = stations.find((s) => s.id === id);
+  if (!station?.geo || station.type === "metro") return null;
   return station as StationWithGeo;
 }
 
 export async function generateStaticParams() {
   return [
-    2416, // Roma Termini
-    2385, // Roma Tiburtina
-    2379, // Roma Ostiense
-    1728, // Milano Centrale
-    1720, // Milano Rogoredo
-    1888, // Napoli Centrale
-    4020, // Napoli Afragola
-    683, // Bologna Centrale
-    1325, // Firenze Santa Maria Novella
-    2876, // Torino Porta Nuova
-    2855, // Torino Lingotto
-    3009, // Venezia S.Lucia
-    3025, // Verona Porta Nuova
-    245, // Genova Brignole
-    257, // Genova Piazza Principe
-    595, // Bari Centrale
-    2018, // Palermo Centrale
-    1032, // Catania Centrale
-    1700, // Messina Centrale
-    2156, // Pisa Centrale
-    275, // La Spezia Centrale
-    2925, // Trieste Centrale
-    2922, // Treviso Centrale
-  ].map((id) => ({ id: id.toString() }));
+    "IT-S08409", // Roma Termini
+    "IT-S08217", // Roma Tiburtina
+    "IT-S08218", // Roma Ostiense
+    "IT-S01700", // Milano Centrale
+    "IT-S01716", // Milano Rogoredo
+    "IT-S09218", // Napoli Centrale
+    "IT-S09597", // Napoli Afragola
+    "IT-S05043", // Bologna Centrale
+    "IT-S06003", // Firenze Santa Maria Novella
+    "IT-S00219", // Torino Porta Nuova
+    "IT-S00230", // Torino Lingotto
+    "IT-S02593", // Venezia S.Lucia
+    "IT-S02812", // Verona Porta Nuova
+    "IT-S04300", // Genova Brignole
+    "IT-S04301", // Genova Piazza Principe
+    "IT-S11004", // Bari Centrale
+    "IT-S13001", // Palermo Centrale
+    "IT-S13600", // Catania Centrale
+    "IT-S12210", // Messina Centrale
+    "IT-S06800", // Pisa Centrale
+    "IT-S05200", // La Spezia Centrale
+    "IT-S03200", // Trieste Centrale
+    "IT-S02900", // Treviso Centrale
+  ].map((id) => ({ id }));
 }
 export const dynamicParams = true;
 export const revalidate = 86400;
@@ -148,7 +145,7 @@ export default async function StationPage({ params }: StationPageProps) {
           <StationStats stationId={station.id} />
           <NearbyStations
             currentStation={station}
-            allStations={stationsCoords}
+            allStations={stations}
           />
         </div>
       </div>
