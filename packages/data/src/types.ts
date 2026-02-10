@@ -1,6 +1,8 @@
 export interface Station {
-  id: number;
+  id: string;
   name: string;
+  type: "rail" | "metro";
+  importance: 1 | 2 | 3 | 4;
   geo?: {
     lat: number;
     lng: number;

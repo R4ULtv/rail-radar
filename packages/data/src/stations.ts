@@ -1,13 +1,9 @@
 import stationsData from "./stations.json" with { type: "json" };
-import stationsWithCoordinatesData from "./stations-with-coords.json" with { type: "json" };
-import metroData from "./metro.json" with { type: "json" };
 import type { Station } from "./types";
 
 /** Original station data */
-export const stations: Station[] = stationsData;
-
-/** Station data with coordinates */
-export const stationsCoords: Station[] = stationsWithCoordinatesData;
-
-/** Metro data */
-export const metroStations: Station[] = metroData;
+export const stations: Station[] = stationsData.map((station) => ({
+  ...station,
+  type: station.type as "rail" | "metro",
+  importance: (station.importance ?? 4) as 1 | 2 | 3 | 4,
+}));
