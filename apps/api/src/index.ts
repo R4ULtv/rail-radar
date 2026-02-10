@@ -2,7 +2,7 @@ import { Hono } from "hono";
 import { cache } from "hono/cache";
 import { cors } from "hono/cors";
 
-import { stationsCoords } from "@repo/data/stations";
+import { stations } from "@repo/data/stations";
 import {
   getAnalyticsOverview,
   getRfiStatus,
@@ -13,8 +13,6 @@ import {
 } from "./analytics.js";
 import { fuzzySearch } from "./fuzzy.js";
 import { scrapeTrains, ScraperError } from "./scraper.js";
-
-const stations = stationsCoords.filter((s) => s.geo);
 
 type Bindings = {
   RATE_LIMITER: RateLimit;
@@ -65,6 +63,7 @@ app.get("/stations", (c) => {
   }
 
   const filtered = fuzzySearch(stations, query, 20);
+  filtered.sort((a, b) => a.importance - b.importance);
   return c.json(filtered);
 });
 
@@ -174,17 +173,7 @@ app.get(
     cacheControl: "public, max-age=300, stale-while-revalidate=60",
   }),
   async (c) => {
-    const id = parseInt(c.req.param("id"), 10);
-
-    if (isNaN(id)) {
-      return c.json(
-        {
-          error:
-            "Invalid station. Please try searching for a different station.",
-        },
-        400,
-      );
-    }
+    const id = c.req.param("id");
 
     const station = stations.find((s) => s.id === id);
 
@@ -267,17 +256,7 @@ app.get(
     await next();
   },
   async (c) => {
-    const id = parseInt(c.req.param("id"), 10);
-
-    if (isNaN(id)) {
-      return c.json(
-        {
-          error:
-            "Invalid station. Please try searching for a different station.",
-        },
-        400,
-      );
-    }
+    const id = c.req.param("id");
 
     const station = stations.find((s) => s.id === id);
 
