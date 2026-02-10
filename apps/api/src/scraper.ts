@@ -19,11 +19,13 @@ export class ScraperError extends Error {
 const BASE_URL =
   "https://iechub.rfi.it/ArriviPartenze/en/ArrivalsDepartures/Monitor";
 
-function buildUrl(stationId: number, arrivals: boolean): string {
+function buildUrl(stationId: string, arrivals: boolean): string {
+  // Extract numeric RFI place ID from station ID (e.g. "IT1728" -> "1728")
+  const placeId = stationId.replace(/^[A-Z]+/, "");
   if (arrivals) {
-    return `${BASE_URL}?placeId=${stationId}&arrivals=True`;
+    return `${BASE_URL}?placeId=${placeId}&arrivals=True`;
   }
-  return `${BASE_URL}?Arrivals=False&Search=&PlaceId=${stationId}`;
+  return `${BASE_URL}?Arrivals=False&Search=&PlaceId=${placeId}`;
 }
 
 interface DelayResult {
@@ -213,7 +215,7 @@ class ParserState {
 const FETCH_TIMEOUT_MS = 30_000;
 
 export async function scrapeTrains(
-  stationId: number,
+  stationId: string,
   type: "arrivals" | "departures" = "departures",
 ): Promise<ScrapeResult> {
   const url = buildUrl(stationId, type === "arrivals");
