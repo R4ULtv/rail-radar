@@ -39,7 +39,9 @@ export async function PUT(request: Request, { params }: RouteParams) {
       id,
       name: name !== undefined ? String(name).trim() : existingStation.name,
       type: type === "rail" || type === "metro" ? type : existingStation.type,
-      importance: [1, 2, 3, 4].includes(importance) ? importance : existingStation.importance,
+      importance: [1, 2, 3, 4].includes(importance)
+        ? importance
+        : existingStation.importance,
       geo: geo
         ? {
             lat: Math.round(Number(geo.lat) * 1e6) / 1e6,

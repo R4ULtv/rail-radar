@@ -105,7 +105,9 @@ export async function getTrendingStations(
   // Normalize old numeric IDs (e.g. "1728") to new format ("IT1728") and merge
   const merged = new Map<string, TopStation>();
   for (const row of result.data) {
-    const id = /^\d+$/.test(row.stationId) ? `IT${row.stationId}` : row.stationId;
+    const id = /^\d+$/.test(row.stationId)
+      ? `IT${row.stationId}`
+      : row.stationId;
     const visits = Number(row.count);
     const unique = Number(row.uniqueVisitors);
     const existing = merged.get(id);
@@ -218,7 +220,6 @@ export async function recordRfiRequest(
     indexes: [new Date().toISOString()],
   });
 }
-
 
 interface RfiStatusResult {
   count: number;

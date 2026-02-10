@@ -102,11 +102,19 @@ function formatChangeDescription(change: StationChange): FormattedChange {
   }
 
   if (details.typeChanged && details.previousType && details.newType) {
-    updates.push(`Type changed from ${details.previousType} to ${details.newType}`);
+    updates.push(
+      `Type changed from ${details.previousType} to ${details.newType}`,
+    );
   }
 
-  if (details.importanceChanged && details.previousImportance !== undefined && details.newImportance !== undefined) {
-    updates.push(`Importance changed from ${details.previousImportance} to ${details.newImportance}`);
+  if (
+    details.importanceChanged &&
+    details.previousImportance !== undefined &&
+    details.newImportance !== undefined
+  ) {
+    updates.push(
+      `Importance changed from ${details.previousImportance} to ${details.newImportance}`,
+    );
   }
 
   return {

@@ -52,7 +52,9 @@ export function StationEditPanel({
 }: StationEditPanelProps) {
   const [name, setName] = useState(station.name);
   const [type, setType] = useState<"rail" | "metro">(station.type);
-  const [importance, setImportance] = useState<1 | 2 | 3 | 4>(station.importance);
+  const [importance, setImportance] = useState<1 | 2 | 3 | 4>(
+    station.importance,
+  );
   const [lat, setLat] = useState(station.geo?.lat?.toString() ?? "");
   const [lng, setLng] = useState(station.geo?.lng?.toString() ?? "");
 
@@ -125,7 +127,10 @@ export function StationEditPanel({
         <div className="grid grid-cols-2 gap-3">
           <div className="flex flex-col gap-1.5">
             <Label htmlFor="type">Type</Label>
-            <Select value={type} onValueChange={(v) => setType(v as "rail" | "metro")}>
+            <Select
+              value={type}
+              onValueChange={(v) => setType(v as "rail" | "metro")}
+            >
               <SelectTrigger id="type">
                 <SelectValue />
               </SelectTrigger>
@@ -137,7 +142,10 @@ export function StationEditPanel({
           </div>
           <div className="flex flex-col gap-1.5">
             <Label htmlFor="importance">Importance</Label>
-            <Select value={String(importance)} onValueChange={(v) => setImportance(Number(v) as 1 | 2 | 3 | 4)}>
+            <Select
+              value={String(importance)}
+              onValueChange={(v) => setImportance(Number(v) as 1 | 2 | 3 | 4)}
+            >
               <SelectTrigger id="importance">
                 <SelectValue />
               </SelectTrigger>

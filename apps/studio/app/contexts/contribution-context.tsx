@@ -206,7 +206,8 @@ export function ContributionProvider({
           // Check what changed
           const nameChanged = previousStation.name !== station.name;
           const typeChanged = previousStation.type !== station.type;
-          const importanceChanged = previousStation.importance !== station.importance;
+          const importanceChanged =
+            previousStation.importance !== station.importance;
           const hadGeo = !!previousStation.geo;
           const hasGeo = !!station.geo;
           const coordinatesAdded = !hadGeo && hasGeo;
@@ -231,7 +232,9 @@ export function ContributionProvider({
             previousType: typeChanged ? previousStation.type : undefined,
             newType: typeChanged ? station.type : undefined,
             importanceChanged,
-            previousImportance: importanceChanged ? previousStation.importance : undefined,
+            previousImportance: importanceChanged
+              ? previousStation.importance
+              : undefined,
             newImportance: importanceChanged ? station.importance : undefined,
           };
         }
