@@ -1,6 +1,6 @@
 import Link from "next/link";
 import type { Station } from "@repo/data";
-import { MapPinIcon } from "lucide-react";
+import { SquareMIcon, TrainFrontIcon } from "lucide-react";
 
 interface NearbyStationsProps {
   currentStation: Station;
@@ -78,16 +78,18 @@ function calculateNearbyStations(
 export function NearbyStations({
   currentStation,
   allStations,
-  limit = 4,
 }: NearbyStationsProps) {
   if (!currentStation.geo || allStations.length === 0) {
     return null;
   }
 
-  const nearbyStations = calculateNearbyStations(
-    currentStation,
-    allStations,
-    limit,
+  const railStations = allStations.filter((s) => s.type === "rail");
+  const metroStations = allStations.filter((s) => s.type === "metro");
+
+  const nearbyRail = calculateNearbyStations(currentStation, railStations, 2);
+  const nearbyMetro = calculateNearbyStations(currentStation, metroStations, 2);
+  const nearbyStations = [...nearbyRail, ...nearbyMetro].sort(
+    (a, b) => a.distance - b.distance,
   );
 
   if (nearbyStations.length === 0) {
@@ -102,18 +104,33 @@ export function NearbyStations({
       <ul className="space-y-2">
         {nearbyStations.map((station) => (
           <li key={station.id}>
-            <Link
-              href={`/station/${station.id}`}
-              className="flex items-center justify-between gap-2 text-sm hover:text-primary transition-colors group"
-            >
-              <span className="flex items-center gap-2 truncate">
-                <MapPinIcon className="size-3.5 text-muted-foreground shrink-0 group-hover:text-primary transition-colors" />
-                <span className="truncate">{station.name}</span>
-              </span>
-              <span className="text-muted-foreground tabular-nums shrink-0">
-                {formatDistance(station.distance)}
-              </span>
-            </Link>
+            {station.type === "metro" ? (
+              <Link
+                href={`/?lat=${station.geo!.lat}&lng=${station.geo!.lng}&zoom=15`}
+                className="flex items-center justify-between gap-2 text-sm hover:text-primary transition-colors group"
+              >
+                <span className="flex items-center gap-2 truncate">
+                  <SquareMIcon className="size-3.5 text-muted-foreground shrink-0 group-hover:text-primary transition-colors" />
+                  <span className="truncate">{station.name}</span>
+                </span>
+                <span className="text-muted-foreground tabular-nums shrink-0">
+                  {formatDistance(station.distance)}
+                </span>
+              </Link>
+            ) : (
+              <Link
+                href={`/station/${station.id}`}
+                className="flex items-center justify-between gap-2 text-sm hover:text-primary transition-colors group"
+              >
+                <span className="flex items-center gap-2 truncate">
+                  <TrainFrontIcon className="size-3.5 text-muted-foreground shrink-0 group-hover:text-primary transition-colors" />
+                  <span className="truncate">{station.name}</span>
+                </span>
+                <span className="text-muted-foreground tabular-nums shrink-0">
+                  {formatDistance(station.distance)}
+                </span>
+              </Link>
+            )}
           </li>
         ))}
       </ul>

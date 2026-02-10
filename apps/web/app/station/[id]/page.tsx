@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import Link from "next/link";
-import { stationsCoords, type Station } from "@repo/data";
+import { stations, type Station } from "@repo/data";
 import { Button } from "@repo/ui/components/button";
 import { ArrowLeftIcon } from "lucide-react";
 import { StaticMap } from "@/components/static-map";
@@ -17,41 +17,17 @@ interface StationPageProps {
 type StationWithGeo = Station & { geo: { lat: number; lng: number } };
 
 function getStation(id: string): StationWithGeo | null {
-  // Ensure ID is purely numeric
-  if (!/^\d+$/.test(id)) return null;
-  const stationId = parseInt(id, 10);
-  const station = stationsCoords.find((s) => s.id === stationId);
-  // Only return stations with coordinates
-  if (!station?.geo) return null;
+  const station = stations.find((s) => s.id === id);
+  if (!station?.geo || station.type !== "rail") return null;
   return station as StationWithGeo;
 }
 
 export async function generateStaticParams() {
-  return [
-    2416, // Roma Termini
-    2385, // Roma Tiburtina
-    2379, // Roma Ostiense
-    1728, // Milano Centrale
-    1720, // Milano Rogoredo
-    1888, // Napoli Centrale
-    4020, // Napoli Afragola
-    683, // Bologna Centrale
-    1325, // Firenze Santa Maria Novella
-    2876, // Torino Porta Nuova
-    2855, // Torino Lingotto
-    3009, // Venezia S.Lucia
-    3025, // Verona Porta Nuova
-    245, // Genova Brignole
-    257, // Genova Piazza Principe
-    595, // Bari Centrale
-    2018, // Palermo Centrale
-    1032, // Catania Centrale
-    1700, // Messina Centrale
-    2156, // Pisa Centrale
-    275, // La Spezia Centrale
-    2925, // Trieste Centrale
-    2922, // Treviso Centrale
-  ].map((id) => ({ id: id.toString() }));
+  return stations
+    .filter((s) => s.type === "rail" && s.geo)
+    .sort((a, b) => a.importance - b.importance)
+    .slice(0, 50)
+    .map((s) => ({ id: s.id }));
 }
 export const dynamicParams = true;
 export const revalidate = 86400;
@@ -146,10 +122,7 @@ export default async function StationPage({ params }: StationPageProps) {
         {/* Stats and nearby stations row */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <StationStats stationId={station.id} />
-          <NearbyStations
-            currentStation={station}
-            allStations={stationsCoords}
-          />
+          <NearbyStations currentStation={station} allStations={stations} />
         </div>
       </div>
 

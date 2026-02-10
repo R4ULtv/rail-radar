@@ -5,11 +5,7 @@ import { useTrainData } from "@/hooks/use-train-data";
 import { TrainColumn } from "./train-column";
 import { useIsMobile } from "@repo/ui/hooks/use-mobile";
 
-interface TrainBoardProps {
-  stationId: number;
-}
-
-export function TrainBoard({ stationId }: TrainBoardProps) {
+export function TrainBoard({ stationId }: { stationId: string }) {
   const isMobile = useIsMobile();
   const [mounted, setMounted] = useState(false);
   const [type, setType] = useState<"arrivals" | "departures">("departures");
