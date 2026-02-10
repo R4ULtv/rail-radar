@@ -1,5 +1,5 @@
 interface TopStation {
-  stationId: number;
+  stationId: string;
   stationName: string;
   visits: number;
   uniqueVisitors: number;
@@ -7,7 +7,7 @@ interface TopStation {
 
 interface AnalyticsQueryResult {
   data: Array<{
-    stationId: number;
+    stationId: string;
     stationName: string;
     count: number;
     uniqueVisitors: number;
@@ -66,13 +66,12 @@ async function queryAnalytics<T>(
 
 export async function recordStationVisit(
   analytics: AnalyticsEngineDataset,
-  data: { stationId: number; stationName: string; ip: string; type: string },
+  data: { stationId: string; stationName: string; ip: string; type: string },
 ): Promise<void> {
   const hashedIP = await hashIP(data.ip);
   analytics.writeDataPoint({
-    blobs: [data.stationName, hashedIP, data.type],
-    doubles: [data.stationId],
-    indexes: [data.stationId.toString()],
+    blobs: [data.stationName, hashedIP, data.type, data.stationId],
+    indexes: [data.stationId],
   });
 }
 
@@ -86,13 +85,13 @@ export async function getTrendingStations(
   const intervalUnit = period === "week" ? "DAY" : period.toUpperCase();
   const query = `
     SELECT
-      double1 as stationId,
+      blob4 as stationId,
       blob1 as stationName,
       count() as count,
       count(DISTINCT blob2) as uniqueVisitors
     FROM station_visits
     WHERE timestamp > NOW() - INTERVAL '${intervalValue}' ${intervalUnit}
-    GROUP BY double1, blob1
+    GROUP BY blob4, blob1
     ORDER BY count DESC
     LIMIT ${limit}
   `;
@@ -114,14 +113,9 @@ export async function getTrendingStations(
 export async function getStationStats(
   accountId: string,
   apiToken: string,
-  stationId: number,
+  stationId: string,
   period: "hour" | "day" | "week" = "day",
 ): Promise<{ station: TopStation | null; topStation: TopStation | null }> {
-  // Validate stationId is a safe integer (defense in depth)
-  if (!Number.isInteger(stationId) || stationId < 0) {
-    throw new Error("Invalid station ID");
-  }
-
   const intervals = { hour: 1, day: 1, week: 7 } as const;
   const units = { hour: "HOUR", day: "DAY", week: "DAY" } as const;
   const intervalValue = intervals[period];
@@ -129,14 +123,14 @@ export async function getStationStats(
 
   const stationQuery = `
     SELECT
-      double1 as stationId,
+      blob4 as stationId,
       blob1 as stationName,
       count() as count,
       count(DISTINCT blob2) as uniqueVisitors
     FROM station_visits
     WHERE timestamp > NOW() - INTERVAL '${intervalValue}' ${intervalUnit}
-      AND double1 = ${stationId}
-    GROUP BY double1, blob1
+      AND index1 = '${stationId}'
+    GROUP BY blob4, blob1
   `;
 
   const [stationResult, trendingResult] = await Promise.all([
@@ -169,7 +163,7 @@ export async function getAnalyticsOverview(
       count(DISTINCT blob2) as uniqueVisitors,
       countIf(blob3 = 'arrivals') as arrivalsCount,
       countIf(blob3 = 'departures') as departuresCount,
-      count(DISTINCT double1) as stationsVisited
+      count(DISTINCT blob4) as stationsVisited
     FROM station_visits
   `;
 
