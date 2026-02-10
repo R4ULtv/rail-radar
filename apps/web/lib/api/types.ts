@@ -25,7 +25,7 @@ export interface TrendingStationsResponse {
 }
 
 export interface TrendingStation {
-  stationId: number;
+  stationId: string;
   stationName: string;
   visits: number;
   uniqueVisitors: number;
@@ -45,7 +45,7 @@ export interface StationStatsResponse {
 }
 
 export interface StationData {
-  stationId: number;
+  stationId: string;
   stationName: string;
   visits: number;
   uniqueVisitors: number;
