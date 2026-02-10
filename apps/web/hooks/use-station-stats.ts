@@ -10,7 +10,7 @@ import type { StationStatsResponse } from "@/lib/api";
  * @param period - Time period for stats (default: "week")
  * @returns Station statistics data, loading state, and error
  */
-export function useStationStats(stationId: number, period: string = "week") {
+export function useStationStats(stationId: string, period: string = "week") {
   const { data, error, isLoading } = useSWR<StationStatsResponse>(
     buildApiUrl(endpoints.stationStats(stationId, period)),
     apiFetcher,

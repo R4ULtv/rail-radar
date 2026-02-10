@@ -3,7 +3,7 @@ import { apiFetcher, buildApiUrl, endpoints, APIError } from "@/lib/api";
 import type { TrainDataResponse } from "@/lib/api";
 
 export function useTrainData(
-  stationId: number | null,
+  stationId: string | null,
   type: "arrivals" | "departures",
   enabled: boolean = true,
 ) {
