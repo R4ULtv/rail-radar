@@ -2,7 +2,7 @@ import { Hono } from "hono";
 import { cache } from "hono/cache";
 import { cors } from "hono/cors";
 
-import { stationsCoords } from "@repo/data/stations";
+import { stations } from "@repo/data/stations";
 import {
   getAnalyticsOverview,
   getRfiStatus,
@@ -12,9 +12,7 @@ import {
   recordStationVisit,
 } from "./analytics.js";
 import { fuzzySearch } from "./fuzzy.js";
-import { scrapeTrains, ScraperError } from "./scraper.js";
-
-const stations = stationsCoords.filter((s) => s.geo);
+import { fetchTrains, ScraperError } from "./scraper.js";
 
 type Bindings = {
   RATE_LIMITER: RateLimit;
@@ -174,17 +172,7 @@ app.get(
     cacheControl: "public, max-age=300, stale-while-revalidate=60",
   }),
   async (c) => {
-    const id = parseInt(c.req.param("id"), 10);
-
-    if (isNaN(id)) {
-      return c.json(
-        {
-          error:
-            "Invalid station. Please try searching for a different station.",
-        },
-        400,
-      );
-    }
+    const id = c.req.param("id");
 
     const station = stations.find((s) => s.id === id);
 
@@ -267,17 +255,7 @@ app.get(
     await next();
   },
   async (c) => {
-    const id = parseInt(c.req.param("id"), 10);
-
-    if (isNaN(id)) {
-      return c.json(
-        {
-          error:
-            "Invalid station. Please try searching for a different station.",
-        },
-        400,
-      );
-    }
+    const id = c.req.param("id");
 
     const station = stations.find((s) => s.id === id);
 
@@ -290,10 +268,20 @@ app.get(
       );
     }
 
+    if (station.type === "metro") {
+      return c.json(
+        {
+          error: "Metro stations do not have real-time train data.",
+        },
+        400,
+      );
+    }
+
     const type = c.req.query("type") === "arrivals" ? "arrivals" : "departures";
+    const stationCode = id.replace("IT-", "");
 
     try {
-      const { trains, info, timing } = await scrapeTrains(id, type);
+      const { trains, info, timing } = await fetchTrains(stationCode, type);
 
       // Record visit after successful response (non-blocking)
       const ip = c.req.header("cf-connecting-ip") ?? "unknown";
