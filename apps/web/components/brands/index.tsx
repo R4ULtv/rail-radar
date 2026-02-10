@@ -36,6 +36,7 @@ const brandIcons: Record<string, ComponentType<BrandIconProps>> = {
   sncf: Sncf, // France
   obb: Obb, // Austria
   "obb railjet": Obb,
+  "obb nightjet": Obb,
   bls: Bls, // Switzerland
 };
 
