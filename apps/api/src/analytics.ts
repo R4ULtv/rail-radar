@@ -1,5 +1,5 @@
 interface TopStation {
-  stationId: number;
+  stationId: string;
   stationName: string;
   visits: number;
   uniqueVisitors: number;
@@ -7,7 +7,7 @@ interface TopStation {
 
 interface AnalyticsQueryResult {
   data: Array<{
-    stationId: number;
+    stationId: string;
     stationName: string;
     count: number;
     uniqueVisitors: number;
@@ -66,13 +66,13 @@ async function queryAnalytics<T>(
 
 export async function recordStationVisit(
   analytics: AnalyticsEngineDataset,
-  data: { stationId: number; stationName: string; ip: string; type: string },
+  data: { stationId: string; stationName: string; ip: string; type: string },
 ): Promise<void> {
   const hashedIP = await hashIP(data.ip);
   analytics.writeDataPoint({
-    blobs: [data.stationName, hashedIP, data.type],
-    doubles: [data.stationId],
-    indexes: [data.stationId.toString()],
+    blobs: [data.stationName, hashedIP, data.type, data.stationId],
+    doubles: [],
+    indexes: [data.stationId],
   });
 }
 
@@ -86,15 +86,14 @@ export async function getTrendingStations(
   const intervalUnit = period === "week" ? "DAY" : period.toUpperCase();
   const query = `
     SELECT
-      double1 as stationId,
+      index1 as stationId,
       blob1 as stationName,
       count() as count,
       count(DISTINCT blob2) as uniqueVisitors
     FROM station_visits
     WHERE timestamp > NOW() - INTERVAL '${intervalValue}' ${intervalUnit}
-    GROUP BY double1, blob1
+    GROUP BY index1, blob1
     ORDER BY count DESC
-    LIMIT ${limit}
   `;
 
   const result = await queryAnalytics<AnalyticsQueryResult>(
@@ -103,22 +102,37 @@ export async function getTrendingStations(
     query,
   );
 
-  return result.data.map((row) => ({
-    stationId: row.stationId,
-    stationName: row.stationName,
-    visits: row.count,
-    uniqueVisitors: row.uniqueVisitors,
-  }));
+  // Normalize old numeric IDs (e.g. "1728") to new format ("IT1728") and merge
+  const merged = new Map<string, TopStation>();
+  for (const row of result.data) {
+    const id = /^\d+$/.test(row.stationId) ? `IT${row.stationId}` : row.stationId;
+    const existing = merged.get(id);
+    if (existing) {
+      existing.visits += row.count;
+      existing.uniqueVisitors += row.uniqueVisitors;
+    } else {
+      merged.set(id, {
+        stationId: id,
+        stationName: row.stationName,
+        visits: row.count,
+        uniqueVisitors: row.uniqueVisitors,
+      });
+    }
+  }
+
+  return [...merged.values()]
+    .sort((a, b) => b.visits - a.visits)
+    .slice(0, limit);
 }
 
 export async function getStationStats(
   accountId: string,
   apiToken: string,
-  stationId: number,
+  stationId: string,
   period: "hour" | "day" | "week" = "day",
 ): Promise<{ station: TopStation | null; topStation: TopStation | null }> {
-  // Validate stationId is a safe integer (defense in depth)
-  if (!Number.isInteger(stationId) || stationId < 0) {
+  // Validate stationId format (defense in depth against SQL injection)
+  if (!/^[A-Z]{2,3}\d+$/.test(stationId)) {
     throw new Error("Invalid station ID");
   }
 
@@ -127,16 +141,18 @@ export async function getStationStats(
   const intervalValue = intervals[period];
   const intervalUnit = units[period];
 
+  // Extract numeric part to match old format data too
+  const numericId = stationId.replace(/^[A-Z]+/, "");
   const stationQuery = `
     SELECT
-      double1 as stationId,
+      '${stationId}' as stationId,
       blob1 as stationName,
       count() as count,
       count(DISTINCT blob2) as uniqueVisitors
     FROM station_visits
     WHERE timestamp > NOW() - INTERVAL '${intervalValue}' ${intervalUnit}
-      AND double1 = ${stationId}
-    GROUP BY double1, blob1
+      AND (index1 = '${stationId}' OR index1 = '${numericId}')
+    GROUP BY blob1
   `;
 
   const [stationResult, trendingResult] = await Promise.all([
@@ -169,7 +185,7 @@ export async function getAnalyticsOverview(
       count(DISTINCT blob2) as uniqueVisitors,
       countIf(blob3 = 'arrivals') as arrivalsCount,
       countIf(blob3 = 'departures') as departuresCount,
-      count(DISTINCT double1) as stationsVisited
+      count(DISTINCT index1) as stationsVisited
     FROM station_visits
   `;
 
