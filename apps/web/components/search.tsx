@@ -6,6 +6,7 @@ import {
   ListIcon,
   SearchIcon,
   SearchXIcon,
+  SquareMIcon,
   TrainFrontIcon,
   TrendingUpIcon,
   XIcon,
@@ -50,7 +51,7 @@ const StationList = React.memo(function StationList({
   focusedIndex?: number;
   startIndex?: number;
   onFocusIndex?: (index: number) => void;
-  visits?: Map<number, number>;
+  visits?: Map<string, number>;
 }) {
   if (stations.length === 0) return null;
 
@@ -79,7 +80,11 @@ const StationList = React.memo(function StationList({
                 isFocused && "bg-muted",
               )}
             >
-              <TrainFrontIcon className="size-4 text-muted-foreground" />
+              {station.type === "metro" ? (
+                <SquareMIcon className="size-4 text-muted-foreground" />
+              ) : (
+                <TrainFrontIcon className="size-4 text-muted-foreground" />
+              )}
               <span className={cn(visitCount !== undefined && "flex-1")}>
                 {station.name}
               </span>
@@ -117,12 +122,14 @@ export function Search() {
     if (!trendingData?.stations) {
       return {
         trendingStations: [] as Station[],
-        trendingVisits: new Map<number, number>(),
+        trendingVisits: new Map<string, number>(),
       };
     }
-    const stations = trendingData.stations.map((s) => ({
+    const stations: Station[] = trendingData.stations.map((s) => ({
       id: s.stationId,
       name: s.stationName,
+      type: "rail" as const,
+      importance: 4 as const,
     }));
     const visits = new Map(
       trendingData.stations.map((s) => [s.stationId, s.visits]),

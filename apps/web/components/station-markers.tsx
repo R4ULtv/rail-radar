@@ -4,7 +4,7 @@ import type { MapMouseEvent } from "mapbox-gl";
 import { useEffect, useMemo } from "react";
 import { Layer, Source, useMap } from "react-map-gl/mapbox";
 import type { LayerProps } from "react-map-gl/mapbox";
-import { stationsCoords, metroStations } from "@repo/data/stations";
+import { stations } from "@repo/data/stations";
 import { useSelectedStation } from "@/hooks/use-selected-station";
 
 const LAYER_ID = "stations";
@@ -60,19 +60,37 @@ const metroLabelStyle: LayerProps = {
 const stationLayerStyle: LayerProps = {
   id: LAYER_ID,
   type: "symbol",
-  minzoom: 7,
+  minzoom: 5,
+  filter: [
+    "<=",
+    ["get", "minzoom"],
+    ["zoom"],
+  ],
   layout: {
     "icon-image": ICON_ID,
-    "icon-size": ["interpolate", ["linear"], ["zoom"], 10, 0.3, 13, 0.35],
+    "icon-size": [
+      "interpolate",
+      ["linear"],
+      ["zoom"],
+      5, ["match", ["get", "importance"], 1, 0.3, 2, 0.25, 0.2],
+      10, ["match", ["get", "importance"], 1, 0.35, 2, 0.32, 0.3],
+      13, ["match", ["get", "importance"], 1, 0.4, 2, 0.37, 0.35],
+    ],
     "icon-allow-overlap": false,
     "icon-anchor": "center",
+    "symbol-sort-key": ["get", "importance"],
   },
 };
 
 const stationLabelStyle: LayerProps = {
   id: "station-labels",
   type: "symbol",
-  minzoom: 11,
+  minzoom: 5,
+  filter: [
+    "<=",
+    ["+", ["get", "minzoom"], 2],
+    ["zoom"],
+  ],
   layout: {
     "text-field": ["get", "name"],
     "text-size": 13,
@@ -140,17 +158,21 @@ const railwayTunnelStyle: LayerProps = {
   },
 };
 
+const IMPORTANCE_MINZOOM: Record<number, number> = { 1: 5, 2: 7, 3: 9, 4: 11 };
+
 function createStationsGeoJSON(): GeoJSON.FeatureCollection {
   return {
     type: "FeatureCollection",
-    features: stationsCoords
-      .filter((station) => station.geo)
+    features: stations
+      .filter((station) => station.type === "rail" && station.geo)
       .map((station) => ({
         type: "Feature" as const,
-        id: station.id,
         properties: {
           id: station.id,
           name: station.name,
+          type: station.type,
+          importance: station.importance,
+          minzoom: IMPORTANCE_MINZOOM[station.importance] ?? 11,
         },
         geometry: {
           type: "Point" as const,
@@ -163,14 +185,14 @@ function createStationsGeoJSON(): GeoJSON.FeatureCollection {
 function createMetroGeoJSON(): GeoJSON.FeatureCollection {
   return {
     type: "FeatureCollection",
-    features: metroStations
-      .filter((station) => station.geo)
+    features: stations
+      .filter((station) => station.type === "metro" && station.geo)
       .map((station) => ({
         type: "Feature" as const,
-        id: station.id,
         properties: {
           id: station.id,
           name: station.name,
+          type: station.type,
         },
         geometry: {
           type: "Point" as const,
@@ -210,12 +232,14 @@ export function StationMarkers() {
       const feature = e.features?.[0];
       if (!feature?.properties) return;
 
-      const id = feature.properties.id as number | undefined;
+      const id = feature.properties.id as string | undefined;
       const name = feature.properties.name as string | undefined;
+      const type = feature.properties.type as "rail" | "metro";
 
       if (id === undefined || name === undefined) return;
 
-      selectStation({ id, name });
+      const importance = (feature.properties.importance ?? 4) as 1 | 2 | 3 | 4;
+      selectStation({ id, name, type, importance });
     };
 
     const handleMouseEnter = () => {
@@ -226,14 +250,22 @@ export function StationMarkers() {
       map.getCanvas().style.cursor = "";
     };
 
+    const METRO_LAYER_ID = "metro-stations";
+
     map.on("click", LAYER_ID, handleClick);
     map.on("mouseenter", LAYER_ID, handleMouseEnter);
     map.on("mouseleave", LAYER_ID, handleMouseLeave);
+    map.on("click", METRO_LAYER_ID, handleClick);
+    map.on("mouseenter", METRO_LAYER_ID, handleMouseEnter);
+    map.on("mouseleave", METRO_LAYER_ID, handleMouseLeave);
 
     return () => {
       map.off("click", LAYER_ID, handleClick);
       map.off("mouseenter", LAYER_ID, handleMouseEnter);
       map.off("mouseleave", LAYER_ID, handleMouseLeave);
+      map.off("click", METRO_LAYER_ID, handleClick);
+      map.off("mouseenter", METRO_LAYER_ID, handleMouseEnter);
+      map.off("mouseleave", METRO_LAYER_ID, handleMouseLeave);
     };
   }, [map, selectStation]);
 
