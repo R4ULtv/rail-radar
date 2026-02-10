@@ -88,7 +88,7 @@ export async function getTrendingStations(
     SELECT
       index1 as stationId,
       blob1 as stationName,
-      count() as count,
+      sum(_sample_interval) as count,
       count(DISTINCT blob2) as uniqueVisitors
     FROM station_visits
     WHERE timestamp > NOW() - INTERVAL '${intervalValue}' ${intervalUnit}
@@ -106,16 +106,18 @@ export async function getTrendingStations(
   const merged = new Map<string, TopStation>();
   for (const row of result.data) {
     const id = /^\d+$/.test(row.stationId) ? `IT${row.stationId}` : row.stationId;
+    const visits = Number(row.count);
+    const unique = Number(row.uniqueVisitors);
     const existing = merged.get(id);
     if (existing) {
-      existing.visits += row.count;
-      existing.uniqueVisitors += row.uniqueVisitors;
+      existing.visits += visits;
+      existing.uniqueVisitors += unique;
     } else {
       merged.set(id, {
         stationId: id,
         stationName: row.stationName,
-        visits: row.count,
-        uniqueVisitors: row.uniqueVisitors,
+        visits,
+        uniqueVisitors: unique,
       });
     }
   }
@@ -147,7 +149,7 @@ export async function getStationStats(
     SELECT
       '${stationId}' as stationId,
       blob1 as stationName,
-      count() as count,
+      sum(_sample_interval) as count,
       count(DISTINCT blob2) as uniqueVisitors
     FROM station_visits
     WHERE timestamp > NOW() - INTERVAL '${intervalValue}' ${intervalUnit}
@@ -165,8 +167,8 @@ export async function getStationStats(
     ? {
         stationId: stationData.stationId,
         stationName: stationData.stationName,
-        visits: stationData.count,
-        uniqueVisitors: stationData.uniqueVisitors,
+        visits: Number(stationData.count),
+        uniqueVisitors: Number(stationData.uniqueVisitors),
       }
     : null;
 
@@ -181,10 +183,10 @@ export async function getAnalyticsOverview(
 ): Promise<AnalyticsOverview> {
   const query = `
     SELECT
-      count() as totalVisits,
+      sum(_sample_interval) as totalVisits,
       count(DISTINCT blob2) as uniqueVisitors,
-      countIf(blob3 = 'arrivals') as arrivalsCount,
-      countIf(blob3 = 'departures') as departuresCount,
+      sumIf(_sample_interval, blob3 = 'arrivals') as arrivalsCount,
+      sumIf(_sample_interval, blob3 = 'departures') as departuresCount,
       count(DISTINCT index1) as stationsVisited
     FROM station_visits
   `;
