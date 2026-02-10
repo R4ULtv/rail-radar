@@ -14,10 +14,16 @@ export interface ChangeDetails {
   coordinatesUpdated?: boolean;
   coordinatesRemoved?: boolean;
   nameChanged?: boolean;
+  typeChanged?: boolean;
+  previousType?: string;
+  newType?: string;
+  importanceChanged?: boolean;
+  previousImportance?: number;
+  newImportance?: number;
 }
 
 export interface StationChange {
-  id: number;
+  id: string;
   type: ChangeType;
   stationName: string;
   timestamp: Date;

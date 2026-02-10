@@ -22,7 +22,7 @@ interface ContributionContextValue {
   session: ContributionSession | null;
   changes: StationChange[];
   stats: ContributionStats | null;
-  changedStationIds: Map<number, ChangeType>;
+  changedStationIds: Map<string, ChangeType>;
   startSession: (stations: Station[]) => void;
   recordChange: (
     type: ChangeType,
@@ -205,6 +205,8 @@ export function ContributionProvider({
         } else if (type === "updated" && previousStation) {
           // Check what changed
           const nameChanged = previousStation.name !== station.name;
+          const typeChanged = previousStation.type !== station.type;
+          const importanceChanged = previousStation.importance !== station.importance;
           const hadGeo = !!previousStation.geo;
           const hasGeo = !!station.geo;
           const coordinatesAdded = !hadGeo && hasGeo;
@@ -225,6 +227,12 @@ export function ContributionProvider({
             coordinatesUpdated,
             coordinatesRemoved,
             nameChanged,
+            typeChanged,
+            previousType: typeChanged ? previousStation.type : undefined,
+            newType: typeChanged ? station.type : undefined,
+            importanceChanged,
+            previousImportance: importanceChanged ? previousStation.importance : undefined,
+            newImportance: importanceChanged ? station.importance : undefined,
           };
         }
 
@@ -254,7 +262,7 @@ export function ContributionProvider({
   }, [session, stations]);
 
   const changedStationIds = useMemo(() => {
-    const map = new Map<number, ChangeType>();
+    const map = new Map<string, ChangeType>();
     if (!session) return map;
     for (const change of session.changes) {
       map.set(change.id, change.type);

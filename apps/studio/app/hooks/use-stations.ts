@@ -14,11 +14,13 @@ export function useStations() {
   const createStation = async (
     name: string,
     geo?: { lat: number; lng: number },
+    type?: "rail" | "metro",
+    importance?: 1 | 2 | 3 | 4,
   ): Promise<Station> => {
     const response = await fetch(API_URL, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ name, geo }),
+      body: JSON.stringify({ name, geo, type, importance }),
     });
 
     if (!response.ok) {
@@ -43,8 +45,8 @@ export function useStations() {
   };
 
   const updateStation = async (
-    id: number,
-    updates: { name?: string; geo?: { lat: number; lng: number } | null },
+    id: string,
+    updates: { name?: string; geo?: { lat: number; lng: number } | null; type?: "rail" | "metro"; importance?: 1 | 2 | 3 | 4 },
   ): Promise<Station> => {
     const response = await fetch(`${API_URL}/${id}`, {
       method: "PUT",
@@ -73,7 +75,7 @@ export function useStations() {
     return updatedStation;
   };
 
-  const deleteStation = async (id: number): Promise<Station> => {
+  const deleteStation = async (id: string): Promise<Station> => {
     const response = await fetch(`${API_URL}/${id}`, {
       method: "DELETE",
     });

@@ -6,7 +6,7 @@ import type { Station } from "@repo/data";
 const DATA_FILE_PATH = path.join(
   process.cwd(),
   "../..",
-  "packages/data/src/stations-with-coords.json",
+  "packages/data/src/stations.json",
 );
 
 async function readStations(): Promise<Station[]> {
@@ -36,7 +36,7 @@ export async function GET() {
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { name, geo } = body;
+    const { name, geo, type, importance } = body;
 
     if (!name || typeof name !== "string") {
       return NextResponse.json({ error: "Name is required" }, { status: 400 });
@@ -44,11 +44,13 @@ export async function POST(request: Request) {
 
     const stations = await readStations();
 
-    // Generate a new ID (max ID + 1)
-    const maxId = stations.reduce((max, s) => Math.max(max, s.id), 0);
+    // Generate a new ID
+    const newId = `IT-R-${Date.now()}`;
     const newStation: Station = {
-      id: maxId + 1,
+      id: newId,
       name: name.trim(),
+      type: type === "metro" ? "metro" : "rail",
+      importance: [1, 2, 3, 4].includes(importance) ? importance : 4,
       geo: geo
         ? {
             lat: Math.round(Number(geo.lat) * 1e6) / 1e6,

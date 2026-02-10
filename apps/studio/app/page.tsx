@@ -18,7 +18,7 @@ function StudioContent() {
     useStations();
   const { recordChange, changedStationIds } = useContribution();
 
-  const [selectedStationId, setSelectedStationId] = useState<number | null>(
+  const [selectedStationId, setSelectedStationId] = useState<string | null>(
     null,
   );
   const [isAddingStation, setIsAddingStation] = useState(false);
@@ -27,7 +27,7 @@ function StudioContent() {
 
   const selectedStation = stations.find((s) => s.id === selectedStationId);
 
-  const handleSelectStation = useCallback((id: number) => {
+  const handleSelectStation = useCallback((id: string) => {
     setSelectedStationId(id);
     setIsAddingStation(false);
   }, []);
@@ -61,7 +61,7 @@ function StudioContent() {
   );
 
   const handleMarkerDragEnd = useCallback(
-    async (id: number, lat: number, lng: number) => {
+    async (id: string, lat: number, lng: number) => {
       const previousStation = stations.find((s) => s.id === id);
       if (!previousStation) return;
 
@@ -103,6 +103,8 @@ function StudioContent() {
     async (updates: {
       name: string;
       geo: { lat: number; lng: number } | null;
+      type: "rail" | "metro";
+      importance: 1 | 2 | 3 | 4;
     }) => {
       if (!selectedStationId) return;
 
@@ -133,7 +135,7 @@ function StudioContent() {
 
     try {
       setIsSaving(true);
-      await deleteStation(selectedStationId);
+      await deleteStation(selectedStationId!);
       recordChange("deleted", station);
       setSelectedStationId(null);
       toast.success("Station deleted");

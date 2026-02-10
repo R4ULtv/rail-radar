@@ -2,11 +2,11 @@
 
 import { useMemo, useState } from "react";
 import {
-  CopyIcon,
   ListIcon,
   MapPinOffIcon,
   PlusIcon,
   SearchIcon,
+  SquareMIcon,
   XIcon,
 } from "lucide-react";
 import { Button } from "@repo/ui/components/button";
@@ -15,17 +15,16 @@ import { ScrollArea } from "@repo/ui/components/scroll-area";
 import { Tabs, TabsList, TabsTrigger } from "@repo/ui/components/tabs";
 import type { Station } from "@repo/data";
 import { cn } from "@repo/ui/lib/utils";
-import { Separator } from "@repo/ui/components/separator";
 import type { ChangeType } from "../types/contribution";
 
-type FilterType = "all" | "missing" | "duplicates";
+type FilterType = "all" | "missing" | "metro";
 
 interface StationSidebarProps {
   stations: Station[];
-  selectedStationId: number | null;
+  selectedStationId: string | null;
   isAddingStation: boolean;
-  changedStationIds?: Map<number, ChangeType>;
-  onSelectStation: (id: number) => void;
+  changedStationIds?: Map<string, ChangeType>;
+  onSelectStation: (id: string) => void;
   onAddStationClick: () => void;
   contributionBanner?: React.ReactNode;
 }
@@ -55,34 +54,6 @@ export function StationSidebar({
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState<FilterType>("all");
 
-  // Group stations by coordinates (for duplicates)
-  const duplicateGroups = useMemo(() => {
-    const coordGroups = new Map<string, Station[]>();
-    for (const station of stations) {
-      if (!station.geo) continue;
-      const key = `${station.geo.lat},${station.geo.lng}`;
-      const group = coordGroups.get(key);
-      if (group) {
-        group.push(station);
-      } else {
-        coordGroups.set(key, [station]);
-      }
-    }
-    // Only keep groups with 2+ stations
-    return Array.from(coordGroups.values()).filter((g) => g.length >= 2);
-  }, [stations]);
-
-  // Derive duplicate IDs from groups
-  const duplicateIds = useMemo(() => {
-    const ids = new Set<number>();
-    for (const group of duplicateGroups) {
-      for (const station of group) {
-        ids.add(station.id);
-      }
-    }
-    return ids;
-  }, [duplicateGroups]);
-
   const filteredStations = useMemo(() => {
     let result = stations;
 
@@ -95,23 +66,12 @@ export function StationSidebar({
     // Apply type filter
     if (filter === "missing") {
       result = result.filter((s) => !s.geo);
-    } else if (filter === "duplicates") {
-      result = result.filter((s) => duplicateIds.has(s.id));
+    } else if (filter === "metro") {
+      result = result.filter((s) => s.type === "metro");
     }
 
     return result;
-  }, [stations, search, filter, duplicateIds]);
-
-  // Filter duplicate groups by search term
-  const filteredDuplicateGroups = useMemo(() => {
-    if (!search.trim()) return duplicateGroups;
-    const lowerSearch = search.toLowerCase();
-    return duplicateGroups
-      .map((group) =>
-        group.filter((s) => s.name.toLowerCase().includes(lowerSearch)),
-      )
-      .filter((group) => group.length > 0);
-  }, [duplicateGroups, search]);
+  }, [stations, search, filter]);
 
   const renderStationItem = (station: Station) => {
     const changeType = changedStationIds?.get(station.id);
@@ -144,6 +104,9 @@ export function StationSidebar({
           )}
         </span>
         <span className="truncate">{station.name}</span>
+        {station.type === "metro" && (
+          <SquareMIcon className="size-3 shrink-0 text-muted-foreground" />
+        )}
       </button>
     );
   };
@@ -190,9 +153,9 @@ export function StationSidebar({
               <MapPinOffIcon className="size-3" />
               Missing
             </TabsTrigger>
-            <TabsTrigger value="duplicates">
-              <CopyIcon className="size-3" />
-              Dupes
+            <TabsTrigger value="metro">
+              <SquareMIcon className="size-3" />
+              Metro
             </TabsTrigger>
           </TabsList>
         </Tabs>
@@ -204,23 +167,9 @@ export function StationSidebar({
       </div>
 
       <ScrollArea className="min-h-0 flex-1 [&_[data-slot=scroll-area-viewport]]:h-full">
-        {filter === "duplicates" ? (
-          <div className="flex flex-col px-2 pb-4">
-            {filteredDuplicateGroups.map((group, groupIndex) => (
-              <div key={groupIndex} className="flex flex-col gap-0.5">
-                <Separator className="my-1 mb-2" />
-                <div className="px-2 text-xs font-medium text-muted-foreground">
-                  {group[0]?.geo?.lat}, {group[0]?.geo?.lng}
-                </div>
-                {group.map((station) => renderStationItem(station))}
-              </div>
-            ))}
-          </div>
-        ) : (
-          <div className="flex flex-col gap-0.5 px-2 pb-4">
-            {filteredStations.map((station) => renderStationItem(station))}
-          </div>
-        )}
+        <div className="flex flex-col gap-0.5 px-2 pb-4">
+          {filteredStations.map((station) => renderStationItem(station))}
+        </div>
       </ScrollArea>
     </div>
   );

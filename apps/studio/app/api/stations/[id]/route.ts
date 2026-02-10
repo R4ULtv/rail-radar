@@ -6,7 +6,7 @@ import type { Station } from "@repo/data";
 const DATA_FILE_PATH = path.join(
   process.cwd(),
   "../..",
-  "packages/data/src/stations-with-coords.json",
+  "packages/data/src/stations.json",
 );
 
 async function readStations(): Promise<Station[]> {
@@ -24,20 +24,11 @@ type RouteParams = { params: Promise<{ id: string }> };
 export async function PUT(request: Request, { params }: RouteParams) {
   try {
     const { id } = await params;
-    const stationId = parseInt(id, 10);
-
-    if (isNaN(stationId)) {
-      return NextResponse.json(
-        { error: "Invalid station ID" },
-        { status: 400 },
-      );
-    }
-
     const body = await request.json();
-    const { name, geo } = body;
+    const { name, geo, type, importance } = body;
 
     const stations = await readStations();
-    const index = stations.findIndex((s) => s.id === stationId);
+    const index = stations.findIndex((s) => s.id === id);
     const existingStation = stations[index];
 
     if (index === -1 || !existingStation) {
@@ -45,8 +36,10 @@ export async function PUT(request: Request, { params }: RouteParams) {
     }
 
     const updatedStation: Station = {
-      id: stationId,
+      id,
       name: name !== undefined ? String(name).trim() : existingStation.name,
+      type: type === "rail" || type === "metro" ? type : existingStation.type,
+      importance: [1, 2, 3, 4].includes(importance) ? importance : existingStation.importance,
       geo: geo
         ? {
             lat: Math.round(Number(geo.lat) * 1e6) / 1e6,
@@ -55,13 +48,6 @@ export async function PUT(request: Request, { params }: RouteParams) {
         : geo === null
           ? undefined
           : existingStation.geo,
-
-      ...(geo && {
-        geo: {
-          lat: Math.round(Number(geo.lat) * 1e6) / 1e6,
-          lng: Math.round(Number(geo.lng) * 1e6) / 1e6,
-        },
-      }),
     };
 
     stations[index] = updatedStation;
@@ -80,17 +66,8 @@ export async function PUT(request: Request, { params }: RouteParams) {
 export async function DELETE(_request: Request, { params }: RouteParams) {
   try {
     const { id } = await params;
-    const stationId = parseInt(id, 10);
-
-    if (isNaN(stationId)) {
-      return NextResponse.json(
-        { error: "Invalid station ID" },
-        { status: 400 },
-      );
-    }
-
     const stations = await readStations();
-    const index = stations.findIndex((s) => s.id === stationId);
+    const index = stations.findIndex((s) => s.id === id);
 
     if (index === -1) {
       return NextResponse.json({ error: "Station not found" }, { status: 404 });

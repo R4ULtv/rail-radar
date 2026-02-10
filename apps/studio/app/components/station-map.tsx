@@ -82,18 +82,18 @@ const DEFAULT_VIEW = {
 
 interface StationMapProps {
   stations: Station[];
-  selectedStationId: number | null;
+  selectedStationId: string | null;
   isAddingStation: boolean;
-  onSelectStation: (id: number) => void;
-  onMarkerDragEnd: (id: number, lat: number, lng: number) => void;
+  onSelectStation: (id: string) => void;
+  onMarkerDragEnd: (id: string, lat: number, lng: number) => void;
   onMapClick: (lat: number, lng: number) => void;
   onSetStationLocation?: (lat: number, lng: number) => void;
 }
 
 interface StationLayersProps {
   stations: Station[];
-  selectedStationId: number | null;
-  onSelectStation: (id: number) => void;
+  selectedStationId: string | null;
+  onSelectStation: (id: string) => void;
 }
 
 function StationLayers({
@@ -129,7 +129,7 @@ function StationLayers({
     const handleClick = (e: MapLayerMouseEvent) => {
       const feature = e.features?.[0];
       if (feature?.properties?.id) {
-        onSelectStation(feature.properties.id as number);
+        onSelectStation(feature.properties.id as string);
       }
     };
 

@@ -18,6 +18,13 @@ import {
 } from "@repo/ui/components/collapsible";
 import { Input } from "@repo/ui/components/input";
 import { Label } from "@repo/ui/components/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@repo/ui/components/select";
 import type { Station } from "@repo/data";
 
 import { cn } from "@repo/ui/lib/utils";
@@ -28,6 +35,8 @@ interface StationEditPanelProps {
   onSave: (updates: {
     name: string;
     geo: { lat: number; lng: number } | null;
+    type: "rail" | "metro";
+    importance: 1 | 2 | 3 | 4;
   }) => void;
   onDelete: () => void;
   onClose: () => void;
@@ -42,12 +51,16 @@ export function StationEditPanel({
   isSaving,
 }: StationEditPanelProps) {
   const [name, setName] = useState(station.name);
+  const [type, setType] = useState<"rail" | "metro">(station.type);
+  const [importance, setImportance] = useState<1 | 2 | 3 | 4>(station.importance);
   const [lat, setLat] = useState(station.geo?.lat?.toString() ?? "");
   const [lng, setLng] = useState(station.geo?.lng?.toString() ?? "");
 
   // Reset form when station changes
   useEffect(() => {
     setName(station.name);
+    setType(station.type);
+    setImportance(station.importance);
     setLat(station.geo?.lat?.toString() ?? "");
     setLng(station.geo?.lng?.toString() ?? "");
   }, [station]);
@@ -61,11 +74,13 @@ export function StationEditPanel({
         ? { lat: parsedLat, lng: parsedLng }
         : null;
 
-    onSave({ name, geo });
+    onSave({ name, geo, type, importance });
   };
 
   const hasChanges =
     name !== station.name ||
+    type !== station.type ||
+    importance !== station.importance ||
     lat !== (station.geo?.lat?.toString() ?? "") ||
     lng !== (station.geo?.lng?.toString() ?? "");
 
@@ -105,6 +120,35 @@ export function StationEditPanel({
             onChange={(e) => setName(e.target.value)}
             placeholder="Station name"
           />
+        </div>
+
+        <div className="grid grid-cols-2 gap-3">
+          <div className="flex flex-col gap-1.5">
+            <Label htmlFor="type">Type</Label>
+            <Select value={type} onValueChange={(v) => setType(v as "rail" | "metro")}>
+              <SelectTrigger id="type">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="rail">Rail</SelectItem>
+                <SelectItem value="metro">Metro</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+          <div className="flex flex-col gap-1.5">
+            <Label htmlFor="importance">Importance</Label>
+            <Select value={String(importance)} onValueChange={(v) => setImportance(Number(v) as 1 | 2 | 3 | 4)}>
+              <SelectTrigger id="importance">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="1">1 - Major</SelectItem>
+                <SelectItem value="2">2 - Important</SelectItem>
+                <SelectItem value="3">3 - Medium</SelectItem>
+                <SelectItem value="4">4 - Minor</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
         </div>
 
         <div className="grid grid-cols-2 gap-3">

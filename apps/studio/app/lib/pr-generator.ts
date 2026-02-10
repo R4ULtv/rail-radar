@@ -4,7 +4,7 @@ function generateGoogleMapsLink(lat: number, lng: number): string {
   return `https://www.google.com/maps?q=${lat},${lng}`;
 }
 
-function generateRfiLink(stationId: number): string {
+function generateRfiLink(stationId: string): string {
   return `https://iechub.rfi.it/ArriviPartenze/en/ArrivalsDepartures/Monitor?placeId=${stationId}&arrivals=False`;
 }
 
@@ -99,6 +99,14 @@ function formatChangeDescription(change: StationChange): FormattedChange {
 
   if (details.nameChanged && details.previousName && details.newName) {
     updates.push(`Renamed from "${details.previousName}"`);
+  }
+
+  if (details.typeChanged && details.previousType && details.newType) {
+    updates.push(`Type changed from ${details.previousType} to ${details.newType}`);
+  }
+
+  if (details.importanceChanged && details.previousImportance !== undefined && details.newImportance !== undefined) {
+    updates.push(`Importance changed from ${details.previousImportance} to ${details.newImportance}`);
   }
 
   return {
