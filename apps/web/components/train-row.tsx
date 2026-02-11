@@ -108,7 +108,8 @@ export function TrainRowSkeleton() {
         {/* Line 1: Train info + Time */}
         <div className="flex items-center justify-between gap-2">
           <div className="flex items-center gap-1.5">
-            <Skeleton className="h-5 w-10" />
+            <Skeleton className="h-5 w-5" />
+            <Skeleton className="h-5 w-6" />
             <Skeleton className="h-5 w-16" />
           </div>
           <Skeleton className="h-5 w-12" />
