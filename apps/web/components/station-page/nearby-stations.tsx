@@ -49,6 +49,7 @@ function calculateNearbyStations(
 
   const { lat, lng } = currentStation.geo;
   const result: StationWithDistance[] = [];
+  let maxDistance = Infinity;
 
   for (const station of allStations) {
     if (station.id === currentStation.id || !station.geo) continue;
@@ -60,15 +61,18 @@ function calculateNearbyStations(
       station.geo.lng,
     );
 
-    if (result.length < limit) {
-      result.push({ ...station, distance });
-      result.sort((a, b) => a.distance - b.distance);
-    } else {
-      const lastStation = result[limit - 1];
-      if (lastStation && distance < lastStation.distance) {
-        result[limit - 1] = { ...station, distance };
-        result.sort((a, b) => a.distance - b.distance);
+    if (result.length < limit || distance < maxDistance) {
+      // Binary insert to maintain sorted order
+      let lo = 0;
+      let hi = result.length;
+      while (lo < hi) {
+        const mid = (lo + hi) >> 1;
+        if (result[mid]!.distance < distance) lo = mid + 1;
+        else hi = mid;
       }
+      result.splice(lo, 0, { ...station, distance });
+      if (result.length > limit) result.pop();
+      maxDistance = result[result.length - 1]!.distance;
     }
   }
 
@@ -85,12 +89,22 @@ export function NearbyStations({
 
   const railStations = allStations.filter((s) => s.type === "rail");
   const metroStations = allStations.filter((s) => s.type === "metro");
-
-  const nearbyRail = calculateNearbyStations(currentStation, railStations, 2);
+  const nearbyRail = calculateNearbyStations(currentStation, railStations, 4);
   const nearbyMetro = calculateNearbyStations(currentStation, metroStations, 2);
-  const nearbyStations = [...nearbyRail, ...nearbyMetro].sort(
+  const combined = [...nearbyRail, ...nearbyMetro].sort(
     (a, b) => a.distance - b.distance,
   );
+  // Max 4 total, max 2 metro — pick closest, skipping excess metro
+  const nearbyStations: typeof combined = [];
+  let metroCount = 0;
+  for (const station of combined) {
+    if (station.type === "metro") {
+      if (metroCount >= 2) continue;
+      metroCount++;
+    }
+    nearbyStations.push(station);
+    if (nearbyStations.length >= 4) break;
+  }
 
   if (nearbyStations.length === 0) {
     return null;
@@ -102,37 +116,29 @@ export function NearbyStations({
         Nearby Stations
       </h2>
       <ul className="space-y-2">
-        {nearbyStations.map((station) => (
-          <li key={station.id}>
-            {station.type === "metro" ? (
+        {nearbyStations.map((station) => {
+          const isMetro = station.type === "metro";
+          const Icon = isMetro ? SquareMIcon : TrainFrontIcon;
+          const href = isMetro
+            ? `/?lat=${station.geo!.lat}&lng=${station.geo!.lng}&zoom=15`
+            : `/station/${station.id}`;
+          return (
+            <li key={station.id}>
               <Link
-                href={`/?lat=${station.geo!.lat}&lng=${station.geo!.lng}&zoom=15`}
+                href={href}
                 className="flex items-center justify-between gap-2 text-sm hover:text-primary transition-colors group"
               >
                 <span className="flex items-center gap-2 truncate">
-                  <SquareMIcon className="size-3.5 text-muted-foreground shrink-0 group-hover:text-primary transition-colors" />
+                  <Icon className="size-3.5 text-muted-foreground shrink-0 group-hover:text-primary transition-colors" />
                   <span className="truncate">{station.name}</span>
                 </span>
                 <span className="text-muted-foreground tabular-nums shrink-0">
                   {formatDistance(station.distance)}
                 </span>
               </Link>
-            ) : (
-              <Link
-                href={`/station/${station.id}`}
-                className="flex items-center justify-between gap-2 text-sm hover:text-primary transition-colors group"
-              >
-                <span className="flex items-center gap-2 truncate">
-                  <TrainFrontIcon className="size-3.5 text-muted-foreground shrink-0 group-hover:text-primary transition-colors" />
-                  <span className="truncate">{station.name}</span>
-                </span>
-                <span className="text-muted-foreground tabular-nums shrink-0">
-                  {formatDistance(station.distance)}
-                </span>
-              </Link>
-            )}
-          </li>
-        ))}
+            </li>
+          );
+        })}
       </ul>
     </section>
   );
