@@ -146,7 +146,7 @@ export function MapControls() {
           </div>
         </Marker>
       )}
-      <div className="absolute bottom-3 right-3 flex flex-col gap-2">
+      <div className="absolute bottom-4 right-4 flex flex-col gap-2">
         <Button
           variant="outline"
           size="icon-sm"
