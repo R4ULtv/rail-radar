@@ -322,13 +322,15 @@ export function Search() {
         {/* Trigger input on the map */}
         <div className="absolute z-50 top-4 left-4 w-[calc(100vw-32px)] pointer-events-none font-sans">
           <InputGroup
-            className="h-10 bg-card dark:bg-card pointer-events-auto cursor-pointer"
+            className="h-10 bg-card dark:bg-card pointer-events-auto cursor-pointer focus-within:ring-2 focus-within:ring-ring"
             onClick={() => setIsDrawerOpen(true)}
           >
             <InputGroupInput
               placeholder="Search Station..."
               value=""
               readOnly
+              name="search-trigger"
+              aria-label="Search stations"
               className="cursor-pointer"
               onFocus={(e) => {
                 e.target.blur();
@@ -361,6 +363,9 @@ export function Search() {
                   value={query}
                   onChange={(e) => setQuery(e.target.value)}
                   autoFocus
+                  name="search"
+                  autoComplete="off"
+                  aria-label="Search stations"
                 />
                 <InputGroupAddon>
                   {isSearchActive && !hasSearched ? (
@@ -412,7 +417,10 @@ export function Search() {
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           onBlur={() => setFocusedIndex(-1)}
+          name="search"
+          autoComplete="off"
           role="combobox"
+          aria-label="Search stations"
           aria-expanded={visibleStations.length > 0}
           aria-haspopup="listbox"
           aria-controls="station-listbox"
