@@ -1,7 +1,14 @@
+import type { Metadata } from "next";
 import { Suspense } from "react";
 
 import { Map } from "@/components/map";
 import MapLoading from "@/components/map-loading";
+
+export const metadata: Metadata = {
+  alternates: {
+    canonical: "/",
+  },
+};
 
 const jsonLd = {
   "@context": "https://schema.org",
