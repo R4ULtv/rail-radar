@@ -1,6 +1,8 @@
 import type { Train } from "@repo/data";
 import type { ContentfulStatusCode } from "hono/utils/http-status";
 
+import { FETCH_TIMEOUT_MS } from "./constants.js";
+
 export interface ScraperTiming {
   fetchMs: number;
 }
@@ -211,8 +213,6 @@ class ParserState {
     this.cellInfoText = "";
   }
 }
-
-const FETCH_TIMEOUT_MS = 30_000;
 
 export async function scrapeTrains(
   stationId: string,

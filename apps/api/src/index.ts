@@ -1,8 +1,9 @@
 import { Hono } from "hono";
 import { cache } from "hono/cache";
 import { cors } from "hono/cors";
+import { validator } from "hono/validator";
 
-import { stations } from "@repo/data/stations";
+import { stationById, stations } from "@repo/data/stations";
 import {
   getAnalyticsOverview,
   getRfiStatus,
@@ -11,6 +12,13 @@ import {
   recordRfiRequest,
   recordStationVisit,
 } from "./analytics.js";
+import {
+  CACHE_TTL,
+  FUZZY_SEARCH_LIMIT,
+  TRENDING_LIMIT,
+  VALID_PERIODS,
+  type Period,
+} from "./constants.js";
 import { fuzzySearch } from "./fuzzy.js";
 import { scrapeTrains, ScraperError } from "./scraper.js";
 
@@ -22,24 +30,32 @@ type Bindings = {
   CLOUDFLARE_API_TOKEN: string;
 };
 
-const validPeriods = ["hour", "day", "week"] as const;
-type Period = (typeof validPeriods)[number];
+type Variables = {
+  clientIp: string;
+};
 
-function validatePeriod(value: unknown): Period {
-  return validPeriods.includes(value as Period) ? (value as Period) : "day";
-}
+const periodValidator = validator("query", (value) => {
+  const period = value["period"];
+  return {
+    period: VALID_PERIODS.includes(period as Period)
+      ? (period as Period)
+      : "day",
+  };
+});
 
-function validateTrainType(value: unknown): "arrivals" | "departures" {
-  return value === "arrivals" ? "arrivals" : "departures";
-}
+const trainTypeValidator = validator("query", (value) => {
+  const type = value["type"];
+  return { type: type === "arrivals" ? "arrivals" : "departures" } as const;
+});
 
-const app = new Hono<{ Bindings: Bindings }>();
+const app = new Hono<{ Bindings: Bindings; Variables: Variables }>();
 
 app.onError((err, c) => {
   console.error("[API Error]", {
     path: c.req.path,
     method: c.req.method,
     message: err.message,
+    stack: err.stack,
   });
   return c.json({ error: "Internal server error" }, 500);
 });
@@ -75,38 +91,55 @@ app.get("/", (c) => {
   });
 });
 
-app.get("/stations", (c) => {
-  const query = c.req.query("q");
+app.get(
+  "/stations",
+  async (c, next) => {
+    const ip = c.req.header("cf-connecting-ip") ?? "unknown";
+    const { success } = await c.env.RATE_LIMITER.limit({ key: ip });
 
-  if (!query) {
-    return c.json(stations);
-  }
+    if (!success) {
+      return c.json(
+        { error: "Too many requests. Please wait a moment and try again." },
+        429,
+      );
+    }
 
-  const filtered = fuzzySearch(stations, query, 20);
-  filtered.sort((a, b) => a.importance - b.importance);
-  return c.json(filtered);
-});
+    await next();
+  },
+  (c) => {
+    const query = c.req.query("q");
+
+    if (!query) {
+      return c.json(stations);
+    }
+
+    const filtered = fuzzySearch(stations, query, FUZZY_SEARCH_LIMIT);
+    filtered.sort((a, b) => a.importance - b.importance);
+    return c.json(filtered);
+  },
+);
 
 app.get(
   "/stations/trending",
   cache({
     cacheName: "analytics-cache",
-    cacheControl: "public, max-age=300, stale-while-revalidate=60",
+    cacheControl: CACHE_TTL.ANALYTICS,
   }),
+  periodValidator,
   async (c) => {
-    const validPeriod = validatePeriod(c.req.query("period"));
+    const { period } = c.req.valid("query");
 
     try {
       const trending = await getTrendingStations(
         c.env.CLOUDFLARE_ACCOUNT_ID,
         c.env.CLOUDFLARE_API_TOKEN,
-        validPeriod,
-        5,
+        period,
+        TRENDING_LIMIT,
       );
 
       return c.json({
         timestamp: new Date().toISOString(),
-        period: validPeriod,
+        period,
         stations: trending,
       });
     } catch {
@@ -122,7 +155,7 @@ app.get(
   "/analytics/overview",
   cache({
     cacheName: "analytics-cache",
-    cacheControl: "public, max-age=300, stale-while-revalidate=60",
+    cacheControl: CACHE_TTL.ANALYTICS,
   }),
   async (c) => {
     try {
@@ -148,21 +181,22 @@ app.get(
   "/rfi/status",
   cache({
     cacheName: "rfi-status-cache",
-    cacheControl: "public, max-age=60, stale-while-revalidate=30",
+    cacheControl: CACHE_TTL.RFI_STATUS,
   }),
+  periodValidator,
   async (c) => {
-    const validPeriod = validatePeriod(c.req.query("period"));
+    const { period } = c.req.valid("query");
 
     try {
       const status = await getRfiStatus(
         c.env.CLOUDFLARE_ACCOUNT_ID,
         c.env.CLOUDFLARE_API_TOKEN,
-        validPeriod,
+        period,
       );
 
       return c.json({
         timestamp: new Date().toISOString(),
-        period: validPeriod,
+        period,
         ...status,
       });
     } catch {
@@ -178,12 +212,12 @@ app.get(
   "/stations/:id/stats",
   cache({
     cacheName: "analytics-cache",
-    cacheControl: "public, max-age=300, stale-while-revalidate=60",
+    cacheControl: CACHE_TTL.ANALYTICS,
   }),
+  periodValidator,
   async (c) => {
     const id = c.req.param("id");
-
-    const station = stations.find((s) => s.id === id);
+    const station = stationById.get(id);
 
     if (!station) {
       return c.json(
@@ -194,14 +228,14 @@ app.get(
       );
     }
 
-    const validPeriod = validatePeriod(c.req.query("period"));
+    const { period } = c.req.valid("query");
 
     try {
       const { station: stationStats, topStation } = await getStationStats(
         c.env.CLOUDFLARE_ACCOUNT_ID,
         c.env.CLOUDFLARE_API_TOKEN,
         id,
-        validPeriod,
+        period,
       );
 
       const isTopStation =
@@ -216,7 +250,7 @@ app.get(
 
       return c.json({
         timestamp: new Date().toISOString(),
-        period: validPeriod,
+        period,
         station: stationStats,
         topStation,
         comparison: {
@@ -237,7 +271,7 @@ app.get(
   "/stations/:id",
   cache({
     cacheName: "stations-cache",
-    cacheControl: "public, max-age=25, stale-while-revalidate=5",
+    cacheControl: CACHE_TTL.STATION_DATA,
   }),
   async (c, next) => {
     const ip = c.req.header("cf-connecting-ip") ?? "unknown";
@@ -250,12 +284,14 @@ app.get(
       );
     }
 
+    // Store IP in context to avoid re-reading header later
+    c.set("clientIp", ip);
     await next();
   },
+  trainTypeValidator,
   async (c) => {
     const id = c.req.param("id");
-
-    const station = stations.find((s) => s.id === id);
+    const station = stationById.get(id);
 
     if (!station) {
       return c.json(
@@ -266,13 +302,13 @@ app.get(
       );
     }
 
-    const type = validateTrainType(c.req.query("type"));
+    const { type } = c.req.valid("query");
 
     try {
       const { trains, info, timing } = await scrapeTrains(id, type);
 
       // Record visit after successful response (non-blocking)
-      const ip = c.req.header("cf-connecting-ip") ?? "unknown";
+      const ip = c.get("clientIp");
       c.executionCtx.waitUntil(
         recordStationVisit(c.env.STATION_ANALYTICS, {
           stationId: station.id,

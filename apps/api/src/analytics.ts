@@ -1,3 +1,9 @@
+import {
+  getPeriodInterval,
+  STATION_ID_PATTERN,
+  type Period,
+} from "./constants.js";
+
 interface TopStation {
   stationId: string;
   stationName: string;
@@ -79,11 +85,10 @@ export async function recordStationVisit(
 export async function getTrendingStations(
   accountId: string,
   apiToken: string,
-  period: "hour" | "day" | "week" = "day",
+  period: Period = "day",
   limit: number = 5,
 ): Promise<TopStation[]> {
-  const intervalValue = { hour: 1, day: 1, week: 7 }[period];
-  const intervalUnit = period === "week" ? "DAY" : period.toUpperCase();
+  const { value, unit } = getPeriodInterval(period);
   const query = `
     SELECT
       index1 as stationId,
@@ -91,7 +96,7 @@ export async function getTrendingStations(
       sum(_sample_interval) as count,
       count(DISTINCT blob2) as uniqueVisitors
     FROM station_visits
-    WHERE timestamp > NOW() - INTERVAL '${intervalValue}' ${intervalUnit}
+    WHERE timestamp > NOW() - INTERVAL '${value}' ${unit}
     GROUP BY index1, blob1
     ORDER BY count DESC
   `;
@@ -133,17 +138,15 @@ export async function getStationStats(
   accountId: string,
   apiToken: string,
   stationId: string,
-  period: "hour" | "day" | "week" = "day",
+  period: Period = "day",
 ): Promise<{ station: TopStation | null; topStation: TopStation | null }> {
-  // Validate stationId format (defense in depth against SQL injection)
-  if (!/^[A-Z]{2,3}\d+$/.test(stationId)) {
+  // SECURITY: Validate stationId format before use in SQL query.
+  // Pattern ensures only alphanumeric station IDs like "IT1728" or "CH123".
+  if (!STATION_ID_PATTERN.test(stationId)) {
     throw new Error("Invalid station ID");
   }
 
-  const intervals = { hour: 1, day: 1, week: 7 } as const;
-  const units = { hour: "HOUR", day: "DAY", week: "DAY" } as const;
-  const intervalValue = intervals[period];
-  const intervalUnit = units[period];
+  const { value, unit } = getPeriodInterval(period);
 
   // Extract numeric part to match old format data too
   const numericId = stationId.replace(/^[A-Z]+/, "");
@@ -154,7 +157,7 @@ export async function getStationStats(
       sum(_sample_interval) as count,
       count(DISTINCT blob2) as uniqueVisitors
     FROM station_visits
-    WHERE timestamp > NOW() - INTERVAL '${intervalValue}' ${intervalUnit}
+    WHERE timestamp > NOW() - INTERVAL '${value}' ${unit}
       AND (index1 = '${stationId}' OR index1 = '${numericId}')
     GROUP BY blob1
   `;
@@ -234,56 +237,45 @@ interface RfiStatusResult {
 export async function getRfiStatus(
   accountId: string,
   apiToken: string,
-  period: "hour" | "day" | "week" = "day",
+  period: Period = "day",
 ): Promise<RfiStatusResult> {
-  const intervalValue = { hour: 1, day: 1, week: 7 }[period];
-  const intervalUnit = period === "week" ? "DAY" : period.toUpperCase();
+  const { value, unit } = getPeriodInterval(period);
 
-  // Get count and success stats (using _sample_interval to account for sampling)
-  const statsQuery = `
+  // Combined query for stats and percentiles in a single request
+  const query = `
     SELECT
       sum(_sample_interval) as count,
       sum(double1 * _sample_interval) / sum(_sample_interval) as avgFetchMs,
-      sumIf(_sample_interval, double2 = 1) as successCount
-    FROM rfi_requests
-    WHERE timestamp > NOW() - INTERVAL '${intervalValue}' ${intervalUnit}
-  `;
-
-  const statsResult = await queryAnalytics<{
-    data: Array<{ count: number; avgFetchMs: number; successCount: number }>;
-  }>(accountId, apiToken, statsQuery);
-
-  const statsData = statsResult.data[0];
-  const count = statsData?.count ?? 0;
-  const successCount = statsData?.successCount ?? 0;
-  const avgFetchMs = statsData?.avgFetchMs ?? 0;
-  const successRate = count > 0 ? (successCount / count) * 100 : 0;
-
-  // Get percentiles using quantileExactWeighted
-  const percentileQuery = `
-    SELECT
+      sumIf(_sample_interval, double2 = 1) as successCount,
       quantileExactWeighted(0.5)(double1, _sample_interval) as p50FetchMs,
       quantileExactWeighted(0.95)(double1, _sample_interval) as p95FetchMs,
       quantileExactWeighted(0.99)(double1, _sample_interval) as p99FetchMs
     FROM rfi_requests
-    WHERE timestamp > NOW() - INTERVAL '${intervalValue}' ${intervalUnit}
+    WHERE timestamp > NOW() - INTERVAL '${value}' ${unit}
   `;
 
-  const percentileResult = await queryAnalytics<{
-    data: Array<{ p50FetchMs: number; p95FetchMs: number; p99FetchMs: number }>;
-  }>(accountId, apiToken, percentileQuery);
+  const result = await queryAnalytics<{
+    data: Array<{
+      count: number;
+      avgFetchMs: number;
+      successCount: number;
+      p50FetchMs: number;
+      p95FetchMs: number;
+      p99FetchMs: number;
+    }>;
+  }>(accountId, apiToken, query);
 
-  const percentileData = percentileResult.data[0];
-  const p50FetchMs = percentileData?.p50FetchMs ?? 0;
-  const p95FetchMs = percentileData?.p95FetchMs ?? 0;
-  const p99FetchMs = percentileData?.p99FetchMs ?? 0;
+  const data = result.data[0];
+  const count = data?.count ?? 0;
+  const successCount = data?.successCount ?? 0;
+  const successRate = count > 0 ? (successCount / count) * 100 : 0;
 
   return {
     count,
-    avgFetchMs,
-    p50FetchMs,
-    p95FetchMs,
-    p99FetchMs,
+    avgFetchMs: data?.avgFetchMs ?? 0,
+    p50FetchMs: data?.p50FetchMs ?? 0,
+    p95FetchMs: data?.p95FetchMs ?? 0,
+    p99FetchMs: data?.p99FetchMs ?? 0,
     successCount,
     successRate,
   };
