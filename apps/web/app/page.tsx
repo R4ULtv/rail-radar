@@ -10,6 +10,14 @@ const jsonLd = {
   url: "https://www.railradar24.com",
   description:
     "Track Italian trains in real time. Get live delays, platform numbers, and departure info for all 2400+ train stations across Italy.",
+  potentialAction: {
+    "@type": "SearchAction",
+    target: {
+      "@type": "EntryPoint",
+      urlTemplate: "https://www.railradar24.com/?q={search_term_string}",
+    },
+    "query-input": "required name=search_term_string",
+  },
 };
 
 export default function Home() {

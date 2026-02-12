@@ -12,6 +12,7 @@ import {
   XIcon,
 } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
+import { parseAsString, useQueryState } from "nuqs";
 
 import {
   Drawer,
@@ -105,10 +106,24 @@ export function Search() {
   const isMobile = useIsMobile();
   const { selectStation, savedStations } = useSelectedStation();
   const inputRef = React.useRef<HTMLInputElement>(null);
-  const [query, setQuery] = React.useState("");
+  const [query, setQuery] = useQueryState(
+    "q",
+    parseAsString.withDefault("").withOptions({
+      history: "replace",
+      shallow: true,
+      throttleMs: 300,
+    }),
+  );
   const debouncedQuery = useDebounce(query.trim(), 300);
   const [focusedIndex, setFocusedIndex] = React.useState<number>(-1);
-  const [isDrawerOpen, setIsDrawerOpen] = React.useState(false);
+  const [isDrawerOpen, setIsDrawerOpen] = React.useState(() => query.length > 0);
+
+  // Auto-open drawer on mobile if query is present in URL
+  React.useEffect(() => {
+    if (isMobile && query.length > 0 && !isDrawerOpen) {
+      setIsDrawerOpen(true);
+    }
+  }, [isMobile, query, isDrawerOpen]);
 
   // Fetch search results
   const { stations: searchResults, isLoading } = useStationSearch(
@@ -155,9 +170,10 @@ export function Search() {
         setQuery("");
       } else {
         inputRef.current?.blur();
+        setQuery("");
       }
     },
-    [selectStation, isMobile],
+    [selectStation, isMobile, setQuery],
   );
 
   const visibleStations = React.useMemo(() => {
@@ -327,7 +343,7 @@ export function Search() {
           >
             <InputGroupInput
               placeholder="Search Station..."
-              value=""
+              value={query}
               readOnly
               name="search-trigger"
               aria-label="Search stations"
