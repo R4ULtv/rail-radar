@@ -25,6 +25,22 @@ interface TrainColumnProps {
   onTypeChange?: (type: "arrivals" | "departures") => void;
 }
 
+const relativeTimeFormatter = new Intl.RelativeTimeFormat("en", {
+  numeric: "auto",
+  style: "narrow",
+});
+
+function formatRelativeTime(secondsAgo: number): string {
+  if (secondsAgo < 5) {
+    return "Updated just now";
+  }
+  const minutesAgo = Math.floor(secondsAgo / 60);
+  if (minutesAgo >= 1) {
+    return `Updated ${relativeTimeFormatter.format(-minutesAgo, "minute")}`;
+  }
+  return `Updated ${relativeTimeFormatter.format(-secondsAgo, "second")}`;
+}
+
 function UpdatedStatus({
   isLoading,
   isValidating,
@@ -67,14 +83,7 @@ function UpdatedStatus({
   }
 
   if (lastUpdated) {
-    const minutesAgo = Math.floor(secondsAgo / 60);
-    const timeText =
-      secondsAgo < 5
-        ? "Updated just now"
-        : minutesAgo >= 1
-          ? `Updated ${minutesAgo}m ago`
-          : `Updated ${secondsAgo}s ago`;
-    return timeText;
+    return formatRelativeTime(secondsAgo);
   }
 
   return null;

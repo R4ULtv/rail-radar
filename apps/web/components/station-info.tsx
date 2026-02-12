@@ -126,6 +126,22 @@ function StationTabs({
   );
 }
 
+const relativeTimeFormatter = new Intl.RelativeTimeFormat("en", {
+  numeric: "auto",
+  style: "narrow",
+});
+
+function formatRelativeTime(secondsAgo: number): string {
+  if (secondsAgo < 5) {
+    return "Updated just now";
+  }
+  const minutesAgo = Math.floor(secondsAgo / 60);
+  if (minutesAgo >= 1) {
+    return `Updated ${relativeTimeFormatter.format(-minutesAgo, "minute")}`;
+  }
+  return `Updated ${relativeTimeFormatter.format(-secondsAgo, "second")}`;
+}
+
 // Updated status text
 function UpdatedStatus({
   isLoading,
@@ -170,14 +186,7 @@ function UpdatedStatus({
   }
 
   if (lastUpdated) {
-    const minutesAgo = Math.floor(secondsAgo / 60);
-    const timeText =
-      secondsAgo < 5
-        ? "Updated just now"
-        : minutesAgo >= 1
-          ? `Updated ${minutesAgo}m ago`
-          : `Updated ${secondsAgo}s ago`;
-    return `${timeText}`;
+    return formatRelativeTime(secondsAgo);
   }
 
   return null;
@@ -306,7 +315,9 @@ export default function StationInfo() {
                       aria-label="View station details"
                     />
                   </CardAction>
-                  <CardTitle>{selectedStation?.name}</CardTitle>
+                  <CardTitle className="truncate">
+                    {selectedStation?.name}
+                  </CardTitle>
                   <CardDescription>
                     <UpdatedStatus
                       isLoading={isLoading}
@@ -349,7 +360,7 @@ export default function StationInfo() {
         )}
       >
         <DrawerHeader className="pb-3 relative group-data-[vaul-drawer-direction=bottom]/drawer-content:text-left">
-          <DrawerTitle className="text-xl pr-39">
+          <DrawerTitle className="text-xl pr-39 truncate">
             {selectedStation?.name}
           </DrawerTitle>
           <DrawerDescription className="text-sm text-muted-foreground h-5">
