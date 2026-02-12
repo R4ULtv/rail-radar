@@ -116,7 +116,9 @@ export function Search() {
   );
   const debouncedQuery = useDebounce(query.trim(), 300);
   const [focusedIndex, setFocusedIndex] = React.useState<number>(-1);
-  const [isDrawerOpen, setIsDrawerOpen] = React.useState(() => query.length > 0);
+  const [isDrawerOpen, setIsDrawerOpen] = React.useState(
+    () => query.length > 0,
+  );
 
   // Auto-open drawer on mobile if query is present in URL
   React.useEffect(() => {
