@@ -22,7 +22,27 @@ type Bindings = {
   CLOUDFLARE_API_TOKEN: string;
 };
 
+const validPeriods = ["hour", "day", "week"] as const;
+type Period = (typeof validPeriods)[number];
+
+function validatePeriod(value: unknown): Period {
+  return validPeriods.includes(value as Period) ? (value as Period) : "day";
+}
+
+function validateTrainType(value: unknown): "arrivals" | "departures" {
+  return value === "arrivals" ? "arrivals" : "departures";
+}
+
 const app = new Hono<{ Bindings: Bindings }>();
+
+app.onError((err, c) => {
+  console.error("[API Error]", {
+    path: c.req.path,
+    method: c.req.method,
+    message: err.message,
+  });
+  return c.json({ error: "Internal server error" }, 500);
+});
 
 app.use(
   "*",
@@ -74,13 +94,7 @@ app.get(
     cacheControl: "public, max-age=300, stale-while-revalidate=60",
   }),
   async (c) => {
-    const period = c.req.query("period");
-    const validPeriods = ["hour", "day", "week"] as const;
-    const validPeriod: "hour" | "day" | "week" = validPeriods.includes(
-      period as "hour" | "day" | "week",
-    )
-      ? (period as "hour" | "day" | "week")
-      : "day";
+    const validPeriod = validatePeriod(c.req.query("period"));
 
     try {
       const trending = await getTrendingStations(
@@ -137,13 +151,7 @@ app.get(
     cacheControl: "public, max-age=60, stale-while-revalidate=30",
   }),
   async (c) => {
-    const period = c.req.query("period");
-    const validPeriods = ["hour", "day", "week"] as const;
-    const validPeriod: "hour" | "day" | "week" = validPeriods.includes(
-      period as "hour" | "day" | "week",
-    )
-      ? (period as "hour" | "day" | "week")
-      : "day";
+    const validPeriod = validatePeriod(c.req.query("period"));
 
     try {
       const status = await getRfiStatus(
@@ -186,13 +194,7 @@ app.get(
       );
     }
 
-    const period = c.req.query("period");
-    const validPeriods = ["hour", "day", "week"] as const;
-    const validPeriod: "hour" | "day" | "week" = validPeriods.includes(
-      period as "hour" | "day" | "week",
-    )
-      ? (period as "hour" | "day" | "week")
-      : "day";
+    const validPeriod = validatePeriod(c.req.query("period"));
 
     try {
       const { station: stationStats, topStation } = await getStationStats(
@@ -222,12 +224,7 @@ app.get(
           isTopStation,
         },
       });
-    } catch (error) {
-      console.error(`Error details:`, {
-        message: error instanceof Error ? error.message : "Unknown error",
-        stack: error instanceof Error ? error.stack : undefined,
-        error: String(error),
-      });
+    } catch {
       return c.json(
         { error: "Unable to fetch analytics data. Please try again later." },
         500,
@@ -269,7 +266,7 @@ app.get(
       );
     }
 
-    const type = c.req.query("type") === "arrivals" ? "arrivals" : "departures";
+    const type = validateTrainType(c.req.query("type"));
 
     try {
       const { trains, info, timing } = await scrapeTrains(id, type);
@@ -302,12 +299,6 @@ app.get(
         trains,
       });
     } catch (error) {
-      console.error(`[/stations/${id}] Error fetching trains:`, {
-        type,
-        error: error instanceof Error ? error.message : String(error),
-        stack: error instanceof Error ? error.stack : undefined,
-      });
-
       if (error instanceof ScraperError) {
         // Record RFI request timing for error case (non-blocking)
         c.executionCtx.waitUntil(

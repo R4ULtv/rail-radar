@@ -230,12 +230,6 @@ export async function scrapeTrains(
     response = await fetch(url, { signal: controller.signal });
   } catch (error) {
     fetchError = error instanceof Error ? error : new Error(String(error));
-    console.error(`[scraper] Fetch failed:`, {
-      url,
-      error: fetchError.message,
-      name: fetchError.name,
-    });
-
     const fetchMs = performance.now() - startTime;
     clearTimeout(timeoutId);
 
