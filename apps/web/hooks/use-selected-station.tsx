@@ -3,7 +3,7 @@
 import * as React from "react";
 import { useQueryState, parseAsString } from "nuqs";
 import { useMap } from "react-map-gl/mapbox";
-import { stations } from "@repo/data/stations";
+import { stationById } from "@repo/data/stations";
 import type { Station } from "@repo/data";
 import { useSavedStations } from "./use-saved-stations";
 
@@ -36,14 +36,13 @@ export function SelectedStationProvider({
 
   const selectedStation = React.useMemo(() => {
     if (!stationId) return null;
-    const station = stations.find((s) => s.id === stationId);
-    return station ?? null;
+    return stationById.get(stationId) ?? null;
   }, [stationId]);
 
   const selectStation = React.useCallback(
     (station: Station) => {
-      // Use provided geo or look it up from stationsCoords
-      const geo = station.geo ?? stations.find((s) => s.id === station.id)?.geo;
+      // Use provided geo or look it up from stationById
+      const geo = station.geo ?? stationById.get(station.id)?.geo;
       if (!geo) return;
 
       if (station.type === "rail") {

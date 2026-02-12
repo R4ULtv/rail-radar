@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { stations } from "@repo/data/stations";
+import { stationById } from "@repo/data/stations";
 import type { Station } from "@repo/data";
 
 const SAVED_STATIONS_KEY = "saved-stations";
@@ -33,7 +33,7 @@ export function useSavedStations() {
   // Derive full station objects from IDs
   const savedStations = React.useMemo(() => {
     return savedIds
-      .map((id) => stations.find((s) => s.id === id))
+      .map((id) => stationById.get(id))
       .filter((s): s is Station => s !== undefined);
   }, [savedIds]);
 

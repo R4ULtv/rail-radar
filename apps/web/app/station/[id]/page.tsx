@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import Link from "next/link";
-import { stations, type Station } from "@repo/data";
+import { stations, stationById, type Station } from "@repo/data";
 import { Button } from "@repo/ui/components/button";
 import { ArrowLeftIcon } from "lucide-react";
 import { StaticMap } from "@/components/static-map";
@@ -17,7 +17,7 @@ interface StationPageProps {
 type StationWithGeo = Station & { geo: { lat: number; lng: number } };
 
 function getStation(id: string): StationWithGeo | null {
-  const station = stations.find((s) => s.id === id);
+  const station = stationById.get(id);
   if (!station?.geo || station.type !== "rail") return null;
   return station as StationWithGeo;
 }
