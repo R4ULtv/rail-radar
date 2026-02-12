@@ -17,6 +17,7 @@ Cloudflare Workers API that provides real-time Italian railway data by scraping 
 | `GET`  | `/stations/:id`       | Get station with trains (`?type=arrivals\|departures`)              |
 | `GET`  | `/stations/:id/stats` | Get station visit stats (`?period=hour\|day\|week`, default: `day`) |
 | `GET`  | `/analytics/overview` | Get global analytics (total visits, unique visitors, etc.)          |
+| `GET`  | `/rfi/status`         | Get RFI request timing stats (`?period=hour\|day\|week`)            |
 
 ### Caching
 
@@ -26,10 +27,22 @@ Responses are cached to reduce load on upstream sources:
 - `/stations/:id/stats`: 5min cache, 1min stale-while-revalidate
 - `/stations/trending`: 5min cache, 1min stale-while-revalidate
 - `/analytics/overview`: 5min cache, 1min stale-while-revalidate
+- `/rfi/status`: 5min cache, 1min stale-while-revalidate
 
 ### Rate Limiting
 
-The `/stations/:id` endpoint is rate-limited per IP using Cloudflare's Rate Limiting.
+The `/stations` and `/stations/:id` endpoints are rate-limited per IP (15 requests per 10 seconds) using Cloudflare's Rate Limiting.
+
+## Project Structure
+
+```
+src/
+├── index.ts      # Main Hono app, route handlers, middleware
+├── scraper.ts    # HTML parsing with HTMLRewriter for RFI data
+├── analytics.ts  # Cloudflare Analytics Engine integration
+├── fuzzy.ts      # Fuzzy search (Damerau-Levenshtein)
+└── constants.ts  # Shared constants (cache TTL, timeouts, validation)
+```
 
 ## Development
 
