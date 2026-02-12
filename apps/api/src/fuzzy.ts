@@ -48,23 +48,27 @@ function damerauLevenshtein(a: string, b: string): number {
 
 /**
  * Score a station name against a query (0-1, higher = better match)
+ * Returns both match score and match type for tiered sorting
  */
-function scoreStation(query: string, name: string): number {
+function scoreStation(
+  query: string,
+  name: string,
+): { score: number; matchType: number } {
   const q = query.toLowerCase();
   const n = name.toLowerCase();
   const words = n.split(/\s+/);
 
-  // Exact match
-  if (n === q) return 1.0;
+  // Exact match - highest priority
+  if (n === q) return { score: 1.0, matchType: 0 };
 
-  // Name starts with query
-  if (n.startsWith(q)) return 0.95;
+  // Name starts with query - very high priority
+  if (n.startsWith(q)) return { score: 0.95, matchType: 1 };
 
-  // Any word starts with query
-  if (words.some((w) => w.startsWith(q))) return 0.9;
+  // Any word starts with query - high priority
+  if (words.some((w) => w.startsWith(q))) return { score: 0.9, matchType: 2 };
 
-  // Name contains query
-  if (n.includes(q)) return 0.8;
+  // Name contains query - medium priority
+  if (n.includes(q)) return { score: 0.7, matchType: 3 };
 
   // Fuzzy match against each word, take best score
   // Only allow 1-2 mistakes max
@@ -95,11 +99,12 @@ function scoreStation(query: string, name: string): number {
   }
 
   // Scale fuzzy matches below exact/prefix matches
-  return bestScore * 0.75;
+  return { score: bestScore * 0.6, matchType: 4 };
 }
 
 /**
  * Search stations with fuzzy matching and ranking
+ * Sorts by: match type (exact/prefix > contains > fuzzy), then importance, then score
  */
 export function fuzzySearch(
   stations: Station[],
@@ -107,13 +112,35 @@ export function fuzzySearch(
   limit: number = 20,
 ): Station[] {
   if (!query.trim()) {
-    return stations.slice(0, limit);
+    // When no query, sort by importance (lower number = more important)
+    return stations
+      .slice()
+      .sort((a, b) => a.importance - b.importance)
+      .slice(0, limit);
   }
 
   const scored = stations
-    .map((station) => ({ station, score: scoreStation(query, station.name) }))
+    .map((station) => {
+      const result = scoreStation(query, station.name);
+      return {
+        station,
+        score: result.score,
+        matchType: result.matchType,
+      };
+    })
     .filter(({ score }) => score > 0.3)
-    .sort((a, b) => b.score - a.score)
+    .sort((a, b) => {
+      // First: match type (exact/prefix matches first)
+      if (a.matchType !== b.matchType) {
+        return a.matchType - b.matchType;
+      }
+      // Second: importance (lower number = more important)
+      if (a.station.importance !== b.station.importance) {
+        return a.station.importance - b.station.importance;
+      }
+      // Third: score within same match type
+      return b.score - a.score;
+    })
     .slice(0, limit);
 
   return scored.map(({ station }) => station);

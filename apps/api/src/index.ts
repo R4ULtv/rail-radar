@@ -114,7 +114,6 @@ app.get(
     }
 
     const filtered = fuzzySearch(stations, query, FUZZY_SEARCH_LIMIT);
-    filtered.sort((a, b) => a.importance - b.importance);
     return c.json(filtered);
   },
 );
