@@ -37,6 +37,9 @@ export function useSavedStations() {
       .filter((s): s is Station => s !== undefined);
   }, [savedIds]);
 
+  // Set for O(1) lookup
+  const savedIdsSet = React.useMemo(() => new Set(savedIds), [savedIds]);
+
   // Load from localStorage after hydration and listen for changes
   React.useEffect(() => {
     // Initial load
@@ -46,26 +49,26 @@ export function useSavedStations() {
       setSavedIds(loadSavedStationIds());
     };
 
-    // Listen for custom event (same-tab sync)
-    window.addEventListener(SAVED_CHANGED_EVENT, handleStorageChange);
-    // Listen for storage event (cross-tab sync)
-    window.addEventListener("storage", (e) => {
+    const handleStorageEvent = (e: StorageEvent) => {
       if (e.key === SAVED_STATIONS_KEY) {
         handleStorageChange();
       }
-    });
+    };
+
+    // Listen for custom event (same-tab sync)
+    window.addEventListener(SAVED_CHANGED_EVENT, handleStorageChange);
+    // Listen for storage event (cross-tab sync)
+    window.addEventListener("storage", handleStorageEvent);
 
     return () => {
       window.removeEventListener(SAVED_CHANGED_EVENT, handleStorageChange);
-      window.removeEventListener("storage", handleStorageChange);
+      window.removeEventListener("storage", handleStorageEvent);
     };
   }, []);
 
   const isSaved = React.useCallback(
-    (stationId: string) => {
-      return savedIds.includes(stationId);
-    },
-    [savedIds],
+    (stationId: string) => savedIdsSet.has(stationId),
+    [savedIdsSet],
   );
 
   const toggleSaved = React.useCallback((stationId: string) => {
