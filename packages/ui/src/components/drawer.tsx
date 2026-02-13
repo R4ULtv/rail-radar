@@ -1,7 +1,8 @@
+// Temporary migration from @vaul to @base-ui. Should be updated when shadcn UI provides official support
 "use client";
 
 import * as React from "react";
-import { Drawer as DrawerPrimitive } from "vaul";
+import { DrawerPreview as DrawerPrimitive } from "@base-ui/react/drawer";
 
 import { cn } from "@repo/ui/lib/utils";
 
@@ -32,12 +33,26 @@ function DrawerClose({
 function DrawerOverlay({
   className,
   ...props
-}: React.ComponentProps<typeof DrawerPrimitive.Overlay>) {
+}: React.ComponentProps<typeof DrawerPrimitive.Backdrop>) {
   return (
-    <DrawerPrimitive.Overlay
+    <DrawerPrimitive.Backdrop
       data-slot="drawer-overlay"
       className={cn(
-        "data-open:animate-in data-closed:animate-out data-closed:fade-out-0 data-open:fade-in-0 bg-black/10 supports-backdrop-filter:backdrop-blur-xs fixed inset-0 z-50",
+        // base
+        "fixed inset-0 z-50 min-h-dvh bg-black/20 supports-backdrop-filter:backdrop-blur-xs",
+        // swipe-linked opacity using --backdrop-opacity pattern from docs
+        "[--backdrop-opacity:0.2] dark:[--backdrop-opacity:0.7]",
+        "opacity-[calc(var(--backdrop-opacity)*(1-var(--drawer-swipe-progress)))]",
+        // transition
+        "transition-opacity duration-[450ms] ease-[cubic-bezier(0.32,0.72,0,1)]",
+        // while swiping — track finger, no transition
+        "data-[swiping]:duration-0",
+        // enter / exit
+        "data-[starting-style]:opacity-0",
+        "data-[ending-style]:opacity-0",
+        "data-[ending-style]:duration-[calc(var(--drawer-swipe-strength)*400ms)]",
+        // iOS 26+ viewport fix
+        "supports-[-webkit-touch-callout:none]:absolute",
         className,
       )}
       {...props}
@@ -49,21 +64,90 @@ function DrawerContent({
   className,
   children,
   ...props
-}: React.ComponentProps<typeof DrawerPrimitive.Content>) {
+}: React.ComponentProps<typeof DrawerPrimitive.Popup>) {
   return (
     <DrawerPortal data-slot="drawer-portal">
       <DrawerOverlay />
-      <DrawerPrimitive.Content
-        data-slot="drawer-content"
-        className={cn(
-          "bg-background flex h-auto flex-col text-sm data-[vaul-drawer-direction=bottom]:inset-x-0 data-[vaul-drawer-direction=bottom]:bottom-0 data-[vaul-drawer-direction=bottom]:mt-24 data-[vaul-drawer-direction=bottom]:max-h-[80vh] data-[vaul-drawer-direction=bottom]:rounded-t-xl data-[vaul-drawer-direction=bottom]:border-t data-[vaul-drawer-direction=left]:inset-y-0 data-[vaul-drawer-direction=left]:left-0 data-[vaul-drawer-direction=left]:w-3/4 data-[vaul-drawer-direction=left]:rounded-r-xl data-[vaul-drawer-direction=left]:border-r data-[vaul-drawer-direction=right]:inset-y-0 data-[vaul-drawer-direction=right]:right-0 data-[vaul-drawer-direction=right]:w-3/4 data-[vaul-drawer-direction=right]:rounded-l-xl data-[vaul-drawer-direction=right]:border-l data-[vaul-drawer-direction=top]:inset-x-0 data-[vaul-drawer-direction=top]:top-0 data-[vaul-drawer-direction=top]:mb-24 data-[vaul-drawer-direction=top]:max-h-[80vh] data-[vaul-drawer-direction=top]:rounded-b-xl data-[vaul-drawer-direction=top]:border-b data-[vaul-drawer-direction=left]:sm:max-w-sm data-[vaul-drawer-direction=right]:sm:max-w-sm group/drawer-content fixed z-50",
-          className,
-        )}
-        {...props}
+      <DrawerPrimitive.Viewport
+        data-slot="drawer-viewport"
+        className="fixed inset-0 z-50 flex items-end justify-center data-[swipe-direction=right]:items-stretch data-[swipe-direction=right]:justify-end data-[swipe-direction=left]:items-stretch data-[swipe-direction=left]:justify-start data-[swipe-direction=up]:items-start data-[swipe-direction=up]:justify-center"
       >
-        <div className="bg-muted mx-auto mt-4 hidden h-1.5 w-[100px] shrink-0 rounded-full group-data-[vaul-drawer-direction=bottom]/drawer-content:block bg-muted mx-auto hidden shrink-0 group-data-[vaul-drawer-direction=bottom]/drawer-content:block" />
-        {children}
-      </DrawerPrimitive.Content>
+        <DrawerPrimitive.Popup
+          data-slot="drawer-content"
+          className={cn(
+            // base
+            "bg-background fixed z-50 flex h-auto flex-col text-sm",
+            // touch + overscroll behavior
+            "touch-auto overscroll-contain overflow-y-auto",
+
+            /* --- bottom (default swipeDirection="down") --- */
+            "data-[swipe-direction=down]:inset-x-0",
+            "data-[swipe-direction=down]:bottom-0",
+            "data-[swipe-direction=down]:mt-24",
+            "data-[swipe-direction=down]:max-h-[80vh]",
+            "data-[swipe-direction=down]:rounded-t-xl",
+            "data-[swipe-direction=down]:border-t",
+            // snap-point-offset + swipe movement — this is what makes snap points work
+            "data-[swipe-direction=down]:[transform:translateY(calc(var(--drawer-snap-point-offset)+var(--drawer-swipe-movement-y)))]",
+            "data-[swipe-direction=down]:data-[starting-style]:[transform:translateY(100%)]",
+            "data-[swipe-direction=down]:data-[ending-style]:[transform:translateY(100%)]",
+
+            /* --- top --- */
+            "data-[swipe-direction=up]:inset-x-0",
+            "data-[swipe-direction=up]:top-0",
+            "data-[swipe-direction=up]:mb-24",
+            "data-[swipe-direction=up]:max-h-[80vh]",
+            "data-[swipe-direction=up]:rounded-b-xl",
+            "data-[swipe-direction=up]:border-b",
+            "data-[swipe-direction=up]:[transform:translateY(var(--drawer-swipe-movement-y))]",
+            "data-[swipe-direction=up]:data-[starting-style]:[transform:translateY(-100%)]",
+            "data-[swipe-direction=up]:data-[ending-style]:[transform:translateY(-100%)]",
+
+            /* --- right --- */
+            "data-[swipe-direction=right]:inset-y-0",
+            "data-[swipe-direction=right]:right-0",
+            "data-[swipe-direction=right]:w-3/4",
+            "data-[swipe-direction=right]:rounded-l-xl",
+            "data-[swipe-direction=right]:border-l",
+            "data-[swipe-direction=right]:sm:max-w-sm",
+            "data-[swipe-direction=right]:[transform:translateX(var(--drawer-swipe-movement-x))]",
+            "data-[swipe-direction=right]:data-[starting-style]:[transform:translateX(100%)]",
+            "data-[swipe-direction=right]:data-[ending-style]:[transform:translateX(100%)]",
+
+            /* --- left --- */
+            "data-[swipe-direction=left]:inset-y-0",
+            "data-[swipe-direction=left]:left-0",
+            "data-[swipe-direction=left]:w-3/4",
+            "data-[swipe-direction=left]:rounded-r-xl",
+            "data-[swipe-direction=left]:border-r",
+            "data-[swipe-direction=left]:sm:max-w-sm",
+            "data-[swipe-direction=left]:[transform:translateX(var(--drawer-swipe-movement-x))]",
+            "data-[swipe-direction=left]:data-[starting-style]:[transform:translateX(-100%)]",
+            "data-[swipe-direction=left]:data-[ending-style]:[transform:translateX(-100%)]",
+
+            /* --- shared transition --- */
+            "transition-transform duration-[450ms] ease-[cubic-bezier(0.32,0.72,0,1)]",
+            "data-[swiping]:select-none",
+            "data-[ending-style]:duration-[calc(var(--drawer-swipe-strength)*400ms)]",
+
+            /* --- group for child selectors --- */
+            "group/drawer-content",
+
+            className,
+          )}
+          {...props}
+        >
+          {/* Handle — only visible for bottom drawers */}
+          <div className="bg-muted mx-auto mt-4 hidden h-1.5 w-[100px] shrink-0 rounded-full group-data-[swipe-direction=down]/drawer-content:block" />
+
+          <DrawerPrimitive.Content
+            data-slot="drawer-inner-content"
+            className="flex min-h-0 flex-1 flex-col"
+          >
+            {children}
+          </DrawerPrimitive.Content>
+        </DrawerPrimitive.Popup>
+      </DrawerPrimitive.Viewport>
     </DrawerPortal>
   );
 }
@@ -73,7 +157,10 @@ function DrawerHeader({ className, ...props }: React.ComponentProps<"div">) {
     <div
       data-slot="drawer-header"
       className={cn(
-        "gap-0.5 p-4 group-data-[vaul-drawer-direction=bottom]/drawer-content:text-center group-data-[vaul-drawer-direction=top]/drawer-content:text-center md:gap-1.5 md:text-left flex flex-col",
+        "flex flex-col gap-0.5 p-4 md:gap-1.5",
+        "group-data-[swipe-direction=down]/drawer-content:text-center",
+        "group-data-[swipe-direction=up]/drawer-content:text-center",
+        "md:text-left",
         className,
       )}
       {...props}
@@ -85,7 +172,7 @@ function DrawerFooter({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
       data-slot="drawer-footer"
-      className={cn("gap-2 p-4 mt-auto flex flex-col", className)}
+      className={cn("mt-auto flex flex-col gap-2 p-4", className)}
       {...props}
     />
   );

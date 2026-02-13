@@ -348,18 +348,22 @@ export default function StationInfo() {
   return (
     <Drawer
       snapPoints={snapPoints}
-      activeSnapPoint={snap}
-      setActiveSnapPoint={setSnap}
+      snapPoint={snap}
+      onSnapPointChange={setSnap}
       open={isOpen}
-      onClose={clearStation}
+      onOpenChange={(nextOpen) => {
+        if (!nextOpen) {
+          clearStation();
+        }
+      }}
     >
       <DrawerContent
         className={cn(
           "h-full max-h-full! -mx-px outline-none bg-card",
-          snap === 1 && "data-[vaul-drawer-direction=bottom]:rounded-t-none",
+          snap === 1 && "data-[swipe-direction=down]:rounded-t-none",
         )}
       >
-        <DrawerHeader className="pb-3 relative group-data-[vaul-drawer-direction=bottom]/drawer-content:text-left">
+        <DrawerHeader className="pb-3 relative group-data-[swipe-direction=down]/drawer-content:text-left">
           <DrawerTitle className="text-xl pr-39 truncate">
             {selectedStation?.name}
           </DrawerTitle>
