@@ -12,7 +12,7 @@
     "check-types": "next typegen && tsc --noEmit"
   },
   "dependencies": {
-    "@repo/data": "workspace:^",
+    "@repo/data": "workspace:*",
     "@repo/ui": "workspace:^",
     "@vercel/analytics": "^1.6.1",
     "lucide-react": "^0.562.0",
@@ -29,9 +29,9 @@
     "@repo/eslint-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
     "@tailwindcss/postcss": "^4.1.18",
-    "@types/node": "^22.19.8",
-    "@types/react": "19.2.10",
-    "@types/react-dom": "19.2.3",
+    "@types/node": "^22.19.9",
+    "@types/react": "^19.2.10",
+    "@types/react-dom": "^19.2.3",
     "babel-plugin-react-compiler": "^1.0.0",
     "eslint": "^9.39.2",
     "tailwindcss": "^4.1.18"

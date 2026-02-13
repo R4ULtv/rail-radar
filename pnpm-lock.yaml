@@ -15,7 +15,7 @@ importers:
         specifier: ^2.8.3
         version: 2.8.3
       typescript:
-        specifier: 5.9.3
+        specifier: ^5.9.3
         version: 5.9.3
 
   apps/api:
@@ -43,10 +43,10 @@ importers:
   apps/studio:
     dependencies:
       '@repo/data':
-        specifier: workspace:^
+        specifier: workspace:*
         version: link:../../packages/data
       '@repo/ui':
-        specifier: workspace:^
+        specifier: workspace:*
         version: link:../../packages/ui
       lucide-react:
         specifier: ^0.562.0
@@ -86,8 +86,8 @@ importers:
         specifier: ^4.1.18
         version: 4.1.18
       '@types/node':
-        specifier: ^20.19.31
-        version: 20.19.31
+        specifier: ^22.19.9
+        version: 22.19.9
       '@types/react':
         specifier: ^19.2.10
         version: 19.2.10
@@ -107,7 +107,7 @@ importers:
   apps/web:
     dependencies:
       '@repo/data':
-        specifier: workspace:^
+        specifier: workspace:*
         version: link:../../packages/data
       '@repo/ui':
         specifier: workspace:^
@@ -153,13 +153,13 @@ importers:
         specifier: ^4.1.18
         version: 4.1.18
       '@types/node':
-        specifier: ^22.19.8
-        version: 22.19.8
+        specifier: ^22.19.9
+        version: 22.19.9
       '@types/react':
-        specifier: 19.2.10
+        specifier: ^19.2.10
         version: 19.2.10
       '@types/react-dom':
-        specifier: 19.2.3
+        specifier: ^19.2.3
         version: 19.2.3(@types/react@19.2.10)
       babel-plugin-react-compiler:
         specifier: ^1.0.0
@@ -183,7 +183,7 @@ importers:
         specifier: ^9.39.2
         version: 9.39.2(jiti@2.6.1)
       typescript:
-        specifier: 5.9.3
+        specifier: ^5.9.3
         version: 5.9.3
 
   packages/eslint-config:
@@ -288,7 +288,7 @@ importers:
         specifier: ^4.1.18
         version: 4.1.18
       typescript:
-        specifier: 5.9.3
+        specifier: ^5.9.3
         version: 5.9.3
 
 packages:
@@ -1294,12 +1294,6 @@ packages:
   '@types/minimatch@6.0.0':
     resolution: {integrity: sha512-zmPitbQ8+6zNutpwgcQuLcsEpn/Cj54Kbn7L5pX0Os5kdWplB7xPgEh/g+SWOB/qmows2gpuCaPyduq8ZZRnxA==}
     deprecated: This is a stub types definition. minimatch provides its own type definitions, so you do not need this installed.
-
-  '@types/node@20.19.31':
-    resolution: {integrity: sha512-5jsi0wpncvTD33Sh1UCgacK37FFwDn+EG7wCmEvs62fCvBL+n8/76cAYDok21NF6+jaVWIqKwCZyX7Vbu8eB3A==}
-
-  '@types/node@22.19.8':
-    resolution: {integrity: sha512-ebO/Yl+EAvVe8DnMfi+iaAyIqYdK0q/q0y0rw82INWEKJOBe6b/P3YWE8NW7oOlF/nXFNrHwhARrN/hdgDkraA==}
 
   '@types/node@22.19.9':
     resolution: {integrity: sha512-PD03/U8g1F9T9MI+1OBisaIARhSzeidsUjQaf51fOxrfjeiKN9bLVO06lHuHYjxdnqLWJijJHfqXPSJri2EM2A==}
@@ -5116,14 +5110,6 @@ snapshots:
   '@types/minimatch@6.0.0':
     dependencies:
       minimatch: 10.1.2
-
-  '@types/node@20.19.31':
-    dependencies:
-      undici-types: 6.21.0
-
-  '@types/node@22.19.8':
-    dependencies:
-      undici-types: 6.21.0
 
   '@types/node@22.19.9':
     dependencies:
