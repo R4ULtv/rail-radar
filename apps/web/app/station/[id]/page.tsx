@@ -30,6 +30,10 @@ export async function generateStaticParams() {
 export const dynamicParams = true;
 export const revalidate = 86400;
 
+function getCountryName(id: string): string {
+  return id.startsWith("CH") ? "Switzerland" : "Italy";
+}
+
 export async function generateMetadata({
   params,
 }: StationPageProps): Promise<Metadata> {
@@ -42,15 +46,18 @@ export async function generateMetadata({
     };
   }
 
+  const country = getCountryName(id);
+  const description = `Live train departures and arrivals at ${station.name}, ${country}. Real-time delays, platforms, and schedules.`;
+
   return {
     title: station.name,
-    description: `Live train departures and arrivals at ${station.name}. Real-time delays, platforms, and schedules.`,
+    description,
     alternates: {
       canonical: `/station/${id}`,
     },
     openGraph: {
       title: `${station.name} | Rail Radar`,
-      description: `Live train departures and arrivals at ${station.name}. Real-time delays, platforms, and schedules.`,
+      description,
     },
   };
 }
@@ -63,6 +70,8 @@ export default async function StationPage({ params }: StationPageProps) {
     notFound();
   }
 
+  const countryCode = station.id.startsWith("CH") ? "CH" : "IT";
+
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "TrainStation",
@@ -74,7 +83,7 @@ export default async function StationPage({ params }: StationPageProps) {
     },
     address: {
       "@type": "PostalAddress",
-      addressCountry: "IT",
+      addressCountry: countryCode,
     },
     isAccessibleForFree: true,
   };
