@@ -1,54 +1,69 @@
-import type { ComponentType, SVGProps } from "react";
+import Image from "next/image";
 
-import Trenord from "./trenord";
-import Italo from "./italo";
-import Trenitalia from "./trenitalia";
-import Tper from "./tper";
-import InterCity from "./intercity";
-import FrecciaRossa from "./frecciarossa";
-import InterCityNotte from "./intercity-notte";
-import Sncf from "./sncf";
-import Sad from "./sad";
-import Obb from "./obb";
-import Bls from "./bls";
-import Tua from "./tua";
-import Sbb from "./sbb";
-
-type BrandIconProps = SVGProps<SVGSVGElement>;
-
-const brandIcons: Record<string, ComponentType<BrandIconProps>> = {
-  trenitalia: Trenitalia,
-  intercity: InterCity,
-  "intercity notte": InterCityNotte,
-  // High-speed
-  italo: Italo,
-  ntv: Italo,
-  frecciarossa: FrecciaRossa,
-  frecciabianca: Trenitalia,
-  frecciargento: Trenitalia,
-  // Regional
-  trenord: Trenord, // Lombardia
-  "trenitalia tper": Tper, // Emilia-Romagna
-  sad: Sad, // Trentino
-  tua: Tua, // Abruzzo
-  fse: Trenitalia, // Puglia
-  "leonardo express": Trenitalia,
+// Maps brand names to their SVG file paths (relative to /brands/)
+const brandPaths: Record<string, string> = {
+  // Italian brands
+  trenitalia: "it/trenitalia",
+  intercity: "it/intercity",
+  "intercity notte": "it/intercity_notte",
+  italo: "it/italo",
+  frecciarossa: "it/frecciarossa",
+  trenord: "it/trenord",
+  "trenitalia tper": "it/tper",
+  sad: "it/sad",
+  tua: "it/tua",
+  // Swiss brands
+  bls: "ch/bls",
+  sbb: "ch/sbb",
+  sob: "ch/sob",
+  szu: "ch/szu",
+  rbs: "ch/rbs",
+  tpf: "ch/tpf",
+  zb: "ch/zb",
+  ab: "ch/ab",
+  thurbo: "ch/thurbo",
   // Other
-  sncf: Sncf, // France
-  obb: Obb, // Austria
-  "obb railjet": Obb,
-  "obb nightjet": Obb,
-  bls: Bls, // Switzerland
-  sbb: Sbb, // Switzerland
+  obb: "obb",
+  sncf: "sncf",
 };
 
-interface BrandLogoProps extends BrandIconProps {
-  brand: string | null;
+// Aliases for brands that share icons
+const brandAliases: Record<string, string> = {
+  ntv: "italo",
+  frecciabianca: "trenitalia",
+  frecciargento: "trenitalia",
+  fse: "trenitalia",
+  "leonardo express": "trenitalia",
+  "obb railjet": "obb",
+  "obb nightjet": "obb",
+  "sbb gmbh": "sbb",
+};
+
+function getBrandPath(brand: string): string | null {
+  const normalized = brand.toLowerCase();
+  const resolved = brandAliases[normalized] ?? normalized;
+  return brandPaths[resolved] ?? null;
 }
 
-export function BrandLogo({ brand, ...props }: BrandLogoProps) {
+interface BrandLogoProps {
+  brand: string | null;
+  className?: string;
+}
+
+export function BrandLogo({ brand, className }: BrandLogoProps) {
   if (!brand) return null;
-  const Icon = brandIcons[brand.toLowerCase()];
-  if (!Icon) return null;
-  return <Icon {...props} />;
+
+  const path = getBrandPath(brand);
+  if (!path) return null;
+
+  return (
+    <Image
+      unoptimized
+      src={`/brands/${path}.svg`}
+      alt={brand}
+      className={className}
+      width={32}
+      height={32}
+    />
+  );
 }
