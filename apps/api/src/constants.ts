@@ -4,18 +4,19 @@ export const CACHE_TTL = {
   RFI_STATUS: "public, max-age=300, stale-while-revalidate=60",
 } as const;
 
-export const FETCH_TIMEOUT_MS = 30_000;
+export const FETCH_TIMEOUT_MS = 20_000;
 
 export const FUZZY_SEARCH_LIMIT = 20;
 export const TRENDING_LIMIT = 5;
 
-export const VALID_PERIODS = ["hour", "day", "week"] as const;
+export const VALID_PERIODS = ["hour", "day", "week", "month"] as const;
 export type Period = (typeof VALID_PERIODS)[number];
 
 export const PERIOD_INTERVALS = {
   hour: { value: 1, unit: "HOUR" },
   day: { value: 1, unit: "DAY" },
   week: { value: 7, unit: "DAY" },
+  month: { value: 1, unit: "MONTH" },
 } as const;
 
 export function getPeriodInterval(period: Period) {
