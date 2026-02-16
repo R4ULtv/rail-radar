@@ -12,6 +12,7 @@ import Sad from "./sad";
 import Obb from "./obb";
 import Bls from "./bls";
 import Tua from "./tua";
+import Sbb from "./sbb";
 
 type BrandIconProps = SVGProps<SVGSVGElement>;
 
@@ -38,6 +39,7 @@ const brandIcons: Record<string, ComponentType<BrandIconProps>> = {
   "obb railjet": Obb,
   "obb nightjet": Obb,
   bls: Bls, // Switzerland
+  sbb: Sbb, // Switzerland
 };
 
 interface BrandLogoProps extends BrandIconProps {
