@@ -20,7 +20,7 @@ import {
   type Period,
 } from "./constants.js";
 import { fuzzySearch } from "./fuzzy.js";
-import { scrapeTrains, ScraperError } from "./scraper.js";
+import { getScraperForStation, ScraperError } from "./scrapers";
 
 type Bindings = {
   RATE_LIMITER: RateLimit;
@@ -303,8 +303,15 @@ app.get(
 
     const { type } = c.req.valid("query");
 
+    const scraper = getScraperForStation(id);
+    if (!scraper) {
+      return c.json({ error: "Unsupported station region." }, 400);
+    }
+
+    const isItalian = id.startsWith("IT");
+
     try {
-      const { trains, info, timing } = await scrapeTrains(id, type);
+      const { trains, info, timing } = await scraper(id, type);
 
       // Record visit after successful response (non-blocking)
       const ip = c.get("clientIp");
@@ -317,13 +324,15 @@ app.get(
         }),
       );
 
-      // Record RFI request timing (non-blocking)
-      c.executionCtx.waitUntil(
-        recordRfiRequest(c.env.RFI_ANALYTICS, {
-          fetchMs: timing.fetchMs,
-          success: true,
-        }),
-      );
+      // Record request timing for Italian stations (RFI)
+      if (isItalian) {
+        c.executionCtx.waitUntil(
+          recordRfiRequest(c.env.RFI_ANALYTICS, {
+            fetchMs: timing.fetchMs,
+            success: true,
+          }),
+        );
+      }
 
       return c.json({
         id: station.id,
@@ -335,13 +344,15 @@ app.get(
       });
     } catch (error) {
       if (error instanceof ScraperError) {
-        // Record RFI request timing for error case (non-blocking)
-        c.executionCtx.waitUntil(
-          recordRfiRequest(c.env.RFI_ANALYTICS, {
-            fetchMs: error.timing?.fetchMs ?? 0,
-            success: false,
-          }),
-        );
+        // Record RFI request timing for error case (non-blocking) - only for Italian
+        if (isItalian) {
+          c.executionCtx.waitUntil(
+            recordRfiRequest(c.env.RFI_ANALYTICS, {
+              fetchMs: error.timing?.fetchMs ?? 0,
+              success: false,
+            }),
+          );
+        }
 
         return c.json({ error: error.message }, error.statusCode);
       }

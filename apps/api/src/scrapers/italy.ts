@@ -1,33 +1,19 @@
 import type { Train } from "@repo/data";
 import type { ContentfulStatusCode } from "hono/utils/http-status";
 
-import { FETCH_TIMEOUT_MS } from "./constants.js";
+import { FETCH_TIMEOUT_MS } from "../constants";
+import { ScraperError, type ScrapeResult } from "./index";
 
-export interface ScraperTiming {
-  fetchMs: number;
-}
-
-export class ScraperError extends Error {
-  constructor(
-    message: string,
-    public statusCode: ContentfulStatusCode,
-    public timing?: ScraperTiming,
-  ) {
-    super(message);
-    this.name = "ScraperError";
-  }
-}
-
-const BASE_URL =
+const RFI_BASE_URL =
   "https://iechub.rfi.it/ArriviPartenze/en/ArrivalsDepartures/Monitor";
 
-function buildUrl(stationId: string, arrivals: boolean): string {
+function buildRfiUrl(stationId: string, arrivals: boolean): string {
   // Extract numeric RFI place ID from station ID (e.g. "IT1728" -> "1728")
   const placeId = stationId.replace(/^[A-Z]+/, "");
   if (arrivals) {
-    return `${BASE_URL}?placeId=${placeId}&arrivals=True`;
+    return `${RFI_BASE_URL}?placeId=${placeId}&arrivals=True`;
   }
-  return `${BASE_URL}?Arrivals=False&Search=&PlaceId=${placeId}`;
+  return `${RFI_BASE_URL}?Arrivals=False&Search=&PlaceId=${placeId}`;
 }
 
 interface DelayResult {
@@ -79,14 +65,6 @@ function parseInfo(text: string): string | null {
     return match[1].trim();
   }
   return trimmed || null;
-}
-
-export interface ScrapeResult {
-  trains: Train[];
-  info: string | null;
-  timing: {
-    fetchMs: number;
-  };
 }
 
 // State class to manage parsing state across HTMLRewriter handlers
@@ -218,7 +196,7 @@ export async function scrapeTrains(
   stationId: string,
   type: "arrivals" | "departures" = "departures",
 ): Promise<ScrapeResult> {
-  const url = buildUrl(stationId, type === "arrivals");
+  const url = buildRfiUrl(stationId, type === "arrivals");
   const startTime = performance.now();
 
   const controller = new AbortController();
