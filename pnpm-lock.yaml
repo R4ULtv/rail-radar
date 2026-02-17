@@ -110,7 +110,7 @@ importers:
         specifier: workspace:*
         version: link:../../packages/data
       '@repo/ui':
-        specifier: workspace:^
+        specifier: workspace:*
         version: link:../../packages/ui
       '@vercel/analytics':
         specifier: ^1.6.1
@@ -179,6 +179,9 @@ importers:
       '@repo/typescript-config':
         specifier: workspace:*
         version: link:../typescript-config
+      '@types/node':
+        specifier: ^22.19.9
+        version: 22.19.9
       eslint:
         specifier: ^9.39.2
         version: 9.39.2(jiti@2.6.1)

@@ -10,7 +10,22 @@ src/
 ├── stations.ts    # Station data exports
 ├── types.ts       # TypeScript type definitions
 └── stations.json  # Raw station data (4500+ stations)
+
+scripts/
+└── format-stations.ts  # Formats stations.json (sort + minify)
 ```
+
+## Scripts
+
+### `format-stations`
+
+Normalizes the stations.json file by sorting stations alphabetically by name and minifying the output.
+
+```bash
+pnpm --filter=@repo/data format-stations
+```
+
+Run this after making manual edits to stations.json to ensure consistent formatting.
 
 ## Installation
 
@@ -58,7 +73,7 @@ const station = stationById.get("IT01700"); // Roma Termini
 interface Station {
   id: string;
   name: string;
-  type: "rail" | "metro";
+  type: "rail" | "metro" | "light";
   importance: 1 | 2 | 3 | 4;
   geo?: {
     lat: number;
