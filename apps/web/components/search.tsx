@@ -8,6 +8,7 @@ import {
   SearchXIcon,
   SquareMIcon,
   TrainFrontIcon,
+  TramFrontIcon,
   TrendingUpIcon,
   XIcon,
 } from "lucide-react";
@@ -83,6 +84,8 @@ const StationList = React.memo(function StationList({
             >
               {station.type === "metro" ? (
                 <SquareMIcon className="size-4 text-muted-foreground" />
+              ) : station.type === "light" ? (
+                <TramFrontIcon className="size-4 text-muted-foreground" />
               ) : (
                 <TrainFrontIcon className="size-4 text-muted-foreground" />
               )}
