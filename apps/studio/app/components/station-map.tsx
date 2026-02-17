@@ -27,12 +27,28 @@ const Marker = dynamic(
 const LAYER_ID = "stations-layer";
 const SOURCE_ID = "stations-source";
 
+const STATION_COLORS: Record<string, string> = {
+  rail: "#4B61D1",
+  metro: "#f22a18",
+  light: "#14b8a6",
+};
+
 const stationLayerStyle: LayerProps = {
   id: LAYER_ID,
   type: "circle",
   paint: {
     "circle-radius": ["interpolate", ["linear"], ["zoom"], 5, 4, 10, 6, 15, 8],
-    "circle-color": "#4B61D1",
+    "circle-color": [
+      "match",
+      ["get", "type"],
+      "rail",
+      "#4B61D1",
+      "metro",
+      "#f22a18",
+      "light",
+      "#14b8a6",
+      "#4B61D1", // default
+    ],
     "circle-stroke-color": "#ffffff",
     "circle-stroke-width": 1.5,
   },
@@ -109,7 +125,7 @@ function StationLayers({
       .filter((s) => s.geo && s.id !== selectedStationId)
       .map((station) => ({
         type: "Feature" as const,
-        properties: { id: station.id },
+        properties: { id: station.id, type: station.type },
         geometry: {
           type: "Point" as const,
           coordinates: [station.geo!.lng, station.geo!.lat],
@@ -261,7 +277,13 @@ export function StationMap({
                 draggable
                 onDragEnd={handleDragEnd}
               >
-                <div className="size-5 cursor-grab rounded-full border-2 border-white bg-accent active:cursor-grabbing" />
+                <div
+                  className="size-5 cursor-grab rounded-full border-2 border-white active:cursor-grabbing"
+                  style={{
+                    backgroundColor:
+                      STATION_COLORS[selectedStation.type] ?? STATION_COLORS.rail,
+                  }}
+                />
               </Marker>
             )}
           </>

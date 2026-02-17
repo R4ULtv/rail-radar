@@ -7,6 +7,7 @@ import {
   PlusIcon,
   SearchIcon,
   SquareMIcon,
+  TramFrontIcon,
   XIcon,
 } from "lucide-react";
 import { Button } from "@repo/ui/components/button";
@@ -17,7 +18,7 @@ import type { Station } from "@repo/data";
 import { cn } from "@repo/ui/lib/utils";
 import type { ChangeType } from "../types/contribution";
 
-type FilterType = "all" | "missing" | "metro";
+type FilterType = "all" | "missing" | "metro" | "light";
 
 interface StationSidebarProps {
   stations: Station[];
@@ -68,6 +69,8 @@ export function StationSidebar({
       result = result.filter((s) => !s.geo);
     } else if (filter === "metro") {
       result = result.filter((s) => s.type === "metro");
+    } else if (filter === "light") {
+      result = result.filter((s) => s.type === "light");
     }
 
     return result;
@@ -106,6 +109,9 @@ export function StationSidebar({
         <span className="truncate">{station.name}</span>
         {station.type === "metro" && (
           <SquareMIcon className="size-3 shrink-0 text-muted-foreground" />
+        )}
+        {station.type === "light" && (
+          <TramFrontIcon className="size-3 shrink-0 text-muted-foreground" />
         )}
       </button>
     );
@@ -147,15 +153,19 @@ export function StationSidebar({
           <TabsList className="w-full">
             <TabsTrigger value="all">
               <ListIcon className="size-3" />
-              All
+              {filter === "all" && "All"}
             </TabsTrigger>
             <TabsTrigger value="missing">
               <MapPinOffIcon className="size-3" />
-              Missing
+              {filter === "missing" && "Missing"}
             </TabsTrigger>
             <TabsTrigger value="metro">
               <SquareMIcon className="size-3" />
-              Metro
+              {filter === "metro" && "Metro"}
+            </TabsTrigger>
+            <TabsTrigger value="light">
+              <TramFrontIcon className="size-3" />
+              {filter === "light" && "Light"}
             </TabsTrigger>
           </TabsList>
         </Tabs>
