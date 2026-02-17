@@ -1,6 +1,32 @@
 import type { Station } from "@repo/data";
 
 /**
+ * Normalize text by removing diacritics and converting to lowercase.
+ * Handles accented characters like Zurich -> Zurich, Geneve -> Geneve
+ */
+function normalizeText(text: string): string {
+  return text
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase();
+}
+
+/**
+ * Get all searchable names for a station (primary name + "/" splits for bilingual names)
+ */
+function getSearchableNames(station: Station): string[] {
+  const names: string[] = [station.name];
+
+  // Handle bilingual names with "/" (e.g., "Biel/Bienne" -> ["Biel", "Bienne"])
+  if (station.name.includes("/")) {
+    const parts = station.name.split("/").map((p) => p.trim());
+    names.push(...parts);
+  }
+
+  return names;
+}
+
+/**
  * Calculate Damerau-Levenshtein distance between two strings
  * (minimum edits including transpositions to transform a into b)
  */
@@ -47,15 +73,15 @@ function damerauLevenshtein(a: string, b: string): number {
 }
 
 /**
- * Score a station name against a query (0-1, higher = better match)
+ * Score a single name against a query (0-1, higher = better match)
  * Returns both match score and match type for tiered sorting
  */
-function scoreStation(
+function scoreAgainstName(
   query: string,
   name: string,
 ): { score: number; matchType: number } {
-  const q = query.toLowerCase();
-  const n = name.toLowerCase();
+  const q = normalizeText(query);
+  const n = normalizeText(name);
   const words = n.split(/\s+/);
 
   // Exact match - highest priority
@@ -103,6 +129,30 @@ function scoreStation(
 }
 
 /**
+ * Score a station against a query by checking primary name and "/" splits.
+ * Returns the best match score across all searchable names.
+ */
+function scoreStation(
+  query: string,
+  station: Station,
+): { score: number; matchType: number } {
+  const names = getSearchableNames(station);
+
+  let best = { score: 0, matchType: 5 };
+  for (const name of names) {
+    const result = scoreAgainstName(query, name);
+    // Prefer better matchType first, then higher score
+    if (
+      result.matchType < best.matchType ||
+      (result.matchType === best.matchType && result.score > best.score)
+    ) {
+      best = result;
+    }
+  }
+  return best;
+}
+
+/**
  * Search stations with fuzzy matching and ranking
  * Sorts by: match type (exact/prefix > contains > fuzzy), then importance, then score
  */
@@ -121,7 +171,7 @@ export function fuzzySearch(
 
   const scored = stations
     .map((station) => {
-      const result = scoreStation(query, station.name);
+      const result = scoreStation(query, station);
       return {
         station,
         score: result.score,
