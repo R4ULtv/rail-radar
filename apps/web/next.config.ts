@@ -40,19 +40,11 @@ const nextConfig: NextConfig = {
         ],
       },
       {
-        source: "/sw.js",
+        source: "/brands/:path*.svg",
         headers: [
           {
-            key: "Content-Type",
-            value: "application/javascript; charset=utf-8",
-          },
-          {
             key: "Cache-Control",
-            value: "no-cache, no-store, must-revalidate",
-          },
-          {
-            key: "Content-Security-Policy",
-            value: "default-src 'self'; script-src 'self'",
+            value: "public, max-age=604800",
           },
         ],
       },
