@@ -1,6 +1,6 @@
 # Rail Radar API
 
-Cloudflare Workers API that provides real-time Italian railway data by scraping official RFI sources.
+Cloudflare Workers API that provides real-time train data for Italy and Switzerland by scraping official sources (RFI, transport.opendata.ch).
 
 ## Tech Stack
 
@@ -37,11 +37,14 @@ The `/stations` and `/stations/:id` endpoints are rate-limited per IP (15 reques
 
 ```
 src/
-├── index.ts      # Main Hono app, route handlers, middleware
-├── scraper.ts    # HTML parsing with HTMLRewriter for RFI data
-├── analytics.ts  # Cloudflare Analytics Engine integration
-├── fuzzy.ts      # Fuzzy search (Damerau-Levenshtein)
-└── constants.ts  # Shared constants (cache TTL, timeouts, validation)
+├── index.ts       # Main Hono app, route handlers, middleware
+├── scrapers/
+│   ├── index.ts       # Scraper router (selects by country prefix)
+│   ├── italy.ts       # RFI data scraper
+│   └── switzerland.ts # Swiss transport API scraper
+├── analytics.ts   # Cloudflare Analytics Engine integration
+├── fuzzy.ts       # Fuzzy search (Damerau-Levenshtein)
+└── constants.ts   # Shared constants (cache TTL, timeouts, validation)
 ```
 
 ## Development

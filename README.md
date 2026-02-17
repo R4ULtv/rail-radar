@@ -1,11 +1,11 @@
 # Rail Radar
 
-Real-time Italian railway tracking with an interactive map interface and live train data.
+Real-time train tracking for Italy and Switzerland with an interactive map interface and live train data.
 
 ## Features
 
-- Interactive map with 2400+ Italian railway stations
-- Real-time arrivals and departures from official RFI data
+- Interactive map with 4500+ railway stations across Italy and Switzerland
+- Real-time arrivals and departures from official data sources (RFI, SBB)
 - Station search with fuzzy matching
 - Shareable URLs with map state
 - User geolocation support
@@ -71,6 +71,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## Acknowledgments
 
-- Train data from [RFI](https://www.rfi.it/) (Rete Ferroviaria Italiana)
+- Italian train data from [RFI](https://www.rfi.it/) (Rete Ferroviaria Italiana)
+- Swiss train data from [transport.opendata.ch](https://transport.opendata.ch/)
 - Map tiles by [Stadia Maps](https://stadiamaps.com/)
 - Map rendering by [MapLibre](https://maplibre.org/)

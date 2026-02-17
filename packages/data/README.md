@@ -6,11 +6,10 @@ Shared station data and TypeScript types for Rail Radar.
 
 ```
 src/
-├── index.ts                  # Main entry point
-├── stations.ts               # Station data exports
-├── types.ts                  # TypeScript type definitions
-├── stations.json             # Raw station data
-└── stations-with-coords.json # Stations with coordinates
+├── index.ts       # Main entry point
+├── stations.ts    # Station data exports
+├── types.ts       # TypeScript type definitions
+└── stations.json  # Raw station data (4500+ stations)
 ```
 
 ## Installation
@@ -28,18 +27,28 @@ The package provides two import paths:
 ### Default Import (`@repo/data`)
 
 ```ts
-import { stations, stationsCoords, type Station, type Train } from "@repo/data";
+import { stations, stationById, type Station, type Train } from "@repo/data";
+```
+
+### Subpath Import (`@repo/data/stations`)
+
+```ts
+import { stations, stationById } from "@repo/data/stations";
 ```
 
 ## Data
 
 ### `stations`
 
-Array of Italian railway stations (raw data).
+Array of 4500+ railway stations across Italy and Switzerland.
 
-### `stationsCoords`
+### `stationById`
 
-Array of 2400+ Italian railway stations with geographic coordinates.
+Map for O(1) station lookup by ID.
+
+```ts
+const station = stationById.get("IT01700"); // Roma Termini
+```
 
 ## Types
 
@@ -47,14 +56,25 @@ Array of 2400+ Italian railway stations with geographic coordinates.
 
 ```ts
 interface Station {
-  id: number;
+  id: string;
   name: string;
+  type: "rail" | "metro";
+  importance: 1 | 2 | 3 | 4;
   geo?: {
     lat: number;
     lng: number;
   };
 }
 ```
+
+**Importance levels:**
+
+| Level | Description                                      |
+| ----- | ------------------------------------------------ |
+| 1     | Major hubs (e.g., Roma Termini, Milano Centrale) |
+| 2     | Important cities                                 |
+| 3     | Regional cities                                  |
+| 4     | Default (smaller stations)                       |
 
 ### `Train`
 
@@ -81,24 +101,24 @@ interface Train {
 import type { Station, Train } from "@repo/data";
 ```
 
-### Get all stations with coordinates
+### Get all stations
 
 ```ts
-import { stationsCoords } from "@repo/data";
+import { stations } from "@repo/data";
 
-const allStations = stationsCoords;
+const allStations = stations;
 ```
 
 ### Filter stations with coordinates
 
 ```ts
-const withCoords = stationsCoords.filter((s) => s.geo);
+const withCoords = stations.filter((s) => s.geo);
 ```
 
-### Use in API routes (subpath import)
+### Lookup station by ID
 
 ```ts
-import { stationsCoords } from "@repo/data/stations";
+import { stationById } from "@repo/data";
 
-const stations = stationsCoords.filter((s) => s.geo);
+const roma = stationById.get("IT01700");
 ```
