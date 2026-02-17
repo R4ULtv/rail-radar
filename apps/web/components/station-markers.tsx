@@ -68,10 +68,10 @@ const metroLabelStyle: LayerProps = {
 const lightLayerStyle: LayerProps = {
   id: "light-stations",
   type: "symbol",
-  minzoom: 11,
+  minzoom: 12,
   layout: {
     "icon-image": LIGHT_ICON_ID,
-    "icon-size": ["interpolate", ["linear"], ["zoom"], 11, 0.25, 13, 0.35],
+    "icon-size": ["interpolate", ["linear"], ["zoom"], 12, 0.25, 16, 0.35],
     "icon-allow-overlap": false,
     "icon-anchor": "center",
   },
@@ -80,7 +80,7 @@ const lightLayerStyle: LayerProps = {
 const lightLabelStyle: LayerProps = {
   id: "light-labels",
   type: "symbol",
-  minzoom: 13,
+  minzoom: 13.5,
   layout: {
     "text-field": ["get", "name"],
     "text-size": 12,
