@@ -73,6 +73,50 @@ function damerauLevenshtein(a: string, b: string): number {
 }
 
 /**
+ * Score a single query word against a single name word (both already normalized)
+ * Returns both match score and match type for tiered sorting
+ */
+function scoreWordAgainstWord(
+  queryWord: string,
+  nameWord: string,
+): { score: number; matchType: number } {
+  // Exact match
+  if (nameWord === queryWord) return { score: 1.0, matchType: 0 };
+
+  // Word starts with query
+  if (nameWord.startsWith(queryWord)) return { score: 0.95, matchType: 1 };
+
+  // Word contains query
+  if (nameWord.includes(queryWord)) return { score: 0.7, matchType: 3 };
+
+  // Fuzzy match
+  const compareWord =
+    nameWord.length > queryWord.length + 2
+      ? nameWord.slice(0, queryWord.length + 2)
+      : nameWord;
+  const distance = damerauLevenshtein(queryWord, compareWord);
+
+  const maxAllowedDistance = Math.min(2, Math.floor(queryWord.length / 2));
+  if (distance > maxAllowedDistance) {
+    return { score: 0, matchType: 5 };
+  }
+
+  const maxLen = Math.max(queryWord.length, compareWord.length);
+  let similarity = maxLen > 0 ? 1 - distance / maxLen : 0;
+
+  // Boost if first letter matches
+  if (
+    queryWord.length > 0 &&
+    nameWord.length > 0 &&
+    queryWord[0] === nameWord[0]
+  ) {
+    similarity = similarity * 0.8 + 0.2;
+  }
+
+  return { score: similarity * 0.6, matchType: 4 };
+}
+
+/**
  * Score a single name against a query (0-1, higher = better match)
  * Returns both match score and match type for tiered sorting
  */
@@ -82,7 +126,7 @@ function scoreAgainstName(
 ): { score: number; matchType: number } {
   const q = normalizeText(query);
   const n = normalizeText(name);
-  const words = n.split(/\s+/);
+  const nameWords = n.split(/\s+/);
 
   // Exact match - highest priority
   if (n === q) return { score: 1.0, matchType: 0 };
@@ -91,7 +135,8 @@ function scoreAgainstName(
   if (n.startsWith(q)) return { score: 0.95, matchType: 1 };
 
   // Any word starts with query - high priority
-  if (words.some((w) => w.startsWith(q))) return { score: 0.9, matchType: 2 };
+  if (nameWords.some((w) => w.startsWith(q)))
+    return { score: 0.9, matchType: 2 };
 
   // Name contains query - medium priority
   if (n.includes(q)) return { score: 0.7, matchType: 3 };
@@ -99,56 +144,111 @@ function scoreAgainstName(
   // Fuzzy match against each word, take best score
   // Only allow 1-2 mistakes max
   let bestScore = 0;
-  for (const word of words) {
-    // Compare query against the word (or prefix of word for long words)
-    const compareWord =
-      word.length > q.length + 2 ? word.slice(0, q.length + 2) : word;
-    const distance = damerauLevenshtein(q, compareWord);
-
-    // Max 2 edits allowed, scale by query length
-    const maxAllowedDistance = Math.min(2, Math.floor(q.length / 2));
-    if (distance > maxAllowedDistance) {
-      continue;
-    }
-
-    const maxLen = Math.max(q.length, compareWord.length);
-    let similarity = maxLen > 0 ? 1 - distance / maxLen : 0;
-
-    // Boost score if first letter matches (common typo pattern)
-    if (q.length > 0 && word.length > 0 && q[0] === word[0]) {
-      similarity = similarity * 0.8 + 0.2;
-    }
-
-    if (similarity > bestScore) {
-      bestScore = similarity;
+  for (const word of nameWords) {
+    const result = scoreWordAgainstWord(q, word);
+    if (result.score > bestScore) {
+      bestScore = result.score;
     }
   }
 
   // Scale fuzzy matches below exact/prefix matches
-  return { score: bestScore * 0.6, matchType: 4 };
+  return { score: bestScore, matchType: 4 };
+}
+
+/**
+ * Score a station against a multi-word query.
+ * All query words must match somewhere in the station name (in any order).
+ */
+function scoreMultiWordQuery(
+  queryWords: string[],
+  name: string,
+): { score: number; matchType: number } {
+  const nameWords = normalizeText(name).split(/\s+/);
+  const wordScores: { score: number; matchType: number }[] = [];
+
+  for (const qWord of queryWords) {
+    let bestForWord = { score: 0, matchType: 5 };
+
+    for (const nWord of nameWords) {
+      const result = scoreWordAgainstWord(qWord, nWord);
+      if (
+        result.matchType < bestForWord.matchType ||
+        (result.matchType === bestForWord.matchType &&
+          result.score > bestForWord.score)
+      ) {
+        bestForWord = result;
+      }
+    }
+
+    // If any word has no match, fail early
+    if (bestForWord.score < 0.3) {
+      return { score: 0, matchType: 5 };
+    }
+
+    wordScores.push(bestForWord);
+  }
+
+  // Score is based on worst matching word (all words must match well)
+  const worstScore = Math.min(...wordScores.map((ws) => ws.score));
+  const worstMatchType = Math.max(...wordScores.map((ws) => ws.matchType));
+
+  return { score: worstScore, matchType: worstMatchType };
 }
 
 /**
  * Score a station against a query by checking primary name and "/" splits.
  * Returns the best match score across all searchable names.
+ * Supports multi-word queries where words can be in any order.
  */
 function scoreStation(
   query: string,
   station: Station,
 ): { score: number; matchType: number } {
   const names = getSearchableNames(station);
+  const queryWords = normalizeText(query)
+    .split(/\s+/)
+    .filter((w) => w.length > 0);
 
+  // Single word query - use existing logic
+  if (queryWords.length === 1) {
+    let best = { score: 0, matchType: 5 };
+    for (const name of names) {
+      const result = scoreAgainstName(query, name);
+      if (
+        result.matchType < best.matchType ||
+        (result.matchType === best.matchType && result.score > best.score)
+      ) {
+        best = result;
+      }
+    }
+    return best;
+  }
+
+  // Multi-word query - check if all words match in any order
   let best = { score: 0, matchType: 5 };
+
   for (const name of names) {
-    const result = scoreAgainstName(query, name);
-    // Prefer better matchType first, then higher score
+    // First try exact/prefix match with full query (preserves "Milano Centrale" > "Centrale Milano" for exact input)
+    const exactResult = scoreAgainstName(query, name);
     if (
-      result.matchType < best.matchType ||
-      (result.matchType === best.matchType && result.score > best.score)
+      exactResult.matchType < best.matchType ||
+      (exactResult.matchType === best.matchType &&
+        exactResult.score > best.score)
     ) {
-      best = result;
+      best = exactResult;
+    }
+
+    // Then try multi-word matching (any order)
+    const multiResult = scoreMultiWordQuery(queryWords, name);
+    if (
+      multiResult.matchType < best.matchType ||
+      (multiResult.matchType === best.matchType &&
+        multiResult.score > best.score)
+    ) {
+      best = multiResult;
     }
   }
+
   return best;
 }
 
