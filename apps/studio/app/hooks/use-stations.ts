@@ -14,7 +14,7 @@ export function useStations() {
   const createStation = async (
     name: string,
     geo?: { lat: number; lng: number },
-    type?: "rail" | "metro",
+    type?: "rail" | "metro" | "light",
     importance?: 1 | 2 | 3 | 4,
   ): Promise<Station> => {
     const response = await fetch(API_URL, {
@@ -49,7 +49,7 @@ export function useStations() {
     updates: {
       name?: string;
       geo?: { lat: number; lng: number } | null;
-      type?: "rail" | "metro";
+      type?: "rail" | "metro" | "light";
       importance?: 1 | 2 | 3 | 4;
     },
   ): Promise<Station> => {

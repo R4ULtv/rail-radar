@@ -103,7 +103,7 @@ function StudioContent() {
     async (updates: {
       name: string;
       geo: { lat: number; lng: number } | null;
-      type: "rail" | "metro";
+      type: "rail" | "metro" | "light";
       importance: 1 | 2 | 3 | 4;
     }) => {
       if (!selectedStationId) return;

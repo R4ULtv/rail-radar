@@ -35,7 +35,7 @@ interface StationEditPanelProps {
   onSave: (updates: {
     name: string;
     geo: { lat: number; lng: number } | null;
-    type: "rail" | "metro";
+    type: "rail" | "metro" | "light";
     importance: 1 | 2 | 3 | 4;
   }) => void;
   onDelete: () => void;
@@ -51,7 +51,7 @@ export function StationEditPanel({
   isSaving,
 }: StationEditPanelProps) {
   const [name, setName] = useState(station.name);
-  const [type, setType] = useState<"rail" | "metro">(station.type);
+  const [type, setType] = useState<"rail" | "metro" | "light">(station.type);
   const [importance, setImportance] = useState<1 | 2 | 3 | 4>(
     station.importance,
   );
@@ -129,7 +129,7 @@ export function StationEditPanel({
             <Label htmlFor="type">Type</Label>
             <Select
               value={type}
-              onValueChange={(v) => setType(v as "rail" | "metro")}
+              onValueChange={(v) => setType(v as "rail" | "metro" | "light")}
             >
               <SelectTrigger id="type">
                 <SelectValue />
@@ -137,6 +137,7 @@ export function StationEditPanel({
               <SelectContent>
                 <SelectItem value="rail">Rail</SelectItem>
                 <SelectItem value="metro">Metro</SelectItem>
+                <SelectItem value="light">Light</SelectItem>
               </SelectContent>
             </Select>
           </div>

@@ -38,7 +38,10 @@ export async function PUT(request: Request, { params }: RouteParams) {
     const updatedStation: Station = {
       id,
       name: name !== undefined ? String(name).trim() : existingStation.name,
-      type: type === "rail" || type === "metro" ? type : existingStation.type,
+      type:
+        type === "rail" || type === "metro" || type === "light"
+          ? type
+          : existingStation.type,
       importance: [1, 2, 3, 4].includes(importance)
         ? importance
         : existingStation.importance,

@@ -49,7 +49,7 @@ export async function POST(request: Request) {
     const newStation: Station = {
       id: newId,
       name: name.trim(),
-      type: type === "metro" ? "metro" : "rail",
+      type: type === "metro" ? "metro" : type === "light" ? "light" : "rail",
       importance: [1, 2, 3, 4].includes(importance) ? importance : 4,
       geo: geo
         ? {
