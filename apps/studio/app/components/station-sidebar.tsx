@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import {
+  CopyIcon,
   ListIcon,
   MapPinOffIcon,
   PlusIcon,
@@ -18,7 +19,7 @@ import type { Station } from "@repo/data";
 import { cn } from "@repo/ui/lib/utils";
 import type { ChangeType } from "../types/contribution";
 
-type FilterType = "all" | "missing" | "metro" | "light";
+type FilterType = "all" | "missing" | "metro" | "light" | "duplicate";
 
 interface StationSidebarProps {
   stations: Station[];
@@ -71,6 +72,29 @@ export function StationSidebar({
       result = result.filter((s) => s.type === "metro");
     } else if (filter === "light") {
       result = result.filter((s) => s.type === "light");
+    } else if (filter === "duplicate") {
+      // Find stations with duplicate names
+      const nameCounts = new Map<string, number>();
+      stations.forEach((s) => {
+        const name = s.name.toLowerCase();
+        nameCounts.set(name, (nameCounts.get(name) ?? 0) + 1);
+      });
+
+      // Find stations with duplicate coordinates
+      const geoCounts = new Map<string, number>();
+      stations.forEach((s) => {
+        if (s.geo) {
+          const key = `${s.geo.lat},${s.geo.lng}`;
+          geoCounts.set(key, (geoCounts.get(key) ?? 0) + 1);
+        }
+      });
+
+      result = result.filter((s) => {
+        const nameIsDuplicate = (nameCounts.get(s.name.toLowerCase()) ?? 0) > 1;
+        const geoIsDuplicate =
+          s.geo && (geoCounts.get(`${s.geo.lat},${s.geo.lng}`) ?? 0) > 1;
+        return nameIsDuplicate || geoIsDuplicate;
+      });
     }
 
     return result;
@@ -166,6 +190,10 @@ export function StationSidebar({
             <TabsTrigger value="light">
               <TramFrontIcon className="size-3" />
               {filter === "light" && "Light"}
+            </TabsTrigger>
+            <TabsTrigger value="duplicate">
+              <CopyIcon className="size-3" />
+              {filter === "duplicate" && "Duplicate"}
             </TabsTrigger>
           </TabsList>
         </Tabs>
