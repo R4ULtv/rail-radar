@@ -39,6 +39,12 @@ import { useTrendingStations } from "@/hooks/use-trending-stations";
 
 import { cn } from "@repo/ui/lib/utils";
 import type { Station } from "@repo/data";
+import Image from "next/image";
+
+function getCountryCode(stationId: string): string {
+  if (stationId.startsWith("CH")) return "ch";
+  return "it";
+}
 
 const StationList = React.memo(function StationList({
   stations,
@@ -89,11 +95,17 @@ const StationList = React.memo(function StationList({
               ) : (
                 <TrainFrontIcon className="size-4 text-muted-foreground" />
               )}
-              <span className={cn(visitCount !== undefined && "flex-1")}>
-                {station.name}
-              </span>
+              <span>{station.name}</span>
+              <Image
+                unoptimized
+                src={`https://raw.githubusercontent.com/lipis/flag-icons/refs/heads/main/flags/4x3/${getCountryCode(station.id)}.svg`}
+                alt={getCountryCode(station.id).toUpperCase()}
+                className="h-3 w-4 shrink-0 rounded object-cover"
+                width={16}
+                height={12}
+              />
               {visitCount !== undefined && (
-                <span className="text-xs text-muted-foreground tabular-nums">
+                <span className="text-xs text-muted-foreground tabular-nums ml-auto">
                   {visitCount}
                 </span>
               )}
