@@ -281,7 +281,8 @@ export function StationMap({
                   className="size-5 cursor-grab rounded-full border-2 border-white active:cursor-grabbing"
                   style={{
                     backgroundColor:
-                      STATION_COLORS[selectedStation.type] ?? STATION_COLORS.rail,
+                      STATION_COLORS[selectedStation.type] ??
+                      STATION_COLORS.rail,
                   }}
                 />
               </Marker>

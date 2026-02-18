@@ -20,6 +20,7 @@ export function StaticMap({ lat, lng, zoom = 15, className }: StaticMapProps) {
         unoptimized
         priority
         fill
+        sizes="100vw"
         src={src}
         alt="Station location"
         className="object-cover object-center"
