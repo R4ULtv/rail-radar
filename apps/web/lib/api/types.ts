@@ -56,18 +56,3 @@ export interface StationData {
  * Returns array of Station objects
  */
 export type StationSearchResponse = Station[];
-
-/**
- * Response from /rfi/status endpoint
- */
-export interface RfiStatusResponse {
-  timestamp: string;
-  period: string;
-  count: number;
-  avgFetchMs: number;
-  p50FetchMs: number;
-  p95FetchMs: number;
-  p99FetchMs: number;
-  successCount: number;
-  successRate: number;
-}
