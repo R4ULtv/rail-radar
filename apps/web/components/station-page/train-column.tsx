@@ -50,7 +50,9 @@ function UpdatedStatus({
   isValidating: boolean;
   lastUpdated: Date | null;
 }) {
-  const [secondsAgo, setSecondsAgo] = useState(0);
+  const [secondsAgo, setSecondsAgo] = useState(() =>
+    lastUpdated ? Math.floor((Date.now() - lastUpdated.getTime()) / 1000) : 0,
+  );
   const [showUpdating, setShowUpdating] = useState(false);
 
   useEffect(() => {
@@ -60,8 +62,6 @@ function UpdatedStatus({
       return Math.floor((Date.now() - lastUpdated.getTime()) / 1000);
     };
 
-    setSecondsAgo(calculateSecondsAgo());
-
     const interval = setInterval(() => {
       setSecondsAgo(calculateSecondsAgo());
     }, 1000);
@@ -70,12 +70,12 @@ function UpdatedStatus({
   }, [lastUpdated]);
 
   useEffect(() => {
-    if (isValidating) {
-      const timer = setTimeout(() => setShowUpdating(true), 150);
-      return () => clearTimeout(timer);
-    } else {
+    if (!isValidating) {
       setShowUpdating(false);
+      return;
     }
+    const timer = setTimeout(() => setShowUpdating(true), 150);
+    return () => clearTimeout(timer);
   }, [isValidating]);
 
   if ((isLoading && !lastUpdated) || showUpdating) {
@@ -167,9 +167,9 @@ export function TrainColumn({
           </div>
         ) : (
           <div>
-            {trainData.map((train, index) => (
+            {trainData.map((train) => (
               <TrainRow
-                key={`${train.trainNumber}-${index}`}
+                key={`${train.trainNumber}-${train.scheduledTime}`}
                 train={train}
                 type={type}
               />

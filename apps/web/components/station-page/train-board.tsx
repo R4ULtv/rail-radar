@@ -1,13 +1,21 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useSyncExternalStore } from "react";
 import { useTrainData } from "@/hooks/use-train-data";
 import { TrainColumn } from "./train-column";
 import { useIsMobile } from "@repo/ui/hooks/use-mobile";
 
 export function TrainBoard({ stationId }: { stationId: string }) {
   const isMobile = useIsMobile();
-  const [mounted, setMounted] = useState(false);
+  // useSyncExternalStore gives false on server, true on client — no effect cascade
+  const mounted = useSyncExternalStore(
+    (cb) => {
+      cb();
+      return () => {};
+    },
+    () => true,
+    () => false,
+  );
   const [type, setType] = useState<"arrivals" | "departures">("departures");
 
   // Desktop: fetch both; Mobile: only fetch active tab
@@ -21,10 +29,6 @@ export function TrainBoard({ stationId }: { stationId: string }) {
     "arrivals",
     mounted && (isMobile === false || type === "arrivals"),
   );
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
 
   // Prevent hydration mismatch - loading skeleton is handled by loading.tsx
   if (!mounted) {
