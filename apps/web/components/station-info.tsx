@@ -83,8 +83,12 @@ function TrainListContent({
     );
   }
 
-  const trainList = trainData.map((train, index) => (
-    <TrainRow key={`${train.trainNumber}-${index}`} train={train} type={type} />
+  const trainList = trainData.map((train) => (
+    <TrainRow
+      key={`${train.trainNumber}-${train.scheduledTime}`}
+      train={train}
+      type={type}
+    />
   ));
 
   if (scrollable) {
