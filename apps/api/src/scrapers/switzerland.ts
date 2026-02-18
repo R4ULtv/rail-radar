@@ -74,8 +74,8 @@ function getSwissStatus(
   const actualTime = scheduledTime + delay;
   const now = Date.now();
 
-  // Within 2 minutes (past or future)
-  const twoMinutes = 2 * 60 * 1000;
+  // Within 3 minutes (past or future)
+  const twoMinutes = 3 * 60 * 1000;
   if (actualTime >= now - twoMinutes && actualTime <= now + twoMinutes) {
     return type === "departures" ? "departing" : "incoming";
   }
