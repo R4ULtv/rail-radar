@@ -6,10 +6,8 @@ import { validator } from "hono/validator";
 import { stationById, stations } from "@repo/data/stations";
 import {
   getAnalyticsOverview,
-  getRfiStatus,
   getStationStats,
   getTrendingStations,
-  recordRfiRequest,
   recordStationVisit,
 } from "./analytics.js";
 import {
@@ -25,7 +23,6 @@ import { getScraperForStation, ScraperError } from "./scrapers";
 type Bindings = {
   RATE_LIMITER: RateLimit;
   STATION_ANALYTICS: AnalyticsEngineDataset;
-  RFI_ANALYTICS: AnalyticsEngineDataset;
   CLOUDFLARE_ACCOUNT_ID: string;
   CLOUDFLARE_API_TOKEN: string;
 };
@@ -85,10 +82,12 @@ app.get("/", (c) => {
       "GET /stations/:id":
         "Get station info with trains (optional: ?type=arrivals|departures)",
       "GET /analytics/overview": "Get global analytics overview",
-      "GET /rfi/status": "Get RFI request timing statistics",
-      "GET /trains/:stationId": "Alias for /stations/:id (redirects)",
     },
   });
+});
+
+app.get("/robots.txt", (c) => {
+  return c.text("User-agent: *\nDisallow: /");
 });
 
 app.get(
@@ -170,37 +169,6 @@ app.get(
     } catch {
       return c.json(
         { error: "Unable to fetch analytics data. Please try again later." },
-        500,
-      );
-    }
-  },
-);
-
-app.get(
-  "/rfi/status",
-  cache({
-    cacheName: "rfi-status-cache",
-    cacheControl: CACHE_TTL.RFI_STATUS,
-  }),
-  periodValidator,
-  async (c) => {
-    const { period } = c.req.valid("query");
-
-    try {
-      const status = await getRfiStatus(
-        c.env.CLOUDFLARE_ACCOUNT_ID,
-        c.env.CLOUDFLARE_API_TOKEN,
-        period,
-      );
-
-      return c.json({
-        timestamp: new Date().toISOString(),
-        period,
-        ...status,
-      });
-    } catch {
-      return c.json(
-        { error: "Unable to fetch RFI status data. Please try again later." },
         500,
       );
     }
@@ -308,10 +276,8 @@ app.get(
       return c.json({ error: "Unsupported station region." }, 400);
     }
 
-    const isItalian = id.startsWith("IT");
-
     try {
-      const { trains, info, timing } = await scraper(id, type);
+      const { trains, info } = await scraper(id, type);
 
       // Record visit after successful response (non-blocking)
       const ip = c.get("clientIp");
@@ -324,16 +290,6 @@ app.get(
         }),
       );
 
-      // Record request timing for Italian stations (RFI)
-      if (isItalian) {
-        c.executionCtx.waitUntil(
-          recordRfiRequest(c.env.RFI_ANALYTICS, {
-            fetchMs: timing.fetchMs,
-            success: true,
-          }),
-        );
-      }
-
       return c.json({
         id: station.id,
         name: station.name,
@@ -344,16 +300,6 @@ app.get(
       });
     } catch (error) {
       if (error instanceof ScraperError) {
-        // Record RFI request timing for error case (non-blocking) - only for Italian
-        if (isItalian) {
-          c.executionCtx.waitUntil(
-            recordRfiRequest(c.env.RFI_ANALYTICS, {
-              fetchMs: error.timing?.fetchMs ?? 0,
-              success: false,
-            }),
-          );
-        }
-
         return c.json({ error: error.message }, error.statusCode);
       }
       return c.json(
