@@ -31,9 +31,5 @@
       "binding": "STATION_ANALYTICS",
       "dataset": "station_visits",
     },
-    {
-      "binding": "RFI_ANALYTICS",
-      "dataset": "rfi_requests",
-    },
   ],
 }
