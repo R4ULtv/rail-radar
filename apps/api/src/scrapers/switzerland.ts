@@ -4,7 +4,7 @@ import type { ContentfulStatusCode } from "hono/utils/http-status";
 import { FETCH_TIMEOUT_MS } from "../constants";
 import { ScraperError, type ScrapeResult } from "./index";
 
-const SWISS_BASE_URL = "http://transport.opendata.ch/v1/stationboard";
+const SWISS_BASE_URL = "https://transport.opendata.ch/v1/stationboard";
 
 function convertSwissStationId(stationId: string): string {
   // Convert CH station ID to 85 prefix (e.g., "CH06013" -> "8506013")
