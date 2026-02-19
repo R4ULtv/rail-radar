@@ -19,10 +19,7 @@ const jsonLd = {
     "Track trains in real time across Italy and Switzerland. Get live delays, platform numbers, and departure info for over 4500 train stations.",
   potentialAction: {
     "@type": "SearchAction",
-    target: {
-      "@type": "EntryPoint",
-      urlTemplate: "https://www.railradar24.com/?q={search_term_string}",
-    },
+    target: "https://www.railradar24.com/?q={search_term_string}",
     "query-input": "required name=search_term_string",
   },
 };

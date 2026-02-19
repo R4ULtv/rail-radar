@@ -74,7 +74,7 @@ export default async function StationPage({ params }: StationPageProps) {
 
   const jsonLd = {
     "@context": "https://schema.org",
-    "@type": "TrainStation",
+    "@type": "Place",
     name: station.name,
     geo: {
       "@type": "GeoCoordinates",
