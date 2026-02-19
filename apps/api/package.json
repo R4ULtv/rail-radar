@@ -11,12 +11,12 @@
   },
   "dependencies": {
     "@repo/data": "workspace:*",
-    "hono": "^4.11.9"
+    "hono": "^4.11.10"
   },
   "devDependencies": {
     "@repo/eslint-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
     "eslint": "^9.39.2",
-    "wrangler": "^4.65.0"
+    "wrangler": "^4.66.0"
   }
 }

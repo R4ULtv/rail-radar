@@ -17,7 +17,7 @@
     "@vercel/analytics": "^1.6.1",
     "lucide-react": "^0.562.0",
     "mapbox-gl": "^3.18.1",
-    "motion": "^12.31.0",
+    "motion": "^12.34.2",
     "next": "16.1.6",
     "nuqs": "^2.8.8",
     "react": "^19.2.4",
