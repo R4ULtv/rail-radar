@@ -4,17 +4,17 @@
   "main": "src/index.ts",
   "compatibility_date": "2026-02-12",
   "placement": {
-    "hostname": "iechub.rfi.it",
+    "mode": "smart"
   },
   "observability": {
     "enabled": true,
-    "head_sampling_rate": 1,
+    "head_sampling_rate": 1
   },
   "routes": [
     {
       "pattern": "api.railradar24.com",
-      "custom_domain": true,
-    },
+      "custom_domain": true
+    }
   ],
   "ratelimits": [
     {
@@ -22,14 +22,14 @@
       "namespace_id": "1001",
       "simple": {
         "limit": 15,
-        "period": 10,
-      },
-    },
+        "period": 10
+      }
+    }
   ],
   "analytics_engine_datasets": [
     {
       "binding": "STATION_ANALYTICS",
-      "dataset": "station_visits",
-    },
-  ],
+      "dataset": "station_visits"
+    }
+  ]
 }
