@@ -351,6 +351,8 @@ export default function StationInfo() {
   // Mobile view (Drawer)
   return (
     <Drawer
+      modal={false}
+      disablePointerDismissal
       snapPoints={snapPoints}
       snapPoint={snap}
       onSnapPointChange={setSnap}
