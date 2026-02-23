@@ -11,6 +11,7 @@ import {
   TramFrontIcon,
   TrendingUpIcon,
   XIcon,
+  UserIcon,
 } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 import { parseAsString, useQueryState } from "nuqs";
@@ -100,12 +101,13 @@ const StationList = React.memo(function StationList({
                 unoptimized
                 src={`https://raw.githubusercontent.com/lipis/flag-icons/refs/heads/main/flags/4x3/${getCountryCode(station.id)}.svg`}
                 alt={getCountryCode(station.id).toUpperCase()}
-                className="h-3 w-4 shrink-0 rounded object-cover"
+                className="size-3 shrink-0 rounded-full object-cover"
                 width={16}
                 height={12}
               />
               {visitCount !== undefined && (
-                <span className="text-xs text-muted-foreground tabular-nums ml-auto">
+                <span className="text-xs text-muted-foreground tabular-nums ml-auto flex items-center gap-1">
+                  <UserIcon className="size-3.5" />
                   {visitCount}
                 </span>
               )}
