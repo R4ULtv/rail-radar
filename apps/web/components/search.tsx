@@ -375,8 +375,14 @@ export function Search() {
             aria-label="Search stations"
             className="bg-card hover:bg-muted dark:bg-card dark:hover:bg-muted w-full justify-start active:scale-[0.98] transition-transform duration-100"
           >
-            <SearchIcon />
-            Search...
+            <SearchIcon className="text-muted-foreground" />
+            <span className="flex-1 text-left">Search...</span>
+            {savedStations.length > 0 && (
+              <span className="inline-flex items-center gap-1 text-xs text-muted-foreground tabular-nums">
+                {savedStations.length}
+                <BookmarkIcon className="size-3.5" />
+              </span>
+            )}
           </Button>
         </div>
 
