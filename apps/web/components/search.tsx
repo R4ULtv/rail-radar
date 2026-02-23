@@ -42,6 +42,7 @@ import { useTrendingStations } from "@/hooks/use-trending-stations";
 import { cn } from "@repo/ui/lib/utils";
 import type { Station } from "@repo/data";
 import Image from "next/image";
+import { Button } from "@repo/ui/components/button";
 
 function getCountryCode(stationId: string): string {
   if (stationId.startsWith("CH")) return "ch";
@@ -140,16 +141,11 @@ export function Search() {
     setUrlQuery(debouncedQuery || null);
   }, [debouncedQuery, setUrlQuery]);
   const [focusedIndex, setFocusedIndex] = React.useState<number>(-1);
+  const prevQueryRef = React.useRef(query);
+  const prevResultsLenRef = React.useRef(0);
   const [isDrawerOpen, setIsDrawerOpen] = React.useState(
-    () => query.length > 0,
+    () => isMobile && query.length > 0,
   );
-
-  // Auto-open drawer on mobile if query is present in URL
-  React.useEffect(() => {
-    if (isMobile && query.length > 0 && !isDrawerOpen) {
-      setIsDrawerOpen(true);
-    }
-  }, [isMobile, query, isDrawerOpen]);
 
   // Fetch search results
   const { stations: searchResults, isLoading } = useStationSearch(
@@ -226,10 +222,17 @@ export function Search() {
     visibleStationsRef.current = visibleStations;
   });
 
-  // Reset focused index when list changes
-  React.useEffect(() => {
-    setFocusedIndex(-1);
-  }, [query, searchResults.length]);
+  // Reset focused index when list changes (derive during render, no effect)
+  if (
+    query !== prevQueryRef.current ||
+    searchResults.length !== prevResultsLenRef.current
+  ) {
+    prevQueryRef.current = query;
+    prevResultsLenRef.current = searchResults.length;
+    if (focusedIndex !== -1) {
+      setFocusedIndex(-1);
+    }
+  }
 
   React.useEffect(() => {
     function handleKeyDown(e: KeyboardEvent) {
@@ -363,26 +366,18 @@ export function Search() {
   if (isMobile) {
     return (
       <>
-        {/* Trigger input on the map */}
-        <div className="absolute z-50 top-4 left-4 w-[calc(100vw-32px)] pointer-events-none font-sans">
-          <InputGroup
-            className="h-10 bg-card dark:bg-card pointer-events-auto cursor-pointer focus-within:ring-2 focus-within:ring-ring"
+        <div className="absolute z-50 top-4 left-4 right-4 font-sans">
+          <Button
+            type="button"
+            size="lg"
+            variant="outline"
             onClick={() => setIsDrawerOpen(true)}
+            aria-label="Search stations"
+            className="bg-card hover:bg-muted dark:bg-card dark:hover:bg-muted w-full justify-start active:scale-[0.98] transition-transform duration-100"
           >
-            <InputGroupInput
-              placeholder="Search Station..."
-              value={query}
-              readOnly
-              tabIndex={-1}
-              name="search-trigger"
-              aria-label="Search stations"
-              className="cursor-pointer pointer-events-none"
-              onChange={() => {}}
-            />
-            <InputGroupAddon>
-              <SearchIcon />
-            </InputGroupAddon>
-          </InputGroup>
+            <SearchIcon />
+            Search...
+          </Button>
         </div>
 
         {/* Full-screen search drawer */}
