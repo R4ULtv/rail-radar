@@ -14,7 +14,8 @@ import {
   UserIcon,
 } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
-import { parseAsString, useQueryState } from "nuqs";
+import { useSearchParams } from "next/navigation";
+import { debounce, parseAsString, useQueryState } from "nuqs";
 
 import {
   Drawer,
@@ -32,7 +33,6 @@ import {
 import { Spinner } from "@repo/ui/components/spinner";
 
 import { useAnimatedHeight } from "@/hooks/use-animated-height";
-import { useDebounce } from "@repo/ui/hooks/use-debounce";
 import { useIsMobile } from "@repo/ui/hooks/use-mobile";
 import { useSelectedStation } from "@/hooks/use-selected-station";
 import { useStationSearch } from "@/hooks/use-station-search";
@@ -102,7 +102,7 @@ const StationList = React.memo(function StationList({
                 src={`https://raw.githubusercontent.com/lipis/flag-icons/refs/heads/main/flags/4x3/${getCountryCode(station.id)}.svg`}
                 alt={getCountryCode(station.id).toUpperCase()}
                 className="size-3 shrink-0 rounded-full object-cover"
-                width={16}
+                width={12}
                 height={12}
               />
               {visitCount !== undefined && (
@@ -123,15 +123,17 @@ export function Search() {
   const isMobile = useIsMobile();
   const { selectStation, savedStations } = useSelectedStation();
   const inputRef = React.useRef<HTMLInputElement>(null);
+  const searchParams = useSearchParams();
   const [query, setQuery] = useQueryState(
     "q",
     parseAsString.withDefault("").withOptions({
       history: "replace",
       shallow: true,
-      throttleMs: 300,
+      limitUrlUpdates: debounce(250),
     }),
   );
-  const debouncedQuery = useDebounce(query.trim(), 300);
+  // query = immediate (responsive input), URL value = debounced (API calls)
+  const debouncedQuery = (searchParams.get("q") || "").trim();
   const [focusedIndex, setFocusedIndex] = React.useState<number>(-1);
   const [isDrawerOpen, setIsDrawerOpen] = React.useState(
     () => query.length > 0,
@@ -214,8 +216,10 @@ export function Search() {
   const focusedIndexRef = React.useRef(focusedIndex);
   const visibleStationsRef = React.useRef(visibleStations);
 
-  focusedIndexRef.current = focusedIndex;
-  visibleStationsRef.current = visibleStations;
+  React.useEffect(() => {
+    focusedIndexRef.current = focusedIndex;
+    visibleStationsRef.current = visibleStations;
+  });
 
   // Reset focused index when list changes
   React.useEffect(() => {
