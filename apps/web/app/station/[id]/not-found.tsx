@@ -22,7 +22,7 @@ export default function StationNotFound() {
           <Button
             variant="outline"
             nativeButton={false}
-            render={<Link href="/?search=true" />}
+            render={<Link href="/" />}
           >
             <SearchIcon className="size-4" />
             Search Stations

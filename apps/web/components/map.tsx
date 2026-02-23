@@ -81,8 +81,8 @@ export function Map() {
                   Math.round(pos.coords.latitude * 1000000) / 1000000;
                 const longitude =
                   Math.round(pos.coords.longitude * 1000000) / 1000000;
-                setInitialPosition({ latitude, longitude, zoom: 12 });
-                setParams({ lat: latitude, lng: longitude, zoom: 12 });
+                setInitialPosition({ latitude, longitude, zoom: 13 });
+                setParams({ lat: latitude, lng: longitude, zoom: 13 });
               },
               () => setDefaultPosition(),
             );
