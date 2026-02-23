@@ -17,7 +17,7 @@
     "@vercel/analytics": "^1.6.1",
     "lucide-react": "^0.562.0",
     "mapbox-gl": "^3.18.1",
-    "motion": "^12.34.2",
+    "motion": "^12.34.3",
     "next": "16.1.6",
     "nuqs": "^2.8.8",
     "react": "^19.2.4",
@@ -28,12 +28,12 @@
   "devDependencies": {
     "@repo/eslint-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
-    "@tailwindcss/postcss": "^4.2.0",
+    "@tailwindcss/postcss": "^4.2.1",
     "@types/node": "^22.19.11",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
     "babel-plugin-react-compiler": "^1.0.0",
-    "eslint": "^9.39.2",
-    "tailwindcss": "^4.2.0"
+    "eslint": "^9.39.3",
+    "tailwindcss": "^4.2.1"
   }
 }

@@ -24,13 +24,13 @@
   "devDependencies": {
     "@repo/eslint-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
-    "@tailwindcss/postcss": "^4.2.0",
+    "@tailwindcss/postcss": "^4.2.1",
     "@turbo/gen": "^2.8.10",
     "@types/node": "^22.19.11",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
-    "eslint": "^9.39.2",
-    "tailwindcss": "^4.2.0",
+    "eslint": "^9.39.3",
+    "tailwindcss": "^4.2.1",
     "typescript": "^5.9.3"
   },
   "exports": {
