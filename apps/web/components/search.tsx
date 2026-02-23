@@ -30,6 +30,7 @@ import {
   InputGroupInput,
 } from "@repo/ui/components/input-group";
 import { Spinner } from "@repo/ui/components/spinner";
+import { Kbd } from "@repo/ui/components/kbd";
 
 import { useAnimatedHeight } from "@/hooks/use-animated-height";
 import { useDebounce } from "@repo/ui/hooks/use-debounce";
@@ -445,7 +446,7 @@ export function Search() {
   // Desktop view - floating card with dropdown
   return (
     <div className="absolute z-50 top-4 left-4 flex flex-col gap-2 md:w-80 w-[calc(100svw-32px)] pointer-events-none font-sans">
-      <InputGroup className="h-10 bg-card dark:bg-card pointer-events-auto">
+      <InputGroup className="h-9 bg-card dark:bg-card pointer-events-auto">
         <InputGroupInput
           ref={inputRef}
           placeholder="Search Station..."
@@ -455,7 +456,7 @@ export function Search() {
           name="search"
           autoComplete="off"
           role="combobox"
-          aria-label="Search stations"
+          aria-label="Search..."
           aria-expanded={visibleStations.length > 0}
           aria-haspopup="listbox"
           aria-controls="station-listbox"
@@ -468,28 +469,23 @@ export function Search() {
         <InputGroupAddon>
           {isSearchActive && !hasSearched ? <Spinner /> : <SearchIcon />}
         </InputGroupAddon>
-        <AnimatePresence>
-          {isSearchActive && (
-            <motion.div
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.8 }}
-              transition={{ duration: 0.2 }}
+        {isSearchActive ? (
+          <InputGroupAddon align="inline-end">
+            <InputGroupButton
+              aria-label="Clear search"
+              title="Clear search"
+              size="icon-xs"
+              onMouseDown={(e) => e.preventDefault()}
+              onClick={() => setQuery("")}
             >
-              <InputGroupAddon align="inline-end">
-                <InputGroupButton
-                  aria-label="Clear search"
-                  title="Clear search"
-                  size="icon-xs"
-                  onMouseDown={(e) => e.preventDefault()}
-                  onClick={() => setQuery("")}
-                >
-                  <XIcon />
-                </InputGroupButton>
-              </InputGroupAddon>
-            </motion.div>
-          )}
-        </AnimatePresence>
+              <XIcon />
+            </InputGroupButton>
+          </InputGroupAddon>
+        ) : (
+          <InputGroupAddon align="inline-end">
+            <Kbd>⌘K</Kbd>
+          </InputGroupAddon>
+        )}
       </InputGroup>
       <AnimatePresence>
         {(!isSearchActive || hasSearched) && (
