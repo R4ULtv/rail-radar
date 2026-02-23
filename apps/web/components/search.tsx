@@ -14,8 +14,7 @@ import {
   UserIcon,
 } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
-import { useSearchParams } from "next/navigation";
-import { debounce, parseAsString, useQueryState } from "nuqs";
+import { parseAsString, useQueryState } from "nuqs";
 
 import {
   Drawer,
@@ -33,6 +32,7 @@ import {
 import { Spinner } from "@repo/ui/components/spinner";
 
 import { useAnimatedHeight } from "@/hooks/use-animated-height";
+import { useDebounce } from "@repo/ui/hooks/use-debounce";
 import { useIsMobile } from "@repo/ui/hooks/use-mobile";
 import { useSelectedStation } from "@/hooks/use-selected-station";
 import { useStationSearch } from "@/hooks/use-station-search";
@@ -123,17 +123,21 @@ export function Search() {
   const isMobile = useIsMobile();
   const { selectStation, savedStations } = useSelectedStation();
   const inputRef = React.useRef<HTMLInputElement>(null);
-  const searchParams = useSearchParams();
-  const [query, setQuery] = useQueryState(
+  const [urlQuery, setUrlQuery] = useQueryState(
     "q",
     parseAsString.withDefault("").withOptions({
       history: "replace",
       shallow: true,
-      limitUrlUpdates: debounce(250),
     }),
   );
-  // query = immediate (responsive input), URL value = debounced (API calls)
-  const debouncedQuery = (searchParams.get("q") || "").trim();
+  // Local state for responsive input, initialized from URL for shareability
+  const [query, setQuery] = React.useState(urlQuery);
+  const debouncedQuery = useDebounce(query.trim(), 250);
+
+  // Sync debounced query to URL
+  React.useEffect(() => {
+    setUrlQuery(debouncedQuery || null);
+  }, [debouncedQuery, setUrlQuery]);
   const [focusedIndex, setFocusedIndex] = React.useState<number>(-1);
   const [isDrawerOpen, setIsDrawerOpen] = React.useState(
     () => query.length > 0,
