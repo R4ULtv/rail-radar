@@ -40,9 +40,7 @@ function findInfoboxTemplate(wikitext: string): string | null {
   }
 
   // Fallback: try to find any template with station-related fields
-  const genericMatch = wikitext.match(
-    /\{\{[^{}]*(?:stazione|fermata)[^{}]*\n([\s\S]*?)\n\}\}/i,
-  );
+  const genericMatch = wikitext.match(/\{\{[^{}]*(?:stazione|fermata)[^{}]*\n([\s\S]*?)\n\}\}/i);
   return genericMatch?.[1] ?? null;
 }
 
@@ -109,13 +107,9 @@ function cleanWikitext(text: string): string {
 /**
  * Extract coordinates from wikitext using {{Coord}} template
  */
-export function extractCoordinates(
-  wikitext: string,
-): { lat: number; lng: number } | undefined {
+export function extractCoordinates(wikitext: string): { lat: number; lng: number } | undefined {
   // Simple decimal format: {{Coord|45.123|12.456|...}}
-  const decimalMatch = wikitext.match(
-    /\{\{[Cc]oord\|(-?\d+\.?\d*)\|(-?\d+\.?\d*)\|/,
-  );
+  const decimalMatch = wikitext.match(/\{\{[Cc]oord\|(-?\d+\.?\d*)\|(-?\d+\.?\d*)\|/);
   if (decimalMatch) {
     const lat = parseFloat(decimalMatch[1]!);
     const lng = parseFloat(decimalMatch[2]!);
@@ -174,10 +168,7 @@ export function extractCoordinates(
 /**
  * Map parsed fields to StationInfobox structure
  */
-function mapFieldsToInfobox(
-  fields: Map<string, string>,
-  wikitext: string,
-): StationInfobox {
+function mapFieldsToInfobox(fields: Map<string, string>, wikitext: string): StationInfobox {
   const infobox: StationInfobox = {};
 
   // Coordinates from wikitext
@@ -187,8 +178,7 @@ function mapFieldsToInfobox(
   }
 
   // Status - check multiple field names
-  const stato =
-    fields.get("stato") || fields.get("status") || fields.get("stato attuale");
+  const stato = fields.get("stato") || fields.get("status") || fields.get("stato attuale");
   if (stato) {
     infobox.stato = stato;
   }
@@ -369,21 +359,13 @@ export function getStationStatus(stato?: string): StationStatus {
  * Calculate distance between two coordinates using Haversine formula
  * @returns Distance in meters
  */
-export function calculateDistance(
-  lat1: number,
-  lng1: number,
-  lat2: number,
-  lng2: number,
-): number {
+export function calculateDistance(lat1: number, lng1: number, lat2: number, lng2: number): number {
   const R = 6371000; // Earth's radius in meters
   const dLat = toRad(lat2 - lat1);
   const dLng = toRad(lng2 - lng1);
   const a =
     Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-    Math.cos(toRad(lat1)) *
-      Math.cos(toRad(lat2)) *
-      Math.sin(dLng / 2) *
-      Math.sin(dLng / 2);
+    Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * Math.sin(dLng / 2) * Math.sin(dLng / 2);
   const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
   return R * c;
 }

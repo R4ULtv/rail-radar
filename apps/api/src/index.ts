@@ -34,9 +34,7 @@ type Variables = {
 const periodValidator = validator("query", (value) => {
   const period = value["period"];
   return {
-    period: VALID_PERIODS.includes(period as Period)
-      ? (period as Period)
-      : "day",
+    period: VALID_PERIODS.includes(period as Period) ? (period as Period) : "day",
   };
 });
 
@@ -60,11 +58,7 @@ app.onError((err, c) => {
 app.use(
   "*",
   cors({
-    origin: [
-      "http://localhost:3000",
-      "http://127.0.0.1:3000",
-      "https://www.railradar24.com",
-    ],
+    origin: ["http://localhost:3000", "http://127.0.0.1:3000", "https://www.railradar24.com"],
   }),
 );
 
@@ -79,8 +73,7 @@ app.get("/", (c) => {
         "Get trending stations (optional: ?period=hour|day|week, default: day)",
       "GET /stations/:id/stats":
         "Get station visit stats (optional: ?period=hour|day|week, default: day)",
-      "GET /stations/:id":
-        "Get station info with trains (optional: ?type=arrivals|departures)",
+      "GET /stations/:id": "Get station info with trains (optional: ?type=arrivals|departures)",
       "GET /analytics/overview": "Get global analytics overview",
     },
   });
@@ -97,10 +90,7 @@ app.get(
     const { success } = await c.env.RATE_LIMITER.limit({ key: ip });
 
     if (!success) {
-      return c.json(
-        { error: "Too many requests. Please wait a moment and try again." },
-        429,
-      );
+      return c.json({ error: "Too many requests. Please wait a moment and try again." }, 429);
     }
 
     await next();
@@ -141,10 +131,7 @@ app.get(
         stations: trending,
       });
     } catch {
-      return c.json(
-        { error: "Unable to fetch analytics data. Please try again later." },
-        500,
-      );
+      return c.json({ error: "Unable to fetch analytics data. Please try again later." }, 500);
     }
   },
 );
@@ -167,10 +154,7 @@ app.get(
         ...overview,
       });
     } catch {
-      return c.json(
-        { error: "Unable to fetch analytics data. Please try again later." },
-        500,
-      );
+      return c.json({ error: "Unable to fetch analytics data. Please try again later." }, 500);
     }
   },
 );
@@ -206,9 +190,7 @@ app.get(
       );
 
       const isTopStation =
-        stationStats && topStation
-          ? stationStats.stationId === topStation.stationId
-          : false;
+        stationStats && topStation ? stationStats.stationId === topStation.stationId : false;
 
       const percentage =
         stationStats && topStation && topStation.visits > 0
@@ -226,10 +208,7 @@ app.get(
         },
       });
     } catch {
-      return c.json(
-        { error: "Unable to fetch analytics data. Please try again later." },
-        500,
-      );
+      return c.json({ error: "Unable to fetch analytics data. Please try again later." }, 500);
     }
   },
 );
@@ -245,10 +224,7 @@ app.get(
     const { success } = await c.env.RATE_LIMITER.limit({ key: ip });
 
     if (!success) {
-      return c.json(
-        { error: "Too many requests. Please wait a moment and try again." },
-        429,
-      );
+      return c.json({ error: "Too many requests. Please wait a moment and try again." }, 429);
     }
 
     // Store IP in context to avoid re-reading header later
@@ -302,10 +278,7 @@ app.get(
       if (error instanceof ScraperError) {
         return c.json({ error: error.message }, error.statusCode);
       }
-      return c.json(
-        { error: "Unable to load train data. Please try again in a moment." },
-        500,
-      );
+      return c.json({ error: "Unable to load train data. Please try again in a moment." }, 500);
     }
   },
 );

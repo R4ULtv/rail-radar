@@ -8,9 +8,7 @@ export function useTrainData(
   enabled: boolean = true,
 ) {
   const { data, error, isLoading, isValidating } = useSWR<TrainDataResponse>(
-    stationId && enabled
-      ? buildApiUrl(endpoints.stationTrains(stationId, type))
-      : null,
+    stationId && enabled ? buildApiUrl(endpoints.stationTrains(stationId, type)) : null,
     apiFetcher,
     {
       refreshInterval: 10_000,

@@ -82,10 +82,7 @@ export default function StationLoading() {
             <CardContent className="flex-1 px-0 overflow-auto">
               <div>
                 {Array.from({ length: 6 }).map((_, i) => (
-                  <div
-                    key={i}
-                    className="flex items-center gap-3 px-4 py-3 border-b"
-                  >
+                  <div key={i} className="flex items-center gap-3 px-4 py-3 border-b">
                     <Skeleton className="h-4 w-12" />
                     <Skeleton className="h-8 w-8 rounded-full" />
                     <div className="flex-1">
@@ -119,10 +116,7 @@ export default function StationLoading() {
               <CardContent className="flex-1 px-0 overflow-auto">
                 <div>
                   {Array.from({ length: 6 }).map((_, i) => (
-                    <div
-                      key={i}
-                      className="flex items-center gap-3 px-4 py-3 border-b"
-                    >
+                    <div key={i} className="flex items-center gap-3 px-4 py-3 border-b">
                       <Skeleton className="h-4 w-12" />
                       <Skeleton className="h-8 w-8 rounded-full" />
                       <div className="flex-1">

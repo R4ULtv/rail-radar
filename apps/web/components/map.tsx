@@ -13,13 +13,10 @@ import StationInfo from "@/components/station-info";
 import { StationMarkers } from "@/components/station-markers";
 import { SelectedStationProvider } from "@/hooks/use-selected-station";
 
-const MapGL = dynamic(
-  () => import("react-map-gl/mapbox").then((mod) => mod.Map),
-  {
-    ssr: false,
-    loading: () => <MapLoading />,
-  },
-);
+const MapGL = dynamic(() => import("react-map-gl/mapbox").then((mod) => mod.Map), {
+  ssr: false,
+  loading: () => <MapLoading />,
+});
 
 const DEFAULT_VIEW = {
   lat: 42.5,
@@ -50,9 +47,7 @@ export function Map() {
     longitude: number;
     zoom: number;
   } | null>(
-    hasUrlParams
-      ? { latitude: params.lat, longitude: params.lng, zoom: params.zoom }
-      : null,
+    hasUrlParams ? { latitude: params.lat, longitude: params.lng, zoom: params.zoom } : null,
   );
 
   const hasInitialPosition = initialPosition !== null;
@@ -77,10 +72,8 @@ export function Map() {
             // Permission already granted, get location immediately
             navigator.geolocation.getCurrentPosition(
               (pos) => {
-                const latitude =
-                  Math.round(pos.coords.latitude * 1000000) / 1000000;
-                const longitude =
-                  Math.round(pos.coords.longitude * 1000000) / 1000000;
+                const latitude = Math.round(pos.coords.latitude * 1000000) / 1000000;
+                const longitude = Math.round(pos.coords.longitude * 1000000) / 1000000;
                 setInitialPosition({ latitude, longitude, zoom: 13 });
                 setParams({ lat: latitude, lng: longitude, zoom: 13 });
               },

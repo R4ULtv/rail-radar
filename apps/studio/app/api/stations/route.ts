@@ -3,11 +3,7 @@ import fs from "fs/promises";
 import path from "path";
 import type { Station } from "@repo/data";
 
-const DATA_FILE_PATH = path.join(
-  process.cwd(),
-  "../..",
-  "packages/data/src/stations.json",
-);
+const DATA_FILE_PATH = path.join(process.cwd(), "../..", "packages/data/src/stations.json");
 
 async function readStations(): Promise<Station[]> {
   const content = await fs.readFile(DATA_FILE_PATH, "utf-8");
@@ -26,10 +22,7 @@ export async function GET() {
     return NextResponse.json(sorted);
   } catch (error) {
     console.error("Failed to read stations:", error);
-    return NextResponse.json(
-      { error: "Failed to read stations" },
-      { status: 500 },
-    );
+    return NextResponse.json({ error: "Failed to read stations" }, { status: 500 });
   }
 }
 
@@ -65,9 +58,6 @@ export async function POST(request: Request) {
     return NextResponse.json(newStation, { status: 201 });
   } catch (error) {
     console.error("Failed to create station:", error);
-    return NextResponse.json(
-      { error: "Failed to create station" },
-      { status: 500 },
-    );
+    return NextResponse.json({ error: "Failed to create station" }, { status: 500 });
   }
 }

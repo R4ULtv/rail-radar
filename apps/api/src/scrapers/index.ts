@@ -25,10 +25,7 @@ export interface ScrapeResult {
   timing: ScraperTiming;
 }
 
-type ScrapeFn = (
-  stationId: string,
-  type?: "arrivals" | "departures",
-) => Promise<ScrapeResult>;
+type ScrapeFn = (stationId: string, type?: "arrivals" | "departures") => Promise<ScrapeResult>;
 
 const scrapers: Record<string, ScrapeFn> = {
   CH: scrapeSwissTrains,

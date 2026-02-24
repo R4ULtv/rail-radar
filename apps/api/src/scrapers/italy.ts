@@ -4,8 +4,7 @@ import type { ContentfulStatusCode } from "hono/utils/http-status";
 import { FETCH_TIMEOUT_MS } from "../constants";
 import { ScraperError, type ScrapeResult } from "./index";
 
-const RFI_BASE_URL =
-  "https://iechub.rfi.it/ArriviPartenze/en/ArrivalsDepartures/Monitor";
+const RFI_BASE_URL = "https://iechub.rfi.it/ArriviPartenze/en/ArrivalsDepartures/Monitor";
 
 function buildRfiUrl(stationId: string, arrivals: boolean): string {
   // Extract numeric RFI place ID from station ID (e.g. "IT1728" -> "1728")
@@ -46,9 +45,7 @@ function parseCategory(text: string | null): string | null {
 function decodeHtmlEntities(text: string): string {
   return text
     .replace(/&#(\d+);/g, (_, code) => String.fromCharCode(parseInt(code, 10)))
-    .replace(/&#x([0-9a-fA-F]+);/g, (_, code) =>
-      String.fromCharCode(parseInt(code, 16)),
-    )
+    .replace(/&#x([0-9a-fA-F]+);/g, (_, code) => String.fromCharCode(parseInt(code, 16)))
     .replace(/&nbsp;/gi, " ")
     .replace(/&amp;/gi, "&")
     .replace(/&lt;/gi, "<")
@@ -126,10 +123,7 @@ class ParserState {
         train.platform = text || null;
         break;
       case 7: // Status (from img src - check for Lampeggio)
-        if (
-          imgSrc.includes("LampeggioGold") ||
-          imgSrc.includes("LampeggioGrey")
-        ) {
+        if (imgSrc.includes("LampeggioGold") || imgSrc.includes("LampeggioGrey")) {
           train.status = this.type === "arrivals" ? "incoming" : "departing";
         }
         break;
@@ -218,11 +212,9 @@ export async function scrapeTrains(
         { fetchMs },
       );
     }
-    throw new ScraperError(
-      "Unable to connect to the train data source. Please try again.",
-      502,
-      { fetchMs },
-    );
+    throw new ScraperError("Unable to connect to the train data source. Please try again.", 502, {
+      fetchMs,
+    });
   }
   const fetchMs = performance.now() - startTime;
   clearTimeout(timeoutId);

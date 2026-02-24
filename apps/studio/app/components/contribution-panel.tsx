@@ -61,9 +61,7 @@ function formatChangeDetails(change: StationChange): string {
       `Removed coordinates (was ${details.previousGeo.lat.toFixed(4)}, ${details.previousGeo.lng.toFixed(4)})`,
     );
   } else if (details.coordinatesUpdated && details.newGeo) {
-    updates.push(
-      `Moved to (${details.newGeo.lat.toFixed(4)}, ${details.newGeo.lng.toFixed(4)})`,
-    );
+    updates.push(`Moved to (${details.newGeo.lat.toFixed(4)}, ${details.newGeo.lng.toFixed(4)})`);
   }
   if (details.nameChanged) {
     updates.push(`Renamed from "${details.previousName}"`);
@@ -84,10 +82,7 @@ function ChangeIcon({ type }: { type: StationChange["type"] }) {
   }
 }
 
-export function ContributionPanel({
-  open,
-  onOpenChange,
-}: ContributionPanelProps) {
+export function ContributionPanel({ open, onOpenChange }: ContributionPanelProps) {
   const { changes, stats, clearSession, isSessionActive } = useContribution();
   const [titleCopied, setTitleCopied] = useState(false);
   const [bodyCopied, setBodyCopied] = useState(false);
@@ -153,9 +148,7 @@ export function ContributionPanel({
               <div className="grid grid-cols-3 gap-4 text-sm">
                 <div className="space-y-1">
                   <div className="text-muted-foreground">Changes</div>
-                  <div className="text-2xl font-semibold">
-                    {stats.changesCount}
-                  </div>
+                  <div className="text-2xl font-semibold">{stats.changesCount}</div>
                 </div>
                 <div className="space-y-1">
                   <div className="text-muted-foreground">Coverage</div>
@@ -165,20 +158,14 @@ export function ContributionPanel({
                     </span>
                     {stats.currentCoverage > stats.initialCoverage && (
                       <span className="text-xs text-green-500">
-                        +
-                        {(
-                          stats.currentCoverage - stats.initialCoverage
-                        ).toFixed(1)}
-                        %
+                        +{(stats.currentCoverage - stats.initialCoverage).toFixed(1)}%
                       </span>
                     )}
                   </div>
                 </div>
                 <div className="space-y-1">
                   <div className="text-muted-foreground">Coords Added</div>
-                  <div className="text-2xl font-semibold">
-                    {stats.coordinatesAdded}
-                  </div>
+                  <div className="text-2xl font-semibold">{stats.coordinatesAdded}</div>
                 </div>
               </div>
 
@@ -191,9 +178,7 @@ export function ContributionPanel({
               <div className="py-8 text-center text-sm text-muted-foreground">
                 <MapPinIcon className="mx-auto mb-2 size-8 opacity-50" />
                 <p>No changes yet</p>
-                <p className="mt-1">
-                  Start editing stations to track your contributions.
-                </p>
+                <p className="mt-1">Start editing stations to track your contributions.</p>
               </div>
             ) : (
               <div className="space-y-2 pr-4">
@@ -204,9 +189,7 @@ export function ContributionPanel({
                   >
                     <ChangeIcon type={change.type} />
                     <div className="min-w-0 flex-1">
-                      <div className="truncate font-medium">
-                        {change.stationName}
-                      </div>
+                      <div className="truncate font-medium">{change.stationName}</div>
                       <div className="text-xs text-muted-foreground">
                         {formatChangeDetails(change)}
                       </div>
@@ -243,12 +226,7 @@ export function ContributionPanel({
                     )}
                   </Button>
                 </div>
-                <Input
-                  id="pr-title"
-                  value={title}
-                  readOnly
-                  className="font-mono text-sm"
-                />
+                <Input id="pr-title" value={title} readOnly className="font-mono text-sm" />
               </div>
 
               <div className="space-y-2">
@@ -274,10 +252,7 @@ export function ContributionPanel({
                   </Button>
                 </div>
                 <ScrollArea className="max-h-40 rounded-md border border-input bg-input/30">
-                  <pre
-                    id="pr-body"
-                    className="whitespace-pre-wrap p-3 font-mono text-xs"
-                  >
+                  <pre id="pr-body" className="whitespace-pre-wrap p-3 font-mono text-xs">
                     {body}
                   </pre>
                 </ScrollArea>

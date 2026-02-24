@@ -9,8 +9,8 @@ export default function StationNotFound() {
         <div className="space-y-2">
           <h1 className="text-4xl font-bold">Station Not Found</h1>
           <p className="text-muted-foreground">
-            We couldn&apos;t find a station with that ID. It may have been
-            removed or the link might be incorrect.
+            We couldn&apos;t find a station with that ID. It may have been removed or the link might
+            be incorrect.
           </p>
         </div>
 
@@ -19,11 +19,7 @@ export default function StationNotFound() {
             <MapIcon className="size-4" />
             Back to Map
           </Button>
-          <Button
-            variant="outline"
-            nativeButton={false}
-            render={<Link href="/" />}
-          >
+          <Button variant="outline" nativeButton={false} render={<Link href="/" />}>
             <SearchIcon className="size-4" />
             Search Stations
           </Button>

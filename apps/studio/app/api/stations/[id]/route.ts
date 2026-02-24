@@ -3,11 +3,7 @@ import fs from "fs/promises";
 import path from "path";
 import type { Station } from "@repo/data";
 
-const DATA_FILE_PATH = path.join(
-  process.cwd(),
-  "../..",
-  "packages/data/src/stations.json",
-);
+const DATA_FILE_PATH = path.join(process.cwd(), "../..", "packages/data/src/stations.json");
 
 async function readStations(): Promise<Station[]> {
   const content = await fs.readFile(DATA_FILE_PATH, "utf-8");
@@ -38,13 +34,8 @@ export async function PUT(request: Request, { params }: RouteParams) {
     const updatedStation: Station = {
       id,
       name: name !== undefined ? String(name).trim() : existingStation.name,
-      type:
-        type === "rail" || type === "metro" || type === "light"
-          ? type
-          : existingStation.type,
-      importance: [1, 2, 3, 4].includes(importance)
-        ? importance
-        : existingStation.importance,
+      type: type === "rail" || type === "metro" || type === "light" ? type : existingStation.type,
+      importance: [1, 2, 3, 4].includes(importance) ? importance : existingStation.importance,
       geo: geo
         ? {
             lat: Math.round(Number(geo.lat) * 1e6) / 1e6,
@@ -61,10 +52,7 @@ export async function PUT(request: Request, { params }: RouteParams) {
     return NextResponse.json(updatedStation);
   } catch (error) {
     console.error("Failed to update station:", error);
-    return NextResponse.json(
-      { error: "Failed to update station" },
-      { status: 500 },
-    );
+    return NextResponse.json({ error: "Failed to update station" }, { status: 500 });
   }
 }
 
@@ -85,9 +73,6 @@ export async function DELETE(_request: Request, { params }: RouteParams) {
     return NextResponse.json(deletedStation);
   } catch (error) {
     console.error("Failed to delete station:", error);
-    return NextResponse.json(
-      { error: "Failed to delete station" },
-      { status: 500 },
-    );
+    return NextResponse.json({ error: "Failed to delete station" }, { status: 500 });
   }
 }

@@ -35,21 +35,15 @@ export function generatePRTitle(stats: ContributionStats): string {
   }
 
   if (stats.stationsRenamed > 0) {
-    parts.push(
-      `rename ${stats.stationsRenamed} station${stats.stationsRenamed !== 1 ? "s" : ""}`,
-    );
+    parts.push(`rename ${stats.stationsRenamed} station${stats.stationsRenamed !== 1 ? "s" : ""}`);
   }
 
   if (stats.stationsCreated > 0) {
-    parts.push(
-      `create ${stats.stationsCreated} station${stats.stationsCreated !== 1 ? "s" : ""}`,
-    );
+    parts.push(`create ${stats.stationsCreated} station${stats.stationsCreated !== 1 ? "s" : ""}`);
   }
 
   if (stats.stationsDeleted > 0) {
-    parts.push(
-      `delete ${stats.stationsDeleted} station${stats.stationsDeleted !== 1 ? "s" : ""}`,
-    );
+    parts.push(`delete ${stats.stationsDeleted} station${stats.stationsDeleted !== 1 ? "s" : ""}`);
   }
 
   if (parts.length === 0) {
@@ -91,9 +85,7 @@ function formatChangeDescription(change: StationChange): FormattedChange {
     );
     mapLink = generateGoogleMapsLink(details.newGeo.lat, details.newGeo.lng);
   } else if (details.coordinatesUpdated && details.newGeo) {
-    updates.push(
-      `Updated to (${details.newGeo.lat.toFixed(4)}, ${details.newGeo.lng.toFixed(4)})`,
-    );
+    updates.push(`Updated to (${details.newGeo.lat.toFixed(4)}, ${details.newGeo.lng.toFixed(4)})`);
     mapLink = generateGoogleMapsLink(details.newGeo.lat, details.newGeo.lng);
   }
 
@@ -102,9 +94,7 @@ function formatChangeDescription(change: StationChange): FormattedChange {
   }
 
   if (details.typeChanged && details.previousType && details.newType) {
-    updates.push(
-      `Type changed from ${details.previousType} to ${details.newType}`,
-    );
+    updates.push(`Type changed from ${details.previousType} to ${details.newType}`);
   }
 
   if (
@@ -123,10 +113,7 @@ function formatChangeDescription(change: StationChange): FormattedChange {
   };
 }
 
-export function generatePRBody(
-  changes: StationChange[],
-  stats: ContributionStats,
-): string {
+export function generatePRBody(changes: StationChange[], stats: ContributionStats): string {
   const lines: string[] = [];
 
   // Summary
@@ -171,13 +158,8 @@ export function generatePRBody(
     const { details, mapLink } = formatChangeDescription(change);
     const typeBadge = getTypeBadge(change.type);
     const mapCell = mapLink ? `[📍 View](${mapLink})` : "-";
-    const rfiCell =
-      change.type !== "deleted"
-        ? `[🚉 Check](${generateRfiLink(change.id)})`
-        : "-";
-    lines.push(
-      `| ${change.stationName} | ${typeBadge} | ${details} | ${mapCell} | ${rfiCell} |`,
-    );
+    const rfiCell = change.type !== "deleted" ? `[🚉 Check](${generateRfiLink(change.id)})` : "-";
+    lines.push(`| ${change.stationName} | ${typeBadge} | ${details} | ${mapCell} | ${rfiCell} |`);
   }
 
   lines.push("");

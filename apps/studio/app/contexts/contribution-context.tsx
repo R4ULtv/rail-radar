@@ -1,13 +1,6 @@
 "use client";
 
-import {
-  createContext,
-  useCallback,
-  useContext,
-  useEffect,
-  useMemo,
-  useState,
-} from "react";
+import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
 import type { Station } from "@repo/data";
 import type {
   StationChange,
@@ -24,18 +17,12 @@ interface ContributionContextValue {
   stats: ContributionStats | null;
   changedStationIds: Map<string, ChangeType>;
   startSession: (stations: Station[]) => void;
-  recordChange: (
-    type: ChangeType,
-    station: Station,
-    previousStation?: Station,
-  ) => void;
+  recordChange: (type: ChangeType, station: Station, previousStation?: Station) => void;
   clearSession: () => void;
   isSessionActive: boolean;
 }
 
-const ContributionContext = createContext<ContributionContextValue | null>(
-  null,
-);
+const ContributionContext = createContext<ContributionContextValue | null>(null);
 
 function calculateCoverage(stations: Station[]): number {
   if (stations.length === 0) return 0;
@@ -206,8 +193,7 @@ export function ContributionProvider({
           // Check what changed
           const nameChanged = previousStation.name !== station.name;
           const typeChanged = previousStation.type !== station.type;
-          const importanceChanged =
-            previousStation.importance !== station.importance;
+          const importanceChanged = previousStation.importance !== station.importance;
           const hadGeo = !!previousStation.geo;
           const hasGeo = !!station.geo;
           const coordinatesAdded = !hadGeo && hasGeo;
@@ -232,9 +218,7 @@ export function ContributionProvider({
             previousType: typeChanged ? previousStation.type : undefined,
             newType: typeChanged ? station.type : undefined,
             importanceChanged,
-            previousImportance: importanceChanged
-              ? previousStation.importance
-              : undefined,
+            previousImportance: importanceChanged ? previousStation.importance : undefined,
             newImportance: importanceChanged ? station.importance : undefined,
           };
         }
@@ -284,19 +268,13 @@ export function ContributionProvider({
     isSessionActive: !!session && session.changes.length > 0,
   };
 
-  return (
-    <ContributionContext.Provider value={value}>
-      {children}
-    </ContributionContext.Provider>
-  );
+  return <ContributionContext.Provider value={value}>{children}</ContributionContext.Provider>;
 }
 
 export function useContribution() {
   const context = useContext(ContributionContext);
   if (!context) {
-    throw new Error(
-      "useContribution must be used within a ContributionProvider",
-    );
+    throw new Error("useContribution must be used within a ContributionProvider");
   }
   return context;
 }

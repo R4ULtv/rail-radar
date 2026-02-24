@@ -91,8 +91,7 @@ export function StationSidebar({
 
       result = result.filter((s) => {
         const nameIsDuplicate = (nameCounts.get(s.name.toLowerCase()) ?? 0) > 1;
-        const geoIsDuplicate =
-          s.geo && (geoCounts.get(`${s.geo.lat},${s.geo.lng}`) ?? 0) > 1;
+        const geoIsDuplicate = s.geo && (geoCounts.get(`${s.geo.lat},${s.geo.lng}`) ?? 0) > 1;
         return nameIsDuplicate || geoIsDuplicate;
       });
     }
@@ -170,10 +169,7 @@ export function StationSidebar({
           <PlusIcon className="size-4" />
           Add Station
         </Button>
-        <Tabs
-          value={filter}
-          onValueChange={(value) => setFilter(value as FilterType)}
-        >
+        <Tabs value={filter} onValueChange={(value) => setFilter(value as FilterType)}>
           <TabsList className="w-full">
             <TabsTrigger value="all">
               <ListIcon className="size-3" />

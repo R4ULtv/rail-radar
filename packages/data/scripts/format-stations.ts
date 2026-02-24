@@ -18,9 +18,7 @@ const stationsPath = join(import.meta.dirname, "../src/stations.json");
 const stations = JSON.parse(readFileSync(stationsPath, "utf-8"));
 
 // Sort stations alphabetically by name using locale-aware comparison
-stations.sort((a: { name: string }, b: { name: string }) =>
-  a.name.localeCompare(b.name),
-);
+stations.sort((a: { name: string }, b: { name: string }) => a.name.localeCompare(b.name));
 
 // Write back as minified JSON (no whitespace)
 writeFileSync(stationsPath, JSON.stringify(stations));

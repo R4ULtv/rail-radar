@@ -6,10 +6,7 @@ const API_URL = "/api/stations";
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
 export function useStations() {
-  const { data, error, isLoading, mutate } = useSWR<Station[]>(
-    API_URL,
-    fetcher,
-  );
+  const { data, error, isLoading, mutate } = useSWR<Station[]>(API_URL, fetcher);
 
   const createStation = async (
     name: string,
@@ -34,9 +31,7 @@ export function useStations() {
     mutate(
       (current) =>
         current
-          ? [...current, newStation].sort((a, b) =>
-              a.name.localeCompare(b.name),
-            )
+          ? [...current, newStation].sort((a, b) => a.name.localeCompare(b.name))
           : [newStation],
       { revalidate: false },
     );
@@ -93,10 +88,9 @@ export function useStations() {
     const deletedStation = await response.json();
 
     // Optimistic update
-    mutate(
-      (current) => (current ? current.filter((s) => s.id !== id) : current),
-      { revalidate: false },
-    );
+    mutate((current) => (current ? current.filter((s) => s.id !== id) : current), {
+      revalidate: false,
+    });
 
     return deletedStation;
   };

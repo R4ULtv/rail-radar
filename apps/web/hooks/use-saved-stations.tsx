@@ -32,9 +32,7 @@ export function useSavedStations() {
 
   // Derive full station objects from IDs
   const savedStations = React.useMemo(() => {
-    return savedIds
-      .map((id) => stationById.get(id))
-      .filter((s): s is Station => s !== undefined);
+    return savedIds.map((id) => stationById.get(id)).filter((s): s is Station => s !== undefined);
   }, [savedIds]);
 
   // Set for O(1) lookup

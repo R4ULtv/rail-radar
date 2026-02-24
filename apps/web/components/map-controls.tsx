@@ -2,13 +2,7 @@
 
 import * as React from "react";
 import { Marker, useMap } from "react-map-gl/mapbox";
-import {
-  CompassIcon,
-  LocateFixedIcon,
-  LocateIcon,
-  MinusIcon,
-  PlusIcon,
-} from "lucide-react";
+import { CompassIcon, LocateFixedIcon, LocateIcon, MinusIcon, PlusIcon } from "lucide-react";
 import { Button } from "@repo/ui/components/button";
 import { ButtonGroup } from "@repo/ui/components/button-group";
 import { GitHub } from "@repo/ui/icons/github";
@@ -131,11 +125,7 @@ export function MapControls() {
   return (
     <>
       {userLocation && (
-        <Marker
-          longitude={userLocation.longitude}
-          latitude={userLocation.latitude}
-          anchor="center"
-        >
+        <Marker longitude={userLocation.longitude} latitude={userLocation.latitude} anchor="center">
           <div className="relative flex items-center justify-center">
             <div className="absolute rounded-full bg-accent/20 size-8" />
             <div

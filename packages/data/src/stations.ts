@@ -9,6 +9,4 @@ export const stations: Station[] = stationsData.map((station) => ({
 }));
 
 /** Station lookup by ID - O(1) instead of O(n) */
-export const stationById = new Map<string, Station>(
-  stations.map((s) => [s.id, s]),
-);
+export const stationById = new Map<string, Station>(stations.map((s) => [s.id, s]));

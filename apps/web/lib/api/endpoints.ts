@@ -24,10 +24,7 @@ export function trendingStations(period: string = "week"): string {
  * @param stationId - Station ID
  * @param type - Type of trains to fetch
  */
-export function stationTrains(
-  stationId: string,
-  type: "arrivals" | "departures",
-): string {
+export function stationTrains(stationId: string, type: "arrivals" | "departures"): string {
   return `/stations/${stationId}?type=${type}`;
 }
 
@@ -36,9 +33,6 @@ export function stationTrains(
  * @param stationId - Station ID
  * @param period - Time period for stats (default: "week")
  */
-export function stationStats(
-  stationId: string,
-  period: string = "week",
-): string {
+export function stationStats(stationId: string, period: string = "week"): string {
   return `/stations/${stationId}/stats?period=${period}`;
 }

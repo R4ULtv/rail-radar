@@ -34,9 +34,7 @@ function getCountryName(id: string): string {
   return id.startsWith("CH") ? "Switzerland" : "Italy";
 }
 
-export async function generateMetadata({
-  params,
-}: StationPageProps): Promise<Metadata> {
+export async function generateMetadata({ params }: StationPageProps): Promise<Metadata> {
   const { id } = await params;
   const station = getStation(id);
 

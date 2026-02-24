@@ -3,12 +3,7 @@
 import { useState } from "react";
 import type { Station } from "@repo/data";
 import { Button } from "@repo/ui/components/button";
-import {
-  CheckIcon,
-  CornerUpRightIcon,
-  MegaphoneIcon,
-  ShareIcon,
-} from "lucide-react";
+import { CheckIcon, CornerUpRightIcon, MegaphoneIcon, ShareIcon } from "lucide-react";
 import { SaveButton } from "@/components/save-button";
 
 interface StationHeaderProps {
@@ -23,8 +18,7 @@ function formatDms(value: number, type: "lat" | "lng") {
   const minutes = Math.floor(minutesFloat);
   const seconds = (minutesFloat - minutes) * 60;
 
-  const hemisphere =
-    type === "lat" ? (value >= 0 ? "N" : "S") : value >= 0 ? "E" : "W";
+  const hemisphere = type === "lat" ? (value >= 0 ? "N" : "S") : value >= 0 ? "E" : "W";
 
   const paddedMinutes = String(minutes).padStart(2, "0");
   const paddedSeconds = seconds.toFixed(1).padStart(4, "0");
@@ -73,13 +67,10 @@ export function StationHeader({ station, info }: StationHeaderProps) {
     <div className="space-y-4">
       <div className="flex items-start justify-between gap-4">
         <div>
-          <h1 className="text-2xl md:text-3xl font-bold tracking-tight">
-            {station.name}
-          </h1>
+          <h1 className="text-2xl md:text-3xl font-bold tracking-tight">{station.name}</h1>
           {station.geo && (
             <p className="text-sm text-muted-foreground mt-2 tabular-nums">
-              {formatDms(station.geo.lat, "lat")}{" "}
-              {formatDms(station.geo.lng, "lng")}
+              {formatDms(station.geo.lat, "lat")} {formatDms(station.geo.lng, "lng")}
             </p>
           )}
         </div>
@@ -96,17 +87,8 @@ export function StationHeader({ station, info }: StationHeaderProps) {
               <CornerUpRightIcon className="size-4" />
             </Button>
           )}
-          <Button
-            variant="ghost"
-            size="icon-sm"
-            onClick={handleShare}
-            aria-label="Share"
-          >
-            {copied ? (
-              <CheckIcon className="size-4" />
-            ) : (
-              <ShareIcon className="size-4" />
-            )}
+          <Button variant="ghost" size="icon-sm" onClick={handleShare} aria-label="Share">
+            {copied ? <CheckIcon className="size-4" /> : <ShareIcon className="size-4" />}
           </Button>
         </div>
       </div>

@@ -6,21 +6,15 @@ import { useStations } from "./hooks/use-stations";
 import { StationSidebar } from "./components/station-sidebar";
 import { StationMap } from "./components/station-map";
 import { StationEditPanel } from "./components/station-edit-panel";
-import {
-  ContributionProvider,
-  useContribution,
-} from "./contexts/contribution-context";
+import { ContributionProvider, useContribution } from "./contexts/contribution-context";
 import { ContributionBanner } from "./components/contribution-banner";
 import { ContributionPanel } from "./components/contribution-panel";
 
 function StudioContent() {
-  const { stations, isLoading, createStation, updateStation, deleteStation } =
-    useStations();
+  const { stations, isLoading, createStation, updateStation, deleteStation } = useStations();
   const { recordChange, changedStationIds } = useContribution();
 
-  const [selectedStationId, setSelectedStationId] = useState<string | null>(
-    null,
-  );
+  const [selectedStationId, setSelectedStationId] = useState<string | null>(null);
   const [isAddingStation, setIsAddingStation] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [contributionPanelOpen, setContributionPanelOpen] = useState(false);
@@ -50,9 +44,7 @@ function StudioContent() {
         setIsAddingStation(false);
         toast.success("Station created");
       } catch (error) {
-        toast.error(
-          error instanceof Error ? error.message : "Failed to create station",
-        );
+        toast.error(error instanceof Error ? error.message : "Failed to create station");
       } finally {
         setIsSaving(false);
       }
@@ -70,9 +62,7 @@ function StudioContent() {
         recordChange("updated", updated, previousStation);
         toast.success("Position updated");
       } catch (error) {
-        toast.error(
-          error instanceof Error ? error.message : "Failed to update position",
-        );
+        toast.error(error instanceof Error ? error.message : "Failed to update position");
       }
     },
     [updateStation, stations, recordChange],
@@ -91,9 +81,7 @@ function StudioContent() {
         recordChange("updated", updated, previousStation);
         toast.success(`Location set for ${selectedStation.name}`);
       } catch (error) {
-        toast.error(
-          error instanceof Error ? error.message : "Failed to set location",
-        );
+        toast.error(error instanceof Error ? error.message : "Failed to set location");
       }
     },
     [selectedStation, updateStation, recordChange],
@@ -117,9 +105,7 @@ function StudioContent() {
         recordChange("updated", updated, previousStation);
         toast.success("Station updated");
       } catch (error) {
-        toast.error(
-          error instanceof Error ? error.message : "Failed to update station",
-        );
+        toast.error(error instanceof Error ? error.message : "Failed to update station");
       } finally {
         setIsSaving(false);
       }
@@ -140,9 +126,7 @@ function StudioContent() {
       setSelectedStationId(null);
       toast.success("Station deleted");
     } catch (error) {
-      toast.error(
-        error instanceof Error ? error.message : "Failed to delete station",
-      );
+      toast.error(error instanceof Error ? error.message : "Failed to delete station");
     } finally {
       setIsSaving(false);
     }
@@ -170,9 +154,7 @@ function StudioContent() {
         onSelectStation={handleSelectStation}
         onAddStationClick={handleAddStationClick}
         contributionBanner={
-          <ContributionBanner
-            onReviewClick={() => setContributionPanelOpen(true)}
-          />
+          <ContributionBanner onReviewClick={() => setContributionPanelOpen(true)} />
         }
       />
       <div className="relative flex-1">
@@ -197,10 +179,7 @@ function StudioContent() {
           </div>
         )}
       </div>
-      <ContributionPanel
-        open={contributionPanelOpen}
-        onOpenChange={setContributionPanelOpen}
-      />
+      <ContributionPanel open={contributionPanelOpen} onOpenChange={setContributionPanelOpen} />
     </main>
   );
 }

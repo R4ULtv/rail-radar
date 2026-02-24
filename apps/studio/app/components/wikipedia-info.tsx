@@ -1,19 +1,10 @@
 "use client";
 
-import {
-  ExternalLinkIcon,
-  BookOpenIcon,
-  Loader2Icon,
-  MapPinIcon,
-} from "lucide-react";
+import { ExternalLinkIcon, BookOpenIcon, Loader2Icon, MapPinIcon } from "lucide-react";
 import { Button, buttonVariants } from "@repo/ui/components/button";
 import { cn } from "@repo/ui/lib/utils";
 import { useWikipediaStation } from "../hooks/use-wikipedia-station";
-import {
-  getStationStatus,
-  calculateDistance,
-  formatDistance,
-} from "../lib/wikipedia-parser";
+import { getStationStatus, calculateDistance, formatDistance } from "../lib/wikipedia-parser";
 import type { StationInfobox, StationStatus } from "../types/wikipedia";
 
 interface WikipediaInfoProps {
@@ -39,28 +30,19 @@ export function WikipediaInfo({
   }
 
   if (error) {
-    return (
-      <div className="py-3 text-sm text-muted-foreground">
-        Failed to load Wikipedia data
-      </div>
-    );
+    return <div className="py-3 text-sm text-muted-foreground">Failed to load Wikipedia data</div>;
   }
 
   if (!data) {
     const searchUrl = `https://it.wikipedia.org/w/index.php?search=${encodeURIComponent(`Stazione di ${stationName}`)}`;
     return (
       <div className="flex flex-col gap-2 py-2">
-        <p className="text-sm text-muted-foreground">
-          No Wikipedia article found
-        </p>
+        <p className="text-sm text-muted-foreground">No Wikipedia article found</p>
         <a
           href={searchUrl}
           target="_blank"
           rel="noopener noreferrer"
-          className={cn(
-            buttonVariants({ variant: "outline", size: "sm" }),
-            "w-full",
-          )}
+          className={cn(buttonVariants({ variant: "outline", size: "sm" }), "w-full")}
         >
           <BookOpenIcon className="size-4" />
           Search on Wikipedia
@@ -112,17 +94,14 @@ function WikipediaContent({
             <div className="flex items-center gap-2 text-sm">
               <MapPinIcon className="size-4 text-muted-foreground" />
               <span className="font-mono text-xs">
-                {data.coordinates.lat.toFixed(6)},{" "}
-                {data.coordinates.lng.toFixed(6)}
+                {data.coordinates.lat.toFixed(6)}, {data.coordinates.lng.toFixed(6)}
               </span>
             </div>
             {onUseCoordinates && (
               <Button
                 variant="outline"
                 size="sm"
-                onClick={() =>
-                  onUseCoordinates(data.coordinates!.lat, data.coordinates!.lng)
-                }
+                onClick={() => onUseCoordinates(data.coordinates!.lat, data.coordinates!.lng)}
               >
                 Use
               </Button>
@@ -156,10 +135,7 @@ function WikipediaContent({
           href={data.wikipediaUrl}
           target="_blank"
           rel="noopener noreferrer"
-          className={cn(
-            buttonVariants({ variant: "outline", size: "sm" }),
-            "w-full",
-          )}
+          className={cn(buttonVariants({ variant: "outline", size: "sm" }), "w-full")}
         >
           <ExternalLinkIcon className="size-4" />
           View on Wikipedia
@@ -169,13 +145,7 @@ function WikipediaContent({
   );
 }
 
-function StatusBadge({
-  status,
-  label,
-}: {
-  status: StationStatus;
-  label: string;
-}) {
+function StatusBadge({ status, label }: { status: StationStatus; label: string }) {
   const statusColors: Record<StationStatus, string> = {
     attiva: "bg-emerald-500/20 text-emerald-400 border-emerald-500/40",
     soppressa: "bg-red-500/20 text-red-400 border-red-500/40",

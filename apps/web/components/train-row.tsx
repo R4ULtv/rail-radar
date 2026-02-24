@@ -17,12 +17,9 @@ export function TrainRow({ train, type }: TrainRowProps) {
     <div
       className={cn(
         "flex gap-3 py-3 px-4 border-b border-border last:border-b-0",
-        train.status === "departing" &&
-          "border-l-3 md:border-l-2 border-l-blue-500",
-        train.status === "incoming" &&
-          "border-l-3 md:border-l-2 border-l-green-500",
-        train.status === "cancelled" &&
-          "border-l-3 md:border-l-2 border-l-red-500",
+        train.status === "departing" && "border-l-3 md:border-l-2 border-l-blue-500",
+        train.status === "incoming" && "border-l-3 md:border-l-2 border-l-green-500",
+        train.status === "cancelled" && "border-l-3 md:border-l-2 border-l-red-500",
       )}
     >
       {/* Platform badge */}
@@ -63,30 +60,19 @@ export function TrainRow({ train, type }: TrainRowProps) {
         {/* Line 2: Route + Status */}
         <div className="mt-1 flex items-center justify-between gap-2 text-sm">
           <span className="text-muted-foreground truncate">
-            {route
-              ? type === "arrivals"
-                ? `From ${route}`
-                : `To ${route}`
-              : "–"}
+            {route ? (type === "arrivals" ? `From ${route}` : `To ${route}`) : "–"}
           </span>
           {train.status && (
             <span
               className={cn(
                 "text-xs font-medium capitalize shrink-0 inline-flex items-center gap-1",
-                train.status === "incoming" &&
-                  "text-green-600 dark:text-green-400",
-                train.status === "departing" &&
-                  "text-blue-600 dark:text-blue-400",
-                train.status === "cancelled" &&
-                  "text-red-600 dark:text-red-400",
+                train.status === "incoming" && "text-green-600 dark:text-green-400",
+                train.status === "departing" && "text-blue-600 dark:text-blue-400",
+                train.status === "cancelled" && "text-red-600 dark:text-red-400",
               )}
             >
-              {train.status === "departing" && (
-                <ArrowRightIcon className="size-3" />
-              )}
-              {train.status === "incoming" && (
-                <ArrowDownIcon className="size-3" />
-              )}
+              {train.status === "departing" && <ArrowRightIcon className="size-3" />}
+              {train.status === "incoming" && <ArrowDownIcon className="size-3" />}
               {train.status === "cancelled" && <BanIcon className="size-3" />}
               {train.status}
             </span>

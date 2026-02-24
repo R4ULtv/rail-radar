@@ -20,8 +20,8 @@ export default function OfflinePage() {
         <EmptyContent>
           <EmptyTitle>You&apos;re offline</EmptyTitle>
           <EmptyDescription>
-            Rail Radar needs an internet connection to show live train data.
-            Please check your connection and try again.
+            Rail Radar needs an internet connection to show live train data. Please check your
+            connection and try again.
           </EmptyDescription>
         </EmptyContent>
       </Empty>

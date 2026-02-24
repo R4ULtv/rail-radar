@@ -143,14 +143,10 @@ export function Search() {
   const [focusedIndex, setFocusedIndex] = React.useState<number>(-1);
   const prevQueryRef = React.useRef(query);
   const prevResultsLenRef = React.useRef(0);
-  const [isDrawerOpen, setIsDrawerOpen] = React.useState(
-    () => isMobile && query.length > 0,
-  );
+  const [isDrawerOpen, setIsDrawerOpen] = React.useState(() => isMobile && query.length > 0);
 
   // Fetch search results
-  const { stations: searchResults, isLoading } = useStationSearch(
-    debouncedQuery || null,
-  );
+  const { stations: searchResults, isLoading } = useStationSearch(debouncedQuery || null);
 
   // Fetch trending stations
   const { data: trendingData } = useTrendingStations("week");
@@ -168,19 +164,15 @@ export function Search() {
       type: "rail" as const,
       importance: 4 as const,
     }));
-    const visits = new Map(
-      trendingData.stations.map((s) => [s.stationId, s.visits]),
-    );
+    const visits = new Map(trendingData.stations.map((s) => [s.stationId, s.visits]));
     return { trendingStations: stations, trendingVisits: visits };
   }, [trendingData]);
 
   const isSearchActive = query.trim().length > 0;
-  const hasSearched =
-    isSearchActive && query.trim() === debouncedQuery && !isLoading;
+  const hasSearched = isSearchActive && query.trim() === debouncedQuery && !isLoading;
 
   const noResults = isSearchActive && hasSearched && searchResults.length === 0;
-  const showDefaultLists =
-    !isSearchActive || noResults || (isSearchActive && !hasSearched);
+  const showDefaultLists = !isSearchActive || noResults || (isSearchActive && !hasSearched);
 
   const cardHeight = useAnimatedHeight();
 
@@ -206,13 +198,7 @@ export function Search() {
       return [...savedStations, ...trendingStations];
     }
     return [];
-  }, [
-    isSearchActive,
-    searchResults,
-    savedStations,
-    noResults,
-    trendingStations,
-  ]);
+  }, [isSearchActive, searchResults, savedStations, noResults, trendingStations]);
 
   const focusedIndexRef = React.useRef(focusedIndex);
   const visibleStationsRef = React.useRef(visibleStations);
@@ -223,10 +209,7 @@ export function Search() {
   });
 
   // Reset focused index when list changes (derive during render, no effect)
-  if (
-    query !== prevQueryRef.current ||
-    searchResults.length !== prevResultsLenRef.current
-  ) {
+  if (query !== prevQueryRef.current || searchResults.length !== prevResultsLenRef.current) {
     prevQueryRef.current = query;
     prevResultsLenRef.current = searchResults.length;
     if (focusedIndex !== -1) {
@@ -315,9 +298,7 @@ export function Search() {
         <div className="px-4 py-3 flex items-center gap-3 text-muted-foreground">
           <SearchXIcon className="size-5 shrink-0" />
           <div className="flex flex-col gap-0.5">
-            <p className="text-sm font-medium text-foreground">
-              No stations found
-            </p>
+            <p className="text-sm font-medium text-foreground">No stations found</p>
             <p className="text-xs">Try a different search term</p>
           </div>
         </div>
@@ -405,11 +386,7 @@ export function Search() {
                   aria-label="Search stations"
                 />
                 <InputGroupAddon>
-                  {isSearchActive && !hasSearched ? (
-                    <Spinner />
-                  ) : (
-                    <SearchIcon />
-                  )}
+                  {isSearchActive && !hasSearched ? <Spinner /> : <SearchIcon />}
                 </InputGroupAddon>
                 <AnimatePresence>
                   {isSearchActive && (

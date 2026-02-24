@@ -14,15 +14,11 @@ import {
 import type { Station } from "@repo/data";
 import type { MapLayerMouseEvent } from "maplibre-gl";
 
-const MapGL = dynamic(
-  () => import("react-map-gl/maplibre").then((mod) => mod.Map),
-  { ssr: false },
-);
+const MapGL = dynamic(() => import("react-map-gl/maplibre").then((mod) => mod.Map), { ssr: false });
 
-const Marker = dynamic(
-  () => import("react-map-gl/maplibre").then((mod) => mod.Marker),
-  { ssr: false },
-);
+const Marker = dynamic(() => import("react-map-gl/maplibre").then((mod) => mod.Marker), {
+  ssr: false,
+});
 
 const LAYER_ID = "stations-layer";
 const SOURCE_ID = "stations-source";
@@ -60,11 +56,7 @@ const railwayLineStyle: LayerProps = {
   type: "line",
   source: "openmaptiles",
   "source-layer": "transportation",
-  filter: [
-    "all",
-    ["==", ["get", "class"], "rail"],
-    ["!=", ["get", "brunnel"], "tunnel"],
-  ],
+  filter: ["all", ["==", ["get", "class"], "rail"], ["!=", ["get", "brunnel"], "tunnel"]],
   paint: {
     "line-color": "#4B61D1",
     "line-width": ["interpolate", ["linear"], ["zoom"], 6, 0.5, 10, 1, 14, 2],
@@ -77,11 +69,7 @@ const railwayTunnelStyle: LayerProps = {
   type: "line",
   source: "openmaptiles",
   "source-layer": "transportation",
-  filter: [
-    "all",
-    ["==", ["get", "class"], "rail"],
-    ["==", ["get", "brunnel"], "tunnel"],
-  ],
+  filter: ["all", ["==", ["get", "class"], "rail"], ["==", ["get", "brunnel"], "tunnel"]],
   paint: {
     "line-color": "#4B61D1",
     "line-width": ["interpolate", ["linear"], ["zoom"], 6, 0.5, 10, 1, 14, 2],
@@ -112,11 +100,7 @@ interface StationLayersProps {
   onSelectStation: (id: string) => void;
 }
 
-function StationLayers({
-  stations,
-  selectedStationId,
-  onSelectStation,
-}: StationLayersProps) {
+function StationLayers({ stations, selectedStationId, onSelectStation }: StationLayersProps) {
   const { current: map } = useMap();
 
   // Build GeoJSON from non-selected stations
@@ -280,9 +264,7 @@ export function StationMap({
                 <div
                   className="size-5 cursor-grab rounded-full border-2 border-white active:cursor-grabbing"
                   style={{
-                    backgroundColor:
-                      STATION_COLORS[selectedStation.type] ??
-                      STATION_COLORS.rail,
+                    backgroundColor: STATION_COLORS[selectedStation.type] ?? STATION_COLORS.rail,
                   }}
                 />
               </Marker>

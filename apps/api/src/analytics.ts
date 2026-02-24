@@ -1,8 +1,4 @@
-import {
-  getPeriodInterval,
-  STATION_ID_PATTERN,
-  type Period,
-} from "./constants.js";
+import { getPeriodInterval, STATION_ID_PATTERN, type Period } from "./constants.js";
 
 interface TopStation {
   stationId: string;
@@ -46,11 +42,7 @@ async function hashIP(ip: string): Promise<string> {
   return hashArray.map((b) => b.toString(16).padStart(2, "0")).join("");
 }
 
-async function queryAnalytics<T>(
-  accountId: string,
-  apiToken: string,
-  query: string,
-): Promise<T> {
+async function queryAnalytics<T>(accountId: string, apiToken: string, query: string): Promise<T> {
   const response = await fetch(
     `https://api.cloudflare.com/client/v4/accounts/${accountId}/analytics_engine/sql`,
     {
@@ -101,18 +93,12 @@ export async function getTrendingStations(
     ORDER BY count DESC
   `;
 
-  const result = await queryAnalytics<AnalyticsQueryResult>(
-    accountId,
-    apiToken,
-    query,
-  );
+  const result = await queryAnalytics<AnalyticsQueryResult>(accountId, apiToken, query);
 
   // Normalize old numeric IDs (e.g. "1728") to new format ("IT1728") and merge
   const merged = new Map<string, TopStation>();
   for (const row of result.data) {
-    const id = /^\d+$/.test(row.stationId)
-      ? `IT${row.stationId}`
-      : row.stationId;
+    const id = /^\d+$/.test(row.stationId) ? `IT${row.stationId}` : row.stationId;
     const visits = Number(row.count);
     const unique = Number(row.uniqueVisitors);
     const existing = merged.get(id);
@@ -129,9 +115,7 @@ export async function getTrendingStations(
     }
   }
 
-  return [...merged.values()]
-    .sort((a, b) => b.visits - a.visits)
-    .slice(0, limit);
+  return [...merged.values()].sort((a, b) => b.visits - a.visits).slice(0, limit);
 }
 
 export async function getStationStats(
@@ -196,11 +180,7 @@ export async function getAnalyticsOverview(
     FROM station_visits
   `;
 
-  const result = await queryAnalytics<AnalyticsOverviewQueryResult>(
-    accountId,
-    apiToken,
-    query,
-  );
+  const result = await queryAnalytics<AnalyticsOverviewQueryResult>(accountId, apiToken, query);
 
   return {
     totalVisits: result.data[0]?.totalVisits ?? 0,

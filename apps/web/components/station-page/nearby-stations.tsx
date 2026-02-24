@@ -11,20 +11,14 @@ interface NearbyStationsProps {
 const DEG_TO_RAD = Math.PI / 180;
 const EARTH_RADIUS_KM = 6371;
 
-function haversineDistance(
-  lat1: number,
-  lng1: number,
-  lat2: number,
-  lng2: number,
-): number {
+function haversineDistance(lat1: number, lng1: number, lat2: number, lng2: number): number {
   const dLat = (lat2 - lat1) * DEG_TO_RAD;
   const dLng = (lng2 - lng1) * DEG_TO_RAD;
   const lat1Rad = lat1 * DEG_TO_RAD;
   const lat2Rad = lat2 * DEG_TO_RAD;
 
   const a =
-    Math.sin(dLat / 2) ** 2 +
-    Math.cos(lat1Rad) * Math.cos(lat2Rad) * Math.sin(dLng / 2) ** 2;
+    Math.sin(dLat / 2) ** 2 + Math.cos(lat1Rad) * Math.cos(lat2Rad) * Math.sin(dLng / 2) ** 2;
   const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
   return EARTH_RADIUS_KM * c;
 }
@@ -54,12 +48,7 @@ function calculateNearbyStations(
   for (const station of allStations) {
     if (station.id === currentStation.id || !station.geo) continue;
 
-    const distance = haversineDistance(
-      lat,
-      lng,
-      station.geo.lat,
-      station.geo.lng,
-    );
+    const distance = haversineDistance(lat, lng, station.geo.lat, station.geo.lng);
 
     if (result.length < limit || distance < maxDistance) {
       // Binary insert to maintain sorted order
@@ -79,10 +68,7 @@ function calculateNearbyStations(
   return result;
 }
 
-export function NearbyStations({
-  currentStation,
-  allStations,
-}: NearbyStationsProps) {
+export function NearbyStations({ currentStation, allStations }: NearbyStationsProps) {
   if (!currentStation.geo || allStations.length === 0) {
     return null;
   }
@@ -91,9 +77,7 @@ export function NearbyStations({
   const metroStations = allStations.filter((s) => s.type === "metro");
   const nearbyRail = calculateNearbyStations(currentStation, railStations, 4);
   const nearbyMetro = calculateNearbyStations(currentStation, metroStations, 2);
-  const combined = [...nearbyRail, ...nearbyMetro].sort(
-    (a, b) => a.distance - b.distance,
-  );
+  const combined = [...nearbyRail, ...nearbyMetro].sort((a, b) => a.distance - b.distance);
   // Max 4 total, max 2 metro — pick closest, skipping excess metro
   const nearbyStations: typeof combined = [];
   let metroCount = 0;
@@ -112,9 +96,7 @@ export function NearbyStations({
 
   return (
     <section className="space-y-3">
-      <h2 className="text-sm font-medium text-muted-foreground">
-        Nearby Stations
-      </h2>
+      <h2 className="text-sm font-medium text-muted-foreground">Nearby Stations</h2>
       <ul className="space-y-2">
         {nearbyStations.map((station) => {
           const isMetro = station.type === "metro";

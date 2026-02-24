@@ -11,10 +11,7 @@ function DrawerProvider({ ...props }: DrawerPrimitive.Provider.Props) {
   return <DrawerPrimitive.Provider data-slot="drawer-provider" {...props} />;
 }
 
-function DrawerIndentBackground({
-  className,
-  ...props
-}: DrawerPrimitive.IndentBackground.Props) {
+function DrawerIndentBackground({ className, ...props }: DrawerPrimitive.IndentBackground.Props) {
   return (
     <DrawerPrimitive.IndentBackground
       data-slot="drawer-indent-background"
@@ -62,10 +59,7 @@ function DrawerClose({ ...props }: DrawerPrimitive.Close.Props) {
   return <DrawerPrimitive.Close data-slot="drawer-close" {...props} />;
 }
 
-function DrawerOverlay({
-  className,
-  ...props
-}: DrawerPrimitive.Backdrop.Props) {
+function DrawerOverlay({ className, ...props }: DrawerPrimitive.Backdrop.Props) {
   return (
     <DrawerPrimitive.Backdrop
       data-slot="drawer-overlay"
@@ -92,10 +86,7 @@ function DrawerOverlay({
   );
 }
 
-function DrawerViewport({
-  className,
-  ...props
-}: DrawerPrimitive.Viewport.Props) {
+function DrawerViewport({ className, ...props }: DrawerPrimitive.Viewport.Props) {
   return (
     <DrawerPrimitive.Viewport
       data-slot="drawer-viewport"
@@ -180,10 +171,7 @@ function DrawerPopup({ className, ...props }: DrawerPrimitive.Popup.Props) {
   );
 }
 
-function DrawerInnerContent({
-  className,
-  ...props
-}: DrawerPrimitive.Content.Props) {
+function DrawerInnerContent({ className, ...props }: DrawerPrimitive.Content.Props) {
   return (
     <DrawerPrimitive.Content
       data-slot="drawer-inner-content"
@@ -216,24 +204,15 @@ function DrawerHandle({ className, ...props }: React.ComponentProps<"div">) {
  * - Modal (default): renders overlay, viewport blocks pointer events
  * - Non-modal: no overlay, viewport passes pointer events through
  */
-function DrawerContent({
-  className,
-  children,
-  ...props
-}: DrawerPrimitive.Popup.Props) {
+function DrawerContent({ className, children, ...props }: DrawerPrimitive.Popup.Props) {
   const modal = React.use(DrawerModalContext);
   const isNonModal = modal === false;
 
   return (
     <DrawerPortal>
       {!isNonModal && <DrawerOverlay />}
-      <DrawerViewport
-        className={isNonModal ? "pointer-events-none" : undefined}
-      >
-        <DrawerPopup
-          className={cn(isNonModal && "pointer-events-auto", className)}
-          {...props}
-        >
+      <DrawerViewport className={isNonModal ? "pointer-events-none" : undefined}>
+        <DrawerPopup className={cn(isNonModal && "pointer-events-auto", className)} {...props}>
           <DrawerHandle />
 
           <DrawerInnerContent>{children}</DrawerInnerContent>
@@ -279,10 +258,7 @@ function DrawerTitle({ className, ...props }: DrawerPrimitive.Title.Props) {
   );
 }
 
-function DrawerDescription({
-  className,
-  ...props
-}: DrawerPrimitive.Description.Props) {
+function DrawerDescription({ className, ...props }: DrawerPrimitive.Description.Props) {
   return (
     <DrawerPrimitive.Description
       data-slot="drawer-description"

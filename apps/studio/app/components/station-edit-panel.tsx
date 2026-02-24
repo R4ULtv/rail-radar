@@ -52,9 +52,7 @@ export function StationEditPanel({
 }: StationEditPanelProps) {
   const [name, setName] = useState(station.name);
   const [type, setType] = useState<"rail" | "metro" | "light">(station.type);
-  const [importance, setImportance] = useState<1 | 2 | 3 | 4>(
-    station.importance,
-  );
+  const [importance, setImportance] = useState<1 | 2 | 3 | 4>(station.importance);
   const [lat, setLat] = useState(station.geo?.lat?.toString() ?? "");
   const [lng, setLng] = useState(station.geo?.lng?.toString() ?? "");
 
@@ -71,10 +69,7 @@ export function StationEditPanel({
     const parsedLat = parseFloat(lat);
     const parsedLng = parseFloat(lng);
 
-    const geo =
-      !isNaN(parsedLat) && !isNaN(parsedLng)
-        ? { lat: parsedLat, lng: parsedLng }
-        : null;
+    const geo = !isNaN(parsedLat) && !isNaN(parsedLng) ? { lat: parsedLat, lng: parsedLng } : null;
 
     onSave({ name, geo, type, importance });
   };
@@ -113,9 +108,7 @@ export function StationEditPanel({
       <div className="flex flex-col gap-4">
         <div className="flex flex-col gap-1.5">
           <Label htmlFor="name">Name</Label>
-          <p className="text-xs text-muted-foreground">
-            Display name shown in the app
-          </p>
+          <p className="text-xs text-muted-foreground">Display name shown in the app</p>
           <Input
             id="name"
             value={name}
@@ -127,10 +120,7 @@ export function StationEditPanel({
         <div className="grid grid-cols-2 gap-3">
           <div className="flex flex-col gap-1.5">
             <Label htmlFor="type">Type</Label>
-            <Select
-              value={type}
-              onValueChange={(v) => setType(v as "rail" | "metro" | "light")}
-            >
+            <Select value={type} onValueChange={(v) => setType(v as "rail" | "metro" | "light")}>
               <SelectTrigger id="type">
                 <SelectValue />
               </SelectTrigger>
@@ -163,9 +153,7 @@ export function StationEditPanel({
         <div className="grid grid-cols-2 gap-3">
           <div className="flex flex-col gap-1.5">
             <Label htmlFor="lat">Latitude</Label>
-            <p className="text-xs text-muted-foreground">
-              North-south position (-90 to 90)
-            </p>
+            <p className="text-xs text-muted-foreground">North-south position (-90 to 90)</p>
             <Input
               id="lat"
               type="number"
@@ -178,9 +166,7 @@ export function StationEditPanel({
           </div>
           <div className="flex flex-col gap-1.5">
             <Label htmlFor="lng">Longitude</Label>
-            <p className="text-xs text-muted-foreground">
-              East-west position (-180 to 180)
-            </p>
+            <p className="text-xs text-muted-foreground">East-west position (-180 to 180)</p>
             <Input
               id="lng"
               type="number"
@@ -198,10 +184,7 @@ export function StationEditPanel({
               href={`https://www.google.com/maps?q=${lat},${lng}`}
               target="_blank"
               rel="noopener noreferrer"
-              className={cn(
-                buttonVariants({ variant: "outline", size: "sm" }),
-                "flex-1",
-              )}
+              className={cn(buttonVariants({ variant: "outline", size: "sm" }), "flex-1")}
             >
               <MapIcon className="size-4" />
               Google Maps
@@ -212,10 +195,7 @@ export function StationEditPanel({
               href={`https://iechub.rfi.it/ArriviPartenze/en/ArrivalsDepartures/Monitor?placeId=${station.id}&arrivals=False`}
               target="_blank"
               rel="noopener noreferrer"
-              className={cn(
-                buttonVariants({ variant: "outline", size: "sm" }),
-                "flex-1",
-              )}
+              className={cn(buttonVariants({ variant: "outline", size: "sm" }), "flex-1")}
             >
               <RadioTowerIcon className="size-4" />
               RFI Data
@@ -235,9 +215,7 @@ export function StationEditPanel({
             <WikipediaInfo
               stationName={station.name}
               currentCoordinates={
-                lat && lng
-                  ? { lat: parseFloat(lat), lng: parseFloat(lng) }
-                  : null
+                lat && lng ? { lat: parseFloat(lat), lng: parseFloat(lng) } : null
               }
               onUseCoordinates={(wikiLat, wikiLng) => {
                 setLat(wikiLat.toString());

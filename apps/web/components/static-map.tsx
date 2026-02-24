@@ -8,9 +8,7 @@ interface StaticMapProps {
 }
 
 export function StaticMap({ lat, lng, zoom = 15, className }: StaticMapProps) {
-  const iconUrl = encodeURIComponent(
-    `${process.env.NEXT_PUBLIC_SITE_URL}/station-icon.png`,
-  );
+  const iconUrl = encodeURIComponent(`${process.env.NEXT_PUBLIC_SITE_URL}/station-icon.png`);
   const marker = `url-${iconUrl}(${lng},${lat})`;
   const src = `https://api.mapbox.com/styles/v1/mapbox/dark-v11/static/${marker}/${lng},${lat},${zoom},0/1280x256@2x?attribution=false&logo=false&access_token=${process.env.NEXT_PUBLIC_MAPBOX_TOKEN}`;
 

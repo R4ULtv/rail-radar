@@ -56,9 +56,7 @@ const headPath = values.head;
 const outputPath = values.output;
 
 if (!basePath || !headPath || !outputPath) {
-  console.error(
-    "Usage: validate-stations.ts --base=<path> --head=<path> --output=<path>",
-  );
+  console.error("Usage: validate-stations.ts --base=<path> --head=<path> --output=<path>");
   process.exit(1);
 }
 
@@ -112,11 +110,7 @@ function validateStations(stations: Station[]): ValidationError[] {
 
     // Validate geo coordinates if present
     if (station.geo !== undefined && station.geo !== null) {
-      if (
-        typeof station.geo.lat !== "number" ||
-        station.geo.lat < -90 ||
-        station.geo.lat > 90
-      ) {
+      if (typeof station.geo.lat !== "number" || station.geo.lat < -90 || station.geo.lat > 90) {
         errors.push({
           stationId: station.id,
           stationName: station.name,
@@ -125,11 +119,7 @@ function validateStations(stations: Station[]): ValidationError[] {
         });
       }
 
-      if (
-        typeof station.geo.lng !== "number" ||
-        station.geo.lng < -180 ||
-        station.geo.lng > 180
-      ) {
+      if (typeof station.geo.lng !== "number" || station.geo.lng < -180 || station.geo.lng > 180) {
         errors.push({
           stationId: station.id,
           stationName: station.name,
@@ -145,10 +135,7 @@ function validateStations(stations: Station[]): ValidationError[] {
 
 // --- Diff Computation ---
 
-function computeDiff(
-  baseStations: Station[],
-  headStations: Station[],
-): DiffResult {
+function computeDiff(baseStations: Station[], headStations: Station[]): DiffResult {
   const baseMap = new Map(baseStations.map((s) => [s.id, s]));
   const headMap = new Map(headStations.map((s) => [s.id, s]));
 
@@ -264,9 +251,7 @@ function generateReport(
   if (errors.length > 0) {
     lines.push("<details>");
     lines.push(
-      "<summary><strong>:warning: Validation Errors (" +
-        errors.length +
-        ")</strong></summary>",
+      "<summary><strong>:warning: Validation Errors (" + errors.length + ")</strong></summary>",
     );
     lines.push("");
     lines.push("| Station ID | Station Name | Field | Error |");
@@ -293,12 +278,8 @@ function generateReport(
     lines.push("| ID | Name | Coordinates |");
     lines.push("|----|------|-------------|");
     for (const station of diff.added.slice(0, 50)) {
-      const coords = station.geo
-        ? `${station.geo.lat}, ${station.geo.lng}`
-        : "_No coordinates_";
-      lines.push(
-        `| ${station.id} | ${escapeMarkdown(station.name)} | ${coords} |`,
-      );
+      const coords = station.geo ? `${station.geo.lat}, ${station.geo.lng}` : "_No coordinates_";
+      lines.push(`| ${station.id} | ${escapeMarkdown(station.name)} | ${coords} |`);
     }
     if (diff.added.length > 50) {
       lines.push(`| ... | _${diff.added.length - 50} more stations_ | ... |`);
@@ -320,12 +301,8 @@ function generateReport(
     lines.push("| ID | Name | Coordinates |");
     lines.push("|----|------|-------------|");
     for (const station of diff.removed.slice(0, 50)) {
-      const coords = station.geo
-        ? `${station.geo.lat}, ${station.geo.lng}`
-        : "_No coordinates_";
-      lines.push(
-        `| ${station.id} | ${escapeMarkdown(station.name)} | ${coords} |`,
-      );
+      const coords = station.geo ? `${station.geo.lat}, ${station.geo.lng}` : "_No coordinates_";
+      lines.push(`| ${station.id} | ${escapeMarkdown(station.name)} | ${coords} |`);
     }
     if (diff.removed.length > 50) {
       lines.push(`| ... | _${diff.removed.length - 50} more stations_ | ... |`);
@@ -357,9 +334,7 @@ function generateReport(
       lines.push("");
     }
     if (diff.modified.length > 30) {
-      lines.push(
-        `_... and ${diff.modified.length - 30} more modified stations_`,
-      );
+      lines.push(`_... and ${diff.modified.length - 30} more modified stations_`);
       lines.push("");
     }
     lines.push("</details>");
@@ -367,11 +342,7 @@ function generateReport(
   }
 
   // No changes case
-  if (
-    diff.added.length === 0 &&
-    diff.removed.length === 0 &&
-    diff.modified.length === 0
-  ) {
+  if (diff.added.length === 0 && diff.removed.length === 0 && diff.modified.length === 0) {
     lines.push("_No changes detected in station data._");
     lines.push("");
   }
@@ -399,21 +370,13 @@ async function main() {
   const errors = validateStations(headStations);
   const diff = computeDiff(baseStations, headStations);
 
-  const report = generateReport(
-    diff,
-    errors,
-    baseStations.length,
-    headStations.length,
-  );
+  const report = generateReport(diff, errors, baseStations.length, headStations.length);
 
   writeFileSync(outputPath, report);
 
   // Set GitHub Actions output
   if (process.env.GITHUB_OUTPUT) {
-    appendFileSync(
-      process.env.GITHUB_OUTPUT,
-      `has_errors=${errors.length > 0}\n`,
-    );
+    appendFileSync(process.env.GITHUB_OUTPUT, `has_errors=${errors.length > 0}\n`);
   }
 
   console.log(`Report generated: ${outputPath}`);

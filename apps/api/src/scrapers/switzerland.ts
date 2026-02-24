@@ -97,8 +97,7 @@ export async function scrapeSwissTrains(
   try {
     response = await fetch(url, { signal: controller.signal });
   } catch (error) {
-    const fetchError =
-      error instanceof Error ? error : new Error(String(error));
+    const fetchError = error instanceof Error ? error : new Error(String(error));
     const fetchMs = performance.now() - startTime;
     clearTimeout(timeoutId);
 
@@ -131,9 +130,7 @@ export async function scrapeSwissTrains(
   const trains: Train[] = data.stationboard.map((entry) => {
     const stop = entry.stop;
     const scheduledTime =
-      type === "departures"
-        ? formatTimeFromISO(stop.departure)
-        : getArrivalTime(stop);
+      type === "departures" ? formatTimeFromISO(stop.departure) : getArrivalTime(stop);
 
     // Combine category + line number, trimming leading zeros (e.g., "EC000021" → "EC21")
     const lineNumber = entry.number?.replace(/^0+/, "") || entry.number || "";
@@ -154,8 +151,7 @@ export async function scrapeSwissTrains(
       train.destination = entry.to;
     } else {
       // For arrivals, origin is the last named station in passList (where train came from)
-      const origin = entry.passList?.filter((stop) => stop.station.name).at(-1)
-        ?.station.name;
+      const origin = entry.passList?.filter((stop) => stop.station.name).at(-1)?.station.name;
       train.origin = origin ?? entry.to;
     }
 

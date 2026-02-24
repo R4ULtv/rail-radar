@@ -162,11 +162,7 @@ const railwayBridgeStyle: LayerProps = {
   type: "line",
   source: "composite",
   "source-layer": "road",
-  filter: [
-    "all",
-    ["==", ["get", "structure"], "bridge"],
-    ["==", ["get", "class"], "major_rail"],
-  ],
+  filter: ["all", ["==", ["get", "structure"], "bridge"], ["==", ["get", "class"], "major_rail"]],
   paint: {
     "line-color": "#4B61D1",
     "line-width": ["interpolate", ["linear"], ["zoom"], 6, 0.5, 10, 1, 14, 2],
@@ -179,11 +175,7 @@ const railwayTunnelStyle: LayerProps = {
   type: "line",
   source: "composite",
   "source-layer": "road",
-  filter: [
-    "all",
-    ["==", ["get", "structure"], "tunnel"],
-    ["==", ["get", "class"], "major_rail"],
-  ],
+  filter: ["all", ["==", ["get", "structure"], "tunnel"], ["==", ["get", "class"], "major_rail"]],
   paint: {
     "line-color": "#4B61D1",
     "line-width": ["interpolate", ["linear"], ["zoom"], 6, 0.5, 10, 1, 14, 2],
@@ -282,9 +274,7 @@ export function StationMarkers() {
     loadIcon(METRO_ICON_ID, METRO_ICON_SVG);
     loadIcon(LIGHT_ICON_ID, LIGHT_ICON_SVG);
 
-    const handleClick = (
-      e: MapMouseEvent & { features?: GeoJSON.Feature[] },
-    ) => {
+    const handleClick = (e: MapMouseEvent & { features?: GeoJSON.Feature[] }) => {
       const feature = e.features?.[0];
       if (!feature?.properties) return;
 

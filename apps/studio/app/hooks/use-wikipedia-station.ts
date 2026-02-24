@@ -18,9 +18,7 @@ interface UseWikipediaStationResult {
 /**
  * Fetch Wikipedia station info for a given station name
  */
-export function useWikipediaStation(
-  stationName: string | null,
-): UseWikipediaStationResult {
+export function useWikipediaStation(stationName: string | null): UseWikipediaStationResult {
   const { data, error, isLoading } = useSWR(
     stationName ? `wikipedia:${stationName}` : null,
     () => fetchWikipediaStation(stationName!),
@@ -41,9 +39,7 @@ export function useWikipediaStation(
 /**
  * Search for and fetch Wikipedia station article
  */
-async function fetchWikipediaStation(
-  stationName: string,
-): Promise<StationInfobox | null> {
+async function fetchWikipediaStation(stationName: string): Promise<StationInfobox | null> {
   // Search for the station article
   const searchResult = await searchWikipedia(stationName);
   if (!searchResult) {
@@ -163,10 +159,7 @@ async function fetchWikipediaContent(title: string): Promise<string | null> {
 
     const revision = page.revisions[0];
     // Handle both old and new API response formats
-    const content =
-      revision.slots?.main?.["*"] ??
-      revision.slots?.main?.content ??
-      revision["*"];
+    const content = revision.slots?.main?.["*"] ?? revision.slots?.main?.content ?? revision["*"];
 
     return content ?? null;
   } catch {
@@ -230,10 +223,7 @@ async function fetchWikidataCoordinates(
     const coordClaim = entity.claims?.P625?.[0];
     const coordValue = coordClaim?.mainsnak?.datavalue?.value;
 
-    if (
-      coordValue?.latitude !== undefined &&
-      coordValue?.longitude !== undefined
-    ) {
+    if (coordValue?.latitude !== undefined && coordValue?.longitude !== undefined) {
       return {
         lat: coordValue.latitude,
         lng: coordValue.longitude,

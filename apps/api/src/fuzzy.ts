@@ -91,9 +91,7 @@ function scoreWordAgainstWord(
 
   // Fuzzy match
   const compareWord =
-    nameWord.length > queryWord.length + 2
-      ? nameWord.slice(0, queryWord.length + 2)
-      : nameWord;
+    nameWord.length > queryWord.length + 2 ? nameWord.slice(0, queryWord.length + 2) : nameWord;
   const distance = damerauLevenshtein(queryWord, compareWord);
 
   const maxAllowedDistance = Math.min(2, Math.floor(queryWord.length / 2));
@@ -105,11 +103,7 @@ function scoreWordAgainstWord(
   let similarity = maxLen > 0 ? 1 - distance / maxLen : 0;
 
   // Boost if first letter matches
-  if (
-    queryWord.length > 0 &&
-    nameWord.length > 0 &&
-    queryWord[0] === nameWord[0]
-  ) {
+  if (queryWord.length > 0 && nameWord.length > 0 && queryWord[0] === nameWord[0]) {
     similarity = similarity * 0.8 + 0.2;
   }
 
@@ -120,10 +114,7 @@ function scoreWordAgainstWord(
  * Score a single name against a query (0-1, higher = better match)
  * Returns both match score and match type for tiered sorting
  */
-function scoreAgainstName(
-  query: string,
-  name: string,
-): { score: number; matchType: number } {
+function scoreAgainstName(query: string, name: string): { score: number; matchType: number } {
   const q = normalizeText(query);
   const n = normalizeText(name);
   const nameWords = n.split(/\s+/);
@@ -135,8 +126,7 @@ function scoreAgainstName(
   if (n.startsWith(q)) return { score: 0.95, matchType: 1 };
 
   // Any word starts with query - high priority
-  if (nameWords.some((w) => w.startsWith(q)))
-    return { score: 0.9, matchType: 2 };
+  if (nameWords.some((w) => w.startsWith(q))) return { score: 0.9, matchType: 2 };
 
   // Name contains query - medium priority
   if (n.includes(q)) return { score: 0.7, matchType: 3 };
@@ -173,8 +163,7 @@ function scoreMultiWordQuery(
       const result = scoreWordAgainstWord(qWord, nWord);
       if (
         result.matchType < bestForWord.matchType ||
-        (result.matchType === bestForWord.matchType &&
-          result.score > bestForWord.score)
+        (result.matchType === bestForWord.matchType && result.score > bestForWord.score)
       ) {
         bestForWord = result;
       }
@@ -200,10 +189,7 @@ function scoreMultiWordQuery(
  * Returns the best match score across all searchable names.
  * Supports multi-word queries where words can be in any order.
  */
-function scoreStation(
-  query: string,
-  station: Station,
-): { score: number; matchType: number } {
+function scoreStation(query: string, station: Station): { score: number; matchType: number } {
   const names = getSearchableNames(station);
   const queryWords = normalizeText(query)
     .split(/\s+/)
@@ -232,8 +218,7 @@ function scoreStation(
     const exactResult = scoreAgainstName(query, name);
     if (
       exactResult.matchType < best.matchType ||
-      (exactResult.matchType === best.matchType &&
-        exactResult.score > best.score)
+      (exactResult.matchType === best.matchType && exactResult.score > best.score)
     ) {
       best = exactResult;
     }
@@ -242,8 +227,7 @@ function scoreStation(
     const multiResult = scoreMultiWordQuery(queryWords, name);
     if (
       multiResult.matchType < best.matchType ||
-      (multiResult.matchType === best.matchType &&
-        multiResult.score > best.score)
+      (multiResult.matchType === best.matchType && multiResult.score > best.score)
     ) {
       best = multiResult;
     }
@@ -256,11 +240,7 @@ function scoreStation(
  * Search stations with fuzzy matching and ranking
  * Sorts by: match type (exact/prefix > contains > fuzzy), then importance, then score
  */
-export function fuzzySearch(
-  stations: Station[],
-  query: string,
-  limit: number = 20,
-): Station[] {
+export function fuzzySearch(stations: Station[], query: string, limit: number = 20): Station[] {
   if (!query.trim()) {
     // When no query, sort by importance (lower number = more important)
     return stations

@@ -1,10 +1,5 @@
 import * as React from "react";
-import {
-  useMotionValue,
-  animate,
-  type MotionValue,
-  type Easing,
-} from "motion/react";
+import { useMotionValue, animate, type MotionValue, type Easing } from "motion/react";
 
 interface UseAnimatedHeightOptions {
   duration?: number;
@@ -17,9 +12,7 @@ interface UseAnimatedHeightReturn {
   height: MotionValue<number>;
 }
 
-export function useAnimatedHeight(
-  options: UseAnimatedHeightOptions = {},
-): UseAnimatedHeightReturn {
+export function useAnimatedHeight(options: UseAnimatedHeightOptions = {}): UseAnimatedHeightReturn {
   const { duration = 0.2, shrinkDuration = 0.1, ease = "easeOut" } = options;
 
   const height = useMotionValue(0);

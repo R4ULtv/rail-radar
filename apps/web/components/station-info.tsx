@@ -68,33 +68,21 @@ function TrainListContent({
   }
 
   if (error) {
-    return (
-      <div className="px-4 py-8 text-center text-sm text-muted-foreground">
-        {error}
-      </div>
-    );
+    return <div className="px-4 py-8 text-center text-sm text-muted-foreground">{error}</div>;
   }
 
   if (!trainData || trainData.length === 0) {
     return (
-      <div className="px-4 py-8 text-center text-sm text-muted-foreground">
-        No {type} scheduled
-      </div>
+      <div className="px-4 py-8 text-center text-sm text-muted-foreground">No {type} scheduled</div>
     );
   }
 
   const trainList = trainData.map((train) => (
-    <TrainRow
-      key={`${train.trainNumber}-${train.scheduledTime}`}
-      train={train}
-      type={type}
-    />
+    <TrainRow key={`${train.trainNumber}-${train.scheduledTime}`} train={train} type={type} />
   ));
 
   if (scrollable) {
-    return (
-      <ScrollArea className="max-h-[calc(100vh-164px)]">{trainList}</ScrollArea>
-    );
+    return <ScrollArea className="max-h-[calc(100vh-164px)]">{trainList}</ScrollArea>;
   }
 
   return <div>{trainList}</div>;
@@ -111,9 +99,7 @@ function StationTabs({
   return (
     <Tabs
       value={type}
-      onValueChange={(value) =>
-        onTypeChange(value as "arrivals" | "departures")
-      }
+      onValueChange={(value) => onTypeChange(value as "arrivals" | "departures")}
       className="mt-3 col-span-2"
     >
       <TabsList className="w-full">
@@ -202,9 +188,7 @@ export default function StationInfo() {
   const isMobile = useIsMobile();
   const { selectedStation, clearStation } = useSelectedStation();
   const [type, setType] = useState<"arrivals" | "departures">("departures");
-  const [snap, setSnap] = useState<number | string | null>(
-    snapPoints[0] as string,
-  );
+  const [snap, setSnap] = useState<number | string | null>(snapPoints[0] as string);
   const [copied, setCopied] = useState(false);
   const cardHeight = useAnimatedHeight();
 
@@ -284,9 +268,7 @@ export default function StationInfo() {
               >
                 <CardHeader className="relative px-4">
                   <CardAction className="space-x-1">
-                    {selectedStation && (
-                      <SaveButton station={selectedStation} />
-                    )}
+                    {selectedStation && <SaveButton station={selectedStation} />}
                     <Button
                       variant="ghost"
                       size="icon"
@@ -295,17 +277,8 @@ export default function StationInfo() {
                     >
                       <CornerUpRightIcon className="size-4" />
                     </Button>
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      onClick={handleShare}
-                      aria-label="Share"
-                    >
-                      {copied ? (
-                        <CheckIcon className="size-4" />
-                      ) : (
-                        <ShareIcon className="size-4" />
-                      )}
+                    <Button variant="ghost" size="icon" onClick={handleShare} aria-label="Share">
+                      {copied ? <CheckIcon className="size-4" /> : <ShareIcon className="size-4" />}
                     </Button>
                     <Button
                       variant="ghost"
@@ -319,9 +292,7 @@ export default function StationInfo() {
                       aria-label="View station details"
                     />
                   </CardAction>
-                  <CardTitle className="truncate">
-                    {selectedStation?.name}
-                  </CardTitle>
+                  <CardTitle className="truncate">{selectedStation?.name}</CardTitle>
                   <CardDescription>
                     <UpdatedStatus
                       isLoading={isLoading}
@@ -370,9 +341,7 @@ export default function StationInfo() {
         )}
       >
         <DrawerHeader className="pb-3 relative group-data-[swipe-direction=down]/drawer-content:text-left">
-          <DrawerTitle className="text-xl pr-39 truncate">
-            {selectedStation?.name}
-          </DrawerTitle>
+          <DrawerTitle className="text-xl pr-39 truncate">{selectedStation?.name}</DrawerTitle>
           <DrawerDescription className="text-sm text-muted-foreground h-5">
             <UpdatedStatus
               isLoading={isLoading}
@@ -389,25 +358,11 @@ export default function StationInfo() {
           <StationTabs type={type} onTypeChange={setType} />
           <div className="absolute top-3.5 right-4 flex gap-1">
             {selectedStation && <SaveButton station={selectedStation} />}
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={handleDirections}
-              aria-label="Directions"
-            >
+            <Button variant="ghost" size="icon" onClick={handleDirections} aria-label="Directions">
               <CornerUpRightIcon className="size-4" />
             </Button>
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={handleShare}
-              aria-label="Share"
-            >
-              {copied ? (
-                <CheckIcon className="size-4" />
-              ) : (
-                <ShareIcon className="size-4" />
-              )}
+            <Button variant="ghost" size="icon" onClick={handleShare} aria-label="Share">
+              {copied ? <CheckIcon className="size-4" /> : <ShareIcon className="size-4" />}
             </Button>
             <Button
               variant="ghost"
@@ -423,18 +378,8 @@ export default function StationInfo() {
           </div>
         </DrawerHeader>
 
-        <div
-          className={cn(
-            "flex-1",
-            snap === 1 ? "overflow-auto" : "overflow-hidden",
-          )}
-        >
-          <TrainListContent
-            trainData={trainData}
-            isLoading={isLoading}
-            error={error}
-            type={type}
-          />
+        <div className={cn("flex-1", snap === 1 ? "overflow-auto" : "overflow-hidden")}>
+          <TrainListContent trainData={trainData} isLoading={isLoading} error={error} type={type} />
         </div>
       </DrawerContent>
     </Drawer>

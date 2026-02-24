@@ -17,14 +17,9 @@ interface SelectedStationContextValue {
   maxSaved: number;
 }
 
-const SelectedStationContext =
-  React.createContext<SelectedStationContextValue | null>(null);
+const SelectedStationContext = React.createContext<SelectedStationContextValue | null>(null);
 
-export function SelectedStationProvider({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export function SelectedStationProvider({ children }: { children: React.ReactNode }) {
   const { current: map } = useMap();
   const [stationId, setStationId] = useQueryState(
     "station",
@@ -81,9 +76,7 @@ export function SelectedStationProvider({
 export function useSelectedStation() {
   const context = React.useContext(SelectedStationContext);
   if (!context) {
-    throw new Error(
-      "useSelectedStation must be used within a SelectedStationProvider",
-    );
+    throw new Error("useSelectedStation must be used within a SelectedStationProvider");
   }
   return context;
 }

@@ -115,29 +115,18 @@ export function TrainColumn({
               value={[type]}
               onValueChange={(value) => {
                 const selected = value[0];
-                if (selected)
-                  onTypeChange(selected as "arrivals" | "departures");
+                if (selected) onTypeChange(selected as "arrivals" | "departures");
               }}
               size="sm"
               variant="outline"
             >
-              <ToggleGroupItem
-                value="departures"
-                className="gap-1 px-2 py-1 h-7 text-xs"
-              >
+              <ToggleGroupItem value="departures" className="gap-1 px-2 py-1 h-7 text-xs">
                 <ArrowUpRightIcon className="size-3.5" />
-                <span className={type === "departures" ? "" : "hidden"}>
-                  Departures
-                </span>
+                <span className={type === "departures" ? "" : "hidden"}>Departures</span>
               </ToggleGroupItem>
-              <ToggleGroupItem
-                value="arrivals"
-                className="gap-1 px-2 py-1 h-7 text-xs"
-              >
+              <ToggleGroupItem value="arrivals" className="gap-1 px-2 py-1 h-7 text-xs">
                 <ArrowDownLeftIcon className="size-3.5" />
-                <span className={type === "arrivals" ? "" : "hidden"}>
-                  Arrivals
-                </span>
+                <span className={type === "arrivals" ? "" : "hidden"}>Arrivals</span>
               </ToggleGroupItem>
             </ToggleGroup>
           )}
@@ -158,9 +147,7 @@ export function TrainColumn({
             ))}
           </div>
         ) : error ? (
-          <div className="px-4 py-8 text-center text-sm text-muted-foreground">
-            {error}
-          </div>
+          <div className="px-4 py-8 text-center text-sm text-muted-foreground">{error}</div>
         ) : !trainData || trainData.length === 0 ? (
           <div className="px-4 py-8 text-center text-sm text-muted-foreground">
             No {type} scheduled
