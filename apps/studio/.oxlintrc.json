@@ -1,0 +1,13 @@
+{
+  "extends": ["../../.oxlintrc.json"],
+  "plugins": ["react", "nextjs"],
+  "settings": {
+    "next": {
+      "rootDir": "."
+    }
+  },
+  "ignorePatterns": [".next/**", "out/**", "build/**"],
+  "rules": {
+    "react/react-in-jsx-scope": "off"
+  }
+}

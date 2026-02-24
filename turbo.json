@@ -13,7 +13,7 @@
     },
     "lint": {
       "dependsOn": ["transit"],
-      "outputs": [".eslintcache"]
+      "outputs": []
     },
     "check-types": {
       "dependsOn": ["transit"]

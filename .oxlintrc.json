@@ -1,0 +1,9 @@
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "plugins": ["typescript"],
+  "jsPlugins": ["eslint-plugin-turbo"],
+  "rules": {
+    "turbo/no-undeclared-env-vars": "warn"
+  },
+  "ignorePatterns": ["dist/**"]
+}

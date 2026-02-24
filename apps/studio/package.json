@@ -7,7 +7,7 @@
     "dev": "next dev --port 3001",
     "build": "next build",
     "start": "next start --port 3001",
-    "lint": "eslint --max-warnings 0",
+    "lint": "oxlint --deny warnings",
     "check-types": "next typegen && tsc --noEmit"
   },
   "dependencies": {
@@ -24,14 +24,12 @@
     "swr": "^2.4.0"
   },
   "devDependencies": {
-    "@repo/eslint-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
     "@tailwindcss/postcss": "^4.2.1",
     "@types/node": "^22.19.11",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
     "babel-plugin-react-compiler": "^1.0.0",
-    "eslint": "^9.39.3",
     "tailwindcss": "^4.2.1"
   }
 }
