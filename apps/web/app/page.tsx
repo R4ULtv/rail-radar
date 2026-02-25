@@ -35,7 +35,7 @@ export default function Home() {
       />
       <Suspense fallback={<MapLoading />}>
         <Map />
-        <div className="absolute bottom-2 left-3 text-[10px] text-white/60">
+        <div className="absolute bottom-2 left-3 text-[10px] text-foreground/60">
           <a
             href="https://www.mapbox.com/about/maps/"
             target="_blank"
