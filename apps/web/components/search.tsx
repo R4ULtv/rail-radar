@@ -379,7 +379,7 @@ export function Search() {
   if (isMobile) {
     return (
       <>
-        <div className="absolute z-50 top-4 left-4 right-4 font-sans">
+        <div className="absolute z-50 top-4 left-4 right-16 font-sans">
           <Button
             type="button"
             size="lg"

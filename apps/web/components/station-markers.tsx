@@ -4,8 +4,11 @@ import type { MapMouseEvent } from "mapbox-gl";
 import { useEffect, useMemo } from "react";
 import { Layer, Source, useMap } from "react-map-gl/mapbox";
 import type { LayerProps } from "react-map-gl/mapbox";
+
+type Visibility = "visible" | "none";
 import { stations } from "@repo/data/stations";
 import { useSelectedStation } from "@/hooks/use-selected-station";
+import type { MapLayersState } from "@/hooks/use-map-layers";
 
 const RAIL_LAYER_ID = "rail-stations";
 const RAIL_ICON_ID = "rail-icon";
@@ -34,23 +37,25 @@ const LIGHT_ICON_SVG = `<svg xmlns="http://www.w3.org/2000/svg" width="64" heigh
   </svg>
 </svg>`;
 
-const metroLayerStyle: LayerProps = {
+const metroLayerStyle = (v: Visibility): LayerProps => ({
   id: "metro-stations",
   type: "symbol",
   minzoom: 13,
   layout: {
+    visibility: v,
     "icon-image": METRO_ICON_ID,
     "icon-size": ["interpolate", ["linear"], ["zoom"], 14, 0.25, 16, 0.35],
     "icon-allow-overlap": false,
     "icon-anchor": "center",
   },
-};
+});
 
-const metroLabelStyle: LayerProps = {
+const metroLabelStyle = (v: Visibility): LayerProps => ({
   id: "metro-labels",
   type: "symbol",
   minzoom: 14.5,
   layout: {
+    visibility: v,
     "text-field": ["get", "name"],
     "text-size": 12,
     "text-offset": [0, 1.3],
@@ -63,25 +68,27 @@ const metroLabelStyle: LayerProps = {
     "text-halo-width": 1.5,
     "text-halo-blur": 1,
   },
-};
+});
 
-const lightLayerStyle: LayerProps = {
+const lightLayerStyle = (v: Visibility): LayerProps => ({
   id: "light-stations",
   type: "symbol",
   minzoom: 12,
   layout: {
+    visibility: v,
     "icon-image": LIGHT_ICON_ID,
     "icon-size": ["interpolate", ["linear"], ["zoom"], 12, 0.25, 16, 0.35],
     "icon-allow-overlap": false,
     "icon-anchor": "center",
   },
-};
+});
 
-const lightLabelStyle: LayerProps = {
+const lightLabelStyle = (v: Visibility): LayerProps => ({
   id: "light-labels",
   type: "symbol",
   minzoom: 13.5,
   layout: {
+    visibility: v,
     "text-field": ["get", "name"],
     "text-size": 12,
     "text-offset": [0, 1.3],
@@ -94,14 +101,15 @@ const lightLabelStyle: LayerProps = {
     "text-halo-width": 1.5,
     "text-halo-blur": 1,
   },
-};
+});
 
-const railLayerStyle: LayerProps = {
+const railLayerStyle = (v: Visibility): LayerProps => ({
   id: RAIL_LAYER_ID,
   type: "symbol",
   minzoom: 5,
   filter: ["<=", ["get", "minzoom"], ["zoom"]],
   layout: {
+    visibility: v,
     "icon-image": RAIL_ICON_ID,
     "icon-size": [
       "interpolate",
@@ -118,14 +126,15 @@ const railLayerStyle: LayerProps = {
     "icon-anchor": "center",
     "symbol-sort-key": ["get", "importance"],
   },
-};
+});
 
-const railLabelStyle: LayerProps = {
+const railLabelStyle = (v: Visibility): LayerProps => ({
   id: "rail-labels",
   type: "symbol",
   minzoom: 5,
   filter: ["<=", ["+", ["get", "minzoom"], 2], ["zoom"]],
   layout: {
+    visibility: v,
     "text-field": ["get", "name"],
     "text-size": 13,
     "text-offset": [0, 1.3],
@@ -138,9 +147,9 @@ const railLabelStyle: LayerProps = {
     "text-halo-width": 1.5,
     "text-halo-blur": 1,
   },
-};
+});
 
-const railwayLineStyle: LayerProps = {
+const railwayLineStyle = (v: Visibility): LayerProps => ({
   id: "railway-lines",
   type: "line",
   source: "composite",
@@ -150,111 +159,119 @@ const railwayLineStyle: LayerProps = {
     ["==", ["get", "class"], "major_rail"],
     ["match", ["get", "structure"], ["none", "ford"], true, false],
   ],
+  layout: { visibility: v },
   paint: {
     "line-color": "#4B61D1",
     "line-width": ["interpolate", ["linear"], ["zoom"], 6, 0.5, 10, 1, 14, 2],
     "line-opacity": 0.6,
   },
-};
+});
 
-const railwayBridgeStyle: LayerProps = {
+const railwayBridgeStyle = (v: Visibility): LayerProps => ({
   id: "railway-lines-bridge",
   type: "line",
   source: "composite",
   "source-layer": "road",
   filter: ["all", ["==", ["get", "structure"], "bridge"], ["==", ["get", "class"], "major_rail"]],
+  layout: { visibility: v },
   paint: {
     "line-color": "#4B61D1",
     "line-width": ["interpolate", ["linear"], ["zoom"], 6, 0.5, 10, 1, 14, 2],
     "line-opacity": 0.6,
   },
-};
+});
 
-const railwayTunnelStyle: LayerProps = {
+const railwayTunnelStyle = (v: Visibility): LayerProps => ({
   id: "railway-lines-tunnel",
   type: "line",
   source: "composite",
   "source-layer": "road",
   filter: ["all", ["==", ["get", "structure"], "tunnel"], ["==", ["get", "class"], "major_rail"]],
+  layout: { visibility: v },
   paint: {
     "line-color": "#4B61D1",
     "line-width": ["interpolate", ["linear"], ["zoom"], 6, 0.5, 10, 1, 14, 2],
     "line-opacity": 0.4,
     "line-dasharray": [2, 2],
   },
-};
+});
 
 const IMPORTANCE_MINZOOM: Record<number, number> = { 1: 5, 2: 7, 3: 9, 4: 11 };
 
-function createRailGeoJSON(): GeoJSON.FeatureCollection {
-  return {
-    type: "FeatureCollection",
-    features: stations
-      .filter((station) => station.type === "rail" && station.geo)
-      .map((station) => ({
-        type: "Feature" as const,
-        properties: {
-          id: station.id,
-          name: station.name,
-          type: station.type,
-          importance: station.importance,
-          minzoom: IMPORTANCE_MINZOOM[station.importance] ?? 11,
-        },
-        geometry: {
-          type: "Point" as const,
-          coordinates: [station.geo!.lng, station.geo!.lat],
-        },
-      })),
-  };
-}
+const railGeojsonData: GeoJSON.FeatureCollection = {
+  type: "FeatureCollection",
+  features: stations
+    .filter((station) => station.type === "rail" && station.geo)
+    .map((station) => ({
+      type: "Feature" as const,
+      properties: {
+        id: station.id,
+        name: station.name,
+        type: station.type,
+        importance: station.importance,
+        minzoom: IMPORTANCE_MINZOOM[station.importance] ?? 11,
+      },
+      geometry: {
+        type: "Point" as const,
+        coordinates: [station.geo!.lng, station.geo!.lat],
+      },
+    })),
+};
 
-function createMetroGeoJSON(): GeoJSON.FeatureCollection {
-  return {
-    type: "FeatureCollection",
-    features: stations
-      .filter((station) => station.type === "metro" && station.geo)
-      .map((station) => ({
-        type: "Feature" as const,
-        properties: {
-          id: station.id,
-          name: station.name,
-          type: station.type,
-        },
-        geometry: {
-          type: "Point" as const,
-          coordinates: [station.geo!.lng, station.geo!.lat],
-        },
-      })),
-  };
-}
+const metroGeojsonData: GeoJSON.FeatureCollection = {
+  type: "FeatureCollection",
+  features: stations
+    .filter((station) => station.type === "metro" && station.geo)
+    .map((station) => ({
+      type: "Feature" as const,
+      properties: {
+        id: station.id,
+        name: station.name,
+        type: station.type,
+      },
+      geometry: {
+        type: "Point" as const,
+        coordinates: [station.geo!.lng, station.geo!.lat],
+      },
+    })),
+};
 
-function createLightGeoJSON(): GeoJSON.FeatureCollection {
-  return {
-    type: "FeatureCollection",
-    features: stations
-      .filter((station) => station.type === "light" && station.geo)
-      .map((station) => ({
-        type: "Feature" as const,
-        properties: {
-          id: station.id,
-          name: station.name,
-          type: station.type,
-        },
-        geometry: {
-          type: "Point" as const,
-          coordinates: [station.geo!.lng, station.geo!.lat],
-        },
-      })),
-  };
-}
+const lightGeojsonData: GeoJSON.FeatureCollection = {
+  type: "FeatureCollection",
+  features: stations
+    .filter((station) => station.type === "light" && station.geo)
+    .map((station) => ({
+      type: "Feature" as const,
+      properties: {
+        id: station.id,
+        name: station.name,
+        type: station.type,
+      },
+      geometry: {
+        type: "Point" as const,
+        coordinates: [station.geo!.lng, station.geo!.lat],
+      },
+    })),
+};
 
-export function StationMarkers() {
+export function StationMarkers({ stations, layers }: Pick<MapLayersState, "stations" | "layers">) {
   const { current: map } = useMap();
   const { selectStation } = useSelectedStation();
 
-  const railGeojsonData = useMemo(() => createRailGeoJSON(), []);
-  const metroGeojsonData = useMemo(() => createMetroGeoJSON(), []);
-  const lightGeojsonData = useMemo(() => createLightGeoJSON(), []);
+  const railVis = stations.rail ? "visible" : ("none" as const);
+  const lightVis = stations.light ? "visible" : ("none" as const);
+  const metroVis = stations.metro ? "visible" : ("none" as const);
+  const linesVis = layers.railwayLines ? "visible" : ("none" as const);
+
+  const railLayer = useMemo(() => railLayerStyle(railVis), [railVis]);
+  const railLabel = useMemo(() => railLabelStyle(railVis), [railVis]);
+  const metroLayer = useMemo(() => metroLayerStyle(metroVis), [metroVis]);
+  const metroLabel = useMemo(() => metroLabelStyle(metroVis), [metroVis]);
+  const lightLayer = useMemo(() => lightLayerStyle(lightVis), [lightVis]);
+  const lightLabel = useMemo(() => lightLabelStyle(lightVis), [lightVis]);
+  const tunnelLayer = useMemo(() => railwayTunnelStyle(linesVis), [linesVis]);
+  const lineLayer = useMemo(() => railwayLineStyle(linesVis), [linesVis]);
+  const bridgeLayer = useMemo(() => railwayBridgeStyle(linesVis), [linesVis]);
 
   useEffect(() => {
     if (!map) return;
@@ -325,23 +342,23 @@ export function StationMarkers() {
   return (
     <>
       {/* Railway tracks */}
-      <Layer {...railwayTunnelStyle} />
-      <Layer {...railwayLineStyle} />
-      <Layer {...railwayBridgeStyle} />
+      <Layer {...tunnelLayer} />
+      <Layer {...lineLayer} />
+      <Layer {...bridgeLayer} />
 
       <Source id="metro-source" type="geojson" data={metroGeojsonData}>
-        <Layer {...metroLayerStyle} />
-        <Layer {...metroLabelStyle} />
+        <Layer {...metroLayer} />
+        <Layer {...metroLabel} />
       </Source>
 
       <Source id="light-source" type="geojson" data={lightGeojsonData}>
-        <Layer {...lightLayerStyle} />
-        <Layer {...lightLabelStyle} />
+        <Layer {...lightLayer} />
+        <Layer {...lightLabel} />
       </Source>
 
       <Source id="rail-source" type="geojson" data={railGeojsonData}>
-        <Layer {...railLayerStyle} />
-        <Layer {...railLabelStyle} />
+        <Layer {...railLayer} />
+        <Layer {...railLabel} />
       </Source>
     </>
   );
