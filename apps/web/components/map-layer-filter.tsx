@@ -4,6 +4,7 @@ import { useState } from "react";
 import type { LucideIcon } from "lucide-react";
 import {
   LayersIcon,
+  TrainFrontTunnelIcon,
   TrainTrackIcon,
   SquareMIcon,
   TramFrontIcon,
@@ -35,7 +36,8 @@ const STATION_OPTIONS: { type: StationType; label: string; icon: LucideIcon }[] 
 ];
 
 const LAYER_OPTIONS: { type: LayerType; label: string; icon: LucideIcon }[] = [
-  { type: "railwayLines", label: "Railway Lines", icon: TrainTrackIcon },
+  { type: "railwaySurface", label: "Surface", icon: TrainTrackIcon },
+  { type: "railwayTunnels", label: "Underground", icon: TrainFrontTunnelIcon },
 ];
 
 function FilterContent({

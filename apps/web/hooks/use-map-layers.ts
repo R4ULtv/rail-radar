@@ -3,7 +3,7 @@
 import { useCallback, useState } from "react";
 
 export type StationType = "rail" | "light" | "metro";
-export type LayerType = "railwayLines";
+export type LayerType = "railwaySurface" | "railwayTunnels";
 export type StationVisibility = Record<StationType, boolean>;
 export type LayerVisibility = Record<LayerType, boolean>;
 
@@ -15,7 +15,7 @@ export interface MapLayersState {
 const STORAGE_KEY = "map-layers";
 const DEFAULT_STATE: MapLayersState = {
   stations: { rail: true, light: true, metro: true },
-  layers: { railwayLines: true },
+  layers: { railwaySurface: true, railwayTunnels: true },
 };
 
 function loadState(): MapLayersState {

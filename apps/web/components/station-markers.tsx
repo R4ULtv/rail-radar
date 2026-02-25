@@ -261,7 +261,8 @@ export function StationMarkers({ stations, layers }: Pick<MapLayersState, "stati
   const railVis = stations.rail ? "visible" : ("none" as const);
   const lightVis = stations.light ? "visible" : ("none" as const);
   const metroVis = stations.metro ? "visible" : ("none" as const);
-  const linesVis = layers.railwayLines ? "visible" : ("none" as const);
+  const surfaceVis = layers.railwaySurface ? "visible" : ("none" as const);
+  const tunnelVis = layers.railwayTunnels ? "visible" : ("none" as const);
 
   const railLayer = useMemo(() => railLayerStyle(railVis), [railVis]);
   const railLabel = useMemo(() => railLabelStyle(railVis), [railVis]);
@@ -269,9 +270,9 @@ export function StationMarkers({ stations, layers }: Pick<MapLayersState, "stati
   const metroLabel = useMemo(() => metroLabelStyle(metroVis), [metroVis]);
   const lightLayer = useMemo(() => lightLayerStyle(lightVis), [lightVis]);
   const lightLabel = useMemo(() => lightLabelStyle(lightVis), [lightVis]);
-  const tunnelLayer = useMemo(() => railwayTunnelStyle(linesVis), [linesVis]);
-  const lineLayer = useMemo(() => railwayLineStyle(linesVis), [linesVis]);
-  const bridgeLayer = useMemo(() => railwayBridgeStyle(linesVis), [linesVis]);
+  const tunnelLayer = useMemo(() => railwayTunnelStyle(tunnelVis), [tunnelVis]);
+  const lineLayer = useMemo(() => railwayLineStyle(surfaceVis), [surfaceVis]);
+  const bridgeLayer = useMemo(() => railwayBridgeStyle(surfaceVis), [surfaceVis]);
 
   useEffect(() => {
     if (!map) return;
