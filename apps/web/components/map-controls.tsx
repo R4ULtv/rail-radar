@@ -142,7 +142,7 @@ export function MapControls() {
           size="icon-sm"
           onClick={handleResetBearing}
           aria-label="Reset bearing"
-          className="bg-card hover:bg-muted dark:bg-card dark:hover:bg-muted size-9 md:size-8"
+          className="bg-card hover:bg-muted dark:bg-card dark:hover:bg-muted size-9 md:size-8 active:scale-[0.98]"
         >
           <CompassIcon
             style={{ transform: `rotate(${-bearing - 45}deg)` }}
@@ -155,7 +155,7 @@ export function MapControls() {
           size="icon-sm"
           onClick={handleLocate}
           aria-label="Locate me"
-          className="bg-card hover:bg-muted dark:bg-card dark:hover:bg-muted size-9 md:size-8"
+          className="bg-card hover:bg-muted dark:bg-card dark:hover:bg-muted size-9 md:size-8 active:scale-[0.98]"
         >
           {userLocation ? <LocateFixedIcon /> : <LocateIcon />}
         </Button>
@@ -166,7 +166,7 @@ export function MapControls() {
             size="icon-sm"
             onClick={handleZoomIn}
             aria-label="Zoom in"
-            className="bg-card hover:bg-muted dark:bg-card dark:hover:bg-muted"
+            className="bg-card hover:bg-muted dark:bg-card dark:hover:bg-muted active:scale-[0.98]"
           >
             <PlusIcon />
           </Button>
@@ -175,7 +175,7 @@ export function MapControls() {
             size="icon-sm"
             onClick={handleZoomOut}
             aria-label="Zoom out"
-            className="bg-card hover:bg-muted dark:bg-card dark:hover:bg-muted"
+            className="bg-card hover:bg-muted dark:bg-card dark:hover:bg-muted active:scale-[0.98]"
           >
             <MinusIcon />
           </Button>
@@ -184,7 +184,7 @@ export function MapControls() {
           variant="outline"
           size="icon-sm"
           aria-label="GitHub"
-          className="bg-card hover:bg-muted dark:bg-card dark:hover:bg-muted size-9 md:size-8"
+          className="bg-card hover:bg-muted dark:bg-card dark:hover:bg-muted size-9 md:size-8 active:scale-[0.98]"
           nativeButton={false}
           render={
             <a

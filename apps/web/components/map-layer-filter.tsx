@@ -99,7 +99,7 @@ export function MapLayerFilter({
       variant="outline"
       size="icon-sm"
       aria-label="Map layers"
-      className="bg-card hover:bg-muted dark:bg-card dark:hover:bg-muted size-10 md:size-8"
+      className="bg-card hover:bg-muted dark:bg-card dark:hover:bg-muted size-10 md:size-8 active:scale-[0.98]"
       onClick={isMobile ? () => setDrawerOpen(true) : undefined}
     >
       <LayersIcon />
