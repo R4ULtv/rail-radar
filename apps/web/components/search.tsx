@@ -42,6 +42,7 @@ import { useTrendingStations } from "@/hooks/use-trending-stations";
 
 import { cn } from "@repo/ui/lib/utils";
 import type { Station } from "@repo/data";
+import type { StationVisibility } from "@/hooks/use-map-layers";
 import Image from "next/image";
 import { Button } from "@repo/ui/components/button";
 
@@ -122,7 +123,7 @@ const StationList = React.memo(function StationList({
   );
 });
 
-export function Search() {
+export function Search({ hiddenStationTypes }: { hiddenStationTypes: StationVisibility }) {
   const isMobile = useIsMobile();
   const { selectStation, savedStations, recentStations } = useSelectedStation();
   const inputRef = React.useRef<HTMLInputElement>(null);
@@ -146,8 +147,17 @@ export function Search() {
   const prevResultsLenRef = React.useRef(0);
   const [isDrawerOpen, setIsDrawerOpen] = React.useState(() => isMobile && query.length > 0);
 
+  const isTypeVisible = React.useCallback(
+    (s: Station) => hiddenStationTypes[s.type as keyof StationVisibility] !== false,
+    [hiddenStationTypes],
+  );
+
   // Fetch search results
-  const { stations: searchResults, isLoading } = useStationSearch(debouncedQuery || null);
+  const { stations: searchResultsRaw, isLoading } = useStationSearch(debouncedQuery || null);
+  const searchResults = React.useMemo(
+    () => searchResultsRaw.filter(isTypeVisible),
+    [searchResultsRaw, isTypeVisible],
+  );
 
   // Fetch trending stations
   const { data: trendingData } = useTrendingStations("week");
@@ -191,11 +201,11 @@ export function Search() {
     [selectStation, isMobile, setQuery],
   );
 
-  // Filter recent stations to exclude those already in saved
+  // Filter recent stations to exclude those already in saved and hidden types
   const filteredRecentStations = React.useMemo(() => {
     const savedIds = new Set(savedStations.map((s) => s.id));
-    return recentStations.filter((s) => !savedIds.has(s.id));
-  }, [recentStations, savedStations]);
+    return recentStations.filter((s) => !savedIds.has(s.id) && isTypeVisible(s));
+  }, [recentStations, savedStations, isTypeVisible]);
 
   const visibleStations = React.useMemo(() => {
     if (isSearchActive && searchResults.length > 0) {

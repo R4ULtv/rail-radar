@@ -129,7 +129,7 @@ export function Map() {
     >
       <SelectedStationProvider>
         <StationMarkers stations={stations} layers={layers} />
-        <Search />
+        <Search hiddenStationTypes={stations} />
         <MapLayerFilter
           stations={stations}
           layers={layers}
