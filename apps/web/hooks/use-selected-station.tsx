@@ -6,12 +6,14 @@ import { useMap } from "react-map-gl/mapbox";
 import { stationById } from "@repo/data/stations";
 import type { Station } from "@repo/data";
 import { useSavedStations } from "./use-saved-stations";
+import { useRecentStations } from "./use-recent-stations";
 
 interface SelectedStationContextValue {
   selectedStation: Station | null;
   selectStation: (station: Station) => void;
   clearStation: () => void;
   savedStations: Station[];
+  recentStations: Station[];
   isSaved: (stationId: string) => boolean;
   toggleSaved: (stationId: string) => void;
   maxSaved: number;
@@ -28,6 +30,7 @@ export function SelectedStationProvider({ children }: { children: React.ReactNod
 
   // Use the standalone saved stations hook
   const { savedStations, isSaved, toggleSaved, maxSaved } = useSavedStations();
+  const { recentStations, addRecentStation } = useRecentStations();
 
   const selectedStation = React.useMemo(() => {
     if (!stationId) return null;
@@ -42,6 +45,7 @@ export function SelectedStationProvider({ children }: { children: React.ReactNod
 
       if (station.type === "rail") {
         setStationId(station.id);
+        addRecentStation(station.id);
       }
 
       map?.flyTo({
@@ -49,7 +53,7 @@ export function SelectedStationProvider({ children }: { children: React.ReactNod
         zoom: station.type === "rail" ? 14 : 15,
       });
     },
-    [map, setStationId],
+    [map, setStationId, addRecentStation],
   );
 
   const clearStation = React.useCallback(() => {
@@ -63,6 +67,7 @@ export function SelectedStationProvider({ children }: { children: React.ReactNod
         selectStation,
         clearStation,
         savedStations,
+        recentStations,
         isSaved,
         toggleSaved,
         maxSaved,

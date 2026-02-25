@@ -3,6 +3,7 @@
 import * as React from "react";
 import {
   BookmarkIcon,
+  HistoryIcon,
   ListIcon,
   SearchIcon,
   SearchXIcon,
@@ -123,7 +124,7 @@ const StationList = React.memo(function StationList({
 
 export function Search() {
   const isMobile = useIsMobile();
-  const { selectStation, savedStations } = useSelectedStation();
+  const { selectStation, savedStations, recentStations } = useSelectedStation();
   const inputRef = React.useRef<HTMLInputElement>(null);
   const [urlQuery, setUrlQuery] = useQueryState(
     "q",
@@ -190,15 +191,28 @@ export function Search() {
     [selectStation, isMobile, setQuery],
   );
 
+  // Filter recent stations to exclude those already in saved
+  const filteredRecentStations = React.useMemo(() => {
+    const savedIds = new Set(savedStations.map((s) => s.id));
+    return recentStations.filter((s) => !savedIds.has(s.id));
+  }, [recentStations, savedStations]);
+
   const visibleStations = React.useMemo(() => {
     if (isSearchActive && searchResults.length > 0) {
       return searchResults.slice(0, 10);
     }
     if (!isSearchActive || noResults) {
-      return [...savedStations, ...trendingStations];
+      return [...filteredRecentStations, ...savedStations, ...trendingStations];
     }
     return [];
-  }, [isSearchActive, searchResults, savedStations, noResults, trendingStations]);
+  }, [
+    isSearchActive,
+    searchResults,
+    filteredRecentStations,
+    savedStations,
+    noResults,
+    trendingStations,
+  ]);
 
   const focusedIndexRef = React.useRef(focusedIndex);
   const visibleStationsRef = React.useRef(visibleStations);
@@ -303,6 +317,24 @@ export function Search() {
           </div>
         </div>
       )}
+      {/* Recent Stations */}
+      {showDefaultLists && filteredRecentStations.length > 0 && (
+        <>
+          <div className="px-4 py-2 not-first:mt-1">
+            <p className="text-muted-foreground text-sm flex items-center gap-2">
+              <HistoryIcon className="size-3.5" />
+              Recent Stations
+            </p>
+          </div>
+          <StationList
+            stations={filteredRecentStations}
+            onSelect={handleSelectStation}
+            focusedIndex={focusedIndex}
+            startIndex={0}
+            onFocusIndex={setFocusedIndex}
+          />
+        </>
+      )}
       {/* Saved Stations */}
       {showDefaultLists && savedStations.length > 0 && (
         <>
@@ -316,7 +348,7 @@ export function Search() {
             stations={savedStations}
             onSelect={handleSelectStation}
             focusedIndex={focusedIndex}
-            startIndex={0}
+            startIndex={filteredRecentStations.length}
             onFocusIndex={setFocusedIndex}
           />
         </>
@@ -334,7 +366,7 @@ export function Search() {
             stations={trendingStations}
             onSelect={handleSelectStation}
             focusedIndex={focusedIndex}
-            startIndex={savedStations.length}
+            startIndex={filteredRecentStations.length + savedStations.length}
             onFocusIndex={setFocusedIndex}
             visits={trendingVisits}
           />
