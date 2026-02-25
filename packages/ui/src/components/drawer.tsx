@@ -65,7 +65,7 @@ function DrawerOverlay({ className, ...props }: DrawerPrimitive.Backdrop.Props) 
       data-slot="drawer-overlay"
       className={cn(
         // base
-        "fixed inset-0 z-50 min-h-dvh bg-black/20 supports-backdrop-filter:backdrop-blur-xs",
+        "fixed inset-0 z-50 min-h-dvh bg-black/50",
         // swipe-linked opacity using --backdrop-opacity pattern from docs
         "[--backdrop-opacity:0.2] dark:[--backdrop-opacity:0.7]",
         "opacity-[calc(var(--backdrop-opacity)*(1-var(--drawer-swipe-progress)))]",
