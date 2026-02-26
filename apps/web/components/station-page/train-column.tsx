@@ -11,7 +11,8 @@ import {
 import { ToggleGroup, ToggleGroupItem } from "@repo/ui/components/toggle-group";
 import { TrainRow, TrainRowSkeleton } from "@/components/train-row";
 import { ArrowDownLeftIcon, ArrowUpRightIcon } from "lucide-react";
-import { useEffect, useState } from "react";
+
+import { UpdatedStatus } from "@/components/updated-status";
 
 interface TrainColumnProps {
   title: string;
@@ -23,67 +24,6 @@ interface TrainColumnProps {
   lastUpdated: Date | null;
   showTypeToggle?: boolean;
   onTypeChange?: (type: "arrivals" | "departures") => void;
-}
-
-const relativeTimeFormatter = new Intl.RelativeTimeFormat("en", {
-  numeric: "auto",
-  style: "narrow",
-});
-
-function formatRelativeTime(secondsAgo: number): string {
-  if (secondsAgo < 5) {
-    return "Updated just now";
-  }
-  const minutesAgo = Math.floor(secondsAgo / 60);
-  if (minutesAgo >= 1) {
-    return `Updated ${relativeTimeFormatter.format(-minutesAgo, "minute")}`;
-  }
-  return `Updated ${relativeTimeFormatter.format(-secondsAgo, "second")}`;
-}
-
-function UpdatedStatus({
-  isLoading,
-  isValidating,
-  lastUpdated,
-}: {
-  isLoading: boolean;
-  isValidating: boolean;
-  lastUpdated: Date | null;
-}) {
-  const [secondsAgo, setSecondsAgo] = useState(0);
-  const [showUpdating, setShowUpdating] = useState(false);
-
-  useEffect(() => {
-    if (!lastUpdated) return;
-
-    const calculate = () => Math.floor((Date.now() - lastUpdated.getTime()) / 1000);
-    setSecondsAgo(calculate());
-
-    const interval = setInterval(() => {
-      setSecondsAgo(calculate());
-    }, 1000);
-
-    return () => clearInterval(interval);
-  }, [lastUpdated]);
-
-  useEffect(() => {
-    if (!isValidating) {
-      setShowUpdating(false);
-      return;
-    }
-    const timer = setTimeout(() => setShowUpdating(true), 150);
-    return () => clearTimeout(timer);
-  }, [isValidating]);
-
-  if ((isLoading && !lastUpdated) || showUpdating) {
-    return "Updating...";
-  }
-
-  if (lastUpdated) {
-    return formatRelativeTime(secondsAgo);
-  }
-
-  return null;
 }
 
 export function TrainColumn({
