@@ -5,6 +5,7 @@ import { useQueryState, parseAsString } from "nuqs";
 import { useMap } from "react-map-gl/mapbox";
 import { stationById } from "@repo/data/stations";
 import type { Station } from "@repo/data";
+import { useIsMobile } from "@repo/ui/hooks/use-mobile";
 import { useSavedStations } from "./use-saved-stations";
 import { useRecentStations } from "./use-recent-stations";
 
@@ -27,6 +28,8 @@ export function SelectedStationProvider({ children }: { children: React.ReactNod
     "station",
     parseAsString.withOptions({ history: "push", shallow: true }),
   );
+
+  const isMobile = useIsMobile();
 
   // Use the standalone saved stations hook
   const { savedStations, isSaved, toggleSaved, maxSaved } = useSavedStations();
@@ -51,9 +54,10 @@ export function SelectedStationProvider({ children }: { children: React.ReactNod
       map?.flyTo({
         center: [geo.lng, geo.lat],
         zoom: station.type === "rail" ? 14 : 15,
+        padding: isMobile ? { bottom: 250, top: 0, left: 0, right: 0 } : undefined,
       });
     },
-    [map, setStationId, addRecentStation],
+    [map, isMobile, setStationId, addRecentStation],
   );
 
   const clearStation = React.useCallback(() => {
