@@ -34,7 +34,7 @@ import {
 import { ScrollArea } from "@repo/ui/components/scroll-area";
 import { Tabs, TabsList, TabsTrigger } from "@repo/ui/components/tabs";
 
-import { AnimatePresence, motion } from "motion/react";
+import { AnimatePresence, LazyMotion, domAnimation, m } from "motion/react";
 import { useAnimatedHeight } from "@/hooks/use-animated-height";
 import { useIsMobile } from "@repo/ui/hooks/use-mobile";
 import { useSelectedStation } from "@/hooks/use-selected-station";
@@ -148,27 +148,23 @@ function UpdatedStatus({
   useEffect(() => {
     if (!lastUpdated) return;
 
-    const calculateSecondsAgo = () => {
-      return Math.floor((Date.now() - lastUpdated.getTime()) / 1000);
-    };
-
-    setSecondsAgo(calculateSecondsAgo());
+    const calculate = () => Math.floor((Date.now() - lastUpdated.getTime()) / 1000);
+    setSecondsAgo(calculate());
 
     const interval = setInterval(() => {
-      setSecondsAgo(calculateSecondsAgo());
+      setSecondsAgo(calculate());
     }, 1000);
 
     return () => clearInterval(interval);
   }, [lastUpdated]);
 
-  // Show "Updating..." only if validating takes more than 150ms
   useEffect(() => {
-    if (isValidating) {
-      const timer = setTimeout(() => setShowUpdating(true), 150);
-      return () => clearTimeout(timer);
-    } else {
+    if (!isValidating) {
       setShowUpdating(false);
+      return;
     }
+    const timer = setTimeout(() => setShowUpdating(true), 150);
+    return () => clearTimeout(timer);
   }, [isValidating]);
 
   if ((isLoading && !lastUpdated) || showUpdating) {
@@ -243,9 +239,10 @@ export default function StationInfo() {
   // Desktop view
   if (!isMobile) {
     return (
+      <LazyMotion features={domAnimation}>
       <AnimatePresence>
         {isOpen && (
-          <motion.div
+          <m.div
             initial={{ opacity: 0, x: 30 }}
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: 30 }}
@@ -261,7 +258,7 @@ export default function StationInfo() {
             >
               <XIcon className="size-4" />
             </Button>
-            <motion.div style={{ height: cardHeight.height }}>
+            <m.div style={{ height: cardHeight.height }}>
               <Card
                 ref={cardHeight.contentRef}
                 className="pt-4 pb-0 gap-4 rounded-md flex flex-col flex-1 w-96"
@@ -312,10 +309,11 @@ export default function StationInfo() {
                   />
                 </CardContent>
               </Card>
-            </motion.div>
-          </motion.div>
+            </m.div>
+          </m.div>
         )}
       </AnimatePresence>
+      </LazyMotion>
     );
   }
 
