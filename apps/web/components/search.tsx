@@ -14,7 +14,7 @@ import {
   XIcon,
   UserIcon,
 } from "lucide-react";
-import { AnimatePresence, motion } from "motion/react";
+import { AnimatePresence, LazyMotion, domAnimation, m } from "motion/react";
 import { parseAsString, useQueryState } from "nuqs";
 
 import {
@@ -123,6 +123,122 @@ const StationList = React.memo(function StationList({
   );
 });
 
+function SearchContent({
+  isSearchActive,
+  searchResults,
+  noResults,
+  showDefaultLists,
+  filteredRecentStations,
+  savedStations,
+  trendingStations,
+  trendingVisits,
+  handleSelectStation,
+  focusedIndex,
+  setFocusedIndex,
+  limit,
+}: {
+  isSearchActive: boolean;
+  searchResults: Station[];
+  noResults: boolean;
+  showDefaultLists: boolean;
+  filteredRecentStations: Station[];
+  savedStations: Station[];
+  trendingStations: Station[];
+  trendingVisits: Map<string, number>;
+  handleSelectStation: (station: Station) => void;
+  focusedIndex: number;
+  setFocusedIndex: (index: number) => void;
+  limit?: number;
+}) {
+  return (
+    <>
+      {/* Search Results */}
+      {isSearchActive && searchResults.length > 0 && (
+        <>
+          <div className="px-4 py-2 not-first:mt-1">
+            <p className="text-muted-foreground text-sm flex items-center gap-2">
+              <ListIcon className="size-3.5" />
+              Search Results
+            </p>
+          </div>
+          <StationList
+            stations={limit ? searchResults.slice(0, limit) : searchResults}
+            onSelect={handleSelectStation}
+            focusedIndex={focusedIndex}
+            startIndex={0}
+            onFocusIndex={setFocusedIndex}
+          />
+        </>
+      )}
+      {/* No Results */}
+      {noResults && (
+        <div className="px-4 py-3 flex items-center gap-3 text-muted-foreground">
+          <SearchXIcon className="size-5 shrink-0" />
+          <div className="flex flex-col gap-0.5">
+            <p className="text-sm font-medium text-foreground">No stations found</p>
+            <p className="text-xs">Try a different search term</p>
+          </div>
+        </div>
+      )}
+      {/* Recent Stations */}
+      {showDefaultLists && filteredRecentStations.length > 0 && (
+        <>
+          <div className="px-4 py-2 not-first:mt-1">
+            <p className="text-muted-foreground text-sm flex items-center gap-2">
+              <HistoryIcon className="size-3.5" />
+              Recent Stations
+            </p>
+          </div>
+          <StationList
+            stations={filteredRecentStations}
+            onSelect={handleSelectStation}
+            focusedIndex={focusedIndex}
+            startIndex={0}
+            onFocusIndex={setFocusedIndex}
+          />
+        </>
+      )}
+      {/* Saved Stations */}
+      {showDefaultLists && savedStations.length > 0 && (
+        <>
+          <div className="px-4 py-2 not-first:mt-1">
+            <p className="text-muted-foreground text-sm flex items-center gap-2">
+              <BookmarkIcon className="size-3.5" />
+              Saved Stations
+            </p>
+          </div>
+          <StationList
+            stations={savedStations}
+            onSelect={handleSelectStation}
+            focusedIndex={focusedIndex}
+            startIndex={filteredRecentStations.length}
+            onFocusIndex={setFocusedIndex}
+          />
+        </>
+      )}
+      {/* Trending Stations */}
+      {showDefaultLists && trendingStations.length > 0 && (
+        <>
+          <div className="px-4 py-2 not-first:mt-1">
+            <p className="text-muted-foreground text-sm flex items-center gap-2">
+              <TrendingUpIcon className="size-3.5" />
+              Trending Stations
+            </p>
+          </div>
+          <StationList
+            stations={trendingStations}
+            onSelect={handleSelectStation}
+            focusedIndex={focusedIndex}
+            startIndex={filteredRecentStations.length + savedStations.length}
+            onFocusIndex={setFocusedIndex}
+            visits={trendingVisits}
+          />
+        </>
+      )}
+    </>
+  );
+}
+
 export function Search({ hiddenStationTypes }: { hiddenStationTypes: StationVisibility }) {
   const isMobile = useIsMobile();
   const { selectStation, savedStations, recentStations } = useSelectedStation();
@@ -143,8 +259,8 @@ export function Search({ hiddenStationTypes }: { hiddenStationTypes: StationVisi
     setUrlQuery(debouncedQuery || null);
   }, [debouncedQuery, setUrlQuery]);
   const [focusedIndex, setFocusedIndex] = React.useState<number>(-1);
-  const prevQueryRef = React.useRef(query);
-  const prevResultsLenRef = React.useRef(0);
+  const [prevQuery, setPrevQuery] = React.useState(query);
+  const [prevResultsLen, setPrevResultsLen] = React.useState(0);
   const [isDrawerOpen, setIsDrawerOpen] = React.useState(() => isMobile && query.length > 0);
 
   const isTypeVisible = React.useCallback(
@@ -232,10 +348,10 @@ export function Search({ hiddenStationTypes }: { hiddenStationTypes: StationVisi
     visibleStationsRef.current = visibleStations;
   });
 
-  // Reset focused index when list changes (derive during render, no effect)
-  if (query !== prevQueryRef.current || searchResults.length !== prevResultsLenRef.current) {
-    prevQueryRef.current = query;
-    prevResultsLenRef.current = searchResults.length;
+  // Reset focused index when list changes (derive during render)
+  if (query !== prevQuery || searchResults.length !== prevResultsLen) {
+    setPrevQuery(query);
+    setPrevResultsLen(searchResults.length);
     if (focusedIndex !== -1) {
       setFocusedIndex(-1);
     }
@@ -296,99 +412,24 @@ export function Search({ hiddenStationTypes }: { hiddenStationTypes: StationVisi
     return () => document.removeEventListener("keydown", handleKeyDown);
   }, [handleSelectStation]);
 
-  // Search content shared between desktop dropdown and mobile drawer
-  const renderSearchContent = (limit?: number) => (
-    <>
-      {/* Search Results */}
-      {isSearchActive && searchResults.length > 0 && (
-        <>
-          <div className="px-4 py-2 not-first:mt-1">
-            <p className="text-muted-foreground text-sm flex items-center gap-2">
-              <ListIcon className="size-3.5" />
-              Search Results
-            </p>
-          </div>
-          <StationList
-            stations={limit ? searchResults.slice(0, limit) : searchResults}
-            onSelect={handleSelectStation}
-            focusedIndex={focusedIndex}
-            startIndex={0}
-            onFocusIndex={setFocusedIndex}
-          />
-        </>
-      )}
-      {/* No Results */}
-      {noResults && (
-        <div className="px-4 py-3 flex items-center gap-3 text-muted-foreground">
-          <SearchXIcon className="size-5 shrink-0" />
-          <div className="flex flex-col gap-0.5">
-            <p className="text-sm font-medium text-foreground">No stations found</p>
-            <p className="text-xs">Try a different search term</p>
-          </div>
-        </div>
-      )}
-      {/* Recent Stations */}
-      {showDefaultLists && filteredRecentStations.length > 0 && (
-        <>
-          <div className="px-4 py-2 not-first:mt-1">
-            <p className="text-muted-foreground text-sm flex items-center gap-2">
-              <HistoryIcon className="size-3.5" />
-              Recent Stations
-            </p>
-          </div>
-          <StationList
-            stations={filteredRecentStations}
-            onSelect={handleSelectStation}
-            focusedIndex={focusedIndex}
-            startIndex={0}
-            onFocusIndex={setFocusedIndex}
-          />
-        </>
-      )}
-      {/* Saved Stations */}
-      {showDefaultLists && savedStations.length > 0 && (
-        <>
-          <div className="px-4 py-2 not-first:mt-1">
-            <p className="text-muted-foreground text-sm flex items-center gap-2">
-              <BookmarkIcon className="size-3.5" />
-              Saved Stations
-            </p>
-          </div>
-          <StationList
-            stations={savedStations}
-            onSelect={handleSelectStation}
-            focusedIndex={focusedIndex}
-            startIndex={filteredRecentStations.length}
-            onFocusIndex={setFocusedIndex}
-          />
-        </>
-      )}
-      {/* Trending Stations */}
-      {showDefaultLists && trendingStations.length > 0 && (
-        <>
-          <div className="px-4 py-2 not-first:mt-1">
-            <p className="text-muted-foreground text-sm flex items-center gap-2">
-              <TrendingUpIcon className="size-3.5" />
-              Trending Stations
-            </p>
-          </div>
-          <StationList
-            stations={trendingStations}
-            onSelect={handleSelectStation}
-            focusedIndex={focusedIndex}
-            startIndex={filteredRecentStations.length + savedStations.length}
-            onFocusIndex={setFocusedIndex}
-            visits={trendingVisits}
-          />
-        </>
-      )}
-    </>
-  );
+  const searchContentProps = {
+    isSearchActive,
+    searchResults,
+    noResults,
+    showDefaultLists,
+    filteredRecentStations,
+    savedStations,
+    trendingStations,
+    trendingVisits,
+    handleSelectStation,
+    focusedIndex,
+    setFocusedIndex,
+  };
 
   // Mobile view - trigger input + full-screen drawer
   if (isMobile) {
     return (
-      <>
+      <LazyMotion features={domAnimation}>
         <div className="absolute z-50 top-4 left-4 right-16 font-sans">
           <Button
             type="button"
@@ -432,7 +473,7 @@ export function Search({ hiddenStationTypes }: { hiddenStationTypes: StationVisi
                 </InputGroupAddon>
                 <AnimatePresence>
                   {isSearchActive && (
-                    <motion.div
+                    <m.div
                       initial={{ opacity: 0, scale: 0.8 }}
                       animate={{ opacity: 1, scale: 1 }}
                       exit={{ opacity: 0, scale: 0.8 }}
@@ -448,23 +489,24 @@ export function Search({ hiddenStationTypes }: { hiddenStationTypes: StationVisi
                           <XIcon />
                         </InputGroupButton>
                       </InputGroupAddon>
-                    </motion.div>
+                    </m.div>
                   )}
                 </AnimatePresence>
               </InputGroup>
             </DrawerHeader>
 
             <div className="flex-1 overflow-auto pt-2">
-              {(!isSearchActive || hasSearched) && renderSearchContent()}
+              {(!isSearchActive || hasSearched) && <SearchContent {...searchContentProps} />}
             </div>
           </DrawerContent>
         </Drawer>
-      </>
+      </LazyMotion>
     );
   }
 
   // Desktop view - floating card with dropdown
   return (
+    <LazyMotion features={domAnimation}>
     <div className="absolute z-50 top-4 left-4 flex flex-col gap-2 md:w-80 w-[calc(100svw-32px)] pointer-events-none font-sans">
       <InputGroup className="h-9 bg-card dark:bg-card pointer-events-auto">
         <InputGroupInput
@@ -509,7 +551,7 @@ export function Search({ hiddenStationTypes }: { hiddenStationTypes: StationVisi
       </InputGroup>
       <AnimatePresence>
         {(!isSearchActive || hasSearched) && (
-          <motion.div
+          <m.div
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
@@ -521,11 +563,12 @@ export function Search({ hiddenStationTypes }: { hiddenStationTypes: StationVisi
               ref={cardHeight.contentRef}
               className="bg-card text-card-foreground rounded-md py-2 shadow-xs ring-1 ring-foreground/10 flex flex-col"
             >
-              <div>{renderSearchContent(10)}</div>
+              <div><SearchContent {...searchContentProps} limit={10} /></div>
             </div>
-          </motion.div>
+          </m.div>
         )}
       </AnimatePresence>
     </div>
+    </LazyMotion>
   );
 }
