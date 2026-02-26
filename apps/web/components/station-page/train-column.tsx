@@ -50,20 +50,17 @@ function UpdatedStatus({
   isValidating: boolean;
   lastUpdated: Date | null;
 }) {
-  const [secondsAgo, setSecondsAgo] = useState(() =>
-    lastUpdated ? Math.floor((Date.now() - lastUpdated.getTime()) / 1000) : 0,
-  );
+  const [secondsAgo, setSecondsAgo] = useState(0);
   const [showUpdating, setShowUpdating] = useState(false);
 
   useEffect(() => {
     if (!lastUpdated) return;
 
-    const calculateSecondsAgo = () => {
-      return Math.floor((Date.now() - lastUpdated.getTime()) / 1000);
-    };
+    const calculate = () => Math.floor((Date.now() - lastUpdated.getTime()) / 1000);
+    setSecondsAgo(calculate());
 
     const interval = setInterval(() => {
-      setSecondsAgo(calculateSecondsAgo());
+      setSecondsAgo(calculate());
     }, 1000);
 
     return () => clearInterval(interval);
