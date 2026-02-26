@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import {
   Empty,
   EmptyHeader,
@@ -7,6 +8,11 @@ import {
   EmptyContent,
 } from "@repo/ui/components/empty";
 import { WifiOffIcon } from "lucide-react";
+
+export const metadata: Metadata = {
+  title: "Offline",
+  description: "Rail Radar needs an internet connection to show live train data.",
+};
 
 export default function OfflinePage() {
   return (
