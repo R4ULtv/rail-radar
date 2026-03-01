@@ -1,6 +1,4 @@
-# Rail Radar
-
-Real-time train tracking for Italy and Switzerland with an interactive map interface and live train data.
+[![Rail Radar](https://www.railradar24.com/og-image.webp)](https://www.railradar24.com)
 
 ## Features
 
