@@ -21,7 +21,7 @@ export const metadata: Metadata = {
     template: "%s | Rail Radar",
   },
   description:
-    "Track trains in real time across Italy and Switzerland. Get live delays, platform numbers, and departure info for over 4500 train stations.",
+    "Track trains in real time across Italy and Switzerland. Get live delays, platform numbers, and departure info for over 4500 train stations on an interactive map.",
   openGraph: {
     type: "website",
     url: "https://www.railradar24.com",
@@ -57,6 +57,9 @@ export default function RootLayout({
         {/* Preconnect to Mapbox services for faster map loading */}
         <link rel="preconnect" href="https://api.mapbox.com" />
         <link rel="preconnect" href="https://events.mapbox.com" />
+        <link rel="apple-touch-icon" href="/icon@180px.png" />
+        <link rel="alternate" hrefLang="en" href="https://www.railradar24.com" />
+        <link rel="alternate" hrefLang="x-default" href="https://www.railradar24.com" />
       </head>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <NuqsAdapter>{children}</NuqsAdapter>

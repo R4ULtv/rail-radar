@@ -33,6 +33,21 @@ export default function Home() {
           __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c"),
         }}
       />
+      <h1 className="sr-only">Rail Radar - Live Train Tracker for Italy & Switzerland</h1>
+      <div className="sr-only">
+        <p>
+          Rail Radar is a real-time train tracking application covering Italy and Switzerland. Monitor
+          live departures, arrivals, delays, and platform changes across more than 4500 train stations
+          on an interactive map. Stay informed with up-to-date data from RFI and Swiss public transport
+          feeds, whether you are commuting daily or planning a trip across the Alps.
+        </p>
+        <p>
+          Search any station to see upcoming trains, check real-time delay information, and explore
+          trending stations. Rail Radar supports major operators including Trenitalia, Italo, Trenord,
+          SBB, and many regional services. Bookmark your favorite stations for quick access and share
+          live views with friends using shareable map links.
+        </p>
+      </div>
       <Suspense fallback={<MapLoading />}>
         <Map />
         <div className="absolute bottom-2 left-3 text-[10px] text-foreground/60">

@@ -45,16 +45,16 @@ export async function generateMetadata({ params }: StationPageProps): Promise<Me
   }
 
   const country = getCountryName(id);
-  const description = `Live train departures and arrivals at ${station.name}, ${country}. Real-time delays, platforms, and schedules.`;
+  const description = `Live train departures and arrivals at ${station.name}, ${country}. Check real-time delays, platform numbers, and schedules updated every 30 seconds.`;
 
   return {
-    title: station.name,
+    title: `${station.name} - Live Departures & Arrivals`,
     description,
     alternates: {
       canonical: `/station/${id}`,
     },
     openGraph: {
-      title: `${station.name} | Rail Radar`,
+      title: `${station.name} - Live Departures & Arrivals | Rail Radar`,
       description,
     },
   };
@@ -70,10 +70,13 @@ export default async function StationPage({ params }: StationPageProps) {
 
   const countryCode = station.id.startsWith("CH") ? "CH" : "IT";
 
+  const country = getCountryName(station.id);
+
   const jsonLd = {
     "@context": "https://schema.org",
-    "@type": "Place",
+    "@type": "TrainStation",
     name: station.name,
+    url: `https://www.railradar24.com/station/${station.id}`,
     geo: {
       "@type": "GeoCoordinates",
       latitude: station.geo.lat,
@@ -134,6 +137,16 @@ export default async function StationPage({ params }: StationPageProps) {
       {/* Train board - edge-to-edge on mobile */}
       <div className="md:mx-auto md:px-4 md:pb-6 max-w-7xl">
         <TrainBoard stationId={station.id} />
+      </div>
+
+      <div className="sr-only">
+        <h2>About {station.name}</h2>
+        <p>
+          {station.name} is a train station located in {country}. View real-time departures and
+          arrivals, check live delay information, and find platform assignments. Train data is
+          refreshed every 30 seconds so you always have the latest schedule. Use Rail Radar to plan
+          your journey, find nearby stations, and get directions to {station.name}.
+        </p>
       </div>
     </div>
   );
