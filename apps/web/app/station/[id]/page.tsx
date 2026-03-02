@@ -56,6 +56,20 @@ export async function generateMetadata({ params }: StationPageProps): Promise<Me
     openGraph: {
       title: `${station.name} - Live Departures & Arrivals | Rail Radar`,
       description,
+      images: [
+        {
+          url: `/og?id=${id}`,
+          width: 1200,
+          height: 630,
+          alt: `${station.name} station map`,
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${station.name} - Live Departures & Arrivals | Rail Radar`,
+      description,
+      images: [`/og?id=${id}`],
     },
   };
 }
