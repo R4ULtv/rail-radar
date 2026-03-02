@@ -29,7 +29,6 @@
   "devDependencies": {
     "@repo/typescript-config": "workspace:*",
     "@tailwindcss/postcss": "^4.2.1",
-    "@takumi-rs/core-linux-x64-gnu": "0.69.5",
     "@types/node": "^22.19.11",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",

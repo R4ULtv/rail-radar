@@ -146,9 +146,6 @@ importers:
       '@tailwindcss/postcss':
         specifier: ^4.2.1
         version: 4.2.1
-      '@takumi-rs/core-linux-x64-gnu':
-        specifier: 0.69.5
-        version: 0.69.5
       '@types/node':
         specifier: ^22.19.11
         version: 22.19.11
@@ -1550,6 +1547,7 @@ packages:
     engines: {node: '>= 12.22.0 < 13 || >= 14.17.0 < 15 || >= 15.12.0 < 16 || >= 16.0.0'}
     cpu: [x64]
     os: [linux]
+    libc: [glibc]
 
   '@takumi-rs/core-linux-x64-musl@0.69.5':
     resolution: {integrity: sha512-Rl4X0DqnrExE741gIzag+332wRzd1dJoMHEbOP9u45srmd5D/AlYR/pIHfP3J4VG42ZtxVxImblNUhNTjSrtZw==}
@@ -4993,7 +4991,8 @@ snapshots:
   '@takumi-rs/core-linux-arm64-musl@0.69.5':
     optional: true
 
-  '@takumi-rs/core-linux-x64-gnu@0.69.5': {}
+  '@takumi-rs/core-linux-x64-gnu@0.69.5':
+    optional: true
 
   '@takumi-rs/core-linux-x64-musl@0.69.5':
     optional: true
