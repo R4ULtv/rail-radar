@@ -55,6 +55,7 @@ export function GET(request: NextRequest) {
   const nearby = getNearbyStations(id);
   const coords = `${toDMS(station.geo.lat, true)} ${toDMS(station.geo.lng, false)}`;
 
+  try {
   return new ImageResponse(
     <div tw="flex w-full h-full bg-[#1C1917]">
       {/* Dot grid background */}
@@ -154,7 +155,7 @@ export function GET(request: NextRequest) {
             <img
               width={750}
               height={630}
-              src={`https://api.mapbox.com/styles/v1/mapbox/dark-v11/static/url-${encodeURIComponent(`${process.env.NEXT_PUBLIC_SITE_URL}/station-icon.png`)}(${station.geo.lng},${station.geo.lat})/${station.geo.lng - 0.007},${station.geo.lat},13,0/750x630@2x?attribution=false&logo=false&access_token=${process.env.NEXT_PUBLIC_MAPBOX_TOKEN}`}
+              src={`https://api.mapbox.com/styles/v1/mapbox/dark-v11/static/url-${encodeURIComponent("https://railradar24.com/station-icon.png")}(${station.geo.lng},${station.geo.lat})/${station.geo.lng - 0.007},${station.geo.lat},13,0/750x630@2x?attribution=false&logo=false&access_token=${process.env.NEXT_PUBLIC_MAPBOX_TOKEN}`}
               tw="absolute inset-0 w-full h-full object-cover brightness-110"
               alt=""
             />
@@ -171,4 +172,8 @@ export function GET(request: NextRequest) {
       },
     },
   );
+  } catch (error) {
+    console.error("OG image generation failed:", error);
+    return new Response(`OG generation error: ${error}`, { status: 500 });
+  }
 }
