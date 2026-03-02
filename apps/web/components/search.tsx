@@ -507,68 +507,70 @@ export function Search({ hiddenStationTypes }: { hiddenStationTypes: StationVisi
   // Desktop view - floating card with dropdown
   return (
     <LazyMotion features={domAnimation}>
-    <div className="absolute z-50 top-4 left-4 flex flex-col gap-2 md:w-80 w-[calc(100svw-32px)] pointer-events-none font-sans">
-      <InputGroup className="h-9 bg-card dark:bg-card pointer-events-auto">
-        <InputGroupInput
-          ref={inputRef}
-          placeholder="Search Station..."
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          onBlur={() => setFocusedIndex(-1)}
-          name="search"
-          autoComplete="off"
-          role="combobox"
-          aria-label="Search..."
-          aria-expanded={visibleStations.length > 0}
-          aria-haspopup="listbox"
-          aria-controls="station-listbox"
-          aria-activedescendant={
-            focusedIndex >= 0 && visibleStations[focusedIndex]
-              ? `station-option-${visibleStations[focusedIndex].id}`
-              : undefined
-          }
-        />
-        <InputGroupAddon>
-          {isSearchActive && !hasSearched ? <Spinner /> : <SearchIcon />}
-        </InputGroupAddon>
-        {isSearchActive ? (
-          <InputGroupAddon align="inline-end">
-            <InputGroupButton
-              aria-label="Clear search"
-              title="Clear search"
-              size="icon-xs"
-              onMouseDown={(e) => e.preventDefault()}
-              onClick={() => setQuery("")}
-            >
-              <XIcon />
-            </InputGroupButton>
+      <div className="absolute z-50 top-4 left-4 flex flex-col gap-2 md:w-80 w-[calc(100svw-32px)] pointer-events-none font-sans">
+        <InputGroup className="h-9 bg-card dark:bg-card pointer-events-auto">
+          <InputGroupInput
+            ref={inputRef}
+            placeholder="Search Station..."
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            onBlur={() => setFocusedIndex(-1)}
+            name="search"
+            autoComplete="off"
+            role="combobox"
+            aria-label="Search..."
+            aria-expanded={visibleStations.length > 0}
+            aria-haspopup="listbox"
+            aria-controls="station-listbox"
+            aria-activedescendant={
+              focusedIndex >= 0 && visibleStations[focusedIndex]
+                ? `station-option-${visibleStations[focusedIndex].id}`
+                : undefined
+            }
+          />
+          <InputGroupAddon>
+            {isSearchActive && !hasSearched ? <Spinner /> : <SearchIcon />}
           </InputGroupAddon>
-        ) : (
-          <InputGroupAddon align="inline-end">
-            <Kbd>⌘K</Kbd>
-          </InputGroupAddon>
-        )}
-      </InputGroup>
-      <AnimatePresence>
-        {(!isSearchActive || hasSearched) && (
-          <m.div
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            transition={{ duration: 0.15 }}
-            style={{ height: cardHeight.height }}
-            className="rounded-md pointer-events-auto overflow-hidden"
-          >
-            <div
-              ref={cardHeight.contentRef}
-              className="bg-card text-card-foreground rounded-md py-2 shadow-xs ring-1 ring-foreground/10 flex flex-col"
+          {isSearchActive ? (
+            <InputGroupAddon align="inline-end">
+              <InputGroupButton
+                aria-label="Clear search"
+                title="Clear search"
+                size="icon-xs"
+                onMouseDown={(e) => e.preventDefault()}
+                onClick={() => setQuery("")}
+              >
+                <XIcon />
+              </InputGroupButton>
+            </InputGroupAddon>
+          ) : (
+            <InputGroupAddon align="inline-end">
+              <Kbd>⌘K</Kbd>
+            </InputGroupAddon>
+          )}
+        </InputGroup>
+        <AnimatePresence>
+          {(!isSearchActive || hasSearched) && (
+            <m.div
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              transition={{ duration: 0.15 }}
+              style={{ height: cardHeight.height }}
+              className="rounded-md pointer-events-auto overflow-hidden"
             >
-              <div><SearchContent {...searchContentProps} limit={10} /></div>
-            </div>
-          </m.div>
-        )}
-      </AnimatePresence>
-    </div>
+              <div
+                ref={cardHeight.contentRef}
+                className="bg-card text-card-foreground rounded-md py-2 shadow-xs ring-1 ring-foreground/10 flex flex-col"
+              >
+                <div>
+                  <SearchContent {...searchContentProps} limit={10} />
+                </div>
+              </div>
+            </m.div>
+          )}
+        </AnimatePresence>
+      </div>
     </LazyMotion>
   );
 }

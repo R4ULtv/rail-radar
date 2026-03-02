@@ -180,79 +180,83 @@ export default function StationInfo() {
   if (!isMobile) {
     return (
       <LazyMotion features={domAnimation}>
-      <AnimatePresence>
-        {isOpen && (
-          <m.div
-            initial={{ opacity: 0, x: 30 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: 30 }}
-            transition={{ duration: 0.2 }}
-            className="absolute z-50 top-4 right-4 font-sans"
-          >
-            <Button
-              variant="outline"
-              size="icon-sm"
-              onClick={clearStation}
-              className="bg-card hover:bg-muted dark:bg-card dark:hover:bg-muted absolute -left-11"
-              aria-label="Close"
+        <AnimatePresence>
+          {isOpen && (
+            <m.div
+              initial={{ opacity: 0, x: 30 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: 30 }}
+              transition={{ duration: 0.2 }}
+              className="absolute z-50 top-4 right-4 font-sans"
             >
-              <XIcon className="size-4" />
-            </Button>
-            <m.div style={{ height: cardHeight.height }}>
-              <Card
-                ref={cardHeight.contentRef}
-                className="pt-4 pb-0 gap-4 rounded-md flex flex-col flex-1 w-96"
+              <Button
+                variant="outline"
+                size="icon-sm"
+                onClick={clearStation}
+                className="bg-card hover:bg-muted dark:bg-card dark:hover:bg-muted absolute -left-11"
+                aria-label="Close"
               >
-                <CardHeader className="relative px-4">
-                  <CardAction className="space-x-1">
-                    {selectedStation && <SaveButton station={selectedStation} />}
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      onClick={handleDirections}
-                      aria-label="Directions"
-                    >
-                      <CornerUpRightIcon className="size-4" />
-                    </Button>
-                    <Button variant="ghost" size="icon" onClick={handleShare} aria-label="Share">
-                      {copied ? <CheckIcon className="size-4" /> : <ShareIcon className="size-4" />}
-                    </Button>
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      nativeButton={false}
-                      render={
-                        <Link href={`/station/${selectedStation?.id}`}>
-                          <InfoIcon className="size-4" />
-                        </Link>
-                      }
-                      aria-label="View station details"
-                    />
-                  </CardAction>
-                  <CardTitle className="truncate">{selectedStation?.name}</CardTitle>
-                  <CardDescription>
-                    <UpdatedStatus
+                <XIcon className="size-4" />
+              </Button>
+              <m.div style={{ height: cardHeight.height }}>
+                <Card
+                  ref={cardHeight.contentRef}
+                  className="pt-4 pb-0 gap-4 rounded-md flex flex-col flex-1 w-96"
+                >
+                  <CardHeader className="relative px-4">
+                    <CardAction className="space-x-1">
+                      {selectedStation && <SaveButton station={selectedStation} />}
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        onClick={handleDirections}
+                        aria-label="Directions"
+                      >
+                        <CornerUpRightIcon className="size-4" />
+                      </Button>
+                      <Button variant="ghost" size="icon" onClick={handleShare} aria-label="Share">
+                        {copied ? (
+                          <CheckIcon className="size-4" />
+                        ) : (
+                          <ShareIcon className="size-4" />
+                        )}
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        nativeButton={false}
+                        render={
+                          <Link href={`/station/${selectedStation?.id}`}>
+                            <InfoIcon className="size-4" />
+                          </Link>
+                        }
+                        aria-label="View station details"
+                      />
+                    </CardAction>
+                    <CardTitle className="truncate">{selectedStation?.name}</CardTitle>
+                    <CardDescription>
+                      <UpdatedStatus
+                        isLoading={isLoading}
+                        isValidating={isValidating}
+                        lastUpdated={lastUpdated}
+                      />
+                    </CardDescription>
+                    <StationTabs type={type} onTypeChange={setType} />
+                  </CardHeader>
+                  <CardContent className="flex-1 px-0">
+                    <TrainListContent
+                      trainData={trainData}
                       isLoading={isLoading}
-                      isValidating={isValidating}
-                      lastUpdated={lastUpdated}
+                      error={error}
+                      type={type}
+                      scrollable
                     />
-                  </CardDescription>
-                  <StationTabs type={type} onTypeChange={setType} />
-                </CardHeader>
-                <CardContent className="flex-1 px-0">
-                  <TrainListContent
-                    trainData={trainData}
-                    isLoading={isLoading}
-                    error={error}
-                    type={type}
-                    scrollable
-                  />
-                </CardContent>
-              </Card>
+                  </CardContent>
+                </Card>
+              </m.div>
             </m.div>
-          </m.div>
-        )}
-      </AnimatePresence>
+          )}
+        </AnimatePresence>
       </LazyMotion>
     );
   }
