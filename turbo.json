@@ -13,10 +13,11 @@
     },
     "lint": {
       "dependsOn": ["transit"],
-      "outputs": []
+      "cache": false
     },
     "check-types": {
-      "dependsOn": ["transit"]
+      "dependsOn": ["transit"],
+      "cache": false
     },
     "dev": {
       "cache": false,
