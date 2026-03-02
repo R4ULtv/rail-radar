@@ -133,9 +133,8 @@ export function GET(request: NextRequest) {
         <span tw="text-[13px] font-mono text-[rgba(168,162,158,0.6)]">railradar24.com</span>
       </div>
 
-      {/* Map — absolute, behind text content */}
-      <div tw="absolute top-0 right-0 bottom-0 flex w-[750px]">
-        {/* Horizontal fade wrapper */}
+      {/* Map — temporarily disabled for debugging */}
+      {/* <div tw="absolute top-0 right-0 bottom-0 flex w-[750px]">
         <div
           tw="absolute inset-0"
           style={{
@@ -143,7 +142,6 @@ export function GET(request: NextRequest) {
               "linear-gradient(to right, transparent 0%, rgba(0,0,0,0.15) 15%, rgba(0,0,0,0.5) 35%, black 60%)",
           }}
         >
-          {/* Vertical fade wrapper */}
           <div
             tw="absolute inset-0"
             style={{
@@ -151,17 +149,16 @@ export function GET(request: NextRequest) {
                 "linear-gradient(to bottom, rgba(0,0,0,0.4) 0%, black 10%, black 90%, rgba(0,0,0,0.4) 100%)",
             }}
           >
-            {/* oxlint-disable-next-line nextjs/no-img-element -- OG image route, can't use next/image */}
             <img
               width={750}
               height={630}
-              src={`https://api.mapbox.com/styles/v1/mapbox/dark-v11/static/${station.geo.lng - 0.007},${station.geo.lat},13,0/750x630@2x?attribution=false&logo=false&access_token=${process.env.NEXT_PUBLIC_MAPBOX_TOKEN}`}
+              src={`https://api.mapbox.com/styles/v1/mapbox/dark-v11/static/${station.geo.lng - 0.007},${station.geo.lat},13,0/750x630?attribution=false&logo=false&access_token=${process.env.NEXT_PUBLIC_MAPBOX_TOKEN}`}
               tw="absolute inset-0 w-full h-full object-cover brightness-110"
               alt=""
             />
           </div>
         </div>
-      </div>
+      </div> */}
     </div>,
     {
       width: 1200,
