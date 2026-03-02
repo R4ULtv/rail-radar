@@ -2,6 +2,7 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   reactCompiler: true,
+  serverExternalPackages: ["@takumi-rs/image-response"],
   images: {
     remotePatterns: [
       {
