@@ -4,6 +4,7 @@ import { NuqsAdapter } from "nuqs/adapters/next/app";
 import "./globals.css";
 import { Analytics } from "@vercel/analytics/next";
 import { ServiceWorkerRegistration } from "@/components/service-worker";
+import baseUrl from "@/lib/base-url";
 
 const geistSans = Geist({
   subsets: ["latin"],
@@ -15,7 +16,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://www.railradar24.com"),
+  metadataBase: baseUrl,
   title: {
     default: "Rail Radar - Live Train Tracker for Italy & Switzerland",
     template: "%s | Rail Radar",
@@ -24,7 +25,7 @@ export const metadata: Metadata = {
     "Track trains in real time across Italy and Switzerland. Get live delays, platform numbers, and departure info for over 4500 train stations on an interactive map.",
   openGraph: {
     type: "website",
-    url: "https://www.railradar24.com",
+    url: baseUrl,
     siteName: "Rail Radar",
     images: [
       {

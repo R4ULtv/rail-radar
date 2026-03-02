@@ -1,9 +1,8 @@
 import { MetadataRoute } from "next";
 import { stations } from "@repo/data";
+import baseUrl from "@/lib/base-url";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = "https://www.railradar24.com";
-
   const stationRoutes: MetadataRoute.Sitemap = stations
     .filter((station) => station.type === "rail" && station.geo)
     .map((station) => ({
@@ -15,7 +14,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   return [
     {
-      url: baseUrl,
+      url: baseUrl.toString(),
       lastModified: new Date(),
       changeFrequency: "daily",
       priority: 1,
