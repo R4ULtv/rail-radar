@@ -28,7 +28,7 @@ export async function generateStaticParams() {
     .map((s) => ({ id: s.id }));
 }
 export const dynamicParams = true;
-export const revalidate = 86400;
+export const revalidate = false;
 
 function getCountryName(id: string): string {
   return id.startsWith("CH") ? "Switzerland" : "Italy";
