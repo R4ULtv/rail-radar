@@ -148,6 +148,7 @@ export function GET(request: NextRequest) {
                 "linear-gradient(to bottom, rgba(0,0,0,0.4) 0%, black 10%, black 90%, rgba(0,0,0,0.4) 100%)",
             }}
           >
+            {/* oxlint-disable-next-line nextjs/no-img-element */}
             <img
               width={750}
               height={630}
