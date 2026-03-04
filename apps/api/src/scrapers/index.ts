@@ -1,5 +1,5 @@
 import type { ContentfulStatusCode } from "hono/utils/http-status";
-import type { Train } from "@repo/data";
+import { getCountry, type CountryCode, type Train } from "@repo/data";
 
 import { scrapeTrains } from "./italy";
 import { scrapeSwissTrains } from "./switzerland";
@@ -27,12 +27,12 @@ export interface ScrapeResult {
 
 type ScrapeFn = (stationId: string, type?: "arrivals" | "departures") => Promise<ScrapeResult>;
 
-const scrapers: Record<string, ScrapeFn> = {
-  CH: scrapeSwissTrains,
-  IT: scrapeTrains,
+const scrapers: Partial<Record<CountryCode, ScrapeFn>> = {
+  ch: scrapeSwissTrains,
+  it: scrapeTrains,
 };
 
 export function getScraperForStation(stationId: string): ScrapeFn | null {
-  const prefix = stationId.match(/^[A-Z]+/)?.[0];
-  return prefix ? (scrapers[prefix] ?? null) : null;
+  const country = getCountry(stationId);
+  return country ? (scrapers[country] ?? null) : null;
 }
