@@ -41,15 +41,11 @@ import { useStationSearch } from "@/hooks/use-station-search";
 import { useTrendingStations } from "@/hooks/use-trending-stations";
 
 import { cn } from "@repo/ui/lib/utils";
-import type { Station } from "@repo/data";
+import { getCountry, type Station } from "@repo/data";
 import type { StationVisibility } from "@/hooks/use-map-layers";
 import Image from "next/image";
 import { Button } from "@repo/ui/components/button";
 
-function getCountryCode(stationId: string): string {
-  if (stationId.startsWith("CH")) return "ch";
-  return "it";
-}
 
 const StationList = React.memo(function StationList({
   stations,
@@ -103,8 +99,8 @@ const StationList = React.memo(function StationList({
               <span>{station.name}</span>
               <Image
                 unoptimized
-                src={`https://raw.githubusercontent.com/lipis/flag-icons/refs/heads/main/flags/4x3/${getCountryCode(station.id)}.svg`}
-                alt={getCountryCode(station.id).toUpperCase()}
+                src={`https://raw.githubusercontent.com/lipis/flag-icons/refs/heads/main/flags/4x3/${getCountry(station.id)}.svg`}
+                alt={getCountry(station.id)?.toUpperCase() ?? ""}
                 className="size-3 shrink-0 rounded-full object-cover"
                 width={12}
                 height={12}
