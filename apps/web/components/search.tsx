@@ -432,7 +432,7 @@ export function Search({ hiddenStationTypes }: { hiddenStationTypes: StationVisi
             variant="outline"
             onClick={() => setIsDrawerOpen(true)}
             aria-label="Search stations"
-            className="bg-card hover:bg-muted dark:bg-card dark:hover:bg-muted w-full justify-start active:scale-[0.98] transition-transform duration-100"
+            className="bg-card text-muted-foreground hover:bg-muted dark:bg-card dark:hover:bg-muted w-full justify-start active:scale-[0.98] transition-transform duration-100"
           >
             <SearchIcon className="text-muted-foreground" />
             <span className="flex-1 text-left">Search...</span>
@@ -455,7 +455,7 @@ export function Search({ hiddenStationTypes }: { hiddenStationTypes: StationVisi
               </DrawerDescription>
               <InputGroup className="h-10 bg-background">
                 <InputGroupInput
-                  placeholder="Search Station..."
+                  placeholder="Search..."
                   value={query}
                   onChange={(e) => setQuery(e.target.value)}
                   autoFocus
@@ -506,7 +506,7 @@ export function Search({ hiddenStationTypes }: { hiddenStationTypes: StationVisi
         <InputGroup className="h-9 bg-card dark:bg-card pointer-events-auto">
           <InputGroupInput
             ref={inputRef}
-            placeholder="Search Station..."
+            placeholder="Search..."
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             onBlur={() => setFocusedIndex(-1)}
