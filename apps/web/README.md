@@ -1,6 +1,6 @@
 # Rail Radar Web
 
-Next.js frontend for real-time train tracking across Italy and Switzerland with an interactive map interface.
+Next.js frontend for real-time train tracking across Italy, Switzerland, and Finland with an interactive map interface.
 
 ## Tech Stack
 

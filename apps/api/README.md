@@ -1,6 +1,6 @@
 # Rail Radar API
 
-Cloudflare Workers API that provides real-time train data for Italy and Switzerland by scraping official sources (RFI, transport.opendata.ch).
+Cloudflare Workers API that provides real-time train data for Italy, Switzerland, and Finland by scraping official sources (RFI, transport.opendata.ch, Digitraffic).
 
 ## Tech Stack
 
@@ -17,7 +17,6 @@ Cloudflare Workers API that provides real-time train data for Italy and Switzerl
 | `GET`  | `/stations/:id`       | Get station with trains (`?type=arrivals\|departures`)              |
 | `GET`  | `/stations/:id/stats` | Get station visit stats (`?period=hour\|day\|week`, default: `day`) |
 | `GET`  | `/analytics/overview` | Get global analytics (total visits, unique visitors, etc.)          |
-| `GET`  | `/rfi/status`         | Get RFI request timing stats (`?period=hour\|day\|week`)            |
 
 ### Caching
 
@@ -27,7 +26,6 @@ Responses are cached to reduce load on upstream sources:
 - `/stations/:id/stats`: 5min cache, 1min stale-while-revalidate
 - `/stations/trending`: 5min cache, 1min stale-while-revalidate
 - `/analytics/overview`: 5min cache, 1min stale-while-revalidate
-- `/rfi/status`: 5min cache, 1min stale-while-revalidate
 
 ### Rate Limiting
 
@@ -41,7 +39,8 @@ src/
 ├── scrapers/
 │   ├── index.ts       # Scraper router (selects by country prefix)
 │   ├── italy.ts       # RFI data scraper
-│   └── switzerland.ts # Swiss transport API scraper
+│   ├── switzerland.ts # Swiss transport API scraper
+│   └── finland.ts     # Finnish Digitraffic API scraper
 ├── analytics.ts   # Cloudflare Analytics Engine integration
 ├── fuzzy.ts       # Fuzzy search (Damerau-Levenshtein)
 └── constants.ts   # Shared constants (cache TTL, timeouts, validation)

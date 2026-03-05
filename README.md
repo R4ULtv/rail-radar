@@ -2,8 +2,8 @@
 
 ## Features
 
-- Interactive map with 4500+ railway stations across Italy and Switzerland
-- Real-time arrivals and departures from official data sources (RFI, SBB)
+- Interactive map with 4500+ railway stations across Italy, Switzerland, and Finland
+- Real-time arrivals and departures from official data sources (RFI, SBB, Digitraffic)
 - Station search with fuzzy matching
 - Shareable URLs with map state
 - User geolocation support
@@ -71,5 +71,5 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 - Italian train data from [RFI](https://www.rfi.it/) (Rete Ferroviaria Italiana)
 - Swiss train data from [transport.opendata.ch](https://transport.opendata.ch/)
-- Map tiles by [Stadia Maps](https://stadiamaps.com/)
-- Map rendering by [MapLibre](https://maplibre.org/)
+- Finnish train data from [Digitraffic](https://www.digitraffic.fi/)
+- Map rendering by [Mapbox](https://www.mapbox.com/)
