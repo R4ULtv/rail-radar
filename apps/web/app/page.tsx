@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { Suspense } from "react";
 
 import { Map } from "@/components/map";
@@ -45,39 +46,55 @@ export default function Home() {
         <p>
           Search any station to see upcoming trains, check real-time delay information, and explore
           trending stations. Rail Radar supports major operators including Trenitalia, Italo,
-          Trenord, SBB, VR, and many regional services. Bookmark your favorite stations for quick access
-          and share live views with friends using shareable map links.
+          Trenord, SBB, VR, and many regional services. Bookmark your favorite stations for quick
+          access and share live views with friends using shareable map links.
         </p>
       </div>
       <Suspense fallback={<MapLoading />}>
         <Map />
-        <div className="absolute bottom-2 left-3 text-[10px] text-foreground/60">
-          <a
-            href="https://www.mapbox.com/about/maps/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="hover:underline"
-          >
-            © Mapbox
-          </a>
-          ,{" "}
-          <a
-            href="http://www.openstreetmap.org/copyright"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="hover:underline"
-          >
-            © OpenStreetMap
-          </a>
-          ,{" "}
-          <a
-            href="https://www.mapbox.com/map-feedback/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="font-semibold hover:underline"
-          >
-            Improve this map
-          </a>
+        <div className="absolute bottom-2 left-3 flex flex-wrap max-w-60 md:max-w-full gap-x-1 text-[10px] text-foreground/60">
+          <span>
+            <a
+              href="https://www.mapbox.com/about/maps/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:underline"
+            >
+              © Mapbox
+            </a>
+            ,{" "}
+            <a
+              href="http://www.openstreetmap.org/copyright"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:underline"
+            >
+              © OpenStreetMap
+            </a>
+            ,{" "}
+            <a
+              href="https://www.mapbox.com/map-feedback/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:underline"
+            >
+              Improve this map
+            </a>
+            <span className="hidden md:inline">{" ·"}</span>
+          </span>
+          <span>
+            <Link href="/privacy-policy" className="hover:underline">
+              Privacy
+            </Link>
+            {" · "}
+            <Link href="/terms-of-service" className="hover:underline">
+              Terms
+            </Link>
+            {" · "}
+            <a href="mailto:contact@railradar24.com" className="hover:underline">
+              Contact
+            </a>
+          </span>
         </div>
       </Suspense>
     </main>
