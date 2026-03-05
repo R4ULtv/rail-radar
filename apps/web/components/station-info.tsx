@@ -12,7 +12,7 @@ import {
   XIcon,
 } from "lucide-react";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { SaveButton } from "@/components/save-button";
 import { TrainRow, TrainRowSkeleton } from "@/components/train-row";
@@ -130,6 +130,17 @@ export default function StationInfo() {
 
   // Derive open state from selectedStation
   const isOpen = !!selectedStation;
+
+  useEffect(() => {
+    if (!isOpen) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        clearStation();
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [isOpen, clearStation]);
 
   const handleShare = async () => {
     if (!selectedStation) return;
