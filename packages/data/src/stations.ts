@@ -11,19 +11,22 @@ export const stations: Station[] = stationsData.map((station) => ({
 /** Station lookup by ID - O(1) instead of O(n) */
 export const stationById = new Map<string, Station>(stations.map((s) => [s.id, s]));
 
-export type CountryCode = "it" | "ch";
-export type CountryName = "italy" | "switzerland";
+export type CountryCode = "it" | "ch" | "fi";
+export type CountryName = "italy" | "switzerland" | "finland";
 
 const COUNTRY_MAP: Record<CountryCode, CountryName> = {
   it: "italy",
   ch: "switzerland",
+  fi: "finland",
 };
 
 const ID_PREFIX_TO_COUNTRY: Record<string, CountryCode> = {
   IT: "it",
-  ITM: "it",
-  ITL: "it",
+  ITM: "it", // Metro
+  ITL: "it", // Local-Light
   CH: "ch",
+  FI: "fi",
+  FIM: "fi",
 };
 
 /** Get country from a station ID. Returns code by default, or full name with `format: "name"` */
