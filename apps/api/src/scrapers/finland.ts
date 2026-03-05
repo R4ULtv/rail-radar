@@ -198,11 +198,18 @@ export async function scrapeFinlandTrains(
 
   const data: DigitrafficTrain[] = await response.json();
 
+  const seen = new Set<string>();
   const trains: Train[] = data
     .filter((entry) => entry.trainCategory !== "On-track machines")
     .map((entry) => mapTrain(entry, shortCode, type))
     .filter((t): t is MappedTrain => t !== null)
     .sort((a, b) => a.sortTime.localeCompare(b.sortTime))
+    .filter((t) => {
+      const key = t.train.trainNumber;
+      if (seen.has(key)) return false;
+      seen.add(key);
+      return true;
+    })
     .map((t) => t.train);
 
   return {
