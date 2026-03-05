@@ -18,11 +18,11 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   metadataBase: baseUrl,
   title: {
-    default: "Rail Radar - Live Train Tracker for Italy & Switzerland",
+    default: "Rail Radar - Live Train Tracker for Italy, Switzerland & Finland",
     template: "%s | Rail Radar",
   },
   description:
-    "Track trains in real time across Italy and Switzerland. Get live delays, platform numbers, and departure info for over 4500 train stations on an interactive map.",
+    "Track trains in real time across Italy, Switzerland, and Finland. Get live delays, platform numbers, and departure info for over 4500 train stations on an interactive map.",
   openGraph: {
     type: "website",
     url: baseUrl,
@@ -32,7 +32,7 @@ export const metadata: Metadata = {
         url: "/og-image.webp",
         width: 1200,
         height: 630,
-        alt: "Rail Radar - Live Train Tracking Map for Italy & Switzerland",
+        alt: "Rail Radar - Live Train Tracking Map for Italy, Switzerland & Finland",
       },
     ],
   },

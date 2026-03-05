@@ -16,7 +16,7 @@ const jsonLd = {
   name: "Rail Radar",
   url: "https://www.railradar24.com",
   description:
-    "Track trains in real time across Italy and Switzerland. Get live delays, platform numbers, and departure info for over 4500 train stations.",
+    "Track trains in real time across Italy, Switzerland, and Finland. Get live delays, platform numbers, and departure info for over 4500 train stations.",
   potentialAction: {
     "@type": "SearchAction",
     target: "https://www.railradar24.com/?q={search_term_string}",
@@ -33,19 +33,19 @@ export default function Home() {
           __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c"),
         }}
       />
-      <h1 className="sr-only">Rail Radar - Live Train Tracker for Italy & Switzerland</h1>
+      <h1 className="sr-only">Rail Radar - Live Train Tracker for Italy, Switzerland & Finland</h1>
       <div className="sr-only">
         <p>
-          Rail Radar is a real-time train tracking application covering Italy and Switzerland.
-          Monitor live departures, arrivals, delays, and platform changes across more than 4500
-          train stations on an interactive map. Stay informed with up-to-date data from RFI and
-          Swiss public transport feeds, whether you are commuting daily or planning a trip across
-          the Alps.
+          Rail Radar is a real-time train tracking application covering Italy, Switzerland, and
+          Finland. Monitor live departures, arrivals, delays, and platform changes across more than
+          4500 train stations on an interactive map. Stay informed with up-to-date data from RFI,
+          Swiss public transport feeds, and Finnish Digitraffic, whether you are commuting daily or
+          planning a trip across Europe.
         </p>
         <p>
           Search any station to see upcoming trains, check real-time delay information, and explore
           trending stations. Rail Radar supports major operators including Trenitalia, Italo,
-          Trenord, SBB, and many regional services. Bookmark your favorite stations for quick access
+          Trenord, SBB, VR, and many regional services. Bookmark your favorite stations for quick access
           and share live views with friends using shareable map links.
         </p>
       </div>
