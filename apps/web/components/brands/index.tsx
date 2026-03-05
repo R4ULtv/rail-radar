@@ -30,6 +30,7 @@ const brandPaths: Record<string, string> = {
   // Other
   obb: "obb",
   sncf: "sncf",
+  vr: "vr",
 };
 
 // Aliases for brands that share icons
