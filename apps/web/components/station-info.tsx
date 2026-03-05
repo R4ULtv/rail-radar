@@ -82,7 +82,7 @@ function TrainListContent({
   ));
 
   if (scrollable) {
-    return <ScrollArea className="max-h-[calc(100vh-164px)]">{trainList}</ScrollArea>;
+    return <ScrollArea className="max-h-[calc(100vh-156px)]">{trainList}</ScrollArea>;
   }
 
   return <div>{trainList}</div>;
@@ -212,7 +212,7 @@ export default function StationInfo() {
               <m.div style={{ height: cardHeight.height }}>
                 <Card
                   ref={cardHeight.contentRef}
-                  className="pt-4 pb-0 gap-4 rounded-md flex flex-col flex-1 w-96"
+                  className="pt-4 pb-0 gap-2 rounded-md flex flex-col flex-1 w-96"
                 >
                   <CardHeader className="relative px-4">
                     <CardAction className="space-x-1">
