@@ -46,7 +46,6 @@ import type { StationVisibility } from "@/hooks/use-map-layers";
 import Image from "next/image";
 import { Button } from "@repo/ui/components/button";
 
-
 const StationList = React.memo(function StationList({
   stations,
   onSelect,

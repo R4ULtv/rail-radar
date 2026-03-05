@@ -30,7 +30,6 @@ export async function generateStaticParams() {
 export const dynamicParams = true;
 export const revalidate = false;
 
-
 export async function generateMetadata({ params }: StationPageProps): Promise<Metadata> {
   const { id } = await params;
   const station = getStation(id);
