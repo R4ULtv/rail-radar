@@ -3,7 +3,7 @@
   "private": true,
   "scripts": {
     "build": "turbo run build",
-    "dev": "turbo run dev",
+    "dev": "turbo run dev --filter=web --filter=api",
     "lint": "turbo run lint",
     "format": "oxfmt",
     "check-types": "turbo run check-types"
