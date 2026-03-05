@@ -95,7 +95,7 @@ const StationList = React.memo(function StationList({
               ) : (
                 <TrainFrontIcon className="size-4 text-muted-foreground" />
               )}
-              <span>{station.name}</span>
+              <span className="max-w-75 md:max-w-61 truncate">{station.name}</span>
               <Image
                 unoptimized
                 src={`https://raw.githubusercontent.com/lipis/flag-icons/refs/heads/main/flags/4x3/${getCountry(station.id)}.svg`}
