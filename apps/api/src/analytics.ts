@@ -1,4 +1,4 @@
-import { getPeriodInterval, STATION_ID_PATTERN, type Period } from "./constants.js";
+import { getPeriodInterval, STATION_ID_PATTERN, type Period } from "./constants";
 
 interface TopStation {
   stationId: string;
