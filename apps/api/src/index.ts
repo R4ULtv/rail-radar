@@ -1,6 +1,7 @@
 import { Hono } from "hono";
 import { cache } from "hono/cache";
 import { cors } from "hono/cors";
+import { createMiddleware } from "hono/factory";
 import { validator } from "hono/validator";
 
 import { stationById, stations } from "@repo/data/stations";
@@ -9,15 +10,15 @@ import {
   getStationStats,
   getTrendingStations,
   recordStationVisit,
-} from "./analytics.js";
+} from "./analytics";
 import {
   CACHE_TTL,
   FUZZY_SEARCH_LIMIT,
   TRENDING_LIMIT,
   VALID_PERIODS,
   type Period,
-} from "./constants.js";
-import { fuzzySearch } from "./fuzzy.js";
+} from "./constants";
+import { fuzzySearch } from "./fuzzy";
 import { getScraperForStation, ScraperError } from "./scrapers";
 
 type Bindings = {
@@ -31,19 +32,37 @@ type Variables = {
   clientIp: string;
 };
 
-const periodValidator = validator("query", (value) => {
+type Env = { Bindings: Bindings; Variables: Variables };
+
+const rateLimit = createMiddleware<Env>(async (c, next) => {
+  const ip = c.req.header("cf-connecting-ip") ?? "unknown";
+  const { success } = await c.env.RATE_LIMITER.limit({ key: ip });
+
+  if (!success) {
+    return c.json({ error: "Too many requests. Please wait a moment and try again." }, 429);
+  }
+
+  c.set("clientIp", ip);
+  await next();
+});
+
+const periodValidator = validator("query", (value, c) => {
   const period = value["period"];
-  return {
-    period: VALID_PERIODS.includes(period as Period) ? (period as Period) : "day",
-  };
+  if (period !== undefined && !VALID_PERIODS.includes(period as Period)) {
+    return c.json({ error: `Invalid period. Must be one of: ${VALID_PERIODS.join(", ")}` }, 400);
+  }
+  return { period: (period as Period) ?? "day" };
 });
 
-const trainTypeValidator = validator("query", (value) => {
+const trainTypeValidator = validator("query", (value, c) => {
   const type = value["type"];
-  return { type: type === "arrivals" ? "arrivals" : "departures" } as const;
+  if (type !== undefined && type !== "arrivals" && type !== "departures") {
+    return c.json({ error: 'Invalid type. Must be "arrivals" or "departures".' }, 400);
+  }
+  return { type: (type ?? "departures") as "arrivals" | "departures" };
 });
 
-const app = new Hono<{ Bindings: Bindings; Variables: Variables }>();
+const app = new Hono<Env>();
 
 app.onError((err, c) => {
   console.error("[API Error]", {
@@ -55,12 +74,18 @@ app.onError((err, c) => {
   return c.json({ error: "Internal server error" }, 500);
 });
 
+app.notFound((c) => {
+  return c.json({ error: "Not found" }, 404);
+});
+
 app.use(
   "*",
   cors({
     origin: ["http://localhost:3000", "http://127.0.0.1:3000", "https://www.railradar24.com"],
   }),
 );
+
+// --- Info routes ---
 
 app.get("/", (c) => {
   return c.json({
@@ -83,29 +108,18 @@ app.get("/robots.txt", (c) => {
   return c.text("User-agent: *\nDisallow: /");
 });
 
-app.get(
-  "/stations",
-  async (c, next) => {
-    const ip = c.req.header("cf-connecting-ip") ?? "unknown";
-    const { success } = await c.env.RATE_LIMITER.limit({ key: ip });
+// --- Station routes ---
 
-    if (!success) {
-      return c.json({ error: "Too many requests. Please wait a moment and try again." }, 429);
-    }
+app.get("/stations", rateLimit, (c) => {
+  const query = c.req.query("q");
 
-    await next();
-  },
-  (c) => {
-    const query = c.req.query("q");
+  if (!query) {
+    return c.json(stations);
+  }
 
-    if (!query) {
-      return c.json(stations);
-    }
-
-    const filtered = fuzzySearch(stations, query, FUZZY_SEARCH_LIMIT);
-    return c.json(filtered);
-  },
-);
+  const filtered = fuzzySearch(stations, query, FUZZY_SEARCH_LIMIT);
+  return c.json(filtered);
+});
 
 app.get(
   "/stations/trending",
@@ -129,29 +143,6 @@ app.get(
         timestamp: new Date().toISOString(),
         period,
         stations: trending,
-      });
-    } catch {
-      return c.json({ error: "Unable to fetch analytics data. Please try again later." }, 500);
-    }
-  },
-);
-
-app.get(
-  "/analytics/overview",
-  cache({
-    cacheName: "analytics-cache",
-    cacheControl: CACHE_TTL.ANALYTICS,
-  }),
-  async (c) => {
-    try {
-      const overview = await getAnalyticsOverview(
-        c.env.CLOUDFLARE_ACCOUNT_ID,
-        c.env.CLOUDFLARE_API_TOKEN,
-      );
-
-      return c.json({
-        timestamp: new Date().toISOString(),
-        ...overview,
       });
     } catch {
       return c.json({ error: "Unable to fetch analytics data. Please try again later." }, 500);
@@ -215,22 +206,11 @@ app.get(
 
 app.get(
   "/stations/:id",
+  rateLimit,
   cache({
     cacheName: "stations-cache",
     cacheControl: CACHE_TTL.STATION_DATA,
   }),
-  async (c, next) => {
-    const ip = c.req.header("cf-connecting-ip") ?? "unknown";
-    const { success } = await c.env.RATE_LIMITER.limit({ key: ip });
-
-    if (!success) {
-      return c.json({ error: "Too many requests. Please wait a moment and try again." }, 429);
-    }
-
-    // Store IP in context to avoid re-reading header later
-    c.set("clientIp", ip);
-    await next();
-  },
   trainTypeValidator,
   async (c) => {
     const id = c.req.param("id");
@@ -279,6 +259,31 @@ app.get(
         return c.json({ error: error.message }, error.statusCode);
       }
       return c.json({ error: "Unable to load train data. Please try again in a moment." }, 500);
+    }
+  },
+);
+
+// --- Analytics routes ---
+
+app.get(
+  "/analytics/overview",
+  cache({
+    cacheName: "analytics-cache",
+    cacheControl: CACHE_TTL.ANALYTICS,
+  }),
+  async (c) => {
+    try {
+      const overview = await getAnalyticsOverview(
+        c.env.CLOUDFLARE_ACCOUNT_ID,
+        c.env.CLOUDFLARE_API_TOKEN,
+      );
+
+      return c.json({
+        timestamp: new Date().toISOString(),
+        ...overview,
+      });
+    } catch {
+      return c.json({ error: "Unable to fetch analytics data. Please try again later." }, 500);
     }
   },
 );
