@@ -9,7 +9,7 @@ src/
 ├── index.ts       # Main entry point
 ├── stations.ts    # Station data exports
 ├── types.ts       # TypeScript type definitions
-└── stations.json  # Raw station data (4500+ stations)
+└── stations.json  # Raw station data (5400+ stations)
 
 scripts/
 └── format-stations.ts  # Formats stations.json (sort + minify)
@@ -55,7 +55,7 @@ import { stations, stationById } from "@repo/data/stations";
 
 ### `stations`
 
-Array of 4500+ railway stations across Italy, Switzerland, and Finland.
+Array of 5400+ railway stations across Europe.
 
 ### `stationById`
 
@@ -67,12 +67,13 @@ const station = stationById.get("IT01700"); // Roma Termini
 
 ### `getCountry`
 
-Get country from a station ID. Returns a country code (`"it"`, `"ch"`, `"fi"`) by default, or a full name (`"italy"`, `"switzerland"`, `"finland"`) with `format: "name"`.
+Get country from a station ID. Returns a country code (`"it"`, `"ch"`, `"fi"`, `"be"`) by default, or a full name (`"italy"`, `"switzerland"`, `"finland"`, `"belgium"`) with `format: "name"`.
 
 ```ts
 getCountry("IT01700"); // "it"
 getCountry("CH8503000"); // "ch"
 getCountry("FI001"); // "fi"
+getCountry("BE95000"); // "be"
 getCountry("IT01700", { format: "name" }); // "italy"
 ```
 
