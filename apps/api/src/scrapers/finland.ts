@@ -1,9 +1,9 @@
 import type { Train } from "@repo/data";
+import { stationById } from "@repo/data/stations";
 import fiStationCodes from "./fi-codes.json";
-import type { ContentfulStatusCode } from "hono/utils/http-status";
 
-import { FETCH_TIMEOUT_MS } from "../constants";
 import { ScraperError, type ScrapeResult } from "./index";
+import { fetchWithTimeout } from "./fetch";
 
 const DIGITRAFFIC_BASE_URL = "https://rata.digitraffic.fi/api/v1";
 const TRAIN_LIMIT = 16;
@@ -12,8 +12,6 @@ const TRAIN_LIMIT = 16;
 const stationCodes = fiStationCodes as Record<string, string>;
 
 // Reverse mapping: shortCode → station name
-import { stationById } from "@repo/data/stations";
-
 const shortCodeToName = new Map<string, string>();
 for (const [uic, code] of Object.entries(stationCodes)) {
   const station = stationById.get(`FI${uic}`);
@@ -155,48 +153,17 @@ export async function scrapeFinlandTrains(
   stationId: string,
   type: "arrivals" | "departures" = "departures",
 ): Promise<ScrapeResult> {
-  const startTime = performance.now();
   const shortCode = getShortCode(stationId);
   const url = buildUrl(shortCode, type);
-  const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), FETCH_TIMEOUT_MS);
-
-  let response: Response;
-  try {
-    response = await fetch(url, {
-      signal: controller.signal,
-      headers: { "Accept-Encoding": "gzip" },
-    });
-  } catch (error) {
-    const fetchError = error instanceof Error ? error : new Error(String(error));
-    const fetchMs = performance.now() - startTime;
-    clearTimeout(timeoutId);
-
-    if (fetchError.name === "AbortError") {
-      throw new ScraperError(
-        "The Finnish train data source is taking too long to respond. Please try again.",
-        504,
-        { fetchMs },
-      );
-    }
-    throw new ScraperError(
-      "Unable to connect to the Finnish train data source. Please try again.",
-      502,
-      { fetchMs },
-    );
-  }
-  const fetchMs = performance.now() - startTime;
-  clearTimeout(timeoutId);
-
-  if (!response.ok) {
-    throw new ScraperError(
-      response.statusText || `HTTP ${response.status}`,
-      response.status as ContentfulStatusCode,
-      { fetchMs },
-    );
-  }
+  const { response, fetchMs } = await fetchWithTimeout(url, "Finnish", {
+    headers: { "Accept-Encoding": "gzip" },
+  });
 
   const data: DigitrafficTrain[] = await response.json();
+
+  if (!Array.isArray(data)) {
+    throw new Error("Invalid response from Finnish train data source.");
+  }
 
   const seen = new Set<string>();
   const trains: Train[] = data

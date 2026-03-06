@@ -1,8 +1,7 @@
 import type { Train } from "@repo/data";
-import type { ContentfulStatusCode } from "hono/utils/http-status";
 
-import { FETCH_TIMEOUT_MS } from "../constants";
-import { ScraperError, type ScrapeResult } from "./index";
+import type { ScrapeResult } from "./index";
+import { fetchWithTimeout } from "./fetch";
 
 const SWISS_BASE_URL = "https://transport.opendata.ch/v1/stationboard";
 
@@ -88,44 +87,13 @@ export async function scrapeSwissTrains(
   type: "arrivals" | "departures" = "departures",
 ): Promise<ScrapeResult> {
   const url = buildSwissUrl(stationId, type === "arrivals");
-  const startTime = performance.now();
-
-  const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), FETCH_TIMEOUT_MS);
-
-  let response: Response;
-  try {
-    response = await fetch(url, { signal: controller.signal });
-  } catch (error) {
-    const fetchError = error instanceof Error ? error : new Error(String(error));
-    const fetchMs = performance.now() - startTime;
-    clearTimeout(timeoutId);
-
-    if (fetchError.name === "AbortError") {
-      throw new ScraperError(
-        "The Swiss train data source is taking too long to respond. Please try again.",
-        504,
-        { fetchMs },
-      );
-    }
-    throw new ScraperError(
-      "Unable to connect to the Swiss train data source. Please try again.",
-      502,
-      { fetchMs },
-    );
-  }
-  const fetchMs = performance.now() - startTime;
-  clearTimeout(timeoutId);
-
-  if (!response.ok) {
-    throw new ScraperError(
-      response.statusText || `HTTP ${response.status}`,
-      response.status as ContentfulStatusCode,
-      { fetchMs },
-    );
-  }
+  const { response, fetchMs } = await fetchWithTimeout(url, "Swiss");
 
   const data: TransportResponse = await response.json();
+
+  if (!data.stationboard || !Array.isArray(data.stationboard)) {
+    throw new Error("Invalid response from Swiss train data source.");
+  }
 
   const trains: Train[] = data.stationboard.map((entry) => {
     const stop = entry.stop;

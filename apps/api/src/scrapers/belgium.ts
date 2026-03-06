@@ -1,8 +1,7 @@
 import type { Train } from "@repo/data";
-import type { ContentfulStatusCode } from "hono/utils/http-status";
 
-import { FETCH_TIMEOUT_MS } from "../constants";
-import { ScraperError, type ScrapeResult } from "./index";
+import type { ScrapeResult } from "./index";
+import { fetchWithTimeout } from "./fetch";
 
 const IRAIL_BASE_URL = "https://api.irail.be/liveboard/";
 
@@ -94,42 +93,7 @@ export async function scrapeBelgiumTrains(
   type: "arrivals" | "departures" = "departures",
 ): Promise<ScrapeResult> {
   const url = buildBelgiumUrl(stationId, type === "arrivals");
-  const startTime = performance.now();
-
-  const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), FETCH_TIMEOUT_MS);
-
-  let response: Response;
-  try {
-    response = await fetch(url, { signal: controller.signal });
-  } catch (error) {
-    const fetchError = error instanceof Error ? error : new Error(String(error));
-    const fetchMs = performance.now() - startTime;
-    clearTimeout(timeoutId);
-
-    if (fetchError.name === "AbortError") {
-      throw new ScraperError(
-        "The Belgian train data source is taking too long to respond. Please try again.",
-        504,
-        { fetchMs },
-      );
-    }
-    throw new ScraperError(
-      "Unable to connect to the Belgian train data source. Please try again.",
-      502,
-      { fetchMs },
-    );
-  }
-  const fetchMs = performance.now() - startTime;
-  clearTimeout(timeoutId);
-
-  if (!response.ok) {
-    throw new ScraperError(
-      response.statusText || `HTTP ${response.status}`,
-      response.status as ContentfulStatusCode,
-      { fetchMs },
-    );
-  }
+  const { response, fetchMs } = await fetchWithTimeout(url, "Belgian");
 
   const data: LiveboardResponse = await response.json();
 
@@ -138,14 +102,14 @@ export async function scrapeBelgiumTrains(
   ).slice(0, 16);
 
   const now = Date.now();
-  const threeMinutes = 3 * 60 * 1000;
+  const recentWindow = 3 * 60 * 1000;
 
   const filtered = entries.filter((entry) => {
     if (entry.canceled === "1") return true;
     if (type === "departures" && entry.left === "1") return true;
     if (type === "arrivals" && entry.arrived === "1") return true;
     const actualTime = parseInt(entry.time, 10) * 1000 + parseInt(entry.delay || "0", 10) * 1000;
-    return actualTime >= now - threeMinutes;
+    return actualTime >= now - recentWindow;
   });
 
   const trains: Train[] = filtered.map((entry) => {
