@@ -88,9 +88,9 @@ function getStatus(
   const timeStr = row.liveEstimateTime ?? row.actualTime ?? row.scheduledTime;
   const time = new Date(timeStr).getTime();
   const now = Date.now();
-  const threeMinutes = 3 * 60 * 1000;
+  const fiveMinutes = 5 * 60 * 1000;
 
-  if (time >= now - threeMinutes && time <= now + threeMinutes) {
+  if (time >= now - fiveMinutes && time <= now + fiveMinutes) {
     return type === "departures" ? "departing" : "incoming";
   }
   return null;

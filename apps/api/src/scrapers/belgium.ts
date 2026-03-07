@@ -74,14 +74,14 @@ function getBelgiumStatus(
   if (type === "departures" && entry.left === "1") return "departing";
   if (type === "arrivals" && entry.arrived === "1") return "incoming";
 
-  // Check if train is within 3-minute window
+  // Check if train is within 5-minute window
   const scheduledTime = parseInt(entry.time, 10) * 1000;
   const delay = parseInt(entry.delay, 10) * 1000;
   const actualTime = scheduledTime + delay;
   const now = Date.now();
-  const threeMinutes = 3 * 60 * 1000;
+  const fiveMinutes = 5 * 60 * 1000;
 
-  if (actualTime >= now - threeMinutes && actualTime <= now + threeMinutes) {
+  if (actualTime >= now - fiveMinutes && actualTime <= now + fiveMinutes) {
     return type === "departures" ? "departing" : "incoming";
   }
 
@@ -102,7 +102,7 @@ export async function scrapeBelgiumTrains(
   ).slice(0, 16);
 
   const now = Date.now();
-  const recentWindow = 3 * 60 * 1000;
+  const recentWindow = 5 * 60 * 1000;
 
   const filtered = entries.filter((entry) => {
     if (entry.canceled === "1") return true;
