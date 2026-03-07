@@ -1,8 +1,11 @@
 import { getPeriodInterval, STATION_ID_PATTERN, type Period } from "./constants";
 
+import { getCountry, type CountryCode } from "@repo/data/stations";
+
 interface TopStation {
   stationId: string;
   stationName: string;
+  country: CountryCode | null;
   visits: number;
   uniqueVisitors: number;
 }
@@ -11,9 +14,17 @@ interface AnalyticsQueryResult {
   data: Array<{
     stationId: string;
     stationName: string;
+    country: string;
     count: number;
     uniqueVisitors: number;
   }>;
+}
+
+interface CountryStats {
+  country: CountryCode;
+  visits: number;
+  uniqueVisitors: number;
+  stationsVisited: number;
 }
 
 interface AnalyticsOverview {
@@ -22,6 +33,7 @@ interface AnalyticsOverview {
   arrivalsCount: number;
   departuresCount: number;
   stationsVisited: number;
+  countries: CountryStats[];
 }
 
 interface AnalyticsOverviewQueryResult {
@@ -30,6 +42,15 @@ interface AnalyticsOverviewQueryResult {
     uniqueVisitors: number;
     arrivalsCount: number;
     departuresCount: number;
+    stationsVisited: number;
+  }>;
+}
+
+interface CountryBreakdownQueryResult {
+  data: Array<{
+    country: string;
+    visits: number;
+    uniqueVisitors: number;
     stationsVisited: number;
   }>;
 }
@@ -64,11 +85,11 @@ async function queryAnalytics<T>(accountId: string, apiToken: string, query: str
 
 export async function recordStationVisit(
   analytics: AnalyticsEngineDataset,
-  data: { stationId: string; stationName: string; ip: string; type: string },
+  data: { stationId: string; stationName: string; ip: string; type: string; country: string },
 ): Promise<void> {
   const hashedIP = await hashIP(data.ip);
   analytics.writeDataPoint({
-    blobs: [data.stationName, hashedIP, data.type, data.stationId],
+    blobs: [data.stationName, hashedIP, data.type, data.stationId, data.country],
     doubles: [],
     indexes: [data.stationId],
   });
@@ -79,17 +100,21 @@ export async function getTrendingStations(
   apiToken: string,
   period: Period = "day",
   limit: number = 5,
+  country?: CountryCode,
 ): Promise<TopStation[]> {
   const { value, unit } = getPeriodInterval(period);
+  const countryFilter = country ? `AND blob5 = '${country}'` : "";
   const query = `
     SELECT
       index1 as stationId,
       blob1 as stationName,
+      blob5 as country,
       sum(_sample_interval) as count,
       count(DISTINCT blob2) as uniqueVisitors
     FROM station_visits
     WHERE timestamp > NOW() - INTERVAL '${value}' ${unit}
-    GROUP BY index1, blob1
+    ${countryFilter}
+    GROUP BY index1, blob1, blob5
     ORDER BY count DESC
   `;
 
@@ -99,6 +124,7 @@ export async function getTrendingStations(
   const merged = new Map<string, TopStation>();
   for (const row of result.data) {
     const id = /^\d+$/.test(row.stationId) ? `IT${row.stationId}` : row.stationId;
+    const rowCountry = (row.country as CountryCode) || getCountry(id);
     const visits = Number(row.count);
     const unique = Number(row.uniqueVisitors);
     const existing = merged.get(id);
@@ -109,6 +135,7 @@ export async function getTrendingStations(
       merged.set(id, {
         stationId: id,
         stationName: row.stationName,
+        country: rowCountry,
         visits,
         uniqueVisitors: unique,
       });
@@ -156,6 +183,7 @@ export async function getStationStats(
     ? {
         stationId: stationData.stationId,
         stationName: stationData.stationName,
+        country: getCountry(stationData.stationId),
         visits: Number(stationData.count),
         uniqueVisitors: Number(stationData.uniqueVisitors),
       }
@@ -170,7 +198,7 @@ export async function getAnalyticsOverview(
   accountId: string,
   apiToken: string,
 ): Promise<AnalyticsOverview> {
-  const query = `
+  const overviewQuery = `
     SELECT
       sum(_sample_interval) as totalVisits,
       count(DISTINCT blob2) as uniqueVisitors,
@@ -180,13 +208,34 @@ export async function getAnalyticsOverview(
     FROM station_visits
   `;
 
-  const result = await queryAnalytics<AnalyticsOverviewQueryResult>(accountId, apiToken, query);
+  const countryQuery = `
+    SELECT
+      blob5 as country,
+      sum(_sample_interval) as visits,
+      count(DISTINCT blob2) as uniqueVisitors,
+      count(DISTINCT index1) as stationsVisited
+    FROM station_visits
+    WHERE blob5 != ''
+    GROUP BY blob5
+    ORDER BY visits DESC
+  `;
+
+  const [overviewResult, countryResult] = await Promise.all([
+    queryAnalytics<AnalyticsOverviewQueryResult>(accountId, apiToken, overviewQuery),
+    queryAnalytics<CountryBreakdownQueryResult>(accountId, apiToken, countryQuery),
+  ]);
 
   return {
-    totalVisits: result.data[0]?.totalVisits ?? 0,
-    uniqueVisitors: result.data[0]?.uniqueVisitors ?? 0,
-    arrivalsCount: result.data[0]?.arrivalsCount ?? 0,
-    departuresCount: result.data[0]?.departuresCount ?? 0,
-    stationsVisited: result.data[0]?.stationsVisited ?? 0,
+    totalVisits: overviewResult.data[0]?.totalVisits ?? 0,
+    uniqueVisitors: overviewResult.data[0]?.uniqueVisitors ?? 0,
+    arrivalsCount: overviewResult.data[0]?.arrivalsCount ?? 0,
+    departuresCount: overviewResult.data[0]?.departuresCount ?? 0,
+    stationsVisited: overviewResult.data[0]?.stationsVisited ?? 0,
+    countries: countryResult.data.map((row) => ({
+      country: row.country as CountryCode,
+      visits: Number(row.visits),
+      uniqueVisitors: Number(row.uniqueVisitors),
+      stationsVisited: Number(row.stationsVisited),
+    })),
   };
 }

@@ -4,7 +4,13 @@ import { cors } from "hono/cors";
 import { createMiddleware } from "hono/factory";
 import { validator } from "hono/validator";
 
-import { stationById, stations } from "@repo/data/stations";
+import {
+  COUNTRY_CODES,
+  getCountry,
+  stationById,
+  stations,
+  type CountryCode,
+} from "@repo/data/stations";
 import {
   getAnalyticsOverview,
   getStationStats,
@@ -96,6 +102,8 @@ app.get("/", (c) => {
       "GET /stations": "List all stations (optional: ?q=search query)",
       "GET /stations/trending":
         "Get trending stations (optional: ?period=hour|day|week, default: day)",
+      "GET /stations/trending/:country":
+        "Get trending stations by country (it|ch|fi|be|nl, optional: ?period=hour|day|week)",
       "GET /stations/:id/stats":
         "Get station visit stats (optional: ?period=hour|day|week, default: day)",
       "GET /stations/:id": "Get station info with trains (optional: ?type=arrivals|departures)",
@@ -142,6 +150,43 @@ app.get(
       return c.json({
         timestamp: new Date().toISOString(),
         period,
+        stations: trending,
+      });
+    } catch {
+      return c.json({ error: "Unable to fetch analytics data. Please try again later." }, 500);
+    }
+  },
+);
+
+app.get(
+  "/stations/trending/:country",
+  cache({
+    cacheName: "analytics-cache",
+    cacheControl: CACHE_TTL.ANALYTICS,
+  }),
+  periodValidator,
+  async (c) => {
+    const country = c.req.param("country") as CountryCode;
+
+    if (!COUNTRY_CODES.includes(country)) {
+      return c.json({ error: `Invalid country. Must be one of: ${COUNTRY_CODES.join(", ")}` }, 400);
+    }
+
+    const { period } = c.req.valid("query");
+
+    try {
+      const trending = await getTrendingStations(
+        c.env.CLOUDFLARE_ACCOUNT_ID,
+        c.env.CLOUDFLARE_API_TOKEN,
+        period,
+        TRENDING_LIMIT,
+        country,
+      );
+
+      return c.json({
+        timestamp: new Date().toISOString(),
+        period,
+        country,
         stations: trending,
       });
     } catch {
@@ -233,7 +278,7 @@ app.get(
     }
 
     try {
-      const { trains, info } = await scraper(id, type);
+      const { trains, info } = await scraper(id, type, c.env);
 
       // Record visit after successful response (non-blocking)
       const ip = c.get("clientIp");
@@ -243,6 +288,7 @@ app.get(
           stationName: station.name,
           ip,
           type,
+          country: getCountry(station.id) ?? "",
         }),
       );
 

@@ -9,14 +9,15 @@ Cloudflare Workers API that provides real-time European train data by scraping o
 
 ## Endpoints
 
-| Method | Path                  | Description                                                         |
-| ------ | --------------------- | ------------------------------------------------------------------- |
-| `GET`  | `/`                   | API info and endpoint documentation                                 |
-| `GET`  | `/stations`           | List all stations (optional: `?q=search`)                           |
-| `GET`  | `/stations/trending`  | Get trending stations (`?period=hour\|day\|week\|month`, default: `day`)   |
-| `GET`  | `/stations/:id`       | Get station with trains (`?type=arrivals\|departures`)                     |
-| `GET`  | `/stations/:id/stats` | Get station visit stats (`?period=hour\|day\|week\|month`, default: `day`) |
-| `GET`  | `/analytics/overview` | Get global analytics (total visits, unique visitors, etc.)          |
+| Method | Path                          | Description                                                                     |
+| ------ | ----------------------------- | ------------------------------------------------------------------------------- |
+| `GET`  | `/`                           | API info and endpoint documentation                                             |
+| `GET`  | `/stations`                   | List all stations (optional: `?q=search`)                                       |
+| `GET`  | `/stations/trending`          | Get trending stations (`?period=hour\|day\|week\|month`, default: `day`)        |
+| `GET`  | `/stations/trending/:country` | Get trending stations by country (`it\|ch\|fi\|be\|nl`, same `?period` options) |
+| `GET`  | `/stations/:id`               | Get station with trains (`?type=arrivals\|departures`)                          |
+| `GET`  | `/stations/:id/stats`         | Get station visit stats (`?period=hour\|day\|week\|month`, default: `day`)      |
+| `GET`  | `/analytics/overview`         | Get global analytics (total visits, unique visitors, country breakdown)         |
 
 ### Caching
 
@@ -25,6 +26,7 @@ Responses are cached to reduce load on upstream sources:
 - `/stations/:id`: 25s cache, 5s stale-while-revalidate
 - `/stations/:id/stats`: 5min cache, 1min stale-while-revalidate
 - `/stations/trending`: 5min cache, 1min stale-while-revalidate
+- `/stations/trending/:country`: 5min cache, 1min stale-while-revalidate
 - `/analytics/overview`: 5min cache, 1min stale-while-revalidate
 
 ### Rate Limiting
