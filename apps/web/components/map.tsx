@@ -123,6 +123,7 @@ export function Map() {
       }}
       mapboxAccessToken={process.env.NEXT_PUBLIC_MAPBOX_TOKEN}
       mapStyle="mapbox://styles/mapbox/dark-v11"
+      projection="mercator"
       maxPitch={0}
       minZoom={4}
       maxZoom={18}
