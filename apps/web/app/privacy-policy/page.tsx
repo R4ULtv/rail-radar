@@ -11,7 +11,10 @@ export const metadata: Metadata = {
 export default function PrivacyPolicyPage() {
   return (
     <div className="mx-auto max-w-3xl px-6 py-16">
-      <Link href="/" className="mb-8 inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground">
+      <Link
+        href="/"
+        className="mb-8 inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground"
+      >
         <ArrowLeftIcon className="size-4" />
         Back to Rail Radar
       </Link>

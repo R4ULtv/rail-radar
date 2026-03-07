@@ -11,7 +11,10 @@ export const metadata: Metadata = {
 export default function TermsOfServicePage() {
   return (
     <div className="mx-auto max-w-3xl px-6 py-16">
-      <Link href="/" className="mb-8 inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground">
+      <Link
+        href="/"
+        className="mb-8 inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground"
+      >
         <ArrowLeftIcon className="size-4" />
         Back to Rail Radar
       </Link>
@@ -86,10 +89,10 @@ export default function TermsOfServicePage() {
             3. No Warranty &amp; Accuracy
           </h2>
           <p>
-            The Service is provided &quot;as is&quot; and &quot;as available&quot; without warranties
-            of any kind. We make no guarantees regarding the accuracy, completeness, or timeliness
-            of the data. Always verify travel information with official railway operators before
-            making travel decisions.
+            The Service is provided &quot;as is&quot; and &quot;as available&quot; without
+            warranties of any kind. We make no guarantees regarding the accuracy, completeness, or
+            timeliness of the data. Always verify travel information with official railway operators
+            before making travel decisions.
           </p>
         </section>
 
@@ -115,17 +118,18 @@ export default function TermsOfServicePage() {
         <section>
           <h2 className="mb-3 text-xl font-semibold text-foreground">6. Third-Party Services</h2>
           <p>
-            The Service relies on third-party services including Mapbox for map rendering, Cloudflare
-            for hosting, Google Fonts for typography, and various public transit data providers. Your
-            use of these services is subject to their respective terms and privacy policies.
+            The Service relies on third-party services including Mapbox for map rendering,
+            Cloudflare for hosting, Google Fonts for typography, and various public transit data
+            providers. Your use of these services is subject to their respective terms and privacy
+            policies.
           </p>
         </section>
 
         <section>
           <h2 className="mb-3 text-xl font-semibold text-foreground">7. Service Availability</h2>
           <p>
-            We may modify, suspend, or discontinue the Service (or any part of it) at any time,
-            with or without notice.
+            We may modify, suspend, or discontinue the Service (or any part of it) at any time, with
+            or without notice.
           </p>
         </section>
 
