@@ -10,9 +10,15 @@ interface SaveButtonProps {
   station: Station;
   variant?: "ghost" | "outline";
   size?: "icon" | "icon-sm";
+  className?: string;
 }
 
-export function SaveButton({ station, variant = "ghost", size = "icon" }: SaveButtonProps) {
+export function SaveButton({
+  station,
+  variant = "ghost",
+  size = "icon",
+  className,
+}: SaveButtonProps) {
   const { isSaved, toggleSaved, savedStations } = useSavedStations();
   const saved = isSaved(station.id);
   const isAtLimit = !saved && savedStations.length >= MAX_SAVED_STATIONS;
@@ -25,6 +31,7 @@ export function SaveButton({ station, variant = "ghost", size = "icon" }: SaveBu
       disabled={isAtLimit}
       aria-label={saved ? "Remove from saved" : "Save station"}
       title={isAtLimit ? `Maximum ${MAX_SAVED_STATIONS} saved stations reached` : undefined}
+      className={className}
     >
       <BookmarkIcon className={cn("size-4", saved && "fill-current")} />
     </Button>
