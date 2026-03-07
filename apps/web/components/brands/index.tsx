@@ -34,6 +34,7 @@ const brandPaths: Record<string, string> = {
   sncb: "sncb",
   eurostar: "eurostar",
   db: "db",
+  ns: "ns",
 };
 
 // Aliases for brands that share icons
