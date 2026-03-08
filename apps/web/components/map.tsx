@@ -6,6 +6,7 @@ import { parseAsFloat, useQueryStates } from "nuqs";
 import { startTransition, useEffect, useState } from "react";
 import type { ViewStateChangeEvent } from "react-map-gl/mapbox";
 
+import { AnnouncementBanner } from "@/components/announcement-banner";
 import { MapControls } from "@/components/map-controls";
 import { MapLayerFilter } from "@/components/map-layer-filter";
 import MapLoading from "@/components/map-loading";
@@ -138,6 +139,7 @@ export function Map() {
           onToggleLayer={toggleLayer}
         />
         <MapControls />
+        <AnnouncementBanner />
         <StationInfo />
       </SelectedStationProvider>
     </MapGL>
