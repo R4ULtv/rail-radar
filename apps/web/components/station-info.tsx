@@ -3,16 +3,13 @@
 import type { Train } from "@repo/data";
 import {
   ArrowDownLeftIcon,
+  ArrowRightIcon,
   ArrowUpRightIcon,
-  CheckIcon,
-  CornerUpRightIcon,
-  InfoIcon,
   MegaphoneIcon,
-  ShareIcon,
   XIcon,
 } from "lucide-react";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { SaveButton } from "@/components/save-button";
 import { TrainRow, TrainRowSkeleton } from "@/components/train-row";
@@ -82,7 +79,7 @@ function TrainListContent({
   ));
 
   if (scrollable) {
-    return <ScrollArea className="max-h-[calc(100vh-164px)]">{trainList}</ScrollArea>;
+    return <ScrollArea className="max-h-[calc(100vh-156px)]">{trainList}</ScrollArea>;
   }
 
   return <div>{trainList}</div>;
@@ -125,47 +122,21 @@ export default function StationInfo() {
   const { selectedStation, clearStation } = useSelectedStation();
   const [type, setType] = useState<"arrivals" | "departures">("departures");
   const [snap, setSnap] = useState<number | string | null>(snapPoints[0] as string);
-  const [copied, setCopied] = useState(false);
   const cardHeight = useAnimatedHeight();
 
   // Derive open state from selectedStation
   const isOpen = !!selectedStation;
 
-  const handleShare = async () => {
-    if (!selectedStation) return;
-
-    const shareUrl = window.location.href;
-    const shareData = {
-      title: selectedStation.name,
-      text: `Check out ${selectedStation.name} on Rail Radar`,
-      url: shareUrl,
-    };
-
-    if (navigator.share) {
-      try {
-        await navigator.share(shareData);
-      } catch (_error) {
-        console.log(_error);
+  useEffect(() => {
+    if (!isOpen) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape" && !e.defaultPrevented) {
+        clearStation();
       }
-    } else {
-      await navigator.clipboard.writeText(shareUrl);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    }
-  };
-
-  const handleDirections = () => {
-    if (!selectedStation?.geo) return;
-
-    const { lat, lng } = selectedStation.geo;
-    const isApple = /iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent);
-
-    const url = isApple
-      ? `https://maps.apple.com/?daddr=${lat},${lng}`
-      : `https://www.google.com/maps/dir/?api=1&origin=Current+Location&destination=${lat},${lng}`;
-
-    window.open(url, "_blank");
-  };
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [isOpen, clearStation]);
 
   const {
     data: trainData,
@@ -201,7 +172,7 @@ export default function StationInfo() {
               <m.div style={{ height: cardHeight.height }}>
                 <Card
                   ref={cardHeight.contentRef}
-                  className="pt-4 pb-0 gap-4 rounded-md flex flex-col flex-1 w-96"
+                  className="pt-4 pb-0 gap-2 rounded-md flex flex-col flex-1 w-96"
                 >
                   <CardHeader className="relative px-4">
                     <CardAction className="space-x-1">
@@ -209,31 +180,24 @@ export default function StationInfo() {
                       <Button
                         variant="ghost"
                         size="icon"
-                        onClick={handleDirections}
-                        aria-label="Directions"
-                      >
-                        <CornerUpRightIcon className="size-4" />
-                      </Button>
-                      <Button variant="ghost" size="icon" onClick={handleShare} aria-label="Share">
-                        {copied ? (
-                          <CheckIcon className="size-4" />
-                        ) : (
-                          <ShareIcon className="size-4" />
-                        )}
-                      </Button>
-                      <Button
-                        variant="ghost"
-                        size="icon"
                         nativeButton={false}
                         render={
                           <Link href={`/station/${selectedStation?.id}`}>
-                            <InfoIcon className="size-4" />
+                            <ArrowRightIcon className="size-4" />
                           </Link>
                         }
                         aria-label="View station details"
                       />
                     </CardAction>
-                    <CardTitle className="truncate">{selectedStation?.name}</CardTitle>
+                    <CardTitle>
+                      <Link
+                        href={`/station/${selectedStation?.id}`}
+                        className="truncate hover:underline inline-flex items-center gap-1 group"
+                      >
+                        {selectedStation?.name}
+                        <ArrowRightIcon className="size-3.5 opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all" />
+                      </Link>
+                    </CardTitle>
                     <CardDescription>
                       <UpdatedStatus
                         isLoading={isLoading}
@@ -283,7 +247,14 @@ export default function StationInfo() {
         )}
       >
         <DrawerHeader className="pb-3 relative group-data-[swipe-direction=down]/drawer-content:text-left">
-          <DrawerTitle className="text-xl pr-39 truncate">{selectedStation?.name}</DrawerTitle>
+          <DrawerTitle className="text-xl pr-20 truncate">
+            <Link
+              href={`/station/${selectedStation?.id}`}
+              className="inline-flex items-center gap-1"
+            >
+              {selectedStation?.name}
+            </Link>
+          </DrawerTitle>
           <DrawerDescription className="text-sm text-muted-foreground h-5">
             <UpdatedStatus
               isLoading={isLoading}
@@ -300,19 +271,13 @@ export default function StationInfo() {
           <StationTabs type={type} onTypeChange={setType} />
           <div className="absolute top-3.5 right-4 flex gap-1">
             {selectedStation && <SaveButton station={selectedStation} />}
-            <Button variant="ghost" size="icon" onClick={handleDirections} aria-label="Directions">
-              <CornerUpRightIcon className="size-4" />
-            </Button>
-            <Button variant="ghost" size="icon" onClick={handleShare} aria-label="Share">
-              {copied ? <CheckIcon className="size-4" /> : <ShareIcon className="size-4" />}
-            </Button>
             <Button
               variant="ghost"
               size="icon"
               nativeButton={false}
               render={
                 <Link href={`/station/${selectedStation?.id}`}>
-                  <InfoIcon className="size-4" />
+                  <ArrowRightIcon className="size-4" />
                 </Link>
               }
               aria-label="View station details"

@@ -1,6 +1,6 @@
 # Rail Radar Studio
 
-Admin tool for managing railway station data across Italy and Switzerland. Add missing coordinates, fix station names, and identify duplicates.
+Admin tool for managing railway station data across Europe. Add missing coordinates, fix station names, and identify duplicates.
 
 ## Tech Stack
 
@@ -28,7 +28,7 @@ Runs on [http://localhost:3001](http://localhost:3001)
 
 ## Features
 
-- Interactive map with 4500+ stations
+- Interactive map with 5400+ stations
 - Station search and filtering (All / Missing coordinates / Duplicates)
 - Click-to-place coordinates for stations missing location
 - Drag markers to fine-tune positions

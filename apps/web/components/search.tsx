@@ -41,15 +41,10 @@ import { useStationSearch } from "@/hooks/use-station-search";
 import { useTrendingStations } from "@/hooks/use-trending-stations";
 
 import { cn } from "@repo/ui/lib/utils";
-import type { Station } from "@repo/data";
+import { getCountry, type Station } from "@repo/data";
 import type { StationVisibility } from "@/hooks/use-map-layers";
 import Image from "next/image";
 import { Button } from "@repo/ui/components/button";
-
-function getCountryCode(stationId: string): string {
-  if (stationId.startsWith("CH")) return "ch";
-  return "it";
-}
 
 const StationList = React.memo(function StationList({
   stations,
@@ -100,11 +95,11 @@ const StationList = React.memo(function StationList({
               ) : (
                 <TrainFrontIcon className="size-4 text-muted-foreground" />
               )}
-              <span>{station.name}</span>
+              <span className="max-w-75 md:max-w-61 truncate">{station.name}</span>
               <Image
                 unoptimized
-                src={`https://raw.githubusercontent.com/lipis/flag-icons/refs/heads/main/flags/4x3/${getCountryCode(station.id)}.svg`}
-                alt={getCountryCode(station.id).toUpperCase()}
+                src={`https://raw.githubusercontent.com/lipis/flag-icons/refs/heads/main/flags/4x3/${getCountry(station.id) ?? "xx"}.svg`}
+                alt={getCountry(station.id)?.toUpperCase() ?? ""}
                 className="size-3 shrink-0 rounded-full object-cover"
                 width={12}
                 height={12}
@@ -437,7 +432,7 @@ export function Search({ hiddenStationTypes }: { hiddenStationTypes: StationVisi
             variant="outline"
             onClick={() => setIsDrawerOpen(true)}
             aria-label="Search stations"
-            className="bg-card hover:bg-muted dark:bg-card dark:hover:bg-muted w-full justify-start active:scale-[0.98] transition-transform duration-100"
+            className="bg-card text-muted-foreground hover:bg-muted dark:bg-card dark:hover:bg-muted w-full justify-start active:scale-[0.98] transition-transform duration-100"
           >
             <SearchIcon className="text-muted-foreground" />
             <span className="flex-1 text-left">Search...</span>
@@ -460,7 +455,7 @@ export function Search({ hiddenStationTypes }: { hiddenStationTypes: StationVisi
               </DrawerDescription>
               <InputGroup className="h-10 bg-background">
                 <InputGroupInput
-                  placeholder="Search Station..."
+                  placeholder="Search..."
                   value={query}
                   onChange={(e) => setQuery(e.target.value)}
                   autoFocus
@@ -511,7 +506,7 @@ export function Search({ hiddenStationTypes }: { hiddenStationTypes: StationVisi
         <InputGroup className="h-9 bg-card dark:bg-card pointer-events-auto">
           <InputGroupInput
             ref={inputRef}
-            placeholder="Search Station..."
+            placeholder="Search..."
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             onBlur={() => setFocusedIndex(-1)}

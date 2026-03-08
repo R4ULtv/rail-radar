@@ -26,7 +26,7 @@ function formatDms(value: number, type: "lat" | "lng") {
   return `${degrees}°${paddedMinutes}'${paddedSeconds}"${hemisphere}`;
 }
 
-export function StationHeader({ station, info }: StationHeaderProps) {
+export function StationActions({ station }: { station: Station }) {
   const [copied, setCopied] = useState(false);
 
   const handleShare = async () => {
@@ -64,6 +64,39 @@ export function StationHeader({ station, info }: StationHeaderProps) {
   };
 
   return (
+    <div className="flex gap-1.5">
+      <SaveButton
+        station={station}
+        size="icon-sm"
+        variant="outline"
+        className="bg-card hover:bg-muted dark:bg-card dark:hover:bg-muted dark:border-border size-8 active:scale-[0.98]"
+      />
+      {station.geo && (
+        <Button
+          variant="outline"
+          size="icon-sm"
+          onClick={handleDirections}
+          aria-label="Directions"
+          className="bg-card hover:bg-muted dark:bg-card dark:hover:bg-muted dark:border-border size-8 active:scale-[0.98]"
+        >
+          <CornerUpRightIcon className="size-4" />
+        </Button>
+      )}
+      <Button
+        variant="outline"
+        size="icon-sm"
+        onClick={handleShare}
+        aria-label="Share"
+        className="bg-card hover:bg-muted dark:bg-card dark:hover:bg-muted dark:border-border size-8 active:scale-[0.98]"
+      >
+        {copied ? <CheckIcon className="size-4" /> : <ShareIcon className="size-4" />}
+      </Button>
+    </div>
+  );
+}
+
+export function StationHeader({ station, info }: StationHeaderProps) {
+  return (
     <div className="space-y-4">
       <div className="flex items-start justify-between gap-4">
         <div>
@@ -74,22 +107,8 @@ export function StationHeader({ station, info }: StationHeaderProps) {
             </p>
           )}
         </div>
-
-        <div className="flex gap-2 shrink-0">
-          <SaveButton station={station} size="icon-sm" />
-          {station.geo && (
-            <Button
-              variant="ghost"
-              size="icon-sm"
-              onClick={handleDirections}
-              aria-label="Directions"
-            >
-              <CornerUpRightIcon className="size-4" />
-            </Button>
-          )}
-          <Button variant="ghost" size="icon-sm" onClick={handleShare} aria-label="Share">
-            {copied ? <CheckIcon className="size-4" /> : <ShareIcon className="size-4" />}
-          </Button>
+        <div className="hidden md:block shrink-0">
+          <StationActions station={station} />
         </div>
       </div>
 

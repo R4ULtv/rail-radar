@@ -6,6 +6,7 @@ import { parseAsFloat, useQueryStates } from "nuqs";
 import { startTransition, useEffect, useState } from "react";
 import type { ViewStateChangeEvent } from "react-map-gl/mapbox";
 
+import { AnnouncementBanner } from "@/components/announcement-banner";
 import { MapControls } from "@/components/map-controls";
 import { MapLayerFilter } from "@/components/map-layer-filter";
 import MapLoading from "@/components/map-loading";
@@ -123,6 +124,7 @@ export function Map() {
       }}
       mapboxAccessToken={process.env.NEXT_PUBLIC_MAPBOX_TOKEN}
       mapStyle="mapbox://styles/mapbox/dark-v11"
+      projection="mercator"
       maxPitch={0}
       minZoom={4}
       maxZoom={18}
@@ -137,6 +139,7 @@ export function Map() {
           onToggleLayer={toggleLayer}
         />
         <MapControls />
+        <AnnouncementBanner />
         <StationInfo />
       </SelectedStationProvider>
     </MapGL>
