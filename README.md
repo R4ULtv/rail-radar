@@ -2,8 +2,8 @@
 
 ## Features
 
-- Interactive map with 5400+ railway stations across Italy, Switzerland, Finland, and Belgium
-- Real-time arrivals and departures from official data sources (RFI, SBB, Digitraffic, iRail)
+- Interactive map with 5400+ railway stations across Italy, Switzerland, Finland, Belgium, and the Netherlands
+- Real-time arrivals and departures from official data sources (RFI, SBB, Digitraffic, iRail, NS)
 - Station search with fuzzy matching
 - Shareable URLs with map state
 - User geolocation support
@@ -73,4 +73,5 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - Swiss train data from [transport.opendata.ch](https://transport.opendata.ch/)
 - Finnish train data from [Digitraffic](https://www.digitraffic.fi/)
 - Belgian train data from [iRail](https://docs.irail.be/) (NMBS/SNCB)
+- Dutch train data from [NS](https://www.ns.nl/) (Nederlandse Spoorwegen)
 - Map rendering by [Mapbox](https://www.mapbox.com/)

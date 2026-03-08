@@ -44,7 +44,8 @@ src/
 │   ├── italy.ts       # RFI data scraper (HTML parsing)
 │   ├── switzerland.ts # Swiss transport API scraper
 │   ├── finland.ts     # Finnish Digitraffic API scraper
-│   └── belgium.ts     # Belgian iRail API scraper
+│   ├── belgium.ts     # Belgian iRail API scraper
+│   └── netherlands.ts # Dutch NS API scraper
 ├── analytics.ts   # Cloudflare Analytics Engine integration
 ├── fuzzy.ts       # Fuzzy search (Damerau-Levenshtein)
 └── constants.ts   # Shared constants (cache TTL, timeouts, validation)
