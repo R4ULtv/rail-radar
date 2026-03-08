@@ -52,9 +52,9 @@ export function MapControls() {
           if (flyTo) console.error("Geolocation error:", error);
         },
         {
-          enableHighAccuracy: true,
+          enableHighAccuracy: false,
           timeout: 10000,
-          maximumAge: 0,
+          maximumAge: 30000,
         },
       );
     },
