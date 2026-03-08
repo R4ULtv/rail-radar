@@ -271,6 +271,10 @@ app.get(
       );
     }
 
+    if (station.type !== "rail") {
+      return c.json({ error: "Only rail stations are supported." }, 400);
+    }
+
     const { type } = c.req.valid("query");
 
     const scraper = getScraperForStation(id);

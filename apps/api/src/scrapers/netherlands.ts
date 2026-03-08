@@ -7,9 +7,6 @@ import { fetchWithTimeout } from "./fetch";
 const NS_BASE_URL = "https://gateway.apiportal.ns.nl/reisinformatie-api/api/v2";
 
 function convertNetherlandsStationId(stationId: string): string {
-  if (stationId.startsWith("NLM")) {
-    throw new ScraperError("Metro stations are not supported by the NS API.", 404);
-  }
   const numericPart = stationId.replace(/^NL/, "");
   return `8400${numericPart}`;
 }
