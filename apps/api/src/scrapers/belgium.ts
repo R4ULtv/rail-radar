@@ -62,7 +62,11 @@ function getBrand(type: string): string {
 
 function formatTimeFromUnix(unixSeconds: string): string {
   const date = new Date(parseInt(unixSeconds, 10) * 1000);
-  return `${date.getHours().toString().padStart(2, "0")}:${date.getMinutes().toString().padStart(2, "0")}`;
+  return date.toLocaleTimeString("nl-BE", {
+    hour: "2-digit",
+    minute: "2-digit",
+    timeZone: "Europe/Brussels",
+  });
 }
 
 function getBelgiumStatus(
@@ -96,6 +100,10 @@ export async function scrapeBelgiumTrains(
   const { response, fetchMs } = await fetchWithTimeout(url, "Belgian");
 
   const data: LiveboardResponse = await response.json();
+
+  if (!data || (!data.departures && !data.arrivals)) {
+    return { trains: [], info: null, timing: { fetchMs } };
+  }
 
   const entries = (
     type === "departures" ? (data.departures?.departure ?? []) : (data.arrivals?.arrival ?? [])

@@ -81,7 +81,11 @@ function getBrand(trainCategory: string): string {
 
 function formatTimeFromISO(isoString: string): string {
   const date = new Date(isoString);
-  return `${date.getHours().toString().padStart(2, "0")}:${date.getMinutes().toString().padStart(2, "0")}`;
+  return date.toLocaleTimeString("nl-NL", {
+    hour: "2-digit",
+    minute: "2-digit",
+    timeZone: "Europe/Amsterdam",
+  });
 }
 
 function calculateDelay(planned: string, actual?: string): number | null {
@@ -136,7 +140,7 @@ export async function scrapeNetherlandsTrains(
 
   if (type === "arrivals") {
     const data: NSArrivalsResponse = await response.json();
-    const entries = data.payload.arrivals ?? [];
+    const entries = data?.payload?.arrivals ?? [];
 
     const filtered = entries.filter((entry) => {
       if (entry.cancelled) return true;
@@ -161,7 +165,7 @@ export async function scrapeNetherlandsTrains(
   }
 
   const data: NSDeparturesResponse = await response.json();
-  const entries = data.payload.departures ?? [];
+  const entries = data?.payload?.departures ?? [];
 
   const filtered = entries.filter((entry) => {
     if (entry.cancelled) return true;
