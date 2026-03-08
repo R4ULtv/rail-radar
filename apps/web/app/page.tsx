@@ -17,7 +17,7 @@ const jsonLd = {
   name: "Rail Radar",
   url: "https://www.railradar24.com",
   description:
-    "Track trains in real time across Italy, Switzerland, and Finland. Get live delays, platform numbers, and departure info for over 4500 train stations.",
+    "Track trains in real time across Italy, Switzerland, Finland, Belgium, and the Netherlands. Get live delays, platform numbers, and departure info for over 5400 train stations.",
   potentialAction: {
     "@type": "SearchAction",
     target: "https://www.railradar24.com/?q={search_term_string}",
@@ -34,20 +34,22 @@ export default function Home() {
           __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c"),
         }}
       />
-      <h1 className="sr-only">Rail Radar - Live Train Tracker for Italy, Switzerland & Finland</h1>
+      <h1 className="sr-only">
+        Rail Radar - Live Train Tracker for Italy, Switzerland, Finland, Belgium & the Netherlands
+      </h1>
       <div className="sr-only">
         <p>
-          Rail Radar is a real-time train tracking application covering Italy, Switzerland, and
-          Finland. Monitor live departures, arrivals, delays, and platform changes across more than
-          4500 train stations on an interactive map. Stay informed with up-to-date data from RFI,
-          Swiss public transport feeds, and Finnish Digitraffic, whether you are commuting daily or
-          planning a trip across Europe.
+          Rail Radar is a real-time train tracking application covering Italy, Switzerland, Finland,
+          Belgium, and the Netherlands. Monitor live departures, arrivals, delays, and platform
+          changes across more than 5400 train stations on an interactive map. Stay informed with
+          up-to-date data from RFI, Swiss public transport feeds, Finnish Digitraffic, iRail, and
+          NS, whether you are commuting daily or planning a trip across Europe.
         </p>
         <p>
           Search any station to see upcoming trains, check real-time delay information, and explore
           trending stations. Rail Radar supports major operators including Trenitalia, Italo,
-          Trenord, SBB, VR, and many regional services. Bookmark your favorite stations for quick
-          access and share live views with friends using shareable map links.
+          Trenord, SBB, VR, NMBS/SNCB, NS, and many regional services. Bookmark your favorite
+          stations for quick access and share live views with friends using shareable map links.
         </p>
       </div>
       <Suspense fallback={<MapLoading />}>
