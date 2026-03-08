@@ -1,6 +1,6 @@
 import { getPeriodInterval, STATION_ID_PATTERN, type Period } from "./constants";
 
-import { getCountry, type CountryCode } from "@repo/data/stations";
+import { COUNTRY_CODES, getCountry, type CountryCode } from "@repo/data/stations";
 
 interface TopStation {
   stationId: string;
@@ -103,6 +103,9 @@ export async function getTrendingStations(
   country?: CountryCode,
 ): Promise<TopStation[]> {
   const { value, unit } = getPeriodInterval(period);
+  if (country && !COUNTRY_CODES.includes(country)) {
+    throw new Error("Invalid country code");
+  }
   const countryFilter = country ? `AND blob5 = '${country}'` : "";
   const query = `
     SELECT
