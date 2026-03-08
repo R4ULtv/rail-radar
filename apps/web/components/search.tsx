@@ -98,7 +98,7 @@ const StationList = React.memo(function StationList({
               <span className="max-w-75 md:max-w-61 truncate">{station.name}</span>
               <Image
                 unoptimized
-                src={`https://raw.githubusercontent.com/lipis/flag-icons/refs/heads/main/flags/4x3/${getCountry(station.id)}.svg`}
+                src={`https://raw.githubusercontent.com/lipis/flag-icons/refs/heads/main/flags/4x3/${getCountry(station.id) ?? "xx"}.svg`}
                 alt={getCountry(station.id)?.toUpperCase() ?? ""}
                 className="size-3 shrink-0 rounded-full object-cover"
                 width={12}
