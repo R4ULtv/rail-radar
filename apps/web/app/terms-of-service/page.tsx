@@ -81,6 +81,28 @@ export default function TermsOfServicePage() {
                 Digitraffic
               </a>
             </li>
+            <li>
+              <strong className="text-foreground">Belgium</strong> &mdash;{" "}
+              <a
+                href="https://docs.irail.be"
+                className="text-foreground underline"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                iRail (NMBS/SNCB)
+              </a>
+            </li>
+            <li>
+              <strong className="text-foreground">Netherlands</strong> &mdash;{" "}
+              <a
+                href="https://www.ns.nl"
+                className="text-foreground underline"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                NS (Nederlandse Spoorwegen)
+              </a>
+            </li>
           </ul>
         </section>
 
