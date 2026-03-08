@@ -28,35 +28,6 @@ export function MapControls() {
     };
   }, [map]);
 
-  React.useEffect(() => {
-    if (!navigator.geolocation || !navigator.permissions) return;
-
-    // Only get location on mount if permission is already granted (don't prompt)
-    navigator.permissions
-      .query({ name: "geolocation" })
-      .then((result) => {
-        if (result.state === "granted") {
-          navigator.geolocation.getCurrentPosition(
-            (position) => {
-              const { longitude, latitude } = position.coords;
-              setUserLocation({ longitude, latitude });
-            },
-            () => {
-              // Error getting location - silently ignore
-            },
-            {
-              enableHighAccuracy: true,
-              timeout: 10000,
-              maximumAge: 60000,
-            },
-          );
-        }
-      })
-      .catch(() => {
-        // Permissions API not supported or error - silently ignore
-      });
-  }, []);
-
   const handleZoomIn = React.useCallback(() => {
     map?.zoomIn();
   }, [map]);
@@ -65,28 +36,57 @@ export function MapControls() {
     map?.zoomOut();
   }, [map]);
 
-  const handleLocate = React.useCallback(() => {
-    if (!navigator.geolocation) return;
+  const fetchLocation = React.useCallback(
+    (flyTo = false) => {
+      if (!navigator.geolocation) return;
 
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        const { longitude, latitude } = position.coords;
-        setUserLocation({ longitude, latitude });
-        map?.flyTo({
-          center: [longitude, latitude],
-          zoom: 14,
-        });
-      },
-      (error) => {
-        console.error("Geolocation error:", error);
-      },
-      {
-        enableHighAccuracy: true,
-        timeout: 10000,
-        maximumAge: 60000,
-      },
-    );
-  }, [map]);
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const { longitude, latitude } = position.coords;
+          setUserLocation({ longitude, latitude });
+          if (flyTo) {
+            map?.flyTo({ center: [longitude, latitude], zoom: 14 });
+          }
+        },
+        (error) => {
+          if (flyTo) console.error("Geolocation error:", error);
+        },
+        {
+          enableHighAccuracy: true,
+          timeout: 10000,
+          maximumAge: 0,
+        },
+      );
+    },
+    [map],
+  );
+
+  const handleLocate = React.useCallback(() => {
+    fetchLocation(true);
+  }, [fetchLocation]);
+
+  React.useEffect(() => {
+    if (!navigator.geolocation || !navigator.permissions) return;
+
+    let intervalId: ReturnType<typeof setInterval> | null = null;
+
+    // Only start polling if permission is already granted (don't prompt)
+    navigator.permissions
+      .query({ name: "geolocation" })
+      .then((result) => {
+        if (result.state === "granted") {
+          fetchLocation();
+          intervalId = setInterval(fetchLocation, 30000);
+        }
+      })
+      .catch(() => {
+        // Permissions API not supported or error - silently ignore
+      });
+
+    return () => {
+      if (intervalId) clearInterval(intervalId);
+    };
+  }, [fetchLocation]);
 
   const handleResetBearing = React.useCallback(() => {
     map?.easeTo({ bearing: 0, pitch: 0 });
