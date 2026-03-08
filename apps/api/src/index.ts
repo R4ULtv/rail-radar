@@ -32,6 +32,7 @@ type Bindings = {
   STATION_ANALYTICS: AnalyticsEngineDataset;
   CLOUDFLARE_ACCOUNT_ID: string;
   CLOUDFLARE_API_TOKEN: string;
+  NS_API_KEY: string;
 };
 
 type Variables = {
