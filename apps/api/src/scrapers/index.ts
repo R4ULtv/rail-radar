@@ -28,6 +28,16 @@ export interface ScrapeResult {
   timing: ScraperTiming;
 }
 
+export function formatTime(isoString: string | null, timeZone: string): string {
+  if (!isoString) return "--:--";
+  return new Date(isoString).toLocaleTimeString("en-US", {
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false,
+    timeZone,
+  });
+}
+
 type ScrapeFn = (
   stationId: string,
   type?: "arrivals" | "departures",

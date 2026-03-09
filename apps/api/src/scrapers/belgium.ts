@@ -1,6 +1,6 @@
 import type { Train } from "@repo/data";
 
-import type { ScrapeResult } from "./index";
+import { type ScrapeResult, formatTime } from "./index";
 import { fetchWithTimeout } from "./fetch";
 
 const IRAIL_BASE_URL = "https://api.irail.be/liveboard/";
@@ -58,15 +58,6 @@ function getBrand(type: string): string {
     default:
       return "SNCB";
   }
-}
-
-function formatTimeFromUnix(unixSeconds: string): string {
-  const date = new Date(parseInt(unixSeconds, 10) * 1000);
-  return date.toLocaleTimeString("nl-BE", {
-    hour: "2-digit",
-    minute: "2-digit",
-    timeZone: "Europe/Brussels",
-  });
 }
 
 function getBelgiumStatus(
@@ -128,7 +119,10 @@ export async function scrapeBelgiumTrains(
       brand: getBrand(entry.vehicleinfo.type),
       category: entry.vehicleinfo.type || null,
       trainNumber: entry.vehicleinfo.number,
-      scheduledTime: formatTimeFromUnix(entry.time),
+      scheduledTime: formatTime(
+        new Date(parseInt(entry.time, 10) * 1000).toISOString(),
+        "Europe/Brussels",
+      ),
       delay: delayMinutes || null,
       platform: entry.platforminfo?.name || entry.platform || null,
       status: getBelgiumStatus(entry, type),

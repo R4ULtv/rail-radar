@@ -2,7 +2,7 @@ import type { Train } from "@repo/data";
 import { stationById } from "@repo/data/stations";
 import fiStationCodes from "./fi-codes.json";
 
-import { ScraperError, type ScrapeResult } from "./index";
+import { ScraperError, type ScrapeResult, formatTime } from "./index";
 import { fetchWithTimeout } from "./fetch";
 
 const DIGITRAFFIC_BASE_URL = "https://rata.digitraffic.fi/api/v1";
@@ -65,14 +65,6 @@ function buildUrl(shortCode: string, type: "arrivals" | "departures"): string {
   return `${DIGITRAFFIC_BASE_URL}/live-trains/station/${shortCode}?${params}`;
 }
 
-function formatTime(isoString: string): string {
-  return new Date(isoString).toLocaleTimeString("fi-FI", {
-    hour: "2-digit",
-    minute: "2-digit",
-    timeZone: "Europe/Helsinki",
-  });
-}
-
 function getStationRow(
   rows: TimeTableRow[],
   stationShortCode: string,
@@ -124,7 +116,7 @@ function mapTrain(
   const origin = commercialStops.find((r) => r.type === "DEPARTURE");
   const destination = [...commercialStops].reverse().find((r) => r.type === "ARRIVAL");
 
-  const scheduledTime = formatTime(stationRow.scheduledTime);
+  const scheduledTime = formatTime(stationRow.scheduledTime, "Europe/Helsinki");
   const category = entry.commuterLineID
     ? `${entry.trainType}${entry.commuterLineID}`
     : entry.trainType;

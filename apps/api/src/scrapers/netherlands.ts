@@ -1,7 +1,6 @@
 import type { Train } from "@repo/data";
 
-import type { ScrapeResult } from "./index";
-import { ScraperError } from "./index";
+import { ScraperError, formatTime, type ScrapeResult } from "./index";
 import { fetchWithTimeout } from "./fetch";
 
 const NS_BASE_URL = "https://gateway.apiportal.ns.nl/reisinformatie-api/api/v2";
@@ -76,15 +75,6 @@ function getBrand(trainCategory: string): string {
   }
 }
 
-function formatTimeFromISO(isoString: string): string {
-  const date = new Date(isoString);
-  return date.toLocaleTimeString("nl-NL", {
-    hour: "2-digit",
-    minute: "2-digit",
-    timeZone: "Europe/Amsterdam",
-  });
-}
-
 function calculateDelay(planned: string, actual?: string): number | null {
   if (!actual) return null;
   const diff = Math.round((new Date(actual).getTime() - new Date(planned).getTime()) / 60000);
@@ -151,7 +141,7 @@ export async function scrapeNetherlandsTrains(
       category: entry.trainCategory || null,
       trainNumber: parseTrainNumber(entry.name),
       origin: entry.origin,
-      scheduledTime: formatTimeFromISO(entry.plannedDateTime),
+      scheduledTime: formatTime(entry.plannedDateTime, "Europe/Amsterdam"),
       delay: calculateDelay(entry.plannedDateTime, entry.actualDateTime),
       platform: entry.actualTrack ?? entry.plannedTrack ?? null,
       status: getStatus(entry, type),
@@ -176,7 +166,7 @@ export async function scrapeNetherlandsTrains(
     category: entry.trainCategory || null,
     trainNumber: parseTrainNumber(entry.name),
     destination: entry.direction,
-    scheduledTime: formatTimeFromISO(entry.plannedDateTime),
+    scheduledTime: formatTime(entry.plannedDateTime, "Europe/Amsterdam"),
     delay: calculateDelay(entry.plannedDateTime, entry.actualDateTime),
     platform: entry.actualTrack ?? entry.plannedTrack ?? null,
     status: getStatus(entry, type),
