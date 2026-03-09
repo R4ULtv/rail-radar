@@ -106,7 +106,7 @@ const lightLabelStyle = (v: Visibility): LayerProps => ({
 const railLayerStyle = (v: Visibility): LayerProps => ({
   id: RAIL_LAYER_ID,
   type: "symbol",
-  minzoom: 5,
+  minzoom: 4,
   filter: ["<=", ["get", "minzoom"], ["zoom"]],
   layout: {
     visibility: v,
@@ -115,7 +115,7 @@ const railLayerStyle = (v: Visibility): LayerProps => ({
       "interpolate",
       ["linear"],
       ["zoom"],
-      5,
+      4,
       ["match", ["get", "importance"], 1, 0.3, 2, 0.25, 0.2],
       10,
       ["match", ["get", "importance"], 1, 0.35, 2, 0.32, 0.3],
@@ -131,7 +131,7 @@ const railLayerStyle = (v: Visibility): LayerProps => ({
 const railLabelStyle = (v: Visibility): LayerProps => ({
   id: "rail-labels",
   type: "symbol",
-  minzoom: 5,
+  minzoom: 4,
   filter: ["<=", ["+", ["get", "minzoom"], 2], ["zoom"]],
   layout: {
     visibility: v,
@@ -196,7 +196,7 @@ const railwayTunnelStyle = (v: Visibility): LayerProps => ({
   },
 });
 
-const IMPORTANCE_MINZOOM: Record<number, number> = { 1: 5, 2: 7, 3: 9, 4: 11 };
+const IMPORTANCE_MINZOOM: Record<number, number> = { 1: 4, 2: 7, 3: 9, 4: 11 };
 
 const railGeojsonData: GeoJSON.FeatureCollection = {
   type: "FeatureCollection",

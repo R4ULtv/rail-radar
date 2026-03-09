@@ -1,11 +1,11 @@
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import Link from "next/link";
-import { stations, stationById, type Station } from "@repo/data";
+import { stations, stationById, getCountry, type Station } from "@repo/data";
 import { Button } from "@repo/ui/components/button";
 import { ArrowLeftIcon } from "lucide-react";
 import { StaticMap } from "@/components/static-map";
-import { StationHeader } from "@/components/station-page/station-header";
+import { StationActions, StationHeader } from "@/components/station-page/station-header";
 import { StationStats } from "@/components/station-page/station-stats";
 import { NearbyStations } from "@/components/station-page/nearby-stations";
 import { TrainBoard } from "@/components/station-page/train-board";
@@ -30,10 +30,6 @@ export async function generateStaticParams() {
 export const dynamicParams = true;
 export const revalidate = false;
 
-function getCountryName(id: string): string {
-  return id.startsWith("CH") ? "Switzerland" : "Italy";
-}
-
 export async function generateMetadata({ params }: StationPageProps): Promise<Metadata> {
   const { id } = await params;
   const station = getStation(id);
@@ -44,7 +40,7 @@ export async function generateMetadata({ params }: StationPageProps): Promise<Me
     };
   }
 
-  const country = getCountryName(id);
+  const country = getCountry(id, { format: "name" });
   const description = `Live train departures and arrivals at ${station.name}, ${country}. Check real-time delays, platform numbers, and schedules updated every 30 seconds.`;
 
   return {
@@ -82,9 +78,8 @@ export default async function StationPage({ params }: StationPageProps) {
     notFound();
   }
 
-  const countryCode = station.id.startsWith("CH") ? "CH" : "IT";
-
-  const country = getCountryName(station.id);
+  const countryCode = getCountry(station.id)?.toUpperCase();
+  const country = getCountry(station.id, { format: "name" });
 
   const jsonLd = {
     "@context": "https://schema.org",
@@ -119,20 +114,22 @@ export default async function StationPage({ params }: StationPageProps) {
           zoom={14}
           className="absolute inset-0"
         />
-        <div className="absolute top-2 left-2 md:top-4 md:left-4 bg-background rounded-md">
-          <Button
-            variant="outline"
-            size="icon-sm"
-            nativeButton={false}
-            render={
-              <Link
-                href={`/?lat=${station.geo.lat}&lng=${station.geo.lng}&zoom=14&station=${station.id}`}
-                aria-label="Back to map"
-              >
-                <ArrowLeftIcon className="size-4" />
-              </Link>
-            }
-          />
+        <Button
+          variant="outline"
+          size="icon-sm"
+          nativeButton={false}
+          className="absolute top-2 left-2 md:top-4 md:left-4 bg-card hover:bg-muted dark:bg-card dark:hover:bg-muted dark:border-border size-8 active:scale-[0.98]"
+          render={
+            <Link
+              href={`/?lat=${station.geo.lat}&lng=${station.geo.lng}&zoom=14&station=${station.id}`}
+              aria-label="Back to map"
+            >
+              <ArrowLeftIcon className="size-4" />
+            </Link>
+          }
+        />
+        <div className="absolute top-2 right-2 md:hidden">
+          <StationActions station={station} />
         </div>
       </div>
 

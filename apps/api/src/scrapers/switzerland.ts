@@ -1,8 +1,7 @@
 import type { Train } from "@repo/data";
-import type { ContentfulStatusCode } from "hono/utils/http-status";
 
-import { FETCH_TIMEOUT_MS } from "../constants";
-import { ScraperError, type ScrapeResult } from "./index";
+import { type ScrapeResult, formatTime } from "./index";
+import { fetchWithTimeout } from "./fetch";
 
 const SWISS_BASE_URL = "https://transport.opendata.ch/v1/stationboard";
 
@@ -42,17 +41,10 @@ interface TransportResponse {
   stationboard: StationboardEntry[];
 }
 
-// Format ISO 8601 timestamp to "HH:MM"
-function formatTimeFromISO(isoString: string | null): string {
-  if (!isoString) return "";
-  const date = new Date(isoString);
-  return `${date.getHours().toString().padStart(2, "0")}:${date.getMinutes().toString().padStart(2, "0")}`;
-}
-
 // Get scheduled time for arrivals - use departure time since that's when train is at the platform
 // (arrival time at current station is not provided, only arrival at final destination)
 function getArrivalTime(stop: Stop): string {
-  return formatTimeFromISO(stop.departure ?? stop.arrival);
+  return formatTime(stop.departure ?? stop.arrival, "Europe/Zurich");
 }
 
 // Prefer real-time platform from prognosis
@@ -88,49 +80,18 @@ export async function scrapeSwissTrains(
   type: "arrivals" | "departures" = "departures",
 ): Promise<ScrapeResult> {
   const url = buildSwissUrl(stationId, type === "arrivals");
-  const startTime = performance.now();
-
-  const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), FETCH_TIMEOUT_MS);
-
-  let response: Response;
-  try {
-    response = await fetch(url, { signal: controller.signal });
-  } catch (error) {
-    const fetchError = error instanceof Error ? error : new Error(String(error));
-    const fetchMs = performance.now() - startTime;
-    clearTimeout(timeoutId);
-
-    if (fetchError.name === "AbortError") {
-      throw new ScraperError(
-        "The Swiss train data source is taking too long to respond. Please try again.",
-        504,
-        { fetchMs },
-      );
-    }
-    throw new ScraperError(
-      "Unable to connect to the Swiss train data source. Please try again.",
-      502,
-      { fetchMs },
-    );
-  }
-  const fetchMs = performance.now() - startTime;
-  clearTimeout(timeoutId);
-
-  if (!response.ok) {
-    throw new ScraperError(
-      response.statusText || `HTTP ${response.status}`,
-      response.status as ContentfulStatusCode,
-      { fetchMs },
-    );
-  }
+  const { response, fetchMs } = await fetchWithTimeout(url, "Swiss");
 
   const data: TransportResponse = await response.json();
+
+  if (!data.stationboard || !Array.isArray(data.stationboard)) {
+    throw new Error("Invalid response from Swiss train data source.");
+  }
 
   const trains: Train[] = data.stationboard.map((entry) => {
     const stop = entry.stop;
     const scheduledTime =
-      type === "departures" ? formatTimeFromISO(stop.departure) : getArrivalTime(stop);
+      type === "departures" ? formatTime(stop.departure, "Europe/Zurich") : getArrivalTime(stop);
 
     // Combine category + line number, trimming leading zeros (e.g., "EC000021" → "EC21")
     const lineNumber = entry.number?.replace(/^0+/, "") || entry.number || "";
