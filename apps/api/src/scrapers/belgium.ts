@@ -3,7 +3,7 @@ import type { Train } from "@repo/data";
 import { type ScrapeResult, formatTime } from "./index";
 import { fetchWithTimeout } from "./fetch";
 
-const IRAIL_BASE_URL = "https://api.irail.be/liveboard/";
+const IRAIL_BASE_URL = "https://api.irail.be/v1/liveboard/";
 
 function convertBelgiumStationId(stationId: string): string {
   // Convert BE station ID to iRail format (e.g., "BE95000" -> "BE.NMBS.008895000")
