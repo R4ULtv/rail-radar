@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useSyncExternalStore } from "react";
 import { SparklesIcon, XIcon } from "lucide-react";
 import { LazyMotion, domAnimation, m, AnimatePresence } from "motion/react";
 import { Alert, AlertTitle, AlertAction } from "@repo/ui/components/alert";
@@ -9,17 +9,18 @@ import { Button } from "@repo/ui/components/button";
 
 const STORAGE_KEY = "banner-dismissed-v1";
 
-export function AnnouncementBanner() {
-  const [visible, setVisible] = useState(false);
+const subscribe = () => () => {};
+const getSnapshot = () => !localStorage.getItem(STORAGE_KEY);
+const getServerSnapshot = () => false;
 
-  useEffect(() => {
-    if (!localStorage.getItem(STORAGE_KEY)) {
-      setVisible(true);
-    }
-  }, []);
+export function AnnouncementBanner() {
+  const shouldShow = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
+  const [dismissed, setDismissed] = useState(false);
+
+  const visible = shouldShow && !dismissed;
 
   const dismiss = () => {
-    setVisible(false);
+    setDismissed(true);
     localStorage.setItem(STORAGE_KEY, "1");
   };
 
