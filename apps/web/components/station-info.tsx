@@ -169,7 +169,7 @@ export default function StationInfo() {
               >
                 <XIcon className="size-4" />
               </Button>
-              <m.div style={{ height: cardHeight.height }}>
+              <m.div style={{ height: cardHeight.height }} className="overflow-hidden rounded-md">
                 <Card
                   ref={cardHeight.contentRef}
                   className="pt-4 pb-0 gap-2 rounded-md flex flex-col flex-1 w-96"
