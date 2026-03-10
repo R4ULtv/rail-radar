@@ -16,42 +16,57 @@ export function useAnimatedHeight(options: UseAnimatedHeightOptions = {}): UseAn
   const { duration = 0.2, shrinkDuration = 0.1, ease = "easeOut" } = options;
 
   const height = useMotionValue(0);
-  const observerRef = React.useRef<ResizeObserver | null>(null);
+
+  const optionsRef = React.useRef({ duration, shrinkDuration, ease });
+  optionsRef.current = { duration, shrinkDuration, ease };
 
   const contentRef = React.useCallback(
     (node: HTMLElement | null) => {
-      if (observerRef.current) {
-        observerRef.current.disconnect();
-        observerRef.current = null;
+      if (!node) return;
+
+      const initialHeight = node.offsetHeight;
+      if (initialHeight > 0) {
+        height.jump(initialHeight);
       }
 
-      if (node) {
-        // Set initial height without animation
-        height.jump(node.offsetHeight);
+      let hasValidHeight = initialHeight > 0;
 
-        observerRef.current = new ResizeObserver(() => {
-          const currentHeight = height.get();
-          const targetHeight = node.offsetHeight;
-          const isShrinking = targetHeight < currentHeight;
+      const observer = new ResizeObserver((entries) => {
+        const entry = entries[0];
+        if (!entry) return;
 
-          animate(height, targetHeight, {
-            duration: isShrinking ? shrinkDuration : duration,
-            ease,
-          });
+        const targetHeight = entry.borderBoxSize?.[0]
+          ? entry.borderBoxSize[0].blockSize
+          : node.offsetHeight;
+
+        if (targetHeight === 0) return;
+
+        if (!hasValidHeight) {
+          hasValidHeight = true;
+          height.jump(targetHeight);
+          return;
+        }
+
+        const currentHeight = height.get();
+        if (Math.abs(targetHeight - currentHeight) < 1) return;
+
+        const { duration, shrinkDuration, ease } = optionsRef.current;
+        const isShrinking = targetHeight < currentHeight;
+
+        animate(height, targetHeight, {
+          duration: isShrinking ? shrinkDuration : duration,
+          ease,
         });
-        observerRef.current.observe(node);
-      }
-    },
-    [height, duration, shrinkDuration, ease],
-  );
+      });
 
-  React.useEffect(() => {
-    return () => {
-      if (observerRef.current) {
-        observerRef.current.disconnect();
-      }
-    };
-  }, []);
+      observer.observe(node);
+
+      return () => {
+        observer.disconnect();
+      };
+    },
+    [height],
+  );
 
   return { contentRef, height };
 }
