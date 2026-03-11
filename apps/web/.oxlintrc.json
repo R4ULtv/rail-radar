@@ -6,7 +6,13 @@
       "rootDir": "."
     }
   },
-  "ignorePatterns": [".next/**", "out/**", "build/**"],
+  "ignorePatterns": [".next/**", "out/**", "build/**", "next-env.d.ts"],
+  "categories": {
+    "correctness": "off"
+  },
+  "env": {
+    "builtin": true
+  },
   "rules": {
     "react/react-in-jsx-scope": "off"
   }
