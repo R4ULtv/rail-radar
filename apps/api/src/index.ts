@@ -144,15 +144,13 @@ app.get(
     const mapboxUrl = `https://api.mapbox.com/styles/v1/mapbox/dark-v11/static/${marker}/${lng},${lat},${zoom},0/1280x256@2x?attribution=false&logo=false&access_token=${c.env.MAPBOX_TOKEN}`;
 
     const accept = c.req.header("accept") ?? "";
-    const image: { format?: "avif" | "webp" } = {};
+    const image: { format?: "webp" } = {};
 
-    if (/image\/avif/.test(accept)) {
-      image.format = "avif";
-    } else if (/image\/webp/.test(accept)) {
+    if (/image\/webp/.test(accept)) {
       image.format = "webp";
     }
 
-    const response = await fetch(mapboxUrl, { cf: { image } });
+    const response = await fetch(mapboxUrl, { cf: { image, quality: 100 } });
 
     if (!response.ok) {
       return c.json({ error: "Failed to fetch map image." }, 502);
