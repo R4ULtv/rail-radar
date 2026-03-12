@@ -143,10 +143,32 @@ app.get(
     const marker = `url-${iconUrl}(${lng},${lat})`;
     const mapboxUrl = `https://api.mapbox.com/styles/v1/mapbox/dark-v11/static/${marker}/${lng},${lat},${zoom},0/1280x256@2x?attribution=false&logo=false&access_token=${c.env.MAPBOX_TOKEN}`;
 
-    const response = await fetch(mapboxUrl);
+    const accept = c.req.header("accept") ?? "";
+    const image: { format?: "avif" | "webp" } = {};
+
+    if (/image\/avif/.test(accept)) {
+      image.format = "avif";
+    } else if (/image\/webp/.test(accept)) {
+      image.format = "webp";
+    }
+
+    const response = await fetch(mapboxUrl, { cf: { image } });
 
     if (!response.ok) {
       return c.json({ error: "Failed to fetch map image." }, 502);
+    }
+
+    if (
+      response.headers.has("cf-resized") &&
+      /err=/.test(response.headers.get("cf-resized") ?? "")
+    ) {
+      const fallback = await fetch(mapboxUrl);
+      if (!fallback.ok) {
+        return c.json({ error: "Failed to fetch map image." }, 502);
+      }
+      return new Response(fallback.body, {
+        headers: { "content-type": fallback.headers.get("content-type") ?? "image/png" },
+      });
     }
 
     return new Response(response.body, {
