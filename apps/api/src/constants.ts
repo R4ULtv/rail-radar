@@ -2,6 +2,7 @@ export const CACHE_TTL = {
   STATION_DATA: "public, max-age=25, stale-while-revalidate=5",
   ANALYTICS: "public, max-age=300, stale-while-revalidate=60",
   RFI_STATUS: "public, max-age=300, stale-while-revalidate=60",
+  STATIC_MAP: "public, max-age=2629746",
 } as const;
 
 export const FETCH_TIMEOUT_MS = 20_000;

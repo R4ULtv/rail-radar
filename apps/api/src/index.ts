@@ -33,6 +33,7 @@ type Bindings = {
   CLOUDFLARE_ACCOUNT_ID: string;
   CLOUDFLARE_API_TOKEN: string;
   NS_API_KEY: string;
+  MAPBOX_TOKEN: string;
 };
 
 type Variables = {
@@ -116,6 +117,45 @@ app.get("/", (c) => {
 app.get("/robots.txt", (c) => {
   return c.text("User-agent: *\nDisallow: /");
 });
+
+// --- Map routes ---
+
+app.get(
+  "/map/static",
+  cache({
+    cacheName: "static-map-cache",
+    cacheControl: CACHE_TTL.STATIC_MAP,
+  }),
+  async (c) => {
+    const lat = parseFloat(c.req.query("lat") ?? "");
+    const lng = parseFloat(c.req.query("lng") ?? "");
+    const zoom = parseInt(c.req.query("zoom") ?? "15", 10);
+
+    if (isNaN(lat) || isNaN(lng) || lat < -90 || lat > 90 || lng < -180 || lng > 180) {
+      return c.json({ error: "Invalid coordinates." }, 400);
+    }
+
+    if (isNaN(zoom) || zoom < 0 || zoom > 22) {
+      return c.json({ error: "Invalid zoom level." }, 400);
+    }
+
+    const iconUrl = encodeURIComponent("https://www.railradar24.com/station-icon.png");
+    const marker = `url-${iconUrl}(${lng},${lat})`;
+    const mapboxUrl = `https://api.mapbox.com/styles/v1/mapbox/dark-v11/static/${marker}/${lng},${lat},${zoom},0/1280x256@2x?attribution=false&logo=false&access_token=${c.env.MAPBOX_TOKEN}`;
+
+    const response = await fetch(mapboxUrl);
+
+    if (!response.ok) {
+      return c.json({ error: "Failed to fetch map image." }, 502);
+    }
+
+    return new Response(response.body, {
+      headers: {
+        "content-type": response.headers.get("content-type") ?? "image/png",
+      },
+    });
+  },
+);
 
 // --- Station routes ---
 
