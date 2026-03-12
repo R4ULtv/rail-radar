@@ -10,8 +10,8 @@
   },
   "devDependencies": {
     "eslint-plugin-turbo": "^2.8.16",
-    "oxfmt": "^0.36.0",
-    "oxlint": "^1.53.0",
+    "oxfmt": "^0.39.0",
+    "oxlint": "^1.54.0",
     "turbo": "^2.8.16",
     "typescript": "^5.9.3"
   },
