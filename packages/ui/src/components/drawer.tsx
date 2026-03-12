@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { DrawerPreview as DrawerPrimitive } from "@base-ui/react/drawer";
+import { Drawer as DrawerPrimitive } from "@base-ui/react/drawer";
 
 import { cn } from "@repo/ui/lib/utils";
 
@@ -49,6 +49,10 @@ function Drawer({ modal = true, ...props }: DrawerPrimitive.Root.Props) {
 
 function DrawerTrigger({ ...props }: DrawerPrimitive.Trigger.Props) {
   return <DrawerPrimitive.Trigger data-slot="drawer-trigger" {...props} />;
+}
+
+function DrawerSwipeArea({ ...props }: DrawerPrimitive.SwipeArea.Props) {
+  return <DrawerPrimitive.SwipeArea data-slot="drawer-swipe-area" {...props} />;
 }
 
 function DrawerPortal({ ...props }: DrawerPrimitive.Portal.Props) {
@@ -283,6 +287,7 @@ export {
   DrawerPopup,
   DrawerPortal,
   DrawerProvider,
+  DrawerSwipeArea,
   DrawerTitle,
   DrawerTrigger,
   DrawerViewport,
