@@ -27,7 +27,7 @@ export function SaveButton({
     <Button
       variant={variant}
       size={size}
-      onClick={() => toggleSaved(station.id)}
+      onClick={() => toggleSaved(station)}
       disabled={isAtLimit}
       aria-label={saved ? "Remove from saved" : "Save station"}
       title={isAtLimit ? `Maximum ${MAX_SAVED_STATIONS} saved stations reached` : undefined}

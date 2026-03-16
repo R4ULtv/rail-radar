@@ -75,7 +75,11 @@ function TrainListContent({
   }
 
   const trainList = trainData.map((train) => (
-    <TrainRow key={`${train.trainNumber}-${train.scheduledTime}`} train={train} type={type} />
+    <TrainRow
+      key={`${train.trainNumber}-${train.scheduledTime}-${train.platform}`}
+      train={train}
+      type={type}
+    />
   ));
 
   if (scrollable) {
@@ -192,10 +196,9 @@ export default function StationInfo() {
                     <CardTitle>
                       <Link
                         href={`/station/${selectedStation?.id}`}
-                        className="truncate hover:underline inline-flex items-center gap-1 group"
+                        className="truncate hover:underline block max-w-68"
                       >
                         {selectedStation?.name}
-                        <ArrowRightIcon className="size-3.5 opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all" />
                       </Link>
                     </CardTitle>
                     <CardDescription>
