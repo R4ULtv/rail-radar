@@ -2,7 +2,7 @@ export const COUNTRY_CODES = ["it", "ch", "fi", "be", "nl"] as const;
 export type CountryCode = (typeof COUNTRY_CODES)[number];
 export type CountryName = "italy" | "switzerland" | "finland" | "belgium" | "netherlands";
 
-const COUNTRY_MAP: Record<CountryCode, CountryName> = {
+export const COUNTRY_MAP: Record<CountryCode, CountryName> = {
   it: "italy",
   ch: "switzerland",
   fi: "finland",
