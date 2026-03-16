@@ -14,6 +14,7 @@ import StationInfo from "@/components/station-info";
 import { StationMarkers } from "@/components/station-markers";
 import { useMapLayers } from "@/hooks/use-map-layers";
 import { SelectedStationProvider } from "@/hooks/use-selected-station";
+import { AnnouncementBanner } from "@/components/announcement-banner";
 
 const MapGL = dynamic(() => import("react-map-gl/mapbox").then((mod) => mod.Map), {
   ssr: false,
@@ -139,6 +140,7 @@ export function Map() {
         />
         <MapControls />
         <StationInfo />
+        <AnnouncementBanner />
       </SelectedStationProvider>
     </MapGL>
   );

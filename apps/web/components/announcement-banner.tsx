@@ -1,13 +1,13 @@
 "use client";
 
 import { useState, useSyncExternalStore } from "react";
-import { SparklesIcon, XIcon } from "lucide-react";
+import { InfoIcon, XIcon } from "lucide-react";
 import { LazyMotion, domAnimation, m, AnimatePresence } from "motion/react";
 import { Alert, AlertTitle, AlertAction } from "@repo/ui/components/alert";
 import { Badge } from "@repo/ui/components/badge";
 import { Button } from "@repo/ui/components/button";
 
-const STORAGE_KEY = "banner-dismissed-v1";
+const STORAGE_KEY = "banner-dismissed-v2";
 
 const subscribe = () => () => {};
 const getSnapshot = () => !localStorage.getItem(STORAGE_KEY);
@@ -41,13 +41,16 @@ export function AnnouncementBanner() {
                   variant="default"
                   className="text-[10px] uppercase tracking-wide mr-1.5 align-middle"
                 >
-                  <SparklesIcon data-icon="inline-start" />
-                  <span className="hidden md:block">New</span>
+                  <InfoIcon data-icon="inline-start" />
+                  <span className="hidden md:block">Notice</span>
                 </Badge>
                 <span className="hidden md:inline">
-                  ~2000 stations added ⋅ 🇧🇪 Belgium, 🇳🇱 Netherlands &amp; 🇫🇮 Finland now live!
+                  Due to internal changes, saved &amp; recent stations have been reset. Sorry about
+                  that!
                 </span>
-                <span className="md:hidden">🇧🇪 🇳🇱 🇫🇮 3 new countries &amp; ~2000 stations!</span>
+                <span className="md:hidden">
+                  Saved &amp; recent stations have been reset. Sorry!
+                </span>
               </AlertTitle>
               <AlertAction className="top-1.5">
                 <Button variant="ghost" size="icon-xs" onClick={dismiss} aria-label="Dismiss">
