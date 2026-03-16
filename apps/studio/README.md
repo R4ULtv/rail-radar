@@ -76,4 +76,4 @@ Runs on [http://localhost:3001](http://localhost:3001)
 
 ## Data Files
 
-Station data is managed in `packages/data/src/stations.json`.
+Station data is managed in `packages/data/src/stations.geojson`.

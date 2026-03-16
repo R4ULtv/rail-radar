@@ -4,7 +4,6 @@ import { useMemo, useState } from "react";
 import {
   CopyIcon,
   ListIcon,
-  MapPinOffIcon,
   PlusIcon,
   SearchIcon,
   SquareMIcon,
@@ -19,7 +18,7 @@ import type { Station } from "@repo/data";
 import { cn } from "@repo/ui/lib/utils";
 import type { ChangeType } from "../types/contribution";
 
-type FilterType = "all" | "missing" | "metro" | "light" | "duplicate";
+type FilterType = "all" | "metro" | "light" | "duplicate";
 
 interface StationSidebarProps {
   stations: Station[];
@@ -66,9 +65,7 @@ export function StationSidebar({
     }
 
     // Apply type filter
-    if (filter === "missing") {
-      result = result.filter((s) => !s.geo);
-    } else if (filter === "metro") {
+    if (filter === "metro") {
       result = result.filter((s) => s.type === "metro");
     } else if (filter === "light") {
       result = result.filter((s) => s.type === "light");
@@ -102,7 +99,6 @@ export function StationSidebar({
   const renderStationItem = (station: Station) => {
     const changeType = changedStationIds?.get(station.id);
     const changeIndicatorColor = getChangeIndicatorColor(changeType);
-    const hasGeo = !!station.geo;
 
     return (
       <button
@@ -114,12 +110,7 @@ export function StationSidebar({
         )}
       >
         <span className="relative flex items-center justify-center">
-          <span
-            className={cn(
-              "size-2 shrink-0 rounded-full",
-              hasGeo ? "bg-green-500" : "bg-muted-foreground/50",
-            )}
-          />
+          <span className="size-2 shrink-0 rounded-full bg-green-500" />
           {changeType && (
             <span
               className={cn(
@@ -174,10 +165,6 @@ export function StationSidebar({
             <TabsTrigger value="all">
               <ListIcon className="size-3" />
               {filter === "all" && "All"}
-            </TabsTrigger>
-            <TabsTrigger value="missing">
-              <MapPinOffIcon className="size-3" />
-              {filter === "missing" && "Missing"}
             </TabsTrigger>
             <TabsTrigger value="metro">
               <SquareMIcon className="size-3" />

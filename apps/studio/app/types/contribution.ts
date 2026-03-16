@@ -10,9 +10,7 @@ export interface ChangeDetails {
   newName?: string;
   previousGeo?: GeoCoordinates | null;
   newGeo?: GeoCoordinates | null;
-  coordinatesAdded?: boolean;
   coordinatesUpdated?: boolean;
-  coordinatesRemoved?: boolean;
   nameChanged?: boolean;
   typeChanged?: boolean;
   previousType?: string;
@@ -33,17 +31,12 @@ export interface StationChange {
 export interface ContributionSession {
   startedAt: Date;
   changes: StationChange[];
-  initialCoverage: number;
 }
 
 export interface ContributionStats {
   changesCount: number;
-  coordinatesAdded: number;
   coordinatesUpdated: number;
-  coordinatesRemoved: number;
   stationsRenamed: number;
   stationsCreated: number;
   stationsDeleted: number;
-  initialCoverage: number;
-  currentCoverage: number;
 }

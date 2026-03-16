@@ -22,12 +22,6 @@ function getTypeBadge(type: StationChange["type"]): string {
 export function generatePRTitle(stats: ContributionStats): string {
   const parts: string[] = [];
 
-  if (stats.coordinatesAdded > 0) {
-    parts.push(
-      `add ${stats.coordinatesAdded} coordinate${stats.coordinatesAdded !== 1 ? "s" : ""}`,
-    );
-  }
-
   if (stats.coordinatesUpdated > 0) {
     parts.push(
       `update ${stats.coordinatesUpdated} coordinate${stats.coordinatesUpdated !== 1 ? "s" : ""}`,
@@ -79,13 +73,8 @@ function formatChangeDescription(change: StationChange): FormattedChange {
   const updates: string[] = [];
   let mapLink: string | null = null;
 
-  if (details.coordinatesAdded && details.newGeo) {
-    updates.push(
-      `Added coordinates (${details.newGeo.lat.toFixed(4)}, ${details.newGeo.lng.toFixed(4)})`,
-    );
-    mapLink = generateGoogleMapsLink(details.newGeo.lat, details.newGeo.lng);
-  } else if (details.coordinatesUpdated && details.newGeo) {
-    updates.push(`Updated to (${details.newGeo.lat.toFixed(4)}, ${details.newGeo.lng.toFixed(4)})`);
+  if (details.coordinatesUpdated && details.newGeo) {
+    updates.push(`Moved to (${details.newGeo.lat.toFixed(4)}, ${details.newGeo.lng.toFixed(4)})`);
     mapLink = generateGoogleMapsLink(details.newGeo.lat, details.newGeo.lng);
   }
 
@@ -120,11 +109,6 @@ export function generatePRBody(changes: StationChange[], stats: ContributionStat
   lines.push("## Summary");
   const summaryParts: string[] = [];
 
-  if (stats.coordinatesAdded > 0) {
-    summaryParts.push(
-      `Added coordinates for ${stats.coordinatesAdded} station${stats.coordinatesAdded !== 1 ? "s" : ""}`,
-    );
-  }
   if (stats.coordinatesUpdated > 0) {
     summaryParts.push(
       `Updated coordinates for ${stats.coordinatesUpdated} station${stats.coordinatesUpdated !== 1 ? "s" : ""}`,
@@ -162,21 +146,6 @@ export function generatePRBody(changes: StationChange[], stats: ContributionStat
     lines.push(`| ${change.stationName} | ${typeBadge} | ${details} | ${mapCell} | ${rfiCell} |`);
   }
 
-  lines.push("");
-
-  // Stats
-  lines.push("## Stats");
-  const coverageChange = stats.currentCoverage - stats.initialCoverage;
-  const coverageChangeText =
-    coverageChange > 0
-      ? ` (+${coverageChange.toFixed(1)}%)`
-      : coverageChange < 0
-        ? ` (${coverageChange.toFixed(1)}%)`
-        : "";
-
-  lines.push(
-    `- Coverage: ${stats.initialCoverage.toFixed(1)}% -> ${stats.currentCoverage.toFixed(1)}%${coverageChangeText}`,
-  );
   lines.push("");
 
   // Footer

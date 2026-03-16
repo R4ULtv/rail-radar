@@ -16,7 +16,7 @@ interface ContributionContextValue {
   changes: StationChange[];
   stats: ContributionStats | null;
   changedStationIds: Map<string, ChangeType>;
-  startSession: (stations: Station[]) => void;
+  startSession: () => void;
   recordChange: (type: ChangeType, station: Station, previousStation?: Station) => void;
   clearSession: () => void;
   isSessionActive: boolean;
@@ -24,21 +24,10 @@ interface ContributionContextValue {
 
 const ContributionContext = createContext<ContributionContextValue | null>(null);
 
-function calculateCoverage(stations: Station[]): number {
-  if (stations.length === 0) return 0;
-  const withCoords = stations.filter((s) => s.geo).length;
-  return (withCoords / stations.length) * 100;
-}
-
-function calculateStats(
-  session: ContributionSession,
-  currentStations: Station[],
-): ContributionStats {
+function calculateStats(session: ContributionSession): ContributionStats {
   const changes = session.changes;
 
-  let coordinatesAdded = 0;
   let coordinatesUpdated = 0;
-  let coordinatesRemoved = 0;
   let stationsRenamed = 0;
   let stationsCreated = 0;
   let stationsDeleted = 0;
@@ -46,20 +35,11 @@ function calculateStats(
   for (const change of changes) {
     if (change.type === "created") {
       stationsCreated++;
-      if (change.details.newGeo) {
-        coordinatesAdded++;
-      }
     } else if (change.type === "deleted") {
       stationsDeleted++;
     } else if (change.type === "updated") {
-      if (change.details.coordinatesAdded) {
-        coordinatesAdded++;
-      }
       if (change.details.coordinatesUpdated) {
         coordinatesUpdated++;
-      }
-      if (change.details.coordinatesRemoved) {
-        coordinatesRemoved++;
       }
       if (change.details.nameChanged) {
         stationsRenamed++;
@@ -69,14 +49,10 @@ function calculateStats(
 
   return {
     changesCount: changes.length,
-    coordinatesAdded,
     coordinatesUpdated,
-    coordinatesRemoved,
     stationsRenamed,
     stationsCreated,
     stationsDeleted,
-    initialCoverage: session.initialCoverage,
-    currentCoverage: calculateCoverage(currentStations),
   };
 }
 
@@ -87,7 +63,6 @@ interface SerializedSession {
       timestamp: string;
     }
   >;
-  initialCoverage: number;
 }
 
 function serializeSession(session: ContributionSession): string {
@@ -97,7 +72,6 @@ function serializeSession(session: ContributionSession): string {
       ...c,
       timestamp: c.timestamp.toISOString(),
     })),
-    initialCoverage: session.initialCoverage,
   };
   return JSON.stringify(serialized);
 }
@@ -111,7 +85,6 @@ function deserializeSession(data: string): ContributionSession | null {
         ...c,
         timestamp: new Date(c.timestamp),
       })),
-      initialCoverage: parsed.initialCoverage,
     };
   } catch {
     return null;
@@ -157,16 +130,14 @@ export function ContributionProvider({
       setSession({
         startedAt: new Date(),
         changes: [],
-        initialCoverage: calculateCoverage(stations),
       });
     }
   }, [isInitialized, session, stations]);
 
-  const startSession = useCallback((currentStations: Station[]) => {
+  const startSession = useCallback(() => {
     setSession({
       startedAt: new Date(),
       changes: [],
-      initialCoverage: calculateCoverage(currentStations),
     });
   }, []);
 
@@ -190,19 +161,12 @@ export function ContributionProvider({
           change.details.previousName = station.name;
           change.details.previousGeo = station.geo ?? null;
         } else if (type === "updated" && previousStation) {
-          // Check what changed
           const nameChanged = previousStation.name !== station.name;
           const typeChanged = previousStation.type !== station.type;
           const importanceChanged = previousStation.importance !== station.importance;
-          const hadGeo = !!previousStation.geo;
-          const hasGeo = !!station.geo;
-          const coordinatesAdded = !hadGeo && hasGeo;
-          const coordinatesRemoved = hadGeo && !hasGeo;
           const coordinatesUpdated =
-            hadGeo &&
-            hasGeo &&
-            (previousStation.geo!.lat !== station.geo!.lat ||
-              previousStation.geo!.lng !== station.geo!.lng);
+            previousStation.geo!.lat !== station.geo!.lat ||
+            previousStation.geo!.lng !== station.geo!.lng;
 
           change.stationName = station.name;
           change.details = {
@@ -210,9 +174,7 @@ export function ContributionProvider({
             newName: nameChanged ? station.name : undefined,
             previousGeo: previousStation.geo ?? null,
             newGeo: station.geo ?? null,
-            coordinatesAdded,
             coordinatesUpdated,
-            coordinatesRemoved,
             nameChanged,
             typeChanged,
             previousType: typeChanged ? previousStation.type : undefined,
@@ -239,14 +201,13 @@ export function ContributionProvider({
     setSession({
       startedAt: new Date(),
       changes: [],
-      initialCoverage: calculateCoverage(stations),
     });
-  }, [stations]);
+  }, []);
 
   const stats = useMemo(() => {
     if (!session) return null;
-    return calculateStats(session, stations);
-  }, [session, stations]);
+    return calculateStats(session);
+  }, [session]);
 
   const changedStationIds = useMemo(() => {
     const map = new Map<string, ChangeType>();

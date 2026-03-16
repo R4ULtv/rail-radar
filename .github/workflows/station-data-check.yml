@@ -4,7 +4,7 @@ on:
   pull_request:
     branches: [main]
     paths:
-      - "packages/data/src/stations-with-coords.json"
+      - "packages/data/src/stations.geojson"
 
 permissions:
   contents: read
@@ -36,14 +36,14 @@ jobs:
 
       - name: Get base branch file
         run: |
-          git show origin/${{ github.base_ref }}:packages/data/src/stations-with-coords.json > /tmp/stations-base.json
+          git show origin/${{ github.base_ref }}:packages/data/src/stations.geojson > /tmp/stations-base.geojson
 
       - name: Run validation and diff
         id: validate
         run: |
           npx tsx .github/scripts/validate-stations.ts \
-            --base=/tmp/stations-base.json \
-            --head=packages/data/src/stations-with-coords.json \
+            --base=/tmp/stations-base.geojson \
+            --head=packages/data/src/stations.geojson \
             --output=/tmp/report.md
 
       - name: Read report

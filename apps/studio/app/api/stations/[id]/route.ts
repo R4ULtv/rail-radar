@@ -1,18 +1,28 @@
 import { NextResponse } from "next/server";
 import fs from "fs/promises";
 import path from "path";
-import type { Station } from "@repo/data";
+import type { Station, StationFeature, StationFeatureCollection } from "@repo/data";
 
-const DATA_FILE_PATH = path.join(process.cwd(), "../..", "packages/data/src/stations.json");
+const DATA_FILE_PATH = path.join(process.cwd(), "../..", "packages/data/src/stations.geojson");
 
-async function readStations(): Promise<Station[]> {
+async function readGeoJSON(): Promise<StationFeatureCollection> {
   const content = await fs.readFile(DATA_FILE_PATH, "utf-8");
   return JSON.parse(content);
 }
 
-async function writeStations(stations: Station[]): Promise<void> {
-  const content = JSON.stringify(stations);
-  await fs.writeFile(DATA_FILE_PATH, content, "utf-8");
+async function writeGeoJSON(geojson: StationFeatureCollection): Promise<void> {
+  await fs.writeFile(DATA_FILE_PATH, JSON.stringify(geojson), "utf-8");
+}
+
+function featureToStation(feature: StationFeature): Station {
+  const [lng, lat] = feature.geometry.coordinates;
+  return {
+    id: feature.properties.id,
+    name: feature.properties.name,
+    type: feature.properties.type,
+    importance: feature.properties.importance,
+    geo: { lat: lat!, lng: lng! },
+  };
 }
 
 type RouteParams = { params: Promise<{ id: string }> };
@@ -23,31 +33,51 @@ export async function PUT(request: Request, { params }: RouteParams) {
     const body = await request.json();
     const { name, geo, type, importance } = body;
 
-    const stations = await readStations();
-    const index = stations.findIndex((s) => s.id === id);
-    const existingStation = stations[index];
+    const geojson = await readGeoJSON();
+    const index = geojson.features.findIndex((f) => f.properties.id === id);
+    const existing = geojson.features[index];
 
-    if (index === -1 || !existingStation) {
+    if (index === -1 || !existing) {
       return NextResponse.json({ error: "Station not found" }, { status: 404 });
     }
+
+    const existingStation = featureToStation(existing);
+
+    const updatedType =
+      type === "rail" || type === "metro" || type === "light" ? type : existingStation.type;
+    const updatedImportance: 1 | 2 | 3 | 4 = [1, 2, 3, 4].includes(importance)
+      ? importance
+      : existingStation.importance;
+    const updatedGeo = geo
+      ? {
+          lat: Math.round(Number(geo.lat) * 1e6) / 1e6,
+          lng: Math.round(Number(geo.lng) * 1e6) / 1e6,
+        }
+      : existingStation.geo!;
 
     const updatedStation: Station = {
       id,
       name: name !== undefined ? String(name).trim() : existingStation.name,
-      type: type === "rail" || type === "metro" || type === "light" ? type : existingStation.type,
-      importance: [1, 2, 3, 4].includes(importance) ? importance : existingStation.importance,
-      geo: geo
-        ? {
-            lat: Math.round(Number(geo.lat) * 1e6) / 1e6,
-            lng: Math.round(Number(geo.lng) * 1e6) / 1e6,
-          }
-        : geo === null
-          ? undefined
-          : existingStation.geo,
+      type: updatedType,
+      importance: updatedImportance,
+      geo: updatedGeo,
     };
 
-    stations[index] = updatedStation;
-    await writeStations(stations);
+    geojson.features[index] = {
+      type: "Feature",
+      properties: {
+        id,
+        name: updatedStation.name,
+        type: updatedType,
+        importance: updatedImportance,
+      },
+      geometry: {
+        type: "Point",
+        coordinates: [updatedGeo.lng, updatedGeo.lat],
+      },
+    };
+
+    await writeGeoJSON(geojson);
 
     return NextResponse.json(updatedStation);
   } catch (error) {
@@ -59,18 +89,18 @@ export async function PUT(request: Request, { params }: RouteParams) {
 export async function DELETE(_request: Request, { params }: RouteParams) {
   try {
     const { id } = await params;
-    const stations = await readStations();
-    const index = stations.findIndex((s) => s.id === id);
+    const geojson = await readGeoJSON();
+    const index = geojson.features.findIndex((f) => f.properties.id === id);
 
     if (index === -1) {
       return NextResponse.json({ error: "Station not found" }, { status: 404 });
     }
 
-    const deletedStation = stations[index];
-    stations.splice(index, 1);
-    await writeStations(stations);
+    const deleted = featureToStation(geojson.features[index]!);
+    geojson.features.splice(index, 1);
+    await writeGeoJSON(geojson);
 
-    return NextResponse.json(deletedStation);
+    return NextResponse.json(deleted);
   } catch (error) {
     console.error("Failed to delete station:", error);
     return NextResponse.json({ error: "Failed to delete station" }, { status: 500 });

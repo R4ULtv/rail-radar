@@ -3,35 +3,46 @@
 /**
  * Station Data Validator and Diff Reporter
  *
- * Validates stations-with-coords.json and generates a PR comment
+ * Validates stations.geojson and generates a PR comment
  * with statistics and detailed change information.
  */
 
 import { readFileSync, writeFileSync, appendFileSync } from "fs";
 import { parseArgs } from "util";
 
-// Types matching packages/data/src/types.ts
-interface Station {
-  id: number;
+interface StationProperties {
+  id: string;
   name: string;
-  geo?: {
-    lat: number;
-    lng: number;
+  type: "rail" | "metro" | "light";
+  importance: 1 | 2 | 3 | 4;
+}
+
+interface StationFeature {
+  type: "Feature";
+  properties: StationProperties;
+  geometry: {
+    type: "Point";
+    coordinates: [number, number];
   };
 }
 
+interface StationGeoJSON {
+  type: "FeatureCollection";
+  features: StationFeature[];
+}
+
 interface ValidationError {
-  stationId: number | "unknown";
+  stationId: string;
   stationName: string;
   field: string;
   message: string;
 }
 
 interface DiffResult {
-  added: Station[];
-  removed: Station[];
+  added: StationFeature[];
+  removed: StationFeature[];
   modified: Array<{
-    id: number;
+    id: string;
     name: string;
     changes: Array<{
       field: string;
@@ -62,69 +73,98 @@ if (!basePath || !headPath || !outputPath) {
 
 // --- File Loading ---
 
-function loadStations(path: string): Station[] {
+function loadGeoJSON(path: string): StationGeoJSON {
   const content = readFileSync(path, "utf-8");
   return JSON.parse(content);
 }
 
 // --- Validation ---
 
-function validateStations(stations: Station[]): ValidationError[] {
+function validateFeatures(features: StationFeature[]): ValidationError[] {
   const errors: ValidationError[] = [];
-  const seenIds = new Map<number, string>();
+  const seenIds = new Map<string, string>();
 
-  for (let i = 0; i < stations.length; i++) {
-    const station = stations[i];
+  for (let i = 0; i < features.length; i++) {
+    const feature = features[i];
+    const props = feature.properties;
 
-    // Check ID exists and is a number
-    if (typeof station.id !== "number") {
+    // Check ID exists and is a string
+    if (typeof props.id !== "string" || props.id.trim() === "") {
       errors.push({
-        stationId: "unknown",
-        stationName: station.name || `index ${i}`,
+        stationId: props.id || `index ${i}`,
+        stationName: props.name || `index ${i}`,
         field: "id",
-        message: `ID is not a number: ${JSON.stringify(station.id)}`,
+        message: `ID is not a valid string: ${JSON.stringify(props.id)}`,
       });
       continue;
     }
 
     // Check for duplicate IDs
-    if (seenIds.has(station.id)) {
+    if (seenIds.has(props.id)) {
       errors.push({
-        stationId: station.id,
-        stationName: station.name,
+        stationId: props.id,
+        stationName: props.name,
         field: "id",
-        message: `Duplicate ID (also used by "${seenIds.get(station.id)}")`,
+        message: `Duplicate ID (also used by "${seenIds.get(props.id)}")`,
       });
     }
-    seenIds.set(station.id, station.name);
+    seenIds.set(props.id, props.name);
 
     // Check name is non-empty string
-    if (typeof station.name !== "string" || station.name.trim() === "") {
+    if (typeof props.name !== "string" || props.name.trim() === "") {
       errors.push({
-        stationId: station.id,
-        stationName: station.name || "(empty)",
+        stationId: props.id,
+        stationName: props.name || "(empty)",
         field: "name",
         message: "Name must be a non-empty string",
       });
     }
 
-    // Validate geo coordinates if present
-    if (station.geo !== undefined && station.geo !== null) {
-      if (typeof station.geo.lat !== "number" || station.geo.lat < -90 || station.geo.lat > 90) {
+    // Validate type
+    if (!["rail", "metro", "light"].includes(props.type)) {
+      errors.push({
+        stationId: props.id,
+        stationName: props.name,
+        field: "type",
+        message: `Invalid type: ${props.type} (must be rail, metro, or light)`,
+      });
+    }
+
+    // Validate importance
+    if (![1, 2, 3, 4].includes(props.importance)) {
+      errors.push({
+        stationId: props.id,
+        stationName: props.name,
+        field: "importance",
+        message: `Invalid importance: ${props.importance} (must be 1-4)`,
+      });
+    }
+
+    // Validate geometry
+    const coords = feature.geometry?.coordinates;
+    if (!coords || coords.length < 2) {
+      errors.push({
+        stationId: props.id,
+        stationName: props.name,
+        field: "geometry",
+        message: "Missing coordinates",
+      });
+    } else {
+      const [lng, lat] = coords;
+      if (typeof lat !== "number" || lat < -90 || lat > 90) {
         errors.push({
-          stationId: station.id,
-          stationName: station.name,
-          field: "geo.lat",
-          message: `Invalid latitude: ${station.geo.lat} (must be -90 to 90)`,
+          stationId: props.id,
+          stationName: props.name,
+          field: "geometry.lat",
+          message: `Invalid latitude: ${lat} (must be -90 to 90)`,
         });
       }
-
-      if (typeof station.geo.lng !== "number" || station.geo.lng < -180 || station.geo.lng > 180) {
+      if (typeof lng !== "number" || lng < -180 || lng > 180) {
         errors.push({
-          stationId: station.id,
-          stationName: station.name,
-          field: "geo.lng",
-          message: `Invalid longitude: ${station.geo.lng} (must be -180 to 180)`,
+          stationId: props.id,
+          stationName: props.name,
+          field: "geometry.lng",
+          message: `Invalid longitude: ${lng} (must be -180 to 180)`,
         });
       }
     }
@@ -135,99 +175,66 @@ function validateStations(stations: Station[]): ValidationError[] {
 
 // --- Diff Computation ---
 
-function computeDiff(baseStations: Station[], headStations: Station[]): DiffResult {
-  const baseMap = new Map(baseStations.map((s) => [s.id, s]));
-  const headMap = new Map(headStations.map((s) => [s.id, s]));
+function computeDiff(baseFeatures: StationFeature[], headFeatures: StationFeature[]): DiffResult {
+  const baseMap = new Map(baseFeatures.map((f) => [f.properties.id, f]));
+  const headMap = new Map(headFeatures.map((f) => [f.properties.id, f]));
 
-  const added: Station[] = [];
-  const removed: Station[] = [];
+  const added: StationFeature[] = [];
+  const removed: StationFeature[] = [];
   const modified: DiffResult["modified"] = [];
 
-  // Find added and modified
-  for (const [id, headStation] of headMap) {
-    const baseStation = baseMap.get(id);
+  for (const [id, headFeature] of headMap) {
+    const baseFeature = baseMap.get(id);
 
-    if (!baseStation) {
-      added.push(headStation);
+    if (!baseFeature) {
+      added.push(headFeature);
     } else {
-      const changes = compareStations(baseStation, headStation);
+      const changes = compareFeatures(baseFeature, headFeature);
       if (changes.length > 0) {
-        modified.push({
-          id,
-          name: headStation.name,
-          changes,
-        });
+        modified.push({ id, name: headFeature.properties.name, changes });
       }
     }
   }
 
-  // Find removed
-  for (const [id, baseStation] of baseMap) {
+  for (const [id, baseFeature] of baseMap) {
     if (!headMap.has(id)) {
-      removed.push(baseStation);
+      removed.push(baseFeature);
     }
   }
 
   return { added, removed, modified };
 }
 
-function compareStations(
-  base: Station,
-  head: Station,
-): Array<{
-  field: string;
-  oldValue: unknown;
-  newValue: unknown;
-}> {
-  const changes: Array<{
-    field: string;
-    oldValue: unknown;
-    newValue: unknown;
-  }> = [];
+function compareFeatures(
+  base: StationFeature,
+  head: StationFeature,
+): Array<{ field: string; oldValue: unknown; newValue: unknown }> {
+  const changes: Array<{ field: string; oldValue: unknown; newValue: unknown }> = [];
 
-  if (base.name !== head.name) {
-    changes.push({ field: "name", oldValue: base.name, newValue: head.name });
+  if (base.properties.name !== head.properties.name) {
+    changes.push({ field: "name", oldValue: base.properties.name, newValue: head.properties.name });
   }
 
-  const baseGeo = base.geo;
-  const headGeo = head.geo;
+  if (base.properties.type !== head.properties.type) {
+    changes.push({ field: "type", oldValue: base.properties.type, newValue: head.properties.type });
+  }
 
-  // Helper to check if geo has valid coordinates
-  // Handles edge cases like geo: {}, geo: null, geo: {lat: null, lng: null}
-  const hasValidGeo = (geo: Station["geo"]): boolean => {
-    return (
-      geo !== undefined &&
-      geo !== null &&
-      typeof geo.lat === "number" &&
-      typeof geo.lng === "number"
-    );
-  };
+  if (base.properties.importance !== head.properties.importance) {
+    changes.push({
+      field: "importance",
+      oldValue: base.properties.importance,
+      newValue: head.properties.importance,
+    });
+  }
 
-  const baseHasGeo = hasValidGeo(baseGeo);
-  const headHasGeo = hasValidGeo(headGeo);
+  const [baseLng, baseLat] = base.geometry.coordinates;
+  const [headLng, headLat] = head.geometry.coordinates;
 
-  if (!baseHasGeo && headHasGeo) {
-    // Geo added
-    changes.push({ field: "geo", oldValue: baseGeo, newValue: headGeo });
-  } else if (baseHasGeo && !headHasGeo) {
-    // Geo removed
-    changes.push({ field: "geo", oldValue: baseGeo, newValue: headGeo });
-  } else if (baseHasGeo && headHasGeo) {
-    // Both have valid geo - compare coordinates
-    if (baseGeo!.lat !== headGeo!.lat) {
-      changes.push({
-        field: "geo.lat",
-        oldValue: baseGeo!.lat,
-        newValue: headGeo!.lat,
-      });
-    }
-    if (baseGeo!.lng !== headGeo!.lng) {
-      changes.push({
-        field: "geo.lng",
-        oldValue: baseGeo!.lng,
-        newValue: headGeo!.lng,
-      });
-    }
+  if (baseLat !== headLat) {
+    changes.push({ field: "lat", oldValue: baseLat, newValue: headLat });
+  }
+  if (baseLng !== headLng) {
+    changes.push({ field: "lng", oldValue: baseLng, newValue: headLng });
   }
 
   return changes;
@@ -235,12 +242,12 @@ function compareStations(
 
 // --- Report Generation ---
 
-function generateReport(
-  diff: DiffResult,
-  errors: ValidationError[],
-  _baseCount: number,
-  _headCount: number,
-): string {
+function formatCoords(feature: StationFeature): string {
+  const [lng, lat] = feature.geometry.coordinates;
+  return `${lat}, ${lng}`;
+}
+
+function generateReport(diff: DiffResult, errors: ValidationError[]): string {
   const lines: string[] = [];
 
   lines.push("<!-- station-data-check -->");
@@ -251,7 +258,7 @@ function generateReport(
   if (errors.length > 0) {
     lines.push("<details>");
     lines.push(
-      "<summary><strong>:warning: Validation Errors (" + errors.length + ")</strong></summary>",
+      `<summary><strong>:warning: Validation Errors (${errors.length})</strong></summary>`,
     );
     lines.push("");
     lines.push("| Station ID | Station Name | Field | Error |");
@@ -270,19 +277,18 @@ function generateReport(
   if (diff.added.length > 0) {
     lines.push("<details>");
     lines.push(
-      "<summary><strong>:heavy_plus_sign: Stations Added (" +
-        diff.added.length +
-        ")</strong></summary>",
+      `<summary><strong>:heavy_plus_sign: Stations Added (${diff.added.length})</strong></summary>`,
     );
     lines.push("");
-    lines.push("| ID | Name | Coordinates |");
-    lines.push("|----|------|-------------|");
-    for (const station of diff.added.slice(0, 50)) {
-      const coords = station.geo ? `${station.geo.lat}, ${station.geo.lng}` : "_No coordinates_";
-      lines.push(`| ${station.id} | ${escapeMarkdown(station.name)} | ${coords} |`);
+    lines.push("| ID | Name | Type | Coordinates |");
+    lines.push("|----|------|------|-------------|");
+    for (const feature of diff.added.slice(0, 50)) {
+      lines.push(
+        `| ${feature.properties.id} | ${escapeMarkdown(feature.properties.name)} | ${feature.properties.type} | ${formatCoords(feature)} |`,
+      );
     }
     if (diff.added.length > 50) {
-      lines.push(`| ... | _${diff.added.length - 50} more stations_ | ... |`);
+      lines.push(`| ... | _${diff.added.length - 50} more stations_ | ... | ... |`);
     }
     lines.push("");
     lines.push("</details>");
@@ -293,19 +299,18 @@ function generateReport(
   if (diff.removed.length > 0) {
     lines.push("<details>");
     lines.push(
-      "<summary><strong>:heavy_minus_sign: Stations Removed (" +
-        diff.removed.length +
-        ")</strong></summary>",
+      `<summary><strong>:heavy_minus_sign: Stations Removed (${diff.removed.length})</strong></summary>`,
     );
     lines.push("");
-    lines.push("| ID | Name | Coordinates |");
-    lines.push("|----|------|-------------|");
-    for (const station of diff.removed.slice(0, 50)) {
-      const coords = station.geo ? `${station.geo.lat}, ${station.geo.lng}` : "_No coordinates_";
-      lines.push(`| ${station.id} | ${escapeMarkdown(station.name)} | ${coords} |`);
+    lines.push("| ID | Name | Type | Coordinates |");
+    lines.push("|----|------|------|-------------|");
+    for (const feature of diff.removed.slice(0, 50)) {
+      lines.push(
+        `| ${feature.properties.id} | ${escapeMarkdown(feature.properties.name)} | ${feature.properties.type} | ${formatCoords(feature)} |`,
+      );
     }
     if (diff.removed.length > 50) {
-      lines.push(`| ... | _${diff.removed.length - 50} more stations_ | ... |`);
+      lines.push(`| ... | _${diff.removed.length - 50} more stations_ | ... | ... |`);
     }
     lines.push("");
     lines.push("</details>");
@@ -316,9 +321,7 @@ function generateReport(
   if (diff.modified.length > 0) {
     lines.push("<details>");
     lines.push(
-      "<summary><strong>:pencil2: Stations Modified (" +
-        diff.modified.length +
-        ")</strong></summary>",
+      `<summary><strong>:pencil2: Stations Modified (${diff.modified.length})</strong></summary>`,
     );
     lines.push("");
     for (const mod of diff.modified.slice(0, 30)) {
@@ -364,13 +367,13 @@ function formatValue(value: unknown): string {
 // --- Main ---
 
 async function main() {
-  const baseStations = loadStations(basePath);
-  const headStations = loadStations(headPath);
+  const baseGeoJSON = loadGeoJSON(basePath);
+  const headGeoJSON = loadGeoJSON(headPath);
 
-  const errors = validateStations(headStations);
-  const diff = computeDiff(baseStations, headStations);
+  const errors = validateFeatures(headGeoJSON.features);
+  const diff = computeDiff(baseGeoJSON.features, headGeoJSON.features);
 
-  const report = generateReport(diff, errors, baseStations.length, headStations.length);
+  const report = generateReport(diff, errors);
 
   writeFileSync(outputPath, report);
 

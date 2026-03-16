@@ -52,15 +52,7 @@ function formatChangeDetails(change: StationChange): string {
   }
 
   const updates: string[] = [];
-  if (details.coordinatesAdded && details.newGeo) {
-    updates.push(
-      `Added coordinates (${details.newGeo.lat.toFixed(4)}, ${details.newGeo.lng.toFixed(4)})`,
-    );
-  } else if (details.coordinatesRemoved && details.previousGeo) {
-    updates.push(
-      `Removed coordinates (was ${details.previousGeo.lat.toFixed(4)}, ${details.previousGeo.lng.toFixed(4)})`,
-    );
-  } else if (details.coordinatesUpdated && details.newGeo) {
+  if (details.coordinatesUpdated && details.newGeo) {
     updates.push(`Moved to (${details.newGeo.lat.toFixed(4)}, ${details.newGeo.lng.toFixed(4)})`);
   }
   if (details.nameChanged) {
@@ -151,21 +143,12 @@ export function ContributionPanel({ open, onOpenChange }: ContributionPanelProps
                   <div className="text-2xl font-semibold">{stats.changesCount}</div>
                 </div>
                 <div className="space-y-1">
-                  <div className="text-muted-foreground">Coverage</div>
-                  <div className="flex items-baseline gap-1">
-                    <span className="text-2xl font-semibold">
-                      {stats.currentCoverage.toFixed(1)}%
-                    </span>
-                    {stats.currentCoverage > stats.initialCoverage && (
-                      <span className="text-xs text-green-500">
-                        +{(stats.currentCoverage - stats.initialCoverage).toFixed(1)}%
-                      </span>
-                    )}
-                  </div>
+                  <div className="text-muted-foreground">Coords Moved</div>
+                  <div className="text-2xl font-semibold">{stats.coordinatesUpdated}</div>
                 </div>
                 <div className="space-y-1">
-                  <div className="text-muted-foreground">Coords Added</div>
-                  <div className="text-2xl font-semibold">{stats.coordinatesAdded}</div>
+                  <div className="text-muted-foreground">Renamed</div>
+                  <div className="text-2xl font-semibold">{stats.stationsRenamed}</div>
                 </div>
               </div>
 

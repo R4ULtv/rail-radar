@@ -34,7 +34,7 @@ interface StationEditPanelProps {
   station: Station;
   onSave: (updates: {
     name: string;
-    geo: { lat: number; lng: number } | null;
+    geo: { lat: number; lng: number };
     type: "rail" | "metro" | "light";
     importance: 1 | 2 | 3 | 4;
   }) => void;
@@ -53,23 +53,24 @@ export function StationEditPanel({
   const [name, setName] = useState(station.name);
   const [type, setType] = useState<"rail" | "metro" | "light">(station.type);
   const [importance, setImportance] = useState<1 | 2 | 3 | 4>(station.importance);
-  const [lat, setLat] = useState(station.geo?.lat?.toString() ?? "");
-  const [lng, setLng] = useState(station.geo?.lng?.toString() ?? "");
+  const [lat, setLat] = useState(station.geo!.lat.toString());
+  const [lng, setLng] = useState(station.geo!.lng.toString());
 
   // Reset form when station changes
   useEffect(() => {
     setName(station.name);
     setType(station.type);
     setImportance(station.importance);
-    setLat(station.geo?.lat?.toString() ?? "");
-    setLng(station.geo?.lng?.toString() ?? "");
+    setLat(station.geo!.lat.toString());
+    setLng(station.geo!.lng.toString());
   }, [station]);
 
   const handleSave = () => {
     const parsedLat = parseFloat(lat);
     const parsedLng = parseFloat(lng);
 
-    const geo = !isNaN(parsedLat) && !isNaN(parsedLng) ? { lat: parsedLat, lng: parsedLng } : null;
+    if (isNaN(parsedLat) || isNaN(parsedLng)) return;
+    const geo = { lat: parsedLat, lng: parsedLng };
 
     onSave({ name, geo, type, importance });
   };
@@ -78,8 +79,8 @@ export function StationEditPanel({
     name !== station.name ||
     type !== station.type ||
     importance !== station.importance ||
-    lat !== (station.geo?.lat?.toString() ?? "") ||
-    lng !== (station.geo?.lng?.toString() ?? "");
+    lat !== station.geo!.lat.toString() ||
+    lng !== station.geo!.lng.toString();
 
   const handleLatPaste = (e: React.ClipboardEvent<HTMLInputElement>) => {
     const pasted = e.clipboardData.getData("text");
