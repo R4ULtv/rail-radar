@@ -3,7 +3,6 @@
 import * as React from "react";
 import { useQueryState, parseAsString } from "nuqs";
 import { useMap } from "react-map-gl/mapbox";
-import { stationById } from "@repo/data/stations";
 import type { Station } from "@repo/data";
 import { useIsMobile } from "@repo/ui/hooks/use-mobile";
 import { useSavedStations } from "./use-saved-stations";
@@ -16,7 +15,7 @@ interface SelectedStationContextValue {
   savedStations: Station[];
   recentStations: Station[];
   isSaved: (stationId: string) => boolean;
-  toggleSaved: (stationId: string) => void;
+  toggleSaved: (station: Station) => void;
   maxSaved: number;
 }
 
@@ -31,43 +30,57 @@ export function SelectedStationProvider({ children }: { children: React.ReactNod
 
   const isMobile = useIsMobile();
 
-  // Use the standalone saved stations hook
   const { savedStations, isSaved, toggleSaved, maxSaved } = useSavedStations();
   const { recentStations, addRecentStation } = useRecentStations();
 
-  const selectedStation = React.useMemo(() => {
-    if (!stationId) return null;
-    return stationById.get(stationId) ?? null;
-  }, [stationId]);
+  const [stationObject, setStationObject] = React.useState<Station | null>(null);
+
+  const stationRef = React.useRef<Station | null>(null);
+
+  const flyToRef = React.useRef((_geo: { lat: number; lng: number }, _type: string) => {});
+  React.useEffect(() => {
+    flyToRef.current = (geo, type) => {
+      map?.flyTo({
+        center: [geo.lng, geo.lat],
+        zoom: type === "rail" ? 14 : 15,
+        padding: isMobile ? { bottom: 250, top: 0, left: 0, right: 0 } : undefined,
+      });
+    };
+  }, [map, isMobile]);
+
+  // Clear stale ?station= param on page load (no data to resolve without a fetch)
+  React.useEffect(() => {
+    if (stationId && !stationRef.current) {
+      setStationId(null);
+    }
+  }, [stationId, setStationId]);
 
   const selectStation = React.useCallback(
     (station: Station) => {
-      // Use provided geo or look it up from stationById
-      const geo = station.geo ?? stationById.get(station.id)?.geo;
-      if (!geo) return;
-
       if (station.type === "rail") {
+        stationRef.current = station;
+        setStationObject(station);
         setStationId(station.id);
-        addRecentStation(station.id);
+        addRecentStation(station);
       }
 
-      map?.flyTo({
-        center: [geo.lng, geo.lat],
-        zoom: station.type === "rail" ? 14 : 15,
-        padding: isMobile ? { bottom: 250, top: 0, left: 0, right: 0 } : undefined,
-      });
+      if (station.geo) {
+        flyToRef.current(station.geo, station.type);
+      }
     },
-    [map, isMobile, setStationId, addRecentStation],
+    [setStationId, addRecentStation],
   );
 
   const clearStation = React.useCallback(() => {
+    stationRef.current = null;
     setStationId(null);
+    setStationObject(null);
   }, [setStationId]);
 
   return (
     <SelectedStationContext.Provider
       value={{
-        selectedStation,
+        selectedStation: stationObject,
         selectStation,
         clearStation,
         savedStations,
