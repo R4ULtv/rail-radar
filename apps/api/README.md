@@ -24,23 +24,25 @@ Cloudflare Workers API that provides real-time European train data by scraping o
 Returns station data in two formats depending on query parameters:
 
 **GeoJSON mode** (default) — returns `application/geo+json` FeatureCollection consumed directly by MapBox GL JS:
+
 - No params: all stations (pre-serialized for performance)
 - `?type=rail|metro|light`: filter by station type
 - `?country=it|ch|fi|be|nl`: filter by country
 - Filters can be combined: `?type=rail&country=it`
 
 **Search mode** — returns `application/json` array of `Station` objects:
+
 - `?q=roma`: fuzzy search by station name (max 20 results)
 
 ### Caching
 
-| Endpoint                  | Cache                                  |
-| ------------------------- | -------------------------------------- |
-| `/stations`               | 24h cache, 1h stale-while-revalidate   |
-| `/stations/:id`           | 25s cache, 5s stale-while-revalidate   |
-| `/stations/:id/stats`     | 5min cache, 1min stale-while-revalidate |
-| `/stations/trending`      | 5min cache, 1min stale-while-revalidate |
-| `/analytics/overview`     | 5min cache, 1min stale-while-revalidate |
+| Endpoint              | Cache                                   |
+| --------------------- | --------------------------------------- |
+| `/stations`           | 24h cache, 1h stale-while-revalidate    |
+| `/stations/:id`       | 25s cache, 5s stale-while-revalidate    |
+| `/stations/:id/stats` | 5min cache, 1min stale-while-revalidate |
+| `/stations/trending`  | 5min cache, 1min stale-while-revalidate |
+| `/analytics/overview` | 5min cache, 1min stale-while-revalidate |
 
 ### Rate Limiting
 

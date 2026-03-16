@@ -40,8 +40,10 @@ const LIGHT_ICON_SVG = `<svg xmlns="http://www.w3.org/2000/svg" width="64" heigh
 const MINZOOM_EXPR = [
   "match",
   ["get", "type"],
-  "metro", 13,
-  "light", 12,
+  "metro",
+  13,
+  "light",
+  12,
   /* rail */ ["match", ["get", "importance"], 1, 4, 2, 7, 3, 9, 11],
 ];
 const MINZOOM_FILTER = ["<=", MINZOOM_EXPR, ["zoom"]];
