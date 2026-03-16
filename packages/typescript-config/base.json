@@ -1,5 +1,6 @@
 {
   "$schema": "https://json.schemastore.org/tsconfig",
+  "files": ["geojson.d.ts"],
   "compilerOptions": {
     "declaration": true,
     "declarationMap": true,
