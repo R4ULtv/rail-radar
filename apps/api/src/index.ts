@@ -237,7 +237,15 @@ app.get(
       return c.json({
         timestamp: new Date().toISOString(),
         period,
-        stations: trending,
+        stations: trending.map((s) => {
+          const station = stationById.get(s.stationId);
+          return {
+            ...s,
+            geo: station?.geo ?? null,
+            type: station?.type ?? "rail",
+            importance: station?.importance ?? 4,
+          };
+        }),
       });
     } catch {
       return c.json({ error: "Unable to fetch analytics data. Please try again later." }, 500);
@@ -274,7 +282,15 @@ app.get(
         timestamp: new Date().toISOString(),
         period,
         country,
-        stations: trending,
+        stations: trending.map((s) => {
+          const station = stationById.get(s.stationId);
+          return {
+            ...s,
+            geo: station?.geo ?? null,
+            type: station?.type ?? "rail",
+            importance: station?.importance ?? 4,
+          };
+        }),
       });
     } catch {
       return c.json({ error: "Unable to fetch analytics data. Please try again later." }, 500);
