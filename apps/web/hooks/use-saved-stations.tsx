@@ -4,7 +4,7 @@ import * as React from "react";
 import type { Station } from "@repo/data";
 
 const SAVED_STATIONS_KEY = "saved-stations";
-export const MAX_SAVED_STATIONS = 10;
+export const MAX_SAVED_STATIONS = 7;
 
 function saveSavedStations(stations: Station[]) {
   try {
@@ -23,7 +23,8 @@ function loadSavedStations(): Station[] {
       localStorage.removeItem(SAVED_STATIONS_KEY);
       return [];
     }
-    return parsed;
+    // Filter out stations without geo (from pre-migration data)
+    return parsed.filter((s: Station) => s.geo?.lat !== undefined && s.geo?.lng !== undefined);
   } catch {
     return [];
   }

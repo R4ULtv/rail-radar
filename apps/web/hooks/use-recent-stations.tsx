@@ -23,7 +23,8 @@ function loadRecentStations(): Station[] {
       localStorage.removeItem(RECENT_STATIONS_KEY);
       return [];
     }
-    return parsed;
+    // Filter out stations without geo (from pre-migration data)
+    return parsed.filter((s: Station) => s.geo?.lat !== undefined && s.geo?.lng !== undefined);
   } catch {
     return [];
   }

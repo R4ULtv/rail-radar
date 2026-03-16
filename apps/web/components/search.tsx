@@ -284,8 +284,9 @@ export function Search({ hiddenStationTypes }: { hiddenStationTypes: StationVisi
     const stations: Station[] = trendingData.stations.map((s) => ({
       id: s.stationId,
       name: s.stationName,
-      type: "rail" as const,
-      importance: 4 as const,
+      type: s.type,
+      importance: s.importance,
+      geo: s.geo ?? undefined,
     }));
     const visits = new Map(trendingData.stations.map((s) => [s.stationId, s.visits]));
     return { trendingStations: stations, trendingVisits: visits };
