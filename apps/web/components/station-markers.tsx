@@ -6,7 +6,6 @@ import { Layer, Source, useMap } from "react-map-gl/mapbox";
 import type { LayerProps } from "react-map-gl/mapbox";
 
 type Visibility = "visible" | "none";
-import { stations } from "@repo/data/stations";
 import { useSelectedStation } from "@/hooks/use-selected-station";
 import type { MapLayersState } from "@/hooks/use-map-layers";
 
@@ -37,10 +36,15 @@ const LIGHT_ICON_SVG = `<svg xmlns="http://www.w3.org/2000/svg" width="64" heigh
   </svg>
 </svg>`;
 
+/** Shared filter: show feature when current zoom >= its minzoom property */
+const MINZOOM_FILTER = ["<=", ["get", "minzoom"], ["zoom"]];
+const LABEL_MINZOOM_FILTER = ["<=", ["+", ["get", "minzoom"], 2], ["zoom"]];
+
 const metroLayerStyle = (v: Visibility): LayerProps => ({
   id: "metro-stations",
   type: "symbol",
-  minzoom: 13,
+  source: "stations-source",
+  filter: ["all", ["==", ["get", "type"], "metro"], MINZOOM_FILTER],
   layout: {
     visibility: v,
     "icon-image": METRO_ICON_ID,
@@ -53,7 +57,8 @@ const metroLayerStyle = (v: Visibility): LayerProps => ({
 const metroLabelStyle = (v: Visibility): LayerProps => ({
   id: "metro-labels",
   type: "symbol",
-  minzoom: 14.5,
+  source: "stations-source",
+  filter: ["all", ["==", ["get", "type"], "metro"], LABEL_MINZOOM_FILTER],
   layout: {
     visibility: v,
     "text-field": ["get", "name"],
@@ -73,7 +78,8 @@ const metroLabelStyle = (v: Visibility): LayerProps => ({
 const lightLayerStyle = (v: Visibility): LayerProps => ({
   id: "light-stations",
   type: "symbol",
-  minzoom: 12,
+  source: "stations-source",
+  filter: ["all", ["==", ["get", "type"], "light"], MINZOOM_FILTER],
   layout: {
     visibility: v,
     "icon-image": LIGHT_ICON_ID,
@@ -86,7 +92,8 @@ const lightLayerStyle = (v: Visibility): LayerProps => ({
 const lightLabelStyle = (v: Visibility): LayerProps => ({
   id: "light-labels",
   type: "symbol",
-  minzoom: 13.5,
+  source: "stations-source",
+  filter: ["all", ["==", ["get", "type"], "light"], LABEL_MINZOOM_FILTER],
   layout: {
     visibility: v,
     "text-field": ["get", "name"],
@@ -106,8 +113,8 @@ const lightLabelStyle = (v: Visibility): LayerProps => ({
 const railLayerStyle = (v: Visibility): LayerProps => ({
   id: RAIL_LAYER_ID,
   type: "symbol",
-  minzoom: 4,
-  filter: ["<=", ["get", "minzoom"], ["zoom"]],
+  source: "stations-source",
+  filter: ["all", ["==", ["get", "type"], "rail"], MINZOOM_FILTER],
   layout: {
     visibility: v,
     "icon-image": RAIL_ICON_ID,
@@ -131,8 +138,8 @@ const railLayerStyle = (v: Visibility): LayerProps => ({
 const railLabelStyle = (v: Visibility): LayerProps => ({
   id: "rail-labels",
   type: "symbol",
-  minzoom: 4,
-  filter: ["<=", ["+", ["get", "minzoom"], 2], ["zoom"]],
+  source: "stations-source",
+  filter: ["all", ["==", ["get", "type"], "rail"], LABEL_MINZOOM_FILTER],
   layout: {
     visibility: v,
     "text-field": ["get", "name"],
@@ -196,64 +203,6 @@ const railwayTunnelStyle = (v: Visibility): LayerProps => ({
   },
 });
 
-const IMPORTANCE_MINZOOM: Record<number, number> = { 1: 4, 2: 7, 3: 9, 4: 11 };
-
-const railGeojsonData: GeoJSON.FeatureCollection = {
-  type: "FeatureCollection",
-  features: stations
-    .filter((station) => station.type === "rail" && station.geo)
-    .map((station) => ({
-      type: "Feature" as const,
-      properties: {
-        id: station.id,
-        name: station.name,
-        type: station.type,
-        importance: station.importance,
-        minzoom: IMPORTANCE_MINZOOM[station.importance] ?? 11,
-      },
-      geometry: {
-        type: "Point" as const,
-        coordinates: [station.geo!.lng, station.geo!.lat],
-      },
-    })),
-};
-
-const metroGeojsonData: GeoJSON.FeatureCollection = {
-  type: "FeatureCollection",
-  features: stations
-    .filter((station) => station.type === "metro" && station.geo)
-    .map((station) => ({
-      type: "Feature" as const,
-      properties: {
-        id: station.id,
-        name: station.name,
-        type: station.type,
-      },
-      geometry: {
-        type: "Point" as const,
-        coordinates: [station.geo!.lng, station.geo!.lat],
-      },
-    })),
-};
-
-const lightGeojsonData: GeoJSON.FeatureCollection = {
-  type: "FeatureCollection",
-  features: stations
-    .filter((station) => station.type === "light" && station.geo)
-    .map((station) => ({
-      type: "Feature" as const,
-      properties: {
-        id: station.id,
-        name: station.name,
-        type: station.type,
-      },
-      geometry: {
-        type: "Point" as const,
-        coordinates: [station.geo!.lng, station.geo!.lat],
-      },
-    })),
-};
-
 export function StationMarkers({ stations, layers }: Pick<MapLayersState, "stations" | "layers">) {
   const { current: map } = useMap();
   const { selectStation } = useSelectedStation();
@@ -294,7 +243,7 @@ export function StationMarkers({ stations, layers }: Pick<MapLayersState, "stati
 
     const handleClick = (e: MapMouseEvent & { features?: GeoJSON.Feature[] }) => {
       const feature = e.features?.[0];
-      if (!feature?.properties) return;
+      if (!feature?.properties || !feature.geometry) return;
 
       const id = feature.properties.id as string | undefined;
       const name = feature.properties.name as string | undefined;
@@ -302,8 +251,9 @@ export function StationMarkers({ stations, layers }: Pick<MapLayersState, "stati
 
       if (id === undefined || name === undefined) return;
 
+      const [lng, lat] = (feature.geometry as GeoJSON.Point).coordinates;
       const importance = (feature.properties.importance ?? 4) as 1 | 2 | 3 | 4;
-      selectStation({ id, name, type, importance });
+      selectStation({ id, name, type, importance, geo: { lat: lat!, lng: lng! } });
     };
 
     const handleMouseEnter = () => {
@@ -347,17 +297,15 @@ export function StationMarkers({ stations, layers }: Pick<MapLayersState, "stati
       <Layer {...lineLayer} />
       <Layer {...bridgeLayer} />
 
-      <Source id="metro-source" type="geojson" data={metroGeojsonData}>
+      <Source
+        id="stations-source"
+        type="geojson"
+        data={`${process.env.NEXT_PUBLIC_API_URL}/stations`}
+      >
         <Layer {...metroLayer} />
         <Layer {...metroLabel} />
-      </Source>
-
-      <Source id="light-source" type="geojson" data={lightGeojsonData}>
         <Layer {...lightLayer} />
         <Layer {...lightLabel} />
-      </Source>
-
-      <Source id="rail-source" type="geojson" data={railGeojsonData}>
         <Layer {...railLayer} />
         <Layer {...railLabel} />
       </Source>
