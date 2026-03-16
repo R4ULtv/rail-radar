@@ -9,6 +9,7 @@ import {
   getCountry,
   stationById,
   stations,
+  stationsGeoJSON,
   type CountryCode,
 } from "@repo/data/stations";
 import {
@@ -179,15 +180,40 @@ app.get(
 
 // --- Station routes ---
 
+const stationsGeoJSONBody = JSON.stringify(stationsGeoJSON);
+
 app.get("/stations", rateLimit, (c) => {
   const query = c.req.query("q");
 
-  if (!query) {
-    return c.json(stations);
+  if (query) {
+    const filtered = fuzzySearch(stations, query, FUZZY_SEARCH_LIMIT);
+    return c.json(filtered);
   }
 
-  const filtered = fuzzySearch(stations, query, FUZZY_SEARCH_LIMIT);
-  return c.json(filtered);
+  const typeFilter = c.req.query("type") as "rail" | "metro" | "light" | undefined;
+  const countryFilter = c.req.query("country") as CountryCode | undefined;
+
+  if (typeFilter && !["rail", "metro", "light"].includes(typeFilter)) {
+    return c.json({ error: 'Invalid type. Must be "rail", "metro", or "light".' }, 400);
+  }
+  if (countryFilter && !COUNTRY_CODES.includes(countryFilter)) {
+    return c.json({ error: `Invalid country. Must be one of: ${COUNTRY_CODES.join(", ")}` }, 400);
+  }
+
+  c.header("Content-Type", "application/geo+json");
+  c.header("Cache-Control", CACHE_TTL.GEOJSON);
+
+  if (!typeFilter && !countryFilter) {
+    return c.body(stationsGeoJSONBody);
+  }
+
+  const features = stationsGeoJSON.features.filter((f) => {
+    if (typeFilter && f.properties.type !== typeFilter) return false;
+    if (countryFilter && getCountry(f.properties.id) !== countryFilter) return false;
+    return true;
+  });
+
+  return c.body(JSON.stringify({ type: "FeatureCollection", features }));
 });
 
 app.get(
