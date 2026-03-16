@@ -1,24 +1,29 @@
 "use client";
 
 import * as React from "react";
-import { stationById } from "@repo/data/stations";
 import type { Station } from "@repo/data";
 
 const RECENT_STATIONS_KEY = "recent-stations";
 const MAX_RECENT_STATIONS = 3;
 
-function saveRecentStationIds(ids: string[]) {
+function saveRecentStations(stations: Station[]) {
   try {
-    localStorage.setItem(RECENT_STATIONS_KEY, JSON.stringify(ids));
+    localStorage.setItem(RECENT_STATIONS_KEY, JSON.stringify(stations));
   } catch {
     // Ignore localStorage errors
   }
 }
 
-function loadRecentStationIds(): string[] {
+function loadRecentStations(): Station[] {
   try {
     const stored = localStorage.getItem(RECENT_STATIONS_KEY);
-    return stored ? JSON.parse(stored) : [];
+    if (!stored) return [];
+    const parsed = JSON.parse(stored);
+    if (!Array.isArray(parsed) || (parsed.length > 0 && typeof parsed[0] === "string")) {
+      localStorage.removeItem(RECENT_STATIONS_KEY);
+      return [];
+    }
+    return parsed;
   } catch {
     return [];
   }
@@ -27,17 +32,13 @@ function loadRecentStationIds(): string[] {
 const RECENT_CHANGED_EVENT = "recent-stations-changed";
 
 export function useRecentStations() {
-  const [recentIds, setRecentIds] = React.useState<string[]>([]);
-
-  const recentStations = React.useMemo(() => {
-    return recentIds.map((id) => stationById.get(id)).filter((s): s is Station => s !== undefined);
-  }, [recentIds]);
+  const [recentStations, setRecent] = React.useState<Station[]>([]);
 
   React.useEffect(() => {
-    setRecentIds(loadRecentStationIds());
+    setRecent(loadRecentStations());
 
     const handleChange = () => {
-      setRecentIds(loadRecentStationIds());
+      setRecent(loadRecentStations());
     };
 
     const handleStorageEvent = (e: StorageEvent) => {
@@ -55,15 +56,15 @@ export function useRecentStations() {
     };
   }, []);
 
-  const addRecentStation = React.useCallback((stationId: string) => {
-    const currentIds = loadRecentStationIds();
-    const updated = [stationId, ...currentIds.filter((id) => id !== stationId)].slice(
+  const addRecentStation = React.useCallback((station: Station) => {
+    const current = loadRecentStations();
+    const updated = [station, ...current.filter((s) => s.id !== station.id)].slice(
       0,
       MAX_RECENT_STATIONS,
     );
 
-    saveRecentStationIds(updated);
-    setRecentIds(updated);
+    saveRecentStations(updated);
+    setRecent(updated);
     window.dispatchEvent(new CustomEvent(RECENT_CHANGED_EVENT));
   }, []);
 

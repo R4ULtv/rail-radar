@@ -1,24 +1,29 @@
 "use client";
 
 import * as React from "react";
-import { stationById } from "@repo/data/stations";
 import type { Station } from "@repo/data";
 
 const SAVED_STATIONS_KEY = "saved-stations";
 export const MAX_SAVED_STATIONS = 10;
 
-function saveSavedStationIds(ids: string[]) {
+function saveSavedStations(stations: Station[]) {
   try {
-    localStorage.setItem(SAVED_STATIONS_KEY, JSON.stringify(ids));
+    localStorage.setItem(SAVED_STATIONS_KEY, JSON.stringify(stations));
   } catch {
     // Ignore localStorage errors
   }
 }
 
-function loadSavedStationIds(): string[] {
+function loadSavedStations(): Station[] {
   try {
     const stored = localStorage.getItem(SAVED_STATIONS_KEY);
-    return stored ? JSON.parse(stored) : [];
+    if (!stored) return [];
+    const parsed = JSON.parse(stored);
+    if (!Array.isArray(parsed) || (parsed.length > 0 && typeof parsed[0] === "string")) {
+      localStorage.removeItem(SAVED_STATIONS_KEY);
+      return [];
+    }
+    return parsed;
   } catch {
     return [];
   }
@@ -28,23 +33,17 @@ function loadSavedStationIds(): string[] {
 const SAVED_CHANGED_EVENT = "saved-stations-changed";
 
 export function useSavedStations() {
-  const [savedIds, setSavedIds] = React.useState<string[]>([]);
-
-  // Derive full station objects from IDs
-  const savedStations = React.useMemo(() => {
-    return savedIds.map((id) => stationById.get(id)).filter((s): s is Station => s !== undefined);
-  }, [savedIds]);
+  const [savedStations, setSaved] = React.useState<Station[]>([]);
 
   // Set for O(1) lookup
-  const savedIdsSet = React.useMemo(() => new Set(savedIds), [savedIds]);
+  const savedIdsSet = React.useMemo(() => new Set(savedStations.map((s) => s.id)), [savedStations]);
 
   // Load from localStorage after hydration and listen for changes
   React.useEffect(() => {
-    // Initial load
-    setSavedIds(loadSavedStationIds());
+    setSaved(loadSavedStations());
 
     const handleStorageChange = () => {
-      setSavedIds(loadSavedStationIds());
+      setSaved(loadSavedStations());
     };
 
     const handleStorageEvent = (e: StorageEvent) => {
@@ -53,9 +52,7 @@ export function useSavedStations() {
       }
     };
 
-    // Listen for custom event (same-tab sync)
     window.addEventListener(SAVED_CHANGED_EVENT, handleStorageChange);
-    // Listen for storage event (cross-tab sync)
     window.addEventListener("storage", handleStorageEvent);
 
     return () => {
@@ -69,22 +66,22 @@ export function useSavedStations() {
     [savedIdsSet],
   );
 
-  const toggleSaved = React.useCallback((stationId: string) => {
-    const currentIds = loadSavedStationIds();
-    const exists = currentIds.includes(stationId);
-    let updated: string[];
+  const toggleSaved = React.useCallback((station: Station) => {
+    const current = loadSavedStations();
+    const exists = current.some((s) => s.id === station.id);
+    let updated: Station[];
 
     if (exists) {
-      updated = currentIds.filter((id) => id !== stationId);
+      updated = current.filter((s) => s.id !== station.id);
     } else {
-      if (currentIds.length >= MAX_SAVED_STATIONS) {
+      if (current.length >= MAX_SAVED_STATIONS) {
         return;
       }
-      updated = [stationId, ...currentIds];
+      updated = [station, ...current];
     }
 
-    saveSavedStationIds(updated);
-    setSavedIds(updated);
+    saveSavedStations(updated);
+    setSaved(updated);
     window.dispatchEvent(new CustomEvent(SAVED_CHANGED_EVENT));
   }, []);
 
