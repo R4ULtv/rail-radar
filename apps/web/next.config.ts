@@ -2,6 +2,11 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   reactCompiler: true,
+  turbopack: {
+    rules: {
+      "*.geojson": { loaders: [], as: "*.json" },
+    },
+  },
   serverExternalPackages: ["@takumi-rs/image-response"],
   images: {
     remotePatterns: [
