@@ -6,56 +6,72 @@ Shared station data and TypeScript types for Rail Radar.
 
 ```
 src/
-├── index.ts       # Main entry point
-├── stations.ts    # Station data exports
-├── types.ts       # TypeScript type definitions
-└── stations.json  # Raw station data (5400+ stations)
+├── index.ts           # Main entry point
+├── stations.ts        # Station data exports (GeoJSON + derived arrays)
+├── countries.ts       # Country codes and lookup utilities
+├── types.ts           # TypeScript type definitions
+├── geojson.d.ts       # Module declaration for .geojson imports
+└── stations.geojson   # GeoJSON FeatureCollection (5700+ stations)
 
 scripts/
-└── format-stations.ts  # Formats stations.json (sort + minify)
-```
-
-## Scripts
-
-### `format-stations`
-
-Normalizes the stations.json file by sorting stations alphabetically by name and minifying the output.
-
-```bash
-pnpm --filter=@repo/data format-stations
-```
-
-Run this after making manual edits to stations.json to ensure consistent formatting.
-
-## Installation
-
-This package is internal to the monorepo. To use it in an app:
-
-```bash
-pnpm add @repo/data --filter=<app>
+├── convert-to-geojson.ts  # Converts stations.json → stations.geojson
+└── format-stations.ts     # Formats stations.json (sort + minify)
 ```
 
 ## Exports
 
-The package provides two import paths:
+The package provides three import paths:
 
 ### Default Import (`@repo/data`)
 
 ```ts
-import { stations, stationById, getCountry, type Station, type Train } from "@repo/data";
+import {
+  stations,
+  stationById,
+  stationsGeoJSON,
+  getCountry,
+  COUNTRY_CODES,
+  type Station,
+  type Train,
+  type StationFeatureCollection,
+  type StationFeature,
+  type StationProperties,
+  type CountryCode,
+  type CountryName,
+} from "@repo/data";
 ```
 
 ### Subpath Import (`@repo/data/stations`)
 
 ```ts
-import { stations, stationById } from "@repo/data/stations";
+import { stations, stationById, stationsGeoJSON } from "@repo/data/stations";
+```
+
+### Subpath Import (`@repo/data/countries`)
+
+```ts
+import { getCountry, COUNTRY_CODES } from "@repo/data/countries";
 ```
 
 ## Data
 
+### `stationsGeoJSON`
+
+A typed GeoJSON `FeatureCollection<Point, StationProperties>` containing all stations. Each feature has:
+
+- `properties.id` — station ID (e.g., `"IT01700"`)
+- `properties.name` — station name
+- `properties.type` — `"rail"`, `"metro"`, or `"light"`
+- `properties.importance` — `1`–`4`
+- `properties.country` — country code (e.g., `"it"`)
+- `properties.minzoom` — minimum zoom level for map display
+- `geometry.coordinates` — `[lng, lat]`
+
+This is served directly by the API as the `/stations` GeoJSON endpoint and consumed by MapBox GL JS.
+
 ### `stations`
 
-Array of 5400+ railway stations across Europe.
+Derived flat array of `Station` objects (backward compat for API search, server components, etc.).
 
 ### `stationById`
 
@@ -67,13 +83,14 @@ const station = stationById.get("IT01700"); // Roma Termini
 
 ### `getCountry`
 
-Get country from a station ID. Returns a country code (`"it"`, `"ch"`, `"fi"`, `"be"`) by default, or a full name (`"italy"`, `"switzerland"`, `"finland"`, `"belgium"`) with `format: "name"`.
+Get country from a station ID. Returns a country code by default, or a full name with `format: "name"`.
 
 ```ts
 getCountry("IT01700"); // "it"
 getCountry("CH8503000"); // "ch"
 getCountry("FI001"); // "fi"
 getCountry("BE95000"); // "be"
+getCountry("NL8400058"); // "nl"
 getCountry("IT01700", { format: "name" }); // "italy"
 ```
 
@@ -87,10 +104,8 @@ interface Station {
   name: string;
   type: "rail" | "metro" | "light";
   importance: 1 | 2 | 3 | 4;
-  geo?: {
-    lat: number;
-    lng: number;
-  };
+  country?: string;
+  geo?: { lat: number; lng: number };
 }
 ```
 
@@ -102,6 +117,21 @@ interface Station {
 | 2     | Important cities                                 |
 | 3     | Regional cities                                  |
 | 4     | Default (smaller stations)                       |
+
+### `StationProperties`
+
+GeoJSON feature properties with required fields for map rendering:
+
+```ts
+interface StationProperties {
+  id: string;
+  name: string;
+  type: "rail" | "metro" | "light";
+  importance: 1 | 2 | 3 | 4;
+  country: string;
+  minzoom: number;
+}
+```
 
 ### `Train`
 
@@ -120,32 +150,12 @@ interface Train {
 }
 ```
 
-## Usage
+## Scripts
 
-### Import types only
+### `convert-to-geojson.ts`
 
-```ts
-import type { Station, Train } from "@repo/data";
-```
+Converts `stations.json` into `stations.geojson`. Computes `minzoom` from importance and station type, excludes stations without coordinates, and adds country codes.
 
-### Get all stations
+### `format-stations.ts`
 
-```ts
-import { stations } from "@repo/data";
-
-const allStations = stations;
-```
-
-### Filter stations with coordinates
-
-```ts
-const withCoords = stations.filter((s) => s.geo);
-```
-
-### Lookup station by ID
-
-```ts
-import { stationById } from "@repo/data";
-
-const roma = stationById.get("IT01700");
-```
+Normalizes `stations.json` by sorting stations alphabetically and minifying. Run after manual edits to ensure consistent formatting.

@@ -5,15 +5,16 @@
   "type": "module",
   "exports": {
     ".": "./src/index.ts",
-    "./stations": "./src/stations.ts"
+    "./stations": "./src/stations.ts",
+    "./countries": "./src/countries.ts"
   },
   "scripts": {
-    "format": "npx tsx scripts/format-stations.ts",
     "lint": "oxlint --deny warnings",
     "check-types": "tsc --noEmit"
   },
   "devDependencies": {
     "@repo/typescript-config": "workspace:*",
+    "@types/geojson": "^7946.0.16",
     "@types/node": "^22.19.15",
     "typescript": "^5.9.3"
   }

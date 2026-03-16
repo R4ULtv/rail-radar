@@ -1,50 +1,23 @@
-import stationsData from "./stations.json" with { type: "json" };
-import type { Station } from "./types";
+import stationsGeoJSONData from "./stations.geojson" with { type: "json" };
+import type { Station, StationFeatureCollection } from "./types";
 
-/** Original station data */
-export const stations: Station[] = stationsData.map((station) => ({
-  ...station,
-  type: station.type as "rail" | "metro" | "light",
-  importance: (station.importance ?? 4) as 1 | 2 | 3 | 4,
+export type { StationFeature, StationFeatureCollection, StationProperties } from "./types";
+export { COUNTRY_CODES, getCountry, type CountryCode, type CountryName } from "./countries";
+
+/** GeoJSON FeatureCollection of all stations */
+export const stationsGeoJSON = stationsGeoJSONData as StationFeatureCollection;
+
+/** Derived flat station array for backward compat (API search, etc.) */
+export const stations: Station[] = stationsGeoJSON.features.map((f) => ({
+  id: f.properties.id,
+  name: f.properties.name,
+  type: f.properties.type,
+  importance: f.properties.importance,
+  geo: {
+    lat: f.geometry.coordinates[1]!,
+    lng: f.geometry.coordinates[0]!,
+  },
 }));
 
 /** Station lookup by ID - O(1) instead of O(n) */
 export const stationById = new Map<string, Station>(stations.map((s) => [s.id, s]));
-
-export const COUNTRY_CODES = ["it", "ch", "fi", "be", "nl"] as const;
-export type CountryCode = (typeof COUNTRY_CODES)[number];
-export type CountryName = "italy" | "switzerland" | "finland" | "belgium" | "netherlands";
-
-const COUNTRY_MAP: Record<CountryCode, CountryName> = {
-  it: "italy",
-  ch: "switzerland",
-  fi: "finland",
-  be: "belgium",
-  nl: "netherlands",
-};
-
-const ID_PREFIX_TO_COUNTRY: Record<string, CountryCode> = {
-  IT: "it",
-  ITM: "it", // Metro
-  ITL: "it", // Local-Light
-  CH: "ch",
-  FI: "fi",
-  FIM: "fi",
-  BE: "be",
-  BEM: "be",
-  NL: "nl",
-  NLM: "nl",
-};
-
-/** Get country from a station ID. Returns code by default, or full name with `format: "name"` */
-export function getCountry(stationId: string, options: { format: "name" }): CountryName | null;
-export function getCountry(stationId: string, options?: { format: "code" }): CountryCode | null;
-export function getCountry(
-  stationId: string,
-  options?: { format: "code" | "name" },
-): CountryCode | CountryName | null {
-  const prefix = stationId.match(/^[A-Z]+/)?.[0];
-  const code = prefix ? (ID_PREFIX_TO_COUNTRY[prefix] ?? null) : null;
-  if (!code) return null;
-  return options?.format === "name" ? COUNTRY_MAP[code] : code;
-}
