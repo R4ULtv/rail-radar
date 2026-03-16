@@ -47,12 +47,6 @@ import type { StationVisibility } from "@/hooks/use-map-layers";
 import Image from "next/image";
 import { Button } from "@repo/ui/components/button";
 
-const newStations: Station[] = [
-  { id: "FI001", name: "Helsinki asema", type: "rail", importance: 1 },
-  { id: "NL058", name: "Amsterdam Centraal", type: "rail", importance: 1 },
-  { id: "BE14001", name: "Brussel-Zuid/Bruxelles-Midi", type: "rail", importance: 1 },
-];
-
 const StationList = React.memo(function StationList({
   stations,
   onSelect,
@@ -218,24 +212,6 @@ function SearchContent({
           />
         </>
       )}
-      {/* New Stations */}
-      {showDefaultLists && newStations.length > 0 && (
-        <>
-          <div className="px-4 py-2 not-first:mt-1">
-            <p className="text-muted-foreground text-sm flex items-center gap-2">
-              <SparklesIcon className="size-3.5" />
-              New Stations
-            </p>
-          </div>
-          <StationList
-            stations={newStations}
-            onSelect={handleSelectStation}
-            focusedIndex={focusedIndex}
-            startIndex={filteredRecentStations.length + savedStations.length}
-            onFocusIndex={setFocusedIndex}
-          />
-        </>
-      )}
       {/* Trending Stations */}
       {showDefaultLists && trendingStations.length > 0 && (
         <>
@@ -249,7 +225,7 @@ function SearchContent({
             stations={trendingStations}
             onSelect={handleSelectStation}
             focusedIndex={focusedIndex}
-            startIndex={filteredRecentStations.length + savedStations.length + newStations.length}
+            startIndex={filteredRecentStations.length + savedStations.length}
             onFocusIndex={setFocusedIndex}
             visits={trendingVisits}
           />
