@@ -16,7 +16,6 @@ export interface StationProperties {
   name: string;
   type: "rail" | "metro" | "light";
   importance: 1 | 2 | 3 | 4;
-  minzoom: number;
 }
 
 export type StationFeature = Feature<Point, StationProperties>;

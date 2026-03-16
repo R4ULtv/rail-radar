@@ -36,9 +36,16 @@ const LIGHT_ICON_SVG = `<svg xmlns="http://www.w3.org/2000/svg" width="64" heigh
   </svg>
 </svg>`;
 
-/** Shared filter: show feature when current zoom >= its minzoom property */
-const MINZOOM_FILTER = ["<=", ["get", "minzoom"], ["zoom"]];
-const LABEL_MINZOOM_FILTER = ["<=", ["+", ["get", "minzoom"], 2], ["zoom"]];
+/** Derive minzoom from importance + type as a MapBox expression */
+const MINZOOM_EXPR = [
+  "match",
+  ["get", "type"],
+  "metro", 13,
+  "light", 12,
+  /* rail */ ["match", ["get", "importance"], 1, 4, 2, 7, 3, 9, 11],
+];
+const MINZOOM_FILTER = ["<=", MINZOOM_EXPR, ["zoom"]];
+const LABEL_MINZOOM_FILTER = ["<=", ["+", MINZOOM_EXPR, 2], ["zoom"]];
 
 const metroLayerStyle = (v: Visibility): LayerProps => ({
   id: "metro-stations",
