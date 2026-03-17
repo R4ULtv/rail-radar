@@ -59,7 +59,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="dark" style={{ colorScheme: "dark" }}>
+    <html lang="en" className="dark scroll-smooth scroll-pt-8" style={{ colorScheme: "dark" }}>
       <head>
         {/* Preconnect to Mapbox services for faster map loading */}
         <link rel="preconnect" href="https://api.mapbox.com" />
