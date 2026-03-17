@@ -1,9 +1,106 @@
-import type { Station } from "@repo/data";
+import {
+  COUNTRY_CODES,
+  COUNTRY_MAP,
+  getCountry,
+  type CountryCode,
+  type CountryName,
+  type Station,
+} from "@repo/data";
 
-/**
- * Normalize text by removing diacritics and converting to lowercase.
- * Handles accented characters like Zurich -> Zurich, Geneve -> Geneve
- */
+const COUNTRY_NAME_TO_CODE = Object.fromEntries(
+  Object.entries(COUNTRY_MAP).map(([code, name]) => [name, code]),
+) as Record<CountryName, CountryCode>;
+
+const STATION_TYPES = ["rail", "metro", "light"] as const;
+type StationType = (typeof STATION_TYPES)[number];
+
+export type ParsedQuery = {
+  coords: { lat: number; lng: number } | null;
+  country: CountryCode | null;
+  type: StationType | null;
+  nameQuery: string;
+};
+
+const COORDS_REGEX = /^(-?\d+(?:\.\d+)?)[,\s]+(-?\d+(?:\.\d+)?)$/;
+
+/** Parse a search query into coords (lat,lng), country/type filters, and a name query. */
+export function parseQuery(q: string): ParsedQuery {
+  const trimmed = q.trim();
+
+  const coordMatch = trimmed.match(COORDS_REGEX);
+  if (coordMatch) {
+    const lat = parseFloat(coordMatch[1]!);
+    const lng = parseFloat(coordMatch[2]!);
+    if (lat >= -90 && lat <= 90 && lng >= -180 && lng <= 180) {
+      return { coords: { lat, lng }, country: null, type: null, nameQuery: "" };
+    }
+  }
+
+  const tokens = trimmed.toLowerCase().split(/\s+/);
+  let country: CountryCode | null = null;
+  let type: StationType | null = null;
+  const remaining: string[] = [];
+
+  for (const token of tokens) {
+    if (!country) {
+      if (token in COUNTRY_NAME_TO_CODE) {
+        country = COUNTRY_NAME_TO_CODE[token as CountryName];
+        continue;
+      }
+      if (COUNTRY_CODES.includes(token as CountryCode)) {
+        country = token as CountryCode;
+        continue;
+      }
+    }
+    if (!type && STATION_TYPES.includes(token as StationType)) {
+      type = token as StationType;
+      continue;
+    }
+    remaining.push(token);
+  }
+
+  return {
+    coords: null,
+    country,
+    type,
+    nameQuery: remaining.join(" "),
+  };
+}
+
+function haversineDistance(lat1: number, lng1: number, lat2: number, lng2: number): number {
+  const R = 6371; // km
+  const dLat = ((lat2 - lat1) * Math.PI) / 180;
+  const dLng = ((lng2 - lng1) * Math.PI) / 180;
+  const a =
+    Math.sin(dLat / 2) ** 2 +
+    Math.cos((lat1 * Math.PI) / 180) * Math.cos((lat2 * Math.PI) / 180) * Math.sin(dLng / 2) ** 2;
+  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+}
+
+/** Find the nearest stations to a coordinate, sorted by distance then importance. */
+export function geoSearch(
+  stations: Station[],
+  lat: number,
+  lng: number,
+  limit: number = 20,
+  filters?: { country?: CountryCode | null; type?: StationType | null },
+): Station[] {
+  return stations
+    .filter((s) => {
+      if (!s.geo) return false;
+      if (filters?.country && getCountry(s.id) !== filters.country) return false;
+      if (filters?.type && s.type !== filters.type) return false;
+      return true;
+    })
+    .map((s) => ({
+      station: s,
+      distance: haversineDistance(lat, lng, s.geo!.lat, s.geo!.lng),
+    }))
+    .sort((a, b) => a.distance - b.distance || a.station.importance - b.station.importance)
+    .slice(0, limit)
+    .map(({ station }) => station);
+}
+
 function normalizeText(text: string): string {
   return text
     .normalize("NFD")
@@ -11,13 +108,9 @@ function normalizeText(text: string): string {
     .toLowerCase();
 }
 
-/**
- * Get all searchable names for a station (primary name + "/" splits for bilingual names)
- */
 function getSearchableNames(station: Station): string[] {
   const names: string[] = [station.name];
 
-  // Handle bilingual names with "/" (e.g., "Biel/Bienne" -> ["Biel", "Bienne"])
   if (station.name.includes("/")) {
     const parts = station.name.split("/").map((p) => p.trim());
     names.push(...parts);
@@ -26,38 +119,30 @@ function getSearchableNames(station: Station): string[] {
   return names;
 }
 
-/**
- * Calculate Damerau-Levenshtein distance between two strings
- * (minimum edits including transpositions to transform a into b)
- */
 function damerauLevenshtein(a: string, b: string): number {
   if (a.length === 0) return b.length;
   if (b.length === 0) return a.length;
 
   const matrix: number[][] = [];
 
-  // Initialize first column
   for (let i = 0; i <= b.length; i++) {
     matrix[i] = [i];
   }
 
-  // Initialize first row
   for (let j = 0; j <= a.length; j++) {
     matrix[0]![j] = j;
   }
 
-  // Fill in the rest of the matrix
   for (let i = 1; i <= b.length; i++) {
     for (let j = 1; j <= a.length; j++) {
       const cost = b.charAt(i - 1) === a.charAt(j - 1) ? 0 : 1;
 
       matrix[i]![j] = Math.min(
-        matrix[i - 1]![j - 1]! + cost, // substitution
-        matrix[i]![j - 1]! + 1, // insertion
-        matrix[i - 1]![j]! + 1, // deletion
+        matrix[i - 1]![j - 1]! + cost,
+        matrix[i]![j - 1]! + 1,
+        matrix[i - 1]![j]! + 1,
       );
 
-      // Transposition
       if (
         i > 1 &&
         j > 1 &&
@@ -72,24 +157,14 @@ function damerauLevenshtein(a: string, b: string): number {
   return matrix[b.length]![a.length]!;
 }
 
-/**
- * Score a single query word against a single name word (both already normalized)
- * Returns both match score and match type for tiered sorting
- */
 function scoreWordAgainstWord(
   queryWord: string,
   nameWord: string,
 ): { score: number; matchType: number } {
-  // Exact match
   if (nameWord === queryWord) return { score: 1.0, matchType: 0 };
-
-  // Word starts with query
   if (nameWord.startsWith(queryWord)) return { score: 0.95, matchType: 1 };
-
-  // Word contains query
   if (nameWord.includes(queryWord)) return { score: 0.7, matchType: 3 };
 
-  // Fuzzy match
   const compareWord =
     nameWord.length > queryWord.length + 2 ? nameWord.slice(0, queryWord.length + 2) : nameWord;
   const distance = damerauLevenshtein(queryWord, compareWord);
@@ -102,7 +177,6 @@ function scoreWordAgainstWord(
   const maxLen = Math.max(queryWord.length, compareWord.length);
   let similarity = maxLen > 0 ? 1 - distance / maxLen : 0;
 
-  // Boost if first letter matches
   if (queryWord.length > 0 && nameWord.length > 0 && queryWord[0] === nameWord[0]) {
     similarity = similarity * 0.8 + 0.2;
   }
@@ -110,29 +184,16 @@ function scoreWordAgainstWord(
   return { score: similarity * 0.6, matchType: 4 };
 }
 
-/**
- * Score a single name against a query (0-1, higher = better match)
- * Returns both match score and match type for tiered sorting
- */
 function scoreAgainstName(query: string, name: string): { score: number; matchType: number } {
   const q = normalizeText(query);
   const n = normalizeText(name);
   const nameWords = n.split(/\s+/);
 
-  // Exact match - highest priority
   if (n === q) return { score: 1.0, matchType: 0 };
-
-  // Name starts with query - very high priority
   if (n.startsWith(q)) return { score: 0.95, matchType: 1 };
-
-  // Any word starts with query - high priority
   if (nameWords.some((w) => w.startsWith(q))) return { score: 0.9, matchType: 2 };
-
-  // Name contains query - medium priority
   if (n.includes(q)) return { score: 0.7, matchType: 3 };
 
-  // Fuzzy match against each word, take best score
-  // Only allow 1-2 mistakes max
   let bestScore = 0;
   for (const word of nameWords) {
     const result = scoreWordAgainstWord(q, word);
@@ -141,14 +202,9 @@ function scoreAgainstName(query: string, name: string): { score: number; matchTy
     }
   }
 
-  // Scale fuzzy matches below exact/prefix matches
   return { score: bestScore, matchType: 4 };
 }
 
-/**
- * Score a station against a multi-word query.
- * All query words must match somewhere in the station name (in any order).
- */
 function scoreMultiWordQuery(
   queryWords: string[],
   name: string,
@@ -169,7 +225,6 @@ function scoreMultiWordQuery(
       }
     }
 
-    // If any word has no match, fail early
     if (bestForWord.score < 0.3) {
       return { score: 0, matchType: 5 };
     }
@@ -177,25 +232,19 @@ function scoreMultiWordQuery(
     wordScores.push(bestForWord);
   }
 
-  // Score is based on worst matching word (all words must match well)
   const worstScore = Math.min(...wordScores.map((ws) => ws.score));
   const worstMatchType = Math.max(...wordScores.map((ws) => ws.matchType));
 
   return { score: worstScore, matchType: worstMatchType };
 }
 
-/**
- * Score a station against a query by checking primary name and "/" splits.
- * Returns the best match score across all searchable names.
- * Supports multi-word queries where words can be in any order.
- */
+/** Score a station against a query, checking all searchable names (including "/" splits). */
 function scoreStation(query: string, station: Station): { score: number; matchType: number } {
   const names = getSearchableNames(station);
   const queryWords = normalizeText(query)
     .split(/\s+/)
     .filter((w) => w.length > 0);
 
-  // Single word query - use existing logic
   if (queryWords.length === 1) {
     let best = { score: 0, matchType: 5 };
     for (const name of names) {
@@ -210,11 +259,9 @@ function scoreStation(query: string, station: Station): { score: number; matchTy
     return best;
   }
 
-  // Multi-word query - check if all words match in any order
   let best = { score: 0, matchType: 5 };
 
   for (const name of names) {
-    // First try exact/prefix match with full query (preserves "Milano Centrale" > "Centrale Milano" for exact input)
     const exactResult = scoreAgainstName(query, name);
     if (
       exactResult.matchType < best.matchType ||
@@ -223,7 +270,6 @@ function scoreStation(query: string, station: Station): { score: number; matchTy
       best = exactResult;
     }
 
-    // Then try multi-word matching (any order)
     const multiResult = scoreMultiWordQuery(queryWords, name);
     if (
       multiResult.matchType < best.matchType ||
@@ -236,20 +282,31 @@ function scoreStation(query: string, station: Station): { score: number; matchTy
   return best;
 }
 
-/**
- * Search stations with fuzzy matching and ranking
- * Sorts by: match type (exact/prefix > contains > fuzzy), then importance, then score
- */
-export function fuzzySearch(stations: Station[], query: string, limit: number = 20): Station[] {
+/** Search stations with fuzzy matching, ranked by match type → importance → score. */
+export function fuzzySearch(
+  stations: Station[],
+  query: string,
+  limit: number = 20,
+  filters?: { country?: CountryCode | null; type?: StationType | null },
+): Station[] {
+  let pool = stations;
+  if (filters?.country) {
+    const cc = filters.country;
+    pool = pool.filter((s) => getCountry(s.id) === cc);
+  }
+  if (filters?.type) {
+    const t = filters.type;
+    pool = pool.filter((s) => s.type === t);
+  }
+
   if (!query.trim()) {
-    // When no query, sort by importance (lower number = more important)
-    return stations
+    return pool
       .slice()
       .sort((a, b) => a.importance - b.importance)
       .slice(0, limit);
   }
 
-  const scored = stations
+  const scored = pool
     .map((station) => {
       const result = scoreStation(query, station);
       return {
@@ -260,15 +317,9 @@ export function fuzzySearch(stations: Station[], query: string, limit: number = 
     })
     .filter(({ score }) => score > 0.3)
     .sort((a, b) => {
-      // First: match type (exact/prefix matches first)
-      if (a.matchType !== b.matchType) {
-        return a.matchType - b.matchType;
-      }
-      // Second: importance (lower number = more important)
-      if (a.station.importance !== b.station.importance) {
+      if (a.matchType !== b.matchType) return a.matchType - b.matchType;
+      if (a.station.importance !== b.station.importance)
         return a.station.importance - b.station.importance;
-      }
-      // Third: score within same match type
       return b.score - a.score;
     })
     .slice(0, limit);

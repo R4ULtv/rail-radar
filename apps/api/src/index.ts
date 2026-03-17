@@ -25,7 +25,7 @@ import {
   VALID_PERIODS,
   type Period,
 } from "./constants";
-import { fuzzySearch } from "./fuzzy";
+import { fuzzySearch, geoSearch, parseQuery } from "./fuzzy";
 import { getScraperForStation, ScraperError } from "./scrapers";
 
 type Bindings = {
@@ -186,8 +186,18 @@ app.get("/stations", rateLimit, (c) => {
   const query = c.req.query("q");
 
   if (query) {
-    const filtered = fuzzySearch(stations, query, FUZZY_SEARCH_LIMIT);
-    return c.json(filtered);
+    const parsed = parseQuery(query);
+    const filters = { country: parsed.country, type: parsed.type };
+
+    if (parsed.coords) {
+      return c.json(
+        geoSearch(stations, parsed.coords.lat, parsed.coords.lng, FUZZY_SEARCH_LIMIT, filters),
+      );
+    }
+    if (parsed.nameQuery) {
+      return c.json(fuzzySearch(stations, parsed.nameQuery, FUZZY_SEARCH_LIMIT, filters));
+    }
+    return c.json(fuzzySearch(stations, "", FUZZY_SEARCH_LIMIT, filters));
   }
 
   const typeFilter = c.req.query("type") as "rail" | "metro" | "light" | undefined;
