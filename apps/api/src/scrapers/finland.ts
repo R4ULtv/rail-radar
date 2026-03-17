@@ -1,5 +1,4 @@
-import type { Train } from "@repo/data";
-import { stationById } from "@repo/data/stations";
+import { stationById, type Train } from "@repo/data";
 import fiStationCodes from "./fi-codes.json";
 
 import { ScraperError, type ScrapeResult, formatTime } from "./index";
