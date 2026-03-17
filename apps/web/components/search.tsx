@@ -471,10 +471,10 @@ export function Search({ hiddenStationTypes }: { hiddenStationTypes: StationVisi
                 <AnimatePresence>
                   {isSearchActive && (
                     <m.div
-                      initial={{ opacity: 0, scale: 0.8 }}
+                      initial={{ opacity: 0, scale: 0.95 }}
                       animate={{ opacity: 1, scale: 1 }}
-                      exit={{ opacity: 0, scale: 0.8 }}
-                      transition={{ duration: 0.2 }}
+                      exit={{ opacity: 0, scale: 0.95 }}
+                      transition={{ duration: 0.15, ease: [0.23, 1, 0.32, 1] }}
                     >
                       <InputGroupAddon align="inline-end">
                         <InputGroupButton
@@ -552,7 +552,7 @@ export function Search({ hiddenStationTypes }: { hiddenStationTypes: StationVisi
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
-              transition={{ duration: 0.15 }}
+              transition={{ duration: 0.15, ease: [0.23, 1, 0.32, 1] }}
               style={{ height: cardHeight.height }}
               className="rounded-md pointer-events-auto overflow-hidden"
             >

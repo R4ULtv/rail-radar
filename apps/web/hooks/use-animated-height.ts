@@ -1,5 +1,11 @@
 import * as React from "react";
-import { useMotionValue, animate, type MotionValue, type Easing } from "motion/react";
+import {
+  useMotionValue,
+  animate,
+  type MotionValue,
+  type Easing,
+  type BezierDefinition,
+} from "motion/react";
 
 interface UseAnimatedHeightOptions {
   duration?: number;
@@ -13,7 +19,11 @@ interface UseAnimatedHeightReturn {
 }
 
 export function useAnimatedHeight(options: UseAnimatedHeightOptions = {}): UseAnimatedHeightReturn {
-  const { duration = 0.2, shrinkDuration = 0.1, ease = "easeOut" } = options;
+  const {
+    duration = 0.2,
+    shrinkDuration = 0.1,
+    ease = [0.23, 1, 0.32, 1] as BezierDefinition,
+  } = options;
 
   const height = useMotionValue(0);
 

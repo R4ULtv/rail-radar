@@ -161,7 +161,7 @@ export default function StationInfo() {
               initial={{ opacity: 0, x: 30 }}
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: 30 }}
-              transition={{ duration: 0.2 }}
+              transition={{ duration: 0.2, ease: [0.23, 1, 0.32, 1] }}
               className="absolute z-50 top-4 right-4 font-sans"
             >
               <Button
