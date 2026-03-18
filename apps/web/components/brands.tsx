@@ -27,6 +27,8 @@ const brandPaths: Record<string, string> = {
   mgb: "ch/mgb",
   ra: "ch/ra",
   rhb: "ch/rhb",
+  mob: "ch/mob",
+  flp: "ch/flp",
   // Other
   obb: "obb",
   sncf: "sncf",
