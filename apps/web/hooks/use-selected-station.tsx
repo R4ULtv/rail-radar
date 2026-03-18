@@ -44,7 +44,6 @@ export function SelectedStationProvider({ children }: { children: React.ReactNod
         center: [geo.lng, geo.lat],
         zoom: type === "rail" ? 14 : 15,
         padding: isMobile ? { bottom: 250, top: 0, left: 0, right: 0 } : undefined,
-        duration: 5000,
       });
     };
   }, [map, isMobile]);
