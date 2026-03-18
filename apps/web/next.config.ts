@@ -54,7 +54,7 @@ const nextConfig: NextConfig = {
         ],
       },
       {
-        source: "/brands/:path*.svg",
+        source: "/(brands|flags)/:path*.svg",
         headers: [
           {
             key: "Cache-Control",
