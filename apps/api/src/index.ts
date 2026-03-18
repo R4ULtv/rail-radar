@@ -11,7 +11,7 @@ import {
   stations,
   stationsGeoJSON,
   type CountryCode,
-} from "@repo/data/stations";
+} from "@repo/data";
 import {
   getAnalyticsOverview,
   getStationStats,
