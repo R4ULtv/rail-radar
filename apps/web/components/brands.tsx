@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { brandBySlug } from "@repo/data";
 
 // Maps brand names to their SVG file paths (relative to /brands/)
 const brandPaths: Record<string, string> = {
@@ -55,6 +56,57 @@ function getBrandPath(brand: string): string | null {
   const normalized = brand.toLowerCase();
   const resolved = brandAliases[normalized] ?? normalized;
   return brandPaths[resolved] ?? null;
+}
+
+// Maps raw brand names (lowercased) to brand slugs
+const brandSlugMap: Record<string, string> = {
+  trenitalia: "trenitalia",
+  italo: "italo",
+  ntv: "italo",
+  frecciarossa: "frecciarossa",
+  frecciabianca: "trenitalia",
+  frecciargento: "trenitalia",
+  intercity: "intercity",
+  "intercity notte": "intercity-notte",
+  trenord: "trenord",
+  "trenitalia tper": "trenitalia-tper",
+  sad: "sad",
+  tua: "tua",
+  fse: "trenitalia",
+  "leonardo express": "trenitalia",
+  bls: "bls",
+  sbb: "sbb",
+  "sbb gmbh": "sbb",
+  sob: "sob",
+  szu: "szu",
+  rbs: "rbs",
+  tpf: "tpf",
+  zb: "zb",
+  ab: "ab",
+  thurbo: "thurbo",
+  tpc: "tpc",
+  tmr: "tmr",
+  mgb: "mgb",
+  ra: "ra",
+  rhb: "rhb",
+  mob: "mob",
+  flp: "flp",
+  obb: "obb",
+  "obb railjet": "obb",
+  "obb nightjet": "obb",
+  sncf: "sncf",
+  vr: "vr",
+  sncb: "sncb",
+  eurostar: "eurostar",
+  db: "db",
+  ns: "ns",
+};
+
+export function getBrandSlug(brand: string): string | null {
+  const normalized = brand.toLowerCase();
+  const slug = brandSlugMap[normalized];
+  if (slug && brandBySlug.has(slug)) return slug;
+  return null;
 }
 
 interface BrandLogoProps {
