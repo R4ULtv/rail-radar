@@ -1,9 +1,6 @@
 import stationsGeoJSONData from "./stations.geojson" with { type: "json" };
 import type { Station, StationFeatureCollection } from "./types";
 
-export type { StationFeature, StationFeatureCollection, StationProperties } from "./types";
-export { COUNTRY_CODES, getCountry, type CountryCode, type CountryName } from "./countries";
-
 /** GeoJSON FeatureCollection of all stations */
 export const stationsGeoJSON = stationsGeoJSONData as StationFeatureCollection;
 

@@ -8,8 +8,8 @@ import {
 } from "@repo/data";
 
 const COUNTRY_NAME_TO_CODE = Object.fromEntries(
-  Object.entries(COUNTRY_MAP).map(([code, name]) => [name, code]),
-) as Record<CountryName, CountryCode>;
+  Object.entries(COUNTRY_MAP).map(([code, name]) => [name.toLowerCase(), code]),
+) as Record<Lowercase<CountryName>, CountryCode>;
 
 const STATION_TYPES = ["rail", "metro", "light"] as const;
 type StationType = (typeof STATION_TYPES)[number];
@@ -44,7 +44,7 @@ export function parseQuery(q: string): ParsedQuery {
   for (const token of tokens) {
     if (!country) {
       if (token in COUNTRY_NAME_TO_CODE) {
-        country = COUNTRY_NAME_TO_CODE[token as CountryName];
+        country = COUNTRY_NAME_TO_CODE[token as Lowercase<CountryName>];
         continue;
       }
       if (COUNTRY_CODES.includes(token as CountryCode)) {

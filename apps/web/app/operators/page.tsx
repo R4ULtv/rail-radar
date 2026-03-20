@@ -90,9 +90,7 @@ export default function BrandsPage() {
                   className="size-7 rounded-full"
                 />
                 <div className="shrink-0">
-                  <h2 className="text-lg font-semibold tracking-tight first-letter:uppercase">
-                    {COUNTRY_MAP[country]}
-                  </h2>
+                  <h2 className="text-lg font-semibold tracking-tight">{COUNTRY_MAP[country]}</h2>
                   <p className="text-xs text-muted-foreground">
                     {`${countryBrands.length} operator${countryBrands.length > 1 ? "s" : ""}`}
                   </p>

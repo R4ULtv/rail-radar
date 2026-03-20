@@ -1,14 +1,14 @@
-export const COUNTRY_CODES = ["it", "ch", "fi", "be", "nl"] as const;
-export type CountryCode = (typeof COUNTRY_CODES)[number];
-export type CountryName = "italy" | "switzerland" | "finland" | "belgium" | "netherlands";
+export const COUNTRY_MAP = {
+  it: "Italy",
+  ch: "Switzerland",
+  fi: "Finland",
+  be: "Belgium",
+  nl: "Netherlands",
+} as const;
 
-export const COUNTRY_MAP: Record<CountryCode, CountryName> = {
-  it: "italy",
-  ch: "switzerland",
-  fi: "finland",
-  be: "belgium",
-  nl: "netherlands",
-};
+export type CountryCode = keyof typeof COUNTRY_MAP;
+export type CountryName = (typeof COUNTRY_MAP)[CountryCode];
+export const COUNTRY_CODES = Object.keys(COUNTRY_MAP) as CountryCode[];
 
 const ID_PREFIX_TO_COUNTRY: Record<string, CountryCode> = {
   IT: "it",
