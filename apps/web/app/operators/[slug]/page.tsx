@@ -248,6 +248,7 @@ export default async function BrandPage({ params }: BrandPageProps) {
         <div className="relative aspect-21/9">
           <Image
             unoptimized
+            loading="eager"
             src={`${process.env.NEXT_PUBLIC_API_URL}/map/static?bbox=${brand.bounds.join(",")}&w=960&h=412`}
             alt={`Map of ${brand.name} operating area`}
             fill
