@@ -16,6 +16,7 @@ import {
   CodeIcon,
   BookOpenIcon,
   CalendarDaysIcon,
+  ExpandIcon,
   TrainTrackIcon,
   UsersIcon,
 } from "lucide-react";
@@ -100,6 +101,19 @@ function formatNumber(n: number): string {
   return String(n);
 }
 
+function boundsToView(bounds: Brand["bounds"]): { lat: number; lng: number; zoom: number } {
+  const [west, south, east, north] = bounds;
+  const lat = (south + north) / 2;
+  const lng = (west + east) / 2;
+
+  const latSpan = north - south;
+  const lngSpan = east - west;
+  const maxSpan = Math.max(latSpan, lngSpan);
+  const zoom = Math.floor(Math.log2(360 / maxSpan));
+
+  return { lat: +lat.toFixed(4), lng: +lng.toFixed(4), zoom: Math.min(zoom, 18) };
+}
+
 function getRelatedBrands(brand: Brand): Brand[] {
   const related: Brand[] = [];
   const seen = new Set<string>([brand.slug]);
@@ -125,6 +139,7 @@ export default async function BrandPage({ params }: BrandPageProps) {
   }
 
   const relatedBrands = getRelatedBrands(brand);
+  const mapView = boundsToView(brand.bounds);
 
   const jsonLd = {
     "@context": "https://schema.org",
@@ -244,23 +259,29 @@ export default async function BrandPage({ params }: BrandPageProps) {
         </div>
       </div>
 
-      <Card className="mb-6 overflow-hidden py-0">
-        <div className="relative aspect-21/9">
-          <Image
-            unoptimized
-            loading="eager"
-            src={`${process.env.NEXT_PUBLIC_API_URL}/map/static?bbox=${brand.bounds.join(",")}&w=960&h=412`}
-            alt={`Map of ${brand.name} operating area`}
-            fill
-            className="object-cover"
-          />
-          <div className="absolute inset-x-0 bottom-0 bg-linear-to-t from-card/40 to-transparent p-4 pt-8">
-            <h2 className="text-xs font-medium uppercase tracking-[0.15em] text-muted-foreground">
-              Operating Area
-            </h2>
+      <Link
+        href={`/?lat=${mapView.lat}&lng=${mapView.lng}&zoom=${mapView.zoom}`}
+        className="group/map"
+      >
+        <Card className="mb-6 overflow-hidden py-0">
+          <div className="relative aspect-21/9">
+            <Image
+              unoptimized
+              loading="eager"
+              src={`${process.env.NEXT_PUBLIC_API_URL}/map/static?bbox=${brand.bounds.join(",")}&w=960&h=412`}
+              alt={`Map of ${brand.name} operating area`}
+              fill
+              className="object-cover"
+            />
+            <ExpandIcon className="absolute top-4 right-4 size-4 text-muted-foreground opacity-0 scale-95 transition-[transform,opacity] duration-200 ease-out group-hover/map:opacity-100 group-hover/map:scale-100" />
+            <div className="absolute inset-x-0 bottom-0 bg-linear-to-t from-card/40 to-transparent p-4 pt-8">
+              <h2 className="text-xs font-medium uppercase tracking-[0.15em] text-muted-foreground">
+                Operating Area
+              </h2>
+            </div>
           </div>
-        </div>
-      </Card>
+        </Card>
+      </Link>
 
       <div className="grid grid-cols-1 md:grid-cols-5 gap-6">
         <div className="md:col-span-3 space-y-6">
