@@ -1243,6 +1243,78 @@ export const brands: Brand[] = [
       },
     ],
   },
+  {
+    slug: "caledonian-sleeper",
+    name: "Caledonian Sleeper",
+    logoPath: "uk/cs",
+    countries: ["uk"],
+    bounds: [-5.7, 51.5, -1.3, 57.5],
+    description:
+      "Caledonian Sleeper operates overnight rail services between London Euston and Scotland, serving Edinburgh, Glasgow, Aberdeen, Inverness, and Fort William. It provides a unique overnight travel experience with seated and sleeper berth options.",
+    website: "https://www.sleeper.scot",
+    founded: 2015,
+    headquarters: "Edinburgh, United Kingdom",
+    networkKm: 1200,
+    annualPassengers: 350_000,
+    serviceTypes: ["night-train"],
+    parentCompany: "Scottish Government (public operator)",
+    links: [
+      { label: "Official Site", url: "https://www.sleeper.scot", type: "website" },
+      {
+        label: "Wikipedia",
+        url: "https://en.wikipedia.org/wiki/Caledonian_Sleeper",
+        type: "wikipedia",
+      },
+    ],
+  },
+  {
+    slug: "grand-central",
+    name: "Grand Central",
+    logoPath: "uk/gc",
+    countries: ["uk"],
+    bounds: [-1.6, 51.5, 0.0, 54.8],
+    description:
+      "Grand Central is an open-access operator running services on the East Coast Main Line, connecting London King's Cross with Sunderland, Hartlepool, and Bradford. It offers an alternative to LNER on the route, serving towns not on the main intercity network.",
+    website: "https://www.grandcentralrail.com",
+    founded: 2007,
+    headquarters: "London, United Kingdom",
+    networkKm: 480,
+    annualPassengers: 2_500_000,
+    serviceTypes: ["intercity"],
+    parentCompany: "Arriva (I Squared Capital)",
+    links: [
+      { label: "Official Site", url: "https://www.grandcentralrail.com", type: "website" },
+      {
+        label: "Wikipedia",
+        url: "https://en.wikipedia.org/wiki/Grand_Central_(train_operating_company)",
+        type: "wikipedia",
+      },
+    ],
+  },
+  {
+    slug: "hull-trains",
+    name: "Hull Trains",
+    logoPath: "uk/ht",
+    countries: ["uk"],
+    bounds: [-0.5, 51.5, 0.0, 53.8],
+    description:
+      "Hull Trains is an open-access operator running direct services between Hull and London King's Cross via Doncaster. It was the UK's first open-access passenger rail operator, providing an alternative to LNER on the East Coast Main Line.",
+    website: "https://www.hulltrains.co.uk",
+    founded: 2000,
+    headquarters: "Hull, United Kingdom",
+    networkKm: 320,
+    annualPassengers: 1_200_000,
+    serviceTypes: ["intercity"],
+    parentCompany: "FirstGroup",
+    links: [
+      { label: "Official Site", url: "https://www.hulltrains.co.uk", type: "website" },
+      {
+        label: "Wikipedia",
+        url: "https://en.wikipedia.org/wiki/Hull_Trains",
+        type: "wikipedia",
+      },
+    ],
+  },
 ];
 
 export const brandBySlug = new Map<string, Brand>(brands.map((b) => [b.slug, b]));
