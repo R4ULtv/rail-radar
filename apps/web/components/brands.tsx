@@ -58,6 +58,9 @@ const brandPaths: Record<string, string> = {
   tp: "uk/tp",
   lo: "uk/lo",
   cc: "uk/cc",
+  cs: "uk/cs",
+  gc: "uk/gc",
+  ht: "uk/ht",
 };
 
 // Aliases for brands that share icons
@@ -70,6 +73,11 @@ const brandAliases: Record<string, string> = {
   "obb railjet": "obb",
   "obb nightjet": "obb",
   "sbb gmbh": "sbb",
+  es: "eurostar",
+  gn: "tl",
+  gx: "sn",
+  ln: "lm",
+  wm: "lm",
 };
 
 function getBrandPath(brand: string): string | null {
