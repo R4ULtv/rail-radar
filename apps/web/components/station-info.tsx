@@ -5,6 +5,8 @@ import {
   ArrowDownLeftIcon,
   ArrowRightIcon,
   ArrowUpRightIcon,
+  BugIcon,
+  LightbulbIcon,
   MegaphoneIcon,
   XIcon,
 } from "lucide-react";
@@ -82,11 +84,45 @@ function TrainListContent({
     />
   ));
 
+  const reportLink = (
+    <div className="px-4 py-3 text-center flex items-center justify-center">
+      <a
+        href="https://github.com/R4ULtv/rail-radar/issues/new?template=bug_report.yml"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="inline-flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors"
+      >
+        <BugIcon className="size-3" />
+        Report a problem
+      </a>
+      <span className="text-muted-foreground/50 mx-1.5">·</span>
+      <a
+        href="https://github.com/R4ULtv/rail-radar/issues/new?template=feature_request.yml"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="inline-flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors"
+      >
+        <LightbulbIcon className="size-3" />
+        Feature request
+      </a>
+    </div>
+  );
+
   if (scrollable) {
-    return <ScrollArea className="max-h-[calc(100vh-156px)]">{trainList}</ScrollArea>;
+    return (
+      <ScrollArea className="max-h-[calc(100vh-156px)]">
+        {trainList}
+        {reportLink}
+      </ScrollArea>
+    );
   }
 
-  return <div>{trainList}</div>;
+  return (
+    <div>
+      {trainList}
+      {reportLink}
+    </div>
+  );
 }
 
 // Shared tabs component
