@@ -1,7 +1,8 @@
 import type { Train } from "@repo/data";
+import Link from "next/link";
 import { cn } from "@repo/ui/lib/utils";
 import { Skeleton } from "@repo/ui/components/skeleton";
-import { BrandLogo } from "@/components/brands";
+import { BrandLogo, getBrandSlug } from "@/components/brands";
 import { ArrowRightIcon, ArrowDownIcon, BanIcon } from "lucide-react";
 
 interface TrainRowProps {
@@ -12,6 +13,9 @@ interface TrainRowProps {
 export function TrainRow({ train, type }: TrainRowProps) {
   const route = type === "arrivals" ? train.origin : train.destination;
   const hasDelay = train.delay !== null && train.delay > 0;
+  const brandSlug = train.brand ? getBrandSlug(train.brand) : null;
+
+  const brandLogo = <BrandLogo brand={train.brand} className="size-4 rounded" />;
 
   return (
     <div
@@ -39,7 +43,13 @@ export function TrainRow({ train, type }: TrainRowProps) {
         {/* Line 1: Train info + Time */}
         <div className="flex items-center justify-between gap-2">
           <div className="flex items-center gap-1.5">
-            <BrandLogo brand={train.brand} className="size-4 rounded" />
+            {brandSlug ? (
+              <Link href={`/operators/${brandSlug}`} aria-label={`${train.brand} brand page`}>
+                {brandLogo}
+              </Link>
+            ) : (
+              brandLogo
+            )}
             {train.category && (
               <span className="text-xs font-medium text-muted-foreground bg-muted px-1.5 py-0.5 rounded">
                 {train.category}

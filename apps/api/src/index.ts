@@ -121,6 +121,30 @@ app.get("/robots.txt", (c) => {
 
 // --- Map routes ---
 
+const MAPBOX_STYLE = "https://api.mapbox.com/styles/v1/mapbox/dark-v11/static";
+const STATION_ICON_URL = encodeURIComponent("https://www.railradar24.com/station-icon.png");
+const MAX_DIMENSION = 1280;
+
+function parseDimensions(w: string | undefined, h: string | undefined, defaults: [number, number]) {
+  const width = parseInt(w ?? String(defaults[0]), 10);
+  const height = parseInt(h ?? String(defaults[1]), 10);
+  return { width, height };
+}
+
+function validDimensions(width: number, height: number) {
+  return width >= 1 && width <= MAX_DIMENSION && height >= 1 && height <= MAX_DIMENSION;
+}
+
+function buildMapboxUrl(path: string, size: string, token: string, extra = "") {
+  return `${MAPBOX_STYLE}/${path}/${size}@2x?attribution=false&logo=false${extra}&access_token=${token}`;
+}
+
+function mapImageResponse(res: Response) {
+  return new Response(res.body, {
+    headers: { "content-type": res.headers.get("content-type") ?? "image/png" },
+  });
+}
+
 app.get(
   "/map/static",
   cache({
@@ -128,53 +152,62 @@ app.get(
     cacheControl: CACHE_TTL.STATIC_MAP,
   }),
   async (c) => {
-    const lat = parseFloat(c.req.query("lat") ?? "");
-    const lng = parseFloat(c.req.query("lng") ?? "");
-    const zoom = parseInt(c.req.query("zoom") ?? "15", 10);
+    const bbox = c.req.query("bbox");
+    const token = c.env.MAPBOX_TOKEN;
 
-    if (isNaN(lat) || isNaN(lng) || lat < -90 || lat > 90 || lng < -180 || lng > 180) {
-      return c.json({ error: "Invalid coordinates." }, 400);
+    let mapboxUrl: string;
+
+    if (bbox) {
+      const { width, height } = parseDimensions(c.req.query("w"), c.req.query("h"), [960, 412]);
+      if (!validDimensions(width, height)) {
+        return c.json({ error: "Invalid dimensions. Max 1280x1280." }, 400);
+      }
+
+      const parts = bbox.split(",").map(Number);
+      if (parts.length !== 4 || parts.some(isNaN)) {
+        return c.json({ error: "Invalid bbox. Must be west,south,east,north." }, 400);
+      }
+
+      mapboxUrl = buildMapboxUrl(`[${bbox}]`, `${width}x${height}`, token, "&padding=40");
+    } else {
+      const { width, height } = parseDimensions(c.req.query("w"), c.req.query("h"), [1280, 256]);
+      if (!validDimensions(width, height)) {
+        return c.json({ error: "Invalid dimensions. Max 1280x1280." }, 400);
+      }
+
+      const lat = parseFloat(c.req.query("lat") ?? "");
+      const lng = parseFloat(c.req.query("lng") ?? "");
+      const zoom = parseInt(c.req.query("zoom") ?? "15", 10);
+
+      if (isNaN(lat) || isNaN(lng) || lat < -90 || lat > 90 || lng < -180 || lng > 180) {
+        return c.json({ error: "Invalid coordinates." }, 400);
+      }
+      if (isNaN(zoom) || zoom < 0 || zoom > 22) {
+        return c.json({ error: "Invalid zoom level." }, 400);
+      }
+
+      const marker = `url-${STATION_ICON_URL}(${lng},${lat})`;
+      mapboxUrl = buildMapboxUrl(`${marker}/${lng},${lat},${zoom},0`, `${width}x${height}`, token);
     }
 
-    if (isNaN(zoom) || zoom < 0 || zoom > 22) {
-      return c.json({ error: "Invalid zoom level." }, 400);
-    }
+    const supportsWebp = /image\/webp/.test(c.req.header("accept") ?? "");
+    const cfOptions = { image: supportsWebp ? { format: "webp" as const } : {}, quality: 100 };
 
-    const iconUrl = encodeURIComponent("https://www.railradar24.com/station-icon.png");
-    const marker = `url-${iconUrl}(${lng},${lat})`;
-    const mapboxUrl = `https://api.mapbox.com/styles/v1/mapbox/dark-v11/static/${marker}/${lng},${lat},${zoom},0/1280x256@2x?attribution=false&logo=false&access_token=${c.env.MAPBOX_TOKEN}`;
-
-    const accept = c.req.header("accept") ?? "";
-    const image: { format?: "webp" } = {};
-
-    if (/image\/webp/.test(accept)) {
-      image.format = "webp";
-    }
-
-    const response = await fetch(mapboxUrl, { cf: { image, quality: 100 } });
-
+    const response = await fetch(mapboxUrl, { cf: cfOptions });
     if (!response.ok) {
       return c.json({ error: "Failed to fetch map image." }, 502);
     }
 
-    if (
-      response.headers.has("cf-resized") &&
-      /err=/.test(response.headers.get("cf-resized") ?? "")
-    ) {
+    const resized = response.headers.get("cf-resized") ?? "";
+    if (resized.includes("err=")) {
       const fallback = await fetch(mapboxUrl);
       if (!fallback.ok) {
         return c.json({ error: "Failed to fetch map image." }, 502);
       }
-      return new Response(fallback.body, {
-        headers: { "content-type": fallback.headers.get("content-type") ?? "image/png" },
-      });
+      return mapImageResponse(fallback);
     }
 
-    return new Response(response.body, {
-      headers: {
-        "content-type": response.headers.get("content-type") ?? "image/png",
-      },
-    });
+    return mapImageResponse(response);
   },
 );
 

@@ -1,13 +1,14 @@
 "use client";
 
 import { useState, useSyncExternalStore } from "react";
-import { InfoIcon, XIcon } from "lucide-react";
+import { SparklesIcon, XIcon } from "lucide-react";
 import { LazyMotion, domAnimation, m, AnimatePresence } from "motion/react";
+import Link from "next/link";
 import { Alert, AlertTitle, AlertAction } from "@repo/ui/components/alert";
 import { Badge } from "@repo/ui/components/badge";
 import { Button } from "@repo/ui/components/button";
 
-const STORAGE_KEY = "banner-dismissed-v2";
+const STORAGE_KEY = "banner-dismissed-v3";
 
 const subscribe = () => () => {};
 const getSnapshot = () => !localStorage.getItem(STORAGE_KEY);
@@ -41,15 +42,28 @@ export function AnnouncementBanner() {
                   variant="default"
                   className="text-[10px] uppercase tracking-wide mr-1.5 align-middle"
                 >
-                  <InfoIcon data-icon="inline-start" />
-                  <span className="hidden md:block">Notice</span>
+                  <SparklesIcon data-icon="inline-start" />
+                  <span className="hidden md:block">New</span>
                 </Badge>
                 <span className="hidden md:inline">
-                  Due to internal changes, saved &amp; recent stations have been reset. Sorry about
-                  that!
+                  Brand pages are here! Explore train operators from station departures.{" "}
+                  <Link
+                    href="/operators"
+                    className="underline underline-offset-2"
+                    onClick={dismiss}
+                  >
+                    Check them out
+                  </Link>
                 </span>
                 <span className="md:hidden">
-                  Saved &amp; recent stations have been reset. Sorry!
+                  <Link
+                    href="/operators"
+                    className="underline underline-offset-2"
+                    onClick={dismiss}
+                  >
+                    Explore brand pages
+                  </Link>{" "}
+                  - train operators info!
                 </span>
               </AlertTitle>
               <AlertAction className="top-1.5">
