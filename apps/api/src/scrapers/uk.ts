@@ -97,12 +97,25 @@ function calculateDelay(
   if (diff < -720) diff += 1440;
   if (diff > 720) diff -= 1440;
 
-  return diff > 0 ? diff : null;
+  return diff > 0 ? diff : 0;
+}
+
+/** Get current UK time in minutes since midnight */
+function getNowMinutesUK(): number | null {
+  const now = new Date();
+  const ukTime = now.toLocaleTimeString("en-GB", {
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false,
+    timeZone: "Europe/London",
+  });
+  return parseHHmm(ukTime);
 }
 
 function getStatus(
   service: ServiceItemWithCallingPoints,
   type: "arrivals" | "departures",
+  nowMinutes: number,
 ): Train["status"] {
   if (service.isCancelled) return "cancelled";
 
@@ -116,18 +129,8 @@ function getStatus(
   const schMinutes = parseHHmm(scheduled);
   if (schMinutes === null) return null;
 
-  // Get current UK time in minutes
-  const now = new Date();
-  const ukTime = now.toLocaleTimeString("en-GB", {
-    hour: "2-digit",
-    minute: "2-digit",
-    hour12: false,
-    timeZone: "Europe/London",
-  });
-  const nowMinutes = parseHHmm(ukTime);
-  if (nowMinutes === null) return null;
-
-  let diff = (et && parseHHmm(et) !== null ? parseHHmm(et)! : schMinutes) - nowMinutes;
+  const etMinutes = et ? parseHHmm(et) : null;
+  let diff = (etMinutes ?? schMinutes) - nowMinutes;
   if (diff < -720) diff += 1440;
   if (diff > 720) diff -= 1440;
 
@@ -225,7 +228,11 @@ function stripHtml(html: string): string {
   return html.replace(/<[^>]*>/g, "").trim();
 }
 
-function mapService(service: ServiceItemWithCallingPoints, type: "arrivals" | "departures"): Train {
+function mapService(
+  service: ServiceItemWithCallingPoints,
+  type: "arrivals" | "departures",
+  nowMinutes: number,
+): Train {
   const scheduled = type === "arrivals" ? service.sta : service.std;
   const estimated = type === "arrivals" ? service.eta : service.etd;
 
@@ -236,7 +243,7 @@ function mapService(service: ServiceItemWithCallingPoints, type: "arrivals" | "d
     scheduledTime: scheduled ?? "--:--",
     delay: calculateDelay(scheduled, estimated),
     platform: service.platform ?? null,
-    status: getStatus(service, type),
+    status: getStatus(service, type, nowMinutes),
     info: getInfo(service),
   };
 
@@ -270,12 +277,25 @@ export async function scrapeUKTrains(
 
   const data: StationBoardWithDetails = await response.json();
 
+  if (data.areServicesAvailable === false) {
+    return {
+      trains: [],
+      info: "Services are currently unavailable at this station.",
+      timing: { fetchMs },
+    };
+  }
+
+  const nowMinutes = getNowMinutesUK();
+
   // Only map trainServices (skip bus/ferry), filter by type
   const services = (data.trainServices ?? []).filter((s) =>
     type === "arrivals" ? s.sta !== undefined : s.std !== undefined,
   );
 
-  const trains: Train[] = services.map((service) => mapService(service, type));
+  const trains: Train[] =
+    nowMinutes !== null
+      ? services.map((service) => mapService(service, type, nowMinutes))
+      : services.map((service) => mapService(service, type, 0));
 
   // NRCC messages as station-level info
   const nrccMessages = data.nrccMessages?.map((m) => stripHtml(m.Value)).filter(Boolean);
