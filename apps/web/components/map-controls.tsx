@@ -5,7 +5,6 @@ import { Marker, useMap } from "react-map-gl/mapbox";
 import { CompassIcon, LocateFixedIcon, LocateIcon, MinusIcon, PlusIcon } from "lucide-react";
 import { Button } from "@repo/ui/components/button";
 import { ButtonGroup } from "@repo/ui/components/button-group";
-import { GitHub } from "@repo/ui/icons/github";
 
 export function MapControls() {
   const { current: map } = useMap();
@@ -180,22 +179,6 @@ export function MapControls() {
             <MinusIcon />
           </Button>
         </ButtonGroup>
-        <Button
-          variant="outline"
-          size="icon-sm"
-          aria-label="GitHub"
-          className="bg-card hover:bg-muted dark:bg-card dark:hover:bg-muted size-9 md:size-8 active:scale-[0.98]"
-          nativeButton={false}
-          render={
-            <a
-              href="https://github.com/R4ULtv/rail-radar"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <GitHub />
-            </a>
-          }
-        />
       </div>
     </>
   );
