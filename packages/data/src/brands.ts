@@ -1315,6 +1315,40 @@ export const brands: Brand[] = [
       },
     ],
   },
+  {
+    slug: "ir",
+    name: "Iarnród Éireann",
+    logoPath: "ir",
+    countries: ["ie"],
+    bounds: [-10.5, 51.4, -5.9, 55.4],
+    description:
+      "Iarnród Éireann (Irish Rail) is Ireland's national railway operator, running intercity, commuter, and DART (Dublin Area Rapid Transit) services across the island. It connects all major Irish cities and operates the electrified DART coastal line serving the greater Dublin area.",
+    website: "https://www.irishrail.ie",
+    founded: 1987,
+    headquarters: "Dublin, Ireland",
+    networkKm: 2400,
+    annualPassengers: 50_000_000,
+    serviceTypes: ["intercity", "commuter", "regional"],
+    parentCompany: "Córas Iompair Éireann",
+    links: [
+      { label: "Official Site", url: "https://www.irishrail.ie", type: "website" },
+      {
+        label: "Timetables",
+        url: "https://www.irishrail.ie/en-ie/train-timetables",
+        type: "timetables",
+      },
+      {
+        label: "Open API",
+        url: "http://api.irishrail.ie/realtime/",
+        type: "api",
+      },
+      {
+        label: "Wikipedia",
+        url: "https://en.wikipedia.org/wiki/Iarnr%C3%B3d_%C3%89ireann",
+        type: "wikipedia",
+      },
+    ],
+  },
 ];
 
 export const brandBySlug = new Map<string, Brand>(brands.map((b) => [b.slug, b]));

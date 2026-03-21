@@ -61,6 +61,8 @@ const brandPaths: Record<string, string> = {
   cs: "uk/cs",
   gc: "uk/gc",
   ht: "uk/ht",
+  // Irish brands
+  ir: "ir",
 };
 
 // Aliases for brands that share icons
@@ -148,6 +150,8 @@ const brandSlugMap: Record<string, string> = {
   tp: "transpennine",
   lo: "london-overground",
   cc: "c2c",
+  // Irish brands
+  ir: "ir",
 };
 
 export function getBrandSlug(brand: string): string | null {
