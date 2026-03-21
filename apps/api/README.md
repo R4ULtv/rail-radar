@@ -9,15 +9,16 @@ Cloudflare Workers API that provides real-time European train data by scraping o
 
 ## Endpoints
 
-| Method | Path                          | Description                                                                     |
-| ------ | ----------------------------- | ------------------------------------------------------------------------------- |
-| `GET`  | `/`                           | API info and endpoint documentation                                             |
-| `GET`  | `/stations`                   | GeoJSON FeatureCollection of all stations (see below)                           |
-| `GET`  | `/stations/trending`          | Get trending stations (`?period=hour\|day\|week\|month`, default: `day`)        |
-| `GET`  | `/stations/trending/:country` | Get trending stations by country (`it\|ch\|fi\|be\|nl`, same `?period` options) |
-| `GET`  | `/stations/:id`               | Get station with trains (`?type=arrivals\|departures`)                          |
-| `GET`  | `/stations/:id/stats`         | Get station visit stats (`?period=hour\|day\|week\|month`, default: `day`)      |
-| `GET`  | `/analytics/overview`         | Get global analytics (total visits, unique visitors, country breakdown)         |
+| Method | Path                          | Description                                                                             |
+| ------ | ----------------------------- | --------------------------------------------------------------------------------------- |
+| `GET`  | `/`                           | API info and endpoint documentation                                                     |
+| `GET`  | `/map/static`                 | Static map image via Mapbox                                                             |
+| `GET`  | `/stations`                   | GeoJSON FeatureCollection of all stations (see below)                                   |
+| `GET`  | `/stations/trending`          | Get trending stations (`?period=hour\|day\|week`, default: `day`)                       |
+| `GET`  | `/stations/trending/:country` | Get trending stations by country (`it\|ch\|fi\|be\|nl\|uk\|ie`, same `?period` options) |
+| `GET`  | `/stations/:id`               | Get station with trains (`?type=arrivals\|departures`)                                  |
+| `GET`  | `/stations/:id/stats`         | Get station visit stats (`?period=hour\|day\|week`, default: `day`)                     |
+| `GET`  | `/analytics/overview`         | Get global analytics (total visits, unique visitors, country breakdown)                 |
 
 ### `GET /stations`
 
@@ -27,7 +28,7 @@ Returns station data in two formats depending on query parameters:
 
 - No params: all stations (pre-serialized for performance)
 - `?type=rail|metro|light`: filter by station type
-- `?country=it|ch|fi|be|nl`: filter by country
+- `?country=it|ch|fi|be|nl|uk|ie`: filter by country
 - Filters can be combined: `?type=rail&country=it`
 
 **Search mode** — returns `application/json` array of `Station` objects:
@@ -60,7 +61,9 @@ src/
 │   ├── switzerland.ts # Swiss transport API scraper
 │   ├── finland.ts     # Finnish Digitraffic API scraper
 │   ├── belgium.ts     # Belgian iRail API scraper
-│   └── netherlands.ts # Dutch NS API scraper
+│   ├── netherlands.ts # Dutch NS API scraper
+│   ├── uk.ts          # UK National Rail API scraper
+│   └── ireland.ts     # Irish Rail API scraper
 ├── analytics.ts   # Cloudflare Analytics Engine integration
 ├── fuzzy.ts       # Fuzzy search (Damerau-Levenshtein)
 └── constants.ts   # Shared constants (cache TTL, timeouts, validation)
