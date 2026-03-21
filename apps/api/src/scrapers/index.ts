@@ -6,6 +6,7 @@ import { scrapeFinlandTrains } from "./finland";
 import { scrapeTrains } from "./italy";
 import { scrapeNetherlandsTrains } from "./netherlands";
 import { scrapeSwissTrains } from "./switzerland";
+import { scrapeIrelandTrains } from "./ireland";
 import { scrapeUKTrains } from "./uk";
 
 export interface ScraperTiming {
@@ -49,6 +50,7 @@ const scrapers: Partial<Record<CountryCode, ScrapeFn>> = {
   be: scrapeBelgiumTrains,
   ch: scrapeSwissTrains,
   fi: scrapeFinlandTrains,
+  ie: scrapeIrelandTrains,
   it: scrapeTrains,
   nl: scrapeNetherlandsTrains,
   uk: scrapeUKTrains,
