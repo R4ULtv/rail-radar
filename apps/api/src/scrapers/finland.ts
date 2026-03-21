@@ -1,5 +1,5 @@
 import { stationById, type Train } from "@repo/data";
-import fiStationCodes from "./fi-codes.json";
+import fiStationCodes from "./codes/fi-codes.json";
 
 import { ScraperError, type ScrapeResult, formatTime } from "./index";
 import { fetchWithTimeout } from "./fetch";

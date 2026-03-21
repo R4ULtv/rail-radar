@@ -3,7 +3,7 @@ import type { Train } from "@repo/data";
 import type { ScrapeResult } from "./index";
 import { ScraperError } from "./index";
 import { fetchWithTimeout } from "./fetch";
-import ieStationCodes from "./ie-codes.json";
+import ieStationCodes from "./codes/ie-codes.json";
 
 const IE_BASE_URL =
   "http://api.irishrail.ie/realtime/realtime.asmx/getStationDataByCodeXML_WithNumMins";

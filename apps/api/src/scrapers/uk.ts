@@ -2,7 +2,7 @@ import type { Train } from "@repo/data";
 
 import { ScraperError, type ScrapeResult } from "./index";
 import { fetchWithTimeout } from "./fetch";
-import ukStationCodes from "./uk-codes.json";
+import ukStationCodes from "./codes/uk-codes.json";
 
 const LDBWS_BASE_URL =
   "https://api1.raildata.org.uk/1010-live-arrival-and-departure-boards-arr-and-dep1_1/LDBWS/api/20220120";
