@@ -130,9 +130,7 @@ class ParserState {
       brand: "IR",
       category: category || null,
       trainNumber: this.currentTrain.trainNumber,
-      ...(this.type === "departures"
-        ? { destination: this.destination }
-        : { origin: this.origin }),
+      ...(this.type === "departures" ? { destination: this.destination } : { origin: this.origin }),
       scheduledTime: scheduledTime || "--:--",
       delay,
       platform: null,
