@@ -107,7 +107,7 @@ app.get("/", (c) => {
       "GET /stations/trending":
         "Get trending stations (optional: ?period=hour|day|week, default: day)",
       "GET /stations/trending/:country":
-        "Get trending stations by country (it|ch|fi|be|nl, optional: ?period=hour|day|week)",
+        "Get trending stations by country (it|ch|fi|be|nl|uk|ie, optional: ?period=hour|day|week)",
       "GET /stations/:id/stats":
         "Get station visit stats (optional: ?period=hour|day|week, default: day)",
       "GET /stations/:id": "Get station info with trains (optional: ?type=arrivals|departures)",
