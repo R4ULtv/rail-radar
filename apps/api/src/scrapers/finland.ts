@@ -1,5 +1,5 @@
 import { stationById, type Train } from "@repo/data";
-import fiStationCodes from "./fi-codes.json";
+import fiStationCodes from "./codes/fi-codes.json";
 
 import { ScraperError, type ScrapeResult, formatTime } from "./index";
 import { fetchWithTimeout } from "./fetch";
@@ -125,7 +125,7 @@ function mapTrain(
     category,
     trainNumber: String(entry.trainNumber),
     scheduledTime,
-    delay: stationRow.differenceInMinutes ?? null,
+    delay: stationRow.differenceInMinutes != null ? Math.max(0, stationRow.differenceInMinutes) : null,
     platform: stationRow.commercialTrack || null,
     status: entry.cancelled ? "cancelled" : getStatus(stationRow, type),
     info: null,

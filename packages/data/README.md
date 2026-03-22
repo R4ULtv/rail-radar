@@ -9,9 +9,10 @@ src/
 ├── index.ts           # Main entry point
 ├── stations.ts        # Station data exports (GeoJSON + derived arrays)
 ├── countries.ts       # Country codes and lookup utilities
+├── brands.ts          # Train brand/operator definitions
 ├── types.ts           # TypeScript type definitions
 ├── geojson.d.ts       # Module declaration for .geojson imports
-└── stations.geojson   # GeoJSON FeatureCollection (5700+ stations)
+└── stations.geojson   # GeoJSON FeatureCollection (8900+ stations)
 
 scripts/
 ├── convert-to-geojson.ts  # Converts stations.json → stations.geojson
@@ -31,8 +32,10 @@ import {
   stationsGeoJSON,
   getCountry,
   COUNTRY_CODES,
+  BRANDS,
   type Station,
   type Train,
+  type Brand,
   type StationFeatureCollection,
   type StationFeature,
   type StationProperties,
@@ -63,8 +66,6 @@ A typed GeoJSON `FeatureCollection<Point, StationProperties>` containing all sta
 - `properties.name` — station name
 - `properties.type` — `"rail"`, `"metro"`, or `"light"`
 - `properties.importance` — `1`–`4`
-- `properties.country` — country code (e.g., `"it"`)
-- `properties.minzoom` — minimum zoom level for map display
 - `geometry.coordinates` — `[lng, lat]`
 
 This is served directly by the API as the `/stations` GeoJSON endpoint and consumed by MapBox GL JS.
@@ -91,6 +92,8 @@ getCountry("CH8503000"); // "ch"
 getCountry("FI001"); // "fi"
 getCountry("BE95000"); // "be"
 getCountry("NL8400058"); // "nl"
+getCountry("UK1072"); // "uk"
+getCountry("IE360"); // "ie"
 getCountry("IT01700", { format: "name" }); // "italy"
 ```
 
@@ -104,7 +107,6 @@ interface Station {
   name: string;
   type: "rail" | "metro" | "light";
   importance: 1 | 2 | 3 | 4;
-  country?: string;
   geo?: { lat: number; lng: number };
 }
 ```
@@ -128,8 +130,6 @@ interface StationProperties {
   name: string;
   type: "rail" | "metro" | "light";
   importance: 1 | 2 | 3 | 4;
-  country: string;
-  minzoom: number;
 }
 ```
 

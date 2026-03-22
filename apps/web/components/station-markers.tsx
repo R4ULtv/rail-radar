@@ -309,7 +309,7 @@ export function StationMarkers({ stations, layers }: Pick<MapLayersState, "stati
       <Source
         id="stations-source"
         type="geojson"
-        data={`${process.env.NEXT_PUBLIC_API_URL}/stations`}
+        data={`${process.env.NEXT_PUBLIC_API_URL}/stations?v=2`}
       >
         <Layer {...metroLayer} />
         <Layer {...metroLabel} />

@@ -13,7 +13,7 @@ Next.js frontend for real-time train tracking across Europe with an interactive 
 
 ## Features
 
-- Interactive full-screen map with 5400+ station markers
+- Interactive full-screen map with 8900+ station markers
 - Real-time train arrivals/departures with 30s polling
 - Fuzzy station search with keyboard shortcuts
 - URL-synced map state for shareable links
@@ -22,10 +22,11 @@ Next.js frontend for real-time train tracking across Europe with an interactive 
 
 ## Environment Variables
 
-| Variable               | Description                                            |
-| ---------------------- | ------------------------------------------------------ |
-| `NEXT_PUBLIC_API_URL`  | API endpoint URL (e.g., `https://api.railradar24.com`) |
-| `NEXT_PUBLIC_SITE_URL` | Website URL (e.g., `https://www.railradar24.com`)      |
+| Variable                   | Description                                            |
+| -------------------------- | ------------------------------------------------------ |
+| `NEXT_PUBLIC_API_URL`      | API endpoint URL (e.g., `https://api.railradar24.com`) |
+| `NEXT_PUBLIC_MAPBOX_TOKEN` | Mapbox public token for map rendering                  |
+| `NEXT_PUBLIC_SITE_URL`     | Website URL (e.g., `https://www.railradar24.com`)      |
 
 ## Development
 
