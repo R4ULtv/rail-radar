@@ -2,7 +2,7 @@
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "rail-radar",
   "main": "src/index.ts",
-  "compatibility_date": "2026-03-12",
+  "compatibility_date": "2026-03-22",
   "observability": {
     "enabled": true,
     "head_sampling_rate": 1,
