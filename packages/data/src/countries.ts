@@ -4,6 +4,7 @@ export const COUNTRY_MAP = {
   fi: "Finland",
   be: "Belgium",
   nl: "Netherlands",
+  uk: "United Kingdom",
 } as const;
 
 export type CountryCode = keyof typeof COUNTRY_MAP;
@@ -21,6 +22,9 @@ const ID_PREFIX_TO_COUNTRY: Record<string, CountryCode> = {
   BEM: "be",
   NL: "nl",
   NLM: "nl",
+  UK: "uk",
+  UKM: "uk",
+  UKL: "uk",
 };
 
 /** Get country from a station ID. Returns code by default, or full name with `format: "name"` */

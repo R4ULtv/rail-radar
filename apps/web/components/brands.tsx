@@ -38,6 +38,29 @@ const brandPaths: Record<string, string> = {
   eurostar: "eurostar",
   db: "db",
   ns: "ns",
+  // UK brands
+  lm: "uk/lm",
+  nt: "uk/nt",
+  gw: "uk/gw",
+  xc: "uk/xc",
+  sr: "uk/sr",
+  em: "uk/em",
+  se: "uk/se",
+  sw: "uk/sw",
+  sn: "uk/sn",
+  le: "uk/le",
+  gr: "uk/gr",
+  xr: "uk/xr",
+  tl: "uk/tl",
+  ch: "uk/ch",
+  vt: "uk/vt",
+  aw: "uk/aw",
+  tp: "uk/tp",
+  lo: "uk/lo",
+  cc: "uk/cc",
+  cs: "uk/cs",
+  gc: "uk/gc",
+  ht: "uk/ht",
 };
 
 // Aliases for brands that share icons
@@ -50,6 +73,11 @@ const brandAliases: Record<string, string> = {
   "obb railjet": "obb",
   "obb nightjet": "obb",
   "sbb gmbh": "sbb",
+  es: "eurostar",
+  gn: "tl",
+  gx: "sn",
+  ln: "lm",
+  wm: "lm",
 };
 
 function getBrandPath(brand: string): string | null {
@@ -100,6 +128,26 @@ const brandSlugMap: Record<string, string> = {
   eurostar: "eurostar",
   db: "db",
   ns: "ns",
+  // UK brands
+  lm: "west-midlands-trains",
+  nt: "northern",
+  gw: "gwr",
+  xc: "crosscountry",
+  sr: "scotrail",
+  em: "emr",
+  se: "southeastern",
+  sw: "swr",
+  sn: "southern",
+  le: "greater-anglia",
+  gr: "lner",
+  xr: "elizabeth-line",
+  tl: "thameslink",
+  ch: "chiltern",
+  vt: "avanti",
+  aw: "tfw",
+  tp: "transpennine",
+  lo: "london-overground",
+  cc: "c2c",
 };
 
 export function getBrandSlug(brand: string): string | null {

@@ -34,6 +34,7 @@ type Bindings = {
   CLOUDFLARE_ACCOUNT_ID: string;
   CLOUDFLARE_API_TOKEN: string;
   NS_API_KEY: string;
+  LDBWS_API_KEY: string;
   MAPBOX_TOKEN: string;
 };
 
