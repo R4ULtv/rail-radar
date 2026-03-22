@@ -6,7 +6,7 @@ import { fetchWithTimeout } from "./fetch";
 import ieStationCodes from "./codes/ie-codes.json";
 
 const IE_BASE_URL =
-  "http://api.irishrail.ie/realtime/realtime.asmx/getStationDataByCodeXML_WithNumMins";
+  "https://api.irishrail.ie/realtime/realtime.asmx/getStationDataByCodeXML_WithNumMins";
 
 // Static numeric ID → station code mapping
 const stationCodes = ieStationCodes as Record<string, string>;
@@ -109,9 +109,9 @@ class ParserState {
           ? this.schdepart
           : this.scharrival;
 
-    // Parse delay - can be negative (early), 0, or positive
+    // Parse delay - clamp negative values (early trains) to 0, matching UK scraper behavior
     const lateNum = parseInt(this.late, 10);
-    const delay = isNaN(lateNum) ? null : lateNum;
+    const delay = isNaN(lateNum) ? null : lateNum > 0 ? lateNum : 0;
 
     // Map status — only show incoming/departing if train is due within 5 minutes
     let trainStatus: Train["status"] = null;
@@ -185,7 +185,6 @@ export async function scrapeIrelandTrains(
       if (state.currentTrain.trainNumber) {
         state.finalizeRecord();
       }
-      state.currentTrain = {};
       state.currentTag = "";
       state.currentText = "";
     },
@@ -216,9 +215,20 @@ export async function scrapeIrelandTrains(
     state.finalizeRecord();
   }
 
-  // Sort by scheduled time and limit to 16
+  if (state.trains.length === 0 && response.status !== 200) {
+    throw new ScraperError("Invalid response from Irish Rail API.", 502);
+  }
+
+  // Sort by scheduled time, deduplicate by train number, and limit to 16
   state.trains.sort((a, b) => a.scheduledTime.localeCompare(b.scheduledTime));
-  const filtered = state.trains.slice(0, 16);
+  const seen = new Set<string>();
+  const filtered = state.trains
+    .filter((t) => {
+      if (seen.has(t.trainNumber)) return false;
+      seen.add(t.trainNumber);
+      return true;
+    })
+    .slice(0, 16);
 
   return {
     trains: filtered,
