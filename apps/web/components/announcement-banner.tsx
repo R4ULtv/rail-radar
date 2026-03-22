@@ -8,7 +8,7 @@ import { Alert, AlertTitle, AlertAction } from "@repo/ui/components/alert";
 import { Badge } from "@repo/ui/components/badge";
 import { Button } from "@repo/ui/components/button";
 
-const STORAGE_KEY = "banner-dismissed-v3";
+const STORAGE_KEY = "banner-dismissed-v4";
 
 const subscribe = () => () => {};
 const getSnapshot = () => !localStorage.getItem(STORAGE_KEY);
@@ -46,24 +46,24 @@ export function AnnouncementBanner() {
                   <span className="hidden md:block">New</span>
                 </Badge>
                 <span className="hidden md:inline">
-                  Brand pages are here! Explore train operators from station departures.{" "}
+                  🇬🇧 UK & 🇮🇪 Ireland stations are live! Track trains across the British Isles.{" "}
                   <Link
-                    href="/operators"
+                    href="/operators#uk"
                     className="underline underline-offset-2"
                     onClick={dismiss}
                   >
-                    Check them out
+                    Explore operators
                   </Link>
                 </span>
                 <span className="md:hidden">
                   <Link
-                    href="/operators"
+                    href="/operators#uk"
                     className="underline underline-offset-2"
                     onClick={dismiss}
                   >
-                    Explore brand pages
+                    🇬🇧 UK & 🇮🇪 Ireland
                   </Link>{" "}
-                  - train operators info!
+                  stations are now live!
                 </span>
               </AlertTitle>
               <AlertAction className="top-1.5">
