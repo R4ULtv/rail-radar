@@ -23,7 +23,7 @@ export const metadata: Metadata = {
     template: "%s | Rail Radar",
   },
   description:
-    "Track trains in real time across Italy, Switzerland, Finland, Belgium, the Netherlands, the UK, and Ireland. Get live delays, platform numbers, and departure info for over 5400 train stations on an interactive map.",
+    "Track trains in real time across Italy, Switzerland, Finland, Belgium, the Netherlands, the UK, and Ireland. Get live delays, platform numbers, and departure info for over 8900 train stations on an interactive map.",
   openGraph: {
     type: "website",
     url: baseUrl,
