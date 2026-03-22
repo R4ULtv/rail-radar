@@ -125,7 +125,7 @@ function mapTrain(
     category,
     trainNumber: String(entry.trainNumber),
     scheduledTime,
-    delay: stationRow.differenceInMinutes ?? null,
+    delay: stationRow.differenceInMinutes != null ? Math.max(0, stationRow.differenceInMinutes) : null,
     platform: stationRow.commercialTrack || null,
     status: entry.cancelled ? "cancelled" : getStatus(stationRow, type),
     info: null,
