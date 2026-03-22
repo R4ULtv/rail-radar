@@ -2,8 +2,8 @@
 
 ## Features
 
-- Interactive map with 5400+ railway stations across Italy, Switzerland, Finland, Belgium, and the Netherlands
-- Real-time arrivals and departures from official data sources (RFI, SBB, Digitraffic, iRail, NS)
+- Interactive map with 8900+ railway stations across Italy, Switzerland, Finland, Belgium, the Netherlands, the United Kingdom, and Ireland
+- Real-time arrivals and departures from official data sources (RFI, SBB, Digitraffic, iRail, NS, LDBWS, Irish Rail)
 - Station search with fuzzy matching
 - Shareable URLs with map state
 - User geolocation support
@@ -41,7 +41,7 @@ pnpm dev --filter=studio # Admin tool at localhost:3001
 | `pnpm dev`         | Start development servers    |
 | `pnpm build`       | Build all packages           |
 | `pnpm lint`        | Lint all packages            |
-| `pnpm format`      | Format code with Prettier    |
+| `pnpm format`      | Format code with oxfmt       |
 | `pnpm check-types` | Run TypeScript type checking |
 
 ## Contributing
@@ -74,4 +74,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - Finnish train data from [Digitraffic](https://www.digitraffic.fi/)
 - Belgian train data from [iRail](https://docs.irail.be/) (NMBS/SNCB)
 - Dutch train data from [NS](https://www.ns.nl/) (Nederlandse Spoorwegen)
+- UK train data from [LDBWS](https://lite.realtime.nationalrail.co.uk/) (National Rail)
+- Irish train data from [Irish Rail](https://www.irishrail.ie/) (Iarnród Éireann)
 - Map rendering by [Mapbox](https://www.mapbox.com/)
