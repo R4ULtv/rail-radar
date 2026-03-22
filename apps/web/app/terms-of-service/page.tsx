@@ -19,7 +19,7 @@ export default function TermsOfServicePage() {
         Back to Rail Radar
       </Link>
       <h1 className="mb-8 text-3xl font-bold">Terms of Service</h1>
-      <p className="mb-4 text-sm text-muted-foreground">Last updated: March 5, 2026</p>
+      <p className="mb-4 text-sm text-muted-foreground">Last updated: March 22, 2026</p>
 
       <div className="space-y-8 leading-relaxed text-muted-foreground">
         <section>
@@ -101,6 +101,28 @@ export default function TermsOfServicePage() {
                 rel="noopener noreferrer"
               >
                 NS (Nederlandse Spoorwegen)
+              </a>
+            </li>
+            <li>
+              <strong className="text-foreground">United Kingdom</strong> &mdash;{" "}
+              <a
+                href="https://lite.realtime.nationalrail.co.uk"
+                className="text-foreground underline"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                LDBWS (National Rail)
+              </a>
+            </li>
+            <li>
+              <strong className="text-foreground">Ireland</strong> &mdash;{" "}
+              <a
+                href="https://www.irishrail.ie"
+                className="text-foreground underline"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Irish Rail (Iarnród Éireann)
               </a>
             </li>
           </ul>
