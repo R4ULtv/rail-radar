@@ -14,6 +14,24 @@ const COUNTRY_NAME_TO_CODE = Object.fromEntries(
 const STATION_TYPES = ["rail", "metro", "light"] as const;
 type StationType = (typeof STATION_TYPES)[number];
 
+type IndexedName = {
+  normalized: string;
+  words: string[];
+};
+
+type IndexedStation = {
+  station: Station;
+  country: CountryCode | null;
+  names: IndexedName[];
+};
+
+type SearchIndex = {
+  indexedStations: IndexedStation[];
+  exactIdMap: Map<string, IndexedStation[]>;
+  numericIdMap: Map<string, IndexedStation[]>;
+  wordPrefixMap: Map<string, IndexedStation[]>;
+};
+
 export type ParsedQuery = {
   coords: { lat: number; lng: number } | null;
   country: CountryCode | null;
@@ -85,20 +103,25 @@ export function geoSearch(
   limit: number = 20,
   filters?: { country?: CountryCode | null; type?: StationType | null },
 ): Station[] {
-  return stations
-    .filter((s) => {
-      if (!s.geo) return false;
-      if (filters?.country && getCountry(s.id) !== filters.country) return false;
-      if (filters?.type && s.type !== filters.type) return false;
-      return true;
-    })
-    .map((s) => ({
-      station: s,
-      distance: haversineDistance(lat, lng, s.geo!.lat, s.geo!.lng),
-    }))
-    .sort((a, b) => a.distance - b.distance || a.station.importance - b.station.importance)
-    .slice(0, limit)
-    .map(({ station }) => station);
+  const results: { station: Station; distance: number }[] = [];
+
+  for (const station of stations) {
+    if (!station.geo) continue;
+    if (filters?.country && getCountry(station.id) !== filters.country) continue;
+    if (filters?.type && station.type !== filters.type) continue;
+
+    pushRankedResult(
+      results,
+      {
+        station,
+        distance: haversineDistance(lat, lng, station.geo.lat, station.geo.lng),
+      },
+      limit,
+      compareGeoResults,
+    );
+  }
+
+  return results.map(({ station }) => station);
 }
 
 function normalizeText(text: string): string {
@@ -112,6 +135,9 @@ function normalizeStationId(text: string): string {
   return text.trim().replace(/\s+/g, "").toUpperCase();
 }
 
+const searchIndexCache = new WeakMap<Station[], SearchIndex>();
+const MAX_PREFIX_INDEX_LENGTH = 6;
+
 function getSearchableNames(station: Station): string[] {
   const names: string[] = [station.name];
 
@@ -121,6 +147,179 @@ function getSearchableNames(station: Station): string[] {
   }
 
   return names;
+}
+
+function addIndexedStationToMap(
+  map: Map<string, IndexedStation[]>,
+  key: string,
+  indexedStation: IndexedStation,
+): void {
+  const matches = map.get(key);
+  if (matches) {
+    matches.push(indexedStation);
+  } else {
+    map.set(key, [indexedStation]);
+  }
+}
+
+function buildSearchIndex(stations: Station[]): SearchIndex {
+  const exactIdMap = new Map<string, IndexedStation[]>();
+  const numericIdMap = new Map<string, IndexedStation[]>();
+  const wordPrefixMap = new Map<string, IndexedStation[]>();
+
+  const indexedStations = stations.map((station) => {
+    const normalizedId = normalizeStationId(station.id);
+    const numericId = normalizedId.replace(/^[A-Z]+/, "");
+    const indexedStation: IndexedStation = {
+      station,
+      country: getCountry(station.id),
+      names: getSearchableNames(station).map((name) => {
+        const normalized = normalizeText(name);
+        return {
+          normalized,
+          words: normalized.split(/\s+/).filter((word) => word.length > 0),
+        };
+      }),
+    };
+
+    addIndexedStationToMap(exactIdMap, normalizedId, indexedStation);
+
+    if (numericId) {
+      addIndexedStationToMap(numericIdMap, numericId, indexedStation);
+    }
+
+    const seenPrefixes = new Set<string>();
+    for (const name of indexedStation.names) {
+      for (const word of name.words) {
+        const maxPrefixLength = Math.min(word.length, MAX_PREFIX_INDEX_LENGTH);
+        for (let i = 1; i <= maxPrefixLength; i++) {
+          const prefix = word.slice(0, i);
+          if (seenPrefixes.has(prefix)) continue;
+          seenPrefixes.add(prefix);
+          addIndexedStationToMap(wordPrefixMap, prefix, indexedStation);
+        }
+      }
+    }
+
+    return indexedStation;
+  });
+
+  return { indexedStations, exactIdMap, numericIdMap, wordPrefixMap };
+}
+
+function getSearchIndex(stations: Station[]): SearchIndex {
+  const cached = searchIndexCache.get(stations);
+  if (cached) {
+    return cached;
+  }
+
+  const index = buildSearchIndex(stations);
+  searchIndexCache.set(stations, index);
+  return index;
+}
+
+function filterIndexedStations(
+  indexedStations: IndexedStation[],
+  filters?: { country?: CountryCode | null; type?: StationType | null },
+): IndexedStation[] {
+  const country = filters?.country;
+  const type = filters?.type;
+
+  if (!country && !type) {
+    return indexedStations;
+  }
+
+  return indexedStations.filter(({ station, country: stationCountry }) => {
+    if (country && stationCountry !== country) return false;
+    if (type && station.type !== type) return false;
+    return true;
+  });
+}
+
+function compareGeoResults(
+  a: { station: Station; distance: number },
+  b: { station: Station; distance: number },
+): number {
+  return a.distance - b.distance || a.station.importance - b.station.importance;
+}
+
+function compareFuzzyResults(
+  a: { station: Station; score: number; matchType: number },
+  b: { station: Station; score: number; matchType: number },
+): number {
+  if (a.matchType !== b.matchType) return a.matchType - b.matchType;
+  if (a.station.importance !== b.station.importance) return a.station.importance - b.station.importance;
+  return b.score - a.score;
+}
+
+function pushRankedResult<T>(results: T[], item: T, limit: number, compare: (a: T, b: T) => number): void {
+  let insertAt = results.length;
+
+  for (let i = 0; i < results.length; i++) {
+    if (compare(item, results[i]!) < 0) {
+      insertAt = i;
+      break;
+    }
+  }
+
+  if (insertAt === results.length) {
+    if (results.length < limit) {
+      results.push(item);
+    }
+    return;
+  }
+
+  results.splice(insertAt, 0, item);
+  if (results.length > limit) {
+    results.pop();
+  }
+}
+
+function getCandidateStations(
+  index: SearchIndex,
+  pool: IndexedStation[],
+  queryWords: string[],
+): IndexedStation[] {
+  const informativeWords = queryWords.filter((queryWord) => queryWord.length >= 2);
+
+  if (informativeWords.length === 0) {
+    return pool;
+  }
+
+  let candidateIds: Set<string> | null = null;
+
+  for (const queryWord of informativeWords) {
+    const prefix = queryWord.slice(0, Math.min(queryWord.length, MAX_PREFIX_INDEX_LENGTH));
+    const matches = index.wordPrefixMap.get(prefix);
+
+    if (!matches || matches.length === 0) {
+      return pool;
+    }
+
+    const matchIds = new Set(matches.map(({ station }) => station.id));
+    if (candidateIds === null) {
+      candidateIds = matchIds;
+    } else {
+      const intersection = new Set<string>();
+      for (const stationId of candidateIds) {
+        if (matchIds.has(stationId)) {
+          intersection.add(stationId);
+        }
+      }
+      candidateIds = intersection;
+    }
+
+    if (candidateIds.size === 0) {
+      return pool;
+    }
+  }
+
+  if (!candidateIds || candidateIds.size === 0) {
+    return pool;
+  }
+
+  const candidates = pool.filter(({ station }) => candidateIds.has(station.id));
+  return candidates.length > 0 ? candidates : pool;
 }
 
 function damerauLevenshtein(a: string, b: string): number {
@@ -188,10 +387,10 @@ function scoreWordAgainstWord(
   return { score: similarity * 0.6, matchType: 4 };
 }
 
-function scoreAgainstName(query: string, name: string): { score: number; matchType: number } {
-  const q = normalizeText(query);
-  const n = normalizeText(name);
-  const nameWords = n.split(/\s+/);
+function scoreAgainstName(query: string, name: IndexedName): { score: number; matchType: number } {
+  const q = query;
+  const n = name.normalized;
+  const nameWords = name.words;
 
   if (n === q) return { score: 1.0, matchType: 0 };
   if (n.startsWith(q)) return { score: 0.95, matchType: 1 };
@@ -211,9 +410,9 @@ function scoreAgainstName(query: string, name: string): { score: number; matchTy
 
 function scoreMultiWordQuery(
   queryWords: string[],
-  name: string,
+  name: IndexedName,
 ): { score: number; matchType: number } {
-  const nameWords = normalizeText(name).split(/\s+/);
+  const nameWords = name.words;
   const wordScores: { score: number; matchType: number }[] = [];
 
   for (const qWord of queryWords) {
@@ -242,15 +441,15 @@ function scoreMultiWordQuery(
   return { score: worstScore, matchType: worstMatchType };
 }
 
-function findDirectIdMatches(query: string, stations: Station[]): Station[] {
+function findDirectIdMatches(query: string, index: SearchIndex): IndexedStation[] {
   const normalizedQuery = normalizeStationId(query);
 
   if (!normalizedQuery) {
     return [];
   }
 
-  const exact = stations.filter((station) => normalizeStationId(station.id) === normalizedQuery);
-  if (exact.length > 0) {
+  const exact = index.exactIdMap.get(normalizedQuery);
+  if (exact && exact.length > 0) {
     return exact;
   }
 
@@ -259,20 +458,21 @@ function findDirectIdMatches(query: string, stations: Station[]): Station[] {
     return [];
   }
 
-  return stations.filter((station) => station.id.replace(/^[A-Z]+/, "") === numericQuery);
+  return index.numericIdMap.get(numericQuery) ?? [];
 }
 
 /** Score a station against a query, checking all searchable names (including "/" splits). */
-function scoreStation(query: string, station: Station): { score: number; matchType: number } {
-  const names = getSearchableNames(station);
-  const queryWords = normalizeText(query)
-    .split(/\s+/)
-    .filter((w) => w.length > 0);
+function scoreStation(
+  normalizedQuery: string,
+  queryWords: string[],
+  indexedStation: IndexedStation,
+): { score: number; matchType: number } {
+  const names = indexedStation.names;
 
   if (queryWords.length === 1) {
     let best = { score: 0, matchType: 5 };
     for (const name of names) {
-      const result = scoreAgainstName(query, name);
+      const result = scoreAgainstName(normalizedQuery, name);
       if (
         result.matchType < best.matchType ||
         (result.matchType === best.matchType && result.score > best.score)
@@ -286,7 +486,7 @@ function scoreStation(query: string, station: Station): { score: number; matchTy
   let best = { score: 0, matchType: 5 };
 
   for (const name of names) {
-    const exactResult = scoreAgainstName(query, name);
+    const exactResult = scoreAgainstName(normalizedQuery, name);
     if (
       exactResult.matchType < best.matchType ||
       (exactResult.matchType === best.matchType && exactResult.score > best.score)
@@ -313,58 +513,55 @@ export function fuzzySearch(
   limit: number = 20,
   filters?: { country?: CountryCode | null; type?: StationType | null },
 ): Station[] {
-  let pool = stations;
-  if (filters?.country) {
-    const cc = filters.country;
-    pool = pool.filter((s) => getCountry(s.id) === cc);
-  }
-  if (filters?.type) {
-    const t = filters.type;
-    pool = pool.filter((s) => s.type === t);
-  }
+  const index = getSearchIndex(stations);
+  const pool = filterIndexedStations(index.indexedStations, filters);
 
   if (!query.trim()) {
     return pool
       .slice()
-      .sort((a, b) => a.importance - b.importance)
-      .slice(0, limit);
+      .sort((a, b) => a.station.importance - b.station.importance)
+      .slice(0, limit)
+      .map(({ station }) => station);
   }
 
-  const directIdMatches = findDirectIdMatches(query, pool).sort(
-    (a, b) => a.importance - b.importance || a.name.localeCompare(b.name),
+  const normalizedQuery = normalizeText(query);
+  const queryWords = normalizedQuery.split(/\s+/).filter((w) => w.length > 0);
+  const candidates = getCandidateStations(index, pool, queryWords);
+  const directIdMatches = filterIndexedStations(findDirectIdMatches(query, index), filters).sort(
+    (a, b) => a.station.importance - b.station.importance || a.station.name.localeCompare(b.station.name),
   );
 
   if (directIdMatches.length > 0) {
-    const exactStation = directIdMatches[0]!;
-    const directIdMatchIds = new Set(directIdMatches.map((station) => station.id));
+    const exactStation = directIdMatches[0]!.station;
+    const directIdMatchIds = new Set(directIdMatches.map(({ station }) => station.id));
 
     if (!exactStation.geo) {
-      return directIdMatches.slice(0, limit);
+      return directIdMatches.slice(0, limit).map(({ station }) => station);
     }
 
     const nearbyStations = geoSearch(stations, exactStation.geo.lat, exactStation.geo.lng, limit, filters)
       .filter((station) => !directIdMatchIds.has(station.id));
 
-    return [...directIdMatches, ...nearbyStations].slice(0, limit);
+    return [...directIdMatches.map(({ station }) => station), ...nearbyStations].slice(0, limit);
   }
 
-  const scored = pool
-    .map((station) => {
-      const result = scoreStation(query, station);
-      return {
-        station,
+  const scored: { station: Station; score: number; matchType: number }[] = [];
+
+  for (const indexedStation of candidates) {
+    const result = scoreStation(normalizedQuery, queryWords, indexedStation);
+    if (result.score <= 0.3) continue;
+
+    pushRankedResult(
+      scored,
+      {
+        station: indexedStation.station,
         score: result.score,
         matchType: result.matchType,
-      };
-    })
-    .filter(({ score }) => score > 0.3)
-    .sort((a, b) => {
-      if (a.matchType !== b.matchType) return a.matchType - b.matchType;
-      if (a.station.importance !== b.station.importance)
-        return a.station.importance - b.station.importance;
-      return b.score - a.score;
-    })
-    .slice(0, limit);
+      },
+      limit,
+      compareFuzzyResults,
+    );
+  }
 
   return scored.map(({ station }) => station);
 }
