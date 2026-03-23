@@ -108,6 +108,10 @@ function normalizeText(text: string): string {
     .toLowerCase();
 }
 
+function normalizeStationId(text: string): string {
+  return text.trim().replace(/\s+/g, "").toUpperCase();
+}
+
 function getSearchableNames(station: Station): string[] {
   const names: string[] = [station.name];
 
@@ -238,6 +242,26 @@ function scoreMultiWordQuery(
   return { score: worstScore, matchType: worstMatchType };
 }
 
+function findDirectIdMatches(query: string, stations: Station[]): Station[] {
+  const normalizedQuery = normalizeStationId(query);
+
+  if (!normalizedQuery) {
+    return [];
+  }
+
+  const exact = stations.filter((station) => normalizeStationId(station.id) === normalizedQuery);
+  if (exact.length > 0) {
+    return exact;
+  }
+
+  const numericQuery = normalizedQuery.replace(/^[A-Z]+/, "");
+  if (!numericQuery) {
+    return [];
+  }
+
+  return stations.filter((station) => station.id.replace(/^[A-Z]+/, "") === numericQuery);
+}
+
 /** Score a station against a query, checking all searchable names (including "/" splits). */
 function scoreStation(query: string, station: Station): { score: number; matchType: number } {
   const names = getSearchableNames(station);
@@ -304,6 +328,24 @@ export function fuzzySearch(
       .slice()
       .sort((a, b) => a.importance - b.importance)
       .slice(0, limit);
+  }
+
+  const directIdMatches = findDirectIdMatches(query, pool).sort(
+    (a, b) => a.importance - b.importance || a.name.localeCompare(b.name),
+  );
+
+  if (directIdMatches.length > 0) {
+    const exactStation = directIdMatches[0]!;
+    const directIdMatchIds = new Set(directIdMatches.map((station) => station.id));
+
+    if (!exactStation.geo) {
+      return directIdMatches.slice(0, limit);
+    }
+
+    const nearbyStations = geoSearch(stations, exactStation.geo.lat, exactStation.geo.lng, limit, filters)
+      .filter((station) => !directIdMatchIds.has(station.id));
+
+    return [...directIdMatches, ...nearbyStations].slice(0, limit);
   }
 
   const scored = pool
