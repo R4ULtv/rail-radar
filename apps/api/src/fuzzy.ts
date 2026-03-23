@@ -248,11 +248,17 @@ function compareFuzzyResults(
   b: { station: Station; score: number; matchType: number },
 ): number {
   if (a.matchType !== b.matchType) return a.matchType - b.matchType;
-  if (a.station.importance !== b.station.importance) return a.station.importance - b.station.importance;
+  if (a.station.importance !== b.station.importance)
+    return a.station.importance - b.station.importance;
   return b.score - a.score;
 }
 
-function pushRankedResult<T>(results: T[], item: T, limit: number, compare: (a: T, b: T) => number): void {
+function pushRankedResult<T>(
+  results: T[],
+  item: T,
+  limit: number,
+  compare: (a: T, b: T) => number,
+): void {
   let insertAt = results.length;
 
   for (let i = 0; i < results.length; i++) {
@@ -528,7 +534,8 @@ export function fuzzySearch(
   const queryWords = normalizedQuery.split(/\s+/).filter((w) => w.length > 0);
   const candidates = getCandidateStations(index, pool, queryWords);
   const directIdMatches = filterIndexedStations(findDirectIdMatches(query, index), filters).sort(
-    (a, b) => a.station.importance - b.station.importance || a.station.name.localeCompare(b.station.name),
+    (a, b) =>
+      a.station.importance - b.station.importance || a.station.name.localeCompare(b.station.name),
   );
 
   if (directIdMatches.length > 0) {
@@ -539,8 +546,13 @@ export function fuzzySearch(
       return directIdMatches.slice(0, limit).map(({ station }) => station);
     }
 
-    const nearbyStations = geoSearch(stations, exactStation.geo.lat, exactStation.geo.lng, limit, filters)
-      .filter((station) => !directIdMatchIds.has(station.id));
+    const nearbyStations = geoSearch(
+      stations,
+      exactStation.geo.lat,
+      exactStation.geo.lng,
+      limit,
+      filters,
+    ).filter((station) => !directIdMatchIds.has(station.id));
 
     return [...directIdMatches.map(({ station }) => station), ...nearbyStations].slice(0, limit);
   }
