@@ -64,7 +64,7 @@ src/
 │   ├── netherlands.ts # Dutch NS API scraper
 │   ├── uk.ts          # UK National Rail API scraper
 │   └── ireland.ts     # Irish Rail API scraper
-├── analytics.ts   # Cloudflare Analytics Engine integration
+├── analytics.ts   # Cloudflare Analytics Engine integration for visits and provider metrics
 ├── fuzzy.ts       # Fuzzy search (Damerau-Levenshtein)
 └── constants.ts   # Shared constants (cache TTL, timeouts, validation)
 ```

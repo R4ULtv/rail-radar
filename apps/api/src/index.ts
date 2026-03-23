@@ -14,8 +14,10 @@ import {
 } from "@repo/data";
 import {
   getAnalyticsOverview,
+  getProviderByStationId,
   getStationStats,
   getTrendingStations,
+  recordProviderMetric,
   recordStationVisit,
 } from "./analytics";
 import {
@@ -31,6 +33,7 @@ import { getScraperForStation, ScraperError } from "./scrapers";
 type Bindings = {
   RATE_LIMITER: RateLimit;
   STATION_ANALYTICS: AnalyticsEngineDataset;
+  PROVIDER_ANALYTICS: AnalyticsEngineDataset;
   CLOUDFLARE_ACCOUNT_ID: string;
   CLOUDFLARE_API_TOKEN: string;
   NS_API_KEY: string;
@@ -422,6 +425,7 @@ app.get(
     }
 
     const { type } = c.req.valid("query");
+    const provider = getProviderByStationId(id);
 
     const scraper = getScraperForStation(id);
     if (!scraper) {
@@ -429,7 +433,7 @@ app.get(
     }
 
     try {
-      const { trains, info } = await scraper(id, type, c.env);
+      const { trains, info, timing } = await scraper(id, type, c.env);
 
       // Record visit after successful response (non-blocking)
       const ip = c.get("clientIp");
@@ -442,6 +446,20 @@ app.get(
           country: getCountry(station.id) ?? "",
         }),
       );
+      if (provider) {
+        c.executionCtx.waitUntil(
+          recordProviderMetric(c.env.PROVIDER_ANALYTICS, {
+            provider,
+            source: "live",
+            result: "success",
+            requestType: type,
+            stationId: station.id,
+            country: getCountry(station.id) ?? "",
+            fetchMs: timing.fetchMs,
+            statusCode: 200,
+          }),
+        );
+      }
 
       return c.json({
         id: station.id,
@@ -453,7 +471,34 @@ app.get(
       });
     } catch (error) {
       if (error instanceof ScraperError) {
+        if (provider) {
+          c.executionCtx.waitUntil(
+            recordProviderMetric(c.env.PROVIDER_ANALYTICS, {
+              provider,
+              source: "live",
+              result: error.statusCode === 504 ? "timeout" : "error",
+              requestType: type,
+              stationId: station.id,
+              country: getCountry(station.id) ?? "",
+              fetchMs: error.timing?.fetchMs ?? null,
+              statusCode: error.statusCode,
+            }),
+          );
+        }
         return c.json({ error: error.message }, error.statusCode);
+      }
+      if (provider) {
+        c.executionCtx.waitUntil(
+          recordProviderMetric(c.env.PROVIDER_ANALYTICS, {
+            provider,
+            source: "live",
+            result: "error",
+            requestType: type,
+            stationId: station.id,
+            country: getCountry(station.id) ?? "",
+            statusCode: 500,
+          }),
+        );
       }
       return c.json({ error: "Unable to load train data. Please try again in a moment." }, 500);
     }

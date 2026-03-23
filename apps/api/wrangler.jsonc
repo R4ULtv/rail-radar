@@ -31,5 +31,9 @@
       "binding": "STATION_ANALYTICS",
       "dataset": "station_visits",
     },
+    {
+      "binding": "PROVIDER_ANALYTICS",
+      "dataset": "provider_metrics",
+    },
   ],
 }

@@ -55,6 +55,30 @@ interface CountryBreakdownQueryResult {
   }>;
 }
 
+export const PROVIDER_IDS = [
+  "digitraffic",
+  "irail",
+  "irishrail",
+  "ns",
+  "opendata-ch",
+  "rfi",
+  "nationalrail",
+] as const;
+
+export type ProviderId = (typeof PROVIDER_IDS)[number];
+export type ProviderMetricSource = "live" | "synthetic";
+export type ProviderMetricResult = "success" | "error" | "timeout";
+
+const COUNTRY_TO_PROVIDER: Partial<Record<CountryCode, ProviderId>> = {
+  be: "irail",
+  ch: "opendata-ch",
+  fi: "digitraffic",
+  ie: "irishrail",
+  it: "rfi",
+  nl: "ns",
+  uk: "nationalrail",
+};
+
 async function hashIP(ip: string): Promise<string> {
   const encoder = new TextEncoder();
   const data = encoder.encode(ip);
@@ -92,6 +116,42 @@ export async function recordStationVisit(
     blobs: [data.stationName, hashedIP, data.type, data.stationId, data.country],
     doubles: [],
     indexes: [data.stationId],
+  });
+}
+
+export function isProviderId(value: string): value is ProviderId {
+  return PROVIDER_IDS.includes(value as ProviderId);
+}
+
+export function getProviderByStationId(stationId: string): ProviderId | null {
+  const country = getCountry(stationId);
+  return country ? (COUNTRY_TO_PROVIDER[country] ?? null) : null;
+}
+
+export async function recordProviderMetric(
+  analytics: AnalyticsEngineDataset,
+  data: {
+    provider: ProviderId;
+    source: ProviderMetricSource;
+    result: ProviderMetricResult;
+    requestType: "arrivals" | "departures";
+    stationId: string;
+    country: CountryCode | "";
+    fetchMs?: number | null;
+    statusCode?: number | null;
+  },
+): Promise<void> {
+  analytics.writeDataPoint({
+    blobs: [
+      data.provider,
+      data.source,
+      data.result,
+      data.requestType,
+      data.stationId,
+      data.country,
+    ],
+    doubles: [data.fetchMs ?? -1, data.statusCode ?? -1],
+    indexes: [data.provider],
   });
 }
 
