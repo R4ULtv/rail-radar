@@ -77,6 +77,8 @@ const trainTypeValidator = validator("query", (value, c) => {
 
 const app = new Hono<Env>();
 
+const STATION_ID_PATTERN = /^(?:[A-Z]{2,}\d+|\d{3,})$/i;
+
 app.onError((err, c) => {
   console.error("[API Error]", {
     path: c.req.path,
@@ -223,6 +225,12 @@ app.get("/stations", rateLimit, (c) => {
   const query = c.req.query("q");
 
   if (query) {
+    const trimmedQuery = query.trim();
+
+    if (trimmedQuery.length < 2 && !STATION_ID_PATTERN.test(trimmedQuery)) {
+      return c.json([]);
+    }
+
     const parsed = parseQuery(query);
     const filters = { country: parsed.country, type: parsed.type };
 
