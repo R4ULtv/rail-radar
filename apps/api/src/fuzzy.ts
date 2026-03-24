@@ -131,6 +131,12 @@ function normalizeText(text: string): string {
     .toLowerCase();
 }
 
+function tokenizeText(text: string): string[] {
+  return normalizeText(text)
+    .split(/[^\p{L}\p{N}]+/u)
+    .filter((word) => word.length > 0);
+}
+
 function normalizeStationId(text: string): string {
   return text.trim().replace(/\s+/g, "").toUpperCase();
 }
@@ -177,7 +183,7 @@ function buildSearchIndex(stations: Station[]): SearchIndex {
         const normalized = normalizeText(name);
         return {
           normalized,
-          words: normalized.split(/\s+/).filter((word) => word.length > 0),
+          words: tokenizeText(name),
         };
       }),
     };
@@ -295,11 +301,22 @@ function getCandidateStations(
   let candidateIds: Set<string> | null = null;
 
   for (const queryWord of informativeWords) {
-    const prefix = queryWord.slice(0, Math.min(queryWord.length, MAX_PREFIX_INDEX_LENGTH));
-    const matches = index.wordPrefixMap.get(prefix);
+    let matches: IndexedStation[] | undefined;
+
+    for (
+      let prefixLength = Math.min(queryWord.length, MAX_PREFIX_INDEX_LENGTH);
+      prefixLength >= 2;
+      prefixLength--
+    ) {
+      const prefix = queryWord.slice(0, prefixLength);
+      matches = index.wordPrefixMap.get(prefix);
+      if (matches && matches.length > 0) {
+        break;
+      }
+    }
 
     if (!matches || matches.length === 0) {
-      return pool;
+      continue;
     }
 
     const matchIds = new Set(matches.map(({ station }) => station.id));
@@ -316,16 +333,16 @@ function getCandidateStations(
     }
 
     if (candidateIds.size === 0) {
-      return pool;
+      break;
     }
   }
 
   if (!candidateIds || candidateIds.size === 0) {
-    return pool;
+    return [];
   }
 
   const candidates = pool.filter(({ station }) => candidateIds.has(station.id));
-  return candidates.length > 0 ? candidates : pool;
+  return candidates.length > 0 ? candidates : [];
 }
 
 function damerauLevenshtein(a: string, b: string): number {
@@ -531,7 +548,7 @@ export function fuzzySearch(
   }
 
   const normalizedQuery = normalizeText(query);
-  const queryWords = normalizedQuery.split(/\s+/).filter((w) => w.length > 0);
+  const queryWords = tokenizeText(query);
   const candidates = getCandidateStations(index, pool, queryWords);
   const directIdMatches = filterIndexedStations(findDirectIdMatches(query, index), filters).sort(
     (a, b) =>
