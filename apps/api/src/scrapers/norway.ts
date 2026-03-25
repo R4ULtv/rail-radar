@@ -7,6 +7,7 @@ const ENTUR_GRAPHQL_URL = "https://api.entur.io/journey-planner/v3/graphql";
 const ENTUR_CLIENT_NAME = "rail-radar";
 const TRAIN_LIMIT = 16;
 const NORWAY_TIMEZONE = "Europe/Oslo";
+const NORWAY_TRAIN_MODES = ["rail", "air"] as const;
 
 type NorwayBoardType = "arrivals" | "departures";
 
@@ -81,7 +82,7 @@ function buildQuery(type: NorwayBoardType): string {
       estimatedCalls(
         numberOfDepartures: ${TRAIN_LIMIT}
         arrivalDeparture: ${type}
-        whiteListedModes: [rail]
+        whiteListedModes: [${NORWAY_TRAIN_MODES.join(", ")}]
       ) {
         realtime
         cancellation
@@ -170,6 +171,10 @@ function getTrainNumber(call: EnturEstimatedCall): string {
   return call.serviceJourney?.privateCode ?? getLineCode(call) ?? "";
 }
 
+function isNorwayTrainMode(mode: string | null | undefined): boolean {
+  return mode != null && NORWAY_TRAIN_MODES.includes(mode as (typeof NORWAY_TRAIN_MODES)[number]);
+}
+
 function getBrand(call: EnturEstimatedCall): string | null {
   const line = call.serviceJourney?.journeyPattern?.line;
   const rawBrand = line?.authority?.name ?? line?.operator?.name ?? null;
@@ -248,7 +253,7 @@ export async function scrapeNorwayTrains(
 
   return {
     trains: calls
-      .filter((call) => call.serviceJourney?.journeyPattern?.line?.transportMode === "rail")
+      .filter((call) => isNorwayTrainMode(call.serviceJourney?.journeyPattern?.line?.transportMode))
       .map((call) => mapCall(call, type)),
     info: null,
     timing: { fetchMs },
