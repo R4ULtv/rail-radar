@@ -92,10 +92,13 @@ const brandAliases: Record<string, string> = {
   "go-ahead nordic as": "go-ahead norge",
 };
 
-function getBrandPath(brand: string): string | null {
+function normalizeBrandName(brand: string): string {
   const normalized = brand.toLowerCase();
-  const resolved = brandAliases[normalized] ?? normalized;
-  return brandPaths[resolved] ?? null;
+  return brandAliases[normalized] ?? normalized;
+}
+
+function getBrandPath(brand: string): string | null {
+  return brandPaths[normalizeBrandName(brand)] ?? null;
 }
 
 // Maps raw brand names (lowercased) to brand slugs
@@ -169,8 +172,7 @@ const brandSlugMap: Record<string, string> = {
 };
 
 export function getBrandSlug(brand: string): string | null {
-  const normalized = brand.toLowerCase();
-  const slug = brandSlugMap[normalized];
+  const slug = brandSlugMap[normalizeBrandName(brand)];
   if (slug && brandBySlug.has(slug)) return slug;
   return null;
 }
