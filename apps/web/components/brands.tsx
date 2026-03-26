@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { brandBySlug } from "@repo/data";
+import { brandBySlug } from "@repo/data/brands";
 
 // Maps brand names to their SVG file paths (relative to /brands/)
 const brandPaths: Record<string, string> = {
