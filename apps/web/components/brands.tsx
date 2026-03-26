@@ -38,6 +38,10 @@ const brandPaths: Record<string, string> = {
   eurostar: "eurostar",
   db: "db",
   ns: "ns",
+  vy: "no/vy",
+  "sj nord": "no/sj_nord",
+  "go-ahead norge": "no/go_ahead",
+  flytoget: "no/flytoget",
   // UK brands
   lm: "uk/lm",
   nt: "uk/nt",
@@ -80,12 +84,21 @@ const brandAliases: Record<string, string> = {
   gx: "sn",
   ln: "lm",
   wm: "lm",
+  "go-ahead": "go-ahead norge",
+  "go-ahead nordic": "go-ahead norge",
+  sjn: "sj nord",
+  sj: "sj nord",
+  "go-ahead norge as": "go-ahead norge",
+  "go-ahead nordic as": "go-ahead norge",
 };
 
-function getBrandPath(brand: string): string | null {
+function normalizeBrandName(brand: string): string {
   const normalized = brand.toLowerCase();
-  const resolved = brandAliases[normalized] ?? normalized;
-  return brandPaths[resolved] ?? null;
+  return brandAliases[normalized] ?? normalized;
+}
+
+function getBrandPath(brand: string): string | null {
+  return brandPaths[normalizeBrandName(brand)] ?? null;
 }
 
 // Maps raw brand names (lowercased) to brand slugs
@@ -130,6 +143,10 @@ const brandSlugMap: Record<string, string> = {
   eurostar: "eurostar",
   db: "db",
   ns: "ns",
+  vy: "vy",
+  "sj nord": "sj-nord",
+  "go-ahead norge": "go-ahead-norge",
+  flytoget: "flytoget",
   // UK brands
   lm: "west-midlands-trains",
   nt: "northern",
@@ -155,8 +172,7 @@ const brandSlugMap: Record<string, string> = {
 };
 
 export function getBrandSlug(brand: string): string | null {
-  const normalized = brand.toLowerCase();
-  const slug = brandSlugMap[normalized];
+  const slug = brandSlugMap[normalizeBrandName(brand)];
   if (slug && brandBySlug.has(slug)) return slug;
   return null;
 }

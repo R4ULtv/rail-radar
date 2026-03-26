@@ -28,7 +28,7 @@ Returns station data in two formats depending on query parameters:
 
 - No params: all stations (pre-serialized for performance)
 - `?type=rail|metro|light`: filter by station type
-- `?country=it|ch|fi|be|nl|uk|ie`: filter by country
+- `?country=it|ch|fi|be|nl|no|uk|ie`: filter by country
 - Filters can be combined: `?type=rail&country=it`
 
 **Search mode** — returns `application/json` array of `Station` objects:

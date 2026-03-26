@@ -5,6 +5,7 @@ import { scrapeBelgiumTrains } from "./belgium";
 import { scrapeFinlandTrains } from "./finland";
 import { scrapeTrains } from "./italy";
 import { scrapeNetherlandsTrains } from "./netherlands";
+import { scrapeNorwayTrains } from "./norway";
 import { scrapeSwissTrains } from "./switzerland";
 import { scrapeIrelandTrains } from "./ireland";
 import { scrapeUKTrains } from "./uk";
@@ -53,6 +54,7 @@ const scrapers: Partial<Record<CountryCode, ScrapeFn>> = {
   ie: scrapeIrelandTrains,
   it: scrapeTrains,
   nl: scrapeNetherlandsTrains,
+  no: scrapeNorwayTrains,
   uk: scrapeUKTrains,
 };
 
