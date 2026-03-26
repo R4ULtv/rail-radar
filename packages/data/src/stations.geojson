@@ -384,7 +384,7 @@
         "id": "ITL100",
         "name": "Acerra",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -540,7 +540,7 @@
         "id": "ITL149",
         "name": "Acqua Acetosa",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -1697,7 +1697,7 @@
         "id": "ITL063",
         "name": "Alessi",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -1762,7 +1762,7 @@
         "id": "ITL102",
         "name": "Alfa Lancia 2",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -1775,7 +1775,7 @@
         "id": "ITL101",
         "name": "Alfa Lancia 4",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -4297,7 +4297,7 @@
         "id": "ITL091",
         "name": "Argine Palasport",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -5259,7 +5259,7 @@
         "id": "CH01172",
         "name": "Assens",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -6299,7 +6299,7 @@
         "id": "ITL015",
         "name": "Baiano",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -6780,7 +6780,7 @@
         "id": "ITL059",
         "name": "Balzani",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -7638,7 +7638,7 @@
         "id": "ITL118",
         "name": "Barra",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -7768,7 +7768,7 @@
         "id": "ITL094",
         "name": "Bartolo Longo",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -8795,7 +8795,7 @@
         "id": "CH00275",
         "name": "Bei den Weihern",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -8886,7 +8886,7 @@
         "id": "CH01170",
         "name": "Bel-Air LEB",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -9315,7 +9315,7 @@
         "id": "CH06367",
         "name": "Bendlehn",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -9458,7 +9458,7 @@
         "id": "ITL060",
         "name": "Berardi",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -9484,7 +9484,7 @@
         "id": "CH01177",
         "name": "Bercher",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -9705,7 +9705,7 @@
         "id": "CH02270",
         "name": "Bergfrieden",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -9770,7 +9770,7 @@
         "id": "CH02276",
         "name": "Berikon-Widen",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -9991,7 +9991,7 @@
         "id": "CH08051",
         "name": "Bern Felsenau",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -10017,7 +10017,7 @@
         "id": "CH08052",
         "name": "Bern Tiefenau",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -10693,7 +10693,7 @@
         "id": "CH17377",
         "name": "Bibenlos-Sonnenhof",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -10745,7 +10745,7 @@
         "id": "CH08068",
         "name": "Biberist RBS",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -11187,7 +11187,7 @@
         "id": "CH02191",
         "name": "Binzenhof",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -12149,7 +12149,7 @@
         "id": "CH02174",
         "name": "Bleien Liebegg",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -12682,7 +12682,7 @@
         "id": "CH07065",
         "name": "Boll-Utzigen",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -12708,7 +12708,7 @@
         "id": "CH07068",
         "name": "Bolligen",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -13748,7 +13748,7 @@
         "id": "ITL045",
         "name": "Boscoreale",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -13761,7 +13761,7 @@
         "id": "ITL024",
         "name": "Boscotrecase",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -13930,7 +13930,7 @@
         "id": "ITL109",
         "name": "Botteghelle",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -14827,7 +14827,7 @@
         "id": "CH02273",
         "name": "Bremgarten",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -14840,7 +14840,7 @@
         "id": "CH02185",
         "name": "Bremgarten Isenlauf",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -14853,7 +14853,7 @@
         "id": "CH02248",
         "name": "Bremgarten Obertor",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -14866,7 +14866,7 @@
         "id": "CH02272",
         "name": "Bremgarten West",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -16218,7 +16218,7 @@
         "id": "ITL056",
         "name": "Brusciano",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -16556,7 +16556,7 @@
         "id": "CH00289",
         "name": "Buchli",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -16582,7 +16582,7 @@
         "id": "CH02123",
         "name": "Buchs AG",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -17752,7 +17752,7 @@
         "id": "CH08062",
         "name": "Büren zum Hof",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -17817,7 +17817,7 @@
         "id": "CH08064",
         "name": "Bätterkinden",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -18090,7 +18090,7 @@
         "id": "NOL014",
         "name": "Café Opera",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -19104,7 +19104,7 @@
         "id": "ITL017",
         "name": "Camposano",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -19325,7 +19325,7 @@
         "id": "ITL006",
         "name": "Cangiani",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -20677,7 +20677,7 @@
         "id": "ITL107",
         "name": "Casalnuovo",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -20807,7 +20807,7 @@
         "id": "ITL028",
         "name": "Casilli",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -20859,7 +20859,7 @@
         "id": "ITL027",
         "name": "Casoria Arpino-Volla",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -21171,7 +21171,7 @@
         "id": "ITL018",
         "name": "Castelcisterna",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -22445,7 +22445,7 @@
         "id": "ITL058",
         "name": "Centocelle",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -22497,7 +22497,7 @@
         "id": "UKL016",
         "name": "Central Terminal",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -22601,7 +22601,7 @@
         "id": "ITL110",
         "name": "Cercola",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -22796,7 +22796,7 @@
         "id": "CH01164",
         "name": "Cery-Fleur-de-Lys",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -23862,7 +23862,7 @@
         "id": "CH01169",
         "name": "Cheseaux",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -24733,7 +24733,7 @@
         "id": "ITL098",
         "name": "Cicciano",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -24772,7 +24772,7 @@
         "id": "ITL096",
         "name": "Cimitile",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -29855,7 +29855,7 @@
         "id": "ITL053",
         "name": "De Ruggiero",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -30076,7 +30076,7 @@
         "id": "CH07067",
         "name": "Deisswil",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -31077,7 +31077,7 @@
         "id": "CH17376",
         "name": "Dietikon Schöneggstrasse",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -31090,7 +31090,7 @@
         "id": "CH02186",
         "name": "Dietikon Stoffelbach",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -31350,7 +31350,7 @@
         "id": "CH02192",
         "name": "Distelberg",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -33586,7 +33586,7 @@
         "id": "ITL035",
         "name": "Ebenhof",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -33716,7 +33716,7 @@
         "id": "CH01173",
         "name": "Echallens",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -34067,7 +34067,7 @@
         "id": "CH03062",
         "name": "Egg",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -34782,7 +34782,7 @@
         "id": "CH03070",
         "name": "Emmat",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -35016,7 +35016,7 @@
         "id": "NOL022",
         "name": "Engen",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -35341,7 +35341,7 @@
         "id": "ITL125",
         "name": "Ercolano Miglio D'Oro",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -35354,7 +35354,7 @@
         "id": "ITL124",
         "name": "Ercolano Scavi",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -35380,7 +35380,7 @@
         "id": "CH02269",
         "name": "Erdmannlistein",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -35809,7 +35809,7 @@
         "id": "CH03060",
         "name": "Esslingen",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -35848,7 +35848,7 @@
         "id": "CH01171",
         "name": "Etagnières",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -37499,7 +37499,7 @@
         "id": "CH01176",
         "name": "Fey",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -37655,7 +37655,7 @@
         "id": "ITL062",
         "name": "Filarete",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -38383,7 +38383,7 @@
         "id": "ITL029",
         "name": "Flocco",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -38812,7 +38812,7 @@
         "id": "CH03065",
         "name": "Forch",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -39579,7 +39579,7 @@
         "id": "CH08061",
         "name": "Fraubrunnen",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -40879,7 +40879,7 @@
         "id": "UKL034",
         "name": "Gates 1-19",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -40892,7 +40892,7 @@
         "id": "UKL035",
         "name": "Gates 20-39",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -42062,7 +42062,7 @@
         "id": "CH06368",
         "name": "Gfeld",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -42140,7 +42140,7 @@
         "id": "ITL001",
         "name": "Gianturco",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -43349,7 +43349,7 @@
         "id": "CH02164",
         "name": "Gontenschwil",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -43856,7 +43856,7 @@
         "id": "CH08060",
         "name": "Grafenried",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -44636,7 +44636,7 @@
         "id": "CH01178",
         "name": "Grésaley",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -45338,7 +45338,7 @@
         "id": "CH02160",
         "name": "Gränichen",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -45351,7 +45351,7 @@
         "id": "CH02184",
         "name": "Gränichen Oberdorf",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -45364,7 +45364,7 @@
         "id": "CH02189",
         "name": "Gränichen Töndler",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -45520,7 +45520,7 @@
         "id": "ITL014",
         "name": "Guindazzi",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -46781,7 +46781,7 @@
         "id": "CH08152",
         "name": "Hard-Mumenthal",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -49758,7 +49758,7 @@
         "id": "ITL070",
         "name": "Himmelfahrt - L'Assunta",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -49836,7 +49836,7 @@
         "id": "CH03063",
         "name": "Hinteregg",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -49888,7 +49888,7 @@
         "id": "CH02197",
         "name": "Hirschthal",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -52995,7 +52995,7 @@
         "id": "CH07069",
         "name": "Ittigen bei Bern",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -53255,7 +53255,7 @@
         "id": "CH08059",
         "name": "Jegenstorf",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -53450,7 +53450,7 @@
         "id": "NOL046",
         "name": "Johanneskirken",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -53645,7 +53645,7 @@
         "id": "CH01165",
         "name": "Jouxtens-Mézery",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -53905,7 +53905,7 @@
         "id": "CH08161",
         "name": "Kaltenherberg",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -54053,32 +54053,6 @@
       "geometry": {
         "type": "Point",
         "coordinates": [4.432661, 51.313528]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "NOL049",
-        "name": "Kardemomme bru",
-        "type": "light",
-        "importance": 4
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [8.1401005, 58.1874981]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "NOL050",
-        "name": "Kardemomme by",
-        "type": "light",
-        "importance": 4
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [8.139491, 58.187425]
       }
     },
     {
@@ -55933,7 +55907,7 @@
         "id": "ITL071",
         "name": "Klobenstein - Collalbo",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -57571,7 +57545,7 @@
         "id": "ITL106",
         "name": "La Pigna",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -58624,7 +58598,7 @@
         "id": "CH94258",
         "name": "Langenthal Industrie Nord",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -58793,7 +58767,7 @@
         "id": "CH03061",
         "name": "Langwies ZH",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -59287,7 +59261,7 @@
         "id": "CH01160",
         "name": "Lausanne-Chauderon",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -59300,7 +59274,7 @@
         "id": "CH01181",
         "name": "Lausanne-Flon",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -60392,7 +60366,7 @@
         "id": "CH02166",
         "name": "Leimbach AG",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -60678,7 +60652,7 @@
         "id": "ITL020",
         "name": "Leopardi",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -61276,7 +61250,7 @@
         "id": "CH87727",
         "name": "Les Ripes",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -61874,7 +61848,7 @@
         "id": "ITL034",
         "name": "Lichtenstern - Stella",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -62511,7 +62485,7 @@
         "id": "ITL033",
         "name": "Linzbach",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -63525,7 +63499,7 @@
         "id": "CH08066",
         "name": "Lohn-Lüterkofen",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -64669,7 +64643,7 @@
         "id": "UKL056",
         "name": "Luton DART Parkway",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -65293,7 +65267,7 @@
         "id": "ITL010",
         "name": "Madonna Dell'Arco",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -65306,7 +65280,7 @@
         "id": "ITL090",
         "name": "Madonnelle",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -65553,7 +65527,7 @@
         "id": "CH03068",
         "name": "Maiacher",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -65657,7 +65631,7 @@
         "id": "UKL057",
         "name": "Main Terminal Building (Arrivals)",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -65670,7 +65644,7 @@
         "id": "UKL058",
         "name": "Main Terminal Building (Departures)",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -66788,7 +66762,7 @@
         "id": "ITL055",
         "name": "Marigliano",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -68322,7 +68296,7 @@
         "id": "CH02169",
         "name": "Menziken",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -68738,7 +68712,7 @@
         "id": "ITL138",
         "name": "Meta",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -69856,7 +69830,7 @@
         "id": "CH02179",
         "name": "Mittelmuhen",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -71429,7 +71403,7 @@
         "id": "CH08056",
         "name": "Moosseedorf",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -71533,7 +71507,7 @@
         "id": "ITL021",
         "name": "Moregine",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -72378,7 +72352,7 @@
         "id": "CH02195",
         "name": "Muhen",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -72391,7 +72365,7 @@
         "id": "CH02180",
         "name": "Muhen Nord",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -72703,7 +72677,7 @@
         "id": "NOL064",
         "name": "Muséplassen",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -73184,7 +73158,7 @@
         "id": "NOL065",
         "name": "Møhlenpris",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -73522,7 +73496,7 @@
         "id": "ITL013",
         "name": "Napoli Centro Direzionale",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -73535,7 +73509,7 @@
         "id": "ITL032",
         "name": "Napoli Garibaldi",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -73639,7 +73613,7 @@
         "id": "ITL072",
         "name": "Napoli Porta Nolana",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -74289,7 +74263,7 @@
         "id": "CH03074",
         "name": "Neue Forch",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -74354,7 +74328,7 @@
         "id": "CH03072",
         "name": "Neuhaus bei Hinteregg",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -74666,7 +74640,7 @@
         "id": "UKL065",
         "name": "New Romney",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -75862,7 +75836,7 @@
         "id": "ITL097",
         "name": "Nola",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -77058,7 +77032,7 @@
         "id": "ITL043",
         "name": "Oberbozen - Soprabolzano",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -77149,7 +77123,7 @@
         "id": "CH02194",
         "name": "Oberentfelden Engelplatz",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -77162,7 +77136,7 @@
         "id": "CH02181",
         "name": "Oberentfelden Uerkenbrücke",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -77214,7 +77188,7 @@
         "id": "CH02163",
         "name": "Oberkulm",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -77227,7 +77201,7 @@
         "id": "CH02178",
         "name": "Obermuhen",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -77370,7 +77344,7 @@
         "id": "CH08070",
         "name": "Oberzollikofen",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -77500,7 +77474,7 @@
         "id": "ITL117",
         "name": "Officine Ponticelli",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -78917,7 +78891,7 @@
         "id": "ITL114",
         "name": "Ottaviano",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -80204,7 +80178,7 @@
         "id": "ITL150",
         "name": "Pantanella",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -80269,7 +80243,7 @@
         "id": "CH07096",
         "name": "Papiermühle",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -80412,7 +80386,7 @@
         "id": "ITL103",
         "name": "Parco Piemonte",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -82167,7 +82141,7 @@
         "id": "ITL134",
         "name": "Piano di Sorrento",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -82726,7 +82700,7 @@
         "id": "ITL136",
         "name": "Pioppaino",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -83311,7 +83285,7 @@
         "id": "ITL120",
         "name": "Poggiomarino",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -83324,7 +83298,7 @@
         "id": "ITL025",
         "name": "Poggioreale",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -83493,7 +83467,7 @@
         "id": "ITL111",
         "name": "Pollena Trocchia",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -83623,7 +83597,7 @@
         "id": "ITL104",
         "name": "Pomigliano d’Arco",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -83649,7 +83623,7 @@
         "id": "ITL132",
         "name": "Pompei - Santuario",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -83662,7 +83636,7 @@
         "id": "ITL135",
         "name": "Pompei Scavi - Villa dei Misteri",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -83896,7 +83870,7 @@
         "id": "ITL066",
         "name": "Ponte Casilino",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -84299,7 +84273,7 @@
         "id": "ITL044",
         "name": "Ponticelli",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -84676,7 +84650,7 @@
         "id": "ITL067",
         "name": "Porta Maggiore",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -84858,7 +84832,7 @@
         "id": "ITL122",
         "name": "Portici Bellavista",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -84871,7 +84845,7 @@
         "id": "ITL123",
         "name": "Portici Via Libertà",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -85599,7 +85573,7 @@
         "id": "ITL019",
         "name": "Pratola Ponte",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -85898,7 +85872,7 @@
         "id": "CH01163",
         "name": "Prilly-Chasseur",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -87172,7 +87146,7 @@
         "id": "ITL037",
         "name": "Rappersbichl - Colle Renon",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -88134,7 +88108,7 @@
         "id": "CH02168",
         "name": "Reinach AG",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -88147,7 +88121,7 @@
         "id": "CH02176",
         "name": "Reinach AG Mitte",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -88160,7 +88134,7 @@
         "id": "CH02167",
         "name": "Reinach AG Nord",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -88368,7 +88342,7 @@
         "id": "CH02278",
         "name": "Reppischhof",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -89304,7 +89278,7 @@
         "id": "ITL022",
         "name": "Rinner",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -89369,7 +89343,7 @@
         "id": "ITL009",
         "name": "Rione Trieste",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -89746,7 +89720,7 @@
         "id": "ITL099",
         "name": "Roccarainola-Tufino",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -90084,7 +90058,7 @@
         "id": "CH08168",
         "name": "Roggwil Buchägerten",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -90097,7 +90071,7 @@
         "id": "CH08162",
         "name": "Roggwil Dorf",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -90110,7 +90084,7 @@
         "id": "CH08173",
         "name": "Roggwil Schmitten",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -90487,7 +90461,7 @@
         "id": "CH01166",
         "name": "Romanel-sur-Lausanne",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -91787,7 +91761,7 @@
         "id": "CH02277",
         "name": "Rudolfstetten",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -91800,7 +91774,7 @@
         "id": "CH02187",
         "name": "Rudolfstetten Hofacker",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -94465,7 +94439,7 @@
         "id": "ITL108",
         "name": "Salice",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -94972,7 +94946,7 @@
         "id": "ITL095",
         "name": "San Giorgio a Cremano",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -94985,7 +94959,7 @@
         "id": "ITL121",
         "name": "San Giorgio Cavalli di Bronzo",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -95011,7 +94985,7 @@
         "id": "ITL031",
         "name": "San Giovanni a Teduccio",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -95024,7 +94998,7 @@
         "id": "ITL115",
         "name": "San Giuseppe",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -95063,7 +95037,7 @@
         "id": "ITL011",
         "name": "San Leonardo",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -95128,7 +95102,7 @@
         "id": "ITL007",
         "name": "San Pietro",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -95193,7 +95167,7 @@
         "id": "ITL119",
         "name": "San Valentino Torio",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -95206,7 +95180,7 @@
         "id": "ITL054",
         "name": "San Vitaliano",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -95648,7 +95622,7 @@
         "id": "ITL112",
         "name": "Sant'Anastasia",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -95661,7 +95635,7 @@
         "id": "ITL065",
         "name": "Sant'Elena",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -95687,7 +95661,7 @@
         "id": "ITL068",
         "name": "Santa Bibiana",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -95713,7 +95687,7 @@
         "id": "ITL127",
         "name": "Santa Maria del Pozzo",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -95947,7 +95921,7 @@
         "id": "ITL012",
         "name": "Sarno",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -96103,7 +96077,7 @@
         "id": "ITL148",
         "name": "Sassone",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -96194,7 +96168,7 @@
         "id": "ITL057",
         "name": "Saviano",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -96337,7 +96311,7 @@
         "id": "ITL131",
         "name": "Scafati",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -96506,7 +96480,7 @@
         "id": "CH08063",
         "name": "Schalunen",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -96610,7 +96584,7 @@
         "id": "CH03064",
         "name": "Scheuren",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -96948,7 +96922,7 @@
         "id": "CH06362",
         "name": "Schwarzer Bären",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -97091,7 +97065,7 @@
         "id": "CH06365",
         "name": "Schützengarten",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -97130,7 +97104,7 @@
         "id": "CH02199",
         "name": "Schöftland",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -97143,7 +97117,7 @@
         "id": "CH02177",
         "name": "Schöftland Nordweg",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -97156,7 +97130,7 @@
         "id": "CH08057",
         "name": "Schönbühl RBS",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -97182,7 +97156,7 @@
         "id": "CH08071",
         "name": "Schönbühl Shoppyland",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -97260,7 +97234,7 @@
         "id": "ITL051",
         "name": "Scisciano",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -97689,7 +97663,7 @@
         "id": "ITL023",
         "name": "Seiano",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -101004,7 +100978,7 @@
         "id": "CH00280",
         "name": "Solothurn Baseltor",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -101017,7 +100991,7 @@
         "id": "CH00272",
         "name": "Solothurn Sternen",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -101069,7 +101043,7 @@
         "id": "ITL113",
         "name": "Somma",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -101290,7 +101264,7 @@
         "id": "ITL089",
         "name": "Sorrento",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -102018,7 +101992,7 @@
         "id": "CH06366",
         "name": "Speicher",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -102057,7 +102031,7 @@
         "id": "ITL016",
         "name": "Sperone-Avella",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -102226,7 +102200,7 @@
         "id": "CH03077",
         "name": "Spital Zollikerberg",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -102785,7 +102759,7 @@
         "id": "UKL089",
         "name": "St Mary's Bay",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -103084,7 +103058,7 @@
         "id": "CH18100",
         "name": "St. Gallen Birnbäumen",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -103136,7 +103110,7 @@
         "id": "CH06270",
         "name": "St. Gallen Marktplatz",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -103149,7 +103123,7 @@
         "id": "CH06361",
         "name": "St. Gallen Notkersegg",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -103175,7 +103149,7 @@
         "id": "CH06359",
         "name": "St. Gallen Schülerhaus",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -103188,7 +103162,7 @@
         "id": "CH06358",
         "name": "St. Gallen Spisertor",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -103383,7 +103357,7 @@
         "id": "CH08163",
         "name": "St. Urban",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -103396,7 +103370,7 @@
         "id": "CH08164",
         "name": "St. Urban Ziegelei",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -103812,7 +103786,7 @@
         "id": "UKL093",
         "name": "Station A",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -103825,7 +103799,7 @@
         "id": "UKL094",
         "name": "Station B",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -104215,7 +104189,7 @@
         "id": "CH08053",
         "name": "Steinibach",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -104371,7 +104345,7 @@
         "id": "CH07066",
         "name": "Stettlen",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -105177,7 +105151,7 @@
         "id": "ITL030",
         "name": "Striano",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -105528,7 +105502,7 @@
         "id": "CH01175",
         "name": "Sugnens",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -105749,7 +105723,7 @@
         "id": "CH01174",
         "name": "Sur Roche",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -106568,7 +106542,7 @@
         "id": "ITL105",
         "name": "Talona",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -107244,7 +107218,7 @@
         "id": "ITL069",
         "name": "Termini Laziali",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -107387,7 +107361,7 @@
         "id": "ITL116",
         "name": "Terzigno",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -107452,7 +107426,7 @@
         "id": "CH02161",
         "name": "Teufenthal AG",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -108817,7 +108791,7 @@
         "id": "ITL061",
         "name": "Tor Pignattara",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -109064,7 +109038,7 @@
         "id": "ITL133",
         "name": "Torre Annunziata - Oplonti",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -109142,7 +109116,7 @@
         "id": "ITL026",
         "name": "Torre del Greco",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -109792,7 +109766,7 @@
         "id": "ITL130",
         "name": "Trecase",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -110351,7 +110325,7 @@
         "id": "CH06369",
         "name": "Trogen",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -111674,23 +111648,10 @@
     {
       "type": "Feature",
       "properties": {
-        "id": "IEL067",
-        "name": "undefined",
-        "type": "light",
-        "importance": 4
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [-6.2777873, 53.3471286]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
         "id": "CH01162",
         "name": "Union-Prilly",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -111755,7 +111716,7 @@
         "id": "CH02182",
         "name": "Unterentfelden Oberdorf",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -111768,7 +111729,7 @@
         "id": "CH02196",
         "name": "Unterentfelden Post",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -111781,7 +111742,7 @@
         "id": "CH02162",
         "name": "Unterkulm",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -111794,7 +111755,7 @@
         "id": "CH16450",
         "name": "Unterkulm Nord",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -111833,7 +111794,7 @@
         "id": "CH08055",
         "name": "Unterzollikofen",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -112119,7 +112080,7 @@
         "id": "CH08058",
         "name": "Urtenen",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -113159,7 +113120,7 @@
         "id": "CH07064",
         "name": "Vechigen",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -113653,7 +113614,7 @@
         "id": "CH01168",
         "name": "Vernand-Camarès",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -114030,7 +113991,7 @@
         "id": "ITL093",
         "name": "Vesuvio de Meis",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -114173,7 +114134,7 @@
         "id": "ITL042",
         "name": "Via dei Monaci",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -114186,7 +114147,7 @@
         "id": "ITL047",
         "name": "Via del Monte",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -114199,7 +114160,7 @@
         "id": "ITL126",
         "name": "Via Sant'Antonio",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -114212,7 +114173,7 @@
         "id": "ITL129",
         "name": "Via Viuli",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -114329,7 +114290,7 @@
         "id": "ITL137",
         "name": "Vico Equense",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -114745,7 +114706,7 @@
         "id": "ITL008",
         "name": "Villa Augustea",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -114797,7 +114758,7 @@
         "id": "ITL128",
         "name": "Villa delle Ginestre",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -114888,7 +114849,7 @@
         "id": "ITL046",
         "name": "Villa Regina",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -114966,7 +114927,7 @@
         "id": "ITL092",
         "name": "Villa Visconti",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -115486,7 +115447,7 @@
         "id": "ITL064",
         "name": "Villini",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -115824,7 +115785,7 @@
         "id": "ITL052",
         "name": "Vittorio Veneto",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -116370,7 +116331,7 @@
         "id": "CH06364",
         "name": "Vögelinsegg",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -116591,7 +116552,7 @@
         "id": "CH03078",
         "name": "Waldburg",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -116864,7 +116825,7 @@
         "id": "CH03075",
         "name": "Waltikon",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -117696,7 +117657,7 @@
         "id": "ITL036",
         "name": "Weidacher",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -119269,7 +119230,7 @@
         "id": "CH02275",
         "name": "Widen Heinrüti",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -120218,7 +120179,7 @@
         "id": "CH18701",
         "name": "Wohlen Fulenbach",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -120231,7 +120192,7 @@
         "id": "CH02271",
         "name": "Wohlen Oberdorf",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -120309,7 +120270,7 @@
         "id": "ITL038",
         "name": "Wolfsgruben - Costalovara",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -120751,7 +120712,7 @@
         "id": "CH89198",
         "name": "Worbboden",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -120764,7 +120725,7 @@
         "id": "CH08054",
         "name": "Worblaufen",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -121752,7 +121713,7 @@
         "id": "CH02165",
         "name": "Zetzwil",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -121960,7 +121921,7 @@
         "id": "CH03067",
         "name": "Zollikerberg",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -122025,7 +121986,7 @@
         "id": "CH02274",
         "name": "Zufikon",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -122038,7 +121999,7 @@
         "id": "CH02268",
         "name": "Zufikon Belvédère",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -122051,7 +122012,7 @@
         "id": "CH02188",
         "name": "Zufikon Hammergut",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -122207,7 +122168,7 @@
         "id": "CH03066",
         "name": "Zumikon",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -122571,7 +122532,7 @@
         "id": "CH03069",
         "name": "Zürich Rehalp",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -123000,7 +122961,7 @@
         "id": "CH19685",
         "name": "Aarau Torfeld",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -123130,7 +123091,7 @@
         "id": "CH08193",
         "name": "Aarwangen Vorstadt",
         "type": "light",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
