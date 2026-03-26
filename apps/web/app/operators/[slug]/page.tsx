@@ -115,19 +115,21 @@ function boundsToView(bounds: Brand["bounds"]): { lat: number; lng: number; zoom
 }
 
 function getRelatedBrands(brand: Brand): Brand[] {
-  const related: Brand[] = [];
   const seen = new Set<string>([brand.slug]);
+  const sameCountry: Brand[] = [];
+  const crossCountry: Brand[] = [];
 
   for (const b of brands) {
     if (seen.has(b.slug)) continue;
     if (b.countries.some((c) => brand.countries.includes(c))) {
-      related.push(b);
+      const allShared = b.countries.every((c) => brand.countries.includes(c));
+      if (allShared) sameCountry.push(b);
+      else crossCountry.push(b);
       seen.add(b.slug);
     }
-    if (related.length >= 4) break;
   }
 
-  return related;
+  return [...sameCountry, ...crossCountry].slice(0, 4);
 }
 
 export default async function BrandPage({ params }: BrandPageProps) {
