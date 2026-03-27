@@ -94,13 +94,6 @@ const brandAliases: Record<string, string> = {
   sjn: "sj nord",
   "go-ahead norge as": "go-ahead norge",
   "go-ahead nordic as": "go-ahead norge",
-  // Swedish aliases
-  "sj ab": "sj",
-  "mtr express ab": "mtr express",
-  "snälltåget ab": "snälltåget",
-  "transdev sverige ab": "transdev",
-  "vr sverige ab": "vr",
-  "vygruppen as": "vy",
 };
 
 function normalizeBrandName(brand: string): string {
