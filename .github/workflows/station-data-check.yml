@@ -2,7 +2,7 @@ name: Station Data Check
 
 on:
   pull_request:
-    branches: [main]
+    branches: [main, preview]
     paths:
       - "packages/data/src/stations.geojson"
 
