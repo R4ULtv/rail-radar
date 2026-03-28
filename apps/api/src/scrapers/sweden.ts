@@ -21,6 +21,7 @@ interface TrafiklabDeparture {
   route: {
     name: string | null;
     designation: string | null;
+    transport_mode_code: number;
     transport_mode: string;
     direction: string | null;
     origin: { id: string; name: string } | null;
@@ -35,8 +36,10 @@ interface TrafiklabDeparture {
     name: string;
     operator: string;
   };
+  stop: { id: string; name: string; lat: number; lon: number };
   scheduled_platform: { id: string; designation: string } | null;
   realtime_platform: { id: string; designation: string } | null;
+  alerts: { type: string; title: string; text: string }[];
 }
 
 interface TrafiklabResponse {
@@ -51,6 +54,34 @@ function toTrafiklabAreaId(stationId: string): string {
     throw new ScraperError("Unknown Swedish station.", 404);
   }
   return `740${numericPart}`;
+}
+
+// GTFS route_type codes → short category codes
+function getCategory(entry: TrafiklabDeparture): string | null {
+  const code = entry.route.transport_mode_code;
+
+  switch (code) {
+    case 101:
+      return "HS"; // High Speed Rail
+    case 102:
+      return "IC"; // Long Distance Rail
+    case 103:
+      return "IR"; // Inter-Regional Rail
+    case 104:
+      return "IC"; // Cross-Country Rail
+    case 105:
+      return "SLP"; // Sleeper Rail
+    case 106:
+      return "RE"; // Regional Rail
+    case 107:
+      return "RE"; // Tourist Railway
+    case 109:
+      return "S"; // Suburban Railway
+    case 100:
+      return "RE"; // Railway Service (generic)
+    default:
+      return null;
+  }
 }
 
 function getBrand(entry: TrafiklabDeparture): string | null {
@@ -101,17 +132,22 @@ function getTrainNumber(entry: TrafiklabDeparture): string {
 function mapEntry(entry: TrafiklabDeparture, type: SwedenBoardType): Train {
   const train: Train = {
     brand: getBrand(entry),
-    category: entry.route.designation,
+    category: getCategory(entry),
     trainNumber: getTrainNumber(entry),
     scheduledTime: formatTime(entry.scheduled, SWEDEN_TIMEZONE),
     delay: getDelay(entry),
     platform: entry.realtime_platform?.designation ?? entry.scheduled_platform?.designation ?? null,
     status: getStatus(entry, type),
-    info: entry.is_realtime ? null : "Scheduled data only",
+    info: entry.alerts[0]?.title ?? null,
   };
 
   if (type === "departures") {
-    train.destination = entry.route.destination?.name ?? entry.route.direction ?? undefined;
+    const dest = entry.route.destination?.name;
+    const origin = entry.route.origin?.name;
+    const isCircular = dest && origin && dest === origin;
+    train.destination = isCircular
+      ? (entry.route.direction ?? entry.route.name ?? dest)
+      : (dest ?? entry.route.direction ?? undefined);
   } else {
     train.origin = entry.route.origin?.name ?? undefined;
   }
@@ -146,6 +182,8 @@ export async function scrapeSwedenTrains(
   const trains = entries
     .filter((entry) => {
       if (!RAIL_MODES.has(entry.route.transport_mode)) return false;
+      // Skip trains terminating at this station (showing in departures but going nowhere)
+      if (type === "departures" && entry.stop.name === entry.route.destination?.name) return false;
       // Deduplicate by train number + scheduled time
       const dedupKey = `${getTrainNumber(entry)}-${entry.scheduled}`;
       if (seen.has(dedupKey)) return false;
