@@ -38,6 +38,7 @@ type Bindings = {
   CLOUDFLARE_API_TOKEN: string;
   NS_API_KEY: string;
   LDBWS_API_KEY: string;
+  TRAFIKLAB_KEY: string;
   MAPBOX_TOKEN: string;
 };
 

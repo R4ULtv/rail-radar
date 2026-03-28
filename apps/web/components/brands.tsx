@@ -40,6 +40,11 @@ const brandPaths: Record<string, string> = {
   ns: "ns",
   vy: "no/vy",
   "sj nord": "no/sj_nord",
+  // Swedish brands
+  sj: "se/sj",
+  "mtr express": "se/mtr",
+  snälltåget: "se/snalltaget",
+  transdev: "transdev",
   "go-ahead norge": "no/go_ahead",
   flytoget: "no/flytoget",
   // UK brands
@@ -87,7 +92,6 @@ const brandAliases: Record<string, string> = {
   "go-ahead": "go-ahead norge",
   "go-ahead nordic": "go-ahead norge",
   sjn: "sj nord",
-  sj: "sj nord",
   "go-ahead norge as": "go-ahead norge",
   "go-ahead nordic as": "go-ahead norge",
 };
@@ -147,6 +151,11 @@ const brandSlugMap: Record<string, string> = {
   "sj nord": "sj-nord",
   "go-ahead norge": "go-ahead-norge",
   flytoget: "flytoget",
+  // Swedish brands
+  sj: "sj",
+  "mtr express": "mtr-express",
+  snälltåget: "snalltaget",
+  transdev: "transdev",
   // UK brands
   lm: "west-midlands-trains",
   nt: "northern",
