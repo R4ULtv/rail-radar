@@ -4,8 +4,8 @@ import {
   getCountry,
   type CountryCode,
   type CountryName,
-  type Station,
-} from "@repo/data";
+} from "@repo/data/countries";
+import type { Station } from "@repo/data";
 
 const COUNTRY_NAME_TO_CODE = Object.fromEntries(
   Object.entries(COUNTRY_MAP).map(([code, name]) => [name.toLowerCase(), code]),

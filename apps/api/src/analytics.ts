@@ -1,6 +1,6 @@
 import { getPeriodInterval, STATION_ID_PATTERN, type Period } from "./constants";
 
-import { COUNTRY_CODES, getCountry, type CountryCode } from "@repo/data";
+import { COUNTRY_CODES, getCountry, type CountryCode } from "@repo/data/countries";
 
 interface TopStation {
   stationId: string;

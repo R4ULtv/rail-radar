@@ -1,5 +1,6 @@
 import type { ContentfulStatusCode } from "hono/utils/http-status";
-import { getCountry, type CountryCode, type Train } from "@repo/data";
+import { getCountry, type CountryCode } from "@repo/data/countries";
+import type { Train } from "@repo/data";
 
 import { scrapeBelgiumTrains } from "./belgium";
 import { scrapeFinlandTrains } from "./finland";
