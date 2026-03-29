@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
-import { brands, COUNTRY_MAP, COUNTRY_CODES } from "@repo/data";
+import { brands } from "@repo/data/brands";
+import { COUNTRY_MAP, COUNTRY_CODES } from "@repo/data/countries";
 import { Badge } from "@repo/ui/components/badge";
 import { Card, CardContent } from "@repo/ui/components/card";
 import { ArrowLeftIcon, ArrowRightIcon } from "lucide-react";

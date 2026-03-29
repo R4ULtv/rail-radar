@@ -2,7 +2,8 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
-import { brands, brandBySlug, COUNTRY_MAP, type Brand } from "@repo/data";
+import { brands, brandBySlug, type Brand } from "@repo/data/brands";
+import { COUNTRY_MAP } from "@repo/data/countries";
 import { Badge } from "@repo/ui/components/badge";
 import { Card, CardContent } from "@repo/ui/components/card";
 import {

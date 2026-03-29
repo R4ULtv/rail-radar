@@ -1,5 +1,6 @@
 import { MetadataRoute } from "next";
-import { stations, brands } from "@repo/data";
+import { stations } from "@repo/data/stations";
+import { brands } from "@repo/data/brands";
 import baseUrl from "@/lib/base-url";
 
 export default function sitemap(): MetadataRoute.Sitemap {
