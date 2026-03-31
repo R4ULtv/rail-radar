@@ -40,7 +40,7 @@ export async function generateMetadata({ params }: BrandPageProps): Promise<Meta
   }
 
   const countries = brand.countries.map((c) => COUNTRY_MAP[c]).join(", ");
-  const description = `${brand.name} - train operator in ${countries}. ${brand.description}`;
+  const description = `${brand.name} is tracked on Rail Radar in ${countries}. ${brand.description}`;
 
   return {
     title: `${brand.name} - Train Operator`,
@@ -56,7 +56,7 @@ export async function generateMetadata({ params }: BrandPageProps): Promise<Meta
           url: "/og-image-brands.webp",
           width: 1200,
           height: 630,
-          alt: "Rail Radar - Train Operators across 5 countries",
+          alt: "Rail Radar - Train operator directory across Europe",
         },
       ],
     },
@@ -69,7 +69,7 @@ export async function generateMetadata({ params }: BrandPageProps): Promise<Meta
           url: "/og-image-brands.webp",
           width: 1200,
           height: 630,
-          alt: "Rail Radar - Train Operators across 5 countries",
+          alt: "Rail Radar - Train operator directory across Europe",
         },
       ],
     },
@@ -189,7 +189,7 @@ export default async function BrandPage({ params }: BrandPageProps) {
       icon: UsersIcon,
     });
   facts.push({
-    label: "Countries",
+    label: "Tracked Countries",
     value: brand.countries.map((c) => COUNTRY_MAP[c]).join(", "),
     icon: GlobeIcon,
   });
