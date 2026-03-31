@@ -727,7 +727,7 @@ export const brands: Brand[] = [
     slug: "eurostar",
     name: "Eurostar",
     logoPath: "eurostar",
-    countries: ["be"],
+    countries: ["uk", "be", "nl"],
     bounds: [-0.5, 48.8, 5.5, 52.4],
     description:
       "Eurostar operates high-speed international rail services connecting the UK with mainland Europe via the Channel Tunnel. Following its merger with Thalys, the unified Eurostar brand now also manages the premier high-speed network linking Paris, Brussels, Amsterdam, and Cologne, creating a unified Western European high-speed giant.",
