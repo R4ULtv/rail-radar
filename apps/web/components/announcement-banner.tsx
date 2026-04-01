@@ -8,7 +8,7 @@ import { Alert, AlertTitle, AlertAction } from "@repo/ui/components/alert";
 import { Badge } from "@repo/ui/components/badge";
 import { Button } from "@repo/ui/components/button";
 
-const STORAGE_KEY = "banner-dismissed-v4";
+const STORAGE_KEY = "banner-dismissed-v5";
 
 const subscribe = () => () => {};
 const getSnapshot = () => !localStorage.getItem(STORAGE_KEY);
@@ -46,9 +46,9 @@ export function AnnouncementBanner() {
                   <span className="hidden md:block">New</span>
                 </Badge>
                 <span className="hidden md:inline">
-                  🇬🇧 UK & 🇮🇪 Ireland stations are live! Track trains across the British Isles.{" "}
+                  Scandinavia update: 🇳🇴 Norway + 🇸🇪 Sweden + 🇩🇰 Denmark.{" "}
                   <Link
-                    href="/operators#uk"
+                    href="/operators#no"
                     className="underline underline-offset-2"
                     onClick={dismiss}
                   >
@@ -57,13 +57,13 @@ export function AnnouncementBanner() {
                 </span>
                 <span className="md:hidden">
                   <Link
-                    href="/operators#uk"
+                    href="/operators#no"
                     className="underline underline-offset-2"
                     onClick={dismiss}
                   >
-                    🇬🇧 UK & 🇮🇪 Ireland
+                    🇳🇴 Norway + 🇸🇪 Sweden + 🇩🇰 Denmark
                   </Link>{" "}
-                  stations are now live!
+                  update
                 </span>
               </AlertTitle>
               <AlertAction className="top-1.5">
