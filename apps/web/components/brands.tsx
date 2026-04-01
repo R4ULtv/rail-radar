@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { brandBySlug } from "@repo/data";
+import { brandBySlug } from "@repo/data/brands";
 
 // Maps brand names to their SVG file paths (relative to /brands/)
 const brandPaths: Record<string, string> = {
@@ -38,6 +38,15 @@ const brandPaths: Record<string, string> = {
   eurostar: "eurostar",
   db: "db",
   ns: "ns",
+  vy: "no/vy",
+  "sj nord": "no/sj_nord",
+  // Swedish brands
+  sj: "se/sj",
+  "mtr express": "se/mtr",
+  snälltåget: "se/snalltaget",
+  transdev: "transdev",
+  "go-ahead norge": "no/go_ahead",
+  flytoget: "no/flytoget",
   // UK brands
   lm: "uk/lm",
   nt: "uk/nt",
@@ -80,12 +89,20 @@ const brandAliases: Record<string, string> = {
   gx: "sn",
   ln: "lm",
   wm: "lm",
+  "go-ahead": "go-ahead norge",
+  "go-ahead nordic": "go-ahead norge",
+  sjn: "sj nord",
+  "go-ahead norge as": "go-ahead norge",
+  "go-ahead nordic as": "go-ahead norge",
 };
 
-function getBrandPath(brand: string): string | null {
+function normalizeBrandName(brand: string): string {
   const normalized = brand.toLowerCase();
-  const resolved = brandAliases[normalized] ?? normalized;
-  return brandPaths[resolved] ?? null;
+  return brandAliases[normalized] ?? normalized;
+}
+
+function getBrandPath(brand: string): string | null {
+  return brandPaths[normalizeBrandName(brand)] ?? null;
 }
 
 // Maps raw brand names (lowercased) to brand slugs
@@ -130,6 +147,15 @@ const brandSlugMap: Record<string, string> = {
   eurostar: "eurostar",
   db: "db",
   ns: "ns",
+  vy: "vy",
+  "sj nord": "sj-nord",
+  "go-ahead norge": "go-ahead-norge",
+  flytoget: "flytoget",
+  // Swedish brands
+  sj: "sj",
+  "mtr express": "mtr-express",
+  snälltåget: "snalltaget",
+  transdev: "transdev",
   // UK brands
   lm: "west-midlands-trains",
   nt: "northern",
@@ -155,8 +181,7 @@ const brandSlugMap: Record<string, string> = {
 };
 
 export function getBrandSlug(brand: string): string | null {
-  const normalized = brand.toLowerCase();
-  const slug = brandSlugMap[normalized];
+  const slug = brandSlugMap[normalizeBrandName(brand)];
   if (slug && brandBySlug.has(slug)) return slug;
   return null;
 }

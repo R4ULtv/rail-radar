@@ -1,5 +1,5 @@
 import { ImageResponse } from "@takumi-rs/image-response";
-import { stations, stationById } from "@repo/data";
+import { stations, stationById } from "@repo/data/stations";
 import type { NextRequest } from "next/server";
 
 const DEG_TO_RAD = Math.PI / 180;

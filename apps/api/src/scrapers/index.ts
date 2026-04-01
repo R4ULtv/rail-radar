@@ -1,12 +1,15 @@
 import type { ContentfulStatusCode } from "hono/utils/http-status";
-import { getCountry, type CountryCode, type Train } from "@repo/data";
+import { getCountry, type CountryCode } from "@repo/data/countries";
+import type { Train } from "@repo/data";
 
 import { scrapeBelgiumTrains } from "./belgium";
 import { scrapeFinlandTrains } from "./finland";
 import { scrapeTrains } from "./italy";
 import { scrapeNetherlandsTrains } from "./netherlands";
+import { scrapeNorwayTrains } from "./norway";
 import { scrapeSwissTrains } from "./switzerland";
 import { scrapeIrelandTrains } from "./ireland";
+import { scrapeSwedenTrains } from "./sweden";
 import { scrapeUKTrains } from "./uk";
 
 export interface ScraperTiming {
@@ -53,6 +56,8 @@ const scrapers: Partial<Record<CountryCode, ScrapeFn>> = {
   ie: scrapeIrelandTrains,
   it: scrapeTrains,
   nl: scrapeNetherlandsTrains,
+  no: scrapeNorwayTrains,
+  se: scrapeSwedenTrains,
   uk: scrapeUKTrains,
 };
 

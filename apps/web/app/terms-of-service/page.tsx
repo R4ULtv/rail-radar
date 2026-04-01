@@ -19,7 +19,7 @@ export default function TermsOfServicePage() {
         Back to Rail Radar
       </Link>
       <h1 className="mb-8 text-3xl font-bold">Terms of Service</h1>
-      <p className="mb-4 text-sm text-muted-foreground">Last updated: March 22, 2026</p>
+      <p className="mb-4 text-sm text-muted-foreground">Last updated: March 25, 2026</p>
 
       <div className="space-y-8 leading-relaxed text-muted-foreground">
         <section>
@@ -101,6 +101,17 @@ export default function TermsOfServicePage() {
                 rel="noopener noreferrer"
               >
                 NS (Nederlandse Spoorwegen)
+              </a>
+            </li>
+            <li>
+              <strong className="text-foreground">Norway</strong> &mdash;{" "}
+              <a
+                href="https://developer.entur.org"
+                className="text-foreground underline"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Entur
               </a>
             </li>
             <li>

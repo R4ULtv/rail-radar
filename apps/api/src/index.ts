@@ -4,14 +4,8 @@ import { cors } from "hono/cors";
 import { createMiddleware } from "hono/factory";
 import { validator } from "hono/validator";
 
-import {
-  COUNTRY_CODES,
-  getCountry,
-  stationById,
-  stations,
-  stationsGeoJSON,
-  type CountryCode,
-} from "@repo/data";
+import { COUNTRY_CODES, getCountry, type CountryCode } from "@repo/data/countries";
+import { stationById, stations, stationsGeoJSON } from "@repo/data/stations";
 import {
   getAnalyticsOverview,
   getProviderByStationId,
@@ -38,6 +32,7 @@ type Bindings = {
   CLOUDFLARE_API_TOKEN: string;
   NS_API_KEY: string;
   LDBWS_API_KEY: string;
+  TRAFIKLAB_KEY: string;
   MAPBOX_TOKEN: string;
 };
 
@@ -112,7 +107,7 @@ app.get("/", (c) => {
       "GET /stations/trending":
         "Get trending stations (optional: ?period=hour|day|week, default: day)",
       "GET /stations/trending/:country":
-        "Get trending stations by country (it|ch|fi|be|nl|uk|ie, optional: ?period=hour|day|week)",
+        "Get trending stations by country (it|ch|fi|be|nl|no|se|uk|ie, optional: ?period=hour|day|week)",
       "GET /stations/:id/stats":
         "Get station visit stats (optional: ?period=hour|day|week, default: day)",
       "GET /stations/:id": "Get station info with trains (optional: ?type=arrivals|departures)",

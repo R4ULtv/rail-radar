@@ -1,7 +1,9 @@
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import Link from "next/link";
-import { stations, stationById, getCountry, type Station } from "@repo/data";
+import { stations, stationById } from "@repo/data/stations";
+import { getCountry } from "@repo/data/countries";
+import type { Station } from "@repo/data";
 import { Button } from "@repo/ui/components/button";
 import { ArrowLeftIcon } from "lucide-react";
 import { StaticMap } from "@/components/static-map";

@@ -1,6 +1,6 @@
 import { getPeriodInterval, STATION_ID_PATTERN, type Period } from "./constants";
 
-import { COUNTRY_CODES, getCountry, type CountryCode } from "@repo/data";
+import { COUNTRY_CODES, getCountry, type CountryCode } from "@repo/data/countries";
 
 interface TopStation {
   stationId: string;
@@ -57,6 +57,7 @@ interface CountryBreakdownQueryResult {
 
 export const PROVIDER_IDS = [
   "digitraffic",
+  "entur",
   "irail",
   "irishrail",
   "ns",
@@ -76,6 +77,7 @@ const COUNTRY_TO_PROVIDER: Partial<Record<CountryCode, ProviderId>> = {
   ie: "irishrail",
   it: "rfi",
   nl: "ns",
+  no: "entur",
   uk: "nationalrail",
 };
 

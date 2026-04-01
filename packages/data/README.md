@@ -64,7 +64,7 @@ A typed GeoJSON `FeatureCollection<Point, StationProperties>` containing all sta
 
 - `properties.id` — station ID (e.g., `"IT01700"`)
 - `properties.name` — station name
-- `properties.type` — `"rail"`, `"metro"`, or `"light"`
+- `properties.type` — `"rail"`, `"metro"`, or `"light"` (light rail: trams and train-like services)
 - `properties.importance` — `1`–`4`
 - `geometry.coordinates` — `[lng, lat]`
 
@@ -111,7 +111,7 @@ interface Station {
 }
 ```
 
-**Importance levels:**
+**Importance levels (rail):**
 
 | Level | Description                                      |
 | ----- | ------------------------------------------------ |
@@ -119,6 +119,13 @@ interface Station {
 | 2     | Important cities                                 |
 | 3     | Regional cities                                  |
 | 4     | Default (smaller stations)                       |
+
+**Importance levels (light rail):**
+
+| Level | Description                                                                    |
+| ----- | ------------------------------------------------------------------------------ |
+| 3     | Train-like services — S-Bahn, suburban rail (e.g., Forchbahn, Circumvesuviana) |
+| 4     | Trams / streetcars (e.g., Oslo tram, Dublin Luas, Bergamo T1)                  |
 
 ### `StationProperties`
 

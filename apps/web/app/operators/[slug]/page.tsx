@@ -2,7 +2,8 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
-import { brands, brandBySlug, COUNTRY_MAP, type Brand } from "@repo/data";
+import { brands, brandBySlug, type Brand } from "@repo/data/brands";
+import { COUNTRY_MAP } from "@repo/data/countries";
 import { Badge } from "@repo/ui/components/badge";
 import { Card, CardContent } from "@repo/ui/components/card";
 import {
@@ -39,7 +40,7 @@ export async function generateMetadata({ params }: BrandPageProps): Promise<Meta
   }
 
   const countries = brand.countries.map((c) => COUNTRY_MAP[c]).join(", ");
-  const description = `${brand.name} - train operator in ${countries}. ${brand.description}`;
+  const description = `${brand.name} is tracked on Rail Radar in ${countries}. ${brand.description}`;
 
   return {
     title: `${brand.name} - Train Operator`,
@@ -55,7 +56,7 @@ export async function generateMetadata({ params }: BrandPageProps): Promise<Meta
           url: "/og-image-brands.webp",
           width: 1200,
           height: 630,
-          alt: "Rail Radar - Train Operators across 5 countries",
+          alt: "Rail Radar - Train operator directory across Europe",
         },
       ],
     },
@@ -68,7 +69,7 @@ export async function generateMetadata({ params }: BrandPageProps): Promise<Meta
           url: "/og-image-brands.webp",
           width: 1200,
           height: 630,
-          alt: "Rail Radar - Train Operators across 5 countries",
+          alt: "Rail Radar - Train operator directory across Europe",
         },
       ],
     },
@@ -115,19 +116,21 @@ function boundsToView(bounds: Brand["bounds"]): { lat: number; lng: number; zoom
 }
 
 function getRelatedBrands(brand: Brand): Brand[] {
-  const related: Brand[] = [];
   const seen = new Set<string>([brand.slug]);
+  const sameCountry: Brand[] = [];
+  const crossCountry: Brand[] = [];
 
   for (const b of brands) {
     if (seen.has(b.slug)) continue;
     if (b.countries.some((c) => brand.countries.includes(c))) {
-      related.push(b);
+      const allShared = b.countries.every((c) => brand.countries.includes(c));
+      if (allShared) sameCountry.push(b);
+      else crossCountry.push(b);
       seen.add(b.slug);
     }
-    if (related.length >= 4) break;
   }
 
-  return related;
+  return [...sameCountry, ...crossCountry].slice(0, 4);
 }
 
 export default async function BrandPage({ params }: BrandPageProps) {
@@ -186,7 +189,7 @@ export default async function BrandPage({ params }: BrandPageProps) {
       icon: UsersIcon,
     });
   facts.push({
-    label: "Countries",
+    label: "Tracked Countries",
     value: brand.countries.map((c) => COUNTRY_MAP[c]).join(", "),
     icon: GlobeIcon,
   });

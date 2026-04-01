@@ -4,7 +4,11 @@
   "private": true,
   "type": "module",
   "exports": {
-    ".": "./src/index.ts"
+    ".": "./src/index.ts",
+    "./brands": "./src/brands.ts",
+    "./stations": "./src/stations.ts",
+    "./countries": "./src/countries.ts",
+    "./types": "./src/types.ts"
   },
   "scripts": {
     "lint": "oxlint --deny warnings",

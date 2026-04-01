@@ -42,7 +42,8 @@ import { useStationSearch } from "@/hooks/use-station-search";
 import { useTrendingStations } from "@/hooks/use-trending-stations";
 
 import { cn } from "@repo/ui/lib/utils";
-import { getCountry, type Station } from "@repo/data";
+import { getCountry } from "@repo/data/countries";
+import type { Station } from "@repo/data";
 import type { StationVisibility } from "@/hooks/use-map-layers";
 import Image from "next/image";
 import { Button } from "@repo/ui/components/button";
