@@ -16,7 +16,7 @@
     "@repo/ui": "workspace:*",
     "@takumi-rs/image-response": "^0.73.1",
     "@vercel/analytics": "^1.6.1",
-    "lucide-react": "^0.562.0",
+    "lucide-react": "^1.7.0",
     "mapbox-gl": "^3.20.0",
     "motion": "^12.38.0",
     "next": "16.2.2",
