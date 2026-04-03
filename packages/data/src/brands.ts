@@ -894,7 +894,11 @@ export const brands: Brand[] = [
     parentCompany: "R.A.T.H. Group",
     links: [
       { label: "Official Site", url: "https://www.vias-online.de", type: "website" },
-      { label: "Wikipedia", url: "https://en.wikipedia.org/wiki/Vias_(rail_company)", type: "wikipedia" },
+      {
+        label: "Wikipedia",
+        url: "https://en.wikipedia.org/wiki/Vias_(rail_company)",
+        type: "wikipedia",
+      },
     ],
   },
   {
