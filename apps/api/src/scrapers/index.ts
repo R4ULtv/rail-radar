@@ -11,6 +11,7 @@ import { scrapeSwissTrains } from "./switzerland";
 import { scrapeIrelandTrains } from "./ireland";
 import { scrapeSwedenTrains } from "./sweden";
 import { scrapeUKTrains } from "./uk";
+import { scrapeGermanTrains } from "./germany";
 
 export interface ScraperTiming {
   fetchMs: number;
@@ -59,6 +60,7 @@ const scrapers: Partial<Record<CountryCode, ScrapeFn>> = {
   no: scrapeNorwayTrains,
   se: scrapeSwedenTrains,
   uk: scrapeUKTrains,
+  de: scrapeGermanTrains,
 };
 
 export function getScraperForStation(stationId: string): ScrapeFn | null {
