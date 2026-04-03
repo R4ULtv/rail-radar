@@ -93,7 +93,7 @@ export function TrainColumn({
           <div>
             {trainData.map((train) => (
               <TrainRow
-                key={`${train.trainNumber}-${train.scheduledTime}`}
+                key={`${train.trainNumber}-${train.scheduledTime}-${train.platform}`}
                 train={train}
                 type={type}
               />
