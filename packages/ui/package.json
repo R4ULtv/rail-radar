@@ -32,8 +32,8 @@
   "devDependencies": {
     "@repo/typescript-config": "workspace:*",
     "@tailwindcss/postcss": "^4.2.2",
-    "@turbo/gen": "^2.9.3",
-    "@types/node": "^22.19.15",
+    "@turbo/gen": "^2.9.4",
+    "@types/node": "^22.19.17",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
     "tailwindcss": "^4.2.2",

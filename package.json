@@ -9,10 +9,10 @@
     "check-types": "turbo run check-types"
   },
   "devDependencies": {
-    "eslint-plugin-turbo": "^2.9.3",
+    "eslint-plugin-turbo": "^2.9.4",
     "oxfmt": "^0.43.0",
     "oxlint": "^1.58.0",
-    "turbo": "^2.9.3",
+    "turbo": "^2.9.4",
     "typescript": "^5.9.3"
   },
   "engines": {
