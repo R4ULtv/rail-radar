@@ -20,7 +20,7 @@ export const metadata: Metadata = {
         url: "/og-image-brands.webp",
         width: 1200,
         height: 630,
-        alt: "Rail Radar - Train Operators across 5 countries",
+        alt: "Rail Radar - Train Operators across 9 countries",
       },
     ],
   },
