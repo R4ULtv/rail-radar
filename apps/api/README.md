@@ -15,7 +15,7 @@ Cloudflare Workers API that provides real-time European train data by scraping o
 | `GET`  | `/map/static`                 | Static map image via Mapbox                                                             |
 | `GET`  | `/stations`                   | GeoJSON FeatureCollection of all stations (see below)                                   |
 | `GET`  | `/stations/trending`          | Get trending stations (`?period=hour\|day\|week`, default: `day`)                       |
-| `GET`  | `/stations/trending/:country` | Get trending stations by country (`it\|ch\|fi\|be\|nl\|uk\|ie`, same `?period` options) |
+| `GET`  | `/stations/trending/:country` | Get trending stations by country (`it\|ch\|fi\|be\|nl\|no\|se\|uk\|ie`, same `?period` options) |
 | `GET`  | `/stations/:id`               | Get station with trains (`?type=arrivals\|departures`)                                  |
 | `GET`  | `/stations/:id/stats`         | Get station visit stats (`?period=hour\|day\|week`, default: `day`)                     |
 | `GET`  | `/analytics/overview`         | Get global analytics (total visits, unique visitors, country breakdown)                 |
@@ -28,7 +28,7 @@ Returns station data in two formats depending on query parameters:
 
 - No params: all stations (pre-serialized for performance)
 - `?type=rail|metro|light`: filter by station type
-- `?country=it|ch|fi|be|nl|no|uk|ie`: filter by country
+- `?country=it|ch|fi|be|nl|no|se|uk|ie`: filter by country
 - Filters can be combined: `?type=rail&country=it`
 
 **Search mode** — returns `application/json` array of `Station` objects:
@@ -62,6 +62,8 @@ src/
 │   ├── finland.ts     # Finnish Digitraffic API scraper
 │   ├── belgium.ts     # Belgian iRail API scraper
 │   ├── netherlands.ts # Dutch NS API scraper
+│   ├── norway.ts      # Norwegian Entur API scraper
+│   ├── sweden.ts      # Swedish Trafiklab API scraper
 │   ├── uk.ts          # UK National Rail API scraper
 │   └── ireland.ts     # Irish Rail API scraper
 ├── analytics.ts   # Cloudflare Analytics Engine integration for visits and provider metrics

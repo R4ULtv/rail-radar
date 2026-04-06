@@ -12,7 +12,7 @@ src/
 ├── brands.ts          # Train brand/operator definitions
 ├── types.ts           # TypeScript type definitions
 ├── geojson.d.ts       # Module declaration for .geojson imports
-└── stations.geojson   # GeoJSON FeatureCollection (8900+ stations)
+└── stations.geojson   # GeoJSON FeatureCollection (10.400+ stations)
 
 scripts/
 ├── convert-to-geojson.ts  # Converts stations.json → stations.geojson
@@ -92,6 +92,8 @@ getCountry("CH8503000"); // "ch"
 getCountry("FI001"); // "fi"
 getCountry("BE95000"); // "be"
 getCountry("NL8400058"); // "nl"
+getCountry("NO0300"); // "no"
+getCountry("SE740000001"); // "se"
 getCountry("UK1072"); // "uk"
 getCountry("IE360"); // "ie"
 getCountry("IT01700", { format: "name" }); // "italy"
