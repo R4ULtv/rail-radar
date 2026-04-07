@@ -21,26 +21,17 @@ scripts/
 
 ## Exports
 
-The package provides three import paths:
+The package provides a root type import path and runtime subpath imports:
 
-### Default Import (`@repo/data`)
+### Type Import (`@repo/data`)
 
 ```ts
 import {
-  stations,
-  stationById,
-  stationsGeoJSON,
-  getCountry,
-  COUNTRY_CODES,
-  BRANDS,
   type Station,
   type Train,
-  type Brand,
   type StationFeatureCollection,
   type StationFeature,
   type StationProperties,
-  type CountryCode,
-  type CountryName,
 } from "@repo/data";
 ```
 
