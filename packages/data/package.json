@@ -5,7 +5,7 @@
   "type": "module",
   "exports": {
     ".": "./src/index.ts",
-    "./brands": "./src/brands.ts",
+    "./operators": "./src/operators.ts",
     "./stations": "./src/stations.ts",
     "./countries": "./src/countries.ts",
     "./types": "./src/types.ts"

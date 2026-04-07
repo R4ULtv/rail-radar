@@ -1,5 +1,4 @@
 import Image from "next/image";
-import { brandBySlug } from "@repo/data/brands";
 
 // Maps brand names to their SVG file paths (relative to /brands/)
 const brandPaths: Record<string, string> = {
@@ -180,9 +179,11 @@ const brandSlugMap: Record<string, string> = {
   ir: "ir",
 };
 
+const brandSlugs = new Set(Object.values(brandSlugMap));
+
 export function getBrandSlug(brand: string): string | null {
   const slug = brandSlugMap[normalizeBrandName(brand)];
-  if (slug && brandBySlug.has(slug)) return slug;
+  if (slug && brandSlugs.has(slug)) return slug;
   return null;
 }
 

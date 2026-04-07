@@ -1,16 +1,16 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
-import { brands } from "@repo/data/brands";
+import { operators } from "@repo/data/operators";
 import { COUNTRY_MAP, COUNTRY_CODES } from "@repo/data/countries";
 import { Badge } from "@repo/ui/components/badge";
 import { Card, CardContent } from "@repo/ui/components/card";
-import { ArrowLeftIcon, ArrowRightIcon } from "lucide-react";
+import { ArrowLeftIcon, ArrowRightIcon, GlobeIcon } from "lucide-react";
 
 export const metadata: Metadata = {
-  title: "Train Operators - All Brands",
+  title: "Train Operators - All Operators",
   description:
-    "Browse all train operators tracked by Rail Radar, including Trenitalia, SBB, VR, SNCB, and more. Find information about each brand, their routes, and services.",
+    "Browse all train operators tracked by Rail Radar, including Trenitalia, SBB, VR, SNCB, and more. Find information about each operator, their routes, and services.",
   alternates: {
     canonical: "/operators",
   },
@@ -36,18 +36,20 @@ const serviceTypeLabels: Record<string, string> = {
   scenic: "Scenic",
 };
 
-export default function BrandsPage() {
-  const brandsByCountry = Object.fromEntries(
+const OPERATOR_GROUPS = ["international", ...COUNTRY_CODES] as const;
+
+export default function OperatorsPage() {
+  const operatorsByCountry = Object.fromEntries(
     Object.entries(
-      brands.reduce<Record<string, typeof brands>>((acc, brand) => {
-        for (const country of brand.countries) {
-          (acc[country] ??= []).push(brand);
+      operators.reduce<Record<string, typeof operators>>((acc, operator) => {
+        for (const country of operator.countries) {
+          (acc[country] ??= []).push(operator);
         }
         return acc;
       }, {}),
-    ).map(([country, countryBrands]) => [
+    ).map(([country, countryOperators]) => [
       country,
-      countryBrands.sort(
+      countryOperators.sort(
         (a, b) => (b.countries[0] === country ? 1 : 0) - (a.countries[0] === country ? 1 : 0),
       ),
     ]),
@@ -68,40 +70,48 @@ export default function BrandsPage() {
           Directory
         </p>
         <h1 className="text-4xl font-bold tracking-tight">Train Operators</h1>
-        <p className="mt-3 text-muted-foreground max-w-lg">
-          {brands.length} train brands tracked across {COUNTRY_CODES.length} countries in real time
-          on Rail Radar.
+        <p className="mt-3 text-muted-foreground max-w-lg text-pretty">
+          {operators.length} train operators tracked across {COUNTRY_CODES.length} countries in real
+          time on Rail Radar.
         </p>
       </div>
 
       <div className="space-y-16">
-        {COUNTRY_CODES.map((country) => {
-          const countryBrands = brandsByCountry[country];
-          if (!countryBrands?.length) return null;
+        {OPERATOR_GROUPS.map((country) => {
+          const countryOperators = operatorsByCountry[country];
+          if (!countryOperators?.length) return null;
+          const isInternational = country === "international";
+          const countryLabel = isInternational ? "International" : COUNTRY_MAP[country];
 
           return (
             <section key={country} id={country}>
               <div className="flex items-center gap-3 mb-6">
-                <Image
-                  unoptimized
-                  src={`/flags/${country}.svg`}
-                  alt={COUNTRY_MAP[country]}
-                  width={28}
-                  height={28}
-                  className="size-7 rounded-full"
-                />
+                {isInternational ? (
+                  <div className="flex items-center justify-center rounded-full">
+                    <GlobeIcon className="size-7 text-foreground" />
+                  </div>
+                ) : (
+                  <Image
+                    unoptimized
+                    src={`/flags/${country}.svg`}
+                    alt={countryLabel}
+                    width={28}
+                    height={28}
+                    className="size-7 rounded-full"
+                  />
+                )}
                 <div className="shrink-0">
-                  <h2 className="text-lg font-semibold tracking-tight">{COUNTRY_MAP[country]}</h2>
+                  <h2 className="text-lg font-semibold tracking-tight">{countryLabel}</h2>
                   <p className="text-xs text-muted-foreground">
-                    {`${countryBrands.length} operator${countryBrands.length > 1 ? "s" : ""}`}
+                    {`${countryOperators.length} operator${countryOperators.length > 1 ? "s" : ""}`}
                   </p>
                 </div>
                 <div className="h-px w-full ml-4 bg-muted" />
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-                {countryBrands.map((brand) => (
-                  <Link key={brand.slug} href={`/operators/${brand.slug}`} className="group">
+                {countryOperators.map((operator) => (
+                  <Link key={operator.slug} href={`/operators/${operator.slug}`} className="group">
                     <Card
                       size="sm"
                       className="h-full transition-[background-color,box-shadow,transform] ease-[cubic-bezier(0.23,1,0.32,1)] duration-200 lg:group-hover:bg-muted/40 lg:group-hover:ring-foreground/20 group-active:scale-[0.98]"
@@ -110,8 +120,8 @@ export default function BrandsPage() {
                         <div className="flex size-10 shrink-0 items-center justify-center overflow-hidden rounded-lg bg-background">
                           <Image
                             unoptimized
-                            src={`/brands/${brand.logoPath}.svg`}
-                            alt={brand.name}
+                            src={`/brands/${operator.logoPath}.svg`}
+                            alt={operator.name}
                             width={40}
                             height={40}
                             className="size-full object-contain"
@@ -119,10 +129,10 @@ export default function BrandsPage() {
                         </div>
                         <div className="min-w-0 flex-1">
                           <div className="text-sm font-medium tracking-tight truncate lg:group-hover:text-foreground">
-                            {brand.name}
+                            {operator.name}
                           </div>
                           <div className="mt-1 flex flex-wrap gap-1">
-                            {brand.serviceTypes.slice(0, 2).map((type) => (
+                            {operator.serviceTypes.slice(0, 2).map((type) => (
                               <Badge
                                 key={type}
                                 variant="secondary"
@@ -131,9 +141,9 @@ export default function BrandsPage() {
                                 {serviceTypeLabels[type] ?? type}
                               </Badge>
                             ))}
-                            {brand.serviceTypes.length > 2 && (
+                            {operator.serviceTypes.length > 2 && (
                               <span className="text-[10px] text-muted-foreground self-center">
-                                +{brand.serviceTypes.length - 2}
+                                +{operator.serviceTypes.length - 2}
                               </span>
                             )}
                           </div>
