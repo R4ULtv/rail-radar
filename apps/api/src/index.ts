@@ -100,7 +100,6 @@ const SERVICE_TYPES = [
   "international",
   "scenic",
 ] as const satisfies readonly ServiceType[];
-const MAX_OPERATOR_LIMIT = 100;
 
 app.onError((err, c) => {
   console.error("[API Error]", {
@@ -132,7 +131,7 @@ app.get("/", (c) => {
     endpoints: {
       "GET /": "API structure and documentation",
       "GET /operators":
-        "List train operators (optional: ?q=search&country=it|international&origin=international&type=passenger&serviceType=high-speed&limit=20)",
+        "List train operators (optional: ?q=search&country=it|international&origin=international&type=passenger&serviceType=high-speed)",
       "GET /operators/:slug": "Get a train operator by slug",
       "GET /stations": "List all stations (optional: ?q=search query)",
       "GET /stations/trending":
@@ -223,12 +222,6 @@ app.get(
     );
     if (serviceTypesResult.error) return c.json({ error: serviceTypesResult.error }, 400);
 
-    const limitQuery = c.req.query("limit");
-    const limit = limitQuery ? Number.parseInt(limitQuery, 10) : null;
-    if (limitQuery && (!limit || limit < 1 || limit > MAX_OPERATOR_LIMIT)) {
-      return c.json({ error: `Invalid limit. Must be between 1 and ${MAX_OPERATOR_LIMIT}.` }, 400);
-    }
-
     const query = c.req.query("q")?.trim();
     const filtered = operators.filter((operator) => {
       if (query && !matchesOperatorQuery(operator, query)) return false;
@@ -261,7 +254,7 @@ app.get(
 
     return c.json({
       count: filtered.length,
-      operators: limit ? filtered.slice(0, limit) : filtered,
+      operators: filtered,
     });
   },
 );
