@@ -13,7 +13,6 @@ import {
   TrendingUpIcon,
   XIcon,
   UserIcon,
-  SparklesIcon,
 } from "lucide-react";
 import { AnimatePresence, LazyMotion, domAnimation, m } from "motion/react";
 import { parseAsString, useQueryState } from "nuqs";

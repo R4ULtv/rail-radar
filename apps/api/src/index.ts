@@ -5,6 +5,14 @@ import { createMiddleware } from "hono/factory";
 import { validator } from "hono/validator";
 
 import { COUNTRY_CODES, getCountry, type CountryCode } from "@repo/data/countries";
+import {
+  operatorBySlug,
+  operators,
+  type Operator,
+  type OperatorCountry,
+  type OperatorType,
+  type ServiceType,
+} from "@repo/data/operators";
 import { stationById, stations, stationsGeoJSON } from "@repo/data/stations";
 import {
   getAnalyticsOverview,
@@ -73,6 +81,25 @@ const trainTypeValidator = validator("query", (value, c) => {
 const app = new Hono<Env>();
 
 const STATION_ID_PATTERN = /^(?:[A-Z]{2,}\d+|\d{3,})$/i;
+const OPERATOR_COUNTRIES = [
+  "international",
+  ...COUNTRY_CODES,
+] as const satisfies readonly OperatorCountry[];
+const OPERATOR_TYPES = [
+  "passenger",
+  "cargo",
+  "metro",
+  "light-rail",
+] as const satisfies readonly OperatorType[];
+const SERVICE_TYPES = [
+  "high-speed",
+  "intercity",
+  "regional",
+  "commuter",
+  "night-train",
+  "international",
+  "scenic",
+] as const satisfies readonly ServiceType[];
 
 app.onError((err, c) => {
   console.error("[API Error]", {
@@ -103,6 +130,9 @@ app.get("/", (c) => {
     version: "1.0.0",
     endpoints: {
       "GET /": "API structure and documentation",
+      "GET /operators":
+        "List train operators (optional: ?q=search&country=it|international&origin=international&type=passenger&serviceType=high-speed)",
+      "GET /operators/:slug": "Get a train operator by slug",
       "GET /stations": "List all stations (optional: ?q=search query)",
       "GET /stations/trending":
         "Get trending stations (optional: ?period=hour|day|week, default: day)",
@@ -119,6 +149,129 @@ app.get("/", (c) => {
 app.get("/robots.txt", (c) => {
   return c.text("User-agent: *\nDisallow: /");
 });
+
+// --- Operator routes ---
+
+function parseFilterList(value: string | undefined): string[] {
+  if (!value) return [];
+  return value
+    .split(",")
+    .map((part) => part.trim().toLowerCase())
+    .filter(Boolean);
+}
+
+function validateFilter<T extends string>(
+  name: string,
+  values: string[],
+  validValues: readonly T[],
+): { values: T[]; error: string | null } {
+  const invalid = values.filter((value) => !validValues.includes(value as T));
+  if (invalid.length > 0) {
+    return {
+      values: [],
+      error: `Invalid ${name}. Must be one of: ${validValues.join(", ")}`,
+    };
+  }
+  return { values: values as T[], error: null };
+}
+
+function matchesOperatorQuery(operator: Operator, query: string): boolean {
+  const normalizedQuery = query.toLowerCase();
+  return [
+    operator.slug,
+    operator.name,
+    operator.description,
+    operator.headquarters,
+    operator.parentCompany,
+  ].some((value) => value?.toLowerCase().includes(normalizedQuery));
+}
+
+app.get(
+  "/operators",
+  cache({
+    cacheName: "operators-cache",
+    cacheControl: CACHE_TTL.OPERATORS,
+  }),
+  (c) => {
+    const countriesResult = validateFilter(
+      "country",
+      parseFilterList(c.req.query("country")),
+      OPERATOR_COUNTRIES,
+    );
+    if (countriesResult.error) return c.json({ error: countriesResult.error }, 400);
+
+    const originResult = validateFilter(
+      "origin",
+      parseFilterList(c.req.query("origin")),
+      OPERATOR_COUNTRIES,
+    );
+    if (originResult.error) return c.json({ error: originResult.error }, 400);
+
+    const operatorTypesResult = validateFilter(
+      "type",
+      parseFilterList(c.req.query("type")),
+      OPERATOR_TYPES,
+    );
+    if (operatorTypesResult.error) return c.json({ error: operatorTypesResult.error }, 400);
+
+    const serviceTypesResult = validateFilter(
+      "serviceType",
+      parseFilterList(c.req.query("serviceType")),
+      SERVICE_TYPES,
+    );
+    if (serviceTypesResult.error) return c.json({ error: serviceTypesResult.error }, 400);
+
+    const query = c.req.query("q")?.trim();
+    const filtered = operators.filter((operator) => {
+      if (query && !matchesOperatorQuery(operator, query)) return false;
+      if (
+        countriesResult.values.length > 0 &&
+        !countriesResult.values.some((country) => operator.countries.includes(country))
+      ) {
+        return false;
+      }
+      if (
+        originResult.values.length > 0 &&
+        !originResult.values.includes(operator.countries[0] as OperatorCountry)
+      ) {
+        return false;
+      }
+      if (
+        operatorTypesResult.values.length > 0 &&
+        !operatorTypesResult.values.some((type) => operator.operatorTypes.includes(type))
+      ) {
+        return false;
+      }
+      if (
+        serviceTypesResult.values.length > 0 &&
+        !serviceTypesResult.values.some((type) => operator.serviceTypes.includes(type))
+      ) {
+        return false;
+      }
+      return true;
+    });
+
+    return c.json({
+      count: filtered.length,
+      operators: filtered,
+    });
+  },
+);
+
+app.get(
+  "/operators/:slug",
+  cache({
+    cacheName: "operators-cache",
+    cacheControl: CACHE_TTL.OPERATORS,
+  }),
+  (c) => {
+    const operator = operatorBySlug.get(c.req.param("slug"));
+    if (!operator) {
+      return c.json({ error: "Operator not found." }, 404);
+    }
+    return c.json(operator);
+  },
+);
 
 // --- Map routes ---
 

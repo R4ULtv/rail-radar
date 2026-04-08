@@ -5,7 +5,7 @@
   "type": "module",
   "exports": {
     ".": "./src/index.ts",
-    "./brands": "./src/brands.ts",
+    "./operators": "./src/operators.ts",
     "./stations": "./src/stations.ts",
     "./countries": "./src/countries.ts",
     "./types": "./src/types.ts"
@@ -17,7 +17,7 @@
   "devDependencies": {
     "@repo/typescript-config": "workspace:*",
     "@types/geojson": "^7946.0.16",
-    "@types/node": "^22.19.15",
-    "typescript": "^5.9.3"
+    "@types/node": "^22.19.17",
+    "typescript": "^6.0.2"
   }
 }

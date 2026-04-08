@@ -4,6 +4,7 @@ export const CACHE_TTL = {
   RFI_STATUS: "public, max-age=300, stale-while-revalidate=60",
   STATIC_MAP: "public, max-age=2592000",
   GEOJSON: "public, max-age=86400, stale-while-revalidate=3600",
+  OPERATORS: "public, max-age=86400, stale-while-revalidate=3600",
 } as const;
 
 export const FETCH_TIMEOUT_MS = 20_000;

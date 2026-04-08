@@ -3,8 +3,8 @@ import { Geist, Geist_Mono } from "next/font/google";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
 import "./globals.css";
 import { Analytics } from "@vercel/analytics/next";
-import { ServiceWorkerRegistration } from "@/components/service-worker";
 import baseUrl from "@/lib/base-url";
+import { ServiceWorkerCleanup } from "@/components/service-worker-cleanup";
 
 const geistSans = Geist({
   subsets: ["latin"],
@@ -74,7 +74,7 @@ export default function RootLayout({
       </head>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <NuqsAdapter>{children}</NuqsAdapter>
-        <ServiceWorkerRegistration />
+        <ServiceWorkerCleanup />
         <Analytics />
       </body>
     </html>
