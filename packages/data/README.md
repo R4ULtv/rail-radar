@@ -9,7 +9,8 @@ src/
 ├── index.ts           # Main entry point
 ├── stations.ts        # Station data exports (GeoJSON + derived arrays)
 ├── countries.ts       # Country codes and lookup utilities
-├── brands.ts          # Train brand/operator definitions
+├── operators.ts       # Operator data loader and exports
+├── operators.json     # Train operator dataset
 ├── types.ts           # TypeScript type definitions
 ├── geojson.d.ts       # Module declaration for .geojson imports
 └── stations.geojson   # GeoJSON FeatureCollection (10.400+ stations)
@@ -39,6 +40,13 @@ import {
 
 ```ts
 import { stations, stationById, stationsGeoJSON } from "@repo/data/stations";
+```
+
+### Subpath Import (`@repo/data/operators`)
+
+```ts
+import { operators, operatorBySlug } from "@repo/data/operators";
+import type { Operator, OperatorCountry, OperatorType, ServiceType } from "@repo/data/operators";
 ```
 
 ### Subpath Import (`@repo/data/countries`)
@@ -88,6 +96,18 @@ getCountry("SE740000001"); // "se"
 getCountry("UK1072"); // "uk"
 getCountry("IE360"); // "ie"
 getCountry("IT01700", { format: "name" }); // "italy"
+```
+
+### `operators`
+
+Array of all `Operator` objects loaded from `operators.json`.
+
+### `operatorBySlug`
+
+Map for O(1) operator lookup by slug.
+
+```ts
+const operator = operatorBySlug.get("trenitalia"); // Trenitalia
 ```
 
 ## Types
@@ -147,6 +167,28 @@ interface Train {
   platform: string | null;
   status: "incoming" | "departing" | "cancelled" | null;
   info: string | null;
+}
+```
+
+### `Operator`
+
+```ts
+interface Operator {
+  slug: string;
+  name: string;
+  logoPath: string;
+  countries: OperatorCountry[]; // CountryCode | "international"
+  operatorTypes: OperatorType[]; // "passenger" | "cargo" | "metro" | "light-rail"
+  bounds: [number, number, number, number]; // [west, south, east, north]
+  description: string;
+  website: string;
+  founded: number | null;
+  headquarters: string | null;
+  networkKm: number | null;
+  annualPassengers: number | null;
+  serviceTypes: ServiceType[]; // "high-speed" | "intercity" | "regional" | "commuter" | "night-train" | "international" | "scenic"
+  parentCompany: string | null;
+  links: OperatorLink[];
 }
 ```
 
