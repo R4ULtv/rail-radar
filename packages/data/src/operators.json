@@ -38,7 +38,7 @@
     "logoPath": "it/italo",
     "countries": ["it"],
     "operatorTypes": ["passenger"],
-    "bounds": [9, 40.5, 16.5, 46],
+    "bounds": [9.0, 40.5, 16.5, 46.0],
     "description": "Operated by Italo-NTV, this is Italy's first private high-speed rail service. Competing directly on the state-owned RFI high-speed network, Italo operates a modern fleet of Alstom AGV and Pendolino EVO trains, connecting major Italian cities with a focus on a premium passenger experience and high-frequency schedules.",
     "website": "https://www.italotreno.it",
     "founded": 2006,
@@ -46,16 +46,16 @@
     "networkKm": 1400,
     "annualPassengers": 22000000,
     "serviceTypes": ["high-speed"],
-    "parentCompany": "Italo – Nuovo Trasporto Viaggiatori",
+    "parentCompany": "Italo - Nuovo Trasporto Viaggiatori (MSC Group)",
     "links": [
       {
         "label": "Official Site",
-        "url": "https://www.italotreno.com",
+        "url": "https://www.italotreno.com/en",
         "type": "website"
       },
       {
         "label": "Timetables",
-        "url": "https://www.italotreno.com/en/train-timetable",
+        "url": "https://www.italotreno.com/en/destinations-timetable",
         "type": "timetables"
       },
       {
@@ -71,14 +71,14 @@
     "logoPath": "it/frecciarossa",
     "countries": ["it"],
     "operatorTypes": ["passenger"],
-    "bounds": [7.5, 40.5, 16.5, 46],
+    "bounds": [2.0, 40.5, 16.5, 48.8],
     "description": "Frecciarossa is Trenitalia's premier high-speed service, reaching operational speeds of 300 km/h. Utilizing advanced trainsets like the ETR 500 and ETR 1000, it forms the rapid transit backbone of Italy along the Turin-Salerno and Milan-Venice corridors, while also expanding its reach into international markets like France and Spain.",
     "website": "https://www.trenitalia.com",
     "founded": 2008,
     "headquarters": "Rome, Italy",
-    "networkKm": 1000,
+    "networkKm": 1500,
     "annualPassengers": 70000000,
-    "serviceTypes": ["high-speed"],
+    "serviceTypes": ["high-speed", "international"],
     "parentCompany": "Trenitalia",
     "links": [
       {
@@ -153,7 +153,7 @@
     "slug": "trenord",
     "name": "Trenord",
     "logoPath": "it/trenord",
-    "countries": ["it"],
+    "countries": ["it", "ch"],
     "operatorTypes": ["passenger"],
     "bounds": [8.5, 44.8, 11.4, 46.6],
     "description": "A joint venture between Trenitalia and FNM (Ferrovie Nord Milano), Trenord operates the regional and suburban rail network in Lombardy. It manages one of Europe's busiest commuter systems, including the comprehensive Milan S-Bahn network, regional cross-country routes, and the Malpensa Express airport link.",
@@ -162,12 +162,12 @@
     "headquarters": "Milan, Italy",
     "networkKm": 1920,
     "annualPassengers": 190000000,
-    "serviceTypes": ["regional", "commuter"],
+    "serviceTypes": ["regional", "commuter", "international"],
     "parentCompany": "Trenitalia / FNM",
     "links": [
       {
         "label": "Official Site",
-        "url": "https://www.trenord.it",
+        "url": "https://www.trenord.it/en",
         "type": "website"
       },
       {
@@ -200,7 +200,7 @@
     "links": [
       {
         "label": "Official Site",
-        "url": "https://www.trenitalia.com",
+        "url": "https://www.trenitaliatper.it",
         "type": "website"
       },
       {
@@ -224,7 +224,7 @@
     "networkKm": 144,
     "annualPassengers": 7000000,
     "serviceTypes": ["regional"],
-    "parentCompany": null,
+    "parentCompany": "SAD Trasporto Locale",
     "links": [
       {
         "label": "Official Site",
@@ -244,7 +244,7 @@
     "logoPath": "it/tua",
     "countries": ["it"],
     "operatorTypes": ["passenger"],
-    "bounds": [13, 41.7, 14.8, 42.9],
+    "bounds": [13.0, 41.7, 14.8, 42.9],
     "description": "TUA (Trasporto Unico Abruzzese) is the consolidated public transport provider for the Abruzzo region. Its railway division, inheriting the legacy of Ferrovia Adriatico Sangritana, operates regional passenger services connecting the mountainous interior with the Adriatic coast, as well as managing local freight.",
     "website": "https://www.tuabruzzo.it",
     "founded": 2015,
@@ -252,7 +252,7 @@
     "networkKm": 150,
     "annualPassengers": 1200000,
     "serviceTypes": ["regional"],
-    "parentCompany": null,
+    "parentCompany": "Abruzzo Region",
     "links": [
       {
         "label": "Official Site",
@@ -270,7 +270,7 @@
     "slug": "sbb",
     "name": "SBB CFF FFS",
     "logoPath": "ch/sbb",
-    "countries": ["ch"],
+    "countries": ["ch", "it"],
     "operatorTypes": ["passenger"],
     "bounds": [5.9, 45.8, 10.5, 47.8],
     "description": "The Swiss Federal Railways (SBB) is the backbone of Switzerland's world-renowned public transport system. Famous for its precision, national clock-face scheduling (Taktfahrplan), and engineering marvels like the Gotthard Base Tunnel, it seamlessly integrates domestic, international, and high-frequency regional transit.",
@@ -280,16 +280,16 @@
     "networkKm": 3230,
     "annualPassengers": 522000000,
     "serviceTypes": ["intercity", "regional", "commuter", "international"],
-    "parentCompany": null,
+    "parentCompany": "Swiss Confederation",
     "links": [
       {
         "label": "Official Site",
-        "url": "https://www.sbb.ch",
+        "url": "https://www.sbb.ch/en",
         "type": "website"
       },
       {
         "label": "Timetables",
-        "url": "https://www.sbb.ch/en",
+        "url": "https://www.sbb.ch/en/timetable",
         "type": "timetables"
       },
       {
@@ -310,7 +310,7 @@
     "logoPath": "ch/bls",
     "countries": ["ch"],
     "operatorTypes": ["passenger"],
-    "bounds": [7, 46.3, 8.5, 47.1],
+    "bounds": [7.0, 46.3, 8.5, 47.1],
     "description": "BLS is Switzerland's second-largest standard-gauge railway. In addition to operating the extensive Bern S-Bahn and regional lines in the Emmental and Bernese Oberland, BLS manages the high-speed Lötschberg Base Tunnel and provides crucial car-shuttle transport through the Alps.",
     "website": "https://www.bls.ch",
     "founded": 1906,
@@ -318,11 +318,11 @@
     "networkKm": 424,
     "annualPassengers": 71000000,
     "serviceTypes": ["regional", "commuter"],
-    "parentCompany": null,
+    "parentCompany": "Canton of Bern & Swiss Confederation",
     "links": [
       {
         "label": "Official Site",
-        "url": "https://www.bls.ch",
+        "url": "https://www.bls.ch/en",
         "type": "website"
       },
       {
@@ -351,7 +351,7 @@
     "networkKm": 123,
     "annualPassengers": 32100000,
     "serviceTypes": ["regional", "scenic"],
-    "parentCompany": null,
+    "parentCompany": "Swiss Cantons (St. Gallen, Schwyz, etc.)",
     "links": [
       {
         "label": "Official Site",
@@ -379,7 +379,7 @@
     "networkKm": 30,
     "annualPassengers": 15000000,
     "serviceTypes": ["commuter"],
-    "parentCompany": null,
+    "parentCompany": "City & Canton of Zurich",
     "links": [
       {
         "label": "Official Site",
@@ -407,7 +407,7 @@
     "networkKm": 61,
     "annualPassengers": 23500000,
     "serviceTypes": ["regional", "commuter"],
-    "parentCompany": null,
+    "parentCompany": "Canton of Bern, City of Bern",
     "links": [
       {
         "label": "Official Site",
@@ -435,7 +435,7 @@
     "networkKm": 122,
     "annualPassengers": 8500000,
     "serviceTypes": ["regional"],
-    "parentCompany": null,
+    "parentCompany": "Canton & City of Fribourg",
     "links": [
       {
         "label": "Official Site",
@@ -463,7 +463,7 @@
     "networkKm": 74,
     "annualPassengers": 13800000,
     "serviceTypes": ["regional", "scenic"],
-    "parentCompany": null,
+    "parentCompany": "SBB CFF FFS",
     "links": [
       {
         "label": "Official Site",
@@ -491,7 +491,7 @@
     "networkKm": 77,
     "annualPassengers": 5500000,
     "serviceTypes": ["regional", "scenic"],
-    "parentCompany": null,
+    "parentCompany": "Swiss Confederation, Canton of Appenzell",
     "links": [
       {
         "label": "Official Site",
@@ -518,7 +518,7 @@
     "headquarters": "Kreuzlingen, Switzerland",
     "networkKm": 658,
     "annualPassengers": 25800000,
-    "serviceTypes": ["regional", "commuter"],
+    "serviceTypes": ["regional", "commuter", "international"],
     "parentCompany": "SBB CFF FFS",
     "links": [
       {
@@ -547,7 +547,7 @@
     "networkKm": 68,
     "annualPassengers": 3000000,
     "serviceTypes": ["regional", "scenic"],
-    "parentCompany": null,
+    "parentCompany": "Cantons of Vaud and Valais",
     "links": [
       {
         "label": "Official Site",
@@ -575,7 +575,7 @@
     "networkKm": 50,
     "annualPassengers": 2000000,
     "serviceTypes": ["regional", "international"],
-    "parentCompany": null,
+    "parentCompany": "Canton of Valais",
     "links": [
       {
         "label": "Official Site",
@@ -603,7 +603,7 @@
     "networkKm": 144,
     "annualPassengers": 8500000,
     "serviceTypes": ["regional", "scenic"],
-    "parentCompany": null,
+    "parentCompany": "BVZ Holding / Swiss Confederation",
     "links": [
       {
         "label": "Official Site",
@@ -621,9 +621,9 @@
     "slug": "rhb",
     "name": "Rhätische Bahn",
     "logoPath": "ch/rhb",
-    "countries": ["ch"],
+    "countries": ["ch", "it"],
     "operatorTypes": ["passenger"],
-    "bounds": [9.3, 46.3, 10.5, 47],
+    "bounds": [9.3, 46.3, 10.5, 47.0],
     "description": "The Rhätische Bahn (RhB) operates the largest narrow-gauge network in Switzerland, covering the mountainous canton of Graubünden. Renowned globally for its engineering marvels, its Albula and Bernina lines—the latter crossing the Alps via adhesion alone without rack assistance—are a UNESCO World Heritage site.",
     "website": "https://www.rhb.ch",
     "founded": 1889,
@@ -631,7 +631,7 @@
     "networkKm": 385,
     "annualPassengers": 12000000,
     "serviceTypes": ["regional", "scenic"],
-    "parentCompany": null,
+    "parentCompany": "Canton of Graubünden",
     "links": [
       {
         "label": "Official Site",
@@ -687,7 +687,7 @@
     "networkKm": 77,
     "annualPassengers": 3600000,
     "serviceTypes": ["regional", "scenic"],
-    "parentCompany": null,
+    "parentCompany": "Cantons of Vaud and Bern",
     "links": [
       {
         "label": "Official Site",
@@ -715,7 +715,7 @@
     "networkKm": 12,
     "annualPassengers": 3000000,
     "serviceTypes": ["regional", "commuter"],
-    "parentCompany": null,
+    "parentCompany": "Canton of Ticino",
     "links": [
       {
         "label": "Official Site",
@@ -743,11 +743,11 @@
     "networkKm": 5000,
     "annualPassengers": 469000000,
     "serviceTypes": ["high-speed", "intercity", "night-train", "international"],
-    "parentCompany": null,
+    "parentCompany": "Republic of Austria",
     "links": [
       {
         "label": "Official Site",
-        "url": "https://www.oebb.at",
+        "url": "https://www.oebb.at/en",
         "type": "website"
       },
       {
@@ -776,7 +776,7 @@
     "networkKm": 29273,
     "annualPassengers": 1800000000,
     "serviceTypes": ["high-speed", "intercity", "international"],
-    "parentCompany": null,
+    "parentCompany": "French State",
     "links": [
       {
         "label": "Official Site",
@@ -797,23 +797,23 @@
   },
   {
     "slug": "vr",
-    "name": "VR",
+    "name": "VR Group",
     "logoPath": "vr",
     "countries": ["fi", "se"],
     "operatorTypes": ["passenger"],
-    "bounds": [11, 55.3, 31.6, 70.1],
-    "description": "VR Group is Finland's state-owned railway company, operating high-speed Pendolino, InterCity, commuter, and freight services on Finland's 1,524 mm broad-gauge network. Since 2022, VR has expanded into Sweden through VR Sverige (formerly Arriva Sverige), operating Pågatågen, Östgötapendeln, and Tåg i Bergslagen regional services, plus the Stockholm–Göteborg high-speed corridor (formerly MTR Express, acquired 2024).",
+    "bounds": [11.0, 55.3, 31.6, 70.1],
+    "description": "VR Group is Finland's state-owned railway company, operating high-speed Pendolino, InterCity, commuter, and freight services on Finland's 1,524 mm broad-gauge network. Since 2022, VR has expanded heavily into Sweden through VR Sverige (operating regional systems) and the acquisition of the Stockholm–Göteborg high-speed corridor (VR Snabbtåg).",
     "website": "https://www.vr.fi",
     "founded": 1862,
     "headquarters": "Helsinki, Finland",
     "networkKm": 5918,
     "annualPassengers": 93000000,
     "serviceTypes": ["high-speed", "intercity", "regional", "commuter", "night-train"],
-    "parentCompany": null,
+    "parentCompany": "State of Finland",
     "links": [
       {
         "label": "Official Site",
-        "url": "https://www.vr.fi",
+        "url": "https://www.vr.fi/en",
         "type": "website"
       },
       {
@@ -847,11 +847,11 @@
     "networkKm": 3536,
     "annualPassengers": 245000000,
     "serviceTypes": ["intercity", "regional", "commuter"],
-    "parentCompany": null,
+    "parentCompany": "Belgian State",
     "links": [
       {
         "label": "Official Site",
-        "url": "https://www.belgiantrain.be",
+        "url": "https://www.belgiantrain.be/en",
         "type": "website"
       },
       {
@@ -866,7 +866,7 @@
       },
       {
         "label": "Wikipedia",
-        "url": "https://en.wikipedia.org/wiki/SNCB",
+        "url": "https://en.wikipedia.org/wiki/National_Railway_Company_of_Belgium",
         "type": "wikipedia"
       }
     ]
@@ -877,15 +877,15 @@
     "logoPath": "eurostar",
     "countries": ["international", "uk", "be", "nl"],
     "operatorTypes": ["passenger"],
-    "bounds": [-0.5, 48.8, 5.5, 52.4],
+    "bounds": [-0.5, 48.8, 7.0, 52.4],
     "description": "Eurostar operates high-speed international rail services connecting the UK with mainland Europe via the Channel Tunnel. Following its merger with Thalys, the unified Eurostar brand now also manages the premier high-speed network linking Paris, Brussels, Amsterdam, and Cologne, creating a unified Western European high-speed giant.",
     "website": "https://www.eurostar.com",
     "founded": 1994,
     "headquarters": "London, United Kingdom",
-    "networkKm": null,
+    "networkKm": 1500,
     "annualPassengers": 20000000,
     "serviceTypes": ["high-speed", "international"],
-    "parentCompany": null,
+    "parentCompany": "SNCF Voyageurs (Majority Shareholder)",
     "links": [
       {
         "label": "Official Site",
@@ -903,9 +903,9 @@
     "slug": "db",
     "name": "Deutsche Bahn",
     "logoPath": "db",
-    "countries": ["international", "ch", "it", "be"],
+    "countries": ["international", "ch", "be"],
     "operatorTypes": ["passenger"],
-    "bounds": [5.9, 47.3, 15, 55.1],
+    "bounds": [5.9, 47.3, 15.0, 55.1],
     "description": "Deutsche Bahn (DB) is Germany's national railway operator and a major force in European transit. Its ICE (Intercity-Express) network forms the high-speed backbone of Central Europe, deeply integrated with regular-interval timetables that connect major German hubs with Switzerland, Austria, and beyond.",
     "website": "https://www.bahn.de",
     "founded": 1994,
@@ -913,7 +913,7 @@
     "networkKm": 33399,
     "annualPassengers": 1600000000,
     "serviceTypes": ["high-speed", "intercity", "international"],
-    "parentCompany": null,
+    "parentCompany": "Federal Republic of Germany",
     "links": [
       {
         "label": "Official Site",
@@ -951,11 +951,11 @@
     "networkKm": 3223,
     "annualPassengers": 475000000,
     "serviceTypes": ["intercity", "regional", "commuter", "international"],
-    "parentCompany": null,
+    "parentCompany": "Dutch State",
     "links": [
       {
         "label": "Official Site",
-        "url": "https://www.ns.nl",
+        "url": "https://www.ns.nl/en",
         "type": "website"
       },
       {
@@ -1013,7 +1013,7 @@
     "description": "Avanti West Coast operates intercity services on the West Coast Main Line, connecting London Euston with Birmingham, Manchester, Liverpool, Glasgow, and Edinburgh. It took over the franchise from Virgin Trains in 2019.",
     "website": "https://www.avantiwestcoast.co.uk",
     "founded": 2019,
-    "headquarters": "Birmingham, United Kingdom",
+    "headquarters": "London, United Kingdom",
     "networkKm": 960,
     "annualPassengers": 34900000,
     "serviceTypes": ["intercity"],
@@ -1037,7 +1037,7 @@
     "logoPath": "uk/gr",
     "countries": ["uk"],
     "operatorTypes": ["passenger"],
-    "bounds": [-1.6, 51.5, 0.1, 56],
+    "bounds": [-1.6, 51.5, 0.1, 56.0],
     "description": "London North Eastern Railway operates intercity services on the East Coast Main Line, connecting London King's Cross with Leeds, York, Newcastle, and Edinburgh using its fleet of Azuma trains.",
     "website": "https://www.lner.co.uk",
     "founded": 2018,
@@ -1065,7 +1065,7 @@
     "logoPath": "uk/xc",
     "countries": ["uk"],
     "operatorTypes": ["passenger"],
-    "bounds": [-4.5, 50.4, 0, 57.5],
+    "bounds": [-4.5, 50.4, 0.0, 57.5],
     "description": "CrossCountry operates the most geographically extensive passenger rail franchise in the UK, connecting major cities without passing through London. Its routes link Aberdeen, Edinburgh, and Newcastle with Birmingham, Bristol, Plymouth, and Penzance.",
     "website": "https://www.crosscountrytrains.co.uk",
     "founded": 2007,
@@ -1121,7 +1121,7 @@
     "logoPath": "uk/em",
     "countries": ["uk"],
     "operatorTypes": ["passenger"],
-    "bounds": [-1.8, 51.5, 0, 53.5],
+    "bounds": [-1.8, 51.5, 0.0, 53.5],
     "description": "East Midlands Railway operates intercity services from London St Pancras to Sheffield, Nottingham, and Derby, as well as regional services across the East Midlands and East Anglia.",
     "website": "https://www.eastmidlandsrailway.co.uk",
     "founded": 2019,
@@ -1177,7 +1177,7 @@
     "logoPath": "uk/se",
     "countries": ["uk"],
     "operatorTypes": ["passenger"],
-    "bounds": [-0.1, 51, 1.4, 51.6],
+    "bounds": [-0.1, 51.0, 1.4, 51.6],
     "description": "Southeastern operates commuter and regional services in South East London, Kent, and East Sussex, including high-speed services via HS1 from London St Pancras to Ashford, Canterbury, and the Medway Towns.",
     "website": "https://www.southeasternrailway.co.uk",
     "founded": 2006,
@@ -1205,7 +1205,7 @@
     "logoPath": "uk/xr",
     "countries": ["uk"],
     "operatorTypes": ["passenger"],
-    "bounds": [-1, 51.4, 0.3, 51.6],
+    "bounds": [-1.0, 51.4, 0.3, 51.6],
     "description": "The Elizabeth line is a high-frequency cross-London railway connecting Reading and Heathrow in the west with Shenfield and Abbey Wood in the east. Opened in 2022, it is one of Europe's largest infrastructure projects and currently the UK's busiest railway.",
     "website": "https://tfl.gov.uk/modes/elizabeth-line/",
     "founded": 2022,
@@ -1261,11 +1261,11 @@
     "logoPath": "uk/nt",
     "countries": ["uk"],
     "operatorTypes": ["passenger"],
-    "bounds": [-3.4, 53, -0.3, 55.5],
+    "bounds": [-3.4, 53.0, -0.3, 55.5],
     "description": "Northern Trains is the largest train operator in the North of England, running regional and commuter services across Lancashire, Yorkshire, Cumbria, and the North East. It operates over 2,500 services daily and has been under public ownership since 2020.",
     "website": "https://www.northernrailway.co.uk",
     "founded": 2016,
-    "headquarters": "Leeds, United Kingdom",
+    "headquarters": "York, United Kingdom",
     "networkKm": 2800,
     "annualPassengers": 91800000,
     "serviceTypes": ["regional", "commuter"],
@@ -1317,7 +1317,7 @@
     "logoPath": "uk/lm",
     "countries": ["uk"],
     "operatorTypes": ["passenger"],
-    "bounds": [-2.6, 51.7, -0.1, 53],
+    "bounds": [-2.6, 51.7, -0.1, 53.0],
     "description": "West Midlands Trains operates London Northwestern Railway and West Midlands Railway services, connecting London Euston with Birmingham, Crewe, and Liverpool. It was taken into public ownership by the Department for Transport in February 2026.",
     "website": "https://www.westmidlandsrailway.co.uk",
     "founded": 2017,
@@ -1373,7 +1373,7 @@
     "logoPath": "uk/tp",
     "countries": ["uk"],
     "operatorTypes": ["passenger"],
-    "bounds": [-3.4, 53, -0.1, 54.8],
+    "bounds": [-3.4, 53.0, -0.1, 54.8],
     "description": "TransPennine Express operates intercity and express services across the North of England and into Scotland, connecting Liverpool, Manchester, Leeds, York, Newcastle, and Edinburgh. It was brought into public ownership in May 2023.",
     "website": "https://www.tpexpress.co.uk",
     "founded": 2004,
@@ -1406,7 +1406,7 @@
     "website": "https://tfl.gov.uk/modes/london-overground/",
     "founded": 2007,
     "headquarters": "London, United Kingdom",
-    "networkKm": 180,
+    "networkKm": 167,
     "annualPassengers": 180000000,
     "serviceTypes": ["commuter"],
     "parentCompany": "Transport for London",
@@ -1517,7 +1517,7 @@
     "description": "Caledonian Sleeper operates overnight rail services between London Euston and Scotland, serving Edinburgh, Glasgow, Aberdeen, Inverness, and Fort William. It provides a unique overnight travel experience with seated and sleeper berth options.",
     "website": "https://www.sleeper.scot",
     "founded": 2015,
-    "headquarters": "Edinburgh, United Kingdom",
+    "headquarters": "Glasgow, United Kingdom",
     "networkKm": 1200,
     "annualPassengers": 350000,
     "serviceTypes": ["night-train"],
@@ -1541,11 +1541,11 @@
     "logoPath": "uk/gc",
     "countries": ["uk"],
     "operatorTypes": ["passenger"],
-    "bounds": [-1.6, 51.5, 0, 54.8],
+    "bounds": [-1.6, 51.5, 0.0, 54.8],
     "description": "Grand Central is an open-access operator running services on the East Coast Main Line, connecting London King's Cross with Sunderland, Hartlepool, and Bradford. It offers an alternative to LNER on the route, serving towns not on the main intercity network.",
     "website": "https://www.grandcentralrail.com",
     "founded": 2007,
-    "headquarters": "London, United Kingdom",
+    "headquarters": "York, United Kingdom",
     "networkKm": 480,
     "annualPassengers": 2500000,
     "serviceTypes": ["intercity"],
@@ -1569,7 +1569,7 @@
     "logoPath": "uk/ht",
     "countries": ["uk"],
     "operatorTypes": ["passenger"],
-    "bounds": [-0.5, 51.5, 0, 53.8],
+    "bounds": [-0.5, 51.5, 0.0, 53.8],
     "description": "Hull Trains is an open-access operator running direct services between Hull and London King's Cross via Doncaster. It was the UK's first open-access passenger rail operator, providing an alternative to LNER on the East Coast Main Line.",
     "website": "https://www.hulltrains.co.uk",
     "founded": 2000,
@@ -1657,7 +1657,7 @@
       },
       {
         "label": "Wikipedia",
-        "url": "https://en.wikipedia.org/wiki/Vy",
+        "url": "https://en.wikipedia.org/wiki/Vy_(transport_operator)",
         "type": "wikipedia"
       }
     ]
@@ -1668,7 +1668,7 @@
     "logoPath": "no/sj_nord",
     "countries": ["no"],
     "operatorTypes": ["passenger"],
-    "bounds": [8, 58, 24, 70.8],
+    "bounds": [8.0, 58.0, 24.0, 70.8],
     "description": "SJ NORD operates Norway's northern traffic package, including the Dovre Line, Nordland Line, Raumabanen, Roros Line, Tronder commuter rail, and related regional services. It is the Norwegian arm of SJ AB and a major long-distance operator outside the Oslo-centered Vy network.",
     "website": "https://www.sj.no",
     "founded": 2020,
@@ -1701,7 +1701,7 @@
     "logoPath": "no/go_ahead",
     "countries": ["no"],
     "operatorTypes": ["passenger"],
-    "bounds": [5, 58, 11.2, 60.5],
+    "bounds": [5.0, 58.0, 11.2, 60.5],
     "description": "Go-Ahead Norge operates the southern traffic package, centered on the Sorland Line, Jaeren Line, and Arendal Line between Oslo, Kristiansand, Stavanger, and nearby commuter corridors. It entered the Norwegian market as the country's first competitively tendered long-distance rail operator.",
     "website": "https://www.goaheadnordic.no",
     "founded": 2019,
@@ -1762,12 +1762,12 @@
     "logoPath": "se/sj",
     "countries": ["se"],
     "operatorTypes": ["passenger"],
-    "bounds": [11, 55.3, 24.2, 69.1],
+    "bounds": [11.0, 55.3, 24.2, 69.1],
     "description": "SJ AB is Sweden's state-owned national rail operator, running high-speed, intercity, regional, commuter, and night-train services across the country. SJ operates the tilting X 2000 and SJ 3000 long-distance trains, and since 2024 also runs Stockholm commuter rail (Stockholmståg). Its subsidiaries include SJ Götalandståg, SJ Norrlandståg, and SJ Öresundståg.",
     "website": "https://www.sj.se",
     "founded": 2001,
     "headquarters": "Stockholm, Sweden",
-    "networkKm": null,
+    "networkKm": 7000,
     "annualPassengers": 32000000,
     "serviceTypes": [
       "high-speed",
@@ -1777,7 +1777,7 @@
       "night-train",
       "international"
     ],
-    "parentCompany": null,
+    "parentCompany": "Swedish State",
     "links": [
       {
         "label": "Official Site",
@@ -1814,7 +1814,7 @@
     "links": [
       {
         "label": "Official Site",
-        "url": "https://www.mtrexpress.se",
+        "url": "https://www.vrresa.se",
         "type": "website"
       },
       {
@@ -1830,7 +1830,7 @@
     "logoPath": "se/snalltaget",
     "countries": ["se"],
     "operatorTypes": ["passenger"],
-    "bounds": [11, 55.3, 24.2, 69.1],
+    "bounds": [11.0, 55.3, 24.2, 69.1],
     "description": "Snälltåget is a Swedish open-access long-distance rail operator running intercity and night-train services, including seasonal routes to Berlin and ski trains to Åre and Swedish Lapland. It is owned by the French transport group Transdev.",
     "website": "https://www.snalltaget.se",
     "founded": 2006,
@@ -1842,7 +1842,7 @@
     "links": [
       {
         "label": "Official Site",
-        "url": "https://www.snalltaget.se",
+        "url": "https://www.snalltaget.se/en",
         "type": "website"
       },
       {
@@ -1858,13 +1858,13 @@
     "logoPath": "transdev",
     "countries": ["international", "se"],
     "operatorTypes": ["passenger"],
-    "bounds": [11, 55.3, 24.2, 69.1],
+    "bounds": [11.0, 55.3, 24.2, 69.1],
     "description": "Transdev is a global public transport operator headquartered in France, running rail, bus, tram, and ferry services across 17+ countries. In Sweden, Transdev operates regional rail services and the Snälltåget long-distance brand through its subsidiary Transdev Sverige AB.",
     "website": "https://www.transdev.com",
     "founded": 2011,
     "headquarters": "Issy-les-Moulineaux, France",
-    "networkKm": null,
-    "annualPassengers": null,
+    "networkKm": 1500,
+    "annualPassengers": 100000000,
     "serviceTypes": ["regional"],
     "parentCompany": "Caisse des Dépôts / Rethmann Group",
     "links": [
