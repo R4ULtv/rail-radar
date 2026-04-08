@@ -181,7 +181,6 @@ function matchesOperatorQuery(operator: Operator, query: string): boolean {
     operator.slug,
     operator.name,
     operator.description,
-    operator.website,
     operator.headquarters,
     operator.parentCompany,
   ].some((value) => value?.toLowerCase().includes(normalizedQuery));
