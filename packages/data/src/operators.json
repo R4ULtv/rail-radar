@@ -912,7 +912,7 @@
     "headquarters": "Berlin, Germany",
     "networkKm": 33399,
     "annualPassengers": 1600000000,
-    "serviceTypes": ["high-speed", "intercity", "international"],
+    "serviceTypes": ["high-speed", "intercity", "regional", "commuter", "international"],
     "parentCompany": "Federal Republic of Germany",
     "links": [
       {
@@ -951,7 +951,7 @@
     "networkKm": null,
     "annualPassengers": null,
     "serviceTypes": ["intercity"],
-    "parentCompany": "FlixMobility",
+    "parentCompany": "Flix SE",
     "links": [
       {
         "label": "Official Site",
@@ -972,14 +972,14 @@
     "countries": ["uk", "nl", "de"],
     "operatorTypes": ["passenger"],
     "bounds": [-5.7, 47.3, 15, 55.1],
-    "description": "Arriva is a major European transport operator owned by Deutsche Bahn, running regional rail services across multiple countries. In Germany it operates as alex and Länderbahn in Bavaria, in the Netherlands as Arriva Nederland, and in the UK as Arriva Trains. It also operates bus and rail services in the Czech Republic, Poland, and other European markets.",
+    "description": "Arriva is a major European transport operator. Acquired by I Squared Capital in 2024, it runs regional rail and bus services across multiple countries, including Arriva Nederland in the Netherlands and Arriva Trains in the UK. It also operates transit networks in the Czech Republic, Poland, and other European markets.",
     "website": "https://www.arriva.co.uk",
     "founded": 1938,
     "headquarters": "Sunderland, United Kingdom",
     "networkKm": null,
     "annualPassengers": null,
     "serviceTypes": ["regional"],
-    "parentCompany": "Deutsche Bahn",
+    "parentCompany": "I Squared Capital",
     "links": [
       {
         "label": "Official Site",
@@ -1002,7 +1002,7 @@
     "bounds": [7.8, 49.4, 10.2, 51.7],
     "description": "Hessische Landesbahn (HLB) is a regional rail operator based in Hesse, serving routes across central Germany. Owned by the State of Hesse, it operates RB and RE services connecting Frankfurt, Giessen, Fulda, Siegen, and surrounding areas.",
     "website": "https://www.hlb-online.de",
-    "founded": 2001,
+    "founded": 1955,
     "headquarters": "Frankfurt am Main, Germany",
     "networkKm": null,
     "annualPassengers": null,
@@ -1031,11 +1031,11 @@
     "description": "Ostdeutsche Eisenbahn (ODEG) is the largest private regional rail operator in eastern Germany, serving Brandenburg, Mecklenburg-Vorpommern, and Berlin. It operates RE and RB lines connecting Berlin with surrounding regions including routes to the Baltic coast and Polish border.",
     "website": "https://www.odeg.de",
     "founded": 2002,
-    "headquarters": "Parchim, Germany",
+    "headquarters": "Berlin, Germany",
     "networkKm": null,
     "annualPassengers": null,
     "serviceTypes": ["regional"],
-    "parentCompany": "Netinera",
+    "parentCompany": "Netinera / BeNEX",
     "links": [
       {
         "label": "Official Site",
@@ -1063,7 +1063,7 @@
     "networkKm": null,
     "annualPassengers": null,
     "serviceTypes": ["regional"],
-    "parentCompany": "Erfurter Bahn",
+    "parentCompany": "Erfurter Bahn / Hessische Landesbahn",
     "links": [
       {
         "label": "Official Site",
@@ -1086,7 +1086,7 @@
     "bounds": [7.5, 49.4, 10, 51],
     "description": "Vias Rail is a regional rail operator in Hesse and Rhineland-Palatinate, running RB and RE services in the Rhine-Main area. It operates lines connecting Frankfurt, Mainz, Darmstadt, and Wiesbaden with the surrounding region.",
     "website": "https://www.vias-online.de",
-    "founded": 2010,
+    "founded": 2005,
     "headquarters": "Düren, Germany",
     "networkKm": null,
     "annualPassengers": null,
