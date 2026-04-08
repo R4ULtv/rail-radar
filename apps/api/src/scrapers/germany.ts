@@ -5,9 +5,10 @@ import { fetchWithTimeout } from "./fetch";
 
 const DB_BOARD_URL = "https://app.services-bahn.de/mob/bahnhofstafel";
 const CONTENT_TYPE = "application/x.db.vendo.mob.bahnhofstafeln.v2+json";
+const TRAIN_LIMIT = 24;
 
-// Product types we care about (exclude STR=tram, BUS, UBAHN=subway, SCHIFF=ferry)
-const TRAIN_PRODUCTS = new Set(["ICE", "IC_EC", "RB", "SBAHN"]);
+// Exclude clearly non-rail modes; keep all DB rail product categories.
+const NON_RAIL_PRODUCTS = new Set(["BUS", "SCHIFF", "STR", "UBAHN"]);
 
 function convertGermanStationId(stationId: string): string {
   // Convert DE station ID to HAFAS format (e.g., "DE00261" -> "8000261")
@@ -138,13 +139,13 @@ export async function scrapeGermanTrains(
       ? data.bahnhofstafelAbfahrtPositionen
       : data.bahnhofstafelAnkunftPositionen) ?? [];
 
-  // Filter to train products and deduplicate
+  // Exclude non-rail products and deduplicate.
   // Dedup by train name + time + destination + platform (zuglaufId differs for coupled trains)
   const seen = new Set<string>();
   const trainEntries = entries
     .filter((entry) => {
-      const product = entry.produktGattung;
-      if (!product || !TRAIN_PRODUCTS.has(product)) return false;
+      const product = entry.produktGattung?.toUpperCase();
+      if (product && NON_RAIL_PRODUCTS.has(product)) return false;
       // Skip non-revenue services (Sonderfahrt etc.) that lack destination/origin
       if (type === "departures" && !entry.richtung) return false;
       if (type === "arrivals" && !entry.abgangsOrt?.name) return false;
@@ -154,7 +155,7 @@ export async function scrapeGermanTrains(
       seen.add(dedupKey);
       return true;
     })
-    .slice(0, 16);
+    .slice(0, TRAIN_LIMIT);
 
   const trains: Train[] = trainEntries.map((entry) => {
     const scheduledDep = entry.abgangsDatum;
