@@ -38,7 +38,7 @@
     "logoPath": "it/italo",
     "countries": ["it"],
     "operatorTypes": ["passenger"],
-    "bounds": [9.0, 40.5, 16.5, 46.0],
+    "bounds": [9, 40.5, 16.5, 46],
     "description": "Operated by Italo-NTV, this is Italy's first private high-speed rail service. Competing directly on the state-owned RFI high-speed network, Italo operates a modern fleet of Alstom AGV and Pendolino EVO trains, connecting major Italian cities with a focus on a premium passenger experience and high-frequency schedules.",
     "website": "https://www.italotreno.it",
     "founded": 2006,
@@ -71,7 +71,7 @@
     "logoPath": "it/frecciarossa",
     "countries": ["it"],
     "operatorTypes": ["passenger"],
-    "bounds": [2.0, 40.5, 16.5, 48.8],
+    "bounds": [2, 40.5, 16.5, 48.8],
     "description": "Frecciarossa is Trenitalia's premier high-speed service, reaching operational speeds of 300 km/h. Utilizing advanced trainsets like the ETR 500 and ETR 1000, it forms the rapid transit backbone of Italy along the Turin-Salerno and Milan-Venice corridors, while also expanding its reach into international markets like France and Spain.",
     "website": "https://www.trenitalia.com",
     "founded": 2008,
@@ -244,7 +244,7 @@
     "logoPath": "it/tua",
     "countries": ["it"],
     "operatorTypes": ["passenger"],
-    "bounds": [13.0, 41.7, 14.8, 42.9],
+    "bounds": [13, 41.7, 14.8, 42.9],
     "description": "TUA (Trasporto Unico Abruzzese) is the consolidated public transport provider for the Abruzzo region. Its railway division, inheriting the legacy of Ferrovia Adriatico Sangritana, operates regional passenger services connecting the mountainous interior with the Adriatic coast, as well as managing local freight.",
     "website": "https://www.tuabruzzo.it",
     "founded": 2015,
@@ -310,7 +310,7 @@
     "logoPath": "ch/bls",
     "countries": ["ch"],
     "operatorTypes": ["passenger"],
-    "bounds": [7.0, 46.3, 8.5, 47.1],
+    "bounds": [7, 46.3, 8.5, 47.1],
     "description": "BLS is Switzerland's second-largest standard-gauge railway. In addition to operating the extensive Bern S-Bahn and regional lines in the Emmental and Bernese Oberland, BLS manages the high-speed Lötschberg Base Tunnel and provides crucial car-shuttle transport through the Alps.",
     "website": "https://www.bls.ch",
     "founded": 1906,
@@ -623,7 +623,7 @@
     "logoPath": "ch/rhb",
     "countries": ["ch", "it"],
     "operatorTypes": ["passenger"],
-    "bounds": [9.3, 46.3, 10.5, 47.0],
+    "bounds": [9.3, 46.3, 10.5, 47],
     "description": "The Rhätische Bahn (RhB) operates the largest narrow-gauge network in Switzerland, covering the mountainous canton of Graubünden. Renowned globally for its engineering marvels, its Albula and Bernina lines—the latter crossing the Alps via adhesion alone without rack assistance—are a UNESCO World Heritage site.",
     "website": "https://www.rhb.ch",
     "founded": 1889,
@@ -801,7 +801,7 @@
     "logoPath": "vr",
     "countries": ["fi", "se"],
     "operatorTypes": ["passenger"],
-    "bounds": [11.0, 55.3, 31.6, 70.1],
+    "bounds": [11, 55.3, 31.6, 70.1],
     "description": "VR Group is Finland's state-owned railway company, operating high-speed Pendolino, InterCity, commuter, and freight services on Finland's 1,524 mm broad-gauge network. Since 2022, VR has expanded heavily into Sweden through VR Sverige (operating regional systems) and the acquisition of the Stockholm–Göteborg high-speed corridor (VR Snabbtåg).",
     "website": "https://www.vr.fi",
     "founded": 1862,
@@ -877,7 +877,7 @@
     "logoPath": "eurostar",
     "countries": ["international", "uk", "be", "nl"],
     "operatorTypes": ["passenger"],
-    "bounds": [-0.5, 48.8, 7.0, 52.4],
+    "bounds": [-0.5, 48.8, 7, 52.4],
     "description": "Eurostar operates high-speed international rail services connecting the UK with mainland Europe via the Channel Tunnel. Following its merger with Thalys, the unified Eurostar brand now also manages the premier high-speed network linking Paris, Brussels, Amsterdam, and Cologne, creating a unified Western European high-speed giant.",
     "website": "https://www.eurostar.com",
     "founded": 1994,
@@ -902,17 +902,17 @@
   {
     "slug": "db",
     "name": "Deutsche Bahn",
-    "logoPath": "db",
-    "countries": ["international", "ch", "be"],
+    "logoPath": "de/db",
+    "countries": ["de", "ch", "it", "be"],
     "operatorTypes": ["passenger"],
-    "bounds": [5.9, 47.3, 15.0, 55.1],
+    "bounds": [5.9, 47.3, 15, 55.1],
     "description": "Deutsche Bahn (DB) is Germany's national railway operator and a major force in European transit. Its ICE (Intercity-Express) network forms the high-speed backbone of Central Europe, deeply integrated with regular-interval timetables that connect major German hubs with Switzerland, Austria, and beyond.",
     "website": "https://www.bahn.de",
     "founded": 1994,
     "headquarters": "Berlin, Germany",
     "networkKm": 33399,
     "annualPassengers": 1600000000,
-    "serviceTypes": ["high-speed", "intercity", "international"],
+    "serviceTypes": ["high-speed", "intercity", "regional", "commuter", "international"],
     "parentCompany": "Federal Republic of Germany",
     "links": [
       {
@@ -933,6 +933,230 @@
       {
         "label": "Wikipedia",
         "url": "https://en.wikipedia.org/wiki/Deutsche_Bahn",
+        "type": "wikipedia"
+      }
+    ]
+  },
+  {
+    "slug": "flixtrain",
+    "name": "FlixTrain",
+    "logoPath": "de/flixtrain",
+    "countries": ["de"],
+    "operatorTypes": ["passenger"],
+    "bounds": [6, 47.3, 15, 55.1],
+    "description": "FlixTrain is a low-cost open-access long-distance train operator in Germany, run by FlixMobility. It competes directly with Deutsche Bahn on popular intercity routes, offering affordable fares on services between major cities like Berlin, Hamburg, Munich, and Cologne.",
+    "website": "https://www.flixtrain.de",
+    "founded": 2018,
+    "headquarters": "Munich, Germany",
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["intercity"],
+    "parentCompany": "Flix SE",
+    "links": [
+      {
+        "label": "Official Site",
+        "url": "https://www.flixtrain.de",
+        "type": "website"
+      },
+      {
+        "label": "Wikipedia",
+        "url": "https://en.wikipedia.org/wiki/FlixTrain",
+        "type": "wikipedia"
+      }
+    ]
+  },
+  {
+    "slug": "arriva",
+    "name": "Arriva",
+    "logoPath": "arriva",
+    "countries": ["uk", "nl", "de"],
+    "operatorTypes": ["passenger"],
+    "bounds": [-5.7, 47.3, 15, 55.1],
+    "description": "Arriva is a major European transport operator. Acquired by I Squared Capital in 2024, it runs regional rail and bus services across multiple countries, including Arriva Nederland in the Netherlands and Arriva Trains in the UK. It also operates transit networks in the Czech Republic, Poland, and other European markets.",
+    "website": "https://www.arriva.co.uk",
+    "founded": 1938,
+    "headquarters": "Sunderland, United Kingdom",
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["regional"],
+    "parentCompany": "I Squared Capital",
+    "links": [
+      {
+        "label": "Official Site",
+        "url": "https://www.arriva.co.uk",
+        "type": "website"
+      },
+      {
+        "label": "Wikipedia",
+        "url": "https://en.wikipedia.org/wiki/Arriva",
+        "type": "wikipedia"
+      }
+    ]
+  },
+  {
+    "slug": "hlb",
+    "name": "Hessische Landesbahn",
+    "logoPath": "de/hlb",
+    "countries": ["de"],
+    "operatorTypes": ["passenger"],
+    "bounds": [7.8, 49.4, 10.2, 51.7],
+    "description": "Hessische Landesbahn (HLB) is a regional rail operator based in Hesse, serving routes across central Germany. Owned by the State of Hesse, it operates RB and RE services connecting Frankfurt, Giessen, Fulda, Siegen, and surrounding areas.",
+    "website": "https://www.hlb-online.de",
+    "founded": 1955,
+    "headquarters": "Frankfurt am Main, Germany",
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["regional"],
+    "parentCompany": "State of Hesse",
+    "links": [
+      {
+        "label": "Official Site",
+        "url": "https://www.hlb-online.de",
+        "type": "website"
+      },
+      {
+        "label": "Wikipedia",
+        "url": "https://en.wikipedia.org/wiki/Hessische_Landesbahn",
+        "type": "wikipedia"
+      }
+    ]
+  },
+  {
+    "slug": "odeg",
+    "name": "ODEG",
+    "logoPath": "de/odeg",
+    "countries": ["de"],
+    "operatorTypes": ["passenger"],
+    "bounds": [11, 51.3, 14.8, 53.6],
+    "description": "Ostdeutsche Eisenbahn (ODEG) is the largest private regional rail operator in eastern Germany, serving Brandenburg, Mecklenburg-Vorpommern, and Berlin. It operates RE and RB lines connecting Berlin with surrounding regions including routes to the Baltic coast and Polish border.",
+    "website": "https://www.odeg.de",
+    "founded": 2002,
+    "headquarters": "Berlin, Germany",
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["regional"],
+    "parentCompany": "Netinera / BeNEX",
+    "links": [
+      {
+        "label": "Official Site",
+        "url": "https://www.odeg.de",
+        "type": "website"
+      },
+      {
+        "label": "Wikipedia",
+        "url": "https://en.wikipedia.org/wiki/Ostdeutsche_Eisenbahn",
+        "type": "wikipedia"
+      }
+    ]
+  },
+  {
+    "slug": "stb",
+    "name": "Süd-Thüringen-Bahn",
+    "logoPath": "de/stb",
+    "countries": ["de"],
+    "operatorTypes": ["passenger"],
+    "bounds": [10, 50.2, 11.6, 50.9],
+    "description": "Süd-Thüringen-Bahn (STB) is a regional rail operator in southern Thuringia, running services on non-electrified lines in the Thuringian Forest region. It connects cities like Erfurt, Meiningen, and Eisenach with smaller towns in the area.",
+    "website": "https://www.sued-thueringen-bahn.de",
+    "founded": 1999,
+    "headquarters": "Meiningen, Germany",
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["regional"],
+    "parentCompany": "Erfurter Bahn / Hessische Landesbahn",
+    "links": [
+      {
+        "label": "Official Site",
+        "url": "https://www.sued-thueringen-bahn.de",
+        "type": "website"
+      },
+      {
+        "label": "Wikipedia",
+        "url": "https://en.wikipedia.org/wiki/S%C3%BCd-Th%C3%BCringen-Bahn",
+        "type": "wikipedia"
+      }
+    ]
+  },
+  {
+    "slug": "vias",
+    "name": "Vias Rail",
+    "logoPath": "de/vias",
+    "countries": ["de"],
+    "operatorTypes": ["passenger"],
+    "bounds": [7.5, 49.4, 10, 51],
+    "description": "Vias Rail is a regional rail operator in Hesse and Rhineland-Palatinate, running RB and RE services in the Rhine-Main area. It operates lines connecting Frankfurt, Mainz, Darmstadt, and Wiesbaden with the surrounding region.",
+    "website": "https://www.vias-online.de",
+    "founded": 2005,
+    "headquarters": "Düren, Germany",
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["regional"],
+    "parentCompany": "R.A.T.H. Group",
+    "links": [
+      {
+        "label": "Official Site",
+        "url": "https://www.vias-online.de",
+        "type": "website"
+      },
+      {
+        "label": "Wikipedia",
+        "url": "https://en.wikipedia.org/wiki/Vias_(rail_company)",
+        "type": "wikipedia"
+      }
+    ]
+  },
+  {
+    "slug": "westfalenbahn",
+    "name": "WestfalenBahn",
+    "logoPath": "de/westfalenbahn",
+    "countries": ["de"],
+    "operatorTypes": ["passenger"],
+    "bounds": [7, 51.5, 11, 53.2],
+    "description": "WestfalenBahn is a regional rail operator in North Rhine-Westphalia and Lower Saxony, running RE and RB services connecting Bielefeld, Osnabrück, Münster, Braunschweig, and Hanover.",
+    "website": "https://www.westfalenbahn.de",
+    "founded": 2005,
+    "headquarters": "Bielefeld, Germany",
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["regional"],
+    "parentCompany": "BeNEX",
+    "links": [
+      {
+        "label": "Official Site",
+        "url": "https://www.westfalenbahn.de",
+        "type": "website"
+      },
+      {
+        "label": "Wikipedia",
+        "url": "https://en.wikipedia.org/wiki/WestfalenBahn",
+        "type": "wikipedia"
+      }
+    ]
+  },
+  {
+    "slug": "vogtlandbahn",
+    "name": "Vogtlandbahn",
+    "logoPath": "de/vogtlandbahn",
+    "countries": ["de"],
+    "operatorTypes": ["passenger"],
+    "bounds": [11.5, 50, 13, 51.2],
+    "description": "Vogtlandbahn, operating under the Trilex and Die Länderbahn brands, is a regional rail operator in Saxony and Thuringia. It runs cross-border services into the Czech Republic and connects cities like Zwickau, Plauen, Hof, and Dresden with surrounding regions.",
+    "website": "https://www.laenderbahn.com",
+    "founded": 1998,
+    "headquarters": "Viechtach, Germany",
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["regional"],
+    "parentCompany": "Netinera",
+    "links": [
+      {
+        "label": "Official Site",
+        "url": "https://www.laenderbahn.com",
+        "type": "website"
+      },
+      {
+        "label": "Wikipedia",
+        "url": "https://en.wikipedia.org/wiki/Vogtlandbahn",
         "type": "wikipedia"
       }
     ]
@@ -1037,7 +1261,7 @@
     "logoPath": "uk/gr",
     "countries": ["uk"],
     "operatorTypes": ["passenger"],
-    "bounds": [-1.6, 51.5, 0.1, 56.0],
+    "bounds": [-1.6, 51.5, 0.1, 56],
     "description": "London North Eastern Railway operates intercity services on the East Coast Main Line, connecting London King's Cross with Leeds, York, Newcastle, and Edinburgh using its fleet of Azuma trains.",
     "website": "https://www.lner.co.uk",
     "founded": 2018,
@@ -1065,7 +1289,7 @@
     "logoPath": "uk/xc",
     "countries": ["uk"],
     "operatorTypes": ["passenger"],
-    "bounds": [-4.5, 50.4, 0.0, 57.5],
+    "bounds": [-4.5, 50.4, 0, 57.5],
     "description": "CrossCountry operates the most geographically extensive passenger rail franchise in the UK, connecting major cities without passing through London. Its routes link Aberdeen, Edinburgh, and Newcastle with Birmingham, Bristol, Plymouth, and Penzance.",
     "website": "https://www.crosscountrytrains.co.uk",
     "founded": 2007,
@@ -1121,7 +1345,7 @@
     "logoPath": "uk/em",
     "countries": ["uk"],
     "operatorTypes": ["passenger"],
-    "bounds": [-1.8, 51.5, 0.0, 53.5],
+    "bounds": [-1.8, 51.5, 0, 53.5],
     "description": "East Midlands Railway operates intercity services from London St Pancras to Sheffield, Nottingham, and Derby, as well as regional services across the East Midlands and East Anglia.",
     "website": "https://www.eastmidlandsrailway.co.uk",
     "founded": 2019,
@@ -1177,7 +1401,7 @@
     "logoPath": "uk/se",
     "countries": ["uk"],
     "operatorTypes": ["passenger"],
-    "bounds": [-0.1, 51.0, 1.4, 51.6],
+    "bounds": [-0.1, 51, 1.4, 51.6],
     "description": "Southeastern operates commuter and regional services in South East London, Kent, and East Sussex, including high-speed services via HS1 from London St Pancras to Ashford, Canterbury, and the Medway Towns.",
     "website": "https://www.southeasternrailway.co.uk",
     "founded": 2006,
@@ -1205,7 +1429,7 @@
     "logoPath": "uk/xr",
     "countries": ["uk"],
     "operatorTypes": ["passenger"],
-    "bounds": [-1.0, 51.4, 0.3, 51.6],
+    "bounds": [-1, 51.4, 0.3, 51.6],
     "description": "The Elizabeth line is a high-frequency cross-London railway connecting Reading and Heathrow in the west with Shenfield and Abbey Wood in the east. Opened in 2022, it is one of Europe's largest infrastructure projects and currently the UK's busiest railway.",
     "website": "https://tfl.gov.uk/modes/elizabeth-line/",
     "founded": 2022,
@@ -1261,7 +1485,7 @@
     "logoPath": "uk/nt",
     "countries": ["uk"],
     "operatorTypes": ["passenger"],
-    "bounds": [-3.4, 53.0, -0.3, 55.5],
+    "bounds": [-3.4, 53, -0.3, 55.5],
     "description": "Northern Trains is the largest train operator in the North of England, running regional and commuter services across Lancashire, Yorkshire, Cumbria, and the North East. It operates over 2,500 services daily and has been under public ownership since 2020.",
     "website": "https://www.northernrailway.co.uk",
     "founded": 2016,
@@ -1317,7 +1541,7 @@
     "logoPath": "uk/lm",
     "countries": ["uk"],
     "operatorTypes": ["passenger"],
-    "bounds": [-2.6, 51.7, -0.1, 53.0],
+    "bounds": [-2.6, 51.7, -0.1, 53],
     "description": "West Midlands Trains operates London Northwestern Railway and West Midlands Railway services, connecting London Euston with Birmingham, Crewe, and Liverpool. It was taken into public ownership by the Department for Transport in February 2026.",
     "website": "https://www.westmidlandsrailway.co.uk",
     "founded": 2017,
@@ -1373,7 +1597,7 @@
     "logoPath": "uk/tp",
     "countries": ["uk"],
     "operatorTypes": ["passenger"],
-    "bounds": [-3.4, 53.0, -0.1, 54.8],
+    "bounds": [-3.4, 53, -0.1, 54.8],
     "description": "TransPennine Express operates intercity and express services across the North of England and into Scotland, connecting Liverpool, Manchester, Leeds, York, Newcastle, and Edinburgh. It was brought into public ownership in May 2023.",
     "website": "https://www.tpexpress.co.uk",
     "founded": 2004,
@@ -1541,7 +1765,7 @@
     "logoPath": "uk/gc",
     "countries": ["uk"],
     "operatorTypes": ["passenger"],
-    "bounds": [-1.6, 51.5, 0.0, 54.8],
+    "bounds": [-1.6, 51.5, 0, 54.8],
     "description": "Grand Central is an open-access operator running services on the East Coast Main Line, connecting London King's Cross with Sunderland, Hartlepool, and Bradford. It offers an alternative to LNER on the route, serving towns not on the main intercity network.",
     "website": "https://www.grandcentralrail.com",
     "founded": 2007,
@@ -1569,7 +1793,7 @@
     "logoPath": "uk/ht",
     "countries": ["uk"],
     "operatorTypes": ["passenger"],
-    "bounds": [-0.5, 51.5, 0.0, 53.8],
+    "bounds": [-0.5, 51.5, 0, 53.8],
     "description": "Hull Trains is an open-access operator running direct services between Hull and London King's Cross via Doncaster. It was the UK's first open-access passenger rail operator, providing an alternative to LNER on the East Coast Main Line.",
     "website": "https://www.hulltrains.co.uk",
     "founded": 2000,
@@ -1668,7 +1892,7 @@
     "logoPath": "no/sj_nord",
     "countries": ["no"],
     "operatorTypes": ["passenger"],
-    "bounds": [8.0, 58.0, 24.0, 70.8],
+    "bounds": [8, 58, 24, 70.8],
     "description": "SJ NORD operates Norway's northern traffic package, including the Dovre Line, Nordland Line, Raumabanen, Roros Line, Tronder commuter rail, and related regional services. It is the Norwegian arm of SJ AB and a major long-distance operator outside the Oslo-centered Vy network.",
     "website": "https://www.sj.no",
     "founded": 2020,
@@ -1701,7 +1925,7 @@
     "logoPath": "no/go_ahead",
     "countries": ["no"],
     "operatorTypes": ["passenger"],
-    "bounds": [5.0, 58.0, 11.2, 60.5],
+    "bounds": [5, 58, 11.2, 60.5],
     "description": "Go-Ahead Norge operates the southern traffic package, centered on the Sorland Line, Jaeren Line, and Arendal Line between Oslo, Kristiansand, Stavanger, and nearby commuter corridors. It entered the Norwegian market as the country's first competitively tendered long-distance rail operator.",
     "website": "https://www.goaheadnordic.no",
     "founded": 2019,
@@ -1762,7 +1986,7 @@
     "logoPath": "se/sj",
     "countries": ["se"],
     "operatorTypes": ["passenger"],
-    "bounds": [11.0, 55.3, 24.2, 69.1],
+    "bounds": [11, 55.3, 24.2, 69.1],
     "description": "SJ AB is Sweden's state-owned national rail operator, running high-speed, intercity, regional, commuter, and night-train services across the country. SJ operates the tilting X 2000 and SJ 3000 long-distance trains, and since 2024 also runs Stockholm commuter rail (Stockholmståg). Its subsidiaries include SJ Götalandståg, SJ Norrlandståg, and SJ Öresundståg.",
     "website": "https://www.sj.se",
     "founded": 2001,
@@ -1830,7 +2054,7 @@
     "logoPath": "se/snalltaget",
     "countries": ["se"],
     "operatorTypes": ["passenger"],
-    "bounds": [11.0, 55.3, 24.2, 69.1],
+    "bounds": [11, 55.3, 24.2, 69.1],
     "description": "Snälltåget is a Swedish open-access long-distance rail operator running intercity and night-train services, including seasonal routes to Berlin and ski trains to Åre and Swedish Lapland. It is owned by the French transport group Transdev.",
     "website": "https://www.snalltaget.se",
     "founded": 2006,
@@ -1858,7 +2082,7 @@
     "logoPath": "transdev",
     "countries": ["international", "se"],
     "operatorTypes": ["passenger"],
-    "bounds": [11.0, 55.3, 24.2, 69.1],
+    "bounds": [11, 55.3, 24.2, 69.1],
     "description": "Transdev is a global public transport operator headquartered in France, running rail, bus, tram, and ferry services across 17+ countries. In Sweden, Transdev operates regional rail services and the Snälltåget long-distance brand through its subsidiary Transdev Sverige AB.",
     "website": "https://www.transdev.com",
     "founded": 2011,
