@@ -2,8 +2,8 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
-import { brands, brandBySlug, type Brand } from "@repo/data/brands";
-import { COUNTRY_MAP } from "@repo/data/countries";
+import { operators, operatorBySlug, type Operator } from "@repo/data/operators";
+import { COUNTRY_MAP, type CountryCode } from "@repo/data/countries";
 import { Badge } from "@repo/ui/components/badge";
 import { Card, CardContent } from "@repo/ui/components/card";
 import {
@@ -22,34 +22,34 @@ import {
   UsersIcon,
 } from "lucide-react";
 
-interface BrandPageProps {
+interface OperatorPageProps {
   params: Promise<{ slug: string }>;
 }
 
 export async function generateStaticParams() {
-  return brands.map((b) => ({ slug: b.slug }));
+  return operators.map((operator) => ({ slug: operator.slug }));
 }
 export const dynamicParams = false;
 
-export async function generateMetadata({ params }: BrandPageProps): Promise<Metadata> {
+export async function generateMetadata({ params }: OperatorPageProps): Promise<Metadata> {
   const { slug } = await params;
-  const brand = brandBySlug.get(slug);
+  const operator = operatorBySlug.get(slug);
 
-  if (!brand) {
-    return { title: "Brand Not Found" };
+  if (!operator) {
+    return { title: "Operator Not Found" };
   }
 
-  const countries = brand.countries.map((c) => COUNTRY_MAP[c]).join(", ");
-  const description = `${brand.name} is tracked on Rail Radar in ${countries}. ${brand.description}`;
+  const countries = formatCountryList(getTrackedCountries(operator));
+  const description = `${operator.name} is tracked on Rail Radar in ${countries}. ${operator.description}`;
 
   return {
-    title: `${brand.name} - Train Operator`,
+    title: `${operator.name} - Train Operator`,
     description,
     alternates: {
       canonical: `/operators/${slug}`,
     },
     openGraph: {
-      title: `${brand.name} - Train Operator | Rail Radar`,
+      title: `${operator.name} - Train Operator | Rail Radar`,
       description,
       images: [
         {
@@ -62,7 +62,7 @@ export async function generateMetadata({ params }: BrandPageProps): Promise<Meta
     },
     twitter: {
       card: "summary",
-      title: `${brand.name} - Train Operator | Rail Radar`,
+      title: `${operator.name} - Train Operator | Rail Radar`,
       description,
       images: [
         {
@@ -102,7 +102,19 @@ function formatNumber(n: number): string {
   return String(n);
 }
 
-function boundsToView(bounds: Brand["bounds"]): { lat: number; lng: number; zoom: number } {
+function isTrackedCountry(country: Operator["countries"][number]): country is CountryCode {
+  return country !== "international";
+}
+
+function getTrackedCountries(operator: Operator): CountryCode[] {
+  return operator.countries.filter(isTrackedCountry);
+}
+
+function formatCountryList(countries: CountryCode[]): string {
+  return countries.length > 0 ? countries.map((c) => COUNTRY_MAP[c]).join(", ") : "international";
+}
+
+function boundsToView(bounds: Operator["bounds"]): { lat: number; lng: number; zoom: number } {
   const [west, south, east, north] = bounds;
   const lat = (south + north) / 2;
   const lng = (west + east) / 2;
@@ -115,15 +127,17 @@ function boundsToView(bounds: Brand["bounds"]): { lat: number; lng: number; zoom
   return { lat: +lat.toFixed(4), lng: +lng.toFixed(4), zoom: Math.min(zoom, 18) };
 }
 
-function getRelatedBrands(brand: Brand): Brand[] {
-  const seen = new Set<string>([brand.slug]);
-  const sameCountry: Brand[] = [];
-  const crossCountry: Brand[] = [];
+function getRelatedOperators(operator: Operator): Operator[] {
+  const seen = new Set<string>([operator.slug]);
+  const sameCountry: Operator[] = [];
+  const crossCountry: Operator[] = [];
+  const operatorCountries = getTrackedCountries(operator);
 
-  for (const b of brands) {
+  for (const b of operators) {
     if (seen.has(b.slug)) continue;
-    if (b.countries.some((c) => brand.countries.includes(c))) {
-      const allShared = b.countries.every((c) => brand.countries.includes(c));
+    const bCountries = getTrackedCountries(b);
+    if (bCountries.some((c) => operatorCountries.includes(c))) {
+      const allShared = bCountries.every((c) => operatorCountries.includes(c));
       if (allShared) sameCountry.push(b);
       else crossCountry.push(b);
       seen.add(b.slug);
@@ -133,34 +147,35 @@ function getRelatedBrands(brand: Brand): Brand[] {
   return [...sameCountry, ...crossCountry].slice(0, 4);
 }
 
-export default async function BrandPage({ params }: BrandPageProps) {
+export default async function OperatorPage({ params }: OperatorPageProps) {
   const { slug } = await params;
-  const brand = brandBySlug.get(slug);
+  const operator = operatorBySlug.get(slug);
 
-  if (!brand) {
+  if (!operator) {
     notFound();
   }
 
-  const relatedBrands = getRelatedBrands(brand);
-  const mapView = boundsToView(brand.bounds);
+  const relatedOperators = getRelatedOperators(operator);
+  const trackedCountries = getTrackedCountries(operator);
+  const mapView = boundsToView(operator.bounds);
 
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "Organization",
-    name: brand.name,
-    url: brand.website,
-    description: brand.description,
-    ...(brand.founded && { foundingDate: String(brand.founded) }),
-    ...(brand.headquarters && {
+    name: operator.name,
+    url: operator.website,
+    description: operator.description,
+    ...(operator.founded && { foundingDate: String(operator.founded) }),
+    ...(operator.headquarters && {
       address: {
         "@type": "PostalAddress",
-        addressLocality: brand.headquarters,
+        addressLocality: operator.headquarters,
       },
     }),
-    ...(brand.parentCompany && {
+    ...(operator.parentCompany && {
       parentOrganization: {
         "@type": "Organization",
-        name: brand.parentCompany,
+        name: operator.parentCompany,
       },
     }),
   };
@@ -170,27 +185,27 @@ export default async function BrandPage({ params }: BrandPageProps) {
     value: string;
     icon: React.ComponentType<{ className?: string }>;
   }[] = [];
-  if (brand.founded)
-    facts.push({ label: "Founded", value: String(brand.founded), icon: CalendarDaysIcon });
-  if (brand.headquarters)
-    facts.push({ label: "Headquarters", value: brand.headquarters, icon: MapPinIcon });
-  if (brand.parentCompany)
-    facts.push({ label: "Parent Company", value: brand.parentCompany, icon: BuildingIcon });
-  if (brand.networkKm)
+  if (operator.founded)
+    facts.push({ label: "Founded", value: String(operator.founded), icon: CalendarDaysIcon });
+  if (operator.headquarters)
+    facts.push({ label: "Headquarters", value: operator.headquarters, icon: MapPinIcon });
+  if (operator.parentCompany)
+    facts.push({ label: "Parent Company", value: operator.parentCompany, icon: BuildingIcon });
+  if (operator.networkKm)
     facts.push({
       label: "Network Length",
-      value: `${brand.networkKm.toLocaleString()} km`,
+      value: `${operator.networkKm.toLocaleString()} km`,
       icon: TrainTrackIcon,
     });
-  if (brand.annualPassengers)
+  if (operator.annualPassengers)
     facts.push({
       label: "Annual Passengers",
-      value: `~${formatNumber(brand.annualPassengers)}`,
+      value: `~${formatNumber(operator.annualPassengers)}`,
       icon: UsersIcon,
     });
   facts.push({
     label: "Tracked Countries",
-    value: brand.countries.map((c) => COUNTRY_MAP[c]).join(", "),
+    value: formatCountryList(trackedCountries),
     icon: GlobeIcon,
   });
 
@@ -216,17 +231,17 @@ export default async function BrandPage({ params }: BrandPageProps) {
           <div className="flex size-20 shrink-0 items-center justify-center overflow-hidden rounded-2xl bg-card">
             <Image
               unoptimized
-              src={`/brands/${brand.logoPath}.svg`}
-              alt={brand.name}
+              src={`/brands/${operator.logoPath}.svg`}
+              alt={operator.name}
               width={80}
               height={80}
               className="size-full object-contain"
             />
           </div>
           <div className="min-w-0 pt-1">
-            <h1 className="text-3xl md:text-4xl font-bold tracking-tight">{brand.name}</h1>
+            <h1 className="text-3xl md:text-4xl font-bold tracking-tight">{operator.name}</h1>
             <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-muted-foreground">
-              {brand.countries.map((c) => (
+              {trackedCountries.map((c) => (
                 <span key={c} className="inline-flex items-center gap-1.5 capitalize">
                   <Image
                     unoptimized
@@ -239,10 +254,10 @@ export default async function BrandPage({ params }: BrandPageProps) {
                   {COUNTRY_MAP[c]}
                 </span>
               ))}
-              {brand.founded && (
+              {operator.founded && (
                 <>
                   <span className="text-foreground/15 hidden sm:inline">|</span>
-                  <span>Est. {brand.founded}</span>
+                  <span>Est. {operator.founded}</span>
                 </>
               )}
             </div>
@@ -250,11 +265,11 @@ export default async function BrandPage({ params }: BrandPageProps) {
         </div>
 
         <p className="mt-8 text-[15px] leading-relaxed text-muted-foreground">
-          {brand.description}
+          {operator.description}
         </p>
 
         <div className="mt-6 flex flex-wrap gap-2">
-          {brand.serviceTypes.map((type) => (
+          {operator.serviceTypes.map((type) => (
             <Badge key={type} variant="outline" className="font-normal">
               {serviceTypeLabels[type] ?? type}
             </Badge>
@@ -271,8 +286,8 @@ export default async function BrandPage({ params }: BrandPageProps) {
             <Image
               unoptimized
               loading="eager"
-              src={`${process.env.NEXT_PUBLIC_API_URL}/map/static?bbox=${brand.bounds.join(",")}&w=960&h=412`}
-              alt={`Map of ${brand.name} operating area`}
+              src={`${process.env.NEXT_PUBLIC_API_URL}/map/static?bbox=${operator.bounds.join(",")}&w=960&h=412`}
+              alt={`Map of ${operator.name} operating area`}
               fill
               className="object-cover"
             />
@@ -316,10 +331,12 @@ export default async function BrandPage({ params }: BrandPageProps) {
             <CardContent>
               <h2 className="text-xs font-medium uppercase tracking-[0.15em] text-muted-foreground mb-4">
                 Tracked in{" "}
-                {brand.countries.length === 1 ? "1 country" : `${brand.countries.length} countries`}
+                {trackedCountries.length === 1
+                  ? "1 country"
+                  : `${trackedCountries.length} countries`}
               </h2>
               <div className="space-y-2">
-                {brand.countries.map((c) => (
+                {trackedCountries.map((c) => (
                   <Link
                     key={c}
                     href={`/operators#${c}`}
@@ -348,7 +365,7 @@ export default async function BrandPage({ params }: BrandPageProps) {
                 Resources
               </h2>
               <div className="space-y-1">
-                {brand.links.map((link) => {
+                {operator.links.map((link) => {
                   const Icon = linkIcons[link.type] ?? GlobeIcon;
                   return (
                     <a
@@ -375,14 +392,14 @@ export default async function BrandPage({ params }: BrandPageProps) {
             </CardContent>
           </Card>
 
-          {relatedBrands.length > 0 && (
+          {relatedOperators.length > 0 && (
             <Card>
               <CardContent>
                 <h2 className="text-xs font-medium uppercase tracking-[0.15em] text-muted-foreground mb-4">
                   Related Operators
                 </h2>
                 <div>
-                  {relatedBrands.map((b) => (
+                  {relatedOperators.map((b) => (
                     <Link
                       key={b.slug}
                       href={`/operators/${b.slug}`}
@@ -400,17 +417,19 @@ export default async function BrandPage({ params }: BrandPageProps) {
                       </div>
                       <div className="min-w-0 flex-1 flex items-center gap-2">
                         <span className="text-sm font-medium truncate">{b.name}</span>
-                        {b.countries.slice(0, 2).map((c) => (
-                          <Image
-                            key={c}
-                            unoptimized
-                            src={`/flags/${c}.svg`}
-                            alt={COUNTRY_MAP[c]}
-                            width={14}
-                            height={14}
-                            className="size-3.5 rounded-full ring-1 ring-foreground/10 shrink-0"
-                          />
-                        ))}
+                        {getTrackedCountries(b)
+                          .slice(0, 2)
+                          .map((c) => (
+                            <Image
+                              key={c}
+                              unoptimized
+                              src={`/flags/${c}.svg`}
+                              alt={COUNTRY_MAP[c]}
+                              width={14}
+                              height={14}
+                              className="size-3.5 rounded-full ring-1 ring-foreground/10 shrink-0"
+                            />
+                          ))}
                       </div>
                       <ArrowRightIcon className="size-3.5 text-muted-foreground opacity-0 lg:group-hover/rel:opacity-100 transition-opacity duration-150 ease-out shrink-0" />
                     </Link>
@@ -423,13 +442,13 @@ export default async function BrandPage({ params }: BrandPageProps) {
       </div>
 
       <div className="sr-only">
-        <h2>About {brand.name}</h2>
+        <h2>About {operator.name}</h2>
         <p>
-          {brand.name} is a train operator serving{" "}
-          {brand.countries.map((c) => COUNTRY_MAP[c]).join(", ")}. View trains operated by{" "}
-          {brand.name} on Rail Radar, including real-time departures, arrivals, delays, and platform
-          information. {brand.serviceTypes.map((t) => serviceTypeLabels[t] ?? t).join(", ")}{" "}
-          services available.
+          {operator.name} is a train operator serving {formatCountryList(trackedCountries)}. View
+          trains operated by {operator.name} on Rail Radar, including real-time departures,
+          arrivals, delays, and platform information.{" "}
+          {operator.serviceTypes.map((t) => serviceTypeLabels[t] ?? t).join(", ")} services
+          available.
         </p>
       </div>
     </div>

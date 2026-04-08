@@ -27,8 +27,8 @@ export default function TermsOfServicePage() {
           <p>
             Rail Radar is a free, open-source web application that provides real-time train tracking
             on an interactive map. It displays live train departures, arrivals, delays, and platform
-            information for thousands of stations across multiple countries. The source code is
-            available under the{" "}
+            information for 10.400+ stations across 9 countries. The source code is available under
+            the{" "}
             <a
               href="https://opensource.org/licenses/MIT"
               className="text-foreground underline"
@@ -112,6 +112,17 @@ export default function TermsOfServicePage() {
                 rel="noopener noreferrer"
               >
                 Entur
+              </a>
+            </li>
+            <li>
+              <strong className="text-foreground">Sweden</strong> &mdash;{" "}
+              <a
+                href="https://www.trafiklab.se"
+                className="text-foreground underline"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Trafiklab
               </a>
             </li>
             <li>

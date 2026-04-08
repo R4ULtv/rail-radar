@@ -1,6 +1,6 @@
 import { MetadataRoute } from "next";
 import { stations } from "@repo/data/stations";
-import { brands } from "@repo/data/brands";
+import { operators } from "@repo/data/operators";
 import baseUrl from "@/lib/base-url";
 
 function absoluteUrl(pathname: string): string {
@@ -17,7 +17,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.7,
     }));
 
-  const operatorRoutes: MetadataRoute.Sitemap = brands.map((operator) => ({
+  const operatorRoutes: MetadataRoute.Sitemap = operators.map((operator) => ({
     url: absoluteUrl(`/operators/${operator.slug}`),
     lastModified: new Date(),
     changeFrequency: "monthly" as const,

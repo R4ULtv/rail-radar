@@ -28,7 +28,7 @@ Runs on [http://localhost:3001](http://localhost:3001)
 
 ## Features
 
-- Interactive map with 8900+ stations
+- Interactive map with 10.400+ stations
 - Station search and filtering (All / Missing coordinates / Duplicates)
 - Click-to-place coordinates for stations missing location
 - Drag markers to fine-tune positions
