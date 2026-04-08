@@ -60,7 +60,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className="dark scroll-smooth scroll-pt-8"
+      className="dark scheme-only-dark scroll-smooth scroll-pt-8"
       style={{ colorScheme: "dark" }}
       data-scroll-behavior="smooth"
     >
