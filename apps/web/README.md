@@ -13,7 +13,7 @@ Next.js frontend for real-time train tracking across Europe with an interactive 
 
 ## Features
 
-- Interactive full-screen map with 10.400+ station markers
+- Interactive full-screen map with 15,000+ station markers
 - Real-time train arrivals/departures with 30s polling
 - Fuzzy station search with keyboard shortcuts
 - URL-synced map state for shareable links

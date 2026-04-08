@@ -13,7 +13,7 @@ src/
 ├── operators.json     # Train operator dataset
 ├── types.ts           # TypeScript type definitions
 ├── geojson.d.ts       # Module declaration for .geojson imports
-└── stations.geojson   # GeoJSON FeatureCollection (10.400+ stations)
+└── stations.geojson   # GeoJSON FeatureCollection (15,000+ stations)
 
 scripts/
 ├── convert-to-geojson.ts  # Converts stations.json → stations.geojson
@@ -88,6 +88,7 @@ Get country from a station ID. Returns a country code by default, or a full name
 ```ts
 getCountry("IT01700"); // "it"
 getCountry("CH8503000"); // "ch"
+getCountry("DE00261"); // "de"
 getCountry("FI001"); // "fi"
 getCountry("BE95000"); // "be"
 getCountry("NL8400058"); // "nl"
