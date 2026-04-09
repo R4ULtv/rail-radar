@@ -65,13 +65,11 @@ export function Map() {
       });
     };
 
-    // Check if geolocation permission is already granted (without prompting)
     if (navigator.permissions && navigator.geolocation) {
       navigator.permissions
         .query({ name: "geolocation" })
         .then((result) => {
           if (result.state === "granted") {
-            // Permission already granted, get location immediately
             navigator.geolocation.getCurrentPosition(
               (pos) => {
                 const latitude = Math.round(pos.coords.latitude * 1000000) / 1000000;
@@ -82,7 +80,6 @@ export function Map() {
               () => setDefaultPosition(),
             );
           } else {
-            // Permission not granted, use default view (don't prompt)
             setDefaultPosition();
           }
         })
@@ -90,7 +87,7 @@ export function Map() {
     } else {
       setDefaultPosition();
     }
-  }, [hasUrlParams, hasInitialPosition, setParams]);
+  }, [hasInitialPosition, hasUrlParams, setParams]);
 
   const handleMoveEnd = (e: ViewStateChangeEvent) => {
     startTransition(() => {
