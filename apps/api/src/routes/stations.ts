@@ -1,7 +1,7 @@
 import { cache } from "hono/cache";
 
-import { COUNTRY_CODES, getCountry, type CountryCode } from "@repo/data/countries";
-import { stationById, stations, stationsGeoJSON } from "@repo/data/stations";
+import { getCountry, type CountryCode } from "@repo/data/countries";
+import { stationById, stations } from "@repo/data/stations";
 
 import {
   getTrendingStations,
@@ -19,10 +19,33 @@ import { rateLimit } from "../middleware/rate-limit";
 import { getScraperForStation, ScraperError } from "../scrapers";
 
 const STATION_ID_PATTERN = /^(?:[A-Z]{2,}\d+|\d{3,})$/i;
-const stationsGeoJSONBody = JSON.stringify(stationsGeoJSON);
 
 function stationNotFound(c: Parameters<typeof jsonError>[0]) {
   return jsonError(c, "Station not found. Please try searching for another station.", 404);
+}
+
+function searchStations(query: string | undefined) {
+  const trimmedQuery = query?.trim();
+
+  if (!trimmedQuery) {
+    return [];
+  }
+
+  if (trimmedQuery.length < 2 && !STATION_ID_PATTERN.test(trimmedQuery)) {
+    return [];
+  }
+
+  const parsed = parseQuery(trimmedQuery);
+  const filters = { country: parsed.country, type: parsed.type };
+
+  if (parsed.coords) {
+    return geoSearch(stations, parsed.coords.lat, parsed.coords.lng, FUZZY_SEARCH_LIMIT, filters);
+  }
+  if (parsed.nameQuery) {
+    return fuzzySearch(stations, parsed.nameQuery, FUZZY_SEARCH_LIMIT, filters);
+  }
+
+  return fuzzySearch(stations, "", FUZZY_SEARCH_LIMIT, filters);
 }
 
 function mapTrendingStation(stationId: string) {
@@ -56,55 +79,8 @@ async function createTrendingResponse(
 
 export const stationsRoutes = factory
   .createApp()
-  .get("/", rateLimit, (c) => {
-    const query = c.req.query("q");
-
-    if (query) {
-      const trimmedQuery = query.trim();
-
-      if (trimmedQuery.length < 2 && !STATION_ID_PATTERN.test(trimmedQuery)) {
-        return c.json([]);
-      }
-
-      const parsed = parseQuery(query);
-      const filters = { country: parsed.country, type: parsed.type };
-
-      if (parsed.coords) {
-        return c.json(
-          geoSearch(stations, parsed.coords.lat, parsed.coords.lng, FUZZY_SEARCH_LIMIT, filters),
-        );
-      }
-      if (parsed.nameQuery) {
-        return c.json(fuzzySearch(stations, parsed.nameQuery, FUZZY_SEARCH_LIMIT, filters));
-      }
-
-      return c.json(fuzzySearch(stations, "", FUZZY_SEARCH_LIMIT, filters));
-    }
-
-    const typeFilter = c.req.query("type") as "rail" | "metro" | "light" | undefined;
-    const countryFilter = c.req.query("country") as CountryCode | undefined;
-
-    if (typeFilter && !["rail", "metro", "light"].includes(typeFilter)) {
-      return jsonError(c, 'Invalid type. Must be "rail", "metro", or "light".', 400);
-    }
-    if (countryFilter && !COUNTRY_CODES.includes(countryFilter)) {
-      return jsonError(c, `Invalid country. Must be one of: ${COUNTRY_CODES.join(", ")}`, 400);
-    }
-
-    c.header("Content-Type", "application/geo+json");
-    c.header("Cache-Control", CACHE_TTL.GEOJSON);
-
-    if (!typeFilter && !countryFilter) {
-      return c.body(stationsGeoJSONBody);
-    }
-
-    const features = stationsGeoJSON.features.filter((feature) => {
-      if (typeFilter && feature.properties.type !== typeFilter) return false;
-      if (countryFilter && getCountry(feature.properties.id) !== countryFilter) return false;
-      return true;
-    });
-
-    return c.body(JSON.stringify({ type: "FeatureCollection", features }));
+  .get("/search", rateLimit, (c) => {
+    return c.json(searchStations(c.req.query("q")));
   })
   .get(
     "/trending",

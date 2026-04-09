@@ -5,7 +5,9 @@ const API_ENDPOINTS = {
   "GET /operators":
     "List train operators (optional: ?q=search&country=it|international&origin=international&type=passenger&serviceType=high-speed)",
   "GET /operators/:slug": "Get a train operator by slug",
-  "GET /stations": "List all stations (optional: ?q=search query)",
+  "GET /stations/search": "Search stations (optional: ?q=search query)",
+  "GET /stations.geojson":
+    "Get stations as GeoJSON (optional: ?type=rail|metro|light&country=it|ch|de|fi|be|nl|no|se|uk|ie|pl)",
   "GET /stations/trending": "Get trending stations (optional: ?period=hour|day|week, default: day)",
   "GET /stations/trending/:country":
     "Get trending stations by country (it|ch|de|fi|be|nl|no|se|uk|ie|pl, optional: ?period=hour|day|week)",
