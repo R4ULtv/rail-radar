@@ -9,7 +9,6 @@ export type Bindings = {
   NS_API_KEY: string;
   LDBWS_API_KEY: string;
   TRAFIKLAB_KEY: string;
-  PLK_API_KEY: string;
   MAPBOX_TOKEN: string;
 };
 
