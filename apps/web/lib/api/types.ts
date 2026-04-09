@@ -55,7 +55,7 @@ export interface StationData {
 }
 
 /**
- * Response from /stations?q=query endpoint
+ * Response from /stations/search?q=query endpoint
  * Returns array of Station objects
  */
 export type StationSearchResponse = Station[];
