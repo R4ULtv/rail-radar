@@ -9,21 +9,39 @@ Cloudflare Workers API that provides real-time European train data by scraping o
 
 ## Endpoints
 
-| Method | Path                          | Description                                                                                             |
-| ------ | ----------------------------- | ------------------------------------------------------------------------------------------------------- |
-| `GET`  | `/`                           | API info and endpoint documentation                                                                     |
-| `GET`  | `/map/static`                 | Static map image via Mapbox                                                                             |
-| `GET`  | `/stations/search`            | Station search endpoint returning JSON arrays                                                           |
-| `GET`  | `/stations.geojson`           | GeoJSON FeatureCollection of all stations (see below)                                                   |
-| `GET`  | `/stations/trending`          | Get trending stations (`?period=hour\|day\|week`, default: `day`)                                       |
+| Method | Path                          | Description                                                                                          |
+| ------ | ----------------------------- | ---------------------------------------------------------------------------------------------------- |
+| `GET`  | `/`                           | API info and endpoint documentation                                                                  |
+| `GET`  | `/operators`                  | List train operators with optional filtering                                                         |
+| `GET`  | `/operators/:slug`            | Get a single train operator by slug                                                                  |
+| `GET`  | `/map/static`                 | Static map image via Mapbox                                                                          |
+| `GET`  | `/stations/search`            | Station search endpoint returning JSON arrays                                                        |
+| `GET`  | `/stations.geojson`           | GeoJSON FeatureCollection of all stations (see below)                                                |
+| `GET`  | `/stations/trending`          | Get trending stations (`?period=hour\|day\|week`, default: `day`)                                    |
 | `GET`  | `/stations/trending/:country` | Get trending stations by country (`it\|ch\|de\|fi\|be\|nl\|no\|se\|uk\|ie\`, same `?period` options) |
-| `GET`  | `/stations/:id`               | Get station with trains (`?type=arrivals\|departures`)                                                  |
-| `GET`  | `/stations/:id/stats`         | Get station visit stats (`?period=hour\|day\|week`, default: `day`)                                     |
-| `GET`  | `/analytics/overview`         | Get global analytics (total visits, unique visitors, country breakdown)                                 |
+| `GET`  | `/stations/:id`               | Get station with trains (`?type=arrivals\|departures`)                                               |
+| `GET`  | `/stations/:id/stats`         | Get station visit stats (`?period=hour\|day\|week`, default: `day`)                                  |
+| `GET`  | `/analytics/overview`         | Get global analytics (total visits, unique visitors, country breakdown)                              |
+
+### `GET /operators`
+
+Returns a JSON object with `count` and `operators`.
+
+- `?q=trenitalia`: text search across operator metadata
+- `?country=it|international`: filter by served countries
+- `?origin=it|international`: filter by operator origin country
+- `?type=passenger|cargo|metro|light-rail`: filter by operator type
+- `?serviceType=high-speed|intercity|regional|commuter|night-train|international|scenic`: filter by service type
+- Comma-separated values are supported for filters like `?country=it,ch`
+
+### `GET /operators/:slug`
+
+Returns a single operator object for the requested slug, or `404` if it does not exist.
 
 ### `GET /stations/search`
 
 Returns an `application/json` array of `Station` objects:
+
 - `?q=roma`: fuzzy search by station name (max 20 results)
 - Empty or missing `q` returns an empty array
 
@@ -40,6 +58,8 @@ Returns `application/geo+json` FeatureCollection consumed directly by MapBox GL 
 
 | Endpoint              | Cache                                   |
 | --------------------- | --------------------------------------- |
+| `/operators`          | 24h cache, 1h stale-while-revalidate    |
+| `/operators/:slug`    | 24h cache, 1h stale-while-revalidate    |
 | `/stations.geojson`   | 24h cache, 1h stale-while-revalidate    |
 | `/stations/:id`       | 25s cache, 5s stale-while-revalidate    |
 | `/stations/:id/stats` | 5min cache, 1min stale-while-revalidate |
