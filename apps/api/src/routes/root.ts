@@ -5,6 +5,8 @@ const API_ENDPOINTS = {
   "GET /operators":
     "List train operators (optional: ?q=search&country=it|international&origin=international&type=passenger&serviceType=high-speed)",
   "GET /operators/:slug": "Get a train operator by slug",
+  "GET /map/static":
+    "Get a static map image (optional: ?bbox=west,south,east,north&w=960&h=412 or ?lat=...&lng=...&zoom=...)",
   "GET /stations/search": "Search stations (optional: ?q=search query)",
   "GET /stations.geojson":
     "Get stations as GeoJSON (optional: ?type=rail|metro|light&country=it|ch|de|fi|be|nl|no|se|uk|ie)",
