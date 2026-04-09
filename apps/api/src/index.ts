@@ -5,6 +5,7 @@ import { analyticsRoutes } from "./routes/analytics";
 import { mapRoutes } from "./routes/map";
 import { operatorsRoutes } from "./routes/operators";
 import { rootRoutes } from "./routes/root";
+import { stationsGeoJsonRoutes } from "./routes/stations-geojson";
 import { stationsRoutes } from "./routes/stations";
 
 export function createApp() {
@@ -36,6 +37,7 @@ export function createApp() {
     .route("/", rootRoutes)
     .route("/operators", operatorsRoutes)
     .route("/map", mapRoutes)
+    .route("/stations.geojson", stationsGeoJsonRoutes)
     .route("/stations", stationsRoutes)
     .route("/analytics", analyticsRoutes);
 }
