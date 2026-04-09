@@ -8,7 +8,7 @@
  * @param query - Search query string
  */
 export function stationSearch(query: string): string {
-  return `/stations?q=${encodeURIComponent(query)}`;
+  return `/stations/search?q=${encodeURIComponent(query)}`;
 }
 
 /**
