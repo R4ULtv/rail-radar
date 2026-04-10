@@ -67,7 +67,7 @@ A typed GeoJSON `FeatureCollection<Point, StationProperties>` containing all sta
 - `properties.importance` — `1`–`4`
 - `geometry.coordinates` — `[lng, lat]`
 
-This is served directly by the API as the `/stations` GeoJSON endpoint and consumed by MapBox GL JS.
+This is served directly by the API as the `/stations.geojson` endpoint and consumed by MapBox GL JS.
 
 ### `stations`
 
