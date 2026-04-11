@@ -20,6 +20,10 @@ function formatLid(evaNumber: string): string {
   return `A=1@L=${evaNumber}@`;
 }
 
+function getDedupLocation(entry: DbBoardEntry, type: "arrivals" | "departures"): string {
+  return type === "departures" ? (entry.richtung ?? "") : (entry.abgangsOrt?.name ?? "");
+}
+
 // Raw DB API response types
 interface DbBoardEntry {
   abfrageOrt?: { name?: string; evaNr?: string };
@@ -140,7 +144,7 @@ export async function scrapeGermanTrains(
       : data.bahnhofstafelAnkunftPositionen) ?? [];
 
   // Exclude non-rail products and deduplicate.
-  // Dedup by train name + time + destination + platform (zuglaufId differs for coupled trains)
+  // Dedup by train name + time + destination/origin + platform (zuglaufId differs for coupled trains)
   const seen = new Set<string>();
   const trainEntries = entries
     .filter((entry) => {
@@ -150,7 +154,8 @@ export async function scrapeGermanTrains(
       if (type === "departures" && !entry.richtung) return false;
       if (type === "arrivals" && !entry.abgangsOrt?.name) return false;
       const time = entry.abgangsDatum ?? entry.ankunftsDatum ?? "";
-      const dedupKey = `${entry.mitteltext}-${time}-${entry.richtung ?? ""}-${entry.gleis ?? ""}`;
+      const dedupLocation = getDedupLocation(entry, type);
+      const dedupKey = `${entry.mitteltext}-${time}-${dedupLocation}-${entry.gleis ?? ""}`;
       if (seen.has(dedupKey)) return false;
       seen.add(dedupKey);
       return true;
