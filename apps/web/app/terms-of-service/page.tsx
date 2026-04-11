@@ -19,7 +19,7 @@ export default function TermsOfServicePage() {
         Back to Rail Radar
       </Link>
       <h1 className="mb-8 text-3xl font-bold">Terms of Service</h1>
-      <p className="mb-4 text-sm text-muted-foreground">Last updated: April 8, 2026</p>
+      <p className="mb-4 text-sm text-muted-foreground">Last updated: April 11, 2026</p>
 
       <div className="space-y-8 leading-relaxed text-muted-foreground">
         <section>
@@ -196,9 +196,9 @@ export default function TermsOfServicePage() {
           <h2 className="mb-3 text-xl font-semibold text-foreground">6. Third-Party Services</h2>
           <p>
             The Service relies on third-party services including Mapbox for map rendering,
-            Cloudflare for hosting, Google Fonts for typography, and various public transit data
-            providers. Your use of these services is subject to their respective terms and privacy
-            policies.
+            Cloudflare for API hosting, security, and rate limiting, Vercel Analytics for website
+            analytics, and various public transit data providers. Your use of these services is
+            subject to their respective terms and privacy policies.
           </p>
         </section>
 
