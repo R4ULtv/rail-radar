@@ -49,10 +49,34 @@ import Image from "next/image";
 import { Button } from "@repo/ui/components/button";
 
 const POPULAR_GERMANY_STATIONS: Station[] = [
-  { id: "DE00105", name: "Frankfurt (Main) Hbf", type: "rail", importance: 1 },
-  { id: "DE11160", name: "Berlin Hauptbahnhof", type: "rail", importance: 1 },
-  { id: "DE00261", name: "München Hbf", type: "rail", importance: 1 },
-  { id: "DE02549", name: "Hamburg Hbf", type: "rail", importance: 1 },
+  {
+    id: "DE00105",
+    name: "Frankfurt (Main) Hbf",
+    type: "rail",
+    importance: 1,
+    geo: { lat: 50.107145, lng: 8.663789 },
+  },
+  {
+    id: "DE11160",
+    name: "Berlin Hauptbahnhof",
+    type: "rail",
+    importance: 1,
+    geo: { lat: 52.525592, lng: 13.369545 },
+  },
+  {
+    id: "DE00261",
+    name: "München Hbf",
+    type: "rail",
+    importance: 1,
+    geo: { lat: 48.140232, lng: 11.558335 },
+  },
+  {
+    id: "DE02549",
+    name: "Hamburg Hbf",
+    type: "rail",
+    importance: 1,
+    geo: { lat: 53.552736, lng: 10.006909 },
+  },
 ];
 
 const StationList = React.memo(function StationList({
