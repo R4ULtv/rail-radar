@@ -24,6 +24,92 @@ function getDedupLocation(entry: DbBoardEntry, type: "arrivals" | "departures"):
   return type === "departures" ? (entry.richtung ?? "") : (entry.abgangsOrt?.name ?? "");
 }
 
+function getBoardTime(entry: DbBoardEntry, type: "arrivals" | "departures"): string {
+  return type === "departures" ? (entry.abgangsDatum ?? "") : (entry.ankunftsDatum ?? "");
+}
+
+function getPlatform(entry: DbBoardEntry): string {
+  return entry.ezGleis ?? entry.gleis ?? entry.plattform ?? "";
+}
+
+function getZuglaufField(zuglaufId: string | undefined, field: string): string | null {
+  if (!zuglaufId) return null;
+  const match = zuglaufId.match(new RegExp(`#${field}#([^#]*)#`));
+  const value = match?.[1]?.trim();
+  return value ? value : null;
+}
+
+function getRouteSignature(entry: DbBoardEntry): string | null {
+  const parts = [
+    getZuglaufField(entry.zuglaufId, "CA"),
+    getZuglaufField(entry.zuglaufId, "FR"),
+    getZuglaufField(entry.zuglaufId, "FT"),
+    getZuglaufField(entry.zuglaufId, "TO"),
+    getZuglaufField(entry.zuglaufId, "TT"),
+  ];
+
+  return parts.some(Boolean) ? parts.join("|") : null;
+}
+
+function getDedupKey(entry: DbBoardEntry, type: "arrivals" | "departures"): string {
+  const fallbackSignature = [
+    entry.kurztext ?? "",
+    entry.zugnummer ?? entry.mitteltext ?? "",
+    getDedupLocation(entry, type),
+  ].join("|");
+
+  return [getBoardTime(entry, type), getPlatform(entry), getRouteSignature(entry) ?? fallbackSignature].join(
+    "|",
+  );
+}
+
+function getGroupedTrainKey(train: Train): string {
+  return [
+    train.brand ?? "",
+    train.category ?? "",
+    train.scheduledTime,
+    train.delay ?? "",
+    train.platform ?? "",
+    train.status ?? "",
+    train.info ?? "",
+  ].join("::");
+}
+
+function getDisplayLabel(entry: DbBoardEntry): string {
+  const mediumText = entry.mitteltext?.trim();
+  if (mediumText) return mediumText;
+
+  return [entry.kurztext ?? "", entry.zugnummer ?? ""].join(" ").trim();
+}
+
+function mergeArrivalBranches(
+  trains: Array<{ train: Train; displayLabel: string }>,
+): Train[] {
+  const grouped = new Map<string, { train: Train; origins: string[] }>();
+
+  for (const { train, displayLabel } of trains) {
+    const key = [getGroupedTrainKey(train), displayLabel].join("::");
+    const origin = train.origin?.trim();
+    const existing = grouped.get(key);
+
+    if (!existing) {
+      grouped.set(key, {
+        train: { ...train },
+        origins: origin ? [origin] : [],
+      });
+      continue;
+    }
+
+    if (origin && !existing.origins.includes(origin)) {
+      existing.origins.push(origin);
+    }
+  }
+
+  return Array.from(grouped.values()).map(({ train, origins }) =>
+    origins.length > 0 ? { ...train, origin: origins.join(" / ") } : train,
+  );
+}
+
 // Raw DB API response types
 interface DbBoardEntry {
   abfrageOrt?: { name?: string; evaNr?: string };
@@ -143,8 +229,7 @@ export async function scrapeGermanTrains(
       ? data.bahnhofstafelAbfahrtPositionen
       : data.bahnhofstafelAnkunftPositionen) ?? [];
 
-  // Exclude non-rail products and deduplicate.
-  // Dedup by train name + time + destination/origin + platform (zuglaufId differs for coupled trains)
+  // Exclude non-rail products, collapse DB alias rows, then merge same-service arrival branches.
   const seen = new Set<string>();
   const trainEntries = entries
     .filter((entry) => {
@@ -153,16 +238,13 @@ export async function scrapeGermanTrains(
       // Skip non-revenue services (Sonderfahrt etc.) that lack destination/origin
       if (type === "departures" && !entry.richtung) return false;
       if (type === "arrivals" && !entry.abgangsOrt?.name) return false;
-      const time = entry.abgangsDatum ?? entry.ankunftsDatum ?? "";
-      const dedupLocation = getDedupLocation(entry, type);
-      const dedupKey = `${entry.mitteltext}-${time}-${dedupLocation}-${entry.gleis ?? ""}`;
+      const dedupKey = getDedupKey(entry, type);
       if (seen.has(dedupKey)) return false;
       seen.add(dedupKey);
       return true;
-    })
-    .slice(0, TRAIN_LIMIT);
+    });
 
-  const trains: Train[] = trainEntries.map((entry) => {
+  const mappedEntries = trainEntries.map((entry) => {
     const scheduledDep = entry.abgangsDatum;
     const realtimeDep = entry.ezAbgangsDatum;
     const scheduledArr = entry.ankunftsDatum;
@@ -177,7 +259,7 @@ export async function scrapeGermanTrains(
       trainNumber: entry.zugnummer || entry.mitteltext?.replace(/^\S+\s+/, "") || "",
       scheduledTime: formatTime(scheduled ?? null, "Europe/Berlin"),
       delay: getDelay(scheduled, realtime),
-      platform: entry.ezGleis ?? entry.gleis ?? entry.plattform ?? null,
+      platform: getPlatform(entry) || null,
       status: getStatus(scheduled, realtime, entry.cancelled, type),
       info: getInfo(entry),
     };
@@ -188,8 +270,15 @@ export async function scrapeGermanTrains(
       train.origin = entry.abgangsOrt?.name ?? undefined;
     }
 
-    return train;
+    return {
+      train,
+      displayLabel: getDisplayLabel(entry),
+    };
   });
+
+  const trains = (
+    type === "arrivals" ? mergeArrivalBranches(mappedEntries) : mappedEntries.map(({ train }) => train)
+  ).slice(0, TRAIN_LIMIT);
 
   return {
     trains,
