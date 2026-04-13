@@ -9,6 +9,7 @@
       "outputs": [".next/**", "!.next/cache/**"]
     },
     "web#build": {
+      "outputs": [".next/**", "!.next/cache/**"],
       "env": ["MAPBOX_SERVER_TOKEN"]
     },
     "transit": {

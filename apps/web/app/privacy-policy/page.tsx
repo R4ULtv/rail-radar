@@ -19,7 +19,7 @@ export default function PrivacyPolicyPage() {
         Back to Rail Radar
       </Link>
       <h1 className="mb-8 text-3xl font-bold">Privacy Policy</h1>
-      <p className="mb-4 text-sm text-muted-foreground">Last updated: March 5, 2026</p>
+      <p className="mb-4 text-sm text-muted-foreground">Last updated: April 11, 2026</p>
 
       <div className="space-y-8 leading-relaxed text-muted-foreground">
         <section>
@@ -42,8 +42,8 @@ export default function PrivacyPolicyPage() {
           </p>
           <ul className="ml-6 list-disc space-y-1">
             <li>
-              IP address (hashed using SHA-256 before storage &mdash; we do not store your raw IP
-              address)
+              A hashed representation of your IP address for station-visit analytics and abuse
+              prevention (we do not store your raw IP address in our own analytics dataset)
             </li>
             <li>Browser type and version</li>
             <li>Pages visited and time spent on pages</li>
@@ -59,7 +59,7 @@ export default function PrivacyPolicyPage() {
           </p>
           <ul className="ml-6 list-disc space-y-1">
             <li>Recently viewed stations (up to 3 station IDs)</li>
-            <li>Saved/bookmarked stations (up to 10 station IDs)</li>
+            <li>Saved/bookmarked stations (up to 7 station IDs)</li>
             <li>Map layer preferences (station types and layer visibility settings)</li>
           </ul>
 
@@ -91,7 +91,7 @@ export default function PrivacyPolicyPage() {
           <ul className="ml-6 list-disc space-y-2">
             <li>
               <strong className="text-foreground">Vercel Analytics</strong> &mdash; for website
-              analytics and performance monitoring
+              analytics and performance monitoring using anonymized, cookieless analytics
             </li>
             <li>
               <strong className="text-foreground">Mapbox</strong> &mdash; for interactive map
@@ -103,12 +103,9 @@ export default function PrivacyPolicyPage() {
               security, rate limiting, and analytics data storage
             </li>
             <li>
-              <strong className="text-foreground">Google Fonts</strong> &mdash; for font loading
-              (requests are made to Google servers, which may log IP addresses)
-            </li>
-            <li>
-              <strong className="text-foreground">GitHub</strong> &mdash; for serving country flag
-              icon assets
+              <strong className="text-foreground">Google Fonts via Next.js</strong> &mdash; fonts
+              are downloaded at build time and self-hosted with the app; browsers do not request
+              fonts directly from Google when loading the Service
             </li>
           </ul>
           <p className="mt-3">
@@ -120,9 +117,10 @@ export default function PrivacyPolicyPage() {
         <section>
           <h2 className="mb-3 text-xl font-semibold text-foreground">5. Cookies</h2>
           <p>
-            We do not use cookies for tracking purposes. Third-party services integrated into our
-            Service (such as Mapbox and Vercel Analytics) may use cookies as described in their own
-            privacy policies.
+            We do not use our own cookies for tracking purposes. Vercel Analytics is configured
+            without cookies. Some third-party services integrated into our Service, particularly
+            infrastructure or map providers, may use cookies or similar technologies as described in
+            their own privacy policies.
           </p>
         </section>
 

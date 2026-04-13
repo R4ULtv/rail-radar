@@ -69,7 +69,6 @@ export function MapControls() {
 
     let intervalId: ReturnType<typeof setInterval> | null = null;
 
-    // Only start polling if permission is already granted (don't prompt)
     navigator.permissions
       .query({ name: "geolocation" })
       .then((result) => {

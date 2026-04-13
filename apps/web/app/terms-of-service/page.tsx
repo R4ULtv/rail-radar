@@ -19,7 +19,7 @@ export default function TermsOfServicePage() {
         Back to Rail Radar
       </Link>
       <h1 className="mb-8 text-3xl font-bold">Terms of Service</h1>
-      <p className="mb-4 text-sm text-muted-foreground">Last updated: March 25, 2026</p>
+      <p className="mb-4 text-sm text-muted-foreground">Last updated: April 11, 2026</p>
 
       <div className="space-y-8 leading-relaxed text-muted-foreground">
         <section>
@@ -27,7 +27,7 @@ export default function TermsOfServicePage() {
           <p>
             Rail Radar is a free, open-source web application that provides real-time train tracking
             on an interactive map. It displays live train departures, arrivals, delays, and platform
-            information for 10.400+ stations across 9 countries. The source code is available under
+            information for 15,000+ stations across 10 countries. The source code is available under
             the{" "}
             <a
               href="https://opensource.org/licenses/MIT"
@@ -68,6 +68,17 @@ export default function TermsOfServicePage() {
                 rel="noopener noreferrer"
               >
                 transport.opendata.ch
+              </a>
+            </li>
+            <li>
+              <strong className="text-foreground">Germany</strong> &mdash;{" "}
+              <a
+                href="https://www.bahn.de"
+                className="text-foreground underline"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Deutsche Bahn (DB)
               </a>
             </li>
             <li>
@@ -185,9 +196,9 @@ export default function TermsOfServicePage() {
           <h2 className="mb-3 text-xl font-semibold text-foreground">6. Third-Party Services</h2>
           <p>
             The Service relies on third-party services including Mapbox for map rendering,
-            Cloudflare for hosting, Google Fonts for typography, and various public transit data
-            providers. Your use of these services is subject to their respective terms and privacy
-            policies.
+            Cloudflare for API hosting, security, and rate limiting, Vercel Analytics for website
+            analytics, and various public transit data providers. Your use of these services is
+            subject to their respective terms and privacy policies.
           </p>
         </section>
 
