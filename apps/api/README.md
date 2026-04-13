@@ -42,8 +42,11 @@ Returns a single operator object for the requested slug, or `404` if it does not
 
 Returns an `application/json` array of `Station` objects:
 
-- `?q=roma`: fuzzy search by station name (max 20 results)
+- `?q=roma`: plain-text prefix search by station name or alias (max 20 results)
+- `?q=DE11160`: exact station ID lookup
 - Empty or missing `q` returns an empty array
+- One-character non-ID queries return an empty array
+- Inline coordinate, country, and type parsing is not supported
 
 ### `GET /stations.geojson`
 
@@ -89,7 +92,7 @@ src/
 │   ├── uk.ts          # UK National Rail API scraper
 │   └── ireland.ts     # Irish Rail API scraper
 ├── analytics.ts   # Cloudflare Analytics Engine integration for visits and provider metrics
-├── fuzzy.ts       # Fuzzy search (Damerau-Levenshtein)
+├── search.ts      # Deterministic station search
 └── constants.ts   # Shared constants (cache TTL, timeouts, validation)
 ```
 
