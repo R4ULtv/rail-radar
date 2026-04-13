@@ -7,7 +7,7 @@ const API_ENDPOINTS = {
   "GET /operators/:slug": "Get a train operator by slug",
   "GET /map/static":
     "Get a static map image (optional: ?bbox=west,south,east,north&w=960&h=412 or ?lat=...&lng=...&zoom=...)",
-  "GET /stations/search": "Search stations (optional: ?q=search query)",
+  "GET /stations/search": "Search stations by plain text or exact station ID (optional: ?q=roma)",
   "GET /stations.geojson":
     "Get stations as GeoJSON (optional: ?type=rail|metro|light&country=it|ch|de|fi|be|nl|no|se|uk|ie)",
   "GET /stations/trending": "Get trending stations (optional: ?period=hour|day|week, default: day)",
