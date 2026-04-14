@@ -10,42 +10,22 @@ import {
   recordProviderMetric,
   recordStationVisit,
 } from "../analytics";
-import { CACHE_TTL, FUZZY_SEARCH_LIMIT, TRENDING_LIMIT, type Period } from "../constants";
-import { fuzzySearch, geoSearch, parseQuery } from "../fuzzy";
+import { CACHE_TTL, STATION_SEARCH_LIMIT, type Period, TRENDING_LIMIT } from "../constants";
 import { factory } from "../lib/env";
 import { jsonError } from "../lib/http";
 import { countryParamValidator, periodValidator, trainTypeValidator } from "../lib/validators";
 import { rateLimit } from "../middleware/rate-limit";
+import { createStationSearch } from "../search";
 import { getScraperForStation, ScraperError } from "../scrapers";
 
-const STATION_ID_PATTERN = /^(?:[A-Z]{2,}\d+|\d{3,})$/i;
+const searchStations = createStationSearch(stations);
 
 function stationNotFound(c: Parameters<typeof jsonError>[0]) {
   return jsonError(c, "Station not found. Please try searching for another station.", 404);
 }
 
-function searchStations(query: string | undefined) {
-  const trimmedQuery = query?.trim();
-
-  if (!trimmedQuery) {
-    return [];
-  }
-
-  if (trimmedQuery.length < 2 && !STATION_ID_PATTERN.test(trimmedQuery)) {
-    return [];
-  }
-
-  const parsed = parseQuery(trimmedQuery);
-  const filters = { country: parsed.country, type: parsed.type };
-
-  if (parsed.coords) {
-    return geoSearch(stations, parsed.coords.lat, parsed.coords.lng, FUZZY_SEARCH_LIMIT, filters);
-  }
-  if (parsed.nameQuery) {
-    return fuzzySearch(stations, parsed.nameQuery, FUZZY_SEARCH_LIMIT, filters);
-  }
-
-  return fuzzySearch(stations, "", FUZZY_SEARCH_LIMIT, filters);
+function getSearchResults(query: string | undefined) {
+  return searchStations(query ?? "", STATION_SEARCH_LIMIT);
 }
 
 function mapTrendingStation(stationId: string) {
@@ -80,7 +60,7 @@ async function createTrendingResponse(
 export const stationsRoutes = factory
   .createApp()
   .get("/search", rateLimit, (c) => {
-    return c.json(searchStations(c.req.query("q")));
+    return c.json(getSearchResults(c.req.query("q")));
   })
   .get(
     "/trending",

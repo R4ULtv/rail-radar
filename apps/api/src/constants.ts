@@ -9,7 +9,7 @@ export const CACHE_TTL = {
 
 export const FETCH_TIMEOUT_MS = 20_000;
 
-export const FUZZY_SEARCH_LIMIT = 20;
+export const STATION_SEARCH_LIMIT = 20;
 export const TRENDING_LIMIT = 5;
 
 export const VALID_PERIODS = ["hour", "day", "week", "month"] as const;
