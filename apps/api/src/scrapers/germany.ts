@@ -58,9 +58,11 @@ function getDedupKey(entry: DbBoardEntry, type: "arrivals" | "departures"): stri
     getDedupLocation(entry, type),
   ].join("|");
 
-  return [getBoardTime(entry, type), getPlatform(entry), getRouteSignature(entry) ?? fallbackSignature].join(
-    "|",
-  );
+  return [
+    getBoardTime(entry, type),
+    getPlatform(entry),
+    getRouteSignature(entry) ?? fallbackSignature,
+  ].join("|");
 }
 
 function getGroupedTrainKey(train: Train): string {
@@ -82,9 +84,7 @@ function getDisplayLabel(entry: DbBoardEntry): string {
   return [entry.kurztext ?? "", entry.zugnummer ?? ""].join(" ").trim();
 }
 
-function mergeArrivalBranches(
-  trains: Array<{ train: Train; displayLabel: string }>,
-): Train[] {
+function mergeArrivalBranches(trains: Array<{ train: Train; displayLabel: string }>): Train[] {
   const grouped = new Map<string, { train: Train; origins: string[] }>();
 
   for (const { train, displayLabel } of trains) {
@@ -231,18 +231,17 @@ export async function scrapeGermanTrains(
 
   // Exclude non-rail products, collapse DB alias rows, then merge same-service arrival branches.
   const seen = new Set<string>();
-  const trainEntries = entries
-    .filter((entry) => {
-      const product = entry.produktGattung?.toUpperCase();
-      if (product && NON_RAIL_PRODUCTS.has(product)) return false;
-      // Skip non-revenue services (Sonderfahrt etc.) that lack destination/origin
-      if (type === "departures" && !entry.richtung) return false;
-      if (type === "arrivals" && !entry.abgangsOrt?.name) return false;
-      const dedupKey = getDedupKey(entry, type);
-      if (seen.has(dedupKey)) return false;
-      seen.add(dedupKey);
-      return true;
-    });
+  const trainEntries = entries.filter((entry) => {
+    const product = entry.produktGattung?.toUpperCase();
+    if (product && NON_RAIL_PRODUCTS.has(product)) return false;
+    // Skip non-revenue services (Sonderfahrt etc.) that lack destination/origin
+    if (type === "departures" && !entry.richtung) return false;
+    if (type === "arrivals" && !entry.abgangsOrt?.name) return false;
+    const dedupKey = getDedupKey(entry, type);
+    if (seen.has(dedupKey)) return false;
+    seen.add(dedupKey);
+    return true;
+  });
 
   const mappedEntries = trainEntries.map((entry) => {
     const scheduledDep = entry.abgangsDatum;
@@ -277,7 +276,9 @@ export async function scrapeGermanTrains(
   });
 
   const trains = (
-    type === "arrivals" ? mergeArrivalBranches(mappedEntries) : mappedEntries.map(({ train }) => train)
+    type === "arrivals"
+      ? mergeArrivalBranches(mappedEntries)
+      : mappedEntries.map(({ train }) => train)
   ).slice(0, TRAIN_LIMIT);
 
   return {
