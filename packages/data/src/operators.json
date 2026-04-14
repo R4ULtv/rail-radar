@@ -1269,7 +1269,7 @@
     "networkKm": 1480,
     "annualPassengers": 26600000,
     "serviceTypes": ["intercity"],
-    "parentCompany": "Department for Transport (public operator)",
+    "parentCompany": "Department for Transport",
     "links": [
       {
         "label": "Official Site",
@@ -1353,7 +1353,7 @@
     "networkKm": 1600,
     "annualPassengers": 31500000,
     "serviceTypes": ["intercity", "regional"],
-    "parentCompany": "Department for Transport (public operator)",
+    "parentCompany": "Transport UK Group",
     "links": [
       {
         "label": "Official Site",
@@ -1381,7 +1381,7 @@
     "networkKm": 1600,
     "annualPassengers": 165600000,
     "serviceTypes": ["commuter", "regional"],
-    "parentCompany": "Department for Transport (public operator)",
+    "parentCompany": "Department for Transport",
     "links": [
       {
         "label": "Official Site",
@@ -1409,7 +1409,7 @@
     "networkKm": 960,
     "annualPassengers": 137900000,
     "serviceTypes": ["commuter", "regional"],
-    "parentCompany": "Department for Transport (public operator)",
+    "parentCompany": "Department for Transport",
     "links": [
       {
         "label": "Official Site",
@@ -1493,7 +1493,7 @@
     "networkKm": 2800,
     "annualPassengers": 91800000,
     "serviceTypes": ["regional", "commuter"],
-    "parentCompany": "Department for Transport (public operator)",
+    "parentCompany": "Department for Transport)",
     "links": [
       {
         "label": "Official Site",
@@ -1521,7 +1521,7 @@
     "networkKm": 1360,
     "annualPassengers": 81800000,
     "serviceTypes": ["intercity", "regional", "commuter"],
-    "parentCompany": "Department for Transport (public operator)",
+    "parentCompany": "Department for Transport",
     "links": [
       {
         "label": "Official Site",
@@ -1549,7 +1549,7 @@
     "networkKm": 1120,
     "annualPassengers": 67700000,
     "serviceTypes": ["regional", "commuter"],
-    "parentCompany": "Department for Transport (public operator)",
+    "parentCompany": "Department for Transport",
     "links": [
       {
         "label": "Official Site",
@@ -1605,7 +1605,7 @@
     "networkKm": 1200,
     "annualPassengers": 28000000,
     "serviceTypes": ["intercity", "regional"],
-    "parentCompany": "Department for Transport (public operator)",
+    "parentCompany": "Department for Transport",
     "links": [
       {
         "label": "Official Site",
@@ -1661,7 +1661,7 @@
     "networkKm": 120,
     "annualPassengers": 40000000,
     "serviceTypes": ["commuter"],
-    "parentCompany": "Trenitalia",
+    "parentCompany": "Department for Transport",
     "links": [
       {
         "label": "Official Site",
