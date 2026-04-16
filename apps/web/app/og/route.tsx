@@ -1,4 +1,4 @@
-import { ImageResponse } from "@takumi-rs/image-response";
+import { ImageResponse } from "takumi-js/response";
 import { stations, stationById } from "@repo/data/stations";
 import type { NextRequest } from "next/server";
 
@@ -59,7 +59,7 @@ export function GET(request: NextRequest) {
     <div tw="flex w-full h-full bg-[#1C1917]">
       {/* Dot grid background */}
       <div
-        tw="absolute inset-0"
+        tw="block absolute inset-0"
         style={{
           backgroundImage: "radial-gradient(circle, rgba(168,162,158,0.12) 1px, transparent 1px)",
           backgroundSize: "24px 24px",
@@ -96,7 +96,7 @@ export function GET(request: NextRequest) {
         {/* Station info */}
         <div tw="flex flex-col">
           {/* Accent line */}
-          <div tw="w-12 h-[3px] rounded-full bg-[#4B61D1]" />
+          <div tw="block w-12 h-[3px] rounded-full bg-[#4B61D1]" />
 
           {/* Station name */}
           <span tw="text-[58px] font-extrabold mt-4 text-[#FAFAF9] leading-none tracking-[-0.04em]">
@@ -135,14 +135,14 @@ export function GET(request: NextRequest) {
       {/* Map — temporarily disabled for debugging */}
       <div tw="absolute top-0 right-0 bottom-0 flex w-[750px]">
         <div
-          tw="absolute inset-0"
+          tw="block absolute inset-0"
           style={{
             maskImage:
               "linear-gradient(to right, transparent 0%, rgba(0,0,0,0.15) 15%, rgba(0,0,0,0.5) 35%, black 60%)",
           }}
         >
           <div
-            tw="absolute inset-0"
+            tw="block absolute inset-0"
             style={{
               maskImage:
                 "linear-gradient(to bottom, rgba(0,0,0,0.4) 0%, black 10%, black 90%, rgba(0,0,0,0.4) 100%)",

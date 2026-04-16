@@ -7,7 +7,7 @@ const nextConfig: NextConfig = {
       "*.geojson": { loaders: [], as: "*.json" },
     },
   },
-  serverExternalPackages: ["@takumi-rs/image-response"],
+  serverExternalPackages: ["@takumi-rs/core"],
   images: {
     remotePatterns: [
       {
