@@ -25,13 +25,7 @@ function getStation(id: string): StationWithGeo | null {
   return station as StationWithGeo;
 }
 
-export async function generateStaticParams() {
-  return stations
-    .filter((s) => s.type === "rail" && s.geo && s.importance <= 3)
-    .map((s) => ({ id: s.id }));
-}
-export const dynamicParams = true;
-export const revalidate = false;
+export const dynamic = "force-dynamic";
 
 export async function generateMetadata({ params }: StationPageProps): Promise<Metadata> {
   const { id } = await params;
