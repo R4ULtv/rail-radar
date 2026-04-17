@@ -5,7 +5,7 @@ import { ScraperError, type ScrapeResult } from "./index";
 
 const REJSEPLANEN_BASE_URL = "https://www.rejseplanen.dk/api";
 const DENMARK_TIMEZONE = "Europe/Copenhagen";
-const TRAIN_LIMIT = 16;
+const TRAIN_LIMIT = 24;
 const STATUS_WINDOW_MINUTES = 5;
 
 const NON_RAIL_PRODUCT_TOKENS = ["bus", "metro", "letbane", "tram", "ferry", "taxi", "subway"];
@@ -409,13 +409,25 @@ function parseTrainNumber(name: string | null): string | null {
 
 function getTrainNumber(entry: JsonRecord): string {
   for (const product of getProductRecords(entry)) {
-    const value = pickString(product, "displayNumber", "num", "line");
+    const value = pickString(product, "displayNumber", "num");
     if (value) {
       return value;
     }
   }
 
-  return parseTrainNumber(pickString(entry, "name")) ?? pickString(entry, "name") ?? "Unknown";
+  const fromName = parseTrainNumber(pickString(entry, "name"));
+  if (fromName && /\d/.test(fromName)) {
+    return fromName;
+  }
+
+  for (const product of getProductRecords(entry)) {
+    const line = pickString(product, "line");
+    if (line) {
+      return line;
+    }
+  }
+
+  return fromName ?? pickString(entry, "name") ?? "Unknown";
 }
 
 function getDelay(entry: JsonRecord): number | null {
@@ -552,7 +564,8 @@ function mapEntry(entry: JsonRecord, type: BoardType): Train {
       pickNestedName(entry, "DestinationStop", "Directions", "Direction", "Destination") ??
       undefined;
   } else {
-    train.origin = pickNestedName(entry, "OriginStop", "Origin") ?? undefined;
+    train.origin =
+      pickNestedName(entry, "OriginStop") ?? pickString(entry, "origin") ?? undefined;
   }
 
   return train;
@@ -582,22 +595,14 @@ function toRejseplanenStationId(stationId: string): string {
   return `86${stationId.slice(2)}`;
 }
 
-function buildBoardUrl(
-  stationId: string,
-  type: BoardType,
-  apiKey: string,
-  options?: { useExtId?: boolean; includeApiKeyQuery?: boolean },
-): string {
+function buildBoardUrl(stationId: string, type: BoardType): string {
   const endpoint = type === "departures" ? "departureBoard" : "arrivalBoard";
   const boardType = type === "departures" ? "DEP_STATION" : "ARR_STATION";
   const url = new URL(`${REJSEPLANEN_BASE_URL}/${endpoint}`);
 
-  if (options?.includeApiKeyQuery) {
-    url.searchParams.set("accessId", apiKey);
-  }
   url.searchParams.set("format", "json");
   url.searchParams.set("lang", "en");
-  url.searchParams.set(options?.useExtId ? "extId" : "id", stationId);
+  url.searchParams.set("id", stationId);
   url.searchParams.set("type", boardType);
   url.searchParams.set("maxJourneys", String(TRAIN_LIMIT));
 
@@ -615,47 +620,16 @@ export async function scrapeDenmarkTrains(
   }
 
   const rejseplanenStationId = toRejseplanenStationId(stationId);
-  const attempts = [
-    { useExtId: false, includeApiKeyQuery: false },
-    { useExtId: true, includeApiKeyQuery: false },
-    { useExtId: false, includeApiKeyQuery: true },
-    { useExtId: true, includeApiKeyQuery: true },
-  ] as const;
-
-  let lastError: ScraperError | null = null;
-  let response: Response | null = null;
-  let fetchMs = 0;
-
-  for (const attempt of attempts) {
-    const requestOptions = {
+  const { response, fetchMs } = await fetchWithTimeout(
+    buildBoardUrl(rejseplanenStationId, type),
+    "Danish",
+    {
       headers: {
         Accept: "application/json",
-        accessId: apiKey,
+        Authorization: `Bearer ${apiKey}`,
       },
-    } satisfies RequestInit;
-
-    try {
-      ({ response, fetchMs } = await fetchWithTimeout(
-        buildBoardUrl(rejseplanenStationId, type, apiKey, attempt),
-        "Danish",
-        requestOptions,
-      ));
-      break;
-    } catch (error) {
-      if (!(error instanceof ScraperError)) {
-        throw error;
-      }
-
-      lastError = error;
-      if (![400, 401, 403, 404].includes(error.statusCode)) {
-        throw error;
-      }
-    }
-  }
-
-  if (!response) {
-    throw lastError ?? new ScraperError("Invalid response from the Danish train data source.", 502);
-  }
+    },
+  );
 
   const payload = (await response.json()) as unknown;
   const entries = getEntries(payload, type);
@@ -672,7 +646,6 @@ export async function scrapeDenmarkTrains(
         })
       );
     })
-    .sort((a, b) => a.scheduledTime.localeCompare(b.scheduledTime))
     .slice(0, TRAIN_LIMIT);
 
   return {
