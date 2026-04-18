@@ -564,8 +564,7 @@ function mapEntry(entry: JsonRecord, type: BoardType): Train {
       pickNestedName(entry, "DestinationStop", "Directions", "Direction", "Destination") ??
       undefined;
   } else {
-    train.origin =
-      pickNestedName(entry, "OriginStop") ?? pickString(entry, "origin") ?? undefined;
+    train.origin = pickNestedName(entry, "OriginStop") ?? pickString(entry, "origin") ?? undefined;
   }
 
   return train;
