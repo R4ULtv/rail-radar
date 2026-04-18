@@ -7,7 +7,6 @@ import {
   ListIcon,
   SearchIcon,
   SearchXIcon,
-  SparklesIcon,
   SquareMIcon,
   TrainFrontIcon,
   TramFrontIcon,
@@ -47,37 +46,6 @@ import type { Station } from "@repo/data";
 import type { StationVisibility } from "@/hooks/use-map-layers";
 import Image from "next/image";
 import { Button } from "@repo/ui/components/button";
-
-const POPULAR_GERMANY_STATIONS: Station[] = [
-  {
-    id: "DE00105",
-    name: "Frankfurt (Main) Hbf",
-    type: "rail",
-    importance: 1,
-    geo: { lat: 50.107145, lng: 8.663789 },
-  },
-  {
-    id: "DE11160",
-    name: "Berlin Hauptbahnhof",
-    type: "rail",
-    importance: 1,
-    geo: { lat: 52.525592, lng: 13.369545 },
-  },
-  {
-    id: "DE00261",
-    name: "München Hbf",
-    type: "rail",
-    importance: 1,
-    geo: { lat: 48.140232, lng: 11.558335 },
-  },
-  {
-    id: "DE02549",
-    name: "Hamburg Hbf",
-    type: "rail",
-    importance: 1,
-    geo: { lat: 53.552736, lng: 10.006909 },
-  },
-];
 
 const StationList = React.memo(function StationList({
   stations,
@@ -158,7 +126,6 @@ function SearchContent({
   showDefaultLists,
   filteredRecentStations,
   savedStations,
-  popularGermanyStations,
   trendingStations,
   trendingVisits,
   handleSelectStation,
@@ -172,7 +139,6 @@ function SearchContent({
   showDefaultLists: boolean;
   filteredRecentStations: Station[];
   savedStations: Station[];
-  popularGermanyStations: Station[];
   trendingStations: Station[];
   trendingVisits: Map<string, number>;
   handleSelectStation: (station: Station) => void;
@@ -246,24 +212,6 @@ function SearchContent({
           />
         </>
       )}
-      {/* Popular Germany Stations */}
-      {showDefaultLists && popularGermanyStations.length > 0 && (
-        <>
-          <div className="px-4 py-2 not-first:mt-1">
-            <p className="text-muted-foreground text-sm flex items-center gap-2">
-              <SparklesIcon className="size-3.5" />
-              Popular in Germany
-            </p>
-          </div>
-          <StationList
-            stations={popularGermanyStations}
-            onSelect={handleSelectStation}
-            focusedIndex={focusedIndex}
-            startIndex={filteredRecentStations.length + savedStations.length}
-            onFocusIndex={setFocusedIndex}
-          />
-        </>
-      )}
       {/* Trending Stations */}
       {showDefaultLists && trendingStations.length > 0 && (
         <>
@@ -277,9 +225,7 @@ function SearchContent({
             stations={trendingStations}
             onSelect={handleSelectStation}
             focusedIndex={focusedIndex}
-            startIndex={
-              filteredRecentStations.length + savedStations.length + popularGermanyStations.length
-            }
+            startIndex={filteredRecentStations.length + savedStations.length}
             onFocusIndex={setFocusedIndex}
             visits={trendingVisits}
           />
@@ -374,22 +320,12 @@ export function Search({ hiddenStationTypes }: { hiddenStationTypes: StationVisi
     return recentStations.filter((s) => !savedIds.has(s.id) && isTypeVisible(s));
   }, [recentStations, savedStations, isTypeVisible]);
 
-  const popularGermanyStations = React.useMemo(
-    () => POPULAR_GERMANY_STATIONS.filter(isTypeVisible),
-    [isTypeVisible],
-  );
-
   const visibleStations = React.useMemo(() => {
     if (isSearchActive && searchResults.length > 0) {
       return searchResults.slice(0, 10);
     }
     if (!isSearchActive || noResults) {
-      return [
-        ...filteredRecentStations,
-        ...savedStations,
-        ...popularGermanyStations,
-        ...trendingStations,
-      ];
+      return [...filteredRecentStations, ...savedStations, ...trendingStations];
     }
     return [];
   }, [
@@ -397,7 +333,6 @@ export function Search({ hiddenStationTypes }: { hiddenStationTypes: StationVisi
     searchResults,
     filteredRecentStations,
     savedStations,
-    popularGermanyStations,
     noResults,
     trendingStations,
   ]);
@@ -481,7 +416,6 @@ export function Search({ hiddenStationTypes }: { hiddenStationTypes: StationVisi
     showDefaultLists,
     filteredRecentStations,
     savedStations,
-    popularGermanyStations,
     trendingStations,
     trendingVisits,
     handleSelectStation,
