@@ -8,6 +8,7 @@ export const COUNTRY_MAP = {
   ie: "Ireland",
   no: "Norway",
   se: "Sweden",
+  dk: "Denmark",
   de: "Germany",
 } as const;
 
@@ -37,6 +38,8 @@ const ID_PREFIX_TO_COUNTRY: Record<string, CountryCode> = {
   SE: "se",
   SEM: "se",
   SEL: "se",
+  DK: "dk",
+  DKM: "dk",
   DE: "de",
   DEM: "de",
 };

@@ -9,10 +9,10 @@ const API_ENDPOINTS = {
     "Get a static map image (optional: ?bbox=west,south,east,north&w=960&h=412 or ?lat=...&lng=...&zoom=...)",
   "GET /stations/search": "Search stations by plain text or exact station ID (optional: ?q=roma)",
   "GET /stations.geojson":
-    "Get stations as GeoJSON (optional: ?type=rail|metro|light&country=it|ch|de|fi|be|nl|no|se|uk|ie)",
+    "Get stations as GeoJSON (optional: ?type=rail|metro|light&country=it|ch|de|fi|be|dk|nl|no|se|uk|ie)",
   "GET /stations/trending": "Get trending stations (optional: ?period=hour|day|week, default: day)",
   "GET /stations/trending/:country":
-    "Get trending stations by country (it|ch|de|fi|be|nl|no|se|uk|ie, optional: ?period=hour|day|week)",
+    "Get trending stations by country (it|ch|de|fi|be|dk|nl|no|se|uk|ie, optional: ?period=hour|day|week)",
   "GET /stations/:id/stats":
     "Get station visit stats (optional: ?period=hour|day|week, default: day)",
   "GET /stations/:id": "Get station info with trains (optional: ?type=arrivals|departures)",
