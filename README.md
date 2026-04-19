@@ -5,6 +5,7 @@
 - Interactive map with 15,000+ railway stations across Italy, Switzerland, Germany, Finland, Belgium, Denmark, the Netherlands, Norway, Sweden, the United Kingdom, and Ireland
 - Real-time arrivals and departures from official data sources (RFI, SBB, DB, Digitraffic, iRail, Rejseplanen, NS, Entur, Trafiklab, LDBWS, Irish Rail)
 - Station search with fuzzy matching
+- Trending stations ranked by unique visitors, with both unique and total visit counts available
 - Shareable URLs with map state
 - User geolocation support
 - Responsive mobile-friendly design
