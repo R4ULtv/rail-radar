@@ -48,22 +48,11 @@ pnpm --filter=studio dev # Admin tool at localhost:3001
 
 ## Contributing
 
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
+See [CONTRIBUTING.md](./CONTRIBUTING.md) for setup, development workflow, quality checks, and pull request guidelines.
 
 ### Contributing Station Data
 
-To add, edit, or remove train stations, use the [Rail Radar Studio](./apps/studio) tool. It provides an interactive map to:
-
-- Add missing coordinates to stations
-- Rename stations and fix typos
-- Identify and merge duplicate stations
-- Add new stations or remove invalid ones
-
-See [apps/studio/README.md](./apps/studio/README.md) for detailed instructions.
+Station data contributions are supported through [Rail Radar Studio](./apps/studio). For the full workflow, see [CONTRIBUTING.md](./CONTRIBUTING.md) and [apps/studio/README.md](./apps/studio/README.md).
 
 ## License
 
