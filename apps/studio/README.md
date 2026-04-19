@@ -21,7 +21,7 @@ pnpm --filter=studio start
 For development with hot-reload:
 
 ```bash
-pnpm dev --filter=studio
+pnpm --filter=studio dev
 ```
 
 Runs on [http://localhost:3001](http://localhost:3001)
@@ -29,8 +29,7 @@ Runs on [http://localhost:3001](http://localhost:3001)
 ## Features
 
 - Interactive map with 15,000+ stations
-- Station search and filtering (All / Missing coordinates / Duplicates)
-- Click-to-place coordinates for stations missing location
+- Station search and filtering (All / Metro / Light / Duplicate)
 - Drag markers to fine-tune positions
 - Edit station names
 - Add new stations
@@ -42,9 +41,8 @@ Runs on [http://localhost:3001](http://localhost:3001)
 ### Making Changes
 
 1. Open the studio at `localhost:3001`
-2. Browse stations via sidebar (use tabs: All, Missing, Duplicates)
+2. Browse stations via sidebar (use tabs: All, Metro, Light, Duplicate)
 3. Make changes:
-   - **Add coordinates**: Select station → Click on map to set location
    - **Move station**: Drag the marker to correct position
    - **Rename station**: Edit name in the side panel
    - **Add new station**: Click "Add Station" → Click on map
@@ -57,7 +55,6 @@ Runs on [http://localhost:3001](http://localhost:3001)
 3. See all your changes with statistics:
    - Coordinates added/updated
    - Stations renamed/created/deleted
-   - Coverage % change
 
 ### Submitting a Pull Request
 

@@ -6,18 +6,13 @@ Shared station data and TypeScript types for Rail Radar.
 
 ```
 src/
-├── index.ts           # Main entry point
-├── stations.ts        # Station data exports (GeoJSON + derived arrays)
-├── countries.ts       # Country codes and lookup utilities
-├── operators.ts       # Operator data loader and exports
-├── operators.json     # Train operator dataset
-├── types.ts           # TypeScript type definitions
-├── geojson.d.ts       # Module declaration for .geojson imports
-└── stations.geojson   # GeoJSON FeatureCollection (15,000+ stations)
-
-scripts/
-├── convert-to-geojson.ts  # Converts stations.json → stations.geojson
-└── format-stations.ts     # Formats stations.json (sort + minify)
+├── index.ts            # Main entry point
+├── stations.ts         # Station data exports (GeoJSON + derived arrays)
+├── countries.ts        # Country codes and lookup utilities
+├── operators.ts        # Operator data loader and exports
+├── operators.json      # Train operator dataset
+├── types.ts            # TypeScript type definitions
+└── stations.geojson    # GeoJSON FeatureCollection (15,000+ stations)
 ```
 
 ## Exports
@@ -46,7 +41,7 @@ import { stations, stationById, stationsGeoJSON } from "@repo/data/stations";
 
 ```ts
 import { operators, operatorBySlug } from "@repo/data/operators";
-import type { Operator, OperatorCountry, OperatorType, ServiceType } from "@repo/data/operators";
+import type { Operator } from "@repo/data";
 ```
 
 ### Subpath Import (`@repo/data/countries`)
@@ -193,13 +188,3 @@ interface Operator {
   links: OperatorLink[];
 }
 ```
-
-## Scripts
-
-### `convert-to-geojson.ts`
-
-Converts `stations.json` into `stations.geojson`. Computes `minzoom` from importance and station type, excludes stations without coordinates, and adds country codes.
-
-### `format-stations.ts`
-
-Normalizes `stations.json` by sorting stations alphabetically and minifying. Run after manual edits to ensure consistent formatting.

@@ -12,6 +12,7 @@ Cloudflare Workers API that provides real-time European train data by scraping o
 | Method | Path                          | Description                                                                                              |
 | ------ | ----------------------------- | -------------------------------------------------------------------------------------------------------- |
 | `GET`  | `/`                           | API info and endpoint documentation                                                                      |
+| `GET`  | `/robots.txt`                 | Blocks crawlers from indexing the API                                                                    |
 | `GET`  | `/operators`                  | List train operators with optional filtering                                                             |
 | `GET`  | `/operators/:slug`            | Get a single train operator by slug                                                                      |
 | `GET`  | `/map/static`                 | Static map image via Mapbox                                                                              |
@@ -104,20 +105,23 @@ src/
 pnpm install
 
 # Start development server
-pnpm dev
+pnpm --filter=api dev
 ```
 
 ## Deployment
 
 ```bash
 # Deploy to Cloudflare Workers
-pnpm deploy
+pnpm --filter=api deploy
 ```
 
 Requires a Cloudflare account with Workers enabled. Configuration is in `wrangler.jsonc`.
 
 Provider-backed scrapers require these Worker secrets:
 
+- `CLOUDFLARE_ACCOUNT_ID`
+- `CLOUDFLARE_API_TOKEN`
+- `MAPBOX_TOKEN`
 - `NS_API_KEY`
 - `LDBWS_API_KEY`
 - `TRAFIKLAB_KEY`
@@ -128,5 +132,5 @@ Provider-backed scrapers require these Worker secrets:
 To generate/synchronize types based on your Worker configuration:
 
 ```bash
-pnpm cf-typegen
+pnpm --filter=api cf-typegen
 ```

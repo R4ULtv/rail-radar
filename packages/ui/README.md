@@ -1,6 +1,6 @@
 # @repo/ui
 
-A comprehensive UI component library built on **Base UI** primitives with modern styling patterns. This package provides 46+ accessible, type-safe components designed for use in a monorepo workspace.
+A comprehensive UI component library built on **Base UI** primitives with modern styling patterns. This package provides 50 accessible, type-safe components designed for use in a monorepo workspace.
 
 ## Architecture
 
@@ -13,7 +13,7 @@ This library uses a **headless component architecture** combining:
 
 ## Features
 
-- 46+ accessible components built on Base UI primitives
+- 50 accessible components built on Base UI primitives
 - Full TypeScript support with comprehensive typing
 - Tailwind CSS 4 with modern OKLch color space
 - Dark mode support via `next-themes`
@@ -38,7 +38,7 @@ import { Card } from "@repo/ui/components/card";
 ### Importing Hooks
 
 ```tsx
-import { useIsMobile } from "@repo/ui/hooks/use-is-mobile";
+import { useIsMobile } from "@repo/ui/hooks/use-mobile";
 import { useDebounce } from "@repo/ui/hooks/use-debounce";
 ```
 
@@ -61,7 +61,7 @@ import "@repo/ui/styles/globals.css";
 Detects if the viewport is mobile-sized (< 768px).
 
 ```tsx
-import { useIsMobile } from "@repo/ui/hooks/use-is-mobile";
+import { useIsMobile } from "@repo/ui/hooks/use-mobile";
 
 export function ResponsiveComponent() {
   const isMobile = useIsMobile();
@@ -144,7 +144,6 @@ Component configuration is managed in `components.json`:
 | **clsx**                     | Conditional className utility                            |
 | **tailwind-merge**           | Merge Tailwind classes without conflicts                 |
 | **sonner**                   | Toast notifications                                      |
-| **vaul**                     | Drawer primitives                                        |
 | **tw-animate-css**           | Custom Tailwind animations                               |
 
 ### Key Architecture Decisions

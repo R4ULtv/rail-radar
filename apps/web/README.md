@@ -26,7 +26,7 @@ Next.js frontend for real-time train tracking across Europe with an interactive 
 | -------------------------- | ------------------------------------------------------ |
 | `NEXT_PUBLIC_API_URL`      | API endpoint URL (e.g., `https://api.railradar24.com`) |
 | `NEXT_PUBLIC_MAPBOX_TOKEN` | Mapbox public token for map rendering                  |
-| `NEXT_PUBLIC_SITE_URL`     | Website URL (e.g., `https://www.railradar24.com`)      |
+| `MAPBOX_SERVER_TOKEN`      | Server-side Mapbox token for generated OG images       |
 
 ## Development
 
@@ -35,7 +35,7 @@ Next.js frontend for real-time train tracking across Europe with an interactive 
 pnpm install
 
 # Start development server (localhost:3000)
-pnpm dev --filter=web
+pnpm --filter=web dev
 ```
 
 ## Project Structure
