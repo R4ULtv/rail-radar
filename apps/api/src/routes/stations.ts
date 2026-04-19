@@ -44,7 +44,14 @@ async function createTrendingResponse(
   period: Period,
   country?: CountryCode,
 ) {
-  const trending = await getTrendingStations(accountId, apiToken, period, TRENDING_LIMIT, country);
+  const trending = await getTrendingStations(
+    accountId,
+    apiToken,
+    period,
+    TRENDING_LIMIT,
+    country,
+    "uniqueVisitors",
+  );
 
   return {
     timestamp: new Date().toISOString(),
