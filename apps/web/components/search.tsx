@@ -53,14 +53,14 @@ const StationList = React.memo(function StationList({
   focusedIndex = -1,
   startIndex = 0,
   onFocusIndex,
-  visits,
+  counts,
 }: {
   stations: Station[];
   onSelect: (station: Station) => void;
   focusedIndex?: number;
   startIndex?: number;
   onFocusIndex?: (index: number) => void;
-  visits?: Map<string, number>;
+  counts?: Map<string, { visits: number; uniqueVisitors: number }>;
 }) {
   if (stations.length === 0) return null;
 
@@ -69,7 +69,7 @@ const StationList = React.memo(function StationList({
       {stations.map((station, index) => {
         const globalIndex = startIndex + index;
         const isFocused = globalIndex === focusedIndex;
-        const visitCount = visits?.get(station.id);
+        const stationCounts = counts?.get(station.id);
 
         return (
           <li
@@ -105,10 +105,11 @@ const StationList = React.memo(function StationList({
                 width={12}
                 height={12}
               />
-              {visitCount !== undefined && (
+              {stationCounts && (
                 <span className="text-xs text-muted-foreground tabular-nums ml-auto flex items-center gap-1">
                   <UserIcon className="size-3.5" />
-                  {visitCount}
+                  {stationCounts.uniqueVisitors.toLocaleString()} (
+                  {stationCounts.visits.toLocaleString()})
                 </span>
               )}
             </button>
@@ -127,7 +128,7 @@ function SearchContent({
   filteredRecentStations,
   savedStations,
   trendingStations,
-  trendingVisits,
+  trendingCounts,
   handleSelectStation,
   focusedIndex,
   setFocusedIndex,
@@ -140,7 +141,7 @@ function SearchContent({
   filteredRecentStations: Station[];
   savedStations: Station[];
   trendingStations: Station[];
-  trendingVisits: Map<string, number>;
+  trendingCounts: Map<string, { visits: number; uniqueVisitors: number }>;
   handleSelectStation: (station: Station) => void;
   focusedIndex: number;
   setFocusedIndex: (index: number) => void;
@@ -227,7 +228,7 @@ function SearchContent({
             focusedIndex={focusedIndex}
             startIndex={filteredRecentStations.length + savedStations.length}
             onFocusIndex={setFocusedIndex}
-            visits={trendingVisits}
+            counts={trendingCounts}
           />
         </>
       )}
@@ -274,11 +275,11 @@ export function Search({ hiddenStationTypes }: { hiddenStationTypes: StationVisi
   // Fetch trending stations
   const { data: trendingData } = useTrendingStations("week");
 
-  const { trendingStations, trendingVisits } = React.useMemo(() => {
+  const { trendingStations, trendingCounts } = React.useMemo(() => {
     if (!trendingData?.stations) {
       return {
         trendingStations: [] as Station[],
-        trendingVisits: new Map<string, number>(),
+        trendingCounts: new Map<string, { visits: number; uniqueVisitors: number }>(),
       };
     }
     const stations: Station[] = trendingData.stations.map((s) => ({
@@ -288,8 +289,13 @@ export function Search({ hiddenStationTypes }: { hiddenStationTypes: StationVisi
       importance: s.importance,
       geo: s.geo ?? undefined,
     }));
-    const visits = new Map(trendingData.stations.map((s) => [s.stationId, s.visits]));
-    return { trendingStations: stations, trendingVisits: visits };
+    const counts = new Map(
+      trendingData.stations.map((s) => [
+        s.stationId,
+        { visits: s.visits, uniqueVisitors: s.uniqueVisitors },
+      ]),
+    );
+    return { trendingStations: stations, trendingCounts: counts };
   }, [trendingData]);
 
   const isSearchActive = query.trim().length > 0;
@@ -417,7 +423,7 @@ export function Search({ hiddenStationTypes }: { hiddenStationTypes: StationVisi
     filteredRecentStations,
     savedStations,
     trendingStations,
-    trendingVisits,
+    trendingCounts,
     handleSelectStation,
     focusedIndex,
     setFocusedIndex,
