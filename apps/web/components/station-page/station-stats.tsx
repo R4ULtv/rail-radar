@@ -40,8 +40,8 @@ export function StationStats({ stationId }: StationStatsProps) {
           <div className="flex items-center gap-2 text-sm text-muted-foreground">
             <BarChart3Icon className="size-4" />
             <span>
-              {station.visits.toLocaleString()} visits ({station.uniqueVisitors.toLocaleString()}{" "}
-              unique) in the last 7 days
+              {station.uniqueVisitors.toLocaleString()} unique visitors (
+              {station.visits.toLocaleString()} visits) in the last 7 days
             </span>
           </div>
         </div>
@@ -55,7 +55,8 @@ export function StationStats({ stationId }: StationStatsProps) {
             {comparison.isTopStation ? (
               <>
                 This is the{" "}
-                <span className="font-medium text-foreground">most visited station</span> this week.
+                <span className="font-medium text-foreground">top trending station</span> this week
+                by unique visitors.
               </>
             ) : (
               <>
@@ -63,7 +64,7 @@ export function StationStats({ stationId }: StationStatsProps) {
                 <span className="font-medium text-foreground">
                   {comparison.percentage.toFixed(1)}%
                 </span>{" "}
-                of the traffic of the{" "}
+                of the unique visitor count of the{" "}
                 <span className="font-medium text-foreground">#1 {topStation.stationName}</span>{" "}
                 station this week.
               </>
