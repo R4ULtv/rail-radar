@@ -8,7 +8,7 @@ import { Alert, AlertTitle, AlertAction } from "@repo/ui/components/alert";
 import { Badge } from "@repo/ui/components/badge";
 import { Button } from "@repo/ui/components/button";
 
-const STORAGE_KEY = "banner-dismissed-v6";
+const STORAGE_KEY = "banner-dismissed-v7";
 
 const subscribe = () => () => {};
 const getSnapshot = () => !localStorage.getItem(STORAGE_KEY);
@@ -46,16 +46,16 @@ export function AnnouncementBanner() {
                   <span className="hidden md:block">New</span>
                 </Badge>
                 <span className="hidden md:inline">
-                  Germany update: 🇩🇪 6.5K new stations are now live.{" "}
+                  Denmark update: 🇩🇰 499 stations are now live.{" "}
                   <Link
-                    href="/operators#de"
+                    href="/operators#dk"
                     className="underline underline-offset-2"
                     onClick={dismiss}
                   >
                     Explore operators
                   </Link>
                 </span>
-                <span className="md:hidden">Germany: 🇩🇪 6.5K new stations live</span>
+                <span className="md:hidden">Denmark: 🇩🇰 499 stations live</span>
               </AlertTitle>
               <AlertAction className="top-1.5">
                 <Button variant="ghost" size="icon-xs" onClick={dismiss} aria-label="Dismiss">

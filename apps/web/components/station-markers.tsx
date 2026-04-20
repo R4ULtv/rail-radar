@@ -44,7 +44,7 @@ const MINZOOM_EXPR = [
   13,
   "light",
   ["match", ["get", "importance"], 3, 11, 13],
-  /* rail */ ["match", ["get", "importance"], 1, 4, 2, 7, 3, 9, 11],
+  /* rail */ ["match", ["get", "importance"], 1, 3, 2, 7, 3, 9, 11],
 ];
 const MINZOOM_FILTER = ["<=", MINZOOM_EXPR, ["zoom"]];
 const LABEL_MINZOOM_FILTER = ["<=", ["+", MINZOOM_EXPR, 2], ["zoom"]];
@@ -142,7 +142,7 @@ const railLayerStyle = (v: Visibility): LayerProps => ({
       "interpolate",
       ["linear"],
       ["zoom"],
-      4,
+      3,
       ["match", ["get", "importance"], 1, 0.3, 2, 0.25, 0.2],
       10,
       ["match", ["get", "importance"], 1, 0.35, 2, 0.32, 0.3],
@@ -320,7 +320,7 @@ export function StationMarkers({ stations, layers }: Pick<MapLayersState, "stati
       <Source
         id="stations-source"
         type="geojson"
-        data={`${process.env.NEXT_PUBLIC_API_URL}/stations.geojson?v=3`}
+        data={`${process.env.NEXT_PUBLIC_API_URL}/stations.geojson`}
       >
         <Layer {...metroLayer} />
         <Layer {...metroLabel} />

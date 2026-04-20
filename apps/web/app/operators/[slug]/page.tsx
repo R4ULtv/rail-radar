@@ -242,7 +242,11 @@ export default async function OperatorPage({ params }: OperatorPageProps) {
             <h1 className="text-3xl md:text-4xl font-bold tracking-tight">{operator.name}</h1>
             <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-muted-foreground">
               {trackedCountries.map((c) => (
-                <span key={c} className="inline-flex items-center gap-1.5 capitalize">
+                <span
+                  key={c}
+                  className="inline-flex items-center gap-1.5 capitalize"
+                  aria-label={COUNTRY_MAP[c]}
+                >
                   <Image
                     unoptimized
                     src={`/flags/${c}.svg`}
@@ -251,7 +255,7 @@ export default async function OperatorPage({ params }: OperatorPageProps) {
                     height={16}
                     className="size-4 rounded-full ring-1 ring-foreground/10"
                   />
-                  {COUNTRY_MAP[c]}
+                  <span className="hidden sm:inline">{COUNTRY_MAP[c]}</span>
                 </span>
               ))}
               {operator.founded && (

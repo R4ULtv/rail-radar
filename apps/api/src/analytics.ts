@@ -10,6 +10,8 @@ interface TopStation {
   uniqueVisitors: number;
 }
 
+type TrendingSort = "visits" | "uniqueVisitors";
+
 interface AnalyticsQueryResult {
   data: Array<{
     stationId: string;
@@ -163,12 +165,14 @@ export async function getTrendingStations(
   period: Period = "day",
   limit: number = 5,
   country?: CountryCode,
+  sortBy: TrendingSort = "visits",
 ): Promise<TopStation[]> {
   const { value, unit } = getPeriodInterval(period);
   if (country && !COUNTRY_CODES.includes(country)) {
     throw new Error("Invalid country code");
   }
   const countryFilter = country ? `AND blob5 = '${country}'` : "";
+  const orderColumn = sortBy === "uniqueVisitors" ? "uniqueVisitors" : "count";
   const query = `
     SELECT
       index1 as stationId,
@@ -180,7 +184,7 @@ export async function getTrendingStations(
     WHERE timestamp > NOW() - INTERVAL '${value}' ${unit}
     ${countryFilter}
     GROUP BY index1, blob1, blob5
-    ORDER BY count DESC
+    ORDER BY ${orderColumn} DESC, count DESC
   `;
 
   const result = await queryAnalytics<AnalyticsQueryResult>(accountId, apiToken, query);
@@ -207,7 +211,13 @@ export async function getTrendingStations(
     }
   }
 
-  return [...merged.values()].sort((a, b) => b.visits - a.visits).slice(0, limit);
+  return [...merged.values()]
+    .sort((a, b) =>
+      sortBy === "uniqueVisitors"
+        ? b.uniqueVisitors - a.uniqueVisitors || b.visits - a.visits
+        : b.visits - a.visits || b.uniqueVisitors - a.uniqueVisitors,
+    )
+    .slice(0, limit);
 }
 
 export async function getStationStats(
@@ -240,7 +250,7 @@ export async function getStationStats(
 
   const [stationResult, trendingResult] = await Promise.all([
     queryAnalytics<AnalyticsQueryResult>(accountId, apiToken, stationQuery),
-    getTrendingStations(accountId, apiToken, period, 1),
+    getTrendingStations(accountId, apiToken, period, 1, undefined, "uniqueVisitors"),
   ]);
 
   const stationData = stationResult.data[0];

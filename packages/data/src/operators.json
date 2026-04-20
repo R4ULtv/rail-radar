@@ -969,10 +969,10 @@
     "slug": "arriva",
     "name": "Arriva",
     "logoPath": "arriva",
-    "countries": ["uk", "nl", "de"],
+    "countries": ["international", "uk", "nl", "de", "dk"],
     "operatorTypes": ["passenger"],
-    "bounds": [-5.7, 47.3, 15, 55.1],
-    "description": "Arriva is a major European transport operator. Acquired by I Squared Capital in 2024, it runs regional rail and bus services across multiple countries, including Arriva Nederland in the Netherlands and Arriva Trains in the UK. It also operates transit networks in the Czech Republic, Poland, and other European markets.",
+    "bounds": [-5.7, 47.3, 15.3, 57.9],
+    "description": "Arriva is a major European transport operator. Acquired by I Squared Capital in 2024, it runs regional rail and bus services across multiple countries, including Arriva Nederland in the Netherlands and the former Arriva Denmark rail business that now operates under the GoCollective name. It also operates transit networks in the UK, Germany, the Czech Republic, Poland, and other European markets.",
     "website": "https://www.arriva.co.uk",
     "founded": 1938,
     "headquarters": "Sunderland, United Kingdom",
@@ -989,6 +989,189 @@
       {
         "label": "Wikipedia",
         "url": "https://en.wikipedia.org/wiki/Arriva",
+        "type": "wikipedia"
+      }
+    ]
+  },
+  {
+    "slug": "dsb",
+    "name": "DSB",
+    "logoPath": "dk/dsb",
+    "countries": ["dk"],
+    "operatorTypes": ["passenger"],
+    "bounds": [8, 54.5, 15.3, 57.9],
+    "description": "DSB is Denmark's state-owned national rail operator and the backbone of passenger rail in the country. It runs the main long-distance and regional network together with Copenhagen's S-train system, carrying roughly 195 million passengers a year across Denmark and key cross-border corridors.",
+    "website": "https://www.dsb.dk",
+    "founded": 1885,
+    "headquarters": "Copenhagen, Denmark",
+    "networkKm": null,
+    "annualPassengers": 195000000,
+    "serviceTypes": ["intercity", "regional", "commuter", "international"],
+    "parentCompany": "Danish State",
+    "links": [
+      {
+        "label": "Official Site",
+        "url": "https://www.dsb.dk/en",
+        "type": "website"
+      },
+      {
+        "label": "Timetables",
+        "url": "https://www.dsb.dk/en/traffic-information/timetables/",
+        "type": "timetables"
+      },
+      {
+        "label": "Wikipedia",
+        "url": "https://en.wikipedia.org/wiki/DSB_(railway_company)",
+        "type": "wikipedia"
+      }
+    ]
+  },
+  {
+    "slug": "lokaltog",
+    "name": "Lokaltog",
+    "logoPath": "dk/lokaltog",
+    "countries": ["dk"],
+    "operatorTypes": ["passenger"],
+    "bounds": [11.7, 54.5, 12.8, 56.3],
+    "description": "Lokaltog is Denmark's largest local railway company, operating local passenger lines across Zealand and Lolland-Falster. The company runs a dense regional network with more than 100 stations and is majority-owned by Movia together with local municipalities and regional stakeholders.",
+    "website": "https://www.lokaltog.dk/",
+    "founded": 2015,
+    "headquarters": "Taastrup, Denmark",
+    "networkKm": 338,
+    "annualPassengers": 9600000,
+    "serviceTypes": ["regional", "commuter"],
+    "parentCompany": "Movia",
+    "links": [
+      {
+        "label": "Official Site",
+        "url": "https://www.lokaltog.dk/international/english/",
+        "type": "website"
+      },
+      {
+        "label": "Timetables",
+        "url": "https://www.lokaltog.dk/",
+        "type": "timetables"
+      },
+      {
+        "label": "Wikipedia",
+        "url": "https://en.wikipedia.org/wiki/Lokaltog",
+        "type": "wikipedia"
+      }
+    ]
+  },
+  {
+    "slug": "nj",
+    "name": "NJ",
+    "logoPath": "dk/nj",
+    "countries": ["dk"],
+    "operatorTypes": ["passenger"],
+    "bounds": [9.7, 56.3, 10.8, 57.8],
+    "description": "Nordjyske Jernbaner (NJ) is the regional rail operator in North Jutland. Founded in 2001 through the merger of Skagensbanen and Hjørring Privatbaner, it runs local passenger services on the Hirtshals-Hjørring and Skagen-Skørping corridors and is majority-owned by Nordjyllands Trafikselskab.",
+    "website": "https://nj.dk",
+    "founded": 2001,
+    "headquarters": "Hjørring, Denmark",
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["regional", "commuter"],
+    "parentCompany": "Nordjyllands Trafikselskab",
+    "links": [
+      {
+        "label": "Official Site",
+        "url": "https://nj.dk/",
+        "type": "website"
+      },
+      {
+        "label": "Wikipedia",
+        "url": "https://en.wikipedia.org/wiki/Nordjyske_Jernbaner",
+        "type": "wikipedia"
+      }
+    ]
+  },
+  {
+    "slug": "midtjyske-jernbaner",
+    "name": "Midtjyske Jernbaner",
+    "logoPath": "dk/mj",
+    "countries": ["dk"],
+    "operatorTypes": ["passenger"],
+    "bounds": [8, 55.4, 9.3, 56.7],
+    "description": "Midtjyske Jernbaner is a West Jutland regional railway operator founded in 2008 through the merger of Odderbanen and Lemvigbanen. Today it operates the Vemb-Lemvig-Thyborøn line and the Holstebro-Skjern corridor, with its operations and control center based in Lemvig.",
+    "website": "https://mjba.dk/",
+    "founded": 2008,
+    "headquarters": "Lemvig, Denmark",
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["regional"],
+    "parentCompany": "Midttrafik",
+    "links": [
+      {
+        "label": "Official Site",
+        "url": "https://mjba.dk/english/",
+        "type": "website"
+      },
+      {
+        "label": "Timetables",
+        "url": "https://mjba.dk/kunder/koereplan/",
+        "type": "timetables"
+      },
+      {
+        "label": "Wikipedia",
+        "url": "https://en.wikipedia.org/wiki/Midtjyske_Jernbaner",
+        "type": "wikipedia"
+      }
+    ]
+  },
+  {
+    "slug": "oresundstag",
+    "name": "Øresundståg",
+    "logoPath": "dk/oresundstag",
+    "countries": ["dk", "se"],
+    "operatorTypes": ["passenger"],
+    "bounds": [11.3, 55.3, 17.1, 57.9],
+    "description": "Øresundståg is the cross-border regional train system linking Denmark with southern Sweden. The brand began with the opening of the fixed link across the Øresund in 2000 and today connects Copenhagen and Helsingør with Malmö, Gothenburg, Kalmar, Karlskrona, and other cities across southern Sweden.",
+    "website": "https://www.oresundstag.se",
+    "founded": 2000,
+    "headquarters": "Hässleholm, Sweden",
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["regional", "commuter", "international"],
+    "parentCompany": "Öresundståg AB / Southern Swedish regional authorities",
+    "links": [
+      {
+        "label": "Official Site",
+        "url": "https://www.oresundstag.se/en",
+        "type": "website"
+      },
+      {
+        "label": "Wikipedia",
+        "url": "https://en.wikipedia.org/wiki/Oresundtrain",
+        "type": "wikipedia"
+      }
+    ]
+  },
+  {
+    "slug": "skanetrafiken",
+    "name": "Skånetrafiken",
+    "logoPath": "dk/ska",
+    "countries": ["dk", "se"],
+    "operatorTypes": ["passenger"],
+    "bounds": [11.3, 55.3, 14.8, 56.6],
+    "description": "Skånetrafiken is the public transport authority and passenger brand for Sweden's Skåne region. In Rail Radar it is modeled as a Denmark-facing cross-border rail operator, because this brand appears in our Denmark live data for services across the Øresund to Copenhagen.",
+    "website": "https://www.skanetrafiken.se/english/",
+    "founded": 1999,
+    "headquarters": "Hässleholm, Sweden",
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["regional", "commuter", "international"],
+    "parentCompany": "Region Skåne",
+    "links": [
+      {
+        "label": "Official Site",
+        "url": "https://www.skanetrafiken.se/english/",
+        "type": "website"
+      },
+      {
+        "label": "Wikipedia",
+        "url": "https://en.wikipedia.org/wiki/Sk%C3%A5netrafiken",
         "type": "wikipedia"
       }
     ]
@@ -1269,7 +1452,7 @@
     "networkKm": 1480,
     "annualPassengers": 26600000,
     "serviceTypes": ["intercity"],
-    "parentCompany": "Department for Transport (public operator)",
+    "parentCompany": "Department for Transport",
     "links": [
       {
         "label": "Official Site",
@@ -1353,7 +1536,7 @@
     "networkKm": 1600,
     "annualPassengers": 31500000,
     "serviceTypes": ["intercity", "regional"],
-    "parentCompany": "Department for Transport (public operator)",
+    "parentCompany": "Transport UK Group",
     "links": [
       {
         "label": "Official Site",
@@ -1381,7 +1564,7 @@
     "networkKm": 1600,
     "annualPassengers": 165600000,
     "serviceTypes": ["commuter", "regional"],
-    "parentCompany": "Department for Transport (public operator)",
+    "parentCompany": "Department for Transport",
     "links": [
       {
         "label": "Official Site",
@@ -1409,7 +1592,7 @@
     "networkKm": 960,
     "annualPassengers": 137900000,
     "serviceTypes": ["commuter", "regional"],
-    "parentCompany": "Department for Transport (public operator)",
+    "parentCompany": "Department for Transport",
     "links": [
       {
         "label": "Official Site",
@@ -1493,7 +1676,7 @@
     "networkKm": 2800,
     "annualPassengers": 91800000,
     "serviceTypes": ["regional", "commuter"],
-    "parentCompany": "Department for Transport (public operator)",
+    "parentCompany": "Department for Transport)",
     "links": [
       {
         "label": "Official Site",
@@ -1521,7 +1704,7 @@
     "networkKm": 1360,
     "annualPassengers": 81800000,
     "serviceTypes": ["intercity", "regional", "commuter"],
-    "parentCompany": "Department for Transport (public operator)",
+    "parentCompany": "Department for Transport",
     "links": [
       {
         "label": "Official Site",
@@ -1549,7 +1732,7 @@
     "networkKm": 1120,
     "annualPassengers": 67700000,
     "serviceTypes": ["regional", "commuter"],
-    "parentCompany": "Department for Transport (public operator)",
+    "parentCompany": "Department for Transport",
     "links": [
       {
         "label": "Official Site",
@@ -1605,7 +1788,7 @@
     "networkKm": 1200,
     "annualPassengers": 28000000,
     "serviceTypes": ["intercity", "regional"],
-    "parentCompany": "Department for Transport (public operator)",
+    "parentCompany": "Department for Transport",
     "links": [
       {
         "label": "Official Site",
@@ -1661,7 +1844,7 @@
     "networkKm": 120,
     "annualPassengers": 40000000,
     "serviceTypes": ["commuter"],
-    "parentCompany": "Trenitalia",
+    "parentCompany": "Department for Transport",
     "links": [
       {
         "label": "Official Site",
@@ -2080,7 +2263,7 @@
     "slug": "transdev",
     "name": "Transdev",
     "logoPath": "transdev",
-    "countries": ["international", "se"],
+    "countries": ["international", "se", "dk", "de", "nl", "ie"],
     "operatorTypes": ["passenger"],
     "bounds": [11, 55.3, 24.2, 69.1],
     "description": "Transdev is a global public transport operator headquartered in France, running rail, bus, tram, and ferry services across 17+ countries. In Sweden, Transdev operates regional rail services and the Snälltåget long-distance brand through its subsidiary Transdev Sverige AB.",

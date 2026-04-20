@@ -22,9 +22,9 @@ const MapGL = dynamic(() => import("react-map-gl/mapbox").then((mod) => mod.Map)
 });
 
 const DEFAULT_VIEW = {
-  lat: 42.5,
-  lng: 12.5,
-  zoom: 5,
+  lat: 50,
+  lng: 12,
+  zoom: 4,
 };
 
 export function Map() {
@@ -123,7 +123,7 @@ export function Map() {
       mapStyle="mapbox://styles/mapbox/dark-v11"
       projection="mercator"
       maxPitch={0}
-      minZoom={4}
+      minZoom={3}
       maxZoom={18}
     >
       <SelectedStationProvider>
