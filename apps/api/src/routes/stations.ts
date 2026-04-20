@@ -147,8 +147,8 @@ export const stationsRoutes = factory
           stationStats && topStation ? stationStats.stationId === topStation.stationId : false;
 
         const percentage =
-          stationStats && topStation && topStation.visits > 0
-            ? Math.round((stationStats.visits / topStation.visits) * 10000) / 100
+          stationStats && topStation && topStation.uniqueVisitors > 0
+            ? Math.round((stationStats.uniqueVisitors / topStation.uniqueVisitors) * 10000) / 100
             : null;
 
         return c.json({

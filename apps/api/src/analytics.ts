@@ -250,7 +250,7 @@ export async function getStationStats(
 
   const [stationResult, trendingResult] = await Promise.all([
     queryAnalytics<AnalyticsQueryResult>(accountId, apiToken, stationQuery),
-    getTrendingStations(accountId, apiToken, period, 1),
+    getTrendingStations(accountId, apiToken, period, 1, undefined, "uniqueVisitors"),
   ]);
 
   const stationData = stationResult.data[0];
