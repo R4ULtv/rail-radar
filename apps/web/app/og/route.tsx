@@ -132,7 +132,7 @@ export function GET(request: NextRequest) {
         <span tw="text-[13px] font-mono text-[rgba(168,162,158,0.6)]">railradar24.com</span>
       </div>
 
-      {/* Map — temporarily disabled for debugging */}
+      {/* Static map preview */}
       <div tw="absolute top-0 right-0 bottom-0 flex w-[750px]">
         <div
           tw="block absolute inset-0"

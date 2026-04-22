@@ -2,10 +2,10 @@ import { MetadataRoute } from "next";
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: "Rail Radar - Live Train Tracker Across 10 European Countries",
+    name: "Rail Radar - Live Train Tracker Across 11 European Countries",
     short_name: "Rail Radar",
     description:
-      "Track trains in real time across 15,000+ stations in 10 European countries, including Germany. Get live delays, platform numbers, and departure info on an interactive map.",
+      "Track trains in real time across 17,000+ stations in 11 European countries, including Denmark and Germany. Get live delays, platform numbers, and departure info on an interactive map.",
     id: "/",
     scope: "/",
     start_url: "/",
