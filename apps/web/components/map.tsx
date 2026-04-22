@@ -120,11 +120,12 @@ export function Map() {
         height: "100%",
       }}
       mapboxAccessToken={process.env.NEXT_PUBLIC_MAPBOX_TOKEN}
-      mapStyle="mapbox://styles/mapbox/dark-v11"
+      mapStyle="mapbox://styles/mapbox/dark-v11?optimize=true"
       projection="mercator"
       maxPitch={0}
       minZoom={3}
       maxZoom={18}
+      performanceMetricsCollection={false}
     >
       <SelectedStationProvider>
         <StationMarkers stations={stations} layers={layers} />
