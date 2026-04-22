@@ -18,10 +18,10 @@ Cloudflare Workers API that provides real-time European train data by scraping o
 | `GET`  | `/map/static`                 | Static map image via Mapbox                                                                                                              |
 | `GET`  | `/stations/search`            | Station search endpoint returning JSON arrays                                                                                            |
 | `GET`  | `/stations.geojson`           | GeoJSON FeatureCollection of all stations (see below)                                                                                    |
-| `GET`  | `/stations/trending`          | Get trending stations ranked by unique visitors (`?period=hour\|day\|week`, default: `day`)                                              |
+| `GET`  | `/stations/trending`          | Get trending stations ranked by unique visitors (`?period=hour\|day\|week\|month`, default: `day`)                                       |
 | `GET`  | `/stations/trending/:country` | Get country-filtered trending stations ranked by unique visitors (`it\|ch\|de\|fi\|be\|dk\|nl\|no\|se\|uk\|ie\`, same `?period` options) |
 | `GET`  | `/stations/:id`               | Get station with trains (`?type=arrivals\|departures`)                                                                                   |
-| `GET`  | `/stations/:id/stats`         | Get station visit stats (`?period=hour\|day\|week`, default: `day`)                                                                      |
+| `GET`  | `/stations/:id/stats`         | Get station visit stats (`?period=hour\|day\|week\|month`, default: `day`)                                                               |
 | `GET`  | `/analytics/overview`         | Get global analytics (total visits, unique visitors, country breakdown)                                                                  |
 
 ### `GET /operators`
@@ -55,12 +55,12 @@ Returns a JSON object with `timestamp`, `period`, and `stations`.
 
 - Stations are ranked by `uniqueVisitors`, with `visits` used as a tie-breaker
 - Each station still includes both `uniqueVisitors` and `visits`, so clients can show values like `20 (219)`
-- `?period=hour|day|week` controls the analytics window
+- `?period=hour|day|week|month` controls the analytics window
 - `/stations/trending/:country` applies the same ranking within a single country
 
 ### `GET /stations.geojson`
 
-Returns `application/geo+json` FeatureCollection consumed directly by MapBox GL JS:
+Returns `application/geo+json` FeatureCollection consumed directly by Mapbox GL JS:
 
 - No params: all stations (pre-serialized for performance)
 - `?type=rail|metro|light`: filter by station type
