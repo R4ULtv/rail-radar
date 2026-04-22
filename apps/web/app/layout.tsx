@@ -5,7 +5,6 @@ import "./globals.css";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import baseUrl from "@/lib/base-url";
-import { ServiceWorkerCleanup } from "@/components/service-worker-cleanup";
 
 const geistSans = Geist({
   subsets: ["latin"],
@@ -75,7 +74,6 @@ export default function RootLayout({
       </head>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <NuqsAdapter>{children}</NuqsAdapter>
-        <ServiceWorkerCleanup />
         <Analytics />
         <SpeedInsights />
       </body>
