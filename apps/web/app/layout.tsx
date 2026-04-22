@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
 import "./globals.css";
 import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import baseUrl from "@/lib/base-url";
 import { ServiceWorkerCleanup } from "@/components/service-worker-cleanup";
 
@@ -76,6 +77,7 @@ export default function RootLayout({
         <NuqsAdapter>{children}</NuqsAdapter>
         <ServiceWorkerCleanup />
         <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );
