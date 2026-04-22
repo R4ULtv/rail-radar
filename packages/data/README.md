@@ -12,7 +12,7 @@ src/
 ├── operators.ts        # Operator data loader and exports
 ├── operators.json      # Train operator dataset
 ├── types.ts            # TypeScript type definitions
-└── stations.geojson    # GeoJSON FeatureCollection (15,000+ stations)
+└── stations.geojson    # GeoJSON FeatureCollection (17,000+ stations)
 ```
 
 ## Exports
@@ -62,7 +62,7 @@ A typed GeoJSON `FeatureCollection<Point, StationProperties>` containing all sta
 - `properties.importance` — `1`–`4`
 - `geometry.coordinates` — `[lng, lat]`
 
-This is served directly by the API as the `/stations.geojson` endpoint and consumed by MapBox GL JS.
+This is served directly by the API as the `/stations.geojson` endpoint and consumed by Mapbox GL JS.
 
 ### `stations`
 
@@ -92,7 +92,7 @@ getCountry("NO0300"); // "no"
 getCountry("SE740000001"); // "se"
 getCountry("UK1072"); // "uk"
 getCountry("IE360"); // "ie"
-getCountry("IT01700", { format: "name" }); // "italy"
+getCountry("IT01700", { format: "name" }); // "Italy"
 ```
 
 ### `operators`

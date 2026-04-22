@@ -5,7 +5,7 @@ Next.js frontend for real-time train tracking across Europe with an interactive 
 ## Tech Stack
 
 - [Next.js 16](https://nextjs.org/) + React 19
-- [MapBox GL](https://www.mapbox.com/mapbox-gljs) via react-map-gl - Interactive mapping
+- [Mapbox GL](https://www.mapbox.com/mapbox-gljs) via react-map-gl - Interactive mapping
 - [SWR](https://swr.vercel.app/) - Data fetching with auto-refresh
 - [nuqs](https://nuqs.47ng.com/) - URL query state sync
 - [Tailwind CSS v4](https://tailwindcss.com/) - Styling
@@ -13,7 +13,7 @@ Next.js frontend for real-time train tracking across Europe with an interactive 
 
 ## Features
 
-- Interactive full-screen map with 15,000+ station markers
+- Interactive full-screen map with 17,000+ station markers
 - Real-time train arrivals/departures with 30s polling
 - Fuzzy station search with keyboard shortcuts
 - URL-synced map state for shareable links
@@ -52,7 +52,7 @@ apps/web/
 │   ├── station-info.tsx    # Station details drawer
 │   ├── station-markers.tsx # GeoJSON marker layer
 │   ├── train-row.tsx       # Train list item
-│   ├── brands/             # Train brand logos
+│   ├── brands.tsx          # Train brand logo resolver
 │   └── station-page/       # Station detail page components
 │       ├── nearby-stations.tsx
 │       ├── station-header.tsx

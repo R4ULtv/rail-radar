@@ -3,8 +3,8 @@ import { Geist, Geist_Mono } from "next/font/google";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
 import "./globals.css";
 import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import baseUrl from "@/lib/base-url";
-import { ServiceWorkerCleanup } from "@/components/service-worker-cleanup";
 
 const geistSans = Geist({
   subsets: ["latin"],
@@ -22,7 +22,7 @@ export const metadata: Metadata = {
     template: "%s | Rail Radar",
   },
   description:
-    "Track live train departures, delays, platforms, and arrivals across 15,000+ stations in 10 European countries.",
+    "Track live train departures, delays, platforms, and arrivals across 17,000+ stations in 11 European countries.",
   openGraph: {
     type: "website",
     url: baseUrl,
@@ -32,7 +32,7 @@ export const metadata: Metadata = {
         url: "/og-image.webp",
         width: 1200,
         height: 630,
-        alt: "Rail Radar - Live Train Tracking Map for Italy, Switzerland, Germany, Finland, Belgium, the Netherlands, Norway, Sweden, the UK, and Ireland",
+        alt: "Rail Radar - Live Train Tracking Map for Italy, Switzerland, Germany, Finland, Belgium, Denmark, the Netherlands, Norway, Sweden, the UK, and Ireland",
       },
     ],
   },
@@ -74,8 +74,8 @@ export default function RootLayout({
       </head>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <NuqsAdapter>{children}</NuqsAdapter>
-        <ServiceWorkerCleanup />
         <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );

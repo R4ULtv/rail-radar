@@ -11,11 +11,11 @@ const API_ENDPOINTS = {
   "GET /stations.geojson":
     "Get stations as GeoJSON (optional: ?type=rail|metro|light&country=it|ch|de|fi|be|dk|nl|no|se|uk|ie)",
   "GET /stations/trending":
-    "Get trending stations ranked by unique visitors (optional: ?period=hour|day|week, default: day)",
+    "Get trending stations ranked by unique visitors (optional: ?period=hour|day|week|month, default: day)",
   "GET /stations/trending/:country":
-    "Get trending stations by country ranked by unique visitors (it|ch|de|fi|be|dk|nl|no|se|uk|ie, optional: ?period=hour|day|week)",
+    "Get trending stations by country ranked by unique visitors (it|ch|de|fi|be|dk|nl|no|se|uk|ie, optional: ?period=hour|day|week|month)",
   "GET /stations/:id/stats":
-    "Get station visit stats (optional: ?period=hour|day|week, default: day)",
+    "Get station visit stats (optional: ?period=hour|day|week|month, default: day)",
   "GET /stations/:id": "Get station info with trains (optional: ?type=arrivals|departures)",
   "GET /analytics/overview": "Get global analytics overview",
 } as const;
