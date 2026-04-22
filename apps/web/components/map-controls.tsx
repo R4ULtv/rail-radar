@@ -5,8 +5,14 @@ import { Marker, useMap } from "react-map-gl/mapbox";
 import { CompassIcon, LocateFixedIcon, LocateIcon, MinusIcon, PlusIcon } from "lucide-react";
 import { Button } from "@repo/ui/components/button";
 import { ButtonGroup } from "@repo/ui/components/button-group";
+import { MapContextMenu } from "@/components/map-context-menu";
+import type { MapContextMenuSnapshot } from "@/components/map-context-menu";
 
-export function MapControls() {
+interface MapControlsProps {
+  contextMenuSnapshot: MapContextMenuSnapshot | null;
+}
+
+export function MapControls({ contextMenuSnapshot }: MapControlsProps) {
   const { current: map } = useMap();
   const [bearing, setBearing] = React.useState(0);
   const [userLocation, setUserLocation] = React.useState<{
@@ -122,6 +128,7 @@ export function MapControls() {
 
   return (
     <>
+      <MapContextMenu snapshot={contextMenuSnapshot} onLocate={handleLocate} />
       {userLocation && (
         <Marker longitude={userLocation.longitude} latitude={userLocation.latitude} anchor="center">
           <div className="relative flex items-center justify-center">

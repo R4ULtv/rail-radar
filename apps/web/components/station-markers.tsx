@@ -1,6 +1,7 @@
 "use client";
 
 import type { MapMouseEvent } from "mapbox-gl";
+import type { Station } from "@repo/data";
 import { useEffect, useMemo } from "react";
 import { Layer, Source, useMap } from "react-map-gl/mapbox";
 import type { LayerProps } from "react-map-gl/mapbox";
@@ -9,7 +10,11 @@ type Visibility = "visible" | "none";
 import { useSelectedStation } from "@/hooks/use-selected-station";
 import type { MapLayersState } from "@/hooks/use-map-layers";
 
-const RAIL_LAYER_ID = "rail-stations";
+export const RAIL_LAYER_ID = "rail-stations";
+export const METRO_LAYER_ID = "metro-stations";
+export const LIGHT_LAYER_ID = "light-stations";
+export const STATION_LAYER_IDS = [RAIL_LAYER_ID, METRO_LAYER_ID, LIGHT_LAYER_ID];
+
 const RAIL_ICON_ID = "rail-icon";
 const METRO_ICON_ID = "metro-icon";
 const LIGHT_ICON_ID = "light-icon";
@@ -223,6 +228,35 @@ const railwayTunnelStyle = (v: Visibility): LayerProps => ({
   },
 });
 
+function isStationType(type: unknown): type is Station["type"] {
+  return type === "rail" || type === "metro" || type === "light";
+}
+
+function normalizeImportance(value: unknown): Station["importance"] {
+  const importance = Number(value);
+  return importance === 1 || importance === 2 || importance === 3 || importance === 4
+    ? importance
+    : 4;
+}
+
+export function stationFromFeature(feature: GeoJSON.Feature | undefined): Station | null {
+  if (!feature?.properties || feature.geometry?.type !== "Point") return null;
+
+  const { id, name, type, importance } = feature.properties;
+  if (typeof id !== "string" || typeof name !== "string" || !isStationType(type)) return null;
+
+  const [lng, lat] = feature.geometry.coordinates;
+  if (typeof lat !== "number" || typeof lng !== "number") return null;
+
+  return {
+    id,
+    name,
+    type,
+    importance: normalizeImportance(importance),
+    geo: { lat, lng },
+  };
+}
+
 export function StationMarkers({ stations, layers }: Pick<MapLayersState, "stations" | "layers">) {
   const { current: map } = useMap();
   const { selectStation } = useSelectedStation();
@@ -262,18 +296,10 @@ export function StationMarkers({ stations, layers }: Pick<MapLayersState, "stati
     loadIcon(LIGHT_ICON_ID, LIGHT_ICON_SVG);
 
     const handleClick = (e: MapMouseEvent & { features?: GeoJSON.Feature[] }) => {
-      const feature = e.features?.[0];
-      if (!feature?.properties || !feature.geometry) return;
+      const station = stationFromFeature(e.features?.[0]);
+      if (!station) return;
 
-      const id = feature.properties.id as string | undefined;
-      const name = feature.properties.name as string | undefined;
-      const type = feature.properties.type as "rail" | "metro" | "light";
-
-      if (id === undefined || name === undefined) return;
-
-      const [lng, lat] = (feature.geometry as GeoJSON.Point).coordinates;
-      const importance = (feature.properties.importance ?? 4) as 1 | 2 | 3 | 4;
-      selectStation({ id, name, type, importance, geo: { lat: lat!, lng: lng! } });
+      selectStation(station);
     };
 
     const handleMouseEnter = () => {
@@ -283,9 +309,6 @@ export function StationMarkers({ stations, layers }: Pick<MapLayersState, "stati
     const handleMouseLeave = () => {
       map.getCanvas().style.cursor = "";
     };
-
-    const METRO_LAYER_ID = "metro-stations";
-    const LIGHT_LAYER_ID = "light-stations";
 
     map.on("click", RAIL_LAYER_ID, handleClick);
     map.on("mouseenter", RAIL_LAYER_ID, handleMouseEnter);
