@@ -34,6 +34,12 @@ export default function Home() {
           __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c"),
         }}
       />
+      <link
+        rel="preload"
+        href={process.env.NEXT_PUBLIC_API_URL + "/stations.geojson"}
+        as="fetch"
+        crossOrigin="anonymous"
+      />
       <h1 className="sr-only">
         Rail Radar - Live Train Tracker for Italy, Switzerland, Germany, Finland, Belgium, Denmark,
         the Netherlands, Norway, Sweden, the UK, and Ireland
@@ -44,9 +50,9 @@ export default function Home() {
           Finland, Belgium, Denmark, the Netherlands, Norway, Sweden, the United Kingdom, and
           Ireland. Monitor live departures, arrivals, delays, and platform changes across more than
           17,000 train stations on an interactive map. Stay informed with up-to-date data from RFI,
-          Swiss public transport feeds, Deutsche Bahn (DB), Finnish Digitraffic, iRail,
-          Rejseplanen, NS, Entur, Trafiklab, LDBWS, and Irish Rail, whether you are commuting daily
-          or planning a trip across Europe.
+          Swiss public transport feeds, Deutsche Bahn (DB), Finnish Digitraffic, iRail, Rejseplanen,
+          NS, Entur, Trafiklab, LDBWS, and Irish Rail, whether you are commuting daily or planning a
+          trip across Europe.
         </p>
         <p>
           Search any station to see upcoming trains, check real-time delay information, and explore

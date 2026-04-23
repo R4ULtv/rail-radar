@@ -68,6 +68,7 @@ export default function RootLayout({
         {/* Preconnect to Mapbox services for faster map loading */}
         <link rel="preconnect" href="https://api.mapbox.com" />
         <link rel="preconnect" href="https://events.mapbox.com" />
+        <link rel="preconnect" href={process.env.NEXT_PUBLIC_API_URL} crossOrigin="anonymous" />
         <link rel="apple-touch-icon" href="/icon@180px.png" />
         <link rel="alternate" hrefLang="en" href="https://www.railradar24.com" />
         <link rel="alternate" hrefLang="x-default" href="https://www.railradar24.com" />
