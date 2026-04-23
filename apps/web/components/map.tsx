@@ -70,14 +70,14 @@ export function Map() {
         if (result.state !== "granted") return;
 
         navigator.geolocation.getCurrentPosition((pos) => {
+          if (hasUserInteractedRef.current) return;
+
           const latitude = Math.round(pos.coords.latitude * 1000000) / 1000000;
           const longitude = Math.round(pos.coords.longitude * 1000000) / 1000000;
           const nextPosition = { latitude, longitude, zoom: 13 };
 
           setInitialPosition(nextPosition);
           setParams({ lat: latitude, lng: longitude, zoom: 13 });
-
-          if (hasUserInteractedRef.current) return;
 
           if (mapRef.current) {
             mapRef.current.jumpTo({ center: [longitude, latitude], zoom: 13 });
