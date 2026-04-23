@@ -3,8 +3,9 @@
 import "mapbox-gl/dist/mapbox-gl.css";
 import dynamic from "next/dynamic";
 import { parseAsFloat, useQueryStates } from "nuqs";
-import { startTransition, useEffect, useState } from "react";
-import type { ViewStateChangeEvent } from "react-map-gl/mapbox";
+import { startTransition, useCallback, useEffect, useRef, useState } from "react";
+import type { Map as MapboxMap } from "mapbox-gl";
+import type { MapEvent, ViewStateChangeEvent } from "react-map-gl/mapbox";
 
 import { MapControls } from "@/components/map-controls";
 import { MapLayerFilter } from "@/components/map-layer-filter";
@@ -27,6 +28,12 @@ const DEFAULT_VIEW = {
   zoom: 4,
 };
 
+type InitialPosition = {
+  latitude: number;
+  longitude: number;
+  zoom: number;
+};
+
 export function Map() {
   const [params, setParams] = useQueryStates(
     {
@@ -45,66 +52,76 @@ export function Map() {
     params.lng !== DEFAULT_VIEW.lng ||
     params.zoom !== DEFAULT_VIEW.zoom;
 
-  const [initialPosition, setInitialPosition] = useState<{
-    latitude: number;
-    longitude: number;
-    zoom: number;
-  } | null>(
-    hasUrlParams ? { latitude: params.lat, longitude: params.lng, zoom: params.zoom } : null,
-  );
-
-  const hasInitialPosition = initialPosition !== null;
+  const [initialPosition, setInitialPosition] = useState<InitialPosition>(() => ({
+    latitude: params.lat,
+    longitude: params.lng,
+    zoom: params.zoom,
+  }));
+  const mapRef = useRef<MapboxMap | null>(null);
+  const hasUserInteractedRef = useRef(false);
+  const pendingAutoLocationRef = useRef<InitialPosition | null>(null);
 
   useEffect(() => {
-    if (hasUrlParams || hasInitialPosition) return;
+    if (hasUrlParams || !navigator.geolocation || !navigator.permissions) return;
 
-    const setDefaultPosition = () => {
-      setInitialPosition({
-        latitude: DEFAULT_VIEW.lat,
-        longitude: DEFAULT_VIEW.lng,
-        zoom: DEFAULT_VIEW.zoom,
-      });
-    };
+    navigator.permissions
+      .query({ name: "geolocation" })
+      .then((result) => {
+        if (result.state !== "granted") return;
 
-    if (navigator.permissions && navigator.geolocation) {
-      navigator.permissions
-        .query({ name: "geolocation" })
-        .then((result) => {
-          if (result.state === "granted") {
-            navigator.geolocation.getCurrentPosition(
-              (pos) => {
-                const latitude = Math.round(pos.coords.latitude * 1000000) / 1000000;
-                const longitude = Math.round(pos.coords.longitude * 1000000) / 1000000;
-                setInitialPosition({ latitude, longitude, zoom: 13 });
-                setParams({ lat: latitude, lng: longitude, zoom: 13 });
-              },
-              () => setDefaultPosition(),
-            );
+        navigator.geolocation.getCurrentPosition((pos) => {
+          if (hasUserInteractedRef.current) return;
+
+          const latitude = Math.round(pos.coords.latitude * 1000000) / 1000000;
+          const longitude = Math.round(pos.coords.longitude * 1000000) / 1000000;
+          const nextPosition = { latitude, longitude, zoom: 13 };
+
+          setInitialPosition(nextPosition);
+          setParams({ lat: latitude, lng: longitude, zoom: 13 });
+
+          if (mapRef.current) {
+            mapRef.current.jumpTo({ center: [longitude, latitude], zoom: 13 });
           } else {
-            setDefaultPosition();
+            pendingAutoLocationRef.current = nextPosition;
           }
-        })
-        .catch(() => setDefaultPosition());
-    } else {
-      setDefaultPosition();
-    }
-  }, [hasInitialPosition, hasUrlParams, setParams]);
-
-  const handleMoveEnd = (e: ViewStateChangeEvent) => {
-    startTransition(() => {
-      setParams({
-        lat: Math.round(e.viewState.latitude * 1000000) / 1000000,
-        lng: Math.round(e.viewState.longitude * 1000000) / 1000000,
-        zoom: Math.round(e.viewState.zoom * 10) / 10,
+        });
+      })
+      .catch(() => {
+        // Permissions API failures should not block the default map load.
       });
-    });
-  };
+  }, [hasUrlParams, setParams]);
+
+  const handleMoveEnd = useCallback(
+    (e: ViewStateChangeEvent) => {
+      startTransition(() => {
+        setParams({
+          lat: Math.round(e.viewState.latitude * 1000000) / 1000000,
+          lng: Math.round(e.viewState.longitude * 1000000) / 1000000,
+          zoom: Math.round(e.viewState.zoom * 10) / 10,
+        });
+      });
+    },
+    [setParams],
+  );
+
+  const handleMapLoad = useCallback((event: MapEvent) => {
+    mapRef.current = event.target;
+    const pendingAutoLocation = pendingAutoLocationRef.current;
+
+    if (pendingAutoLocation && !hasUserInteractedRef.current) {
+      event.target.jumpTo({
+        center: [pendingAutoLocation.longitude, pendingAutoLocation.latitude],
+        zoom: pendingAutoLocation.zoom,
+      });
+      pendingAutoLocationRef.current = null;
+    }
+  }, []);
+
+  const handleUserInteraction = useCallback(() => {
+    hasUserInteractedRef.current = true;
+  }, []);
 
   const { stations, layers, toggleStation, toggleLayer } = useMapLayers();
-
-  if (!initialPosition) {
-    return <MapLoading />;
-  }
 
   return (
     <MapGL
@@ -119,12 +136,17 @@ export function Map() {
         width: "100%",
         height: "100%",
       }}
+      onLoad={handleMapLoad}
       mapboxAccessToken={process.env.NEXT_PUBLIC_MAPBOX_TOKEN}
-      mapStyle="mapbox://styles/mapbox/dark-v11"
+      mapStyle="mapbox://styles/mapbox/dark-v11?optimize=true"
       projection="mercator"
       maxPitch={0}
       minZoom={3}
       maxZoom={18}
+      performanceMetricsCollection={false}
+      reuseMaps
+      onDragStart={handleUserInteraction}
+      onZoomStart={handleUserInteraction}
     >
       <SelectedStationProvider>
         <StationMarkers stations={stations} layers={layers} />

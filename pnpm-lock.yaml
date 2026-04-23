@@ -52,8 +52,8 @@ importers:
         specifier: ^1.8.0
         version: 1.8.0(react@19.2.5)
       maplibre-gl:
-        specifier: ^5.23.0
-        version: 5.23.0
+        specifier: ^5.24.0
+        version: 5.24.0
       next:
         specifier: 16.2.4
         version: 16.2.4(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.5(react@19.2.5))(react@19.2.5)
@@ -68,7 +68,7 @@ importers:
         version: 19.2.5(react@19.2.5)
       react-map-gl:
         specifier: ^8.1.1
-        version: 8.1.1(mapbox-gl@3.22.0)(maplibre-gl@5.23.0)(react-dom@19.2.5(react@19.2.5))(react@19.2.5)
+        version: 8.1.1(mapbox-gl@3.22.0)(maplibre-gl@5.24.0)(react-dom@19.2.5(react@19.2.5))(react@19.2.5)
       sonner:
         specifier: ^2.0.7
         version: 2.0.7(react-dom@19.2.5(react@19.2.5))(react@19.2.5)
@@ -135,13 +135,13 @@ importers:
         version: 19.2.5(react@19.2.5)
       react-map-gl:
         specifier: ^8.1.1
-        version: 8.1.1(mapbox-gl@3.22.0)(maplibre-gl@5.23.0)(react-dom@19.2.5(react@19.2.5))(react@19.2.5)
+        version: 8.1.1(mapbox-gl@3.22.0)(maplibre-gl@5.24.0)(react-dom@19.2.5(react@19.2.5))(react@19.2.5)
       swr:
         specifier: ^2.4.1
         version: 2.4.1(react@19.2.5)
       takumi-js:
-        specifier: ^1.0.15
-        version: 1.0.15(react-dom@19.2.5(react@19.2.5))(react@19.2.5)
+        specifier: ^1.0.16
+        version: 1.0.16(react-dom@19.2.5(react@19.2.5))(react@19.2.5)
     devDependencies:
       '@repo/typescript-config':
         specifier: workspace:*
@@ -462,8 +462,8 @@ packages:
   '@date-fns/tz@1.4.1':
     resolution: {integrity: sha512-P5LUNhtbj6YfI3iJjw5EL9eUAG6OitD0W3fWQcpQjDRc/QIsL0tRNuO1PcDvPccWL1fSTXXdE1ds+l95DV/OFA==}
 
-  '@dotenvx/dotenvx@1.61.4':
-    resolution: {integrity: sha512-g6QvAdXmSKMxmF1oFeCcDwklB5/fmkRXzApL3q2n20Z7YXUzDvFZg1ItTsXdX9g5hTyEKjmcOPJON37O5TiDew==}
+  '@dotenvx/dotenvx@1.61.5':
+    resolution: {integrity: sha512-DysyULN/STdycYnyoKIe4y0QjRutWp/EDlCwpyUvq2dknjZV8TkKsLM7QXTjf31eV4Ak7GDG5JQ2e5CvrmJsog==}
     hasBin: true
 
   '@ecies/ciphers@0.2.6':
@@ -1260,8 +1260,8 @@ packages:
       '@cfworker/json-schema':
         optional: true
 
-  '@mswjs/interceptors@0.41.4':
-    resolution: {integrity: sha512-3B9EinUkrdOUGYzHRzRWSXunQ4YFGboJnyLNRwEJWEde+j8fNhPUHvrN1E3g1DU/iS/s8JQrMNVe+S7AHHVs0w==}
+  '@mswjs/interceptors@0.41.5':
+    resolution: {integrity: sha512-Fa2HztoLlZxRN6wVC2KB7q0SvRTKjfP0328NVnSit03+0nzm62syxyT46KGbgq3Vr1A/mmLeQwu3GprB0lNTjw==}
     engines: {node: '>=18'}
 
   '@next/env@16.2.4':
@@ -1737,64 +1737,64 @@ packages:
   '@tailwindcss/postcss@4.2.4':
     resolution: {integrity: sha512-wgAVj6nUWAolAu8YFvzT2cTBIElWHkjZwFYovF+xsqKsW2ADxM/X2opxj5NsF/qVccAOjRNe8X2IdPzMsWyHTg==}
 
-  '@takumi-rs/core-darwin-arm64@1.0.15':
-    resolution: {integrity: sha512-yx8JvVVMvEMlk6hyrbJCjPu2Y1RRtCj8RI9qI5b1LnK4gIb1fr4UY+wo7ZCb9UT2c4O87CAOdzWgKaNNyCab1Q==}
+  '@takumi-rs/core-darwin-arm64@1.0.16':
+    resolution: {integrity: sha512-VOdlE3gs35R+9Q1XEGdxUjtov8pY+PZLYQLiwicx46tB3rR8156TZhVOKi0un8X9yfvjcyb5r2kDXuf/rxn5Ew==}
     engines: {node: '>= 12.22.0 < 13 || >= 14.17.0 < 15 || >= 15.12.0 < 16 || >= 16.0.0'}
     cpu: [arm64]
     os: [darwin]
 
-  '@takumi-rs/core-darwin-x64@1.0.15':
-    resolution: {integrity: sha512-ZIxNwlCVcheOJFw7udy399DWjO/PkCOqjTrWQh9b3e3M7h83YtDSSdGW8qpjqPANS4Yuf0tsNdKBtx3uuPtZJw==}
+  '@takumi-rs/core-darwin-x64@1.0.16':
+    resolution: {integrity: sha512-/DLxUPmZNjgdYJeQSb48D9ryGYtCgdq+Y9Jz7BhhLAGifCY5HxbWPud5lRbZ4ROQbCxO63bMtUpXHsN+IwRwTw==}
     engines: {node: '>= 12.22.0 < 13 || >= 14.17.0 < 15 || >= 15.12.0 < 16 || >= 16.0.0'}
     cpu: [x64]
     os: [darwin]
 
-  '@takumi-rs/core-linux-arm64-gnu@1.0.15':
-    resolution: {integrity: sha512-dY/RsyncIXRBO/NK6RY9IRguhtPlW2r0VvMZ8Tkt4gCoRFyE2yC4Cr238zfKOD6YnfIzGKGOnn5WGX6fFKmH+A==}
+  '@takumi-rs/core-linux-arm64-gnu@1.0.16':
+    resolution: {integrity: sha512-Ac/hQNUx1OOckVwp2QnIQe37MbVooKYZVZ8+lrWSOId4eiUu95znB3MmSskLSkgSy8BJn0oRl0/qDlfz7A/Ufg==}
     engines: {node: '>= 12.22.0 < 13 || >= 14.17.0 < 15 || >= 15.12.0 < 16 || >= 16.0.0'}
     cpu: [arm64]
     os: [linux]
     libc: [glibc]
 
-  '@takumi-rs/core-linux-arm64-musl@1.0.15':
-    resolution: {integrity: sha512-gkdhCE/wTuuVR3LcsH3OwT8/i1iaKqmnbaUYU0lgbuYxsgzZ+OgB9ZXS/JjSjlBLcndDC07h6FQ5z7MpMGla8Q==}
+  '@takumi-rs/core-linux-arm64-musl@1.0.16':
+    resolution: {integrity: sha512-JBS23hA7o2R7QDJPtaJfkWXC+ZH+dK9crJqAwknKc62VN83y856bEXKcgQmvtkaB+zY/kzKpuKNdfYH9onACGA==}
     engines: {node: '>= 12.22.0 < 13 || >= 14.17.0 < 15 || >= 15.12.0 < 16 || >= 16.0.0'}
     cpu: [arm64]
     os: [linux]
     libc: [musl]
 
-  '@takumi-rs/core-linux-x64-gnu@1.0.15':
-    resolution: {integrity: sha512-cRmEYeYEmSGVwt2DbQdHvukEmSatOjcpDz8UGdLh43y8XTUFDexfhQ953GHFMinT6RhrD3gntCYVZLI5EEEsfQ==}
+  '@takumi-rs/core-linux-x64-gnu@1.0.16':
+    resolution: {integrity: sha512-O2kCbdIcHswY25CnzRup/Dy3bzG1AAglYuJ0ZSiH0eni+NGOLCxq85lK8gfgaoW2+II09zVU87bX3Ass3TGgqg==}
     engines: {node: '>= 12.22.0 < 13 || >= 14.17.0 < 15 || >= 15.12.0 < 16 || >= 16.0.0'}
     cpu: [x64]
     os: [linux]
     libc: [glibc]
 
-  '@takumi-rs/core-linux-x64-musl@1.0.15':
-    resolution: {integrity: sha512-vmh29lENj8vgDGzVWUOIYOoDqkVgA4yyOYdEElMhclNjqOjtoTX3MDZuYRgHKykuSFhNUNdnxVTePZe9w/xDlQ==}
+  '@takumi-rs/core-linux-x64-musl@1.0.16':
+    resolution: {integrity: sha512-OLEWcnHjuKCt4W2SuMbwQ4M8q9DzEmNfEu3u7FITKdCUuNB7612lJB5AnILHNuTqH/jqRMkDqn/dAxwpb50SKA==}
     engines: {node: '>= 12.22.0 < 13 || >= 14.17.0 < 15 || >= 15.12.0 < 16 || >= 16.0.0'}
     cpu: [x64]
     os: [linux]
     libc: [musl]
 
-  '@takumi-rs/core-win32-arm64-msvc@1.0.15':
-    resolution: {integrity: sha512-LU2aLuvQA0WWPrGzZMDYEgWxxDg+qda4bFi+qcwyT+ZXkOhcNtaCiCVFYJOqpJY5iHo5pHtZynA4HJ5DkjCaXA==}
+  '@takumi-rs/core-win32-arm64-msvc@1.0.16':
+    resolution: {integrity: sha512-F+/yVv4qndp8yboVwmoFziHwvbFIr/W3neZq9o1izcdpPt/YUhS04iVepxnPlyLGC0sHL4L/Y98F/hODclgvVw==}
     engines: {node: '>= 12.22.0 < 13 || >= 14.17.0 < 15 || >= 15.12.0 < 16 || >= 16.0.0'}
     cpu: [arm64]
     os: [win32]
 
-  '@takumi-rs/core-win32-x64-msvc@1.0.15':
-    resolution: {integrity: sha512-gGq4kGfmqtNRWsJXOXNZHtWbouTSSym8jpoYvAs15eFB5bPuXJznQeZ883OaRDKuqXpPkwNonVKZM15qOSMcCQ==}
+  '@takumi-rs/core-win32-x64-msvc@1.0.16':
+    resolution: {integrity: sha512-AkKVaAAeWc56gYMJum8sC8xZ8y+hiqiZ2ywT0DfG3XLbRDTcMAUjAUj+/PqHcO52kaJhC+iiHzsUuubXk/tnqw==}
     engines: {node: '>= 12.22.0 < 13 || >= 14.17.0 < 15 || >= 15.12.0 < 16 || >= 16.0.0'}
     cpu: [x64]
     os: [win32]
 
-  '@takumi-rs/core@1.0.15':
-    resolution: {integrity: sha512-zof1cMTKuswcuYpuJxPYQZHSgn2/02Yb4TnZbRKkRL2F5zB3z3p/tlFZc/2pkxvSpJn4YlN2GrOZkYV1Axr6gA==}
+  '@takumi-rs/core@1.0.16':
+    resolution: {integrity: sha512-LkCASB4jo0Myhc0K5GrfvULc9SrFKrArZ+g+UQ0wNYN6cQFIbpEJWjZdtvGCtFCinfir8JrMcyuIiA5/qWxI7A==}
     engines: {node: '>= 12.22.0 < 13 || >= 14.17.0 < 15 || >= 15.12.0 < 16 || >= 16.0.0'}
 
-  '@takumi-rs/helpers@1.0.15':
-    resolution: {integrity: sha512-Qxt8mQY3QNKbseKsjgZdM4v324nSwBpQ6H4SPIv3jZuy3JUzSXhgtTP395S9/MQToSL6yCBw4L3c02okb2f5Sw==}
+  '@takumi-rs/helpers@1.0.16':
+    resolution: {integrity: sha512-rWWzJqOh1uklKK6YQQeseO2ohVlfAuRp7ucSJH2FEPMiIQN5+Iew2akAZtwKN2VzpSuxzaVv1ss/mMwSH/Qmtg==}
     peerDependencies:
       react: ^19.2.5
       react-dom: ^18.0.0 || ^19.0.0
@@ -1804,8 +1804,8 @@ packages:
       react-dom:
         optional: true
 
-  '@takumi-rs/wasm@1.0.15':
-    resolution: {integrity: sha512-A5p1zEfTPLnG7OcXhcHRu6kt9rTKQFoTEY3uFE7R9FB6KbLHB+Uohk8iCfkghxOW/J0mfHyNQU3SCfsw7MClBA==}
+  '@takumi-rs/wasm@1.0.16':
+    resolution: {integrity: sha512-c51NLo6x3tP5AJjiboJA/6BPIqbWV7PJmMciG9jtpqJKjHp/Au5wyXdlZ6+aYyZlYY9rEL/JH126cKIjBjv2iQ==}
 
   '@ts-morph/common@0.27.0':
     resolution: {integrity: sha512-Wf29UqxWDpc+i61k3oIOzcUfQt79PIT9y/MWfAGlrkjg6lBC1hwDECLXPVJAhWjiGbfBCxZd65F/LIZF3+jeJQ==}
@@ -2053,8 +2053,8 @@ packages:
     resolution: {integrity: sha512-BLrgEcRTwX2o6gGxGOCNyMvGSp35YofuYzw9h1IMTRmKqttAZZVU67bdb9Pr2vUHA8+j3i2tJfjO6C6+4myGTA==}
     engines: {node: 18 || 20 || >=22}
 
-  baseline-browser-mapping@2.10.20:
-    resolution: {integrity: sha512-1AaXxEPfXT+GvTBJFuy4yXVHWJBXa4OdbIebGN/wX5DlsIkU0+wzGnd2lOzokSk51d5LUmqjgBLRLlypLUqInQ==}
+  baseline-browser-mapping@2.10.21:
+    resolution: {integrity: sha512-Q+rUQ7Uz8AHM7DEaNdwvfFCTq7a43lNTzuS94eiWqwyxfV/wJv+oUivef51T91mmRY4d4A1u9rcSvkeufCVXlA==}
     engines: {node: '>=6.0.0'}
     hasBin: true
 
@@ -2350,8 +2350,8 @@ packages:
   ee-first@1.1.1:
     resolution: {integrity: sha512-WMwm9LhRUo+WUaRN+vRuETqG89IgZphVSNkdFgeb6sS/E4OrDIN7t48CAewSHXc6C8lefD8KKfr5vY61brQlow==}
 
-  electron-to-chromium@1.5.343:
-    resolution: {integrity: sha512-YHnQ3MXI08icvL9ZKnEBy05F2EQ8ob01UaMOuMbM8l+4UcAq6MPPbBTJBbsBUg3H8JeZNt+O4fjsoWth3p6IFg==}
+  electron-to-chromium@1.5.344:
+    resolution: {integrity: sha512-4MxfbmNDm+KPh066EZy+eUnkcDPcZ35wNmOWzFuh/ijvHsve6kbLTLURy88uCNK5FbpN+yk2nQY6BYh1GEt+wg==}
 
   emoji-regex@10.6.0:
     resolution: {integrity: sha512-toUI84YS5YmxW219erniWD0CIVOo46xGKColeNQRgOzDorgBi1v4D71/OFzgD9GO2UGKIv1C3Sp8DAn0+j5w7A==}
@@ -2489,8 +2489,8 @@ packages:
     resolution: {integrity: sha512-9Be3ZoN4LmYR90tUoVu2te2BsbzHfhJyfEiAVfz7N5/zv+jduIfLrV2xdQXOHbaD6KgpGdO9PRPM1Y4Q9QkPkA==}
     engines: {node: ^18.19.0 || >=20.5.0}
 
-  express-rate-limit@8.3.2:
-    resolution: {integrity: sha512-77VmFeJkO0/rvimEDuUC5H30oqUC4EyOhyGccfqoLebB0oiEYfM7nwPrsDsBL1gsTpwfzX8SFy2MT3TDyRq+bg==}
+  express-rate-limit@8.4.0:
+    resolution: {integrity: sha512-gDK8yiqKxrGta+3WtON59arrrw6GLmadA1qoFgYXzdcch8fmKDID2XqO8itsi3f1wufXYPT51387dN6cvVBS3Q==}
     engines: {node: '>= 16'}
     peerDependencies:
       express: '>= 4.11'
@@ -3025,8 +3025,8 @@ packages:
   mapbox-gl@3.22.0:
     resolution: {integrity: sha512-ZIpF+oAMcQoDlvABmiRkHoydyBR9zI6CyDeVRa2/iyua0/B2+rPuIzoCV/CgN14P5F0HVk53GIZw220WSqJPyA==}
 
-  maplibre-gl@5.23.0:
-    resolution: {integrity: sha512-aou8YBNFS8uVtDWFWt0W/6oorfl18wt+oIA8fnXk1kivjkbtXi9gGrQvflTpwrR3hG13aWdIdbYWeN0NFMV7ag==}
+  maplibre-gl@5.24.0:
+    resolution: {integrity: sha512-ALyFxgtd5R+65UqZ/++lOqwWcC0SNho9c27fYSyLmG7AfnAul2o46F05aDJGPbFU57wos9dgcIySHs0Xe6ia3A==}
     engines: {node: '>=16.14.0', npm: '>=8.1.0'}
 
   martinez-polygon-clipping@0.8.1:
@@ -3109,8 +3109,8 @@ packages:
   ms@2.1.3:
     resolution: {integrity: sha512-6FlzubTLZG3J2a/NVCAleEhjzq5oxgHyaCU9yYXvcLsvoVaHJq/s5xXI6/XXP6tz7R9xAOtHnSO/tXtF3WRTlA==}
 
-  msw@2.13.4:
-    resolution: {integrity: sha512-fPlKBeFe+8rpcyR3umUmmHuNwu6gc6T3STvkgEa9WDX/HEgal9wDeflpCUAIRtmvaLZM2igfI5y1bZ9G5J26KA==}
+  msw@2.13.5:
+    resolution: {integrity: sha512-LuJem+CbqbywJtafv4zh5kcCQNmZnKwfJgJ/LcNYjeG3CU/xJLepJM1CNZcbp+oV8tXFGvUfswPGru34Mx7QGQ==}
     engines: {node: '>=18'}
     hasBin: true
     peerDependencies:
@@ -3691,8 +3691,8 @@ packages:
   tailwindcss@4.2.4:
     resolution: {integrity: sha512-HhKppgO81FQof5m6TEnuBWCZGgfRAWbaeOaGT00KOy/Pf/j6oUihdvBpA7ltCeAvZpFhW3j0PTclkxsd4IXYDA==}
 
-  takumi-js@1.0.15:
-    resolution: {integrity: sha512-LDla+dknf+JtUsNQ4eTnoQXcapBppc3GqFAn0TMNvQpwCyIkMzhg6DqA8Ew6f+ZOm52KTJ5EK0v8FXK7oXTTug==}
+  takumi-js@1.0.16:
+    resolution: {integrity: sha512-8LqKyN2vWSafw/kW2TpMPNnRFkM9kUkmL8s6jAeK0cz4i2Tt6c7TqP1I2AXVPL6BxBUvAlhvXw/uco7lXJ4G9Q==}
 
   tapable@2.3.3:
     resolution: {integrity: sha512-uxc/zpqFg6x7C8vOE7lh6Lbda8eEL9zmVm/PLeTPBRhh1xCgdWaQ+J1CUieGpIfm2HdtsUpRv+HshiasBMcc6A==}
@@ -4176,7 +4176,7 @@ snapshots:
   '@date-fns/tz@1.4.1':
     optional: true
 
-  '@dotenvx/dotenvx@1.61.4':
+  '@dotenvx/dotenvx@1.61.5':
     dependencies:
       commander: 11.1.0
       dotenv: 17.4.2
@@ -4777,7 +4777,7 @@ snapshots:
       eventsource: 3.0.7
       eventsource-parser: 3.0.8
       express: 5.2.1
-      express-rate-limit: 8.3.2(express@5.2.1)
+      express-rate-limit: 8.4.0(express@5.2.1)
       hono: 4.12.14
       jose: 6.2.2
       json-schema-typed: 8.0.2
@@ -4788,7 +4788,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@mswjs/interceptors@0.41.4':
+  '@mswjs/interceptors@0.41.5':
     dependencies:
       '@open-draft/deferred-promise': 2.2.0
       '@open-draft/logger': 0.3.0
@@ -5079,54 +5079,54 @@ snapshots:
       postcss: 8.5.10
       tailwindcss: 4.2.4
 
-  '@takumi-rs/core-darwin-arm64@1.0.15':
+  '@takumi-rs/core-darwin-arm64@1.0.16':
     optional: true
 
-  '@takumi-rs/core-darwin-x64@1.0.15':
+  '@takumi-rs/core-darwin-x64@1.0.16':
     optional: true
 
-  '@takumi-rs/core-linux-arm64-gnu@1.0.15':
+  '@takumi-rs/core-linux-arm64-gnu@1.0.16':
     optional: true
 
-  '@takumi-rs/core-linux-arm64-musl@1.0.15':
+  '@takumi-rs/core-linux-arm64-musl@1.0.16':
     optional: true
 
-  '@takumi-rs/core-linux-x64-gnu@1.0.15':
+  '@takumi-rs/core-linux-x64-gnu@1.0.16':
     optional: true
 
-  '@takumi-rs/core-linux-x64-musl@1.0.15':
+  '@takumi-rs/core-linux-x64-musl@1.0.16':
     optional: true
 
-  '@takumi-rs/core-win32-arm64-msvc@1.0.15':
+  '@takumi-rs/core-win32-arm64-msvc@1.0.16':
     optional: true
 
-  '@takumi-rs/core-win32-x64-msvc@1.0.15':
+  '@takumi-rs/core-win32-x64-msvc@1.0.16':
     optional: true
 
-  '@takumi-rs/core@1.0.15(react-dom@19.2.5(react@19.2.5))(react@19.2.5)':
+  '@takumi-rs/core@1.0.16(react-dom@19.2.5(react@19.2.5))(react@19.2.5)':
     dependencies:
-      '@takumi-rs/helpers': 1.0.15(react-dom@19.2.5(react@19.2.5))(react@19.2.5)
+      '@takumi-rs/helpers': 1.0.16(react-dom@19.2.5(react@19.2.5))(react@19.2.5)
     optionalDependencies:
-      '@takumi-rs/core-darwin-arm64': 1.0.15
-      '@takumi-rs/core-darwin-x64': 1.0.15
-      '@takumi-rs/core-linux-arm64-gnu': 1.0.15
-      '@takumi-rs/core-linux-arm64-musl': 1.0.15
-      '@takumi-rs/core-linux-x64-gnu': 1.0.15
-      '@takumi-rs/core-linux-x64-musl': 1.0.15
-      '@takumi-rs/core-win32-arm64-msvc': 1.0.15
-      '@takumi-rs/core-win32-x64-msvc': 1.0.15
+      '@takumi-rs/core-darwin-arm64': 1.0.16
+      '@takumi-rs/core-darwin-x64': 1.0.16
+      '@takumi-rs/core-linux-arm64-gnu': 1.0.16
+      '@takumi-rs/core-linux-arm64-musl': 1.0.16
+      '@takumi-rs/core-linux-x64-gnu': 1.0.16
+      '@takumi-rs/core-linux-x64-musl': 1.0.16
+      '@takumi-rs/core-win32-arm64-msvc': 1.0.16
+      '@takumi-rs/core-win32-x64-msvc': 1.0.16
     transitivePeerDependencies:
       - react
       - react-dom
 
-  '@takumi-rs/helpers@1.0.15(react-dom@19.2.5(react@19.2.5))(react@19.2.5)':
+  '@takumi-rs/helpers@1.0.16(react-dom@19.2.5(react@19.2.5))(react@19.2.5)':
     optionalDependencies:
       react: 19.2.5
       react-dom: 19.2.5(react@19.2.5)
 
-  '@takumi-rs/wasm@1.0.15(react-dom@19.2.5(react@19.2.5))(react@19.2.5)':
+  '@takumi-rs/wasm@1.0.16(react-dom@19.2.5(react@19.2.5))(react@19.2.5)':
     dependencies:
-      '@takumi-rs/helpers': 1.0.15(react-dom@19.2.5(react@19.2.5))(react@19.2.5)
+      '@takumi-rs/helpers': 1.0.16(react-dom@19.2.5(react@19.2.5))(react@19.2.5)
     transitivePeerDependencies:
       - react
       - react-dom
@@ -5241,13 +5241,13 @@ snapshots:
     optionalDependencies:
       mapbox-gl: 3.22.0
 
-  '@vis.gl/react-maplibre@8.1.1(maplibre-gl@5.23.0)(react-dom@19.2.5(react@19.2.5))(react@19.2.5)':
+  '@vis.gl/react-maplibre@8.1.1(maplibre-gl@5.24.0)(react-dom@19.2.5(react@19.2.5))(react@19.2.5)':
     dependencies:
       '@maplibre/maplibre-gl-style-spec': 19.3.3
       react: 19.2.5
       react-dom: 19.2.5(react@19.2.5)
     optionalDependencies:
-      maplibre-gl: 5.23.0
+      maplibre-gl: 5.24.0
 
   accepts@2.0.0:
     dependencies:
@@ -5306,7 +5306,7 @@ snapshots:
 
   balanced-match@4.0.4: {}
 
-  baseline-browser-mapping@2.10.20: {}
+  baseline-browser-mapping@2.10.21: {}
 
   blake3-wasm@2.1.5: {}
 
@@ -5339,9 +5339,9 @@ snapshots:
 
   browserslist@4.28.2:
     dependencies:
-      baseline-browser-mapping: 2.10.20
+      baseline-browser-mapping: 2.10.21
       caniuse-lite: 1.0.30001790
-      electron-to-chromium: 1.5.343
+      electron-to-chromium: 1.5.344
       node-releases: 2.0.38
       update-browserslist-db: 1.2.3(browserslist@4.28.2)
 
@@ -5552,7 +5552,7 @@ snapshots:
 
   ee-first@1.1.1: {}
 
-  electron-to-chromium@1.5.343: {}
+  electron-to-chromium@1.5.344: {}
 
   emoji-regex@10.6.0: {}
 
@@ -5760,7 +5760,7 @@ snapshots:
       strip-final-newline: 4.0.0
       yoctocolors: 2.1.2
 
-  express-rate-limit@8.3.2(express@5.2.1):
+  express-rate-limit@8.4.0(express@5.2.1):
     dependencies:
       express: 5.2.1
       ip-address: 10.1.0
@@ -6238,7 +6238,7 @@ snapshots:
       supercluster: 8.0.1
       tinyqueue: 3.0.0
 
-  maplibre-gl@5.23.0:
+  maplibre-gl@5.24.0:
     dependencies:
       '@mapbox/jsonlint-lines-primitives': 2.0.2
       '@mapbox/point-geometry': 1.1.0
@@ -6329,10 +6329,10 @@ snapshots:
 
   ms@2.1.3: {}
 
-  msw@2.13.4(@types/node@22.19.17)(typescript@6.0.3):
+  msw@2.13.5(@types/node@22.19.17)(typescript@6.0.3):
     dependencies:
       '@inquirer/confirm': 6.0.12(@types/node@22.19.17)
-      '@mswjs/interceptors': 0.41.4
+      '@mswjs/interceptors': 0.41.5
       '@open-draft/deferred-promise': 3.0.0
       '@types/statuses': 2.0.6
       cookie: 1.1.1
@@ -6375,7 +6375,7 @@ snapshots:
     dependencies:
       '@next/env': 16.2.4
       '@swc/helpers': 0.5.15
-      baseline-browser-mapping: 2.10.20
+      baseline-browser-mapping: 2.10.21
       caniuse-lite: 1.0.30001790
       postcss: 8.4.31
       react: 19.2.5
@@ -6636,15 +6636,15 @@ snapshots:
 
   react-is@18.3.1: {}
 
-  react-map-gl@8.1.1(mapbox-gl@3.22.0)(maplibre-gl@5.23.0)(react-dom@19.2.5(react@19.2.5))(react@19.2.5):
+  react-map-gl@8.1.1(mapbox-gl@3.22.0)(maplibre-gl@5.24.0)(react-dom@19.2.5(react@19.2.5))(react@19.2.5):
     dependencies:
       '@vis.gl/react-mapbox': 8.1.1(mapbox-gl@3.22.0)(react-dom@19.2.5(react@19.2.5))(react@19.2.5)
-      '@vis.gl/react-maplibre': 8.1.1(maplibre-gl@5.23.0)(react-dom@19.2.5(react@19.2.5))(react@19.2.5)
+      '@vis.gl/react-maplibre': 8.1.1(maplibre-gl@5.24.0)(react-dom@19.2.5(react@19.2.5))(react@19.2.5)
       react: 19.2.5
       react-dom: 19.2.5(react@19.2.5)
     optionalDependencies:
       mapbox-gl: 3.22.0
-      maplibre-gl: 5.23.0
+      maplibre-gl: 5.24.0
 
   react-redux@9.2.0(@types/react@19.2.14)(react@19.2.5)(redux@5.0.1):
     dependencies:
@@ -6782,7 +6782,7 @@ snapshots:
       '@babel/parser': 7.29.2
       '@babel/plugin-transform-typescript': 7.28.6(@babel/core@7.29.0)
       '@babel/preset-typescript': 7.28.5(@babel/core@7.29.0)
-      '@dotenvx/dotenvx': 1.61.4
+      '@dotenvx/dotenvx': 1.61.5
       '@modelcontextprotocol/sdk': 1.29.0(zod@3.25.76)
       '@types/validate-npm-package-name': 4.0.2
       browserslist: 4.28.2
@@ -6797,7 +6797,7 @@ snapshots:
       fuzzysort: 3.1.0
       https-proxy-agent: 7.0.6
       kleur: 4.1.5
-      msw: 2.13.4(@types/node@22.19.17)(typescript@6.0.3)
+      msw: 2.13.5(@types/node@22.19.17)(typescript@6.0.3)
       node-fetch: 3.3.2
       open: 11.0.0
       ora: 8.2.0
@@ -6985,11 +6985,11 @@ snapshots:
 
   tailwindcss@4.2.4: {}
 
-  takumi-js@1.0.15(react-dom@19.2.5(react@19.2.5))(react@19.2.5):
+  takumi-js@1.0.16(react-dom@19.2.5(react@19.2.5))(react@19.2.5):
     dependencies:
-      '@takumi-rs/core': 1.0.15(react-dom@19.2.5(react@19.2.5))(react@19.2.5)
-      '@takumi-rs/helpers': 1.0.15(react-dom@19.2.5(react@19.2.5))(react@19.2.5)
-      '@takumi-rs/wasm': 1.0.15(react-dom@19.2.5(react@19.2.5))(react@19.2.5)
+      '@takumi-rs/core': 1.0.16(react-dom@19.2.5(react@19.2.5))(react@19.2.5)
+      '@takumi-rs/helpers': 1.0.16(react-dom@19.2.5(react@19.2.5))(react@19.2.5)
+      '@takumi-rs/wasm': 1.0.16(react-dom@19.2.5(react@19.2.5))(react@19.2.5)
     transitivePeerDependencies:
       - react
       - react-dom
