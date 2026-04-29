@@ -37,6 +37,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "monthly",
       priority: 0.6,
     },
+    {
+      url: absoluteUrl("/report/2026-04-28"),
+      lastModified: new Date("2026-04-28"),
+      changeFrequency: "yearly",
+      priority: 0.4,
+    },
     ...stationRoutes,
     ...operatorRoutes,
   ];
