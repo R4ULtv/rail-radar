@@ -53,7 +53,7 @@ export async function generateMetadata({ params }: OperatorPageProps): Promise<M
       description,
       images: [
         {
-          url: "/og-image-brands.webp",
+          url: "/operators.webp",
           width: 1200,
           height: 630,
           alt: "Rail Radar - Train operator directory across Europe",
@@ -66,7 +66,7 @@ export async function generateMetadata({ params }: OperatorPageProps): Promise<M
       description,
       images: [
         {
-          url: "/og-image-brands.webp",
+          url: "/operators.webp",
           width: 1200,
           height: 630,
           alt: "Rail Radar - Train operator directory across Europe",
