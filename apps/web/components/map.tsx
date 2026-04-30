@@ -96,7 +96,7 @@ export function Map() {
       }
     };
 
-    const requestGrantedLocation = () => {
+    const requestLocation = () => {
       navigator.geolocation.getCurrentPosition(
         updateFromPosition,
         () => {
@@ -107,7 +107,7 @@ export function Map() {
     };
 
     if (!navigator.permissions) {
-      requestGrantedLocation();
+      requestLocation();
       return () => {
         cancelled = true;
       };
@@ -116,7 +116,14 @@ export function Map() {
     navigator.permissions
       .query({ name: "geolocation" })
       .then((result) => {
-        if (result.state === "granted" || result.state === "prompt") requestGrantedLocation();
+        const shouldPromptForLocationOnLoad = true;
+
+        if (
+          result.state === "granted" ||
+          (shouldPromptForLocationOnLoad && result.state === "prompt")
+        ) {
+          requestLocation();
+        }
       })
       .catch(() => {
         // Permissions API failures should not block the default map load.
