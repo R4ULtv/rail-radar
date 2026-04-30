@@ -109,7 +109,7 @@ export function Map() {
     navigator.permissions
       .query({ name: "geolocation" })
       .then((result) => {
-        if (result.state === "granted") requestGrantedLocation();
+        if (result.state === "granted" || result.state === "prompt") requestGrantedLocation();
       })
       .catch(() => {
         // Permissions API failures should not block the default map load.
