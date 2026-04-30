@@ -56,7 +56,7 @@ const report = {
   firstSeen: "2026-01-26",
   lastSeen: "2026-04-28",
   summary: {
-    totalVisits: 22465,
+    totalVisits: 22459,
     uniqueVisitors: 2561,
     arrivalsCount: 5922,
     departuresCount: 16537,
