@@ -28,6 +28,12 @@ const DEFAULT_VIEW = {
   zoom: 4,
 };
 
+const LOCATION_OPTIONS: PositionOptions = {
+  enableHighAccuracy: false,
+  timeout: 10000,
+  maximumAge: 30000,
+};
+
 type InitialPosition = {
   latitude: number;
   longitude: number;
@@ -62,33 +68,56 @@ export function Map() {
   const pendingAutoLocationRef = useRef<InitialPosition | null>(null);
 
   useEffect(() => {
-    if (hasUrlParams || !navigator.geolocation || !navigator.permissions) return;
+    if (hasUrlParams || !navigator.geolocation) return;
+
+    let cancelled = false;
+
+    const updateFromPosition = (pos: GeolocationPosition) => {
+      if (cancelled || hasUserInteractedRef.current) return;
+
+      const latitude = Math.round(pos.coords.latitude * 1000000) / 1000000;
+      const longitude = Math.round(pos.coords.longitude * 1000000) / 1000000;
+      const nextPosition = { latitude, longitude, zoom: 13 };
+
+      setInitialPosition(nextPosition);
+      setParams({ lat: latitude, lng: longitude, zoom: 13 });
+
+      if (mapRef.current) {
+        mapRef.current.jumpTo({ center: [longitude, latitude], zoom: 13 });
+      } else {
+        pendingAutoLocationRef.current = nextPosition;
+      }
+    };
+
+    const requestGrantedLocation = () => {
+      navigator.geolocation.getCurrentPosition(
+        updateFromPosition,
+        () => {
+          // Location failures should not block the default map load.
+        },
+        LOCATION_OPTIONS,
+      );
+    };
+
+    if (!navigator.permissions) {
+      requestGrantedLocation();
+      return () => {
+        cancelled = true;
+      };
+    }
 
     navigator.permissions
       .query({ name: "geolocation" })
       .then((result) => {
-        if (result.state !== "granted") return;
-
-        navigator.geolocation.getCurrentPosition((pos) => {
-          if (hasUserInteractedRef.current) return;
-
-          const latitude = Math.round(pos.coords.latitude * 1000000) / 1000000;
-          const longitude = Math.round(pos.coords.longitude * 1000000) / 1000000;
-          const nextPosition = { latitude, longitude, zoom: 13 };
-
-          setInitialPosition(nextPosition);
-          setParams({ lat: latitude, lng: longitude, zoom: 13 });
-
-          if (mapRef.current) {
-            mapRef.current.jumpTo({ center: [longitude, latitude], zoom: 13 });
-          } else {
-            pendingAutoLocationRef.current = nextPosition;
-          }
-        });
+        if (result.state === "granted") requestGrantedLocation();
       })
       .catch(() => {
         // Permissions API failures should not block the default map load.
       });
+
+    return () => {
+      cancelled = true;
+    };
   }, [hasUrlParams, setParams]);
 
   const handleMoveEnd = useCallback(
