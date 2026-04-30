@@ -1,18 +1,42 @@
-"use client";
-
 import * as React from "react";
 import { Marker, useMap } from "react-map-gl/mapbox";
 import { CompassIcon, LocateFixedIcon, LocateIcon, MinusIcon, PlusIcon } from "lucide-react";
 import { Button } from "@repo/ui/components/button";
 import { ButtonGroup } from "@repo/ui/components/button-group";
 
-export function MapControls() {
+const LOCATION_OPTIONS: PositionOptions = {
+  enableHighAccuracy: false,
+  timeout: 10000,
+  maximumAge: 30000,
+};
+
+function getGeolocationErrorMessage(error: GeolocationPositionError) {
+  switch (error.code) {
+    case error.PERMISSION_DENIED:
+      return "Location permission was denied.";
+    case error.POSITION_UNAVAILABLE:
+      return "Location is currently unavailable.";
+    case error.TIMEOUT:
+      return "Location request timed out.";
+    default:
+      return error.message || "Location request failed.";
+  }
+}
+
+type UserLocation = {
+  longitude: number;
+  latitude: number;
+};
+
+type MapControlsProps = {
+  userLocation: UserLocation | null;
+  onUserLocationChange: (location: UserLocation) => void;
+};
+
+export function MapControls({ userLocation, onUserLocationChange }: MapControlsProps) {
   const { current: map } = useMap();
   const [bearing, setBearing] = React.useState(0);
-  const [userLocation, setUserLocation] = React.useState<{
-    longitude: number;
-    latitude: number;
-  } | null>(null);
+  const [isLocating, setIsLocating] = React.useState(false);
 
   React.useEffect(() => {
     if (!map) return;
@@ -39,25 +63,27 @@ export function MapControls() {
     (flyTo = false) => {
       if (!navigator.geolocation) return;
 
+      if (flyTo) setIsLocating(true);
+
       navigator.geolocation.getCurrentPosition(
         (position) => {
           const { longitude, latitude } = position.coords;
-          setUserLocation({ longitude, latitude });
+          onUserLocationChange({ longitude, latitude });
+          setIsLocating(false);
           if (flyTo) {
             map?.flyTo({ center: [longitude, latitude], zoom: 14 });
           }
         },
         (error) => {
-          if (flyTo) console.error("Geolocation error:", error);
+          setIsLocating(false);
+          if (flyTo) {
+            console.info("Geolocation unavailable:", getGeolocationErrorMessage(error));
+          }
         },
-        {
-          enableHighAccuracy: false,
-          timeout: 10000,
-          maximumAge: 30000,
-        },
+        LOCATION_OPTIONS,
       );
     },
-    [map],
+    [map, onUserLocationChange],
   );
 
   const handleLocate = React.useCallback(() => {
@@ -134,7 +160,7 @@ export function MapControls() {
           </div>
         </Marker>
       )}
-      <div className="absolute bottom-4 right-4 flex flex-col gap-2">
+      <div className="absolute bottom-4 right-4 z-30 flex flex-col gap-2">
         <Button
           variant="outline"
           size="icon-sm"
@@ -153,9 +179,14 @@ export function MapControls() {
           size="icon-sm"
           onClick={handleLocate}
           aria-label="Locate me"
+          aria-busy={isLocating}
           className="bg-card hover:bg-muted dark:bg-card dark:hover:bg-muted size-9 md:size-8 active:scale-[0.98]"
         >
-          {userLocation ? <LocateFixedIcon /> : <LocateIcon />}
+          {userLocation || isLocating ? (
+            <LocateFixedIcon className={isLocating ? "motion-safe:animate-pulse" : undefined} />
+          ) : (
+            <LocateIcon />
+          )}
         </Button>
 
         <ButtonGroup orientation="vertical" className="hidden md:flex">

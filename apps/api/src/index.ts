@@ -29,7 +29,12 @@ export function createApp() {
   app.use(
     "*",
     cors({
-      origin: ["http://localhost:3000", "http://127.0.0.1:3000", "https://www.railradar24.com"],
+      origin: [
+        "http://localhost:3000",
+        "http://127.0.0.1:3000",
+        "https://www.railradar24.com",
+        "https://preview.railradar24.com",
+      ],
     }),
   );
 

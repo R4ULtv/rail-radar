@@ -17,7 +17,7 @@ export const metadata: Metadata = {
   openGraph: {
     images: [
       {
-        url: "/og-image-brands.webp",
+        url: "/operators.webp",
         width: 1200,
         height: 630,
         alt: "Rail Radar - Train Operators across 11 countries",

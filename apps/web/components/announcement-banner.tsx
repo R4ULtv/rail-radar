@@ -1,14 +1,14 @@
 "use client";
 
 import { useState, useSyncExternalStore } from "react";
-import { SparklesIcon, XIcon } from "lucide-react";
+import { ChartNoAxesColumnIncreasingIcon, XIcon } from "lucide-react";
 import { LazyMotion, domAnimation, m, AnimatePresence } from "motion/react";
 import Link from "next/link";
 import { Alert, AlertTitle, AlertAction } from "@repo/ui/components/alert";
 import { Badge } from "@repo/ui/components/badge";
 import { Button } from "@repo/ui/components/button";
 
-const STORAGE_KEY = "banner-dismissed-v7";
+const STORAGE_KEY = "banner-dismissed-v8";
 
 const subscribe = () => () => {};
 const getSnapshot = () => !localStorage.getItem(STORAGE_KEY);
@@ -42,20 +42,20 @@ export function AnnouncementBanner() {
                   variant="default"
                   className="text-[10px] uppercase tracking-wide mr-1.5 align-middle"
                 >
-                  <SparklesIcon data-icon="inline-start" />
-                  <span className="hidden md:block">New</span>
+                  <ChartNoAxesColumnIncreasingIcon data-icon="inline-start" />
+                  <span className="hidden md:block">Report</span>
                 </Badge>
                 <span className="hidden md:inline">
-                  Denmark update: 🇩🇰 499 stations are now live.{" "}
+                  April traffic report: 22,465 station visits across 11 countries.{" "}
                   <Link
-                    href="/operators#dk"
+                    href="/report/2026-04-28"
                     className="underline underline-offset-2"
                     onClick={dismiss}
                   >
-                    Explore operators
+                    Read the report
                   </Link>
                 </span>
-                <span className="md:hidden">Denmark: 🇩🇰 499 stations live</span>
+                <span className="md:hidden">April report: 22,465 visits</span>
               </AlertTitle>
               <AlertAction className="top-1.5">
                 <Button variant="ghost" size="icon-xs" onClick={dismiss} aria-label="Dismiss">
