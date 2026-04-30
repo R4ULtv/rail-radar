@@ -40,6 +40,11 @@ type InitialPosition = {
   zoom: number;
 };
 
+type UserLocation = {
+  latitude: number;
+  longitude: number;
+};
+
 export function Map() {
   const [params, setParams] = useQueryStates(
     {
@@ -63,6 +68,7 @@ export function Map() {
     longitude: params.lng,
     zoom: params.zoom,
   }));
+  const [userLocation, setUserLocation] = useState<UserLocation | null>(null);
   const mapRef = useRef<MapboxMap | null>(null);
   const hasUserInteractedRef = useRef(false);
   const pendingAutoLocationRef = useRef<InitialPosition | null>(null);
@@ -79,6 +85,7 @@ export function Map() {
       const longitude = Math.round(pos.coords.longitude * 1000000) / 1000000;
       const nextPosition = { latitude, longitude, zoom: 13 };
 
+      setUserLocation({ latitude, longitude });
       setInitialPosition(nextPosition);
       setParams({ lat: latitude, lng: longitude, zoom: 13 });
 
@@ -186,7 +193,7 @@ export function Map() {
           onToggleStation={toggleStation}
           onToggleLayer={toggleLayer}
         />
-        <MapControls />
+        <MapControls userLocation={userLocation} onUserLocationChange={setUserLocation} />
         <StationInfo />
         <AnnouncementBanner />
       </SelectedStationProvider>

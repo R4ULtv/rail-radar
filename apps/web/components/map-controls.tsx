@@ -1,5 +1,3 @@
-"use client";
-
 import * as React from "react";
 import { Marker, useMap } from "react-map-gl/mapbox";
 import { CompassIcon, LocateFixedIcon, LocateIcon, MinusIcon, PlusIcon } from "lucide-react";
@@ -25,14 +23,20 @@ function getGeolocationErrorMessage(error: GeolocationPositionError) {
   }
 }
 
-export function MapControls() {
+type UserLocation = {
+  longitude: number;
+  latitude: number;
+};
+
+type MapControlsProps = {
+  userLocation: UserLocation | null;
+  onUserLocationChange: (location: UserLocation) => void;
+};
+
+export function MapControls({ userLocation, onUserLocationChange }: MapControlsProps) {
   const { current: map } = useMap();
   const [bearing, setBearing] = React.useState(0);
   const [isLocating, setIsLocating] = React.useState(false);
-  const [userLocation, setUserLocation] = React.useState<{
-    longitude: number;
-    latitude: number;
-  } | null>(null);
 
   React.useEffect(() => {
     if (!map) return;
@@ -64,7 +68,7 @@ export function MapControls() {
       navigator.geolocation.getCurrentPosition(
         (position) => {
           const { longitude, latitude } = position.coords;
-          setUserLocation({ longitude, latitude });
+          onUserLocationChange({ longitude, latitude });
           setIsLocating(false);
           if (flyTo) {
             map?.flyTo({ center: [longitude, latitude], zoom: 14 });
@@ -79,7 +83,7 @@ export function MapControls() {
         LOCATION_OPTIONS,
       );
     },
-    [map],
+    [map, onUserLocationChange],
   );
 
   const handleLocate = React.useCallback(() => {
