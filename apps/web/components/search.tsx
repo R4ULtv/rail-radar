@@ -249,7 +249,10 @@ export function Search({ hiddenStationTypes }: { hiddenStationTypes: StationVisi
   );
   // Local state for responsive input, initialized from URL for shareability
   const [query, setQuery] = React.useState(urlQuery);
-  const debouncedQuery = useDebounce(query.trim(), 250);
+  const trimmedQuery = query.trim();
+  const debouncedQuery = useDebounce(trimmedQuery, 250);
+  const hasMinimumSearchLength = trimmedQuery.length >= 2;
+  const searchQuery = debouncedQuery.length >= 2 ? debouncedQuery : null;
 
   // Sync debounced query to URL
   React.useEffect(() => {
@@ -265,7 +268,7 @@ export function Search({ hiddenStationTypes }: { hiddenStationTypes: StationVisi
   );
 
   // Fetch search results
-  const { stations: searchResultsRaw, isLoading } = useStationSearch(debouncedQuery || null);
+  const { stations: searchResultsRaw, isLoading } = useStationSearch(searchQuery);
   const searchResults = React.useMemo(
     () => searchResultsRaw.filter(isTypeVisible),
     [searchResultsRaw, isTypeVisible],
@@ -297,11 +300,15 @@ export function Search({ hiddenStationTypes }: { hiddenStationTypes: StationVisi
     return { trendingStations: stations, trendingCounts: counts };
   }, [trendingData]);
 
-  const isSearchActive = query.trim().length > 0;
-  const hasSearched = isSearchActive && query.trim() === debouncedQuery && !isLoading;
+  const isSearchActive = trimmedQuery.length > 0;
+  const isSearchReady = hasMinimumSearchLength && trimmedQuery === debouncedQuery;
+  const hasSearched = isSearchActive && isSearchReady && !isLoading;
 
-  const noResults = isSearchActive && hasSearched && searchResults.length === 0;
-  const showDefaultLists = !isSearchActive || noResults || (isSearchActive && !hasSearched);
+  const noResults = hasSearched && searchResults.length === 0;
+  const showDefaultLists =
+    !isSearchActive || !hasMinimumSearchLength || noResults || (isSearchActive && !hasSearched);
+  const showSearchSpinner = hasMinimumSearchLength && !hasSearched;
+  const showSearchContent = !isSearchActive || !hasMinimumSearchLength || hasSearched;
 
   const cardHeight = useAnimatedHeight();
 
@@ -476,7 +483,7 @@ export function Search({ hiddenStationTypes }: { hiddenStationTypes: StationVisi
                   aria-label="Search stations"
                 />
                 <InputGroupAddon>
-                  {isSearchActive && !hasSearched ? <Spinner /> : <SearchIcon />}
+                  {showSearchSpinner ? <Spinner /> : <SearchIcon />}
                 </InputGroupAddon>
                 <AnimatePresence>
                   {isSearchActive && (
@@ -503,7 +510,7 @@ export function Search({ hiddenStationTypes }: { hiddenStationTypes: StationVisi
             </DrawerHeader>
 
             <div className="flex-1 overflow-auto pt-2">
-              {(!isSearchActive || hasSearched) && <SearchContent {...searchContentProps} />}
+              {showSearchContent && <SearchContent {...searchContentProps} />}
             </div>
           </DrawerContent>
         </Drawer>
@@ -536,7 +543,7 @@ export function Search({ hiddenStationTypes }: { hiddenStationTypes: StationVisi
             }
           />
           <InputGroupAddon>
-            {isSearchActive && !hasSearched ? <Spinner /> : <SearchIcon />}
+            {showSearchSpinner ? <Spinner /> : <SearchIcon />}
           </InputGroupAddon>
           {isSearchActive ? (
             <InputGroupAddon align="inline-end">
@@ -557,7 +564,7 @@ export function Search({ hiddenStationTypes }: { hiddenStationTypes: StationVisi
           )}
         </InputGroup>
         <AnimatePresence>
-          {(!isSearchActive || hasSearched) && (
+          {showSearchContent && (
             <m.div
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
