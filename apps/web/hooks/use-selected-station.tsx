@@ -96,7 +96,7 @@ export function SelectedStationProvider({ children }: { children: React.ReactNod
 }
 
 export function useSelectedStation() {
-  const context = React.useContext(SelectedStationContext);
+  const context = React.use(SelectedStationContext);
   if (!context) {
     throw new Error("useSelectedStation must be used within a SelectedStationProvider");
   }
