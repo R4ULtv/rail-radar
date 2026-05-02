@@ -256,8 +256,7 @@ export function Search({ hiddenStationTypes }: { hiddenStationTypes: StationVisi
     setUrlQuery(debouncedQuery || null);
   }, [debouncedQuery, setUrlQuery]);
   const [focusedIndex, setFocusedIndex] = React.useState<number>(-1);
-  const [prevQuery, setPrevQuery] = React.useState(query);
-  const [prevResultsLen, setPrevResultsLen] = React.useState(0);
+  const previousListStateRef = React.useRef({ query, resultsLength: 0 });
   const [isDrawerOpen, setIsDrawerOpen] = React.useState(() => isMobile && query.length > 0);
 
   const isTypeVisible = React.useCallback(
@@ -351,10 +350,9 @@ export function Search({ hiddenStationTypes }: { hiddenStationTypes: StationVisi
     visibleStationsRef.current = visibleStations;
   });
 
-  // Reset focused index when list changes (derive during render)
-  if (query !== prevQuery || searchResults.length !== prevResultsLen) {
-    setPrevQuery(query);
-    setPrevResultsLen(searchResults.length);
+  const previousListState = previousListStateRef.current;
+  if (query !== previousListState.query || searchResults.length !== previousListState.resultsLength) {
+    previousListStateRef.current = { query, resultsLength: searchResults.length };
     if (focusedIndex !== -1) {
       setFocusedIndex(-1);
     }
@@ -415,6 +413,12 @@ export function Search({ hiddenStationTypes }: { hiddenStationTypes: StationVisi
     return () => document.removeEventListener("keydown", handleKeyDown);
   }, [handleSelectStation]);
 
+  React.useEffect(() => {
+    if (isMobile && isDrawerOpen) {
+      inputRef.current?.focus();
+    }
+  }, [isMobile, isDrawerOpen]);
+
   const searchContentProps = {
     isSearchActive,
     searchResults,
@@ -463,10 +467,10 @@ export function Search({ hiddenStationTypes }: { hiddenStationTypes: StationVisi
               </DrawerDescription>
               <InputGroup className="h-10 bg-background">
                 <InputGroupInput
+                  ref={inputRef}
                   placeholder="Search..."
                   value={query}
                   onChange={(e) => setQuery(e.target.value)}
-                  autoFocus
                   name="search"
                   autoComplete="off"
                   aria-label="Search stations"
