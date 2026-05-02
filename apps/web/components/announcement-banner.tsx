@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useSyncExternalStore } from "react";
+import { useReducer, useRef, useSyncExternalStore } from "react";
 import { ChartNoAxesColumnIncreasingIcon, XIcon } from "lucide-react";
 import { LazyMotion, domAnimation, m, AnimatePresence } from "motion/react";
 import Link from "next/link";
@@ -16,13 +16,15 @@ const getServerSnapshot = () => false;
 
 export function AnnouncementBanner() {
   const shouldShow = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
-  const [dismissed, setDismissed] = useState(false);
+  const dismissedRef = useRef(false);
+  const [, rerender] = useReducer((value: number) => value + 1, 0);
 
-  const visible = shouldShow && !dismissed;
+  const visible = shouldShow && !dismissedRef.current;
 
   const dismiss = () => {
-    setDismissed(true);
+    dismissedRef.current = true;
     localStorage.setItem(STORAGE_KEY, "1");
+    rerender();
   };
 
   return (
