@@ -3,7 +3,7 @@
 import "mapbox-gl/dist/mapbox-gl.css";
 import dynamic from "next/dynamic";
 import { parseAsFloat, useQueryStates } from "nuqs";
-import { startTransition, useCallback, useEffect, useRef, useState } from "react";
+import { startTransition, useCallback, useEffect, useReducer, useRef } from "react";
 import type { Map as MapboxMap } from "mapbox-gl";
 import type { MapEvent, ViewStateChangeEvent } from "react-map-gl/mapbox";
 
@@ -45,6 +45,41 @@ type UserLocation = {
   longitude: number;
 };
 
+type MapState = {
+  initialPosition: InitialPosition;
+  userLocation: UserLocation | null;
+};
+
+type MapAction =
+  | {
+      type: "setAutoLocation";
+      position: InitialPosition;
+    }
+  | {
+      type: "setUserLocation";
+      location: UserLocation;
+    };
+
+function mapReducer(state: MapState, action: MapAction): MapState {
+  switch (action.type) {
+    case "setAutoLocation":
+      return {
+        initialPosition: action.position,
+        userLocation: {
+          latitude: action.position.latitude,
+          longitude: action.position.longitude,
+        },
+      };
+    case "setUserLocation":
+      return {
+        ...state,
+        userLocation: action.location,
+      };
+    default:
+      return state;
+  }
+}
+
 export function Map() {
   const [params, setParams] = useQueryStates(
     {
@@ -63,12 +98,14 @@ export function Map() {
     params.lng !== DEFAULT_VIEW.lng ||
     params.zoom !== DEFAULT_VIEW.zoom;
 
-  const [initialPosition, setInitialPosition] = useState<InitialPosition>(() => ({
-    latitude: params.lat,
-    longitude: params.lng,
-    zoom: params.zoom,
+  const [{ initialPosition, userLocation }, dispatch] = useReducer(mapReducer, null, () => ({
+    initialPosition: {
+      latitude: params.lat,
+      longitude: params.lng,
+      zoom: params.zoom,
+    },
+    userLocation: null,
   }));
-  const [userLocation, setUserLocation] = useState<UserLocation | null>(null);
   const mapRef = useRef<MapboxMap | null>(null);
   const hasUserInteractedRef = useRef(false);
   const pendingAutoLocationRef = useRef<InitialPosition | null>(null);
@@ -85,8 +122,7 @@ export function Map() {
       const longitude = Math.round(pos.coords.longitude * 1000000) / 1000000;
       const nextPosition = { latitude, longitude, zoom: 13 };
 
-      setUserLocation({ latitude, longitude });
-      setInitialPosition(nextPosition);
+      dispatch({ type: "setAutoLocation", position: nextPosition });
       setParams({ lat: latitude, lng: longitude, zoom: 13 });
 
       if (mapRef.current) {
@@ -164,6 +200,10 @@ export function Map() {
     hasUserInteractedRef.current = true;
   }, []);
 
+  const handleUserLocationChange = useCallback((location: UserLocation) => {
+    dispatch({ type: "setUserLocation", location });
+  }, []);
+
   const { stations, layers, toggleStation, toggleLayer } = useMapLayers();
 
   return (
@@ -200,7 +240,7 @@ export function Map() {
           onToggleStation={toggleStation}
           onToggleLayer={toggleLayer}
         />
-        <MapControls userLocation={userLocation} onUserLocationChange={setUserLocation} />
+        <MapControls userLocation={userLocation} onUserLocationChange={handleUserLocationChange} />
         <StationInfo />
         <AnnouncementBanner />
       </SelectedStationProvider>
