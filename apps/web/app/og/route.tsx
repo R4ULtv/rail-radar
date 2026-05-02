@@ -33,11 +33,14 @@ function getNearbyStations(stationId: string) {
   if (!station?.geo) return [];
 
   const { lat, lng } = station.geo;
-  return stations
-    .filter((s) => s.id !== stationId && s.geo && s.type === "rail")
-    .map((s) => ({ ...s, distance: haversineDistance(lat, lng, s.geo!.lat, s.geo!.lng) }))
-    .sort((a, b) => a.distance - b.distance)
-    .slice(0, 4);
+  const nearby = [];
+
+  for (const s of stations) {
+    if (s.id === stationId || !s.geo || s.type !== "rail") continue;
+    nearby.push({ ...s, distance: haversineDistance(lat, lng, s.geo.lat, s.geo.lng) });
+  }
+
+  return nearby.sort((a, b) => a.distance - b.distance).slice(0, 4);
 }
 
 export function GET(request: NextRequest) {
