@@ -132,12 +132,13 @@ function getRelatedOperators(operator: Operator): Operator[] {
   const sameCountry: Operator[] = [];
   const crossCountry: Operator[] = [];
   const operatorCountries = getTrackedCountries(operator);
+  const operatorCountrySet = new Set(operatorCountries);
 
   for (const b of operators) {
     if (seen.has(b.slug)) continue;
     const bCountries = getTrackedCountries(b);
-    if (bCountries.some((c) => operatorCountries.includes(c))) {
-      const allShared = bCountries.every((c) => operatorCountries.includes(c));
+    if (bCountries.some((c) => operatorCountrySet.has(c))) {
+      const allShared = bCountries.every((c) => operatorCountrySet.has(c));
       if (allShared) sameCountry.push(b);
       else crossCountry.push(b);
       seen.add(b.slug);
@@ -293,6 +294,7 @@ export default async function OperatorPage({ params }: OperatorPageProps) {
               src={`${process.env.NEXT_PUBLIC_API_URL}/map/static?bbox=${operator.bounds.join(",")}&w=960&h=412`}
               alt={`Map of ${operator.name} operating area`}
               fill
+              sizes="(max-width: 768px) calc(100vw - 32px), 848px"
               className="object-cover"
             />
             <ExpandIcon className="absolute top-4 right-4 size-4 text-muted-foreground opacity-0 scale-95 transition-[transform,opacity] duration-200 ease-out group-hover/map:opacity-100 group-hover/map:scale-100" />
