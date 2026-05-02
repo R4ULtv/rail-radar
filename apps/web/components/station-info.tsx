@@ -42,6 +42,30 @@ import { useTrainData } from "@/hooks/use-train-data";
 import { cn } from "@repo/ui/lib/utils";
 import { Button } from "@repo/ui/components/button";
 
+const REPORT_LINKS = (
+  <div className="px-4 py-3 text-center flex items-center justify-center">
+    <a
+      href="https://github.com/R4ULtv/rail-radar/issues/new?template=bug_report.yml"
+      target="_blank"
+      rel="noopener noreferrer"
+      className="inline-flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors"
+    >
+      <BugIcon className="size-3" />
+      Report a problem
+    </a>
+    <span className="text-muted-foreground/50 mx-1.5">·</span>
+    <a
+      href="https://github.com/R4ULtv/rail-radar/issues/new?template=feature_request.yml"
+      target="_blank"
+      rel="noopener noreferrer"
+      className="inline-flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors"
+    >
+      <LightbulbIcon className="size-3" />
+      Feature request
+    </a>
+  </div>
+);
+
 // Shared component for train list content (loading, error, empty, list states)
 function TrainListContent({
   trainData,
@@ -84,35 +108,11 @@ function TrainListContent({
     />
   ));
 
-  const reportLink = (
-    <div className="px-4 py-3 text-center flex items-center justify-center">
-      <a
-        href="https://github.com/R4ULtv/rail-radar/issues/new?template=bug_report.yml"
-        target="_blank"
-        rel="noopener noreferrer"
-        className="inline-flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors"
-      >
-        <BugIcon className="size-3" />
-        Report a problem
-      </a>
-      <span className="text-muted-foreground/50 mx-1.5">·</span>
-      <a
-        href="https://github.com/R4ULtv/rail-radar/issues/new?template=feature_request.yml"
-        target="_blank"
-        rel="noopener noreferrer"
-        className="inline-flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors"
-      >
-        <LightbulbIcon className="size-3" />
-        Feature request
-      </a>
-    </div>
-  );
-
   if (scrollable) {
     return (
       <ScrollArea className="max-h-[calc(100vh-156px)]">
         {trainList}
-        {reportLink}
+        {REPORT_LINKS}
       </ScrollArea>
     );
   }
@@ -120,7 +120,7 @@ function TrainListContent({
   return (
     <div>
       {trainList}
-      {reportLink}
+      {REPORT_LINKS}
     </div>
   );
 }
