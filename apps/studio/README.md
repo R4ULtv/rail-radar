@@ -1,76 +1,77 @@
 # Rail Radar Studio
 
-Admin tool for managing railway station data across Europe. Add missing coordinates, fix station names, and identify duplicates.
+Admin tool for managing railway station data across Europe. Add missing coordinates, fix station names, create stations, and identify duplicates — then ship the changes back as a pull request.
 
 ## Tech Stack
 
-- Next.js 16 + React 19
+- SvelteKit 2 + Svelte 5 (runes)
 - MapLibre GL (interactive map)
-- Sonner (toast notifications)
-- localStorage for session persistence
+- Tailwind CSS 4 + shadcn-svelte / bits-ui
+- Wikidata + Wikipedia for station enrichment
+- Cloudflare adapter for deployment, file-system API for local edits
 
 ## Getting Started
-
-For contribution work, build and run the production version:
-
-```bash
-pnpm --filter=studio build
-pnpm --filter=studio start
-```
 
 For development with hot-reload:
 
 ```bash
-pnpm --filter=studio dev
+pnpm --filter=studio-beta dev
 ```
 
-Runs on [http://localhost:3001](http://localhost:3001)
+Runs on [http://localhost:3002](http://localhost:3002).
+
+The dev script sets `PUBLIC_STUDIO_LOCAL_MODE=true` and `LOCAL_ENV=true`, which enables the local file API (`/api/stations`) so edits are written straight to `packages/data/src/stations.geojson`.
+
+For a production build:
+
+```bash
+pnpm --filter=studio-beta build
+pnpm --filter=studio-beta preview
+```
+
+## Modes
+
+**Local mode** — used during development. Reads and writes `packages/data/src/stations.geojson` directly through the SvelteKit endpoints under `/api/stations`. Every edit is persisted to disk immediately.
+
+**Browser mode** — used in the deployed build. Upload a GeoJSON file, edit in-browser, and export the result. Nothing is written server-side.
+
+The mode is selected automatically based on the `LOCAL_ENV` flag.
 
 ## Features
 
-- Interactive map with 15,000+ stations
-- Station search and filtering (All / Metro / Light / Duplicate)
-- Drag markers to fine-tune positions
-- Edit station names
-- Add new stations
-- Delete stations
-- **Contribution tracking with auto-generated PRs**
+- Interactive map with all stations, filterable by type (rail / metro / light) and country
+- Sidebar search and filtering
+- Drag markers to fine-tune coordinates
+- Edit station name, type, and importance
+- Create new stations by clicking the map, with ID validation:
+  - 2-3 letter country prefix + 3+ digits (typically 6-8)
+  - duplicate-ID detection with the conflicting station's name
+  - hint when the entered prefix doesn't match any existing country
+- Delete and restore stations
+- Undo / redo (`⌘Z` / `⌘⇧Z`) with labelled history
+- Wikipedia / Wikidata enrichment for any country (language-agnostic via Wikidata; richer infobox parsing for Italian stations)
+- Contribution tracking with auto-generated pull-request content
 
-## How to Contribute Changes
+## Editing Workflow
 
-### Making Changes
+1. Browse stations via the sidebar or click a marker.
+2. Make changes:
+   - **Move** — drag the marker.
+   - **Rename / retype** — edit the side panel and save.
+   - **Add** — click "Add Station", click on the map, choose an ID.
+   - **Delete** — open the edit panel and click delete.
+3. Use the Wikipedia panel to pull suggested coordinates from Wikidata when a station is missing them.
+4. Click **Review** to open the contribution panel and see a summary of every change.
 
-1. Open the studio at `localhost:3001`
-2. Browse stations via sidebar (use tabs: All, Metro, Light, Duplicate)
-3. Make changes:
-   - **Move station**: Drag the marker to correct position
-   - **Rename station**: Edit name in the side panel
-   - **Add new station**: Click "Add Station" → Click on map
-   - **Delete station**: Open edit panel → Click delete
+## Submitting Changes
 
-### Reviewing Your Changes
+1. Open the contribution panel.
+2. Review the auto-generated PR title and description.
+3. Click **Open in GitHub** — GitHub opens with the body pre-filled.
+4. Create a branch (suggested format: `studio/YYYY-MM-DD-description`), commit, and open the PR.
 
-1. Changes are tracked automatically (green banner appears)
-2. Click "Review" to open the contribution panel
-3. See all your changes with statistics:
-   - Coordinates added/updated
-   - Stations renamed/created/deleted
+Changes are persisted to `localStorage`, so closing the tab won't lose work.
 
-### Submitting a Pull Request
+## Data
 
-1. In the contribution panel, review the auto-generated PR content
-2. Click "Open in GitHub" button
-3. GitHub opens with pre-filled PR title and description
-4. Create a new branch with the auto-suggested name (format: `studio/YYYY-MM-DD-description`)
-5. Commit your changes and submit the PR
-
-**Note**: Changes are saved to localStorage, so you can close the browser and continue later.
-
-### Clearing Your Session
-
-- Click "Clear Session" in the contribution panel to start fresh
-- This removes all tracked changes from localStorage
-
-## Data Files
-
-Station data is managed in `packages/data/src/stations.geojson`.
+Station data lives in `packages/data/src/stations.geojson` and is shared with the rest of the monorepo via `@repo/data`.
