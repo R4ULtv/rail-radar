@@ -301,6 +301,7 @@ export function Search({ hiddenStationTypes }: { hiddenStationTypes: StationVisi
   }, [trendingData]);
 
   const isSearchActive = trimmedQuery.length > 0;
+  const isSearchResultsActive = isSearchActive && hasMinimumSearchLength;
   const isSearchReady = hasMinimumSearchLength && trimmedQuery === debouncedQuery;
   const hasSearched = isSearchActive && isSearchReady && !isLoading;
 
@@ -333,15 +334,15 @@ export function Search({ hiddenStationTypes }: { hiddenStationTypes: StationVisi
   }, [recentStations, savedStations, isTypeVisible]);
 
   const visibleStations = React.useMemo(() => {
-    if (isSearchActive && searchResults.length > 0) {
+    if (isSearchResultsActive && searchResults.length > 0) {
       return searchResults.slice(0, 10);
     }
-    if (!isSearchActive || noResults) {
+    if (!isSearchResultsActive || noResults) {
       return [...filteredRecentStations, ...savedStations, ...trendingStations];
     }
     return [];
   }, [
-    isSearchActive,
+    isSearchResultsActive,
     searchResults,
     filteredRecentStations,
     savedStations,
@@ -427,7 +428,7 @@ export function Search({ hiddenStationTypes }: { hiddenStationTypes: StationVisi
   }, [isMobile, isDrawerOpen]);
 
   const searchContentProps = {
-    isSearchActive,
+    isSearchActive: isSearchResultsActive,
     searchResults,
     noResults,
     showDefaultLists,
