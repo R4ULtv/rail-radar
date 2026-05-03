@@ -12,6 +12,10 @@
       "outputs": [".next/**", "!.next/cache/**"],
       "env": ["MAPBOX_SERVER_TOKEN"]
     },
+    "studio#build": {
+      "outputs": [".svelte-kit/**", "!.svelte-kit/cache/**"],
+      "env": ["PUBLIC_STUDIO_LOCAL_MODE", "LOCAL_ENV", "STUDIO_LOCAL_MODE"]
+    },
     "transit": {
       "dependsOn": ["^transit"]
     },
