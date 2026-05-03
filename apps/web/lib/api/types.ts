@@ -21,37 +21,38 @@ export interface TrainDataResponse {
 export interface TrendingStationsResponse {
   timestamp: string;
   period: string;
-  stations: TrendingStation[];
-}
-
-export interface TrendingStation {
-  stationId: string;
-  stationName: string;
-  visits: number;
-  uniqueVisitors: number;
-  geo: { lat: number; lng: number } | null;
-  type: "rail" | "metro" | "light";
-  importance: 1 | 2 | 3 | 4;
+  stations: {
+    stationId: string;
+    stationName: string;
+    visits: number;
+    uniqueVisitors: number;
+    geo: { lat: number; lng: number } | null;
+    type: "rail" | "metro" | "light";
+    importance: 1 | 2 | 3 | 4;
+  }[];
 }
 
 /**
  * Response from /stations/:id/stats endpoint
  */
 export interface StationStatsResponse {
-  station: StationData | null;
-  topStation: StationData | null;
+  station: {
+    stationId: string;
+    stationName: string;
+    visits: number;
+    uniqueVisitors: number;
+  } | null;
+  topStation: {
+    stationId: string;
+    stationName: string;
+    visits: number;
+    uniqueVisitors: number;
+  } | null;
   comparison: {
     percentage: number | null;
     isTopStation: boolean;
   };
   period: string;
-}
-
-export interface StationData {
-  stationId: string;
-  stationName: string;
-  visits: number;
-  uniqueVisitors: number;
 }
 
 /**

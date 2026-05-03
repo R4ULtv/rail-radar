@@ -9,14 +9,14 @@
     "check-types": "turbo run check-types"
   },
   "devDependencies": {
-    "eslint-plugin-turbo": "^2.9.6",
+    "eslint-plugin-turbo": "^2.9.7",
     "oxfmt": "^0.47.0",
     "oxlint": "^1.62.0",
-    "turbo": "^2.9.6",
+    "turbo": "^2.9.7",
     "typescript": "^6.0.3"
   },
   "engines": {
     "node": ">=22"
   },
-  "packageManager": "pnpm@10.33.0"
+  "packageManager": "pnpm@11.0.3"
 }

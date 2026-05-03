@@ -249,15 +249,17 @@ export function Search({ hiddenStationTypes }: { hiddenStationTypes: StationVisi
   );
   // Local state for responsive input, initialized from URL for shareability
   const [query, setQuery] = React.useState(urlQuery);
-  const debouncedQuery = useDebounce(query.trim(), 250);
+  const trimmedQuery = query.trim();
+  const debouncedQuery = useDebounce(trimmedQuery, 250);
+  const hasMinimumSearchLength = trimmedQuery.length >= 2;
+  const searchQuery = debouncedQuery.length >= 2 ? debouncedQuery : null;
 
   // Sync debounced query to URL
   React.useEffect(() => {
     setUrlQuery(debouncedQuery || null);
   }, [debouncedQuery, setUrlQuery]);
   const [focusedIndex, setFocusedIndex] = React.useState<number>(-1);
-  const [prevQuery, setPrevQuery] = React.useState(query);
-  const [prevResultsLen, setPrevResultsLen] = React.useState(0);
+  const previousListStateRef = React.useRef({ query, resultsLength: 0 });
   const [isDrawerOpen, setIsDrawerOpen] = React.useState(() => isMobile && query.length > 0);
 
   const isTypeVisible = React.useCallback(
@@ -266,7 +268,7 @@ export function Search({ hiddenStationTypes }: { hiddenStationTypes: StationVisi
   );
 
   // Fetch search results
-  const { stations: searchResultsRaw, isLoading } = useStationSearch(debouncedQuery || null);
+  const { stations: searchResultsRaw, isLoading } = useStationSearch(searchQuery);
   const searchResults = React.useMemo(
     () => searchResultsRaw.filter(isTypeVisible),
     [searchResultsRaw, isTypeVisible],
@@ -298,11 +300,16 @@ export function Search({ hiddenStationTypes }: { hiddenStationTypes: StationVisi
     return { trendingStations: stations, trendingCounts: counts };
   }, [trendingData]);
 
-  const isSearchActive = query.trim().length > 0;
-  const hasSearched = isSearchActive && query.trim() === debouncedQuery && !isLoading;
+  const isSearchActive = trimmedQuery.length > 0;
+  const isSearchResultsActive = isSearchActive && hasMinimumSearchLength;
+  const isSearchReady = hasMinimumSearchLength && trimmedQuery === debouncedQuery;
+  const hasSearched = isSearchActive && isSearchReady && !isLoading;
 
-  const noResults = isSearchActive && hasSearched && searchResults.length === 0;
-  const showDefaultLists = !isSearchActive || noResults || (isSearchActive && !hasSearched);
+  const noResults = hasSearched && searchResults.length === 0;
+  const showDefaultLists =
+    !isSearchActive || !hasMinimumSearchLength || noResults || (isSearchActive && !hasSearched);
+  const showSearchSpinner = hasMinimumSearchLength && !hasSearched;
+  const showSearchContent = !isSearchActive || !hasMinimumSearchLength || hasSearched;
 
   const cardHeight = useAnimatedHeight();
 
@@ -327,15 +334,15 @@ export function Search({ hiddenStationTypes }: { hiddenStationTypes: StationVisi
   }, [recentStations, savedStations, isTypeVisible]);
 
   const visibleStations = React.useMemo(() => {
-    if (isSearchActive && searchResults.length > 0) {
+    if (isSearchResultsActive && searchResults.length > 0) {
       return searchResults.slice(0, 10);
     }
-    if (!isSearchActive || noResults) {
+    if (!isSearchResultsActive || noResults) {
       return [...filteredRecentStations, ...savedStations, ...trendingStations];
     }
     return [];
   }, [
-    isSearchActive,
+    isSearchResultsActive,
     searchResults,
     filteredRecentStations,
     savedStations,
@@ -351,10 +358,9 @@ export function Search({ hiddenStationTypes }: { hiddenStationTypes: StationVisi
     visibleStationsRef.current = visibleStations;
   });
 
-  // Reset focused index when list changes (derive during render)
-  if (query !== prevQuery || searchResults.length !== prevResultsLen) {
-    setPrevQuery(query);
-    setPrevResultsLen(searchResults.length);
+  const previousListState = previousListStateRef.current;
+  if (query !== previousListState.query || searchResults.length !== previousListState.resultsLength) {
+    previousListStateRef.current = { query, resultsLength: searchResults.length };
     if (focusedIndex !== -1) {
       setFocusedIndex(-1);
     }
@@ -415,8 +421,14 @@ export function Search({ hiddenStationTypes }: { hiddenStationTypes: StationVisi
     return () => document.removeEventListener("keydown", handleKeyDown);
   }, [handleSelectStation]);
 
+  React.useEffect(() => {
+    if (isMobile && isDrawerOpen) {
+      inputRef.current?.focus();
+    }
+  }, [isMobile, isDrawerOpen]);
+
   const searchContentProps = {
-    isSearchActive,
+    isSearchActive: isSearchResultsActive,
     searchResults,
     noResults,
     showDefaultLists,
@@ -463,16 +475,16 @@ export function Search({ hiddenStationTypes }: { hiddenStationTypes: StationVisi
               </DrawerDescription>
               <InputGroup className="h-10 bg-background">
                 <InputGroupInput
+                  ref={inputRef}
                   placeholder="Search..."
                   value={query}
                   onChange={(e) => setQuery(e.target.value)}
-                  autoFocus
                   name="search"
                   autoComplete="off"
                   aria-label="Search stations"
                 />
                 <InputGroupAddon>
-                  {isSearchActive && !hasSearched ? <Spinner /> : <SearchIcon />}
+                  {showSearchSpinner ? <Spinner /> : <SearchIcon />}
                 </InputGroupAddon>
                 <AnimatePresence>
                   {isSearchActive && (
@@ -499,7 +511,7 @@ export function Search({ hiddenStationTypes }: { hiddenStationTypes: StationVisi
             </DrawerHeader>
 
             <div className="flex-1 overflow-auto pt-2">
-              {(!isSearchActive || hasSearched) && <SearchContent {...searchContentProps} />}
+              {showSearchContent && <SearchContent {...searchContentProps} />}
             </div>
           </DrawerContent>
         </Drawer>
@@ -532,7 +544,7 @@ export function Search({ hiddenStationTypes }: { hiddenStationTypes: StationVisi
             }
           />
           <InputGroupAddon>
-            {isSearchActive && !hasSearched ? <Spinner /> : <SearchIcon />}
+            {showSearchSpinner ? <Spinner /> : <SearchIcon />}
           </InputGroupAddon>
           {isSearchActive ? (
             <InputGroupAddon align="inline-end">
@@ -553,7 +565,7 @@ export function Search({ hiddenStationTypes }: { hiddenStationTypes: StationVisi
           )}
         </InputGroup>
         <AnimatePresence>
-          {(!isSearchActive || hasSearched) && (
+          {showSearchContent && (
             <m.div
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
