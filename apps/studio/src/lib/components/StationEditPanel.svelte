@@ -36,7 +36,7 @@
         onClose: () => void;
     } = $props();
 
-    let lastStationId = $state<string | null>(null);
+    let lastStationFields = $state<string | null>(null);
     let name = $state("");
     let type = $state<"rail" | "metro" | "light">("rail");
     let importance = $state("4");
@@ -44,8 +44,16 @@
     let lng = $state("");
 
     $effect(() => {
-        if (station.id === lastStationId) return;
-        lastStationId = station.id;
+        const stationFields = JSON.stringify({
+            id: station.id,
+            name: station.name,
+            type: station.type,
+            importance: station.importance,
+            lat: station.geo?.lat ?? null,
+            lng: station.geo?.lng ?? null,
+        });
+        if (stationFields === lastStationFields) return;
+        lastStationFields = stationFields;
         name = station.name;
         type = station.type;
         importance = station.importance.toString();
