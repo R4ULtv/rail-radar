@@ -11,10 +11,7 @@ import {
   validateGeojson,
 } from "../src/lib/stations";
 
-const DATA_FILE_PATH = path.resolve(
-  process.cwd(),
-  "../../packages/data/src/stations.geojson",
-);
+const DATA_FILE_PATH = path.resolve(process.cwd(), "../../packages/data/src/stations.geojson");
 
 async function readGeojsonFile(): Promise<StationFeatureCollection> {
   const content = await fs.readFile(DATA_FILE_PATH, "utf-8");
@@ -24,9 +21,7 @@ async function readGeojsonFile(): Promise<StationFeatureCollection> {
 async function writeGeojsonFile(geojson: StationFeatureCollection): Promise<void> {
   const sorted: StationFeatureCollection = {
     ...geojson,
-    features: [...geojson.features].sort((a, b) =>
-      a.properties.id.localeCompare(b.properties.id),
-    ),
+    features: [...geojson.features].sort((a, b) => a.properties.id.localeCompare(b.properties.id)),
   };
   const serialized = JSON.stringify(sorted, null, 2).replace(
     /"coordinates": \[\s*(-?\d+(?:\.\d+)?),\s*(-?\d+(?:\.\d+)?)\s*\]/g,
@@ -105,9 +100,7 @@ export function localStationApi(): Plugin {
             }
             const geojson = await readGeojsonFile();
             const feature = stationToFeature(station as never);
-            const index = geojson.features.findIndex(
-              (item) => item.properties.id === station.id,
-            );
+            const index = geojson.features.findIndex((item) => item.properties.id === station.id);
             if (index === -1) geojson.features.push(feature);
             else geojson.features[index] = feature;
             await writeGeojsonFile(geojson);
@@ -126,10 +119,7 @@ export function localStationApi(): Plugin {
               if (index === -1 || !existing) {
                 return send(res, 404, { error: "Station not found" });
               }
-              const updated = applyStationUpdates(
-                featureToStation(existing),
-                body as never,
-              );
+              const updated = applyStationUpdates(featureToStation(existing), body as never);
               geojson.features[index] = stationToFeature(updated);
               await writeGeojsonFile(geojson);
               return send(res, 200, updated);
