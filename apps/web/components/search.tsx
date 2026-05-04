@@ -359,7 +359,10 @@ export function Search({ hiddenStationTypes }: { hiddenStationTypes: StationVisi
   });
 
   const previousListState = previousListStateRef.current;
-  if (query !== previousListState.query || searchResults.length !== previousListState.resultsLength) {
+  if (
+    query !== previousListState.query ||
+    searchResults.length !== previousListState.resultsLength
+  ) {
     previousListStateRef.current = { query, resultsLength: searchResults.length };
     if (focusedIndex !== -1) {
       setFocusedIndex(-1);
@@ -543,9 +546,7 @@ export function Search({ hiddenStationTypes }: { hiddenStationTypes: StationVisi
                 : undefined
             }
           />
-          <InputGroupAddon>
-            {showSearchSpinner ? <Spinner /> : <SearchIcon />}
-          </InputGroupAddon>
+          <InputGroupAddon>{showSearchSpinner ? <Spinner /> : <SearchIcon />}</InputGroupAddon>
           {isSearchActive ? (
             <InputGroupAddon align="inline-end">
               <InputGroupButton
