@@ -29,15 +29,21 @@
   let data = $state<StationInfobox | null>(null);
   let isLoading = $state(false);
   let error = $state<string | null>(null);
+  let loadVersion = 0;
 
   async function load(name: string, id: string | null) {
+    const version = ++loadVersion;
     isLoading = true;
     error = null;
     try {
-      data = await fetchWikipediaStation(name, id);
+      const result = await fetchWikipediaStation(name, id);
+      if (version !== loadVersion) return;
+      data = result;
     } catch {
+      if (version !== loadVersion) return;
       error = "Failed to load Wikipedia data";
     } finally {
+      if (version !== loadVersion) return;
       isLoading = false;
     }
   }
