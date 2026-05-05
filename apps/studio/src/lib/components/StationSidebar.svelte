@@ -1,5 +1,6 @@
 <script lang="ts">
     import type { Station } from "@repo/data";
+    import { tick } from "svelte";
     import {
         CopyIcon,
         ListIcon,
@@ -124,6 +125,52 @@
         if (changeType === "deleted") return "bg-red-500";
         return "";
     }
+
+    function scrollStationIntoView(index: number) {
+        if (!scrollContainer) return;
+
+        const rowTop = index * ROW_HEIGHT;
+        const rowBottom = rowTop + ROW_HEIGHT;
+        const viewportTop = scrollContainer.scrollTop;
+        const viewportBottom = viewportTop + scrollContainer.clientHeight;
+
+        if (rowTop < viewportTop) {
+            scrollContainer.scrollTop = rowTop;
+        } else if (rowBottom > viewportBottom) {
+            scrollContainer.scrollTop = rowBottom - scrollContainer.clientHeight;
+        }
+    }
+
+    async function focusStationButton(stationId: string) {
+        await tick();
+        scrollContainer
+            ?.querySelector<HTMLButtonElement>(
+                `[data-station-id="${CSS.escape(stationId)}"]`,
+            )
+            ?.focus();
+    }
+
+    function handleStationKeydown(event: KeyboardEvent, stationId: string) {
+        if (event.key !== "ArrowDown" && event.key !== "ArrowUp") return;
+
+        const currentIndex = filteredStations.findIndex(
+            (station) => station.id === stationId,
+        );
+        if (currentIndex === -1) return;
+
+        const direction = event.key === "ArrowDown" ? 1 : -1;
+        const nextIndex = Math.min(
+            filteredStations.length - 1,
+            Math.max(0, currentIndex + direction),
+        );
+        const nextStation = filteredStations[nextIndex];
+        if (!nextStation) return;
+
+        event.preventDefault();
+        scrollStationIntoView(nextIndex);
+        onSelectStation(nextStation.id);
+        void focusStationButton(nextStation.id);
+    }
 </script>
 
 <aside
@@ -204,6 +251,7 @@
                     {#each visibleStations as station (station.id)}
                         {@const changeType = changedStationIds.get(station.id)}
                         <Button
+                            data-station-id={station.id}
                             variant="ghost"
                             size="sm"
                             class={cn(
@@ -214,6 +262,8 @@
                                     "border-l-primary",
                             )}
                             onclick={() => onSelectStation(station.id)}
+                            onkeydown={(event) =>
+                                handleStationKeydown(event, station.id)}
                         >
                             <span
                                 class="relative flex items-center justify-center"
