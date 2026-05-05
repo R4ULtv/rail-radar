@@ -1,6 +1,6 @@
 # Rail Radar API
 
-Cloudflare Workers API that provides real-time European train data by scraping official sources.
+Cloudflare Workers API that provides real-time European train data from official sources and analytics endpoints.
 
 ## Tech Stack
 
@@ -87,7 +87,14 @@ The `/stations/search` endpoint and `/stations/:id` endpoint are rate-limited pe
 
 ```
 src/
-├── index.ts       # Main Hono app, route handlers, middleware
+├── index.ts       # Main Hono app and route mounting
+├── routes/
+│   ├── analytics.ts        # Global analytics endpoint
+│   ├── map.ts              # Static Mapbox image endpoint
+│   ├── operators.ts        # Operator list and detail endpoints
+│   ├── root.ts             # API index and robots.txt
+│   ├── stations.ts         # Search, live trains, stats, trending
+│   └── stations-geojson.ts # Stations GeoJSON endpoint
 ├── scrapers/
 │   ├── index.ts       # Scraper router (selects by country prefix)
 │   ├── fetch.ts       # Shared fetch helper (timeout, error handling)

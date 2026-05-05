@@ -44,6 +44,12 @@ import { operators, operatorBySlug } from "@repo/data/operators";
 import type { Operator } from "@repo/data";
 ```
 
+### Subpath Import (`@repo/data/types`)
+
+```ts
+import type { Station, Operator, Train } from "@repo/data/types";
+```
+
 ### Subpath Import (`@repo/data/countries`)
 
 ```ts

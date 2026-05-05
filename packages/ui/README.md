@@ -19,6 +19,8 @@ This library uses a **headless component architecture** combining:
 - Dark mode support via `next-themes`
 - Type-safe component variants using CVA
 - Custom hooks for common UI patterns
+- Chart primitives built on Recharts
+- Local icon exports for project-specific icons
 - Workspace package designed for monorepo consumption
 - Highly composable component API
 - CSS custom properties for theming
@@ -40,6 +42,12 @@ import { Card } from "@repo/ui/components/card";
 ```tsx
 import { useIsMobile } from "@repo/ui/hooks/use-mobile";
 import { useDebounce } from "@repo/ui/hooks/use-debounce";
+```
+
+### Importing Icons
+
+```tsx
+import { GitHubIcon } from "@repo/ui/icons/github";
 ```
 
 ### Importing Utilities
@@ -142,6 +150,7 @@ Component configuration is managed in `components.json`:
 | **lucide-react**             | Icon library                                             |
 | **class-variance-authority** | Type-safe component variants                             |
 | **clsx**                     | Conditional className utility                            |
+| **recharts**                 | Chart rendering primitives                               |
 | **tailwind-merge**           | Merge Tailwind classes without conflicts                 |
 | **sonner**                   | Toast notifications                                      |
 | **tw-animate-css**           | Custom Tailwind animations                               |
