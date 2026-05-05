@@ -10,6 +10,7 @@
 
     const SOURCE_ID = "stations-source";
     const LAYER_ID = "stations-layer";
+    const SELECTED_STATION_ZOOM = 10;
 
     let {
         stations,
@@ -101,7 +102,7 @@
 
         map.flyTo({
             center: [selectedStation.geo.lng, selectedStation.geo.lat],
-            zoom: 10,
+            zoom: Math.max(map.getZoom(), SELECTED_STATION_ZOOM),
             duration: 500,
         });
     }
