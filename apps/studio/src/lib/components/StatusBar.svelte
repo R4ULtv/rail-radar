@@ -20,6 +20,12 @@
   const railCount = $derived(stations.filter((station) => station.type === "rail").length);
   const metroCount = $derived(stations.filter((station) => station.type === "metro").length);
   const lightCount = $derived(stations.filter((station) => station.type === "light").length);
+  const stateLabel = $derived.by(() => {
+    if (isAddingStation) return "Adding";
+    if (selectedStation && !selectedStation.geo) return "Placing";
+    if (selectedStation) return "Editing";
+    return "Browse";
+  });
 </script>
 
 <footer
@@ -52,7 +58,7 @@
     <div class="flex items-center gap-1.5">
       <ActivityIcon class="size-3" />
       <span class="uppercase tracking-wider">
-        State: <span class="text-foreground">{isAddingStation ? "Adding" : "Browse"}</span>
+        State: <span class="text-foreground">{stateLabel}</span>
       </span>
     </div>
   </div>
