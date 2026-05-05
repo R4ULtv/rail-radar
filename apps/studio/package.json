@@ -4,9 +4,9 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "PUBLIC_STUDIO_LOCAL_MODE=true LOCAL_ENV=true vite dev --port 3002",
+    "dev": "PUBLIC_STUDIO_LOCAL_MODE=true LOCAL_ENV=true vite dev --port 3001",
     "build": "vite build",
-    "preview": "vite preview --port 3002",
+    "preview": "vite preview --port 3001",
     "lint": "oxlint --deny warnings src",
     "check-types": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json"
   },
