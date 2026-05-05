@@ -126,31 +126,6 @@
     </div>
 
     <div class="ml-auto flex min-w-0 items-center gap-2">
-        <input
-            bind:this={fileInput}
-            type="file"
-            accept=".geojson,.json,application/geo+json,application/json"
-            class="hidden"
-            onchange={handleFileChange}
-        />
-
-        <Button variant="outline" size="sm" onclick={() => fileInput?.click()}>
-            <UploadIcon class="size-3.5" />
-            <span class="hidden sm:inline">Import</span>
-        </Button>
-
-        <Button
-            variant="outline"
-            size="sm"
-            disabled={!canExport}
-            onclick={onExportClick}
-        >
-            <DownloadIcon class="size-3.5" />
-            <span class="hidden sm:inline">Export</span>
-        </Button>
-
-        <Separator orientation="vertical" class="hidden h-6 sm:block" />
-
         <Button
             variant={isAddingStation ? "default" : "outline"}
             size="sm"
@@ -174,6 +149,31 @@
                     >{modifiedCount}</span
                 >
             {/if}
+        </Button>
+
+        <div class="h-6 w-px shrink-0 bg-border" aria-hidden="true"></div>
+
+        <input
+            bind:this={fileInput}
+            type="file"
+            accept=".geojson,.json,application/geo+json,application/json"
+            class="hidden"
+            onchange={handleFileChange}
+        />
+
+        <Button variant="outline" size="sm" onclick={() => fileInput?.click()}>
+            <UploadIcon class="size-3.5" />
+            <span class="hidden sm:inline">Import</span>
+        </Button>
+
+        <Button
+            variant="outline"
+            size="sm"
+            disabled={!canExport}
+            onclick={onExportClick}
+        >
+            <DownloadIcon class="size-3.5" />
+            <span class="hidden sm:inline">Export</span>
         </Button>
     </div>
 </header>
