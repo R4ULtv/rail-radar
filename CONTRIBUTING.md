@@ -4,7 +4,7 @@ Thanks for your interest in contributing to Rail Radar. This repository is a `pn
 
 - `apps/web`: the public Next.js frontend
 - `apps/api`: the Cloudflare Workers API
-- `apps/studio`: the station-data admin tool
+- `apps/studio`: the SvelteKit station-data admin tool
 - `packages/data`: shared station data and TypeScript types
 - `packages/ui`: shared UI components
 
@@ -25,7 +25,7 @@ Please read and follow the [Code of Conduct](./CODE_OF_CONDUCT.md) before contri
 ### Prerequisites
 
 - Node.js `22` or newer
-- `pnpm` `10`
+- `pnpm` `11`
 
 If you use Corepack:
 
@@ -56,10 +56,11 @@ From the repository root:
 pnpm dev
 ```
 
-That starts the main local development flow for:
+That starts the monorepo development task for:
 
 - `web` on `localhost:3000`
 - `api` with the local Workers dev server
+- `studio` on `localhost:3001`
 
 You can also work on individual apps:
 
@@ -84,6 +85,7 @@ If you are working in a single package or app, targeted commands are also welcom
 ```bash
 pnpm --filter=web build
 pnpm --filter=api cf-typegen
+pnpm --filter=studio check-types
 ```
 
 CI currently validates linting and type checking on pull requests, so keeping your branch green locally will make review smoother.

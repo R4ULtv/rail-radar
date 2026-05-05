@@ -4,9 +4,9 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "PUBLIC_STUDIO_LOCAL_MODE=true LOCAL_ENV=true vite dev --port 3002",
+    "dev": "PUBLIC_STUDIO_LOCAL_MODE=true LOCAL_ENV=true vite dev --port 3001",
     "build": "vite build",
-    "preview": "vite preview --port 3002",
+    "preview": "vite preview --port 3001",
     "lint": "oxlint --deny warnings src",
     "check-types": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json"
   },
@@ -26,7 +26,7 @@
     "@sveltejs/vite-plugin-svelte": "^7.0.0",
     "@tailwindcss/vite": "^4.2.4",
     "@types/node": "^22.19.17",
-    "bits-ui": "^2.18.0",
+    "bits-ui": "^2.18.1",
     "clsx": "^2.1.1",
     "shadcn-svelte": "^1.2.7",
     "svelte-check": "^4.4.7",

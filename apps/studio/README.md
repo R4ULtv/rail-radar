@@ -15,18 +15,18 @@ Admin tool for managing railway station data across Europe. Add missing coordina
 For development with hot-reload:
 
 ```bash
-pnpm --filter=studio-beta dev
+pnpm --filter=studio dev
 ```
 
-Runs on [http://localhost:3002](http://localhost:3002).
+Runs on [http://localhost:3001](http://localhost:3001).
 
 The dev script sets `PUBLIC_STUDIO_LOCAL_MODE=true` and `LOCAL_ENV=true`, which enables the local file API (`/api/stations`) so edits are written straight to `packages/data/src/stations.geojson`.
 
 For a production build:
 
 ```bash
-pnpm --filter=studio-beta build
-pnpm --filter=studio-beta preview
+pnpm --filter=studio build
+pnpm --filter=studio preview
 ```
 
 ## Modes
@@ -35,7 +35,7 @@ pnpm --filter=studio-beta preview
 
 **Browser mode** — used in the deployed build. Upload a GeoJSON file, edit in-browser, and export the result. Nothing is written server-side.
 
-The mode is selected automatically based on the `LOCAL_ENV` flag.
+The mode is selected automatically based on `PUBLIC_STUDIO_LOCAL_MODE`, `LOCAL_ENV`, or `STUDIO_LOCAL_MODE`.
 
 ## Features
 

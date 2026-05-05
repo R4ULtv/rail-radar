@@ -5,8 +5,9 @@
 - Interactive map with 17,000+ railway stations across Italy, Switzerland, Germany, Finland, Belgium, Denmark, the Netherlands, Norway, Sweden, the United Kingdom, and Ireland
 - Real-time arrivals and departures from official data sources (RFI, SBB, DB, Digitraffic, iRail, Rejseplanen, NS, Entur, Trafiklab, LDBWS, Irish Rail)
 - Station search with fuzzy matching
+- Operator directory with network metadata and static coverage maps
 - Trending stations ranked by unique visitors, with both unique and total visit counts available
-- Shareable URLs with map state
+- Shareable URLs with map state, saved stations, and recent stations
 - User geolocation support
 - Responsive mobile-friendly design
 
@@ -26,7 +27,7 @@
 # Install dependencies
 pnpm install
 
-# Run web + API in development
+# Run all development apps
 pnpm dev
 
 # Run specific app
@@ -39,7 +40,7 @@ pnpm --filter=studio dev # Admin tool at localhost:3001
 
 | Command                        | Description                            |
 | ------------------------------ | -------------------------------------- |
-| `pnpm dev`                     | Start web and API development servers  |
+| `pnpm dev`                     | Start all development servers          |
 | `pnpm --filter=studio dev`     | Start the admin tool at localhost:3001 |
 | `pnpm build`                   | Build all packages                     |
 | `pnpm lint --force`            | Lint all packages                      |

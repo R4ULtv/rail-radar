@@ -17,6 +17,8 @@ Next.js frontend for real-time train tracking across Europe with an interactive 
 - Real-time train arrivals/departures with 30s polling
 - Fuzzy station search with keyboard shortcuts
 - URL-synced map state for shareable links
+- Operator directory and station detail pages with static maps
+- Saved stations and recent stations in localStorage
 - User geolocation with animated marker
 - Responsive design for mobile and desktop
 
@@ -43,10 +45,17 @@ pnpm --filter=web dev
 ```
 apps/web/
 ├── app/                    # Next.js App Router
+│   ├── operators/          # Operator directory and detail pages
+│   ├── station/[id]/       # Station detail pages
+│   ├── og/route.tsx        # Dynamic Open Graph image route
+│   ├── layout.tsx
+│   └── page.tsx            # Main map experience
 ├── components/
 │   ├── map.tsx             # Main map component
 │   ├── map-controls.tsx    # Zoom, locate, compass controls
+│   ├── map-layer-filter.tsx # Rail / metro / light layer filter
 │   ├── map-loading.tsx     # Map loading skeleton
+│   ├── save-button.tsx     # Saved station control
 │   ├── search.tsx          # Station search
 │   ├── static-map.tsx      # Static Mapbox image component
 │   ├── station-info.tsx    # Station details drawer
@@ -59,6 +68,9 @@ apps/web/
 │       ├── station-stats.tsx
 │       ├── train-board.tsx
 │       └── train-column.tsx
+├── hooks/
+│   ├── use-recent-stations.tsx
+│   └── use-saved-stations.tsx
 └── lib/
     └── api/                # API client and types
 ```
