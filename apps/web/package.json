@@ -19,10 +19,10 @@
     "lucide-react": "^1.14.0",
     "mapbox-gl": "^3.23.1",
     "motion": "^12.38.0",
-    "next": "16.2.4",
+    "next": "16.2.5",
     "nuqs": "^2.8.9",
-    "react": "^19.2.5",
-    "react-dom": "^19.2.5",
+    "react": "^19.2.6",
+    "react-dom": "^19.2.6",
     "react-map-gl": "^8.1.1",
     "swr": "^2.4.1",
     "takumi-js": "^1.1.2"
