@@ -14,7 +14,7 @@
     "@sveltejs/kit": "^2.59.1",
     "maplibre-gl": "^5.24.0",
     "svelte": "^5.55.5",
-    "vite": "^8.0.10"
+    "vite": "^8.0.11"
   },
   "devDependencies": {
     "@fontsource-variable/geist": "^5.2.8",
