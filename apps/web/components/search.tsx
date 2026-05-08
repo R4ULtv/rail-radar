@@ -448,7 +448,7 @@ export function Search({ hiddenStationTypes }: { hiddenStationTypes: StationVisi
   if (isMobile) {
     return (
       <LazyMotion features={domAnimation}>
-        <div className="absolute z-50 top-4 left-4 right-16 font-sans">
+        <div className="absolute z-50 top-4 right-4 left-4 font-sans">
           <Button
             type="button"
             size="lg"
