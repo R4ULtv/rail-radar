@@ -8,7 +8,6 @@ import type { Map as MapboxMap } from "mapbox-gl";
 import type { MapEvent, ViewStateChangeEvent } from "react-map-gl/mapbox";
 
 import { MapControls } from "@/components/map-controls";
-import { MapLayerFilter } from "@/components/map-layer-filter";
 import MapLoading from "@/components/map-loading";
 import { Search } from "@/components/search";
 import StationInfo from "@/components/station-info";
@@ -203,7 +202,7 @@ export function Map() {
     dispatch({ type: "setUserLocation", location });
   }, []);
 
-  const { stations, layers, toggleStation, toggleLayer } = useMapLayers();
+  const { stations, layers } = useMapLayers();
 
   return (
     <MapGL
@@ -233,12 +232,6 @@ export function Map() {
       <SelectedStationProvider>
         <StationMarkers stations={stations} layers={layers} />
         <Search hiddenStationTypes={stations} />
-        <MapLayerFilter
-          stations={stations}
-          layers={layers}
-          onToggleStation={toggleStation}
-          onToggleLayer={toggleLayer}
-        />
         <MapControls userLocation={userLocation} onUserLocationChange={handleUserLocationChange} />
         <StationInfo />
       </SelectedStationProvider>

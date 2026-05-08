@@ -53,7 +53,6 @@ apps/web/
 ├── components/
 │   ├── map.tsx             # Main map component
 │   ├── map-controls.tsx    # Zoom, locate, compass controls
-│   ├── map-layer-filter.tsx # Rail / metro / light layer filter
 │   ├── map-loading.tsx     # Map loading skeleton
 │   ├── save-button.tsx     # Saved station control
 │   ├── search.tsx          # Station search
