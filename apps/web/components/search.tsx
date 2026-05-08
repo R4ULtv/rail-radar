@@ -43,7 +43,6 @@ import { useTrendingStations } from "@/hooks/use-trending-stations";
 import { cn } from "@repo/ui/lib/utils";
 import { getCountry } from "@repo/data/countries";
 import type { Station } from "@repo/data";
-import type { StationVisibility } from "@/hooks/use-map-layers";
 import Image from "next/image";
 import { Button } from "@repo/ui/components/button";
 
@@ -236,7 +235,7 @@ function SearchContent({
   );
 }
 
-export function Search({ hiddenStationTypes }: { hiddenStationTypes: StationVisibility }) {
+export function Search() {
   const isMobile = useIsMobile();
   const { selectStation, savedStations, recentStations } = useSelectedStation();
   const inputRef = React.useRef<HTMLInputElement>(null);
@@ -262,17 +261,9 @@ export function Search({ hiddenStationTypes }: { hiddenStationTypes: StationVisi
   const previousListStateRef = React.useRef({ query, resultsLength: 0 });
   const [isDrawerOpen, setIsDrawerOpen] = React.useState(() => isMobile && query.length > 0);
 
-  const isTypeVisible = React.useCallback(
-    (s: Station) => hiddenStationTypes[s.type as keyof StationVisibility] !== false,
-    [hiddenStationTypes],
-  );
-
   // Fetch search results
   const { stations: searchResultsRaw, isLoading } = useStationSearch(searchQuery);
-  const searchResults = React.useMemo(
-    () => searchResultsRaw.filter(isTypeVisible),
-    [searchResultsRaw, isTypeVisible],
-  );
+  const searchResults = searchResultsRaw;
 
   // Fetch trending stations
   const { data: trendingData } = useTrendingStations("week");
@@ -327,11 +318,11 @@ export function Search({ hiddenStationTypes }: { hiddenStationTypes: StationVisi
     [selectStation, isMobile, setQuery],
   );
 
-  // Filter recent stations to exclude those already in saved and hidden types
+  // Filter recent stations to exclude those already in saved stations.
   const filteredRecentStations = React.useMemo(() => {
     const savedIds = new Set(savedStations.map((s) => s.id));
-    return recentStations.filter((s) => !savedIds.has(s.id) && isTypeVisible(s));
-  }, [recentStations, savedStations, isTypeVisible]);
+    return recentStations.filter((s) => !savedIds.has(s.id));
+  }, [recentStations, savedStations]);
 
   const visibleStations = React.useMemo(() => {
     if (isSearchResultsActive && searchResults.length > 0) {
@@ -448,7 +439,7 @@ export function Search({ hiddenStationTypes }: { hiddenStationTypes: StationVisi
   if (isMobile) {
     return (
       <LazyMotion features={domAnimation}>
-        <div className="absolute z-50 top-4 left-4 right-16 font-sans">
+        <div className="absolute z-50 top-4 right-4 left-4 font-sans">
           <Button
             type="button"
             size="lg"

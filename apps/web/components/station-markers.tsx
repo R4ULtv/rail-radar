@@ -1,13 +1,10 @@
 "use client";
 
 import type { MapMouseEvent } from "mapbox-gl";
-import { useEffect, useMemo } from "react";
+import { useEffect } from "react";
 import { Layer, Source, useMap } from "react-map-gl/mapbox";
 import type { LayerProps } from "react-map-gl/mapbox";
-
-type Visibility = "visible" | "none";
 import { useSelectedStation } from "@/hooks/use-selected-station";
-import type { MapLayersState } from "@/hooks/use-map-layers";
 
 const RAIL_LAYER_ID = "rail-stations";
 const RAIL_ICON_ID = "rail-icon";
@@ -49,13 +46,12 @@ const MINZOOM_EXPR = [
 const MINZOOM_FILTER = ["<=", MINZOOM_EXPR, ["zoom"]];
 const LABEL_MINZOOM_FILTER = ["<=", ["+", MINZOOM_EXPR, 2], ["zoom"]];
 
-const metroLayerStyle = (v: Visibility): LayerProps => ({
+const metroLayerStyle = (): LayerProps => ({
   id: "metro-stations",
   type: "symbol",
   source: "stations-source",
   filter: ["all", ["==", ["get", "type"], "metro"], MINZOOM_FILTER],
   layout: {
-    visibility: v,
     "icon-image": METRO_ICON_ID,
     "icon-size": ["interpolate", ["linear"], ["zoom"], 14, 0.25, 16, 0.35],
     "icon-allow-overlap": false,
@@ -63,13 +59,12 @@ const metroLayerStyle = (v: Visibility): LayerProps => ({
   },
 });
 
-const metroLabelStyle = (v: Visibility): LayerProps => ({
+const metroLabelStyle = (): LayerProps => ({
   id: "metro-labels",
   type: "symbol",
   source: "stations-source",
   filter: ["all", ["==", ["get", "type"], "metro"], LABEL_MINZOOM_FILTER],
   layout: {
-    visibility: v,
     "text-field": ["get", "name"],
     "text-size": 12,
     "text-offset": [0, 1.3],
@@ -84,13 +79,12 @@ const metroLabelStyle = (v: Visibility): LayerProps => ({
   },
 });
 
-const lightLayerStyle = (v: Visibility): LayerProps => ({
+const lightLayerStyle = (): LayerProps => ({
   id: "light-stations",
   type: "symbol",
   source: "stations-source",
   filter: ["all", ["==", ["get", "type"], "light"], MINZOOM_FILTER],
   layout: {
-    visibility: v,
     "icon-image": LIGHT_ICON_ID,
     "icon-size": [
       "interpolate",
@@ -109,13 +103,12 @@ const lightLayerStyle = (v: Visibility): LayerProps => ({
   },
 });
 
-const lightLabelStyle = (v: Visibility): LayerProps => ({
+const lightLabelStyle = (): LayerProps => ({
   id: "light-labels",
   type: "symbol",
   source: "stations-source",
   filter: ["all", ["==", ["get", "type"], "light"], LABEL_MINZOOM_FILTER],
   layout: {
-    visibility: v,
     "text-field": ["get", "name"],
     "text-size": 12,
     "text-offset": [0, 1.3],
@@ -130,13 +123,12 @@ const lightLabelStyle = (v: Visibility): LayerProps => ({
   },
 });
 
-const railLayerStyle = (v: Visibility): LayerProps => ({
+const railLayerStyle = (): LayerProps => ({
   id: RAIL_LAYER_ID,
   type: "symbol",
   source: "stations-source",
   filter: ["all", ["==", ["get", "type"], "rail"], MINZOOM_FILTER],
   layout: {
-    visibility: v,
     "icon-image": RAIL_ICON_ID,
     "icon-size": [
       "interpolate",
@@ -155,13 +147,12 @@ const railLayerStyle = (v: Visibility): LayerProps => ({
   },
 });
 
-const railLabelStyle = (v: Visibility): LayerProps => ({
+const railLabelStyle = (): LayerProps => ({
   id: "rail-labels",
   type: "symbol",
   source: "stations-source",
   filter: ["all", ["==", ["get", "type"], "rail"], LABEL_MINZOOM_FILTER],
   layout: {
-    visibility: v,
     "text-field": ["get", "name"],
     "text-size": 13,
     "text-offset": [0, 1.3],
@@ -176,7 +167,7 @@ const railLabelStyle = (v: Visibility): LayerProps => ({
   },
 });
 
-const railwayLineStyle = (v: Visibility): LayerProps => ({
+const railwayLineStyle = (): LayerProps => ({
   id: "railway-lines",
   type: "line",
   source: "composite",
@@ -186,7 +177,6 @@ const railwayLineStyle = (v: Visibility): LayerProps => ({
     ["==", ["get", "class"], "major_rail"],
     ["match", ["get", "structure"], ["none", "ford"], true, false],
   ],
-  layout: { visibility: v },
   paint: {
     "line-color": "#4B61D1",
     "line-width": ["interpolate", ["linear"], ["zoom"], 6, 0.5, 10, 1, 14, 2],
@@ -194,13 +184,12 @@ const railwayLineStyle = (v: Visibility): LayerProps => ({
   },
 });
 
-const railwayBridgeStyle = (v: Visibility): LayerProps => ({
+const railwayBridgeStyle = (): LayerProps => ({
   id: "railway-lines-bridge",
   type: "line",
   source: "composite",
   "source-layer": "road",
   filter: ["all", ["==", ["get", "structure"], "bridge"], ["==", ["get", "class"], "major_rail"]],
-  layout: { visibility: v },
   paint: {
     "line-color": "#4B61D1",
     "line-width": ["interpolate", ["linear"], ["zoom"], 6, 0.5, 10, 1, 14, 2],
@@ -208,13 +197,12 @@ const railwayBridgeStyle = (v: Visibility): LayerProps => ({
   },
 });
 
-const railwayTunnelStyle = (v: Visibility): LayerProps => ({
+const railwayTunnelStyle = (): LayerProps => ({
   id: "railway-lines-tunnel",
   type: "line",
   source: "composite",
   "source-layer": "road",
   filter: ["all", ["==", ["get", "structure"], "tunnel"], ["==", ["get", "class"], "major_rail"]],
-  layout: { visibility: v },
   paint: {
     "line-color": "#4B61D1",
     "line-width": ["interpolate", ["linear"], ["zoom"], 6, 0.5, 10, 1, 14, 2],
@@ -223,25 +211,9 @@ const railwayTunnelStyle = (v: Visibility): LayerProps => ({
   },
 });
 
-export function StationMarkers({ stations, layers }: Pick<MapLayersState, "stations" | "layers">) {
+export function StationMarkers() {
   const { current: map } = useMap();
   const { selectStation } = useSelectedStation();
-
-  const railVis = stations.rail ? "visible" : ("none" as const);
-  const lightVis = stations.light ? "visible" : ("none" as const);
-  const metroVis = stations.metro ? "visible" : ("none" as const);
-  const surfaceVis = layers.railwaySurface ? "visible" : ("none" as const);
-  const tunnelVis = layers.railwayTunnels ? "visible" : ("none" as const);
-
-  const railLayer = useMemo(() => railLayerStyle(railVis), [railVis]);
-  const railLabel = useMemo(() => railLabelStyle(railVis), [railVis]);
-  const metroLayer = useMemo(() => metroLayerStyle(metroVis), [metroVis]);
-  const metroLabel = useMemo(() => metroLabelStyle(metroVis), [metroVis]);
-  const lightLayer = useMemo(() => lightLayerStyle(lightVis), [lightVis]);
-  const lightLabel = useMemo(() => lightLabelStyle(lightVis), [lightVis]);
-  const tunnelLayer = useMemo(() => railwayTunnelStyle(tunnelVis), [tunnelVis]);
-  const lineLayer = useMemo(() => railwayLineStyle(surfaceVis), [surfaceVis]);
-  const bridgeLayer = useMemo(() => railwayBridgeStyle(surfaceVis), [surfaceVis]);
 
   useEffect(() => {
     if (!map) return;
@@ -313,21 +285,21 @@ export function StationMarkers({ stations, layers }: Pick<MapLayersState, "stati
   return (
     <>
       {/* Railway tracks */}
-      <Layer {...tunnelLayer} />
-      <Layer {...lineLayer} />
-      <Layer {...bridgeLayer} />
+      <Layer {...railwayTunnelStyle()} />
+      <Layer {...railwayLineStyle()} />
+      <Layer {...railwayBridgeStyle()} />
 
       <Source
         id="stations-source"
         type="geojson"
         data={`${process.env.NEXT_PUBLIC_API_URL}/stations.geojson`}
       >
-        <Layer {...metroLayer} />
-        <Layer {...metroLabel} />
-        <Layer {...lightLayer} />
-        <Layer {...lightLabel} />
-        <Layer {...railLayer} />
-        <Layer {...railLabel} />
+        <Layer {...metroLayerStyle()} />
+        <Layer {...metroLabelStyle()} />
+        <Layer {...lightLayerStyle()} />
+        <Layer {...lightLabelStyle()} />
+        <Layer {...railLayerStyle()} />
+        <Layer {...railLabelStyle()} />
       </Source>
     </>
   );

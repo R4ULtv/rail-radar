@@ -43,8 +43,9 @@
       if (version !== loadVersion) return;
       error = "Failed to load Wikipedia data";
     } finally {
-      if (version !== loadVersion) return;
-      isLoading = false;
+      if (version === loadVersion) {
+        isLoading = false;
+      }
     }
   }
 
