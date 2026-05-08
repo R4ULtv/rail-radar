@@ -12,7 +12,6 @@ import MapLoading from "@/components/map-loading";
 import { Search } from "@/components/search";
 import StationInfo from "@/components/station-info";
 import { StationMarkers } from "@/components/station-markers";
-import { useMapLayers } from "@/hooks/use-map-layers";
 import { SelectedStationProvider } from "@/hooks/use-selected-station";
 
 const MapGL = dynamic(() => import("react-map-gl/mapbox").then((mod) => mod.Map), {
@@ -202,8 +201,6 @@ export function Map() {
     dispatch({ type: "setUserLocation", location });
   }, []);
 
-  const { stations, layers } = useMapLayers();
-
   return (
     <MapGL
       initialViewState={{
@@ -230,8 +227,8 @@ export function Map() {
       onZoomStart={handleUserInteraction}
     >
       <SelectedStationProvider>
-        <StationMarkers stations={stations} layers={layers} />
-        <Search hiddenStationTypes={stations} />
+        <StationMarkers />
+        <Search />
         <MapControls userLocation={userLocation} onUserLocationChange={handleUserLocationChange} />
         <StationInfo />
       </SelectedStationProvider>
