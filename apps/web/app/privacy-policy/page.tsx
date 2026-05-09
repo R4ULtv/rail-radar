@@ -18,7 +18,7 @@ export default function PrivacyPolicyPage() {
         <ArrowLeftIcon className="size-4" />
         Back to Rail Radar
       </Link>
-      <h1 className="mb-8 text-3xl font-bold">Privacy Policy</h1>
+      <h1 className="mb-8 text-3xl font-semibold">Privacy Policy</h1>
       <p className="mb-4 text-sm text-muted-foreground">Last updated: April 22, 2026</p>
 
       <div className="space-y-8 leading-relaxed text-muted-foreground">

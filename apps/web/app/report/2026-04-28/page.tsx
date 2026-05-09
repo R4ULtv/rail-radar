@@ -364,7 +364,7 @@ export default function AnalyticsReportPage() {
           <p className="text-xs font-medium uppercase tracking-[0.2em] text-muted-foreground">
             Report · April 28, 2026
           </p>
-          <h1 className="mt-3 text-4xl font-bold tracking-tight text-balance md:text-5xl">
+          <h1 className="mt-3 text-4xl font-semibold tracking-tight text-balance md:text-5xl">
             How people use Rail Radar: Traffic patterns from the first three months
           </h1>
           <p className="mt-5 text-base leading-7 text-muted-foreground md:text-lg">

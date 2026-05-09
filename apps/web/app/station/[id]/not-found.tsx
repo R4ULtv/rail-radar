@@ -7,7 +7,7 @@ export default function StationNotFound() {
     <div className="min-h-screen bg-background flex items-center justify-center px-4">
       <div className="text-center space-y-6 max-w-md">
         <div className="space-y-2">
-          <h1 className="text-4xl font-bold">Station Not Found</h1>
+          <h1 className="text-4xl font-semibold">Station Not Found</h1>
           <p className="text-muted-foreground">
             We couldn&apos;t find a station with that ID. It may have been removed or the link might
             be incorrect.
