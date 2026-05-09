@@ -15,7 +15,7 @@ export default function StationLoading() {
         <Skeleton className="absolute inset-0 rounded-none" />
         {/* Back button placeholder */}
         <div className="absolute top-2 left-2 md:top-4 md:left-4">
-          <Skeleton className="h-8 w-8 rounded-md" />
+          <Skeleton className="size-8 rounded-md" />
         </div>
       </div>
 
@@ -29,9 +29,9 @@ export default function StationLoading() {
               <Skeleton className="h-4 w-40 mt-2" />
             </div>
             <div className="flex gap-2 shrink-0">
-              <Skeleton className="h-8 w-8 rounded-md" />
-              <Skeleton className="h-8 w-8 rounded-md" />
-              <Skeleton className="h-8 w-8 rounded-md" />
+              <Skeleton className="size-8 rounded-md" />
+              <Skeleton className="size-8 rounded-md" />
+              <Skeleton className="size-8 rounded-md" />
             </div>
           </div>
         </div>
@@ -70,7 +70,7 @@ export default function StationLoading() {
             <CardHeader className="px-4">
               <div className="flex items-center justify-between gap-2">
                 <CardTitle className="flex items-center gap-2 text-base">
-                  <Skeleton className="h-4 w-4" />
+                  <Skeleton className="size-4" />
                   <Skeleton className="h-5 w-24" />
                 </CardTitle>
                 <Skeleton className="h-7 w-32 rounded-md" />
@@ -84,7 +84,7 @@ export default function StationLoading() {
                 {Array.from({ length: 6 }).map((_, i) => (
                   <div key={i} className="flex items-center gap-3 px-4 py-3 border-b">
                     <Skeleton className="h-4 w-12" />
-                    <Skeleton className="h-8 w-8 rounded-full" />
+                    <Skeleton className="size-8 rounded-full" />
                     <div className="flex-1">
                       <Skeleton className="h-4 w-32 mb-1" />
                       <Skeleton className="h-3 w-24" />
@@ -106,7 +106,7 @@ export default function StationLoading() {
             >
               <CardHeader className="px-4">
                 <CardTitle className="flex items-center gap-2 text-base">
-                  <Skeleton className="h-4 w-4" />
+                  <Skeleton className="size-4" />
                   <Skeleton className="h-5 w-24" />
                 </CardTitle>
                 <CardDescription>
@@ -118,7 +118,7 @@ export default function StationLoading() {
                   {Array.from({ length: 6 }).map((_, i) => (
                     <div key={i} className="flex items-center gap-3 px-4 py-3 border-b">
                       <Skeleton className="h-4 w-12" />
-                      <Skeleton className="h-8 w-8 rounded-full" />
+                      <Skeleton className="size-8 rounded-full" />
                       <div className="flex-1">
                         <Skeleton className="h-4 w-32 mb-1" />
                         <Skeleton className="h-3 w-24" />
