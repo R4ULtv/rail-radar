@@ -1,6 +1,6 @@
 <script lang="ts">
     import type { Station } from "@repo/data";
-    import { tick } from "svelte";
+    import { onMount, tick } from "svelte";
     import {
         CopyIcon,
         ListIcon,
@@ -37,6 +37,7 @@
     let scrollTop = $state(0);
     let viewportHeight = $state(0);
     let scrollContainer = $state<HTMLElement | null>(null);
+    let searchInput = $state<HTMLInputElement | null>(null);
     let lastFilterKey = $state("");
 
     let filteredStations = $derived.by(() => {
@@ -119,6 +120,23 @@
         };
     });
 
+    onMount(() => {
+        function handleShortcut(event: KeyboardEvent) {
+            if (
+                (!event.metaKey && !event.ctrlKey) ||
+                event.key.toLowerCase() !== "k"
+            )
+                return;
+
+            event.preventDefault();
+            searchInput?.focus();
+            searchInput?.select();
+        }
+
+        window.addEventListener("keydown", handleShortcut);
+        return () => window.removeEventListener("keydown", handleShortcut);
+    });
+
     function changeClass(changeType: ChangeType | undefined): string {
         if (changeType === "created") return "bg-green-500";
         if (changeType === "updated") return "bg-blue-500";
@@ -137,7 +155,8 @@
         if (rowTop < viewportTop) {
             scrollContainer.scrollTop = rowTop;
         } else if (rowBottom > viewportBottom) {
-            scrollContainer.scrollTop = rowBottom - scrollContainer.clientHeight;
+            scrollContainer.scrollTop =
+                rowBottom - scrollContainer.clientHeight;
         }
     }
 
@@ -199,6 +218,7 @@
                 class="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground"
             />
             <Input
+                bind:ref={searchInput}
                 class="w-full pl-9"
                 placeholder="Search stations..."
                 bind:value={search}
@@ -223,15 +243,23 @@
                 </Tabs.Trigger>
                 <Tabs.Trigger value="metro" title="Metro" class="gap-1.5">
                     <SquareMIcon class="size-3" />
-                    {#if filter === "metro"}<span class="text-xs">Metro</span>{/if}
+                    {#if filter === "metro"}<span class="text-xs">Metro</span
+                        >{/if}
                 </Tabs.Trigger>
                 <Tabs.Trigger value="light" title="Light rail" class="gap-1.5">
                     <TramFrontIcon class="size-3" />
-                    {#if filter === "light"}<span class="text-xs">Light</span>{/if}
+                    {#if filter === "light"}<span class="text-xs">Light</span
+                        >{/if}
                 </Tabs.Trigger>
-                <Tabs.Trigger value="duplicate" title="Duplicates" class="gap-1.5">
+                <Tabs.Trigger
+                    value="duplicate"
+                    title="Duplicates"
+                    class="gap-1.5"
+                >
                     <CopyIcon class="size-3" />
-                    {#if filter === "duplicate"}<span class="text-xs">Duplicates</span>{/if}
+                    {#if filter === "duplicate"}<span class="text-xs"
+                            >Duplicates</span
+                        >{/if}
                 </Tabs.Trigger>
             </Tabs.List>
         </Tabs.Root>
