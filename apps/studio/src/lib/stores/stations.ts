@@ -10,6 +10,32 @@ import {
 } from "$lib/stations";
 
 export type DataMode = "local" | "browser";
+export type RemoteStationSourceId = "main" | "preview";
+
+export interface RemoteStationSource {
+  id: RemoteStationSourceId;
+  label: string;
+  description: string;
+  fileName: string;
+  url: string;
+}
+
+export const remoteStationSources: RemoteStationSource[] = [
+  {
+    id: "main",
+    label: "Main website",
+    description: "Latest data from the main branch",
+    fileName: "main-stations.geojson",
+    url: "https://raw.githubusercontent.com/R4ULtv/rail-radar/refs/heads/main/packages/data/src/stations.geojson",
+  },
+  {
+    id: "preview",
+    label: "Preview branch",
+    description: "Latest data from the preview branch",
+    fileName: "preview-stations.geojson",
+    url: "https://raw.githubusercontent.com/R4ULtv/rail-radar/refs/heads/preview/packages/data/src/stations.geojson",
+  },
+];
 
 interface StationState {
   stations: Station[];
@@ -42,11 +68,21 @@ async function readApiError(response: Response, fallback: string): Promise<strin
   }
 }
 
+function readJsonError(error: unknown, fallback: string): string {
+  return error instanceof Error ? error.message : fallback;
+}
+
 function createStationStore() {
   const store = writable<StationState>(initialState);
 
   return {
     subscribe: store.subscribe,
+    resetBrowserFile() {
+      store.set({
+        ...initialState,
+        isLoading: false,
+      });
+    },
     async initialize(options?: { mode?: DataMode }) {
       store.update((state) => ({ ...state, isLoading: true, error: null }));
       const mode = options?.mode ?? "browser";
@@ -100,7 +136,42 @@ function createStationStore() {
       } catch (error) {
         store.update((state) => ({
           ...state,
-          error: error instanceof Error ? error.message : "Failed to read GeoJSON file",
+          error: readJsonError(error, "Failed to read GeoJSON file"),
+        }));
+      }
+    },
+    async loadRemoteSource(sourceId: RemoteStationSourceId) {
+      const source = remoteStationSources.find((item) => item.id === sourceId);
+      if (!source) throw new Error("Unknown station data source");
+
+      store.update((state) => ({ ...state, isLoading: true, error: null }));
+
+      try {
+        const response = await fetch(source.url, { cache: "no-store" });
+        if (!response.ok) {
+          throw new Error(
+            `Failed to load ${source.label}: ${response.status} ${response.statusText}`,
+          );
+        }
+
+        const geojson = validateGeojson(await response.json());
+        store.set({
+          stations: geojsonToStations(geojson),
+          sourceGeojson: geojson,
+          mode: "browser",
+          isLoading: false,
+          error: null,
+          fileName: source.fileName,
+        });
+      } catch (error) {
+        store.update((state) => ({
+          ...state,
+          stations: [],
+          sourceGeojson: null,
+          mode: "browser",
+          isLoading: false,
+          error: readJsonError(error, `Failed to load ${source.label}`),
+          fileName: null,
         }));
       }
     },
