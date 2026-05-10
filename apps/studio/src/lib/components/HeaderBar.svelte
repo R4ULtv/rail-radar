@@ -24,6 +24,7 @@
         onExportClick,
         onAddStationClick,
         onReviewClick,
+        onHomeClick,
         canUndo,
         canRedo,
         undoLabel,
@@ -40,6 +41,7 @@
         onExportClick: () => void;
         onAddStationClick: () => void;
         onReviewClick: () => void;
+        onHomeClick: () => void;
         canUndo: boolean;
         canRedo: boolean;
         undoLabel: string | null;
@@ -61,7 +63,12 @@
 <header
     class="flex h-13 shrink-0 items-center gap-3 border-b border-border bg-card/90 px-3 text-card-foreground backdrop-blur"
 >
-    <div class="flex items-center gap-2.5 pr-1">
+    <button
+        type="button"
+        class="flex items-center gap-2.5 pr-1 text-left transition-opacity hover:opacity-80 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+        onclick={onHomeClick}
+        title="Back to start"
+    >
         <div
             class="flex size-7 items-center justify-center rounded-none bg-accent text-primary"
         >
@@ -75,7 +82,7 @@
                 Station Manager
             </div>
         </div>
-    </div>
+    </button>
 
     <Separator orientation="vertical" class="hidden h-6 sm:block" />
 
@@ -118,7 +125,7 @@
 
         {#if modifiedCount > 0}
             <Badge
-                class="ml-1 border-blue-400/30 bg-blue-500/15 font-mono text-[10px] text-blue-200 hover:bg-blue-500/15"
+                class="ml-1 border-accent bg-accent font-mono text-[10px] text-accent-foreground hover:bg-accent"
             >
                 {modifiedCount} changed
             </Badge>

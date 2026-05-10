@@ -11,7 +11,10 @@
     import UploadPrompt from "$lib/components/UploadPrompt.svelte";
     import { contributionStore } from "$lib/stores/contribution";
     import { historyStore, type HistoryOp } from "$lib/stores/history";
-    import { stationStore } from "$lib/stores/stations";
+    import {
+        stationStore,
+        type RemoteStationSourceId,
+    } from "$lib/stores/stations";
     import type { PageData } from "./$types";
 
     let { data }: { data: PageData } = $props();
@@ -147,6 +150,30 @@
         selectedStationId = null;
         isAddingStation = false;
         showToast(`Imported ${file.name}`);
+    }
+
+    async function handleLoadRemoteSource(sourceId: RemoteStationSourceId) {
+        await stationStore.loadRemoteSource(sourceId);
+        historyStore.clear();
+        selectedStationId = null;
+        isAddingStation = false;
+        showToast("Loaded latest station data");
+    }
+
+    function handleHomeClick() {
+        selectedStationId = null;
+        isAddingStation = false;
+        pendingNewStation = null;
+        contributionPanelOpen = false;
+        historyStore.clear();
+        contributionStore.clearSession();
+
+        if (stationState.mode === "browser") {
+            stationStore.resetBrowserFile();
+            return;
+        }
+
+        void stationStore.initialize({ mode: data.mode });
     }
 
     async function handleMapClick(lat: number, lng: number) {
@@ -389,7 +416,11 @@
         </div>
     </main>
 {:else if stationState.mode === "browser" && stationState.stations.length === 0}
-    <UploadPrompt error={stationState.error} />
+    <UploadPrompt
+        error={stationState.error}
+        onImportFile={handleImportFile}
+        onLoadRemoteSource={handleLoadRemoteSource}
+    />
 {:else}
     <main class="flex h-screen flex-col overflow-hidden">
         <HeaderBar
@@ -402,6 +433,7 @@
             onExportClick={() => stationStore.exportGeojson()}
             onAddStationClick={handleAddStationClick}
             onReviewClick={() => (contributionPanelOpen = true)}
+            onHomeClick={handleHomeClick}
             canUndo={$canUndoStore}
             canRedo={$canRedoStore}
             undoLabel={$undoLabelStore}
