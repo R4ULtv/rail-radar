@@ -19,6 +19,12 @@ export async function fetchWithTimeout(
     const fetchError = error instanceof Error ? error : new Error(String(error));
     const fetchMs = performance.now() - startTime;
     clearTimeout(timeoutId);
+    console.error(`[${regionLabel} fetch failed]`, {
+      url,
+      message: fetchError.message,
+      name: fetchError.name,
+      cause: fetchError.cause,
+    });
 
     if (fetchError.name === "AbortError") {
       throw new ScraperError(
