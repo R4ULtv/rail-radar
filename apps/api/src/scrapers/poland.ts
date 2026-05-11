@@ -93,13 +93,13 @@ interface PolandScheduleStop {
 
 interface ParsedTimeSpan {
   display: string;
-  sortMinutes: number;
+  sortTime: number;
 }
 
 interface MappedTrain {
   key: string;
   train: Train;
-  sortMinutes: number;
+  sortTime: number;
 }
 
 function toPolandStationNumber(stationId: string): number {
@@ -157,7 +157,7 @@ function parseIsoTime(value: string | null): ParsedTimeSpan | null {
 
   return {
     display: `${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}`,
-    sortMinutes: hours * 60 + minutes,
+    sortTime: timestamp,
   };
 }
 
@@ -283,7 +283,7 @@ function mapTrain(
   return {
     key: `${routeKey(operation.scheduleId, operation.orderId)}:${operation.operatingDate}`,
     train,
-    sortMinutes: scheduled?.sortMinutes ?? Number.MAX_SAFE_INTEGER,
+    sortTime: scheduled?.sortTime ?? Number.MAX_SAFE_INTEGER,
   };
 }
 
@@ -369,7 +369,7 @@ export async function scrapePolandTrains(
       ),
     )
     .filter((entry): entry is MappedTrain => entry !== null)
-    .sort((a, b) => a.sortMinutes - b.sortMinutes)
+    .sort((a, b) => a.sortTime - b.sortTime)
     .filter((entry) => {
       if (seen.has(entry.key)) return false;
       seen.add(entry.key);
