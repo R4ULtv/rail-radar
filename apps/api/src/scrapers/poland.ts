@@ -177,7 +177,6 @@ function getTrainInfo(
   return null;
 }
 
-
 function mapTrain(
   operation: PolandOperationTrain,
   currentStationId: number,
