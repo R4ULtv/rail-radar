@@ -103,11 +103,11 @@ interface MappedTrain {
 }
 
 function toPolandStationNumber(stationId: string): number {
-  const numericPart = stationId.replace(/^[A-Z]+/, "");
-  if (!/^\d+$/.test(numericPart)) {
+  const match = stationId.match(/^PL(\d+)$/);
+  if (!match) {
     throw new ScraperError("Unknown Polish station.", 404);
   }
-  return Number(numericPart);
+  return Number(match[1]);
 }
 
 function buildPolandUrl(path: string, params: Record<string, string | number | boolean>): string {
@@ -305,12 +305,12 @@ export async function scrapePolandTrains(
   type: PolandBoardType = "departures",
   env?: Record<string, unknown>,
 ): Promise<ScrapeResult> {
+  const stationNumber = toPolandStationNumber(stationId);
   const apiKey = env?.PLK_API_KEY as string | undefined;
   if (!apiKey) {
     throw new ScraperError("Polish train data source is not configured.", 500);
   }
 
-  const stationNumber = toPolandStationNumber(stationId);
   const operationsUrl = buildPolandUrl("/operations", {
     stations: stationNumber,
     withPlanned: true,
