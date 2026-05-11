@@ -11,6 +11,27 @@ const POLAND_HEADERS = {
   Accept: "application/json",
 };
 
+const POLAND_CARRIERS: Record<string, string> = {
+  IC: "PKP Intercity",
+  PR: "POLREGIO",
+  KM: "KM",
+  KD: "KD",
+  KS: "KS",
+  KW: "KW",
+  KMŁ: "KMŁ",
+  ŁKA: "ŁKA",
+  SKMT: "SKM",
+  SKM_3M: "SKM",
+  SKM: "SKM",
+  WKD: "Warszawska Kolej Dojazdowa",
+  AR: "Arriva",
+  RP: "Railpolonia",
+  LEO: "Leo Express",
+  "Leo Express": "Leo Express",
+  RJ: "RegioJet",
+  ODEG: "ODEG",
+};
+
 type PolandBoardType = "arrivals" | "departures";
 
 interface PolandOperationResponse {
@@ -236,8 +257,10 @@ function mapTrain(
 
   const endpointName = getRouteEndpointName(schedule, currentStationId, type, stationDict);
 
+  const brand = schedule?.carrierCode ? (POLAND_CARRIERS[schedule.carrierCode] ?? null) : null;
+
   const train: Train = {
-    brand: schedule?.name ?? null,
+    brand,
     category,
     trainNumber,
     ...(type === "departures"
