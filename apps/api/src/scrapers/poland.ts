@@ -42,6 +42,34 @@ interface PolandOperationStop {
   isCancelled: boolean;
 }
 
+interface PolandScheduleResponse {
+  routes?: PolandScheduleRoute[] | null;
+  dictionaries?: {
+    stations?: Record<string, { id: number; name: string }> | null;
+  } | null;
+}
+
+interface PolandScheduleRoute {
+  scheduleId: number;
+  orderId: number;
+  name?: string | null;
+  carrierCode?: string | null;
+  nationalNumber?: string | null;
+  commercialCategorySymbol?: string | null;
+  stations?: PolandScheduleStop[] | null;
+}
+
+interface PolandScheduleStop {
+  stationId: number;
+  orderNumber: number;
+  arrivalTrainNumber?: string | null;
+  arrivalPlatform?: string | null;
+  arrivalCommercialCategory?: string | null;
+  departureTrainNumber?: string | null;
+  departurePlatform?: string | null;
+  departureCommercialCategory?: string | null;
+}
+
 interface ParsedTimeSpan {
   display: string;
   sortMinutes: number;
@@ -181,20 +209,47 @@ function mapTrain(
   operation: PolandOperationTrain,
   currentStationId: number,
   type: PolandBoardType,
+  schedule: PolandScheduleRoute | undefined,
+  stationDict: Record<string, { id: number; name: string }>,
 ): MappedTrain | null {
   const operationStop = operation.stations?.find((stop) => stop.stationId === currentStationId);
   if (!shouldIncludeTrain(operation, operationStop, type)) return null;
 
   const scheduled = getOperationPlannedTime(operationStop, type);
   const actual = getActualEventTime(operationStop, type);
+  const scheduleStop = schedule?.stations?.find((stop) => stop.stationId === currentStationId);
+
+  const trainNumber =
+    (type === "departures" ? scheduleStop?.departureTrainNumber : scheduleStop?.arrivalTrainNumber) ??
+    schedule?.nationalNumber ??
+    String(operation.trainOrderId);
+
+  const category =
+    (type === "departures"
+      ? scheduleStop?.departureCommercialCategory
+      : scheduleStop?.arrivalCommercialCategory) ??
+    schedule?.commercialCategorySymbol ??
+    null;
+
+  const platform =
+    (type === "departures" ? scheduleStop?.departurePlatform : scheduleStop?.arrivalPlatform) ?? null;
+
+  const endpointName = getRouteEndpointName(schedule, currentStationId, type, stationDict);
 
   const train: Train = {
-    brand: null,
-    category: null,
-    trainNumber: String(operation.trainOrderId),
+    brand: schedule?.name ?? null,
+    category,
+    trainNumber,
+    ...(type === "departures"
+      ? endpointName
+        ? { destination: endpointName }
+        : {}
+      : endpointName
+        ? { origin: endpointName }
+        : {}),
     scheduledTime: scheduled?.display ?? formatTime(actual, POLAND_TIMEZONE),
     delay: getDelay(operationStop, type),
-    platform: null,
+    platform,
     status: getStatus(operationStop, type),
     info: getTrainInfo(operation, operationStop),
   };
@@ -204,6 +259,22 @@ function mapTrain(
     train,
     sortMinutes: scheduled?.sortMinutes ?? Number.MAX_SAFE_INTEGER,
   };
+}
+
+function getRouteEndpointName(
+  schedule: PolandScheduleRoute | undefined,
+  currentStationId: number,
+  type: PolandBoardType,
+  stationDict: Record<string, { id: number; name: string }>,
+): string | null {
+  const stops = schedule?.stations;
+  if (!stops || stops.length === 0) return null;
+
+  const sorted = [...stops].sort((a, b) => a.orderNumber - b.orderNumber);
+  const endpoint = type === "departures" ? sorted[sorted.length - 1] : sorted[0];
+  if (!endpoint || endpoint.stationId === currentStationId) return null;
+
+  return stationDict[String(endpoint.stationId)]?.name ?? null;
 }
 
 export async function scrapePolandTrains(
@@ -222,19 +293,29 @@ export async function scrapePolandTrains(
     withPlanned: true,
     pageSize: TRAIN_LIMIT,
   });
+  const schedulesUrl = buildPolandUrl("/schedules", {
+    stations: stationNumber,
+    fullRoute: true,
+    dictionaries: true,
+  });
 
-  const { response: operationsResponse, fetchMs: operationsFetchMs } = await fetchWithTimeout(
-    operationsUrl,
-    "Polish",
-    {
-      headers: {
-        ...POLAND_HEADERS,
-        "X-API-Key": apiKey,
-      },
-    },
-  );
+  const headers = { ...POLAND_HEADERS, "X-API-Key": apiKey };
 
-  const operationsData: PolandOperationResponse = await operationsResponse.json();
+  const [operationsResult, schedulesResult] = await Promise.all([
+    fetchWithTimeout(operationsUrl, "Polish", { headers }),
+    fetchWithTimeout(schedulesUrl, "Polish", { headers }),
+  ]);
+
+  const operationsData: PolandOperationResponse = await operationsResult.response.json();
+  const schedulesData: PolandScheduleResponse = await schedulesResult.response.json();
+  const fetchMs = Math.max(operationsResult.fetchMs, schedulesResult.fetchMs);
+
+  const scheduleMap = new Map<string, PolandScheduleRoute>();
+  for (const route of schedulesData.routes ?? []) {
+    scheduleMap.set(routeKey(route.scheduleId, route.orderId), route);
+  }
+  const stationDict = schedulesData.dictionaries?.stations ?? {};
+
   const operations = operationsData.trains ?? [];
   const stationOperations = operations.filter((operation) => {
     const stop = operation.stations?.find((item) => item.stationId === stationNumber);
@@ -245,14 +326,22 @@ export async function scrapePolandTrains(
     return {
       trains: [],
       info: null,
-      timing: { fetchMs: operationsFetchMs },
+      timing: { fetchMs },
     };
   }
 
   const seen = new Set<string>();
 
   const trains = stationOperations
-    .map((operation) => mapTrain(operation, stationNumber, type))
+    .map((operation) =>
+      mapTrain(
+        operation,
+        stationNumber,
+        type,
+        scheduleMap.get(routeKey(operation.scheduleId, operation.orderId)),
+        stationDict,
+      ),
+    )
     .filter((entry): entry is MappedTrain => entry !== null)
     .sort((a, b) => a.sortMinutes - b.sortMinutes)
     .filter((entry) => {
@@ -266,6 +355,6 @@ export async function scrapePolandTrains(
   return {
     trains,
     info: null,
-    timing: { fetchMs: operationsFetchMs },
+    timing: { fetchMs },
   };
 }
