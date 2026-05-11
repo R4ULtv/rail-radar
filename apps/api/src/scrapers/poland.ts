@@ -200,9 +200,12 @@ function shouldIncludeTrain(
   type: PolandBoardType,
 ): boolean {
   if (!stop) return false;
+
+  const plannedTime = getPlannedEventTime(stop, type);
+  const actualTime = getActualEventTime(stop, type);
+  if (!plannedTime && !actualTime) return false;
   if (stop.isCancelled) return true;
 
-  const actualTime = getActualEventTime(stop, type);
   if (actualTime) {
     return new Date(actualTime).getTime() >= Date.now() - RECENT_WINDOW_MS;
   }
