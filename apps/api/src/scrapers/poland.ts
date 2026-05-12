@@ -244,7 +244,9 @@ function mapTrain(
   const scheduleStop = schedule?.stations?.find((stop) => stop.stationId === currentStationId);
 
   const trainNumber =
-    (type === "departures" ? scheduleStop?.departureTrainNumber : scheduleStop?.arrivalTrainNumber) ??
+    (type === "departures"
+      ? scheduleStop?.departureTrainNumber
+      : scheduleStop?.arrivalTrainNumber) ??
     schedule?.nationalNumber ??
     String(operation.trainOrderId);
 
@@ -256,7 +258,8 @@ function mapTrain(
     null;
 
   const platform =
-    (type === "departures" ? scheduleStop?.departurePlatform : scheduleStop?.arrivalPlatform) ?? null;
+    (type === "departures" ? scheduleStop?.departurePlatform : scheduleStop?.arrivalPlatform) ??
+    null;
 
   const endpointName = getRouteEndpointName(schedule, currentStationId, type, stationDict);
 
