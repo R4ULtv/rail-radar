@@ -969,9 +969,9 @@
     "slug": "arriva",
     "name": "Arriva",
     "logoPath": "arriva",
-    "countries": ["international", "uk", "nl", "de", "dk"],
+    "countries": ["international", "uk", "nl", "de", "dk", "pl"],
     "operatorTypes": ["passenger"],
-    "bounds": [-5.7, 47.3, 15.3, 57.9],
+    "bounds": [-5.7, 47.3, 24.2, 57.9],
     "description": "Arriva is a major European transport operator. Acquired by I Squared Capital in 2024, it runs regional rail and bus services across multiple countries, including Arriva Nederland in the Netherlands and the former Arriva Denmark rail business that now operates under the GoCollective name. It also operates transit networks in the UK, Germany, the Czech Republic, Poland, and other European markets.",
     "website": "https://www.arriva.co.uk",
     "founded": 1938,
@@ -989,6 +989,62 @@
       {
         "label": "Wikipedia",
         "url": "https://en.wikipedia.org/wiki/Arriva",
+        "type": "wikipedia"
+      }
+    ]
+  },
+  {
+    "slug": "leo-express",
+    "name": "Leo Express",
+    "logoPath": "leo-express",
+    "countries": ["international", "pl"],
+    "operatorTypes": ["passenger"],
+    "bounds": [14.1, 49, 24.2, 52.5],
+    "description": "Leo Express is a Czech private rail and bus operator focused on modern intercity travel across Central Europe. Its black-and-gold brand is associated with open-access services from Prague toward Ostrava, Slovakia, and Poland, alongside regional public-service operations and connecting coach routes.",
+    "website": "https://www.leoexpress.com",
+    "founded": 2010,
+    "headquarters": "Prague, Czechia",
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["intercity", "regional", "international"],
+    "parentCompany": null,
+    "links": [
+      {
+        "label": "Official Site",
+        "url": "https://www.leoexpress.com",
+        "type": "website"
+      },
+      {
+        "label": "Wikipedia",
+        "url": "https://en.wikipedia.org/wiki/Leo_Express",
+        "type": "wikipedia"
+      }
+    ]
+  },
+  {
+    "slug": "regiojet",
+    "name": "RegioJet",
+    "logoPath": "regiojet",
+    "countries": ["international", "pl"],
+    "operatorTypes": ["passenger"],
+    "bounds": [14.1, 48.5, 24.2, 52.5],
+    "description": "RegioJet is a Czech private rail and coach operator owned by Student Agency. The yellow RegioJet brand is known for open-access long-distance trains in Czechia and Slovakia, with international services linking Central European cities such as Prague, Brno, Vienna, Bratislava, and Polish destinations.",
+    "website": "https://regiojet.com",
+    "founded": 2009,
+    "headquarters": "Brno, Czechia",
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["intercity", "international"],
+    "parentCompany": "Student Agency",
+    "links": [
+      {
+        "label": "Official Site",
+        "url": "https://regiojet.com",
+        "type": "website"
+      },
+      {
+        "label": "Wikipedia",
+        "url": "https://en.wikipedia.org/wiki/RegioJet",
         "type": "wikipedia"
       }
     ]
@@ -1208,9 +1264,9 @@
     "slug": "odeg",
     "name": "ODEG",
     "logoPath": "de/odeg",
-    "countries": ["de"],
+    "countries": ["de", "pl"],
     "operatorTypes": ["passenger"],
-    "bounds": [11, 51.3, 14.8, 53.6],
+    "bounds": [11, 51.3, 15.3, 53.6],
     "description": "Ostdeutsche Eisenbahn (ODEG) is the largest private regional rail operator in eastern Germany, serving Brandenburg, Mecklenburg-Vorpommern, and Berlin. It operates RE and RB lines connecting Berlin with surrounding regions including routes to the Baltic coast and Polish border.",
     "website": "https://www.odeg.de",
     "founded": 2002,
@@ -2288,6 +2344,118 @@
       {
         "label": "Wikipedia",
         "url": "https://en.wikipedia.org/wiki/Transdev",
+        "type": "wikipedia"
+      }
+    ]
+  },
+  {
+    "slug": "pkp-intercity",
+    "name": "PKP Intercity",
+    "logoPath": "pl/pkp-intercity",
+    "countries": ["pl"],
+    "operatorTypes": ["passenger"],
+    "bounds": [14.1, 49, 24.2, 54.9],
+    "description": "PKP Intercity is Poland's national long-distance passenger railway operator and part of the PKP Group. It runs the country's main intercity network under brands such as TLK, IC, EIC, and Express InterCity Premium, connecting major Polish cities and operating many international services.",
+    "website": "https://www.intercity.pl",
+    "founded": 2001,
+    "headquarters": "Warsaw, Poland",
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["high-speed", "intercity", "night-train", "international"],
+    "parentCompany": "PKP Group",
+    "links": [
+      {
+        "label": "Official Site",
+        "url": "https://www.intercity.pl",
+        "type": "website"
+      },
+      {
+        "label": "Wikipedia",
+        "url": "https://en.wikipedia.org/wiki/PKP_Intercity",
+        "type": "wikipedia"
+      }
+    ]
+  },
+  {
+    "slug": "polregio",
+    "name": "POLREGIO",
+    "logoPath": "pl/polregio",
+    "countries": ["pl"],
+    "operatorTypes": ["passenger"],
+    "bounds": [14.1, 49, 24.2, 54.9],
+    "description": "POLREGIO is Poland's largest regional passenger rail operator, formerly known as Przewozy Regionalne. Its red-and-blue brand appears on local and interregional trains across much of the country, linking smaller towns with regional capitals under public-service contracts.",
+    "website": "https://polregio.pl",
+    "founded": 2001,
+    "headquarters": "Warsaw, Poland",
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["regional"],
+    "parentCompany": null,
+    "links": [
+      {
+        "label": "Official Site",
+        "url": "https://polregio.pl",
+        "type": "website"
+      },
+      {
+        "label": "Wikipedia",
+        "url": "https://en.wikipedia.org/wiki/Polregio",
+        "type": "wikipedia"
+      }
+    ]
+  },
+  {
+    "slug": "skm",
+    "name": "SKM",
+    "logoPath": "pl/skm",
+    "countries": ["pl"],
+    "operatorTypes": ["passenger"],
+    "bounds": [14.1, 49, 24.2, 54.9],
+    "description": "SKM, short for Szybka Kolej Miejska, is a Polish fast urban rail brand used for metropolitan commuter services. SKM trains connect city centers with suburbs on mainline railway infrastructure, with well-known networks in areas such as Warsaw and the Tricity.",
+    "website": "https://www.skm.pkp.pl",
+    "founded": null,
+    "headquarters": null,
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["commuter", "regional"],
+    "parentCompany": null,
+    "links": [
+      {
+        "label": "Official Site",
+        "url": "https://www.skm.pkp.pl",
+        "type": "website"
+      },
+      {
+        "label": "Wikipedia",
+        "url": "https://en.wikipedia.org/wiki/Szybka_Kolej_Miejska",
+        "type": "wikipedia"
+      }
+    ]
+  },
+  {
+    "slug": "railpolonia",
+    "name": "Railpolonia",
+    "logoPath": "pl/railpolonia",
+    "countries": ["pl"],
+    "operatorTypes": ["cargo"],
+    "bounds": [14.1, 49, 24.2, 54.9],
+    "description": "Railpolonia is a Polish rail freight operator based in the Warsaw region and part of the Budokrusz group. The company provides rail cargo transport and traction services, with a brand focused on industrial logistics and specialist freight movements.",
+    "website": "https://www.railpolonia.pl",
+    "founded": null,
+    "headquarters": "Poland",
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["international"],
+    "parentCompany": null,
+    "links": [
+      {
+        "label": "Official Site",
+        "url": "https://www.railpolonia.pl",
+        "type": "website"
+      },
+      {
+        "label": "Wikipedia",
+        "url": "https://en.wikipedia.org/wiki/Railpolonia",
         "type": "wikipedia"
       }
     ]

@@ -55,6 +55,13 @@ const brandPaths: Record<string, string> = {
   ns: "ns",
   vy: "no/vy",
   "sj nord": "no/sj_nord",
+  // Polish brands
+  "pkp intercity": "pl/pkp-intercity",
+  polregio: "pl/polregio",
+  skm: "pl/skm",
+  railpolonia: "pl/railpolonia",
+  "leo express": "leo-express",
+  regiojet: "regiojet",
   // Swedish brands
   sj: "se/sj",
   "mtr express": "se/mtr",
@@ -184,6 +191,13 @@ const brandSlugMap: Record<string, string> = {
   "sj nord": "sj-nord",
   "go-ahead norge": "go-ahead-norge",
   flytoget: "flytoget",
+  // Polish brands
+  "pkp intercity": "pkp-intercity",
+  polregio: "polregio",
+  skm: "skm",
+  railpolonia: "railpolonia",
+  "leo express": "leo-express",
+  regiojet: "regiojet",
   // Swedish brands
   sj: "sj",
   "mtr express": "mtr-express",
