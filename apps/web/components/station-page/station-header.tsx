@@ -27,7 +27,7 @@ export function StationHeader({ station, info }: StationHeaderProps) {
     <div className="space-y-4">
       <div className="flex items-start justify-between gap-4">
         <div>
-          <h1 className="text-2xl md:text-3xl font-bold tracking-tight">{station.name}</h1>
+          <h1 className="text-2xl md:text-3xl font-semibold tracking-tight">{station.name}</h1>
           {station.geo && (
             <p className="text-sm text-muted-foreground mt-2 tabular-nums">
               {formatDms(station.geo.lat, "lat")} {formatDms(station.geo.lng, "lng")}

@@ -62,7 +62,10 @@
 
   function openGitHub() {
     const params = new URLSearchParams({ quick_pull: "1", title, body });
-    window.open(`https://github.com/r4ultv/rail-radar/compare/main...HEAD?${params.toString()}`, "_blank");
+    window.open(
+      `https://github.com/r4ultv/rail-radar/compare/main...HEAD?${params.toString()}`,
+      "_blank",
+    );
   }
 
   function clearSession() {
@@ -71,7 +74,7 @@
   }
 </script>
 
-<Dialog.Root {open} onOpenChange={onOpenChange}>
+<Dialog.Root {open} {onOpenChange}>
   <Dialog.Content class="flex max-h-[85vh] flex-col sm:max-w-xl">
     <Dialog.Header>
       <Dialog.Title>Contribution Session</Dialog.Title>
@@ -109,7 +112,9 @@
             {#each changes as change (change.id)}
               <div class="rounded-md border border-border bg-muted/30 p-3">
                 <div class="flex items-center gap-2">
-                  <Badge variant={change.type === "deleted" ? "destructive" : "secondary"}>{change.type}</Badge>
+                  <Badge variant={change.type === "deleted" ? "destructive" : "secondary"}
+                    >{change.type}</Badge
+                  >
                   <div class="min-w-0 truncate font-medium">{change.stationName}</div>
                 </div>
                 <div class="mt-1 text-xs text-muted-foreground">{formatChangeDetails(change)}</div>
@@ -126,7 +131,9 @@
           <div class="flex items-center justify-between">
             <Label for="pr-title">PR Title</Label>
             <Button variant="ghost" size="sm" onclick={() => copyText("title", title)}>
-              {#if copied === "title"}<CheckIcon class="size-3" /> Copied{:else}<CopyIcon class="size-3" /> Copy{/if}
+              {#if copied === "title"}<CheckIcon class="size-3" /> Copied{:else}<CopyIcon
+                  class="size-3"
+                /> Copy{/if}
             </Button>
           </div>
           <Input id="pr-title" value={title} readonly class="font-mono text-sm" />
@@ -136,7 +143,9 @@
           <div class="flex items-center justify-between">
             <Label for="pr-body">PR Description</Label>
             <Button variant="ghost" size="sm" onclick={() => copyText("body", body)}>
-              {#if copied === "body"}<CheckIcon class="size-3" /> Copied{:else}<CopyIcon class="size-3" /> Copy{/if}
+              {#if copied === "body"}<CheckIcon class="size-3" /> Copied{:else}<CopyIcon
+                  class="size-3"
+                /> Copy{/if}
             </Button>
           </div>
           <ScrollArea class="h-48 rounded-md border border-border bg-muted/30">

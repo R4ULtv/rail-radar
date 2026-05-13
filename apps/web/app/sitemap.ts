@@ -8,14 +8,20 @@ function absoluteUrl(pathname: string): string {
 }
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const stationRoutes: MetadataRoute.Sitemap = stations
-    .filter((station) => station.type === "rail" && station.geo)
-    .map((station) => ({
-      url: absoluteUrl(`/station/${station.id}`),
-      lastModified: new Date(),
-      changeFrequency: "daily" as const,
-      priority: 0.7,
-    }));
+  const stationRoutes: MetadataRoute.Sitemap = stations.reduce<MetadataRoute.Sitemap>(
+    (routes, station) => {
+      if (station.type !== "rail" || !station.geo) return routes;
+
+      routes.push({
+        url: absoluteUrl(`/station/${station.id}`),
+        lastModified: new Date(),
+        changeFrequency: "daily",
+        priority: 0.7,
+      });
+      return routes;
+    },
+    [],
+  );
 
   const operatorRoutes: MetadataRoute.Sitemap = operators.map((operator) => ({
     url: absoluteUrl(`/operators/${operator.slug}`),

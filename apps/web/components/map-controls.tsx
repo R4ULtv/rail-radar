@@ -116,35 +116,39 @@ export function MapControls({ userLocation, onUserLocationChange }: MapControlsP
     map?.easeTo({ bearing: 0, pitch: 0 });
   }, [map]);
 
+  const handleKeyboardShortcut = React.useEffectEvent((event: KeyboardEvent) => {
+    const target = event.target as HTMLElement;
+    if (target.tagName === "INPUT" || target.tagName === "TEXTAREA") {
+      return;
+    }
+
+    switch (event.key) {
+      case "+":
+      case "=":
+        handleZoomIn();
+        break;
+      case "-":
+        handleZoomOut();
+        break;
+      case "l":
+      case "L":
+        handleLocate();
+        break;
+      case "n":
+      case "N":
+        handleResetBearing();
+        break;
+    }
+  });
+
   React.useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
-      const target = event.target as HTMLElement;
-      if (target.tagName === "INPUT" || target.tagName === "TEXTAREA") {
-        return;
-      }
-
-      switch (event.key) {
-        case "+":
-        case "=":
-          handleZoomIn();
-          break;
-        case "-":
-          handleZoomOut();
-          break;
-        case "l":
-        case "L":
-          handleLocate();
-          break;
-        case "n":
-        case "N":
-          handleResetBearing();
-          break;
-      }
+      handleKeyboardShortcut(event);
     };
 
     document.addEventListener("keydown", handleKeyDown);
     return () => document.removeEventListener("keydown", handleKeyDown);
-  }, [handleZoomIn, handleZoomOut, handleLocate, handleResetBearing]);
+  }, []);
 
   return (
     <>
@@ -152,10 +156,7 @@ export function MapControls({ userLocation, onUserLocationChange }: MapControlsP
         <Marker longitude={userLocation.longitude} latitude={userLocation.latitude} anchor="center">
           <div className="relative flex items-center justify-center">
             <div className="absolute rounded-full bg-accent/20 size-8" />
-            <div
-              className="absolute rounded-full bg-accent/40 size-5 motion-safe:animate-ping"
-              style={{ animationDuration: "2s" }}
-            />
+            <div className="absolute rounded-full bg-accent/40 size-5 motion-safe:animate-ping" />
             <div className="size-4 rounded-full border-2 border-white bg-accent shadow-md z-10" />
           </div>
         </Marker>

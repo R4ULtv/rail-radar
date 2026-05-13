@@ -97,14 +97,14 @@ export function TrainRowSkeleton() {
   return (
     <div className="flex gap-3 py-3 px-4 border-b border-border last:border-b-0">
       {/* Platform badge skeleton */}
-      <Skeleton className="shrink-0 w-12 h-12 rounded-md" />
+      <Skeleton className="shrink-0 size-12 rounded-md" />
 
       {/* Train details skeleton */}
       <div className="flex-1 min-w-0">
         {/* Line 1: Train info + Time */}
         <div className="flex items-center justify-between gap-2">
           <div className="flex items-center gap-1.5">
-            <Skeleton className="h-5 w-5" />
+            <Skeleton className="size-5" />
             <Skeleton className="h-5 w-6" />
             <Skeleton className="h-5 w-16" />
           </div>

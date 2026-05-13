@@ -31,7 +31,9 @@
 
   const trimmedId = $derived(id.trim().toUpperCase());
   const formatValid = $derived(trimmedId.length === 0 || isValidStationId(trimmedId));
-  const duplicateName = $derived(trimmedId.length > 0 ? (existingIds.get(trimmedId) ?? null) : null);
+  const duplicateName = $derived(
+    trimmedId.length > 0 ? (existingIds.get(trimmedId) ?? null) : null,
+  );
   const error = $derived(
     trimmedId.length === 0
       ? "ID is required"
@@ -46,9 +48,7 @@
   const showPrefixHint = $derived(
     !error && enteredPrefix.length > 0 && !existingPrefixes.has(enteredPrefix),
   );
-  const showDigitLengthHint = $derived(
-    !error && enteredDigits.length > 8,
-  );
+  const showDigitLengthHint = $derived(!error && enteredDigits.length > 8);
   const sortedPrefixes = $derived([...existingPrefixes].sort());
   const canSubmit = $derived(!error && name.trim().length > 0);
 
@@ -87,7 +87,9 @@
         {#if error}
           <p class="text-xs text-destructive">{error}</p>
         {:else if showPrefixHint}
-          <div class="rounded-md border border-amber-500/30 bg-amber-500/10 p-2 text-xs text-amber-200">
+          <div
+            class="rounded-md border border-amber-500/30 bg-amber-500/10 p-2 text-xs text-amber-200"
+          >
             <p>
               Prefix <code class="font-mono">{enteredPrefix}</code> doesn't exist yet. Existing prefixes:
             </p>

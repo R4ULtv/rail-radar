@@ -37,10 +37,28 @@
   </div>
   <span class="text-muted-foreground/40">|</span>
   <div class="hidden items-center gap-3 sm:flex">
-    <span><span class="uppercase tracking-wider">Total</span> <span class="text-foreground">{stations.length}</span></span>
-    <span><span class="mr-1.5 inline-block size-1.5 rounded-full align-middle" style:background-color={STATION_TYPE_COLOR.rail}></span>{railCount}</span>
-    <span><span class="mr-1.5 inline-block size-1.5 rounded-full align-middle" style:background-color={STATION_TYPE_COLOR.metro}></span>{metroCount}</span>
-    <span><span class="mr-1.5 inline-block size-1.5 rounded-full align-middle" style:background-color={STATION_TYPE_COLOR.light}></span>{lightCount}</span>
+    <span
+      ><span class="uppercase tracking-wider">Total</span>
+      <span class="text-foreground">{stations.length}</span></span
+    >
+    <span
+      ><span
+        class="mr-1.5 inline-block size-1.5 rounded-full align-middle"
+        style:background-color={STATION_TYPE_COLOR.rail}
+      ></span>{railCount}</span
+    >
+    <span
+      ><span
+        class="mr-1.5 inline-block size-1.5 rounded-full align-middle"
+        style:background-color={STATION_TYPE_COLOR.metro}
+      ></span>{metroCount}</span
+    >
+    <span
+      ><span
+        class="mr-1.5 inline-block size-1.5 rounded-full align-middle"
+        style:background-color={STATION_TYPE_COLOR.light}
+      ></span>{lightCount}</span
+    >
   </div>
   <span class="hidden text-muted-foreground/40 sm:inline">|</span>
   <div class="hidden items-center gap-1.5 sm:flex">
@@ -52,7 +70,9 @@
     {#if selectedStation?.geo}
       <div class="hidden min-w-0 items-center gap-1.5 md:flex">
         <MapPinIcon class="size-3 shrink-0" />
-        <span class="truncate">{selectedStation.geo.lat.toFixed(5)}, {selectedStation.geo.lng.toFixed(5)}</span>
+        <span class="truncate"
+          >{selectedStation.geo.lat.toFixed(5)}, {selectedStation.geo.lng.toFixed(5)}</span
+        >
       </div>
     {/if}
     <div class="flex items-center gap-1.5">

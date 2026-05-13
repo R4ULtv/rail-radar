@@ -19,8 +19,19 @@
   } = $props();
 
   const COUNTRY_LANG: Record<string, string> = {
-    IT: "it", DE: "de", CH: "de", AT: "de", FR: "fr", BE: "fr",
-    NL: "nl", DK: "da", NO: "no", SE: "sv", FI: "fi", GB: "en", IE: "en",
+    IT: "it",
+    DE: "de",
+    CH: "de",
+    AT: "de",
+    FR: "fr",
+    BE: "fr",
+    NL: "nl",
+    DK: "da",
+    NO: "no",
+    SE: "sv",
+    FI: "fi",
+    GB: "en",
+    IE: "en",
   };
   const lang = $derived(
     stationId ? (COUNTRY_LANG[stationId.slice(0, 2).toUpperCase()] ?? "en") : "en",
@@ -53,7 +64,9 @@
     if (stationName) void load(stationName, stationId);
   });
 
-  function statusVariant(status: StationStatus): "default" | "secondary" | "destructive" | "outline" {
+  function statusVariant(
+    status: StationStatus,
+  ): "default" | "secondary" | "destructive" | "outline" {
     if (status === "soppressa") return "destructive";
     if (status === "chiusa") return "outline";
     return "secondary";
@@ -79,7 +92,15 @@
   </div>
 {:else}
   {@const status = getStationStatus(data.stato)}
-  {@const distance = data.coordinates && currentCoordinates ? calculateDistance(currentCoordinates.lat, currentCoordinates.lng, data.coordinates.lat, data.coordinates.lng) : null}
+  {@const distance =
+    data.coordinates && currentCoordinates
+      ? calculateDistance(
+          currentCoordinates.lat,
+          currentCoordinates.lng,
+          data.coordinates.lat,
+          data.coordinates.lng,
+        )
+      : null}
   <div class="flex flex-col gap-3 py-2">
     {#if data.stato}
       <Badge variant={statusVariant(status)} class="w-fit capitalize">{data.stato}</Badge>
@@ -94,7 +115,11 @@
               {data.coordinates.lat.toFixed(6)}, {data.coordinates.lng.toFixed(6)}
             </span>
           </div>
-          <Button variant="outline" size="sm" onclick={() => onUseCoordinates(data!.coordinates!.lat, data!.coordinates!.lng)}>
+          <Button
+            variant="outline"
+            size="sm"
+            onclick={() => onUseCoordinates(data!.coordinates!.lat, data!.coordinates!.lng)}
+          >
             Use
           </Button>
         </div>
@@ -103,7 +128,9 @@
             {#if distance < 1}
               <span class="text-emerald-300">Coordinates match</span>
             {:else}
-              Distance from current: <span class="font-medium text-foreground">{formatDistance(distance)}</span>
+              Distance from current: <span class="font-medium text-foreground"
+                >{formatDistance(distance)}</span
+              >
             {/if}
           </div>
         {/if}
@@ -111,7 +138,13 @@
     {/if}
 
     {#if data.wikipediaUrl}
-      <Button variant="outline" class="w-full" href={data.wikipediaUrl} target="_blank" rel="noopener noreferrer">
+      <Button
+        variant="outline"
+        class="w-full"
+        href={data.wikipediaUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+      >
         <ExternalLinkIcon class="size-4" />
         View on Wikipedia
       </Button>

@@ -69,7 +69,7 @@ export default function OperatorsPage() {
         <p className="text-xs font-medium uppercase tracking-[0.2em] text-muted-foreground mb-3">
           Directory
         </p>
-        <h1 className="text-4xl font-bold tracking-tight">Train Operators</h1>
+        <h1 className="text-4xl font-semibold tracking-tight">Train Operators</h1>
         <p className="mt-3 text-muted-foreground max-w-lg text-pretty">
           {operators.length} train operators tracked across {COUNTRY_CODES.length} countries in real
           time on Rail Radar.

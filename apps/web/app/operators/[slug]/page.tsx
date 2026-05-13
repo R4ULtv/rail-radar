@@ -240,7 +240,7 @@ export default async function OperatorPage({ params }: OperatorPageProps) {
             />
           </div>
           <div className="min-w-0 pt-1">
-            <h1 className="text-3xl md:text-4xl font-bold tracking-tight">{operator.name}</h1>
+            <h1 className="text-3xl md:text-4xl font-semibold tracking-tight">{operator.name}</h1>
             <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-muted-foreground">
               {trackedCountries.map((c) => (
                 <span
