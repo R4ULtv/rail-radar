@@ -14,7 +14,7 @@
     "@sveltejs/kit": "^2.59.1",
     "maplibre-gl": "^5.24.0",
     "svelte": "^5.55.5",
-    "vite": "^8.0.11"
+    "vite": "^8.0.12"
   },
   "devDependencies": {
     "@fontsource-variable/geist": "^5.2.8",
@@ -25,7 +25,7 @@
     "@sveltejs/adapter-cloudflare": "^7.2.8",
     "@sveltejs/vite-plugin-svelte": "^7.1.2",
     "@tailwindcss/vite": "^4.3.0",
-    "@types/node": "^22.19.18",
+    "@types/node": "^22.19.19",
     "bits-ui": "^2.18.1",
     "clsx": "^2.1.1",
     "shadcn-svelte": "^1.2.7",
