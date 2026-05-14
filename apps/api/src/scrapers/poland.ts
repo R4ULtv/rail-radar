@@ -10,6 +10,7 @@ const RECENT_WINDOW_MS = 10 * 60 * 1000;
 const POLAND_HEADERS = {
   Accept: "application/json",
 };
+const POLAND_RAW_CACHE_TTL_MS = 15_000;
 
 const POLAND_CARRIERS: Record<string, string> = {
   IC: "PKP Intercity",
@@ -101,6 +102,19 @@ interface MappedTrain {
   train: Train;
   sortTime: number;
 }
+
+interface PolandRawData {
+  operationsData: PolandOperationResponse;
+  schedulesData: PolandScheduleResponse;
+  fetchMs: number;
+}
+
+interface PolandRawCacheEntry {
+  expiresAt: number;
+  promise: Promise<PolandRawData>;
+}
+
+const rawDataCache = new Map<number, PolandRawCacheEntry>();
 
 function toPolandStationNumber(stationId: string): number {
   const match = stationId.match(/^PL(\d+)$/);
@@ -306,17 +320,7 @@ function getRouteEndpointName(
   return stationDict[String(endpoint.stationId)]?.name ?? null;
 }
 
-export async function scrapePolandTrains(
-  stationId: string,
-  type: PolandBoardType = "departures",
-  env?: Record<string, unknown>,
-): Promise<ScrapeResult> {
-  const stationNumber = toPolandStationNumber(stationId);
-  const apiKey = env?.PLK_API_KEY as string | undefined;
-  if (!apiKey) {
-    throw new ScraperError("Polish train data source is not configured.", 500);
-  }
-
+async function fetchPolandRawData(stationNumber: number, apiKey: string): Promise<PolandRawData> {
   const operationsUrl = buildPolandUrl("/operations", {
     stations: stationNumber,
     withPlanned: true,
@@ -338,6 +342,46 @@ export async function scrapePolandTrains(
   const operationsData: PolandOperationResponse = await operationsResult.response.json();
   const schedulesData: PolandScheduleResponse = await schedulesResult.response.json();
   const fetchMs = Math.max(operationsResult.fetchMs, schedulesResult.fetchMs);
+
+  return { operationsData, schedulesData, fetchMs };
+}
+
+function getCachedPolandRawData(stationNumber: number, apiKey: string): Promise<PolandRawData> {
+  const now = Date.now();
+  const cached = rawDataCache.get(stationNumber);
+
+  if (cached && cached.expiresAt > now) {
+    return cached.promise;
+  }
+
+  const promise = fetchPolandRawData(stationNumber, apiKey).catch((error) => {
+    rawDataCache.delete(stationNumber);
+    throw error;
+  });
+
+  rawDataCache.set(stationNumber, {
+    expiresAt: now + POLAND_RAW_CACHE_TTL_MS,
+    promise,
+  });
+
+  return promise;
+}
+
+export async function scrapePolandTrains(
+  stationId: string,
+  type: PolandBoardType = "departures",
+  env?: Record<string, unknown>,
+): Promise<ScrapeResult> {
+  const stationNumber = toPolandStationNumber(stationId);
+  const apiKey = env?.PLK_API_KEY as string | undefined;
+  if (!apiKey) {
+    throw new ScraperError("Polish train data source is not configured.", 500);
+  }
+
+  const { operationsData, schedulesData, fetchMs } = await getCachedPolandRawData(
+    stationNumber,
+    apiKey,
+  );
 
   const scheduleMap = new Map<string, PolandScheduleRoute>();
   for (const route of schedulesData.routes ?? []) {
