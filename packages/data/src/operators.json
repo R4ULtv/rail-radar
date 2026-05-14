@@ -2433,29 +2433,141 @@
     ]
   },
   {
-    "slug": "railpolonia",
-    "name": "Railpolonia",
-    "logoPath": "pl/railpolonia",
+    "slug": "km",
+    "name": "Koleje Mazowieckie",
+    "logoPath": "pl/km",
     "countries": ["pl"],
-    "operatorTypes": ["cargo"],
-    "bounds": [14.1, 49, 24.2, 54.9],
-    "description": "Railpolonia is a Polish rail freight operator based in the Warsaw region and part of the Budokrusz group. The company provides rail cargo transport and traction services, with a brand focused on industrial logistics and specialist freight movements.",
-    "website": "https://www.railpolonia.pl",
-    "founded": null,
-    "headquarters": "Poland",
+    "operatorTypes": ["passenger"],
+    "bounds": [19.1, 51, 23.2, 53.6],
+    "description": "Koleje Mazowieckie is one of Poland's largest regional passenger rail operators, serving Warsaw and the wider Masovian Voivodeship. The KM brand connects the capital with towns such as Radom, Płock, Siedlce, Mława, Sochaczew, and Żyrardów.",
+    "website": "https://www.mazowieckie.com.pl",
+    "founded": 2004,
+    "headquarters": "Warsaw, Poland",
     "networkKm": null,
     "annualPassengers": null,
-    "serviceTypes": ["international"],
-    "parentCompany": null,
+    "serviceTypes": ["regional", "commuter"],
+    "parentCompany": "Masovian Voivodeship",
     "links": [
       {
         "label": "Official Site",
-        "url": "https://www.railpolonia.pl",
+        "url": "https://www.mazowieckie.com.pl",
         "type": "website"
       },
       {
         "label": "Wikipedia",
-        "url": "https://en.wikipedia.org/wiki/Railpolonia",
+        "url": "https://en.wikipedia.org/wiki/Masovian_Railways",
+        "type": "wikipedia"
+      }
+    ]
+  },
+  {
+    "slug": "ks",
+    "name": "Koleje Śląskie",
+    "logoPath": "pl/ks",
+    "countries": ["pl"],
+    "operatorTypes": ["passenger"],
+    "bounds": [18, 49.3, 19.8, 51.2],
+    "description": "Koleje Śląskie is the regional passenger rail operator for Poland's Silesian Voivodeship. Its KS brand serves the dense urban and industrial region around Katowice, Gliwice, Częstochowa, Bielsko-Biała, Rybnik, and nearby cross-regional routes.",
+    "website": "https://www.kolejeslaskie.pl",
+    "founded": 2010,
+    "headquarters": "Katowice, Poland",
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["regional", "commuter"],
+    "parentCompany": "Silesian Voivodeship",
+    "links": [
+      {
+        "label": "Official Site",
+        "url": "https://www.kolejeslaskie.pl",
+        "type": "website"
+      },
+      {
+        "label": "Wikipedia",
+        "url": "https://en.wikipedia.org/wiki/Silesian_Railways",
+        "type": "wikipedia"
+      }
+    ]
+  },
+  {
+    "slug": "kw",
+    "name": "Koleje Wielkopolskie",
+    "logoPath": "pl/kw",
+    "countries": ["pl"],
+    "operatorTypes": ["passenger"],
+    "bounds": [15.8, 51.2, 19, 53.5],
+    "description": "Koleje Wielkopolskie is a regional passenger rail operator owned by the Greater Poland Voivodeship. The KW brand is centered on Poznań and serves routes across Wielkopolska, linking regional towns with the voivodeship capital and neighboring rail networks.",
+    "website": "https://koleje-wielkopolskie.com.pl",
+    "founded": 2009,
+    "headquarters": "Poznań, Poland",
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["regional", "commuter"],
+    "parentCompany": "Greater Poland Voivodeship",
+    "links": [
+      {
+        "label": "Official Site",
+        "url": "https://koleje-wielkopolskie.com.pl",
+        "type": "website"
+      },
+      {
+        "label": "Wikipedia",
+        "url": "https://en.wikipedia.org/wiki/Greater_Poland_Railways",
+        "type": "wikipedia"
+      }
+    ]
+  },
+  {
+    "slug": "lka",
+    "name": "Łódzka Kolej Aglomeracyjna",
+    "logoPath": "pl/lka",
+    "countries": ["pl"],
+    "operatorTypes": ["passenger"],
+    "bounds": [18.4, 50.8, 20.6, 52.4],
+    "description": "Łódzka Kolej Aglomeracyjna is a regional and commuter rail operator serving Łódź and the surrounding Łódź Voivodeship. The ŁKA brand links the metropolitan area with nearby towns and regional centers using modern electric multiple units and integrated regional services.",
+    "website": "https://lka.lodzkie.pl",
+    "founded": 2010,
+    "headquarters": "Łódź, Poland",
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["regional", "commuter"],
+    "parentCompany": "Łódź Voivodeship",
+    "links": [
+      {
+        "label": "Official Site",
+        "url": "https://lka.lodzkie.pl",
+        "type": "website"
+      },
+      {
+        "label": "Wikipedia",
+        "url": "https://en.wikipedia.org/wiki/%C5%81%C3%B3d%C5%BA_Agglomeration_Railway",
+        "type": "wikipedia"
+      }
+    ]
+  },
+  {
+    "slug": "wkd",
+    "name": "Warszawska Kolej Dojazdowa",
+    "logoPath": "pl/wkd",
+    "countries": ["pl"],
+    "operatorTypes": ["passenger"],
+    "bounds": [20.5, 52, 21.1, 52.3],
+    "description": "Warszawska Kolej Dojazdowa is a suburban rail operator serving the south-western Warsaw metropolitan area. The WKD brand runs frequent commuter services from central Warsaw toward Grodzisk Mazowiecki and Milanówek on its own electrified railway line.",
+    "website": "https://wkd.com.pl",
+    "founded": 2000,
+    "headquarters": "Grodzisk Mazowiecki, Poland",
+    "networkKm": 33,
+    "annualPassengers": null,
+    "serviceTypes": ["commuter", "regional"],
+    "parentCompany": null,
+    "links": [
+      {
+        "label": "Official Site",
+        "url": "https://wkd.com.pl",
+        "type": "website"
+      },
+      {
+        "label": "Wikipedia",
+        "url": "https://en.wikipedia.org/wiki/Warsaw_Commuter_Railway",
         "type": "wikipedia"
       }
     ]
