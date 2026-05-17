@@ -6,6 +6,7 @@ import { operators, operatorBySlug, type Operator } from "@repo/data/operators";
 import { COUNTRY_MAP, type CountryCode } from "@repo/data/countries";
 import { Badge } from "@repo/ui/components/badge";
 import { Card, CardContent } from "@repo/ui/components/card";
+import { staticAssetUrl } from "@/lib/static-assets";
 import {
   ArrowLeftIcon,
   ArrowRightIcon,
@@ -232,7 +233,7 @@ export default async function OperatorPage({ params }: OperatorPageProps) {
           <div className="flex size-20 shrink-0 items-center justify-center overflow-hidden rounded-2xl bg-card">
             <Image
               unoptimized
-              src={`/brands/${operator.logoPath}.svg`}
+              src={staticAssetUrl(`/operators/${operator.logoPath}.svg`)}
               alt={operator.name}
               width={80}
               height={80}
@@ -250,7 +251,7 @@ export default async function OperatorPage({ params }: OperatorPageProps) {
                 >
                   <Image
                     unoptimized
-                    src={`/flags/${c}.svg`}
+                    src={staticAssetUrl(`/flags/${c}.svg`)}
                     alt={COUNTRY_MAP[c]}
                     width={16}
                     height={16}
@@ -350,7 +351,7 @@ export default async function OperatorPage({ params }: OperatorPageProps) {
                   >
                     <Image
                       unoptimized
-                      src={`/flags/${c}.svg`}
+                      src={staticAssetUrl(`/flags/${c}.svg`)}
                       alt={COUNTRY_MAP[c]}
                       width={18}
                       height={18}
@@ -414,7 +415,7 @@ export default async function OperatorPage({ params }: OperatorPageProps) {
                       <div className="flex size-8 shrink-0 items-center justify-center overflow-hidden rounded-lg bg-background">
                         <Image
                           unoptimized
-                          src={`/brands/${b.logoPath}.svg`}
+                          src={staticAssetUrl(`/operators/${b.logoPath}.svg`)}
                           alt={b.name}
                           width={32}
                           height={32}
@@ -429,7 +430,7 @@ export default async function OperatorPage({ params }: OperatorPageProps) {
                             <Image
                               key={c}
                               unoptimized
-                              src={`/flags/${c}.svg`}
+                              src={staticAssetUrl(`/flags/${c}.svg`)}
                               alt={COUNTRY_MAP[c]}
                               width={14}
                               height={14}

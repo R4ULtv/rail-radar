@@ -1,6 +1,7 @@
 import Image from "next/image";
 
-// Maps brand names to their SVG file paths (relative to /brands/)
+import { staticAssetUrl } from "@/lib/static-assets";
+// Maps brand names to their SVG file paths (relative to /operators/)
 const brandPaths: Record<string, string> = {
   // Italian brands
   trenitalia: "it/trenitalia",
@@ -259,7 +260,7 @@ export function BrandLogo({ brand, className }: BrandLogoProps) {
   return (
     <Image
       unoptimized
-      src={`/brands/${path}.svg`}
+      src={staticAssetUrl(`/operators/${path}.svg`)}
       alt={brand}
       className={className}
       width={32}

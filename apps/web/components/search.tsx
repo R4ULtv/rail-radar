@@ -1,5 +1,6 @@
 "use client";
 
+import { staticAssetUrl } from "@/lib/static-assets";
 import * as React from "react";
 import {
   BookmarkIcon,
@@ -98,7 +99,7 @@ const StationList = React.memo(function StationList({
               <span className="max-w-75 md:max-w-61 truncate">{station.name}</span>
               <Image
                 unoptimized
-                src={`/flags/${getCountry(station.id) ?? "xx"}.svg`}
+                src={staticAssetUrl(`/flags/${getCountry(station.id) ?? "xx"}.svg`)}
                 alt={getCountry(station.id)?.toUpperCase() ?? ""}
                 className="size-3 shrink-0 rounded-full object-cover"
                 width={12}
