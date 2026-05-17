@@ -16,6 +16,7 @@
 | Directory                        | Description                              |
 | -------------------------------- | ---------------------------------------- |
 | [apps/api](./apps/api)           | Cloudflare Workers API for train data    |
+| [apps/static](./apps/static)     | Cloudflare Worker for shared media assets |
 | [apps/studio](./apps/studio)     | Admin tool for station data management   |
 | [apps/web](./apps/web)           | Next.js frontend with interactive map    |
 | [packages/data](./packages/data) | Shared station data and TypeScript types |
@@ -33,6 +34,7 @@ pnpm dev
 # Run specific app
 pnpm --filter=web dev    # Frontend at localhost:3000
 pnpm --filter=api dev    # API server
+pnpm --filter=static dev # Shared media Worker at localhost:8788
 pnpm --filter=studio dev # Admin tool at localhost:3001
 ```
 
@@ -41,12 +43,18 @@ pnpm --filter=studio dev # Admin tool at localhost:3001
 | Command                        | Description                            |
 | ------------------------------ | -------------------------------------- |
 | `pnpm dev`                     | Start all development servers          |
+| `pnpm --filter=static dev`     | Start the shared media Worker at localhost:8788 |
 | `pnpm --filter=studio dev`     | Start the admin tool at localhost:3001 |
 | `pnpm build`                   | Build all packages                     |
 | `pnpm lint --force`            | Lint all packages                      |
 | `pnpm format`                  | Format code with oxfmt                 |
 | `pnpm check-types --force`     | Run TypeScript type checking           |
-| `pnpm --filter=api cf-typegen` | Generate Cloudflare Worker types       |
+| `pnpm --filter=api cf-typegen` | Generate API Worker types              |
+| `pnpm --filter=static cf-typegen` | Generate static Worker types         |
+
+## Media Delivery
+
+Shared media is served by [apps/static](./apps/static) from `static.railradar24.com`. Small, repo-owned assets such as flags, operator logos, screenshots, and other reusable images are deployed through Cloudflare Workers Static Assets. Larger, growing collections such as future station photos are planned for a dedicated R2 bucket behind the same media app rather than being bundled into the web deployment.
 
 ## Contributing
 
