@@ -1,6 +1,6 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "rail-radar-static",
+  "name": "rail-static",
   "main": "src/index.ts",
   "compatibility_date": "2026-05-16",
   "observability": {
