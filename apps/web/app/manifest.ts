@@ -1,8 +1,9 @@
 import { MetadataRoute } from "next";
+import { staticAssetUrl } from "@/lib/static-assets";
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: "Rail Radar - Live Train Tracker Across 11 European Countries",
+    name: "Rail Radar - Live Train Tracker Across Europe",
     short_name: "Rail Radar",
     description:
       "Track trains in real time across 17,000+ stations in 11 European countries, including Denmark and Germany. Get live delays, platform numbers, and departure info on an interactive map.",
@@ -19,12 +20,6 @@ export default function manifest(): MetadataRoute.Manifest {
     categories: ["travel", "utilities", "productivity"],
     prefer_related_applications: false,
     icons: [
-      {
-        src: "/icon.svg",
-        sizes: "any",
-        type: "image/svg+xml",
-        purpose: "any",
-      },
       {
         src: "/icon@192px.png",
         sizes: "192x192",
@@ -52,18 +47,32 @@ export default function manifest(): MetadataRoute.Manifest {
     ],
     screenshots: [
       {
-        src: "/screenshots/mobile-home.png",
-        sizes: "1080x1920",
+        src: staticAssetUrl("/screenshots/mobile-home.png"),
+        sizes: "828x1792",
         type: "image/png",
         form_factor: "narrow",
-        label: "Home Screen showing live trains",
+        label: "Mobile map view showing nearby stations and live train activity",
       },
       {
-        src: "/screenshots/mobile-detail.png",
-        sizes: "1080x1920",
+        src: staticAssetUrl("/screenshots/mobile-detail.png"),
+        sizes: "828x1792",
         type: "image/png",
         form_factor: "narrow",
-        label: "Train Details and Delays",
+        label: "Mobile station detail view with live departures, platforms, and delays",
+      },
+      {
+        src: staticAssetUrl("/screenshots/desktop-home.png"),
+        sizes: "1920x1080",
+        type: "image/png",
+        form_factor: "wide",
+        label: "Desktop map view for exploring stations across Europe",
+      },
+      {
+        src: staticAssetUrl("/screenshots/desktop-detail.png"),
+        sizes: "1920x1080",
+        type: "image/png",
+        form_factor: "wide",
+        label: "Desktop station detail view with live departures, platforms, and delays",
       },
     ],
   };
