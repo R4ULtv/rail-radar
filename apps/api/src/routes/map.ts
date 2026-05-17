@@ -5,7 +5,7 @@ import { factory } from "../lib/env";
 import { jsonError } from "../lib/http";
 
 const MAPBOX_STYLE = "https://api.mapbox.com/styles/v1/mapbox/dark-v11/static";
-const STATION_ICON_URL = encodeURIComponent("https://www.railradar24.com/station-icon.png");
+const STATION_ICON_URL = encodeURIComponent("https://static.railradar24.com/station-icon.png");
 const MAX_DIMENSION = 1280;
 
 function parseDimensions(w: string | undefined, h: string | undefined, defaults: [number, number]) {
