@@ -5,7 +5,7 @@ import path from "node:path";
 import { optimize } from "svgo";
 
 const repoRoot = path.resolve(import.meta.dirname, "..");
-const defaultTarget = "apps/web/public/brands";
+const defaultTarget = "apps/static/public/operators";
 const maxListedFiles = 20;
 
 const args = process.argv.slice(2);
