@@ -219,7 +219,7 @@ function SearchContent({
           <div className="px-4 py-2 not-first:mt-1">
             <p className="text-muted-foreground text-sm flex items-center gap-2">
               <TrendingUpIcon className="size-3.5" />
-              Trending Stations
+              Popular Stations (7-day trending)
             </p>
           </div>
           <StationList
