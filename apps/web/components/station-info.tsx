@@ -43,26 +43,32 @@ import { cn } from "@repo/ui/lib/utils";
 import { Button } from "@repo/ui/components/button";
 
 const REPORT_LINKS = (
-  <div className="px-4 py-3 text-center flex items-center justify-center">
-    <a
-      href="https://github.com/R4ULtv/rail-radar/issues/new?template=bug_report.yml"
-      target="_blank"
-      rel="noopener noreferrer"
-      className="inline-flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors"
-    >
-      <BugIcon className="size-3" />
-      Report a problem
-    </a>
-    <span className="text-muted-foreground/50 mx-1.5">·</span>
-    <a
-      href="https://github.com/R4ULtv/rail-radar/issues/new?template=feature_request.yml"
-      target="_blank"
-      rel="noopener noreferrer"
-      className="inline-flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors"
-    >
-      <LightbulbIcon className="size-3" />
-      Feature request
-    </a>
+  <div className="px-4 py-3 text-center ">
+    <div className="flex items-center justify-center">
+      <a
+        href="https://github.com/R4ULtv/rail-radar/issues/new?template=bug_report.yml"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="inline-flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors"
+      >
+        <BugIcon className="size-3" />
+        Report a problem
+      </a>
+      <span className="text-muted-foreground/50 mx-1.5">·</span>
+      <a
+        href="https://github.com/R4ULtv/rail-radar/issues/new?template=feature_request.yml"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="inline-flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors"
+      >
+        <LightbulbIcon className="size-3" />
+        Feature request
+      </a>
+    </div>
+    <p className="text-center text-xs text-muted-foreground mt-2">
+      Rail Radar is free and open source. Reports from users help improve station and live-train
+      data.
+    </p>
   </div>
 );
 
