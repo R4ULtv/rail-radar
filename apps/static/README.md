@@ -21,10 +21,10 @@ This app is the dedicated home for reusable media that should not be coupled to 
 
 ## Asset Strategy
 
-| Asset type | Storage | Examples |
-| --- | --- | --- |
+| Asset type                         | Storage               | Examples                                             |
+| ---------------------------------- | --------------------- | ---------------------------------------------------- |
 | Small, repo-owned, versioned files | Workers Static Assets | flags, operator logos, screenshots, shared UI images |
-| Larger, growing media collections | Future R2 bucket | station photos |
+| Larger, growing media collections  | Future R2 bucket      | station photos                                       |
 
 This split keeps the first implementation simple while leaving a clean path for future station-image growth.
 

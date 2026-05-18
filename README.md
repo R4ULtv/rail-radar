@@ -13,14 +13,14 @@
 
 ## Project Structure
 
-| Directory                        | Description                              |
-| -------------------------------- | ---------------------------------------- |
-| [apps/api](./apps/api)           | Cloudflare Workers API for train data    |
+| Directory                        | Description                               |
+| -------------------------------- | ----------------------------------------- |
+| [apps/api](./apps/api)           | Cloudflare Workers API for train data     |
 | [apps/static](./apps/static)     | Cloudflare Worker for shared media assets |
-| [apps/studio](./apps/studio)     | Admin tool for station data management   |
-| [apps/web](./apps/web)           | Next.js frontend with interactive map    |
-| [packages/data](./packages/data) | Shared station data and TypeScript types |
-| [packages/ui](./packages/ui)     | Shared React component library           |
+| [apps/studio](./apps/studio)     | Admin tool for station data management    |
+| [apps/web](./apps/web)           | Next.js frontend with interactive map     |
+| [packages/data](./packages/data) | Shared station data and TypeScript types  |
+| [packages/ui](./packages/ui)     | Shared React component library            |
 
 ## Quick Start
 
@@ -40,17 +40,17 @@ pnpm --filter=studio dev # Admin tool at localhost:3001
 
 ## Scripts
 
-| Command                        | Description                            |
-| ------------------------------ | -------------------------------------- |
-| `pnpm dev`                     | Start all development servers          |
-| `pnpm --filter=static dev`     | Start the shared media Worker at localhost:8788 |
-| `pnpm --filter=studio dev`     | Start the admin tool at localhost:3001 |
-| `pnpm build`                   | Build all packages                     |
-| `pnpm lint --force`            | Lint all packages                      |
-| `pnpm format`                  | Format code with oxfmt                 |
-| `pnpm check-types --force`     | Run TypeScript type checking           |
-| `pnpm --filter=api cf-typegen` | Generate API Worker types              |
-| `pnpm --filter=static cf-typegen` | Generate static Worker types         |
+| Command                           | Description                                     |
+| --------------------------------- | ----------------------------------------------- |
+| `pnpm dev`                        | Start all development servers                   |
+| `pnpm --filter=static dev`        | Start the shared media Worker at localhost:8788 |
+| `pnpm --filter=studio dev`        | Start the admin tool at localhost:3001          |
+| `pnpm build`                      | Build all packages                              |
+| `pnpm lint --force`               | Lint all packages                               |
+| `pnpm format`                     | Format code with oxfmt                          |
+| `pnpm check-types --force`        | Run TypeScript type checking                    |
+| `pnpm --filter=api cf-typegen`    | Generate API Worker types                       |
+| `pnpm --filter=static cf-typegen` | Generate static Worker types                    |
 
 ## Media Delivery
 
