@@ -21,7 +21,7 @@ export const metadata: Metadata = {
         url: "/operators.webp",
         width: 1200,
         height: 630,
-        alt: "Rail Radar - Train Operators across 11 countries",
+        alt: "Rail Radar - Train Operators across 12 countries",
       },
     ],
   },

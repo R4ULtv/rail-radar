@@ -19,7 +19,7 @@ export default function TermsOfServicePage() {
         Back to Rail Radar
       </Link>
       <h1 className="mb-8 text-3xl font-semibold">Terms of Service</h1>
-      <p className="mb-4 text-sm text-muted-foreground">Last updated: April 22, 2026</p>
+      <p className="mb-4 text-sm text-muted-foreground">Last updated: May 18, 2026</p>
 
       <div className="space-y-8 leading-relaxed text-muted-foreground">
         <section>
@@ -27,7 +27,7 @@ export default function TermsOfServicePage() {
           <p>
             Rail Radar is a free, open-source web application that provides real-time train tracking
             on an interactive map. It displays live train departures, arrivals, delays, and platform
-            information for 17,000+ stations across 11 countries. The source code is available under
+            information for 18,000+ stations across 12 countries. The source code is available under
             the{" "}
             <a
               href="https://opensource.org/licenses/MIT"
@@ -145,6 +145,17 @@ export default function TermsOfServicePage() {
                 rel="noopener noreferrer"
               >
                 Trafiklab
+              </a>
+            </li>
+            <li>
+              <strong className="text-foreground">Poland</strong> &mdash;{" "}
+              <a
+                href="https://www.plk-sa.pl"
+                className="text-foreground underline"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                PKP Polskie Linie Kolejowe (PLK)
               </a>
             </li>
             <li>

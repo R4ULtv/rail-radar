@@ -6,7 +6,7 @@ export default function manifest(): MetadataRoute.Manifest {
     name: "Rail Radar - Live Train Tracker Across Europe",
     short_name: "Rail Radar",
     description:
-      "Track trains in real time across 17,000+ stations in 11 European countries, including Denmark and Germany. Get live delays, platform numbers, and departure info on an interactive map.",
+      "Track trains in real time across 18,000+ stations in 12 European countries, including Poland, Denmark, and Germany. Get live delays, platform numbers, and departure info on an interactive map.",
     id: "/",
     scope: "/",
     start_url: "/",
