@@ -2560,6 +2560,62 @@
     ]
   },
   {
+    "slug": "kd",
+    "name": "Koleje Dolnośląskie",
+    "logoPath": "pl/kd",
+    "countries": ["pl"],
+    "operatorTypes": ["passenger"],
+    "bounds": [14.8, 50, 17.9, 51.9],
+    "description": "Koleje Dolnośląskie is the regional passenger rail operator for Poland's Lower Silesian Voivodeship. The KD brand is centered on Wrocław and Legnica, serving dense regional corridors across Dolny Śląsk and cross-border links toward Czechia and Germany.",
+    "website": "https://kolejedolnoslaskie.pl",
+    "founded": 2007,
+    "headquarters": "Legnica, Poland",
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["regional", "commuter", "international"],
+    "parentCompany": "Lower Silesian Voivodeship",
+    "links": [
+      {
+        "label": "Official Site",
+        "url": "https://kolejedolnoslaskie.pl",
+        "type": "website"
+      },
+      {
+        "label": "Wikipedia",
+        "url": "https://en.wikipedia.org/wiki/Koleje_Dolno%C5%9Bl%C4%85skie",
+        "type": "wikipedia"
+      }
+    ]
+  },
+  {
+    "slug": "kml",
+    "name": "Koleje Małopolskie",
+    "logoPath": "pl/kml",
+    "countries": ["pl"],
+    "operatorTypes": ["passenger"],
+    "bounds": [19, 49, 21.5, 50.6],
+    "description": "Koleje Małopolskie is the regional passenger rail operator for Poland's Lesser Poland Voivodeship. The KMŁ brand serves Kraków and surrounding regional corridors, including airport, agglomeration, and interregional services across Małopolska.",
+    "website": "https://kolejemalopolskie.com.pl",
+    "founded": 2013,
+    "headquarters": "Kraków, Poland",
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["regional", "commuter"],
+    "parentCompany": "Lesser Poland Voivodeship",
+    "links": [
+      {
+        "label": "Official Site",
+        "url": "https://kolejemalopolskie.com.pl",
+        "type": "website"
+      },
+      {
+        "label": "Wikipedia",
+        "url": "https://en.wikipedia.org/wiki/Koleje_Ma%C5%82opolskie",
+        "type": "wikipedia"
+      }
+    ]
+  },
+  {
     "slug": "ks",
     "name": "Koleje Śląskie",
     "logoPath": "pl/ks",
