@@ -70,6 +70,11 @@ const brandPaths: Record<string, string> = {
   regiojet: "regiojet",
   // Swedish brands
   sj: "se/sj",
+  "arlanda express": "se/arlanda",
+  mälartåg: "se/malartag",
+  malartag: "se/malartag",
+  västtrafik: "se/vasttrafik",
+  vasttrafik: "se/vasttrafik",
   "mtr express": "se/mtr",
   snälltåget: "se/snalltaget",
   transdev: "transdev",
@@ -211,6 +216,11 @@ const brandSlugMap: Record<string, string> = {
   regiojet: "regiojet",
   // Swedish brands
   sj: "sj",
+  "arlanda express": "arlanda-express",
+  mälartåg: "malartag",
+  malartag: "malartag",
+  västtrafik: "vasttrafik",
+  vasttrafik: "vasttrafik",
   "mtr express": "mtr-express",
   snälltåget: "snalltaget",
   transdev: "transdev",

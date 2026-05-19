@@ -2260,6 +2260,105 @@
     ]
   },
   {
+    "slug": "arlanda-express",
+    "name": "Arlanda Express",
+    "logoPath": "se/arlanda",
+    "countries": ["se"],
+    "operatorTypes": ["passenger"],
+    "bounds": [17.8, 59.3, 18.1, 59.7],
+    "description": "Arlanda Express is Sweden's dedicated airport rail link between Stockholm Central Station and Stockholm Arlanda Airport. Its high-frequency electric trains provide a fast, direct connection between the capital and Sweden's largest airport.",
+    "website": "https://www.arlandaexpress.com",
+    "founded": 1999,
+    "headquarters": "Stockholm, Sweden",
+    "networkKm": 39,
+    "annualPassengers": null,
+    "serviceTypes": ["commuter"],
+    "parentCompany": "A-Train AB",
+    "links": [
+      {
+        "label": "Official Site",
+        "url": "https://www.arlandaexpress.com",
+        "type": "website"
+      },
+      {
+        "label": "Timetables",
+        "url": "https://www.arlandaexpress.com/timetable",
+        "type": "timetables"
+      },
+      {
+        "label": "Wikipedia",
+        "url": "https://en.wikipedia.org/wiki/Arlanda_Express",
+        "type": "wikipedia"
+      }
+    ]
+  },
+  {
+    "slug": "malartag",
+    "name": "Mälartåg",
+    "logoPath": "se/malartag",
+    "countries": ["se"],
+    "operatorTypes": ["passenger"],
+    "bounds": [14.9, 58.7, 18.8, 60.9],
+    "description": "Mälartåg is the regional rail brand for the Mälaren Valley and surrounding counties in central Sweden. The network connects Stockholm with cities including Uppsala, Västerås, Örebro, Eskilstuna, Norrköping, and Linköping under regional public transport cooperation.",
+    "website": "https://malartag.se",
+    "founded": 2017,
+    "headquarters": "Stockholm, Sweden",
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["regional", "commuter"],
+    "parentCompany": "Mälardalstrafik",
+    "links": [
+      {
+        "label": "Official Site",
+        "url": "https://malartag.se",
+        "type": "website"
+      },
+      {
+        "label": "Timetables",
+        "url": "https://malartag.se/tidtabeller/",
+        "type": "timetables"
+      },
+      {
+        "label": "Wikipedia",
+        "url": "https://en.wikipedia.org/wiki/M%C3%A4lart%C3%A5g",
+        "type": "wikipedia"
+      }
+    ]
+  },
+  {
+    "slug": "vasttrafik",
+    "name": "Västtrafik",
+    "logoPath": "se/vasttrafik",
+    "countries": ["se"],
+    "operatorTypes": ["passenger"],
+    "bounds": [10.9, 57, 13.7, 59.2],
+    "description": "Västtrafik is the public transport brand for Västra Götaland in western Sweden. Its rail services connect Göteborg with regional cities and commuter corridors across the county, including routes toward Alingsås, Borås, Uddevalla, Skövde, Vänersborg, and Strömstad.",
+    "website": "https://www.vasttrafik.se",
+    "founded": 1998,
+    "headquarters": "Göteborg, Sweden",
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["regional", "commuter"],
+    "parentCompany": "Västra Götalandsregionen",
+    "links": [
+      {
+        "label": "Official Site",
+        "url": "https://www.vasttrafik.se",
+        "type": "website"
+      },
+      {
+        "label": "Timetables",
+        "url": "https://www.vasttrafik.se/reseplanering/tidtabeller/",
+        "type": "timetables"
+      },
+      {
+        "label": "Wikipedia",
+        "url": "https://en.wikipedia.org/wiki/V%C3%A4sttrafik",
+        "type": "wikipedia"
+      }
+    ]
+  },
+  {
     "slug": "mtr-express",
     "name": "MTR Express",
     "logoPath": "se/mtr",
