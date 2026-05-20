@@ -13,7 +13,7 @@
   "dependencies": {
     "@sveltejs/kit": "^2.60.1",
     "maplibre-gl": "^5.24.0",
-    "svelte": "^5.55.7",
+    "svelte": "^5.55.8",
     "vite": "^8.0.13"
   },
   "devDependencies": {
