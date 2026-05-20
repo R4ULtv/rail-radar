@@ -323,6 +323,7 @@ function mapTrain(
 
   const scheduled = getOperationPlannedTime(operationStop, type);
   const actual = getActualEventTime(operationStop, type);
+  const actualParsed = parseIsoTime(actual);
   const scheduleStop = findScheduleStop(schedule, currentStationId, operationStop);
 
   const trainNumber =
@@ -364,7 +365,8 @@ function mapTrain(
       : endpointName
         ? { origin: endpointName }
         : {}),
-    scheduledTime: scheduled?.display ?? formatTime(actual, POLAND_TIMEZONE),
+    scheduledTime:
+      scheduled?.display ?? actualParsed?.display ?? formatTime(actual, POLAND_TIMEZONE),
     delay: getDelay(operationStop, type),
     platform,
     status: getStatus(operationStop, type),
@@ -374,7 +376,7 @@ function mapTrain(
   return {
     key: `${routeKey(operation.scheduleId, operation.orderId)}:${operation.operatingDate}`,
     train,
-    sortTime: scheduled?.sortTime ?? Number.MAX_SAFE_INTEGER,
+    sortTime: scheduled?.sortTime ?? actualParsed?.sortTime ?? Number.MAX_SAFE_INTEGER,
   };
 }
 
@@ -546,7 +548,6 @@ export async function scrapePolandTrains(
   if (!apiKey) {
     throw new ScraperError("Polish train data source is not configured.", 500);
   }
-
   const { operationsData, schedulesData, fetchMs } = await getCachedPolandRawData(
     stationNumber,
     apiKey,
