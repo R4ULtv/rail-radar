@@ -9,9 +9,11 @@ const TRAIN_LIMIT = 24;
 const RECENT_WINDOW_MS = 10 * 60 * 1000;
 const POLAND_HEADERS = {
   Accept: "application/json",
+  "User-Agent": "RailRadar/1.0 (+https://railradar24.com)",
 };
 const POLAND_RAW_CACHE_TTL_MS = 15_000;
-const POLAND_RETRY_DELAYS_MS = [250, 750] as const;
+const POLAND_RAW_STALE_TTL_MS = 5 * 60 * 1000;
+const POLAND_RETRY_DELAYS_MS = [250, 750, 1_500, 3_000] as const;
 const POLAND_UPSTREAM_ORIGIN_ERROR_STATUS = 530;
 
 const POLAND_CARRIERS: Record<string, string> = {
@@ -113,7 +115,9 @@ interface PolandRawData {
 
 interface PolandRawCacheEntry {
   expiresAt: number;
+  staleUntil: number;
   promise: Promise<PolandRawData>;
+  value?: PolandRawData;
 }
 
 const rawDataCache = new Map<number, PolandRawCacheEntry>();
@@ -402,18 +406,33 @@ function getCachedPolandRawData(stationNumber: number, apiKey: string): Promise<
   const now = Date.now();
   const cached = rawDataCache.get(stationNumber);
 
-  if (cached && cached.expiresAt > now) {
+  if (cached && (cached.expiresAt > now || !cached.value)) {
     return cached.promise;
   }
 
-  const promise = fetchPolandRawData(stationNumber, apiKey).catch((error) => {
+  const promise = fetchPolandRawData(stationNumber, apiKey).then((value) => {
+    rawDataCache.set(stationNumber, {
+      expiresAt: Date.now() + POLAND_RAW_CACHE_TTL_MS,
+      staleUntil: Date.now() + POLAND_RAW_STALE_TTL_MS,
+      promise: Promise.resolve(value),
+      value,
+    });
+
+    return value;
+  }).catch((error) => {
+    if (cached?.value && cached.staleUntil > Date.now()) {
+      return cached.value;
+    }
+
     rawDataCache.delete(stationNumber);
     throw error;
   });
 
   rawDataCache.set(stationNumber, {
     expiresAt: now + POLAND_RAW_CACHE_TTL_MS,
+    staleUntil: cached?.staleUntil ?? now + POLAND_RAW_STALE_TTL_MS,
     promise,
+    value: cached?.value,
   });
 
   return promise;
