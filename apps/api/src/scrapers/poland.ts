@@ -11,6 +11,8 @@ const POLAND_HEADERS = {
   Accept: "application/json",
 };
 const POLAND_RAW_CACHE_TTL_MS = 15_000;
+const POLAND_RETRY_DELAYS_MS = [250, 750] as const;
+const POLAND_UPSTREAM_ORIGIN_ERROR_STATUS = 530;
 
 const POLAND_CARRIERS: Record<string, string> = {
   IC: "PKP Intercity",
@@ -134,6 +136,42 @@ function buildPolandUrl(path: string, params: Record<string, string | number | b
 
 function routeKey(scheduleId: number, orderId: number): string {
   return `${scheduleId}:${orderId}`;
+}
+
+function sleep(ms: number): Promise<void> {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+async function fetchPolandWithRetry(
+  url: string,
+  headers: Record<string, string>,
+): Promise<{ response: Response; fetchMs: number }> {
+  let totalFetchMs = 0;
+
+  for (let attempt = 0; attempt <= POLAND_RETRY_DELAYS_MS.length; attempt++) {
+    try {
+      const result = await fetchWithTimeout(url, "Polish", { headers });
+      return {
+        response: result.response,
+        fetchMs: totalFetchMs + result.fetchMs,
+      };
+    } catch (error) {
+      const statusCode = error instanceof ScraperError ? Number(error.statusCode) : null;
+      if (statusCode !== POLAND_UPSTREAM_ORIGIN_ERROR_STATUS) {
+        throw error;
+      }
+
+      totalFetchMs += error instanceof ScraperError ? (error.timing?.fetchMs ?? 0) : 0;
+      const delay = POLAND_RETRY_DELAYS_MS[attempt];
+      if (delay == null) {
+        throw error;
+      }
+
+      await sleep(delay);
+    }
+  }
+
+  throw new Error("Unreachable Poland retry state");
 }
 
 function getOperationPlannedTime(
@@ -328,7 +366,7 @@ async function fetchPolandRawData(stationNumber: number, apiKey: string): Promis
   });
   const headers = { ...POLAND_HEADERS, "X-API-Key": apiKey };
 
-  const operationsResult = await fetchWithTimeout(operationsUrl, "Polish", { headers });
+  const operationsResult = await fetchPolandWithRetry(operationsUrl, headers);
   const operationsData: PolandOperationResponse = await operationsResult.response.json();
 
   const schedulesUrl = buildPolandUrl("/schedules", {
@@ -341,7 +379,7 @@ async function fetchPolandRawData(stationNumber: number, apiKey: string): Promis
   let schedulesData: PolandScheduleResponse = {};
   let fetchMs = operationsResult.fetchMs;
   try {
-    const schedulesResult = await fetchWithTimeout(schedulesUrl, "Polish", { headers });
+    const schedulesResult = await fetchPolandWithRetry(schedulesUrl, headers);
     schedulesData = await schedulesResult.response.json();
     fetchMs = Math.max(fetchMs, schedulesResult.fetchMs);
   } catch {
