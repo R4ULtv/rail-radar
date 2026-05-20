@@ -326,22 +326,36 @@ async function fetchPolandRawData(stationNumber: number, apiKey: string): Promis
     withPlanned: true,
     pageSize: TRAIN_LIMIT,
   });
-  const schedulesUrl = buildPolandUrl("/schedules", {
-    stations: stationNumber,
-    fullRoute: true,
-    dictionaries: true,
-  });
-
   const headers = { ...POLAND_HEADERS, "X-API-Key": apiKey };
 
-  const [operationsResult, schedulesResult] = await Promise.all([
-    fetchWithTimeout(operationsUrl, "Polish", { headers }),
-    fetchWithTimeout(schedulesUrl, "Polish", { headers }),
-  ]);
-
+  const operationsResult = await fetchWithTimeout(operationsUrl, "Polish", { headers });
   const operationsData: PolandOperationResponse = await operationsResult.response.json();
-  const schedulesData: PolandScheduleResponse = await schedulesResult.response.json();
-  const fetchMs = Math.max(operationsResult.fetchMs, schedulesResult.fetchMs);
+
+  const schedulesUrl = buildPolandUrl("/schedules", {
+    stations: stationNumber,
+    fullRoutes: true,
+    dictionaries: true,
+    pageSize: TRAIN_LIMIT,
+  });
+
+  let schedulesData: PolandScheduleResponse = {};
+  let fetchMs = operationsResult.fetchMs;
+  try {
+    const schedulesResult = await fetchWithTimeout(schedulesUrl, "Polish", { headers });
+    schedulesData = await schedulesResult.response.json();
+    fetchMs = Math.max(fetchMs, schedulesResult.fetchMs);
+  } catch {
+    const stations = operationsData.stations;
+    if (stations) {
+      schedulesData = {
+        dictionaries: {
+          stations: Object.fromEntries(
+            Object.entries(stations).map(([id, name]) => [id, { id: Number(id), name }]),
+          ),
+        },
+      };
+    }
+  }
 
   return { operationsData, schedulesData, fetchMs };
 }
