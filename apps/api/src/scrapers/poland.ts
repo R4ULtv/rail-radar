@@ -13,6 +13,8 @@ const POLAND_HEADERS = {
 };
 const POLAND_RAW_CACHE_TTL_MS = 15_000;
 const POLAND_RAW_STALE_TTL_MS = 5 * 60 * 1000;
+const POLAND_SCHEDULE_CACHE_TTL_MS = 6 * 60 * 60 * 1000;
+const POLAND_SCHEDULE_STALE_TTL_MS = 24 * 60 * 60 * 1000;
 const POLAND_RETRY_DELAYS_MS = [250, 750, 1_500, 3_000] as const;
 const POLAND_UPSTREAM_ORIGIN_ERROR_STATUS = 530;
 
@@ -120,7 +122,15 @@ interface PolandRawCacheEntry {
   value?: PolandRawData;
 }
 
+interface PolandScheduleCacheEntry {
+  expiresAt: number;
+  staleUntil: number;
+  promise: Promise<PolandScheduleResponse>;
+  value?: PolandScheduleResponse;
+}
+
 const rawDataCache = new Map<number, PolandRawCacheEntry>();
+const scheduleDataCache = new Map<number, PolandScheduleCacheEntry>();
 
 function toPolandStationNumber(stationId: string): number {
   const match = stationId.match(/^PL(\d+)$/);
@@ -285,6 +295,22 @@ function getTrainInfo(
   return null;
 }
 
+function getStopSequence(stop: PolandOperationStop): number {
+  return stop.plannedSequenceNumber ?? stop.actualSequenceNumber;
+}
+
+function findScheduleStop(
+  schedule: PolandScheduleRoute | undefined,
+  currentStationId: number,
+  operationStop: PolandOperationStop | undefined,
+): PolandScheduleStop | undefined {
+  const candidates = schedule?.stations?.filter((stop) => stop.stationId === currentStationId);
+  if (!candidates || candidates.length === 0) return undefined;
+
+  const operationSequence = operationStop ? getStopSequence(operationStop) : null;
+  return candidates.find((stop) => stop.orderNumber === operationSequence) ?? candidates[0];
+}
+
 function mapTrain(
   operation: PolandOperationTrain,
   currentStationId: number,
@@ -297,7 +323,7 @@ function mapTrain(
 
   const scheduled = getOperationPlannedTime(operationStop, type);
   const actual = getActualEventTime(operationStop, type);
-  const scheduleStop = schedule?.stations?.find((stop) => stop.stationId === currentStationId);
+  const scheduleStop = findScheduleStop(schedule, currentStationId, operationStop);
 
   const trainNumber =
     (type === "departures"
@@ -317,7 +343,13 @@ function mapTrain(
     (type === "departures" ? scheduleStop?.departurePlatform : scheduleStop?.arrivalPlatform) ??
     null;
 
-  const endpointName = getRouteEndpointName(schedule, currentStationId, type, stationDict);
+  const endpointName = getRouteEndpointName(
+    schedule,
+    operation,
+    currentStationId,
+    type,
+    stationDict,
+  );
 
   const brand = schedule?.carrierCode ? (POLAND_CARRIERS[schedule.carrierCode] ?? null) : null;
 
@@ -348,23 +380,95 @@ function mapTrain(
 
 function getRouteEndpointName(
   schedule: PolandScheduleRoute | undefined,
+  operation: PolandOperationTrain,
   currentStationId: number,
   type: PolandBoardType,
   stationDict: Record<string, { id: number; name: string }>,
 ): string | null {
-  const stops = schedule?.stations;
-  if (!stops || stops.length === 0) return null;
-
-  const sorted = [...stops].sort((a, b) => a.orderNumber - b.orderNumber);
-  const endpoint = type === "departures" ? sorted[sorted.length - 1] : sorted[0];
+  const scheduleStops = schedule?.stations;
+  const endpoint =
+    scheduleStops && scheduleStops.length > 0
+      ? [...scheduleStops].sort((a, b) => a.orderNumber - b.orderNumber)[
+          type === "departures" ? scheduleStops.length - 1 : 0
+        ]
+      : [...(operation.stations ?? [])].sort((a, b) => getStopSequence(a) - getStopSequence(b))[
+          type === "departures" ? (operation.stations?.length ?? 0) - 1 : 0
+        ];
   if (!endpoint || endpoint.stationId === currentStationId) return null;
 
   return stationDict[String(endpoint.stationId)]?.name ?? null;
 }
 
+function stationDictionaryFromOperations(
+  operationsData: PolandOperationResponse,
+): Record<string, { id: number; name: string }> {
+  return Object.fromEntries(
+    Object.entries(operationsData.stations ?? {}).map(([id, name]) => [
+      id,
+      { id: Number(id), name },
+    ]),
+  );
+}
+
+async function fetchPolandSchedules(
+  stationNumber: number,
+  headers: Record<string, string>,
+): Promise<PolandScheduleResponse> {
+  const schedulesUrl = buildPolandUrl("/schedules", {
+    stations: stationNumber,
+    fullRoute: true,
+    dictionaries: true,
+  });
+
+  const schedulesResult = await fetchPolandWithRetry(schedulesUrl, headers);
+  return schedulesResult.response.json();
+}
+
+function getCachedPolandSchedules(
+  stationNumber: number,
+  headers: Record<string, string>,
+): Promise<PolandScheduleResponse> {
+  const now = Date.now();
+  const cached = scheduleDataCache.get(stationNumber);
+
+  if (cached && (cached.expiresAt > now || !cached.value)) {
+    return cached.promise;
+  }
+
+  const promise = fetchPolandSchedules(stationNumber, headers)
+    .then((value) => {
+      scheduleDataCache.set(stationNumber, {
+        expiresAt: Date.now() + POLAND_SCHEDULE_CACHE_TTL_MS,
+        staleUntil: Date.now() + POLAND_SCHEDULE_STALE_TTL_MS,
+        promise: Promise.resolve(value),
+        value,
+      });
+
+      return value;
+    })
+    .catch((error) => {
+      if (cached?.value && cached.staleUntil > Date.now()) {
+        return cached.value;
+      }
+
+      scheduleDataCache.delete(stationNumber);
+      throw error;
+    });
+
+  scheduleDataCache.set(stationNumber, {
+    expiresAt: now + POLAND_SCHEDULE_CACHE_TTL_MS,
+    staleUntil: cached?.staleUntil ?? now + POLAND_SCHEDULE_STALE_TTL_MS,
+    promise,
+    value: cached?.value,
+  });
+
+  return promise;
+}
+
 async function fetchPolandRawData(stationNumber: number, apiKey: string): Promise<PolandRawData> {
   const operationsUrl = buildPolandUrl("/operations", {
     stations: stationNumber,
+    fullRoutes: true,
     withPlanned: true,
     pageSize: TRAIN_LIMIT,
   });
@@ -373,33 +477,25 @@ async function fetchPolandRawData(stationNumber: number, apiKey: string): Promis
   const operationsResult = await fetchPolandWithRetry(operationsUrl, headers);
   const operationsData: PolandOperationResponse = await operationsResult.response.json();
 
-  const schedulesUrl = buildPolandUrl("/schedules", {
-    stations: stationNumber,
-    fullRoutes: true,
-    dictionaries: true,
-    pageSize: TRAIN_LIMIT,
-  });
-
   let schedulesData: PolandScheduleResponse = {};
-  let fetchMs = operationsResult.fetchMs;
   try {
-    const schedulesResult = await fetchPolandWithRetry(schedulesUrl, headers);
-    schedulesData = await schedulesResult.response.json();
-    fetchMs = Math.max(fetchMs, schedulesResult.fetchMs);
+    schedulesData = await getCachedPolandSchedules(stationNumber, headers);
   } catch {
-    const stations = operationsData.stations;
-    if (stations) {
-      schedulesData = {
-        dictionaries: {
-          stations: Object.fromEntries(
-            Object.entries(stations).map(([id, name]) => [id, { id: Number(id), name }]),
-          ),
-        },
-      };
-    }
+    schedulesData = {};
   }
 
-  return { operationsData, schedulesData, fetchMs };
+  schedulesData = {
+    ...schedulesData,
+    dictionaries: {
+      ...schedulesData.dictionaries,
+      stations: {
+        ...stationDictionaryFromOperations(operationsData),
+        ...schedulesData.dictionaries?.stations,
+      },
+    },
+  };
+
+  return { operationsData, schedulesData, fetchMs: operationsResult.fetchMs };
 }
 
 function getCachedPolandRawData(stationNumber: number, apiKey: string): Promise<PolandRawData> {
@@ -410,23 +506,25 @@ function getCachedPolandRawData(stationNumber: number, apiKey: string): Promise<
     return cached.promise;
   }
 
-  const promise = fetchPolandRawData(stationNumber, apiKey).then((value) => {
-    rawDataCache.set(stationNumber, {
-      expiresAt: Date.now() + POLAND_RAW_CACHE_TTL_MS,
-      staleUntil: Date.now() + POLAND_RAW_STALE_TTL_MS,
-      promise: Promise.resolve(value),
-      value,
+  const promise = fetchPolandRawData(stationNumber, apiKey)
+    .then((value) => {
+      rawDataCache.set(stationNumber, {
+        expiresAt: Date.now() + POLAND_RAW_CACHE_TTL_MS,
+        staleUntil: Date.now() + POLAND_RAW_STALE_TTL_MS,
+        promise: Promise.resolve(value),
+        value,
+      });
+
+      return value;
+    })
+    .catch((error) => {
+      if (cached?.value && cached.staleUntil > Date.now()) {
+        return cached.value;
+      }
+
+      rawDataCache.delete(stationNumber);
+      throw error;
     });
-
-    return value;
-  }).catch((error) => {
-    if (cached?.value && cached.staleUntil > Date.now()) {
-      return cached.value;
-    }
-
-    rawDataCache.delete(stationNumber);
-    throw error;
-  });
 
   rawDataCache.set(stationNumber, {
     expiresAt: now + POLAND_RAW_CACHE_TTL_MS,
