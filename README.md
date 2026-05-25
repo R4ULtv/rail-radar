@@ -56,6 +56,12 @@ pnpm --filter=studio dev # Admin tool at localhost:3001
 
 Shared media is served by [apps/static](./apps/static) from `static.railradar24.com`. Small, repo-owned assets such as flags, operator logos, screenshots, and other reusable images are deployed through Cloudflare Workers Static Assets. Larger, growing collections such as future station photos are planned for a dedicated R2 bucket behind the same media app rather than being bundled into the web deployment.
 
+## Support
+
+Rail Radar is free to use and independently maintained. If it's useful to you, you can help cover the API calls, hosting, and map tiles that keep it running.
+
+[Donate via Polar](https://buy.polar.sh/polar_cl_tASj1xHmBWAiDQyuWr7zsyBSSFc9eUPZ9hwLy4cBlBN) — one-time, monthly, or yearly support. Also reachable from the in-app [/donate](https://www.railradar24.com/donate) page or the "Sponsor" button at the top of this repository.
+
 ## Contributing
 
 See [CONTRIBUTING.md](./CONTRIBUTING.md) for setup, development workflow, quality checks, and pull request guidelines.
