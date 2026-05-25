@@ -15,8 +15,9 @@ const POLAND_RAW_CACHE_TTL_MS = 15_000;
 const POLAND_RAW_STALE_TTL_MS = 5 * 60 * 1000;
 const POLAND_SCHEDULE_CACHE_TTL_MS = 6 * 60 * 60 * 1000;
 const POLAND_SCHEDULE_STALE_TTL_MS = 24 * 60 * 60 * 1000;
-const POLAND_RETRY_DELAYS_MS = [250, 750, 1_500, 3_000] as const;
-const POLAND_UPSTREAM_ORIGIN_ERROR_STATUS = 530;
+const POLAND_RETRY_DELAYS_MS = [250, 750] as const;
+const POLAND_FETCH_TIMEOUT_MS = 8_000;
+const POLAND_MAX_IN_FLIGHT_FETCHES = 2;
 
 const POLAND_CARRIERS: Record<string, string> = {
   IC: "PKP Intercity",
@@ -131,6 +132,8 @@ interface PolandScheduleCacheEntry {
 
 const rawDataCache = new Map<number, PolandRawCacheEntry>();
 const scheduleDataCache = new Map<number, PolandScheduleCacheEntry>();
+let activePolandFetches = 0;
+const polandFetchQueue: Array<() => void> = [];
 
 function toPolandStationNumber(stationId: string): number {
   const match = stationId.match(/^PL(\d+)$/);
@@ -156,6 +159,27 @@ function sleep(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
+async function withPolandFetchSlot<T>(callback: () => Promise<T>): Promise<T> {
+  if (activePolandFetches >= POLAND_MAX_IN_FLIGHT_FETCHES) {
+    await new Promise<void>((resolve) => polandFetchQueue.push(resolve));
+  }
+
+  activePolandFetches++;
+  try {
+    return await callback();
+  } finally {
+    activePolandFetches--;
+    polandFetchQueue.shift()?.();
+  }
+}
+
+function isRetryablePolandError(error: unknown): boolean {
+  if (!(error instanceof ScraperError)) return false;
+
+  const statusCode = Number(error.statusCode);
+  return statusCode === 408 || statusCode === 429 || (statusCode >= 500 && statusCode !== 501);
+}
+
 async function fetchPolandWithRetry(
   url: string,
   headers: Record<string, string>,
@@ -164,14 +188,15 @@ async function fetchPolandWithRetry(
 
   for (let attempt = 0; attempt <= POLAND_RETRY_DELAYS_MS.length; attempt++) {
     try {
-      const result = await fetchWithTimeout(url, "Polish", { headers });
+      const result = await withPolandFetchSlot(() =>
+        fetchWithTimeout(url, "Polish", { headers }, POLAND_FETCH_TIMEOUT_MS),
+      );
       return {
         response: result.response,
         fetchMs: totalFetchMs + result.fetchMs,
       };
     } catch (error) {
-      const statusCode = error instanceof ScraperError ? Number(error.statusCode) : null;
-      if (statusCode !== POLAND_UPSTREAM_ORIGIN_ERROR_STATUS) {
+      if (!isRetryablePolandError(error)) {
         throw error;
       }
 
