@@ -1,14 +1,14 @@
 "use client";
 
 import { useReducer, useRef, useSyncExternalStore } from "react";
-import { ChartNoAxesColumnIncreasingIcon, XIcon } from "lucide-react";
+import { HeartHandshakeIcon, XIcon } from "lucide-react";
 import { LazyMotion, domAnimation, m, AnimatePresence } from "motion/react";
 import Link from "next/link";
 import { Alert, AlertTitle, AlertAction } from "@repo/ui/components/alert";
 import { Badge } from "@repo/ui/components/badge";
 import { Button } from "@repo/ui/components/button";
 
-const STORAGE_KEY = "banner-dismissed-v8";
+const STORAGE_KEY = "banner-dismissed-v9";
 
 const subscribe = () => () => {};
 const getSnapshot = () => !localStorage.getItem(STORAGE_KEY);
@@ -44,20 +44,21 @@ export function AnnouncementBanner() {
                   variant="default"
                   className="text-[10px] uppercase tracking-wide mr-1.5 align-middle"
                 >
-                  <ChartNoAxesColumnIncreasingIcon data-icon="inline-start" />
-                  <span className="hidden md:block">Report</span>
+                  <HeartHandshakeIcon data-icon="inline-start" />
+                  <span className="hidden md:block">Support</span>
                 </Badge>
                 <span className="hidden md:inline">
-                  April traffic report: 22,465 station visits across 11 countries.{" "}
-                  <Link
-                    href="/report/2026-04-28"
-                    className="underline underline-offset-2"
-                    onClick={dismiss}
-                  >
-                    Read the report
+                  Help keep Rail Radar fast, independent, and improving.{" "}
+                  <Link href="/donate" className="underline underline-offset-2" onClick={dismiss}>
+                    Donate
                   </Link>
                 </span>
-                <span className="md:hidden">April report: 22,465 visits</span>
+                <span className="md:hidden">
+                  Help keep Rail Radar running.{" "}
+                  <Link href="/donate" className="underline underline-offset-2" onClick={dismiss}>
+                    Donate
+                  </Link>
+                </span>
               </AlertTitle>
               <AlertAction className="top-1.5">
                 <Button variant="ghost" size="icon-xs" onClick={dismiss} aria-label="Dismiss">
