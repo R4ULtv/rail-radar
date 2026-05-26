@@ -13,8 +13,10 @@ import {
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
+import { PolishStationWarning } from "@/components/polish-station-warning";
 import { SaveButton } from "@/components/save-button";
 import { TrainRow, TrainRowSkeleton } from "@/components/train-row";
+import { UpdatedStatus } from "@/components/updated-status";
 import {
   Card,
   CardAction,
@@ -159,8 +161,6 @@ function StationTabs({
   );
 }
 
-import { UpdatedStatus } from "@/components/updated-status";
-
 const snapPoints = ["230px", "450px", 1];
 
 export default function StationInfo() {
@@ -192,6 +192,7 @@ export default function StationInfo() {
     lastUpdated,
     info,
   } = useTrainData(selectedStation?.id ?? null, type, isOpen);
+  const showPolishStationWarning = selectedStation?.id.startsWith("PL") ?? false;
 
   // Desktop view
   if (!isMobile) {
@@ -250,6 +251,7 @@ export default function StationInfo() {
                         lastUpdated={lastUpdated}
                       />
                     </CardDescription>
+                    {showPolishStationWarning && <PolishStationWarning className="col-span-2" />}
                     <StationTabs type={type} onTypeChange={setType} />
                   </CardHeader>
                   <CardContent className="flex-1 px-0">
@@ -313,6 +315,7 @@ export default function StationInfo() {
               <span className="font-normal">{info}</span>
             </div>
           )}
+          {showPolishStationWarning && <PolishStationWarning className="col-span-2" />}
           <StationTabs type={type} onTypeChange={setType} />
           <div className="absolute top-3.5 right-4 flex gap-1">
             {selectedStation && <SaveButton station={selectedStation} />}
