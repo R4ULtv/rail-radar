@@ -7,6 +7,7 @@ import { Badge } from "@repo/ui/components/badge";
 import { Card, CardContent } from "@repo/ui/components/card";
 import { ArrowLeftIcon, ArrowRightIcon, GlobeIcon } from "lucide-react";
 
+import { staticAssetUrl } from "@/lib/static-assets";
 export const metadata: Metadata = {
   title: "Train Operators - All Operators",
   description:
@@ -20,7 +21,7 @@ export const metadata: Metadata = {
         url: "/operators.webp",
         width: 1200,
         height: 630,
-        alt: "Rail Radar - Train Operators across 11 countries",
+        alt: "Rail Radar - Train Operators across 12 countries",
       },
     ],
   },
@@ -93,7 +94,7 @@ export default function OperatorsPage() {
                 ) : (
                   <Image
                     unoptimized
-                    src={`/flags/${country}.svg`}
+                    src={staticAssetUrl(`/flags/${country}.svg`)}
                     alt={countryLabel}
                     width={28}
                     height={28}
@@ -120,7 +121,7 @@ export default function OperatorsPage() {
                         <div className="flex size-10 shrink-0 items-center justify-center overflow-hidden rounded-lg bg-background">
                           <Image
                             unoptimized
-                            src={`/brands/${operator.logoPath}.svg`}
+                            src={staticAssetUrl(`/operators/${operator.logoPath}.svg`)}
                             alt={operator.name}
                             width={40}
                             height={40}

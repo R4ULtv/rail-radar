@@ -1,5 +1,6 @@
 import type { Station } from "@repo/data";
 import { MegaphoneIcon } from "lucide-react";
+import { PolishStationWarning } from "@/components/polish-station-warning";
 import { StationActions } from "@/components/station-page/station-actions";
 
 interface StationHeaderProps {
@@ -45,6 +46,8 @@ export function StationHeader({ station, info }: StationHeaderProps) {
           <span>{info}</span>
         </div>
       )}
+
+      {station.id.startsWith("PL") && <PolishStationWarning />}
     </div>
   );
 }

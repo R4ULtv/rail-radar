@@ -969,9 +969,9 @@
     "slug": "arriva",
     "name": "Arriva",
     "logoPath": "arriva",
-    "countries": ["international", "uk", "nl", "de", "dk"],
+    "countries": ["international", "uk", "nl", "de", "dk", "pl"],
     "operatorTypes": ["passenger"],
-    "bounds": [-5.7, 47.3, 15.3, 57.9],
+    "bounds": [-5.7, 47.3, 24.2, 57.9],
     "description": "Arriva is a major European transport operator. Acquired by I Squared Capital in 2024, it runs regional rail and bus services across multiple countries, including Arriva Nederland in the Netherlands and the former Arriva Denmark rail business that now operates under the GoCollective name. It also operates transit networks in the UK, Germany, the Czech Republic, Poland, and other European markets.",
     "website": "https://www.arriva.co.uk",
     "founded": 1938,
@@ -989,6 +989,62 @@
       {
         "label": "Wikipedia",
         "url": "https://en.wikipedia.org/wiki/Arriva",
+        "type": "wikipedia"
+      }
+    ]
+  },
+  {
+    "slug": "leo-express",
+    "name": "Leo Express",
+    "logoPath": "leo-express",
+    "countries": ["international", "pl"],
+    "operatorTypes": ["passenger"],
+    "bounds": [14.1, 49, 24.2, 52.5],
+    "description": "Leo Express is a Czech private rail and bus operator focused on modern intercity travel across Central Europe. Its black-and-gold brand is associated with open-access services from Prague toward Ostrava, Slovakia, and Poland, alongside regional public-service operations and connecting coach routes.",
+    "website": "https://www.leoexpress.com",
+    "founded": 2010,
+    "headquarters": "Prague, Czechia",
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["intercity", "regional", "international"],
+    "parentCompany": null,
+    "links": [
+      {
+        "label": "Official Site",
+        "url": "https://www.leoexpress.com",
+        "type": "website"
+      },
+      {
+        "label": "Wikipedia",
+        "url": "https://en.wikipedia.org/wiki/Leo_Express",
+        "type": "wikipedia"
+      }
+    ]
+  },
+  {
+    "slug": "regiojet",
+    "name": "RegioJet",
+    "logoPath": "regiojet",
+    "countries": ["international", "pl"],
+    "operatorTypes": ["passenger"],
+    "bounds": [14.1, 48.5, 24.2, 52.5],
+    "description": "RegioJet is a Czech private rail and coach operator owned by Student Agency. The yellow RegioJet brand is known for open-access long-distance trains in Czechia and Slovakia, with international services linking Central European cities such as Prague, Brno, Vienna, Bratislava, and Polish destinations.",
+    "website": "https://regiojet.com",
+    "founded": 2009,
+    "headquarters": "Brno, Czechia",
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["intercity", "international"],
+    "parentCompany": "Student Agency",
+    "links": [
+      {
+        "label": "Official Site",
+        "url": "https://regiojet.com",
+        "type": "website"
+      },
+      {
+        "label": "Wikipedia",
+        "url": "https://en.wikipedia.org/wiki/RegioJet",
         "type": "wikipedia"
       }
     ]
@@ -1208,9 +1264,9 @@
     "slug": "odeg",
     "name": "ODEG",
     "logoPath": "de/odeg",
-    "countries": ["de"],
+    "countries": ["de", "pl"],
     "operatorTypes": ["passenger"],
-    "bounds": [11, 51.3, 14.8, 53.6],
+    "bounds": [11, 51.3, 15.3, 53.6],
     "description": "Ostdeutsche Eisenbahn (ODEG) is the largest private regional rail operator in eastern Germany, serving Brandenburg, Mecklenburg-Vorpommern, and Berlin. It operates RE and RB lines connecting Berlin with surrounding regions including routes to the Baltic coast and Polish border.",
     "website": "https://www.odeg.de",
     "founded": 2002,
@@ -2204,6 +2260,105 @@
     ]
   },
   {
+    "slug": "arlanda-express",
+    "name": "Arlanda Express",
+    "logoPath": "se/arlanda",
+    "countries": ["se"],
+    "operatorTypes": ["passenger"],
+    "bounds": [17.8, 59.3, 18.1, 59.7],
+    "description": "Arlanda Express is Sweden's dedicated airport rail link between Stockholm Central Station and Stockholm Arlanda Airport. Its high-frequency electric trains provide a fast, direct connection between the capital and Sweden's largest airport.",
+    "website": "https://www.arlandaexpress.com",
+    "founded": 1999,
+    "headquarters": "Stockholm, Sweden",
+    "networkKm": 39,
+    "annualPassengers": null,
+    "serviceTypes": ["commuter"],
+    "parentCompany": "A-Train AB",
+    "links": [
+      {
+        "label": "Official Site",
+        "url": "https://www.arlandaexpress.com",
+        "type": "website"
+      },
+      {
+        "label": "Timetables",
+        "url": "https://www.arlandaexpress.com/timetable",
+        "type": "timetables"
+      },
+      {
+        "label": "Wikipedia",
+        "url": "https://en.wikipedia.org/wiki/Arlanda_Express",
+        "type": "wikipedia"
+      }
+    ]
+  },
+  {
+    "slug": "malartag",
+    "name": "Mälartåg",
+    "logoPath": "se/malartag",
+    "countries": ["se"],
+    "operatorTypes": ["passenger"],
+    "bounds": [14.9, 58.7, 18.8, 60.9],
+    "description": "Mälartåg is the regional rail brand for the Mälaren Valley and surrounding counties in central Sweden. The network connects Stockholm with cities including Uppsala, Västerås, Örebro, Eskilstuna, Norrköping, and Linköping under regional public transport cooperation.",
+    "website": "https://malartag.se",
+    "founded": 2017,
+    "headquarters": "Stockholm, Sweden",
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["regional", "commuter"],
+    "parentCompany": "Mälardalstrafik",
+    "links": [
+      {
+        "label": "Official Site",
+        "url": "https://malartag.se",
+        "type": "website"
+      },
+      {
+        "label": "Timetables",
+        "url": "https://malartag.se/tidtabeller/",
+        "type": "timetables"
+      },
+      {
+        "label": "Wikipedia",
+        "url": "https://en.wikipedia.org/wiki/M%C3%A4lart%C3%A5g",
+        "type": "wikipedia"
+      }
+    ]
+  },
+  {
+    "slug": "vasttrafik",
+    "name": "Västtrafik",
+    "logoPath": "se/vasttrafik",
+    "countries": ["se"],
+    "operatorTypes": ["passenger"],
+    "bounds": [10.9, 57, 13.7, 59.2],
+    "description": "Västtrafik is the public transport brand for Västra Götaland in western Sweden. Its rail services connect Göteborg with regional cities and commuter corridors across the county, including routes toward Alingsås, Borås, Uddevalla, Skövde, Vänersborg, and Strömstad.",
+    "website": "https://www.vasttrafik.se",
+    "founded": 1998,
+    "headquarters": "Göteborg, Sweden",
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["regional", "commuter"],
+    "parentCompany": "Västra Götalandsregionen",
+    "links": [
+      {
+        "label": "Official Site",
+        "url": "https://www.vasttrafik.se",
+        "type": "website"
+      },
+      {
+        "label": "Timetables",
+        "url": "https://www.vasttrafik.se/reseplanering/tidtabeller/",
+        "type": "timetables"
+      },
+      {
+        "label": "Wikipedia",
+        "url": "https://en.wikipedia.org/wiki/V%C3%A4sttrafik",
+        "type": "wikipedia"
+      }
+    ]
+  },
+  {
     "slug": "mtr-express",
     "name": "MTR Express",
     "logoPath": "se/mtr",
@@ -2288,6 +2443,286 @@
       {
         "label": "Wikipedia",
         "url": "https://en.wikipedia.org/wiki/Transdev",
+        "type": "wikipedia"
+      }
+    ]
+  },
+  {
+    "slug": "pkp-intercity",
+    "name": "PKP Intercity",
+    "logoPath": "pl/pkp-intercity",
+    "countries": ["pl"],
+    "operatorTypes": ["passenger"],
+    "bounds": [14.1, 49, 24.2, 54.9],
+    "description": "PKP Intercity is Poland's national long-distance passenger railway operator and part of the PKP Group. It runs the country's main intercity network under brands such as TLK, IC, EIC, and Express InterCity Premium, connecting major Polish cities and operating many international services.",
+    "website": "https://www.intercity.pl",
+    "founded": 2001,
+    "headquarters": "Warsaw, Poland",
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["high-speed", "intercity", "night-train", "international"],
+    "parentCompany": "PKP Group",
+    "links": [
+      {
+        "label": "Official Site",
+        "url": "https://www.intercity.pl",
+        "type": "website"
+      },
+      {
+        "label": "Wikipedia",
+        "url": "https://en.wikipedia.org/wiki/PKP_Intercity",
+        "type": "wikipedia"
+      }
+    ]
+  },
+  {
+    "slug": "polregio",
+    "name": "POLREGIO",
+    "logoPath": "pl/polregio",
+    "countries": ["pl"],
+    "operatorTypes": ["passenger"],
+    "bounds": [14.1, 49, 24.2, 54.9],
+    "description": "POLREGIO is Poland's largest regional passenger rail operator, formerly known as Przewozy Regionalne. Its red-and-blue brand appears on local and interregional trains across much of the country, linking smaller towns with regional capitals under public-service contracts.",
+    "website": "https://polregio.pl",
+    "founded": 2001,
+    "headquarters": "Warsaw, Poland",
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["regional"],
+    "parentCompany": null,
+    "links": [
+      {
+        "label": "Official Site",
+        "url": "https://polregio.pl",
+        "type": "website"
+      },
+      {
+        "label": "Wikipedia",
+        "url": "https://en.wikipedia.org/wiki/Polregio",
+        "type": "wikipedia"
+      }
+    ]
+  },
+  {
+    "slug": "skm",
+    "name": "SKM",
+    "logoPath": "pl/skm",
+    "countries": ["pl"],
+    "operatorTypes": ["passenger"],
+    "bounds": [14.1, 49, 24.2, 54.9],
+    "description": "SKM, short for Szybka Kolej Miejska, is a Polish fast urban rail brand used for metropolitan commuter services. SKM trains connect city centers with suburbs on mainline railway infrastructure, with well-known networks in areas such as Warsaw and the Tricity.",
+    "website": "https://www.skm.pkp.pl",
+    "founded": null,
+    "headquarters": null,
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["commuter", "regional"],
+    "parentCompany": null,
+    "links": [
+      {
+        "label": "Official Site",
+        "url": "https://www.skm.pkp.pl",
+        "type": "website"
+      },
+      {
+        "label": "Wikipedia",
+        "url": "https://en.wikipedia.org/wiki/Szybka_Kolej_Miejska",
+        "type": "wikipedia"
+      }
+    ]
+  },
+  {
+    "slug": "km",
+    "name": "Koleje Mazowieckie",
+    "logoPath": "pl/km",
+    "countries": ["pl"],
+    "operatorTypes": ["passenger"],
+    "bounds": [19.1, 51, 23.2, 53.6],
+    "description": "Koleje Mazowieckie is one of Poland's largest regional passenger rail operators, serving Warsaw and the wider Masovian Voivodeship. The KM brand connects the capital with towns such as Radom, Płock, Siedlce, Mława, Sochaczew, and Żyrardów.",
+    "website": "https://www.mazowieckie.com.pl",
+    "founded": 2004,
+    "headquarters": "Warsaw, Poland",
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["regional", "commuter"],
+    "parentCompany": "Masovian Voivodeship",
+    "links": [
+      {
+        "label": "Official Site",
+        "url": "https://www.mazowieckie.com.pl",
+        "type": "website"
+      },
+      {
+        "label": "Wikipedia",
+        "url": "https://en.wikipedia.org/wiki/Masovian_Railways",
+        "type": "wikipedia"
+      }
+    ]
+  },
+  {
+    "slug": "kd",
+    "name": "Koleje Dolnośląskie",
+    "logoPath": "pl/kd",
+    "countries": ["pl"],
+    "operatorTypes": ["passenger"],
+    "bounds": [14.8, 50, 17.9, 51.9],
+    "description": "Koleje Dolnośląskie is the regional passenger rail operator for Poland's Lower Silesian Voivodeship. The KD brand is centered on Wrocław and Legnica, serving dense regional corridors across Dolny Śląsk and cross-border links toward Czechia and Germany.",
+    "website": "https://kolejedolnoslaskie.pl",
+    "founded": 2007,
+    "headquarters": "Legnica, Poland",
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["regional", "commuter", "international"],
+    "parentCompany": "Lower Silesian Voivodeship",
+    "links": [
+      {
+        "label": "Official Site",
+        "url": "https://kolejedolnoslaskie.pl",
+        "type": "website"
+      },
+      {
+        "label": "Wikipedia",
+        "url": "https://en.wikipedia.org/wiki/Koleje_Dolno%C5%9Bl%C4%85skie",
+        "type": "wikipedia"
+      }
+    ]
+  },
+  {
+    "slug": "kml",
+    "name": "Koleje Małopolskie",
+    "logoPath": "pl/kml",
+    "countries": ["pl"],
+    "operatorTypes": ["passenger"],
+    "bounds": [19, 49, 21.5, 50.6],
+    "description": "Koleje Małopolskie is the regional passenger rail operator for Poland's Lesser Poland Voivodeship. The KMŁ brand serves Kraków and surrounding regional corridors, including airport, agglomeration, and interregional services across Małopolska.",
+    "website": "https://kolejemalopolskie.com.pl",
+    "founded": 2013,
+    "headquarters": "Kraków, Poland",
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["regional", "commuter"],
+    "parentCompany": "Lesser Poland Voivodeship",
+    "links": [
+      {
+        "label": "Official Site",
+        "url": "https://kolejemalopolskie.com.pl",
+        "type": "website"
+      },
+      {
+        "label": "Wikipedia",
+        "url": "https://en.wikipedia.org/wiki/Koleje_Ma%C5%82opolskie",
+        "type": "wikipedia"
+      }
+    ]
+  },
+  {
+    "slug": "ks",
+    "name": "Koleje Śląskie",
+    "logoPath": "pl/ks",
+    "countries": ["pl"],
+    "operatorTypes": ["passenger"],
+    "bounds": [18, 49.3, 19.8, 51.2],
+    "description": "Koleje Śląskie is the regional passenger rail operator for Poland's Silesian Voivodeship. Its KS brand serves the dense urban and industrial region around Katowice, Gliwice, Częstochowa, Bielsko-Biała, Rybnik, and nearby cross-regional routes.",
+    "website": "https://www.kolejeslaskie.pl",
+    "founded": 2010,
+    "headquarters": "Katowice, Poland",
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["regional", "commuter"],
+    "parentCompany": "Silesian Voivodeship",
+    "links": [
+      {
+        "label": "Official Site",
+        "url": "https://www.kolejeslaskie.pl",
+        "type": "website"
+      },
+      {
+        "label": "Wikipedia",
+        "url": "https://en.wikipedia.org/wiki/Silesian_Railways",
+        "type": "wikipedia"
+      }
+    ]
+  },
+  {
+    "slug": "kw",
+    "name": "Koleje Wielkopolskie",
+    "logoPath": "pl/kw",
+    "countries": ["pl"],
+    "operatorTypes": ["passenger"],
+    "bounds": [15.8, 51.2, 19, 53.5],
+    "description": "Koleje Wielkopolskie is a regional passenger rail operator owned by the Greater Poland Voivodeship. The KW brand is centered on Poznań and serves routes across Wielkopolska, linking regional towns with the voivodeship capital and neighboring rail networks.",
+    "website": "https://koleje-wielkopolskie.com.pl",
+    "founded": 2009,
+    "headquarters": "Poznań, Poland",
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["regional", "commuter"],
+    "parentCompany": "Greater Poland Voivodeship",
+    "links": [
+      {
+        "label": "Official Site",
+        "url": "https://koleje-wielkopolskie.com.pl",
+        "type": "website"
+      },
+      {
+        "label": "Wikipedia",
+        "url": "https://en.wikipedia.org/wiki/Greater_Poland_Railways",
+        "type": "wikipedia"
+      }
+    ]
+  },
+  {
+    "slug": "lka",
+    "name": "Łódzka Kolej Aglomeracyjna",
+    "logoPath": "pl/lka",
+    "countries": ["pl"],
+    "operatorTypes": ["passenger"],
+    "bounds": [18.4, 50.8, 20.6, 52.4],
+    "description": "Łódzka Kolej Aglomeracyjna is a regional and commuter rail operator serving Łódź and the surrounding Łódź Voivodeship. The ŁKA brand links the metropolitan area with nearby towns and regional centers using modern electric multiple units and integrated regional services.",
+    "website": "https://lka.lodzkie.pl",
+    "founded": 2010,
+    "headquarters": "Łódź, Poland",
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["regional", "commuter"],
+    "parentCompany": "Łódź Voivodeship",
+    "links": [
+      {
+        "label": "Official Site",
+        "url": "https://lka.lodzkie.pl",
+        "type": "website"
+      },
+      {
+        "label": "Wikipedia",
+        "url": "https://en.wikipedia.org/wiki/%C5%81%C3%B3d%C5%BA_Agglomeration_Railway",
+        "type": "wikipedia"
+      }
+    ]
+  },
+  {
+    "slug": "wkd",
+    "name": "Warszawska Kolej Dojazdowa",
+    "logoPath": "pl/wkd",
+    "countries": ["pl"],
+    "operatorTypes": ["passenger"],
+    "bounds": [20.5, 52, 21.1, 52.3],
+    "description": "Warszawska Kolej Dojazdowa is a suburban rail operator serving the south-western Warsaw metropolitan area. The WKD brand runs frequent commuter services from central Warsaw toward Grodzisk Mazowiecki and Milanówek on its own electrified railway line.",
+    "website": "https://wkd.com.pl",
+    "founded": 2000,
+    "headquarters": "Grodzisk Mazowiecki, Poland",
+    "networkKm": 33,
+    "annualPassengers": null,
+    "serviceTypes": ["commuter", "regional"],
+    "parentCompany": null,
+    "links": [
+      {
+        "label": "Official Site",
+        "url": "https://wkd.com.pl",
+        "type": "website"
+      },
+      {
+        "label": "Wikipedia",
+        "url": "https://en.wikipedia.org/wiki/Warsaw_Commuter_Railway",
         "type": "wikipedia"
       }
     ]

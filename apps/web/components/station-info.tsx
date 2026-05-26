@@ -13,8 +13,10 @@ import {
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
+import { PolishStationWarning } from "@/components/polish-station-warning";
 import { SaveButton } from "@/components/save-button";
 import { TrainRow, TrainRowSkeleton } from "@/components/train-row";
+import { UpdatedStatus } from "@/components/updated-status";
 import {
   Card,
   CardAction,
@@ -43,26 +45,32 @@ import { cn } from "@repo/ui/lib/utils";
 import { Button } from "@repo/ui/components/button";
 
 const REPORT_LINKS = (
-  <div className="px-4 py-3 text-center flex items-center justify-center">
-    <a
-      href="https://github.com/R4ULtv/rail-radar/issues/new?template=bug_report.yml"
-      target="_blank"
-      rel="noopener noreferrer"
-      className="inline-flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors"
-    >
-      <BugIcon className="size-3" />
-      Report a problem
-    </a>
-    <span className="text-muted-foreground/50 mx-1.5">·</span>
-    <a
-      href="https://github.com/R4ULtv/rail-radar/issues/new?template=feature_request.yml"
-      target="_blank"
-      rel="noopener noreferrer"
-      className="inline-flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors"
-    >
-      <LightbulbIcon className="size-3" />
-      Feature request
-    </a>
+  <div className="px-4 py-3 text-center ">
+    <div className="flex items-center justify-center">
+      <a
+        href="https://github.com/R4ULtv/rail-radar/issues/new?template=bug_report.yml"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="inline-flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors"
+      >
+        <BugIcon className="size-3" />
+        Report a problem
+      </a>
+      <span className="text-muted-foreground/50 mx-1.5">·</span>
+      <a
+        href="https://github.com/R4ULtv/rail-radar/issues/new?template=feature_request.yml"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="inline-flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors"
+      >
+        <LightbulbIcon className="size-3" />
+        Feature request
+      </a>
+    </div>
+    <p className="text-center text-xs text-muted-foreground mt-2">
+      Rail Radar is free and open source. Reports from users help improve station and live-train
+      data.
+    </p>
   </div>
 );
 
@@ -153,8 +161,6 @@ function StationTabs({
   );
 }
 
-import { UpdatedStatus } from "@/components/updated-status";
-
 const snapPoints = ["230px", "450px", 1];
 
 export default function StationInfo() {
@@ -186,6 +192,7 @@ export default function StationInfo() {
     lastUpdated,
     info,
   } = useTrainData(selectedStation?.id ?? null, type, isOpen);
+  const showPolishStationWarning = selectedStation?.id.startsWith("PL") ?? false;
 
   // Desktop view
   if (!isMobile) {
@@ -244,6 +251,7 @@ export default function StationInfo() {
                         lastUpdated={lastUpdated}
                       />
                     </CardDescription>
+                    {showPolishStationWarning && <PolishStationWarning className="col-span-2" />}
                     <StationTabs type={type} onTypeChange={setType} />
                   </CardHeader>
                   <CardContent className="flex-1 px-0">
@@ -307,6 +315,7 @@ export default function StationInfo() {
               <span className="font-normal">{info}</span>
             </div>
           )}
+          {showPolishStationWarning && <PolishStationWarning className="col-span-2" />}
           <StationTabs type={type} onTypeChange={setType} />
           <div className="absolute top-3.5 right-4 flex gap-1">
             {selectedStation && <SaveButton station={selectedStation} />}

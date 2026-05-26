@@ -1,0 +1,11 @@
+/operators/*
+  Cache-Control: public, max-age=604800
+
+/flags/*
+  Cache-Control: public, max-age=604800
+
+/screenshots/*
+  Cache-Control: public, max-age=86400
+
+/station-icon.png
+  Cache-Control: public, max-age=86400

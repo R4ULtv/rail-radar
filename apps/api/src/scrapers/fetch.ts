@@ -7,10 +7,11 @@ export async function fetchWithTimeout(
   url: string,
   regionLabel: string,
   options?: RequestInit,
+  timeoutMs: number = FETCH_TIMEOUT_MS,
 ): Promise<{ response: Response; fetchMs: number }> {
   const startTime = performance.now();
   const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), FETCH_TIMEOUT_MS);
+  const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
 
   let response: Response;
   try {

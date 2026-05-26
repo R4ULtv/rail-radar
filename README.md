@@ -2,8 +2,8 @@
 
 ## Features
 
-- Interactive map with 17,000+ railway stations across Italy, Switzerland, Germany, Finland, Belgium, Denmark, the Netherlands, Norway, Sweden, the United Kingdom, and Ireland
-- Real-time arrivals and departures from official data sources (RFI, SBB, DB, Digitraffic, iRail, Rejseplanen, NS, Entur, Trafiklab, LDBWS, Irish Rail)
+- Interactive map with 18,000+ railway stations across Italy, Switzerland, Germany, Finland, Belgium, Denmark, the Netherlands, Norway, Sweden, Poland, the United Kingdom, and Ireland
+- Real-time arrivals and departures from official data sources (RFI, SBB, DB, Digitraffic, iRail, Rejseplanen, NS, Entur, Trafiklab, PLK, LDBWS, Irish Rail)
 - Station search with fuzzy matching
 - Operator directory with network metadata and static coverage maps
 - Trending stations ranked by unique visitors, with both unique and total visit counts available
@@ -13,13 +13,14 @@
 
 ## Project Structure
 
-| Directory                        | Description                              |
-| -------------------------------- | ---------------------------------------- |
-| [apps/api](./apps/api)           | Cloudflare Workers API for train data    |
-| [apps/studio](./apps/studio)     | Admin tool for station data management   |
-| [apps/web](./apps/web)           | Next.js frontend with interactive map    |
-| [packages/data](./packages/data) | Shared station data and TypeScript types |
-| [packages/ui](./packages/ui)     | Shared React component library           |
+| Directory                        | Description                               |
+| -------------------------------- | ----------------------------------------- |
+| [apps/api](./apps/api)           | Cloudflare Workers API for train data     |
+| [apps/static](./apps/static)     | Cloudflare Worker for shared media assets |
+| [apps/studio](./apps/studio)     | Admin tool for station data management    |
+| [apps/web](./apps/web)           | Next.js frontend with interactive map     |
+| [packages/data](./packages/data) | Shared station data and TypeScript types  |
+| [packages/ui](./packages/ui)     | Shared React component library            |
 
 ## Quick Start
 
@@ -33,20 +34,33 @@ pnpm dev
 # Run specific app
 pnpm --filter=web dev    # Frontend at localhost:3000
 pnpm --filter=api dev    # API server
+pnpm --filter=static dev # Shared media Worker at localhost:8788
 pnpm --filter=studio dev # Admin tool at localhost:3001
 ```
 
 ## Scripts
 
-| Command                        | Description                            |
-| ------------------------------ | -------------------------------------- |
-| `pnpm dev`                     | Start all development servers          |
-| `pnpm --filter=studio dev`     | Start the admin tool at localhost:3001 |
-| `pnpm build`                   | Build all packages                     |
-| `pnpm lint --force`            | Lint all packages                      |
-| `pnpm format`                  | Format code with oxfmt                 |
-| `pnpm check-types --force`     | Run TypeScript type checking           |
-| `pnpm --filter=api cf-typegen` | Generate Cloudflare Worker types       |
+| Command                           | Description                                     |
+| --------------------------------- | ----------------------------------------------- |
+| `pnpm dev`                        | Start all development servers                   |
+| `pnpm --filter=static dev`        | Start the shared media Worker at localhost:8788 |
+| `pnpm --filter=studio dev`        | Start the admin tool at localhost:3001          |
+| `pnpm build`                      | Build all packages                              |
+| `pnpm lint --force`               | Lint all packages                               |
+| `pnpm format`                     | Format code with oxfmt                          |
+| `pnpm check-types --force`        | Run TypeScript type checking                    |
+| `pnpm --filter=api cf-typegen`    | Generate API Worker types                       |
+| `pnpm --filter=static cf-typegen` | Generate static Worker types                    |
+
+## Media Delivery
+
+Shared media is served by [apps/static](./apps/static) from `static.railradar24.com`. Small, repo-owned assets such as flags, operator logos, screenshots, and other reusable images are deployed through Cloudflare Workers Static Assets. Larger, growing collections such as future station photos are planned for a dedicated R2 bucket behind the same media app rather than being bundled into the web deployment.
+
+## Support
+
+Rail Radar is free to use and independently maintained. If it's useful to you, you can help cover the API calls, hosting, and map tiles that keep it running.
+
+[Donate via Polar](https://buy.polar.sh/polar_cl_tASj1xHmBWAiDQyuWr7zsyBSSFc9eUPZ9hwLy4cBlBN) — one-time, monthly, or yearly support. Also reachable from the in-app [/donate](https://www.railradar24.com/donate) page or the "Sponsor" button at the top of this repository.
 
 ## Contributing
 
@@ -71,6 +85,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - 🇮🇪 Irish train data from [Irish Rail](https://www.irishrail.ie/) (Iarnród Éireann)
 - 🇳🇴 Norwegian train data from [Entur](https://www.entur.no/)
 - 🇸🇪 Swedish train data from [Trafiklab](https://www.trafiklab.se/)
+- 🇵🇱 Polish train data from [PKP Polskie Linie Kolejowe](https://www.plk-sa.pl/) (PLK)
 - 🇩🇰 Danish train data from [Rejseplanen](https://www.rejseplanen.dk/)
 - 🇩🇪 German train data from [Deutsche Bahn](https://www.bahn.de/) (DB)
 - Map rendering by [Mapbox](https://www.mapbox.com/)

@@ -1,6 +1,6 @@
 import type { Train } from "@repo/data";
 
-import { ScraperError, formatTime, type ScrapeResult } from "./index";
+import { ScraperError, type ScrapeResult } from "./index";
 import { fetchWithTimeout } from "./fetch";
 
 const TRAFIKLAB_BASE_URL = "https://realtime-api.trafiklab.se/v1";
@@ -108,13 +108,62 @@ function getDelay(entry: TrafiklabDeparture): number | null {
   return minutes > 0 ? minutes : null;
 }
 
+function formatLocalTime(value: string | null): string {
+  const match = value?.match(/T(\d{2}:\d{2})/);
+  return match?.[1] ?? "--:--";
+}
+
+function getTimeZoneOffsetMs(timeZone: string, date: Date): number {
+  const parts = new Intl.DateTimeFormat("en-GB", {
+    timeZone,
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+    hour12: false,
+  }).formatToParts(date);
+
+  const values = Object.fromEntries(parts.map(({ type, value }) => [type, value]));
+  const localTime = Date.UTC(
+    Number(values.year),
+    Number(values.month) - 1,
+    Number(values.day),
+    Number(values.hour),
+    Number(values.minute),
+    Number(values.second),
+  );
+
+  return localTime - date.getTime();
+}
+
+function parseStockholmLocalTime(value: string | null): number | null {
+  const match = value?.match(/^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})$/);
+  if (!match) return null;
+
+  const [, year, month, day, hour, minute, second] = match;
+  const utcTime = Date.UTC(
+    Number(year),
+    Number(month) - 1,
+    Number(day),
+    Number(hour),
+    Number(minute),
+    Number(second),
+  );
+
+  return utcTime - getTimeZoneOffsetMs(SWEDEN_TIMEZONE, new Date(utcTime));
+}
+
 function getStatus(entry: TrafiklabDeparture, type: SwedenBoardType): Train["status"] {
   if (entry.canceled) return "cancelled";
 
   const timeStr = entry.realtime ?? entry.scheduled;
   if (!timeStr) return null;
 
-  const actualTime = new Date(timeStr).getTime();
+  const actualTime = parseStockholmLocalTime(timeStr);
+  if (actualTime == null) return null;
+
   const now = Date.now();
   const fiveMinutes = 5 * 60 * 1000;
 
@@ -134,7 +183,7 @@ function mapEntry(entry: TrafiklabDeparture, type: SwedenBoardType): Train {
     brand: getBrand(entry),
     category: getCategory(entry),
     trainNumber: getTrainNumber(entry),
-    scheduledTime: formatTime(entry.scheduled, SWEDEN_TIMEZONE),
+    scheduledTime: formatLocalTime(entry.scheduled),
     delay: getDelay(entry),
     platform: entry.realtime_platform?.designation ?? entry.scheduled_platform?.designation ?? null,
     status: getStatus(entry, type),

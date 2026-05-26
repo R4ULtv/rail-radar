@@ -109,6 +109,11 @@
 
   onMount(() => {
     function handleShortcut(event: KeyboardEvent) {
+      const target = event.target as HTMLElement | null;
+      const inField =
+        target?.tagName === "INPUT" || target?.tagName === "TEXTAREA" || target?.isContentEditable;
+
+      if (inField) return;
       if ((!event.metaKey && !event.ctrlKey) || event.key.toLowerCase() !== "k") return;
 
       event.preventDefault();

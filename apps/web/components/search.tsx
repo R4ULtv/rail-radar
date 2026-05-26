@@ -1,5 +1,6 @@
 "use client";
 
+import { staticAssetUrl } from "@/lib/static-assets";
 import * as React from "react";
 import {
   BookmarkIcon,
@@ -98,7 +99,7 @@ const StationList = React.memo(function StationList({
               <span className="max-w-75 md:max-w-61 truncate">{station.name}</span>
               <Image
                 unoptimized
-                src={`/flags/${getCountry(station.id) ?? "xx"}.svg`}
+                src={staticAssetUrl(`/flags/${getCountry(station.id) ?? "xx"}.svg`)}
                 alt={getCountry(station.id)?.toUpperCase() ?? ""}
                 className="size-3 shrink-0 rounded-full object-cover"
                 width={12}
@@ -218,7 +219,7 @@ function SearchContent({
           <div className="px-4 py-2 not-first:mt-1">
             <p className="text-muted-foreground text-sm flex items-center gap-2">
               <TrendingUpIcon className="size-3.5" />
-              Trending Stations
+              Popular Stations (7-day trending)
             </p>
           </div>
           <StationList

@@ -3,6 +3,7 @@ import Link from "next/link";
 import { ActivityIcon, ArrowLeftIcon, GaugeIcon, MapPinnedIcon, UsersIcon } from "lucide-react";
 import { Button } from "@repo/ui/components/button";
 import { Card, CardContent } from "@repo/ui/components/card";
+import { staticAssetUrl } from "@/lib/static-assets";
 import {
   Item,
   ItemActions,

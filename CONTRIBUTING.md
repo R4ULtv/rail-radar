@@ -4,6 +4,7 @@ Thanks for your interest in contributing to Rail Radar. This repository is a `pn
 
 - `apps/web`: the public Next.js frontend
 - `apps/api`: the Cloudflare Workers API
+- `apps/static`: the Cloudflare Worker for shared static assets
 - `apps/studio`: the SvelteKit station-data admin tool
 - `packages/data`: shared station data and TypeScript types
 - `packages/ui`: shared UI components
@@ -60,6 +61,7 @@ That starts the monorepo development task for:
 
 - `web` on `localhost:3000`
 - `api` with the local Workers dev server
+- `static` on `localhost:8788`
 - `studio` on `localhost:3001`
 
 You can also work on individual apps:
@@ -67,6 +69,7 @@ You can also work on individual apps:
 ```bash
 pnpm --filter=web dev
 pnpm --filter=api dev
+pnpm --filter=static dev
 pnpm --filter=studio dev
 ```
 
@@ -85,6 +88,7 @@ If you are working in a single package or app, targeted commands are also welcom
 ```bash
 pnpm --filter=web build
 pnpm --filter=api cf-typegen
+pnpm --filter=static cf-typegen
 pnpm --filter=studio check-types
 ```
 

@@ -1,6 +1,7 @@
 import Image from "next/image";
 
-// Maps brand names to their SVG file paths (relative to /brands/)
+import { staticAssetUrl } from "@/lib/static-assets";
+// Maps brand names to their SVG file paths (relative to /operators/)
 const brandPaths: Record<string, string> = {
   // Italian brands
   trenitalia: "it/trenitalia",
@@ -55,8 +56,32 @@ const brandPaths: Record<string, string> = {
   ns: "ns",
   vy: "no/vy",
   "sj nord": "no/sj_nord",
+  // Polish brands
+  "pkp intercity": "pl/pkp-intercity",
+  polregio: "pl/polregio",
+  kd: "pl/kd",
+  "koleje dolnośląskie": "pl/kd",
+  "koleje dolnoslaskie": "pl/kd",
+  km: "pl/km",
+  kml: "pl/kml",
+  kmł: "pl/kml",
+  "koleje małopolskie": "pl/kml",
+  "koleje malopolskie": "pl/kml",
+  ks: "pl/ks",
+  kw: "pl/kw",
+  skm: "pl/skm",
+  łka: "pl/lka",
+  "warszawska kolej dojazdowa": "pl/wkd",
+  railpolonia: "pl/railpolonia",
+  "leo express": "leo-express",
+  regiojet: "regiojet",
   // Swedish brands
   sj: "se/sj",
+  "arlanda express": "se/arlanda",
+  mälartåg: "se/malartag",
+  malartag: "se/malartag",
+  västtrafik: "se/vasttrafik",
+  vasttrafik: "se/vasttrafik",
   "mtr express": "se/mtr",
   snälltåget: "se/snalltaget",
   transdev: "transdev",
@@ -184,8 +209,32 @@ const brandSlugMap: Record<string, string> = {
   "sj nord": "sj-nord",
   "go-ahead norge": "go-ahead-norge",
   flytoget: "flytoget",
+  // Polish brands
+  "pkp intercity": "pkp-intercity",
+  polregio: "polregio",
+  kd: "kd",
+  "koleje dolnośląskie": "kd",
+  "koleje dolnoslaskie": "kd",
+  km: "km",
+  kml: "kml",
+  kmł: "kml",
+  "koleje małopolskie": "kml",
+  "koleje malopolskie": "kml",
+  ks: "ks",
+  kw: "kw",
+  skm: "skm",
+  łka: "lka",
+  "warszawska kolej dojazdowa": "wkd",
+  railpolonia: "railpolonia",
+  "leo express": "leo-express",
+  regiojet: "regiojet",
   // Swedish brands
   sj: "sj",
+  "arlanda express": "arlanda-express",
+  mälartåg: "malartag",
+  malartag: "malartag",
+  västtrafik: "vasttrafik",
+  vasttrafik: "vasttrafik",
   "mtr express": "mtr-express",
   snälltåget: "snalltaget",
   transdev: "transdev",
@@ -235,7 +284,7 @@ export function BrandLogo({ brand, className }: BrandLogoProps) {
   return (
     <Image
       unoptimized
-      src={`/brands/${path}.svg`}
+      src={staticAssetUrl(`/operators/${path}.svg`)}
       alt={brand}
       className={className}
       width={32}
