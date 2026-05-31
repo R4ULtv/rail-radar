@@ -69,6 +69,17 @@
       lng !== (station.geo?.lng.toString() ?? ""),
   );
 
+  const typeLabel = $derived(type === "rail" ? "Rail" : type === "metro" ? "Metro" : "Light");
+  const importanceLabel = $derived(
+    importance === "1"
+      ? "Major"
+      : importance === "2"
+        ? "Important"
+        : importance === "3"
+          ? "Medium"
+          : "Minor",
+  );
+
   function handleSave() {
     const parsedLat = parseFloat(lat);
     const parsedLng = parseFloat(lng);
@@ -132,7 +143,7 @@
           <Label>Type</Label>
           <Select.Root type="single" bind:value={type}>
             <Select.Trigger class="w-full">
-              {type === "rail" ? "Rail" : type === "metro" ? "Metro" : "Light"}
+              {typeLabel}
             </Select.Trigger>
             <Select.Content>
               <Select.Item value="rail">Rail</Select.Item>
@@ -146,13 +157,7 @@
           <Label>Importance</Label>
           <Select.Root type="single" bind:value={importance}>
             <Select.Trigger class="w-full">
-              {importance} - {importance === "1"
-                ? "Major"
-                : importance === "2"
-                  ? "Important"
-                  : importance === "3"
-                    ? "Medium"
-                    : "Minor"}
+              {importance} - {importanceLabel}
             </Select.Trigger>
             <Select.Content>
               <Select.Item value="1">1 - Major</Select.Item>
