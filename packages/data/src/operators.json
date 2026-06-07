@@ -964,6 +964,34 @@
     ]
   },
   {
+    "slug": "tgv-lyria",
+    "name": "TGV Lyria",
+    "logoPath": "fr/lyria",
+    "countries": ["fr", "ch"],
+    "operatorTypes": ["passenger"],
+    "bounds": [1.4, 45.9, 8.6, 49.3],
+    "description": "TGV Lyria is the high-speed brand for rail travel between France and Switzerland, operated by the SNCF–SBB joint venture Lyria. Running Euroduplex trainsets at up to 320 km/h, it links Paris with Geneva, Lausanne, Basel, Zurich, and the Swiss Alps.",
+    "website": "https://www.tgv-lyria.com",
+    "founded": 1981,
+    "headquarters": "Paris, France",
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["high-speed", "international"],
+    "parentCompany": "Lyria SAS (SNCF / SBB CFF FFS)",
+    "links": [
+      {
+        "label": "Official Site",
+        "url": "https://www.tgv-lyria.com",
+        "type": "website"
+      },
+      {
+        "label": "Wikipedia",
+        "url": "https://en.wikipedia.org/wiki/Lyria",
+        "type": "wikipedia"
+      }
+    ]
+  },
+  {
     "slug": "vr",
     "name": "VR Group",
     "logoPath": "vr",
