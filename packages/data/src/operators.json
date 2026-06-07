@@ -827,7 +827,7 @@
     "slug": "ouigo",
     "name": "OUIGO",
     "logoPath": "fr/ouigo",
-    "countries": ["fr", "es"],
+    "countries": ["fr"],
     "operatorTypes": ["passenger"],
     "bounds": [-4.8, 41, 7.8, 51.1],
     "description": "OUIGO is SNCF's low-cost high-speed brand, launched in 2013 to offer no-frills TGV travel at budget fares. It operates double-deck high-speed trainsets on France's busiest corridors, complemented since 2022 by OUIGO Train Classique conventional-speed services and high-speed operations in Spain.",
