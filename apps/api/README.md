@@ -19,7 +19,7 @@ Cloudflare Workers API that provides real-time European train data from official
 | `GET`  | `/stations/search`            | Station search endpoint returning JSON arrays                                                                                                |
 | `GET`  | `/stations.geojson`           | GeoJSON FeatureCollection of all stations (see below)                                                                                        |
 | `GET`  | `/stations/trending`          | Get trending stations ranked by unique visitors (`?period=hour\|day\|week\|month`, default: `day`)                                           |
-| `GET`  | `/stations/trending/:country` | Get country-filtered trending stations ranked by unique visitors (`it\|ch\|de\|fi\|be\|dk\|nl\|no\|se\|pl\|uk\|ie\`, same `?period` options) |
+| `GET`  | `/stations/trending/:country` | Get country-filtered trending stations ranked by unique visitors (`it\|ch\|de\|fi\|be\|dk\|nl\|no\|se\|pl\|uk\|ie\|fr\`, same `?period` options) |
 | `GET`  | `/stations/:id`               | Get station with trains (`?type=arrivals\|departures`)                                                                                       |
 | `GET`  | `/stations/:id/stats`         | Get station visit stats (`?period=hour\|day\|week\|month`, default: `day`)                                                                   |
 | `GET`  | `/analytics/overview`         | Get global analytics (total visits, unique visitors, country breakdown)                                                                      |
@@ -64,7 +64,7 @@ Returns `application/geo+json` FeatureCollection consumed directly by Mapbox GL 
 
 - No params: all stations (pre-serialized for performance)
 - `?type=rail|metro|light`: filter by station type
-- `?country=it|ch|de|fi|be|dk|nl|no|se|pl|uk|ie`: filter by country
+- `?country=it|ch|de|fi|be|dk|nl|no|se|pl|uk|ie|fr`: filter by country
 - Filters can be combined: `?type=rail&country=it`
 
 ### Caching
@@ -109,7 +109,8 @@ src/
 │   ├── poland.ts      # Polish PLK API scraper
 │   ├── denmark.ts     # Danish Rejseplanen API scraper
 │   ├── uk.ts          # UK National Rail API scraper
-│   └── ireland.ts     # Irish Rail API scraper
+│   ├── ireland.ts     # Irish Rail API scraper
+│   └── france.ts      # French SNCF (Navitia) API scraper
 ├── analytics.ts   # Cloudflare Analytics Engine integration for visits and provider metrics
 ├── search.ts      # Deterministic station search
 └── constants.ts   # Shared constants (cache TTL, timeouts, validation)
@@ -144,6 +145,7 @@ Provider-backed scrapers require these Worker secrets:
 - `TRAFIKLAB_KEY`
 - `PLK_API_KEY`
 - `REJSEPLANEN_API_KEY`
+- `SNCF_API_KEY`
 
 ## Type Generation
 
