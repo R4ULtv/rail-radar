@@ -880,6 +880,118 @@
     ]
   },
   {
+    "slug": "fluo",
+    "name": "Fluo Grand Est",
+    "logoPath": "fr/fluo",
+    "countries": ["fr"],
+    "operatorTypes": ["passenger"],
+    "bounds": [3.4, 47.4, 8.2, 49.6],
+    "description": "Fluo Grand Est is the regional TER brand for the Grand Est region of north-eastern France. Operated by SNCF Voyageurs under contract with the Grand Est council, it unifies regional trains and buses across Alsace, Lorraine, and Champagne-Ardenne, including cross-border services toward Germany, Luxembourg, and Belgium.",
+    "website": "https://www.fluo.eu",
+    "founded": 2018,
+    "headquarters": "Strasbourg, France",
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["regional", "commuter", "international"],
+    "parentCompany": "SNCF Voyageurs",
+    "links": [
+      {
+        "label": "Official Site",
+        "url": "https://www.fluo.eu",
+        "type": "website"
+      },
+      {
+        "label": "Wikipedia",
+        "url": "https://fr.wikipedia.org/wiki/Fluo_Grand_Est",
+        "type": "wikipedia"
+      }
+    ]
+  },
+  {
+    "slug": "regionaura",
+    "name": "TER Auvergne-Rhône-Alpes",
+    "logoPath": "fr/regionaura",
+    "countries": ["fr"],
+    "operatorTypes": ["passenger"],
+    "bounds": [2.1, 44.1, 7.2, 46.8],
+    "description": "TER Auvergne-Rhône-Alpes is the regional rail brand for the Auvergne-Rhône-Alpes region in south-eastern France. Operated by SNCF Voyageurs for the regional council, it serves a dense network around Lyon, Grenoble, Saint-Étienne, and Clermont-Ferrand, reaching into the Alps and Massif Central.",
+    "website": "https://www.ter.sncf.com/auvergne-rhone-alpes",
+    "founded": 2016,
+    "headquarters": "Lyon, France",
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["regional", "commuter"],
+    "parentCompany": "SNCF Voyageurs",
+    "links": [
+      {
+        "label": "Official Site",
+        "url": "https://www.ter.sncf.com/auvergne-rhone-alpes",
+        "type": "website"
+      },
+      {
+        "label": "Wikipedia",
+        "url": "https://fr.wikipedia.org/wiki/TER_Auvergne-Rh%C3%B4ne-Alpes",
+        "type": "wikipedia"
+      }
+    ]
+  },
+  {
+    "slug": "ter-na",
+    "name": "TER Nouvelle-Aquitaine",
+    "logoPath": "fr/ter-na",
+    "countries": ["fr"],
+    "operatorTypes": ["passenger"],
+    "bounds": [-1.8, 42.7, 2.6, 47.2],
+    "description": "TER Nouvelle-Aquitaine is the regional rail brand for Nouvelle-Aquitaine, France's largest region by area. Operated by SNCF Voyageurs for the regional council, it connects Bordeaux, Limoges, Poitiers, and Pau across the Atlantic coast, the Pyrenees, and the rural interior.",
+    "website": "https://www.ter.sncf.com/nouvelle-aquitaine",
+    "founded": 2016,
+    "headquarters": "Bordeaux, France",
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["regional", "commuter"],
+    "parentCompany": "SNCF Voyageurs",
+    "links": [
+      {
+        "label": "Official Site",
+        "url": "https://www.ter.sncf.com/nouvelle-aquitaine",
+        "type": "website"
+      },
+      {
+        "label": "Wikipedia",
+        "url": "https://fr.wikipedia.org/wiki/TER_Nouvelle-Aquitaine",
+        "type": "wikipedia"
+      }
+    ]
+  },
+  {
+    "slug": "zou",
+    "name": "ZOU !",
+    "logoPath": "fr/zou",
+    "countries": ["fr"],
+    "operatorTypes": ["passenger"],
+    "bounds": [4.2, 43, 7.7, 45.1],
+    "description": "ZOU ! is the regional transport brand for the Provence-Alpes-Côte d'Azur region in south-eastern France. Its TER rail services, operated by SNCF Voyageurs for the regional council, link Marseille, Nice, Toulon, and Avignon along the Mediterranean coast and into the southern Alps.",
+    "website": "https://zou.maregionsud.fr",
+    "founded": 2017,
+    "headquarters": "Marseille, France",
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["regional", "commuter"],
+    "parentCompany": "SNCF Voyageurs",
+    "links": [
+      {
+        "label": "Official Site",
+        "url": "https://zou.maregionsud.fr",
+        "type": "website"
+      },
+      {
+        "label": "Wikipedia",
+        "url": "https://fr.wikipedia.org/wiki/Transport_express_r%C3%A9gional_Provence-Alpes-C%C3%B4te_d%27Azur",
+        "type": "wikipedia"
+      }
+    ]
+  },
+  {
     "slug": "transilien",
     "name": "Transilien",
     "logoPath": "fr/transilien",
