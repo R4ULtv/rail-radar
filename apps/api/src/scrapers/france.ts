@@ -3,7 +3,7 @@ import type { Train } from "@repo/data";
 import { ScraperError, type ScrapeResult } from "./index";
 import { fetchWithTimeout } from "./fetch";
 
-const SNCF_BASE_URL = "https://api.sncf.com/v1/coverage/sncf";
+const SNCF_BASE_URL = "https://api.navitia.io/v1/coverage/sncf";
 const PARIS_TZ = "Europe/Paris";
 const RECENT_WINDOW_MS = 5 * 60 * 1000;
 
@@ -255,7 +255,7 @@ export async function scrapeFranceTrains(
       trainNumber,
       scheduledTime: formatLocalTime(scheduled),
       delay: cancelled ? null : calculateDelay(scheduled, realtime),
-      platform: null, // SNCF's Navitia board does not expose track/voie.
+      platform: null,
       status: cancelled ? "cancelled" : getStatus(realtime, nowMs, arrivals),
       info: messages.length > 0 ? messages.join("; ") : null,
     };
