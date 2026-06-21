@@ -88,5 +88,5 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - 🇵🇱 Polish train data from [PKP Polskie Linie Kolejowe](https://www.plk-sa.pl/) (PLK)
 - 🇩🇰 Danish train data from [Rejseplanen](https://www.rejseplanen.dk/)
 - 🇩🇪 German train data from [Deutsche Bahn](https://www.bahn.de/) (DB)
-- 🇫🇷 French train data from [Hove (SNCF)](https://www.hove.com/)
+- 🇫🇷 French train data from [SNCF (Navitia)](https://numerique.sncf.com/startup/api/)
 - Map rendering by [Mapbox](https://www.mapbox.com/)
