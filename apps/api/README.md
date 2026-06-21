@@ -9,20 +9,20 @@ Cloudflare Workers API that provides real-time European train data from official
 
 ## Endpoints
 
-| Method | Path                          | Description                                                                                                                                  |
-| ------ | ----------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
-| `GET`  | `/`                           | API info and endpoint documentation                                                                                                          |
-| `GET`  | `/robots.txt`                 | Blocks crawlers from indexing the API                                                                                                        |
-| `GET`  | `/operators`                  | List train operators with optional filtering                                                                                                 |
-| `GET`  | `/operators/:slug`            | Get a single train operator by slug                                                                                                          |
-| `GET`  | `/map/static`                 | Static map image via Mapbox                                                                                                                  |
-| `GET`  | `/stations/search`            | Station search endpoint returning JSON arrays                                                                                                |
-| `GET`  | `/stations.geojson`           | GeoJSON FeatureCollection of all stations (see below)                                                                                        |
-| `GET`  | `/stations/trending`          | Get trending stations ranked by unique visitors (`?period=hour\|day\|week\|month`, default: `day`)                                           |
+| Method | Path                          | Description                                                                                                                                      |
+| ------ | ----------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `GET`  | `/`                           | API info and endpoint documentation                                                                                                              |
+| `GET`  | `/robots.txt`                 | Blocks crawlers from indexing the API                                                                                                            |
+| `GET`  | `/operators`                  | List train operators with optional filtering                                                                                                     |
+| `GET`  | `/operators/:slug`            | Get a single train operator by slug                                                                                                              |
+| `GET`  | `/map/static`                 | Static map image via Mapbox                                                                                                                      |
+| `GET`  | `/stations/search`            | Station search endpoint returning JSON arrays                                                                                                    |
+| `GET`  | `/stations.geojson`           | GeoJSON FeatureCollection of all stations (see below)                                                                                            |
+| `GET`  | `/stations/trending`          | Get trending stations ranked by unique visitors (`?period=hour\|day\|week\|month`, default: `day`)                                               |
 | `GET`  | `/stations/trending/:country` | Get country-filtered trending stations ranked by unique visitors (`it\|ch\|de\|fi\|be\|dk\|nl\|no\|se\|pl\|uk\|ie\|fr\`, same `?period` options) |
-| `GET`  | `/stations/:id`               | Get station with trains (`?type=arrivals\|departures`)                                                                                       |
-| `GET`  | `/stations/:id/stats`         | Get station visit stats (`?period=hour\|day\|week\|month`, default: `day`)                                                                   |
-| `GET`  | `/analytics/overview`         | Get global analytics (total visits, unique visitors, country breakdown)                                                                      |
+| `GET`  | `/stations/:id`               | Get station with trains (`?type=arrivals\|departures`)                                                                                           |
+| `GET`  | `/stations/:id/stats`         | Get station visit stats (`?period=hour\|day\|week\|month`, default: `day`)                                                                       |
+| `GET`  | `/analytics/overview`         | Get global analytics (total visits, unique visitors, country breakdown)                                                                          |
 
 ### `GET /operators`
 
