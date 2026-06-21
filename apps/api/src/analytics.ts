@@ -66,6 +66,7 @@ export const PROVIDER_IDS = [
   "opendata-ch",
   "rfi",
   "nationalrail",
+  "sncf",
 ] as const;
 
 export type ProviderId = (typeof PROVIDER_IDS)[number];
@@ -81,6 +82,7 @@ const COUNTRY_TO_PROVIDER: Partial<Record<CountryCode, ProviderId>> = {
   nl: "ns",
   no: "entur",
   uk: "nationalrail",
+  fr: "sncf",
 };
 
 async function hashIP(ip: string): Promise<string> {
