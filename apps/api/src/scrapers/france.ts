@@ -73,9 +73,16 @@ interface NavitiaLink {
   id: string;
 }
 
+interface StopPoint {
+  // Static platform from the GTFS feed (stops.txt platform_code), not a live track
+  // assignment — populated only where SNCF models per-platform stop_points.
+  platform_code?: string | null;
+}
+
 interface Passage {
   display_informations: DisplayInformations;
   stop_date_time: StopDateTime;
+  stop_point?: StopPoint;
   links?: NavitiaLink[];
 }
 
@@ -256,7 +263,7 @@ export async function scrapeFranceTrains(
       trainNumber,
       scheduledTime: formatLocalTime(scheduled),
       delay: cancelled ? null : calculateDelay(scheduled, realtime),
-      platform: null,
+      platform: passage.stop_point?.platform_code?.trim() || null,
       status: cancelled ? "cancelled" : getStatus(realtime, nowMs, arrivals),
       info: messages.length > 0 ? messages.join("; ") : null,
     };
