@@ -6,6 +6,7 @@ import { fetchWithTimeout } from "./fetch";
 const SNCF_BASE_URL = "https://api.navitia.io/v1/coverage/sncf";
 const PARIS_TZ = "Europe/Paris";
 const RECENT_WINDOW_MS = 5 * 60 * 1000;
+const TRAIN_LIMIT = 24;
 
 // Convert FR station ID to its 8-digit UIC code (e.g. "FR686006" -> "87686006").
 function convertFranceStationId(stationId: string): string {
@@ -24,7 +25,7 @@ function buildSncfUrl(stationId: string, arrivals: boolean, fromDatetime: string
   const stopArea = encodeURIComponent(buildStopAreaId(stationId));
   return (
     `${SNCF_BASE_URL}/stop_areas/${stopArea}/${endpoint}` +
-    `?data_freshness=realtime&count=16&disable_geojson=true&from_datetime=${fromDatetime}`
+    `?data_freshness=realtime&count=${TRAIN_LIMIT}&disable_geojson=true&from_datetime=${fromDatetime}`
   );
 }
 
