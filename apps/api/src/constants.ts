@@ -7,7 +7,7 @@ export const CACHE_TTL = {
   OPERATORS: "public, max-age=86400, stale-while-revalidate=3600",
 } as const;
 
-export const FETCH_TIMEOUT_MS = 20_000;
+export const FETCH_TIMEOUT_MS = 12_000;
 
 export const STATION_SEARCH_LIMIT = 20;
 export const TRENDING_LIMIT = 5;

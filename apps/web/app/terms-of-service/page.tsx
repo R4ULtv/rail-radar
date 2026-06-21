@@ -27,7 +27,7 @@ export default function TermsOfServicePage() {
           <p>
             Rail Radar is a free, open-source web application that provides real-time train tracking
             on an interactive map. It displays live train departures, arrivals, delays, and platform
-            information for 18,000+ stations across 12 countries. The source code is available under
+            information for 21,000+ stations across 13 countries. The source code is available under
             the{" "}
             <a
               href="https://opensource.org/licenses/MIT"
@@ -178,6 +178,17 @@ export default function TermsOfServicePage() {
                 rel="noopener noreferrer"
               >
                 Irish Rail (Iarnród Éireann)
+              </a>
+            </li>
+            <li>
+              <strong className="text-foreground">France</strong> &mdash;{" "}
+              <a
+                href="https://numerique.sncf.com/startup/api/"
+                className="text-foreground underline"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                SNCF (Navitia)
               </a>
             </li>
           </ul>

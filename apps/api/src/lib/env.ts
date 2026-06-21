@@ -11,6 +11,7 @@ export type Bindings = {
   TRAFIKLAB_KEY: string;
   REJSEPLANEN_API_KEY: string;
   PLK_API_KEY: string;
+  SNCF_API_KEY: string;
   MAPBOX_TOKEN: string;
 };
 

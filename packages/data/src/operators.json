@@ -765,8 +765,8 @@
   {
     "slug": "sncf",
     "name": "SNCF",
-    "logoPath": "sncf",
-    "countries": ["international", "ch", "it", "be"],
+    "logoPath": "fr/sncf",
+    "countries": ["fr", "ch", "it", "be"],
     "operatorTypes": ["passenger"],
     "bounds": [-5.1, 42.3, 9.6, 51.1],
     "description": "The French National Railway Company (SNCF) operates one of Europe's largest rail networks. World-renowned for pioneering the TGV high-speed network, it manages everything from rapid international connections (TGV inOui, Ouigo) to extensive regional transit (TER) across France and into neighboring nations.",
@@ -791,6 +791,314 @@
       {
         "label": "Wikipedia",
         "url": "https://en.wikipedia.org/wiki/SNCF",
+        "type": "wikipedia"
+      }
+    ]
+  },
+  {
+    "slug": "tgv-inoui",
+    "name": "TGV INOUI",
+    "logoPath": "fr/inoui",
+    "countries": ["fr", "ch", "it", "be"],
+    "operatorTypes": ["passenger"],
+    "bounds": [-4.8, 43, 8.2, 51.1],
+    "description": "TGV INOUI is SNCF Voyageurs' flagship high-speed brand, rolled out from 2017 to replace the historic TGV name on its premium services. Running at up to 320 km/h on France's LGV network, it links Paris with major cities nationwide and crosses into Switzerland, Italy, and Germany.",
+    "website": "https://www.sncf-connect.com",
+    "founded": 2017,
+    "headquarters": "Saint-Denis, France",
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["high-speed", "intercity", "international"],
+    "parentCompany": "SNCF Voyageurs",
+    "links": [
+      {
+        "label": "Official Site",
+        "url": "https://www.sncf-connect.com/en-en/trains/tgv-inoui",
+        "type": "website"
+      },
+      {
+        "label": "Wikipedia",
+        "url": "https://en.wikipedia.org/wiki/TGV_inOui",
+        "type": "wikipedia"
+      }
+    ]
+  },
+  {
+    "slug": "ouigo",
+    "name": "OUIGO",
+    "logoPath": "fr/ouigo",
+    "countries": ["fr"],
+    "operatorTypes": ["passenger"],
+    "bounds": [-4.8, 41, 7.8, 51.1],
+    "description": "OUIGO is SNCF's low-cost high-speed brand, launched in 2013 to offer no-frills TGV travel at budget fares. It operates double-deck high-speed trainsets on France's busiest corridors, complemented since 2022 by OUIGO Train Classique conventional-speed services and high-speed operations in Spain.",
+    "website": "https://www.ouigo.com",
+    "founded": 2013,
+    "headquarters": "Saint-Denis, France",
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["high-speed"],
+    "parentCompany": "SNCF Voyageurs",
+    "links": [
+      {
+        "label": "Official Site",
+        "url": "https://www.ouigo.com",
+        "type": "website"
+      },
+      {
+        "label": "Wikipedia",
+        "url": "https://en.wikipedia.org/wiki/Ouigo",
+        "type": "wikipedia"
+      }
+    ]
+  },
+  {
+    "slug": "ter",
+    "name": "TER",
+    "logoPath": "fr/ter",
+    "countries": ["fr"],
+    "operatorTypes": ["passenger"],
+    "bounds": [-5.1, 42.3, 8.2, 51.1],
+    "description": "TER (Transport express régional) is the brand for France's regional rail services, operated by SNCF Voyageurs under contract with the regional councils that organize and fund them. Each region runs its own livery and sub-brand (Fluo, liO, NOMAD, Rémi, and others) over the shared TER identity.",
+    "website": "https://www.ter.sncf.com",
+    "founded": 1986,
+    "headquarters": "Saint-Denis, France",
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["regional", "commuter"],
+    "parentCompany": "SNCF Voyageurs",
+    "links": [
+      {
+        "label": "Official Site",
+        "url": "https://www.ter.sncf.com",
+        "type": "website"
+      },
+      {
+        "label": "Wikipedia",
+        "url": "https://en.wikipedia.org/wiki/Transport_express_r%C3%A9gional",
+        "type": "wikipedia"
+      }
+    ]
+  },
+  {
+    "slug": "fluo",
+    "name": "Fluo Grand Est",
+    "logoPath": "fr/fluo",
+    "countries": ["fr"],
+    "operatorTypes": ["passenger"],
+    "bounds": [3.4, 47.4, 8.2, 49.6],
+    "description": "Fluo Grand Est is the regional TER brand for the Grand Est region of north-eastern France. Operated by SNCF Voyageurs under contract with the Grand Est council, it unifies regional trains and buses across Alsace, Lorraine, and Champagne-Ardenne, including cross-border services toward Germany, Luxembourg, and Belgium.",
+    "website": "https://www.fluo.eu",
+    "founded": 2018,
+    "headquarters": "Strasbourg, France",
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["regional", "commuter", "international"],
+    "parentCompany": "SNCF Voyageurs",
+    "links": [
+      {
+        "label": "Official Site",
+        "url": "https://www.fluo.eu",
+        "type": "website"
+      },
+      {
+        "label": "Wikipedia",
+        "url": "https://fr.wikipedia.org/wiki/Fluo_Grand_Est",
+        "type": "wikipedia"
+      }
+    ]
+  },
+  {
+    "slug": "regionaura",
+    "name": "TER Auvergne-Rhône-Alpes",
+    "logoPath": "fr/regionaura",
+    "countries": ["fr"],
+    "operatorTypes": ["passenger"],
+    "bounds": [2.1, 44.1, 7.2, 46.8],
+    "description": "TER Auvergne-Rhône-Alpes is the regional rail brand for the Auvergne-Rhône-Alpes region in south-eastern France. Operated by SNCF Voyageurs for the regional council, it serves a dense network around Lyon, Grenoble, Saint-Étienne, and Clermont-Ferrand, reaching into the Alps and Massif Central.",
+    "website": "https://www.ter.sncf.com/auvergne-rhone-alpes",
+    "founded": 2016,
+    "headquarters": "Lyon, France",
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["regional", "commuter"],
+    "parentCompany": "SNCF Voyageurs",
+    "links": [
+      {
+        "label": "Official Site",
+        "url": "https://www.ter.sncf.com/auvergne-rhone-alpes",
+        "type": "website"
+      },
+      {
+        "label": "Wikipedia",
+        "url": "https://fr.wikipedia.org/wiki/TER_Auvergne-Rh%C3%B4ne-Alpes",
+        "type": "wikipedia"
+      }
+    ]
+  },
+  {
+    "slug": "ter-na",
+    "name": "TER Nouvelle-Aquitaine",
+    "logoPath": "fr/ter-na",
+    "countries": ["fr"],
+    "operatorTypes": ["passenger"],
+    "bounds": [-1.8, 42.7, 2.6, 47.2],
+    "description": "TER Nouvelle-Aquitaine is the regional rail brand for Nouvelle-Aquitaine, France's largest region by area. Operated by SNCF Voyageurs for the regional council, it connects Bordeaux, Limoges, Poitiers, and Pau across the Atlantic coast, the Pyrenees, and the rural interior.",
+    "website": "https://www.ter.sncf.com/nouvelle-aquitaine",
+    "founded": 2016,
+    "headquarters": "Bordeaux, France",
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["regional", "commuter"],
+    "parentCompany": "SNCF Voyageurs",
+    "links": [
+      {
+        "label": "Official Site",
+        "url": "https://www.ter.sncf.com/nouvelle-aquitaine",
+        "type": "website"
+      },
+      {
+        "label": "Wikipedia",
+        "url": "https://fr.wikipedia.org/wiki/TER_Nouvelle-Aquitaine",
+        "type": "wikipedia"
+      }
+    ]
+  },
+  {
+    "slug": "zou",
+    "name": "ZOU !",
+    "logoPath": "fr/zou",
+    "countries": ["fr"],
+    "operatorTypes": ["passenger"],
+    "bounds": [4.2, 43, 7.7, 45.1],
+    "description": "ZOU ! is the regional transport brand for the Provence-Alpes-Côte d'Azur region in south-eastern France. Its TER rail services, operated by SNCF Voyageurs for the regional council, link Marseille, Nice, Toulon, and Avignon along the Mediterranean coast and into the southern Alps.",
+    "website": "https://zou.maregionsud.fr",
+    "founded": 2017,
+    "headquarters": "Marseille, France",
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["regional", "commuter"],
+    "parentCompany": "SNCF Voyageurs",
+    "links": [
+      {
+        "label": "Official Site",
+        "url": "https://zou.maregionsud.fr",
+        "type": "website"
+      },
+      {
+        "label": "Wikipedia",
+        "url": "https://fr.wikipedia.org/wiki/Transport_express_r%C3%A9gional_Provence-Alpes-C%C3%B4te_d%27Azur",
+        "type": "wikipedia"
+      }
+    ]
+  },
+  {
+    "slug": "transilien",
+    "name": "Transilien",
+    "logoPath": "fr/transilien",
+    "countries": ["fr"],
+    "operatorTypes": ["passenger"],
+    "bounds": [1.4, 48.1, 3.6, 49.3],
+    "description": "Transilien is SNCF Voyageurs' suburban rail network for the Île-de-France region around Paris. Operating lines H, J, K, L, N, P, R, and U alongside the SNCF-run portions of the RER, it forms one of Europe's busiest commuter systems under the authority of Île-de-France Mobilités.",
+    "website": "https://www.transilien.com",
+    "founded": 1999,
+    "headquarters": "Paris, France",
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["commuter", "regional"],
+    "parentCompany": "SNCF Voyageurs",
+    "links": [
+      {
+        "label": "Official Site",
+        "url": "https://www.transilien.com",
+        "type": "website"
+      },
+      {
+        "label": "Wikipedia",
+        "url": "https://en.wikipedia.org/wiki/Transilien",
+        "type": "wikipedia"
+      }
+    ]
+  },
+  {
+    "slug": "rer",
+    "name": "RER",
+    "logoPath": "fr/rer",
+    "countries": ["fr"],
+    "operatorTypes": ["passenger"],
+    "bounds": [1.4, 48.1, 3.6, 49.3],
+    "description": "The RER (Réseau Express Régional) is the high-capacity express rail network serving Paris and the Île-de-France region. Its five lines (A–E) combine metro-style frequencies in the city centre with suburban reach, jointly operated by SNCF and RATP under Île-de-France Mobilités.",
+    "website": "https://www.transilien.com",
+    "founded": 1977,
+    "headquarters": "Paris, France",
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["commuter", "regional"],
+    "parentCompany": "SNCF Voyageurs / RATP",
+    "links": [
+      {
+        "label": "Official Site",
+        "url": "https://www.transilien.com",
+        "type": "website"
+      },
+      {
+        "label": "Wikipedia",
+        "url": "https://en.wikipedia.org/wiki/R%C3%A9seau_Express_R%C3%A9gional",
+        "type": "wikipedia"
+      }
+    ]
+  },
+  {
+    "slug": "leman-express",
+    "name": "Léman Express",
+    "logoPath": "fr/leman",
+    "countries": ["fr", "ch"],
+    "operatorTypes": ["passenger"],
+    "bounds": [5.8, 45.9, 6.9, 46.6],
+    "description": "Léman Express (LEX) is the cross-border regional rail network centred on Geneva, linking the Swiss canton with neighbouring France since its 2019 launch. Operated by the SNCF–SBB joint venture Lémanis, it is the largest cross-border regional network in Europe, built around the Cornavin–Eaux-Vives–Annemasse (CEVA) line.",
+    "website": "https://www.lemanexpress.ch",
+    "founded": 2019,
+    "headquarters": "Geneva, Switzerland",
+    "networkKm": 230,
+    "annualPassengers": null,
+    "serviceTypes": ["regional", "commuter", "international"],
+    "parentCompany": "Lémanis (SNCF / SBB CFF FFS)",
+    "links": [
+      {
+        "label": "Official Site",
+        "url": "https://www.lemanexpress.ch",
+        "type": "website"
+      },
+      {
+        "label": "Wikipedia",
+        "url": "https://en.wikipedia.org/wiki/L%C3%A9man_Express",
+        "type": "wikipedia"
+      }
+    ]
+  },
+  {
+    "slug": "tgv-lyria",
+    "name": "TGV Lyria",
+    "logoPath": "fr/lyria",
+    "countries": ["fr", "ch"],
+    "operatorTypes": ["passenger"],
+    "bounds": [1.4, 45.9, 8.6, 49.3],
+    "description": "TGV Lyria is the high-speed brand for rail travel between France and Switzerland, operated by the SNCF–SBB joint venture Lyria. Running Euroduplex trainsets at up to 320 km/h, it links Paris with Geneva, Lausanne, Basel, Zurich, and the Swiss Alps.",
+    "website": "https://www.tgv-lyria.com",
+    "founded": 1981,
+    "headquarters": "Paris, France",
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["high-speed", "international"],
+    "parentCompany": "Lyria SAS (SNCF / SBB CFF FFS)",
+    "links": [
+      {
+        "label": "Official Site",
+        "url": "https://www.tgv-lyria.com",
+        "type": "website"
+      },
+      {
+        "label": "Wikipedia",
+        "url": "https://en.wikipedia.org/wiki/Lyria",
         "type": "wikipedia"
       }
     ]
@@ -875,7 +1183,7 @@
     "slug": "eurostar",
     "name": "Eurostar",
     "logoPath": "eurostar",
-    "countries": ["international", "uk", "be", "nl"],
+    "countries": ["international", "fr", "uk", "be", "nl"],
     "operatorTypes": ["passenger"],
     "bounds": [-0.5, 48.8, 7, 52.4],
     "description": "Eurostar operates high-speed international rail services connecting the UK with mainland Europe via the Channel Tunnel. Following its merger with Thalys, the unified Eurostar brand now also manages the premier high-speed network linking Paris, Brussels, Amsterdam, and Cologne, creating a unified Western European high-speed giant.",
@@ -2418,7 +2726,7 @@
     "slug": "transdev",
     "name": "Transdev",
     "logoPath": "transdev",
-    "countries": ["international", "se", "dk", "de", "nl", "ie"],
+    "countries": ["international", "fr", "se", "dk", "de", "nl", "ie"],
     "operatorTypes": ["passenger"],
     "bounds": [11, 55.3, 24.2, 69.1],
     "description": "Transdev is a global public transport operator headquartered in France, running rail, bus, tram, and ferry services across 17+ countries. In Sweden, Transdev operates regional rail services and the Snälltåget long-distance brand through its subsidiary Transdev Sverige AB.",
