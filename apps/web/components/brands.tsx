@@ -36,7 +36,7 @@ const brandPaths: Record<string, string> = {
   sncf: "fr/sncf",
   "tgv inoui": "fr/inoui",
   ouigo: "fr/ouigo",
-  lex: "fr/lemane",
+  lex: "fr/leman",
   rer: "fr/rer",
   transilien: "fr/transilien",
   ter: "fr/ter",

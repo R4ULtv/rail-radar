@@ -1050,7 +1050,7 @@
   {
     "slug": "leman-express",
     "name": "Léman Express",
-    "logoPath": "fr/lemane",
+    "logoPath": "fr/leman",
     "countries": ["fr", "ch"],
     "operatorTypes": ["passenger"],
     "bounds": [5.8, 45.9, 6.9, 46.6],
