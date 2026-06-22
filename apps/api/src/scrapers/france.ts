@@ -38,6 +38,7 @@ interface DisplayInformations {
   headsign: string | null;
   code: string | null;
   trip_short_name: string | null;
+  links?: NavitiaLink[];
 }
 
 // Short category labels for trains with no line code (long-distance services).
@@ -246,7 +247,7 @@ export async function scrapeFranceTrains(
       ? passage.stop_date_time.arrival_date_time
       : passage.stop_date_time.departure_date_time;
 
-    const linked = (passage.links ?? [])
+    const linked = [...(passage.links ?? []), ...(info.links ?? [])]
       .filter((link) => link.type === "disruption")
       .map((link) => disruptionsById.get(link.id))
       .filter((d): d is Disruption => Boolean(d));
