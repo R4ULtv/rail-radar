@@ -173,6 +173,9 @@ export async function getTrendingStations(
   if (country && !COUNTRY_CODES.includes(country)) {
     throw new Error("Invalid country code");
   }
+  // SECURITY: `country` is validated against COUNTRY_CODES above. Do NOT
+  // interpolate any value here that has not been checked against a fixed
+  // allowlist/pattern — the Analytics Engine SQL API has no parameterization.
   const countryFilter = country ? `AND blob5 = '${country}'` : "";
   const orderColumn = sortBy === "uniqueVisitors" ? "uniqueVisitors" : "count";
   const query = `
@@ -238,6 +241,9 @@ export async function getStationStats(
 
   // Extract numeric part to match old format data too
   const numericId = stationId.replace(/^[A-Z]+/, "");
+  // SECURITY: `stationId` is validated against STATION_ID_PATTERN above. Do NOT
+  // interpolate any value here that has not been checked against a fixed
+  // allowlist/pattern — the Analytics Engine SQL API has no parameterization.
   const stationQuery = `
     SELECT
       '${stationId}' as stationId,
