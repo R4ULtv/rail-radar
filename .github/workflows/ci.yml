@@ -39,3 +39,6 @@ jobs:
 
       - name: Run type checking
         run: pnpm check-types --affected
+
+      - name: Run build
+        run: pnpm build --affected
