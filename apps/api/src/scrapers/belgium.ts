@@ -47,6 +47,11 @@ interface LiveboardResponse {
   arrivals?: { arrival: LiveboardEntry[] };
 }
 
+function parseEpochSeconds(value: string | undefined): number | null {
+  const n = parseInt(value ?? "", 10);
+  return Number.isNaN(n) ? null : n;
+}
+
 function getBrand(type: string): string {
   switch (type) {
     case "EUR":
@@ -70,9 +75,9 @@ function getBelgiumStatus(
   if (type === "arrivals" && entry.arrived === "1") return "incoming";
 
   // Check if train is within 5-minute window
-  const scheduledTime = parseInt(entry.time, 10) * 1000;
-  const delay = parseInt(entry.delay, 10) * 1000;
-  const actualTime = scheduledTime + delay;
+  const seconds = parseEpochSeconds(entry.time);
+  if (seconds === null) return null;
+  const actualTime = (seconds + (parseEpochSeconds(entry.delay) ?? 0)) * 1000;
   const now = Date.now();
   const fiveMinutes = 5 * 60 * 1000;
 
@@ -107,22 +112,25 @@ export async function scrapeBelgiumTrains(
     if (entry.canceled === "1") return true;
     if (type === "departures" && entry.left === "1") return true;
     if (type === "arrivals" && entry.arrived === "1") return true;
-    const actualTime = parseInt(entry.time, 10) * 1000 + parseInt(entry.delay || "0", 10) * 1000;
+    const seconds = parseEpochSeconds(entry.time);
+    if (seconds === null) return false;
+    const actualTime = (seconds + (parseEpochSeconds(entry.delay) ?? 0)) * 1000;
     return actualTime >= now - recentWindow;
   });
 
   const trains: Train[] = filtered.map((entry) => {
-    const delaySeconds = parseInt(entry.delay, 10);
+    const delaySeconds = parseEpochSeconds(entry.delay) ?? 0;
     const delayMinutes = Math.round(delaySeconds / 60);
+
+    const scheduledSeconds = parseEpochSeconds(entry.time);
+    const scheduledIso =
+      scheduledSeconds === null ? null : new Date(scheduledSeconds * 1000).toISOString();
 
     const train: Train = {
       brand: getBrand(entry.vehicleinfo.type),
       category: entry.vehicleinfo.type || null,
       trainNumber: entry.vehicleinfo.number,
-      scheduledTime: formatTime(
-        new Date(parseInt(entry.time, 10) * 1000).toISOString(),
-        "Europe/Brussels",
-      ),
+      scheduledTime: formatTime(scheduledIso, "Europe/Brussels"),
       delay: delayMinutes || null,
       platform: entry.platforminfo?.name || entry.platform || null,
       status: getBelgiumStatus(entry, type),

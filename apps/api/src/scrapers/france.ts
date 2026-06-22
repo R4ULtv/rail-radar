@@ -38,6 +38,7 @@ interface DisplayInformations {
   headsign: string | null;
   code: string | null;
   trip_short_name: string | null;
+  links?: NavitiaLink[];
 }
 
 // Short category labels for trains with no line code (long-distance services).
@@ -246,7 +247,7 @@ export async function scrapeFranceTrains(
       ? passage.stop_date_time.arrival_date_time
       : passage.stop_date_time.departure_date_time;
 
-    const linked = (passage.links ?? [])
+    const linked = [...(passage.links ?? []), ...(info.links ?? [])]
       .filter((link) => link.type === "disruption")
       .map((link) => disruptionsById.get(link.id))
       .filter((d): d is Disruption => Boolean(d));
@@ -269,9 +270,10 @@ export async function scrapeFranceTrains(
     };
 
     if (arrivals) {
-      // Navitia exposes the vehicle's terminus as `direction`; true origin would
-      // require a per-trip lookup, so we surface the line direction here.
-      train.origin = cleanPlace(info.direction);
+      // Navitia's `display_informations.direction` is the vehicle's terminus,
+      // not the true origin. The route name ("Paris Est - Strasbourg") is a
+      // line-pair, not trip-direction, so it's also unreliable. Leave origin
+      // unset rather than show a false origin.
     } else {
       train.destination = cleanPlace(info.direction);
     }

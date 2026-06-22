@@ -1,4 +1,5 @@
 import { cors } from "hono/cors";
+import { secureHeaders } from "hono/secure-headers";
 import { factory } from "./lib/env";
 import { jsonError } from "./lib/http";
 import { analyticsRoutes } from "./routes/analytics";
@@ -16,7 +17,6 @@ export function createApp() {
       path: c.req.path,
       method: c.req.method,
       message: err.message,
-      stack: err.stack,
     });
 
     return jsonError(c, "Internal server error", 500);
@@ -26,6 +26,7 @@ export function createApp() {
     return jsonError(c, "Not found", 404);
   });
 
+  app.use("*", secureHeaders());
   app.use(
     "*",
     cors({
