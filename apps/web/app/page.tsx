@@ -34,12 +34,8 @@ export default function Home() {
           __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c"),
         }}
       />
-      <link
-        rel="preload"
-        href={process.env.NEXT_PUBLIC_API_URL + "/stations.geojson"}
-        as="fetch"
-        crossOrigin="anonymous"
-      />
+      <link rel="preconnect" href={process.env.NEXT_PUBLIC_API_URL} crossOrigin="anonymous" />
+      <link rel="dns-prefetch" href={process.env.NEXT_PUBLIC_API_URL} />
       <h1 className="sr-only">
         Rail Radar - Live Train Tracker for Italy, Switzerland, Germany, Finland, Belgium, Denmark,
         the Netherlands, Norway, Sweden, Poland, the UK, and Ireland
@@ -101,6 +97,10 @@ export default function Home() {
             {" · "}
             <Link href="/terms-of-service" className="hover:underline">
               Terms
+            </Link>
+            {" · "}
+            <Link href="/donate" className="hover:underline">
+              Donate
             </Link>
             {" · "}
             <a href="mailto:contact@railradar24.com" className="hover:underline">
