@@ -3,7 +3,7 @@
 import "mapbox-gl/dist/mapbox-gl.css";
 import dynamic from "next/dynamic";
 import { parseAsFloat, useQueryStates } from "nuqs";
-import { startTransition, useCallback, useEffect, useReducer, useRef } from "react";
+import { startTransition, useCallback, useEffect, useReducer, useRef, useState } from "react";
 import type { Map as MapboxMap } from "mapbox-gl";
 import type { MapEvent, ViewStateChangeEvent } from "react-map-gl/mapbox";
 
@@ -16,7 +16,7 @@ import { StationMarkers } from "@/components/station-markers";
 import { SelectedStationProvider } from "@/hooks/use-selected-station";
 
 const MapGL = dynamic(() => import("react-map-gl/mapbox").then((mod) => mod.Map), {
-  ssr: false,
+  ssr: true,
   loading: () => <MapLoading />,
 });
 
@@ -107,6 +107,7 @@ export function Map() {
   const mapRef = useRef<MapboxMap | null>(null);
   const hasUserInteractedRef = useRef(false);
   const pendingAutoLocationRef = useRef<InitialPosition | null>(null);
+  const [isMapLoaded, setIsMapLoaded] = useState(false);
 
   useEffect(() => {
     if (hasUrlParams || !navigator.geolocation) return;
@@ -183,6 +184,7 @@ export function Map() {
 
   const handleMapLoad = useCallback((event: MapEvent) => {
     mapRef.current = event.target;
+    setIsMapLoaded(true);
     const pendingAutoLocation = pendingAutoLocationRef.current;
 
     if (pendingAutoLocation && !hasUserInteractedRef.current) {
@@ -203,37 +205,47 @@ export function Map() {
   }, []);
 
   return (
-    <MapGL
-      initialViewState={{
-        ...initialPosition,
-        bearing: 0,
-        pitch: 0,
-      }}
-      onMoveEnd={handleMoveEnd}
-      attributionControl={false}
-      style={{
-        width: "100%",
-        height: "100%",
-      }}
-      onLoad={handleMapLoad}
-      mapboxAccessToken={process.env.NEXT_PUBLIC_MAPBOX_TOKEN}
-      mapStyle="mapbox://styles/mapbox/dark-v11?optimize=true"
-      projection="mercator"
-      maxPitch={0}
-      minZoom={3}
-      maxZoom={18}
-      performanceMetricsCollection={false}
-      reuseMaps
-      onDragStart={handleUserInteraction}
-      onZoomStart={handleUserInteraction}
-    >
-      <SelectedStationProvider>
-        <StationMarkers />
-        <Search />
-        <AnnouncementBanner />
-        <MapControls userLocation={userLocation} onUserLocationChange={handleUserLocationChange} />
-        <StationInfo />
-      </SelectedStationProvider>
-    </MapGL>
+    <div style={{ position: "relative", width: "100%", height: "100%" }}>
+      {!isMapLoaded && (
+        <div className="bg-background absolute inset-0 z-10">
+          <MapLoading />
+        </div>
+      )}
+      <MapGL
+        initialViewState={{
+          ...initialPosition,
+          bearing: 0,
+          pitch: 0,
+        }}
+        onMoveEnd={handleMoveEnd}
+        attributionControl={false}
+        style={{
+          width: "100%",
+          height: "100%",
+        }}
+        onLoad={handleMapLoad}
+        mapboxAccessToken={process.env.NEXT_PUBLIC_MAPBOX_TOKEN}
+        mapStyle="mapbox://styles/mapbox/dark-v11?optimize=true"
+        projection="mercator"
+        maxPitch={0}
+        minZoom={3}
+        maxZoom={18}
+        performanceMetricsCollection={false}
+        reuseMaps
+        onDragStart={handleUserInteraction}
+        onZoomStart={handleUserInteraction}
+      >
+        <SelectedStationProvider>
+          <StationMarkers />
+          <Search />
+          <AnnouncementBanner />
+          <MapControls
+            userLocation={userLocation}
+            onUserLocationChange={handleUserLocationChange}
+          />
+          <StationInfo />
+        </SelectedStationProvider>
+      </MapGL>
+    </div>
   );
 }
