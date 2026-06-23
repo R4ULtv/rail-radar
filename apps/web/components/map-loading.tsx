@@ -32,7 +32,7 @@ export default function MapLoading() {
       <span className="relative inline-flex items-center justify-center">
         <span
           aria-hidden="true"
-          className="text-accent font-mono text-3xl leading-none tabular-nums"
+          className="text-accent font-mono text-3xl md:text-2xl leading-none tabular-nums"
         >
           {FRAMES[frame]}
         </span>
