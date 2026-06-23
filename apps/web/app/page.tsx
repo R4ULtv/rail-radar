@@ -99,6 +99,10 @@ export default function Home() {
               Terms
             </Link>
             {" · "}
+            <Link href="/donate" className="hover:underline">
+              Donate
+            </Link>
+            {" · "}
             <a href="mailto:contact@railradar24.com" className="hover:underline">
               Contact
             </a>
