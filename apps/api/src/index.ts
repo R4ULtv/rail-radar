@@ -26,7 +26,7 @@ export function createApp() {
     return jsonError(c, "Not found", 404);
   });
 
-  app.use("*", secureHeaders());
+  app.use("*", secureHeaders({ crossOriginResourcePolicy: "cross-origin" }));
   app.use(
     "*",
     cors({
