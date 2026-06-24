@@ -13,7 +13,7 @@ import {
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
-import { PolishStationWarning } from "@/components/polish-station-warning";
+import { hasStationWarning, StationWarning } from "@/components/station-warning";
 import { SaveButton } from "@/components/save-button";
 import { TrainRow, TrainRowSkeleton } from "@/components/train-row";
 import { UpdatedStatus } from "@/components/updated-status";
@@ -81,12 +81,14 @@ function TrainListContent({
   error,
   type,
   scrollable = false,
+  hasWarning = false,
 }: {
   trainData: Train[] | null;
   isLoading: boolean;
   error: string | null;
   type: "arrivals" | "departures";
   scrollable?: boolean;
+  hasWarning?: boolean;
 }) {
   if (isLoading) {
     return (
@@ -118,7 +120,9 @@ function TrainListContent({
 
   if (scrollable) {
     return (
-      <ScrollArea className="max-h-[calc(100vh-156px)]">
+      <ScrollArea
+        className={cn("max-h-[calc(100vh-156px)]", hasWarning && "max-h-[calc(100vh-208px)]")}
+      >
         {trainList}
         {REPORT_LINKS}
       </ScrollArea>
@@ -192,7 +196,6 @@ export default function StationInfo() {
     lastUpdated,
     info,
   } = useTrainData(selectedStation?.id ?? null, type, isOpen);
-  const showPolishStationWarning = selectedStation?.id.startsWith("PL") ?? false;
 
   // Desktop view
   if (!isMobile) {
@@ -251,7 +254,9 @@ export default function StationInfo() {
                         lastUpdated={lastUpdated}
                       />
                     </CardDescription>
-                    {showPolishStationWarning && <PolishStationWarning className="col-span-2" />}
+                    {selectedStation && (
+                      <StationWarning stationId={selectedStation.id} className="col-span-2" />
+                    )}
                     <StationTabs type={type} onTypeChange={setType} />
                   </CardHeader>
                   <CardContent className="flex-1 px-0">
@@ -261,6 +266,7 @@ export default function StationInfo() {
                       error={error}
                       type={type}
                       scrollable
+                      hasWarning={selectedStation != null && hasStationWarning(selectedStation.id)}
                     />
                   </CardContent>
                 </Card>
@@ -315,7 +321,9 @@ export default function StationInfo() {
               <span className="font-normal">{info}</span>
             </div>
           )}
-          {showPolishStationWarning && <PolishStationWarning className="col-span-2" />}
+          {selectedStation && (
+            <StationWarning stationId={selectedStation.id} className="col-span-2" />
+          )}
           <StationTabs type={type} onTypeChange={setType} />
           <div className="absolute top-3.5 right-4 flex gap-1">
             {selectedStation && <SaveButton station={selectedStation} />}

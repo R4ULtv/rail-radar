@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Suspense } from "react";
+import { preconnect } from "react-dom";
 
 import { Map } from "@/components/map";
 import MapLoading from "@/components/map-loading";
@@ -26,6 +27,8 @@ const jsonLd = {
 };
 
 export default function Home() {
+  preconnect("https://api.mapbox.com", { crossOrigin: "anonymous" });
+
   return (
     <main className="h-svh w-svw">
       <script
@@ -34,8 +37,6 @@ export default function Home() {
           __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c"),
         }}
       />
-      <link rel="preconnect" href={process.env.NEXT_PUBLIC_API_URL} crossOrigin="anonymous" />
-      <link rel="dns-prefetch" href={process.env.NEXT_PUBLIC_API_URL} />
       <h1 className="sr-only">
         Rail Radar - Live Train Tracker for Italy, Switzerland, Germany, Finland, Belgium, Denmark,
         the Netherlands, Norway, Sweden, Poland, the UK, and Ireland

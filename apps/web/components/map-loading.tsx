@@ -6,11 +6,16 @@ const CELLS = 5;
 const FILLED = "▰";
 const EMPTY = "▱";
 
-// Fill left-to-right from empty, then drain — a continuous wave loop.
+// Fill left-to-right from empty until full, then empty left-to-right —
+// a continuous wave that always travels in the same direction.
 const FRAMES = Array.from({ length: CELLS * 2 }, (_, step) => {
-  const filling = step <= CELLS;
-  const count = filling ? step : CELLS * 2 - step;
-  return FILLED.repeat(count) + EMPTY.repeat(CELLS - count);
+  if (step <= CELLS) {
+    // Filling: add a cell on the right edge each step.
+    return FILLED.repeat(step) + EMPTY.repeat(CELLS - step);
+  }
+  // Draining: clear a cell from the left edge each step.
+  const empty = step - CELLS;
+  return EMPTY.repeat(empty) + FILLED.repeat(CELLS - empty);
 });
 
 export default function MapLoading() {
@@ -32,7 +37,7 @@ export default function MapLoading() {
       <span className="relative inline-flex items-center justify-center">
         <span
           aria-hidden="true"
-          className="text-accent font-mono text-3xl leading-none tabular-nums"
+          className="text-accent font-mono text-3xl md:text-2xl leading-none tracking-tighter tabular-nums"
         >
           {FRAMES[frame]}
         </span>
