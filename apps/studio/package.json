@@ -19,7 +19,7 @@
   "devDependencies": {
     "@fontsource-variable/geist": "^5.2.9",
     "@internationalized/date": "^3.12.2",
-    "@lucide/svelte": "^1.21.0",
+    "@lucide/svelte": "^1.22.0",
     "@repo/data": "workspace:*",
     "@repo/typescript-config": "workspace:*",
     "@sveltejs/adapter-cloudflare": "^7.2.9",
