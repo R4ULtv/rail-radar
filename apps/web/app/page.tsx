@@ -104,6 +104,10 @@ export default function Home() {
               Donate
             </Link>
             {" · "}
+            <Link href="/stations/" className="hover:underline">
+              Stations
+            </Link>
+            {" · "}
             <a href="mailto:contact@railradar24.com" className="hover:underline">
               Contact
             </a>
