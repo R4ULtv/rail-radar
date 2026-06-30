@@ -1,6 +1,7 @@
 import { MetadataRoute } from "next";
-import { stations } from "@repo/data/stations";
+import { stations, stationsByCountry } from "@repo/data/stations";
 import { operators } from "@repo/data/operators";
+import { COUNTRY_CODES, COUNTRY_SLUG } from "@repo/data/countries";
 import baseUrl from "@/lib/base-url";
 
 function absoluteUrl(pathname: string): string {
@@ -30,6 +31,15 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.6,
   }));
 
+  const countryRoutes: MetadataRoute.Sitemap = COUNTRY_CODES.filter(
+    (code) => (stationsByCountry.get(code)?.length ?? 0) > 0,
+  ).map((code) => ({
+    url: absoluteUrl(`/stations/${COUNTRY_SLUG[code]}`),
+    lastModified: new Date(),
+    changeFrequency: "monthly" as const,
+    priority: 0.6,
+  }));
+
   return [
     {
       url: absoluteUrl("/"),
@@ -44,6 +54,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.6,
     },
     {
+      url: absoluteUrl("/stations"),
+      lastModified: new Date(),
+      changeFrequency: "monthly",
+      priority: 0.7,
+    },
+    {
       url: absoluteUrl("/donate"),
       lastModified: new Date(),
       changeFrequency: "monthly",
@@ -55,6 +71,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "yearly",
       priority: 0.4,
     },
+    ...countryRoutes,
     ...stationRoutes,
     ...operatorRoutes,
   ];
