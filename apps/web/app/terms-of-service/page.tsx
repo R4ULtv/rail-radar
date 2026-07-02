@@ -229,10 +229,9 @@ export default function TermsOfServicePage() {
           <h2 className="mb-3 text-xl font-semibold text-foreground">6. Third-Party Services</h2>
           <p>
             The Service relies on third-party services including Mapbox for map rendering,
-            Cloudflare for API hosting, security, and rate limiting, Vercel Web Analytics and Speed
-            Insights for website analytics and performance monitoring, and various public transit
-            data providers. Your use of these services is subject to their respective terms and
-            privacy policies.
+            Cloudflare for API hosting, security, and rate limiting, PostHog for website analytics
+            and performance monitoring, and various public transit data providers. Your use of these
+            services is subject to their respective terms and privacy policies.
           </p>
         </section>
 
