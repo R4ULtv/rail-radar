@@ -19,7 +19,7 @@ export default function PrivacyPolicyPage() {
         Back to Rail Radar
       </Link>
       <h1 className="mb-8 text-3xl font-semibold">Privacy Policy</h1>
-      <p className="mb-4 text-sm text-muted-foreground">Last updated: April 22, 2026</p>
+      <p className="mb-4 text-sm text-muted-foreground">Last updated: July 2, 2026</p>
 
       <div className="space-y-8 leading-relaxed text-muted-foreground">
         <section>
@@ -91,9 +91,11 @@ export default function PrivacyPolicyPage() {
           <p className="mb-3">We use the following third-party services:</p>
           <ul className="ml-6 list-disc space-y-2">
             <li>
-              <strong className="text-foreground">Vercel Web Analytics and Speed Insights</strong>{" "}
-              &mdash; for website analytics and Web Vitals performance monitoring using anonymized,
-              cookieless data points that are not tied to individual visitors
+              <strong className="text-foreground">PostHog (EU)</strong> &mdash; for website
+              analytics and Web Vitals performance monitoring using anonymized, cookieless data
+              points that are not tied to individual visitors. Data is processed and stored on
+              PostHog&apos;s EU infrastructure and is routed through our own domain
+              (t.railradar24.com)
             </li>
             <li>
               <strong className="text-foreground">Mapbox</strong> &mdash; for interactive map
@@ -119,10 +121,11 @@ export default function PrivacyPolicyPage() {
         <section>
           <h2 className="mb-3 text-xl font-semibold text-foreground">5. Cookies</h2>
           <p>
-            We do not use our own cookies for tracking purposes. Vercel Web Analytics and Speed
-            Insights are configured without cookies. Some third-party services integrated into our
-            Service, particularly infrastructure or map providers, may use cookies or similar
-            technologies as described in their own privacy policies.
+            We do not use our own cookies for tracking purposes. PostHog is configured in a
+            cookieless, anonymous mode (in-memory session storage, with no visitor identification).
+            Some third-party services integrated into our Service, particularly infrastructure or
+            map providers, may use cookies or similar technologies as described in their own privacy
+            policies.
           </p>
         </section>
 

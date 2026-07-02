@@ -1,12 +1,15 @@
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import Link from "next/link";
+import Image from "next/image";
 import { stations, stationById } from "@repo/data/stations";
-import { getCountry } from "@repo/data/countries";
+import { getCountry, getCountrySlug } from "@repo/data/countries";
 import type { Station } from "@repo/data";
 import { Button } from "@repo/ui/components/button";
-import { ArrowLeftIcon } from "lucide-react";
+import { Card, CardContent } from "@repo/ui/components/card";
+import { ArrowLeftIcon, ArrowRightIcon } from "lucide-react";
 import { StaticMap } from "@/components/static-map";
+import { staticAssetUrl } from "@/lib/static-assets";
 import { StationHeader } from "@/components/station-page/station-header";
 import { StationActions } from "@/components/station-page/station-actions";
 import { StationStats } from "@/components/station-page/station-stats";
@@ -75,8 +78,10 @@ export default async function StationPage({ params }: StationPageProps) {
     notFound();
   }
 
-  const countryCode = getCountry(station.id)?.toUpperCase();
+  const code = getCountry(station.id);
+  const countryCode = code?.toUpperCase();
   const country = getCountry(station.id, { format: "name" });
+  const countrySlug = code ? getCountrySlug(code) : null;
 
   const jsonLd = {
     "@context": "https://schema.org",
@@ -146,6 +151,40 @@ export default async function StationPage({ params }: StationPageProps) {
       <div className="md:mx-auto md:px-4 md:pb-6 max-w-7xl">
         <TrainBoard stationId={station.id} />
       </div>
+
+      {/* Discover more stations in the same country */}
+      {countrySlug && country && (
+        <div className="mx-auto px-3 md:px-4 pt-6 md:pt-0 pb-6 max-w-7xl">
+          <Link href={`/stations/${countrySlug}`} className="group block">
+            <Card
+              size="sm"
+              className="transition-[background-color,box-shadow,transform] lg:group-hover:bg-muted group-active:scale-[0.99]"
+            >
+              <CardContent className="flex items-center gap-3">
+                {code && (
+                  <Image
+                    unoptimized
+                    src={staticAssetUrl(`/flags/${code}.svg`)}
+                    alt={country}
+                    width={40}
+                    height={40}
+                    className="size-10 shrink-0 rounded-full"
+                  />
+                )}
+                <div className="min-w-0 flex-1">
+                  <div className="text-sm font-medium tracking-tight lg:group-hover:text-foreground">
+                    Discover more stations in {country}
+                  </div>
+                  <div className="mt-0.5 text-xs text-muted-foreground">
+                    Browse every train station across {country}
+                  </div>
+                </div>
+                <ArrowRightIcon className="size-4 shrink-0 text-muted-foreground transition-transform duration-150 ease-out lg:group-hover:translate-x-0.5 lg:group-hover:text-foreground" />
+              </CardContent>
+            </Card>
+          </Link>
+        </div>
+      )}
 
       <div className="sr-only">
         <h2>About {station.name}</h2>
