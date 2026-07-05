@@ -164,7 +164,7 @@ function getDelay(scheduled: string | undefined, realtime: string | undefined): 
   if (!scheduled || !realtime) return null;
   const diff = new Date(realtime).getTime() - new Date(scheduled).getTime();
   const minutes = Math.round(diff / 60000);
-  return minutes || null;
+  return minutes > 0 ? minutes : null;
 }
 
 function getStatus(
