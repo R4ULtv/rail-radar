@@ -1,6 +1,6 @@
 import type { Train } from "@repo/data";
 
-import { type ScrapeResult, formatTime } from "./index";
+import { type ScrapeResult, formatTime } from "./core";
 import { fetchWithTimeout } from "./fetch";
 
 const DB_BOARD_URL = "https://app.services-bahn.de/mob/bahnhofstafel";

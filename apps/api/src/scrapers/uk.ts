@@ -1,6 +1,6 @@
 import type { Train } from "@repo/data";
 
-import { ScraperError, type ScrapeResult } from "./index";
+import { ScraperError, type ScrapeResult } from "./core";
 import { fetchWithTimeout } from "./fetch";
 import ukStationCodes from "./codes/uk-codes.json";
 

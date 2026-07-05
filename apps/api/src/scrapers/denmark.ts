@@ -1,7 +1,7 @@
 import type { Train } from "@repo/data";
 
 import { fetchWithTimeout } from "./fetch";
-import { ScraperError, type ScrapeResult } from "./index";
+import { ScraperError, type ScrapeResult } from "./core";
 
 const REJSEPLANEN_BASE_URL = "https://www.rejseplanen.dk/api";
 const DENMARK_TIMEZONE = "Europe/Copenhagen";

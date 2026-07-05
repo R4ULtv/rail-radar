@@ -1,7 +1,7 @@
 import type { ContentfulStatusCode } from "hono/utils/http-status";
 
 import { FETCH_TIMEOUT_MS } from "../constants";
-import { ScraperError } from "./index";
+import { ScraperError } from "./core";
 
 export async function fetchWithTimeout(
   url: string,

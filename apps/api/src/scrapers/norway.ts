@@ -1,6 +1,6 @@
 import type { Train } from "@repo/data";
 
-import { ScraperError, formatTime, type ScrapeResult } from "./index";
+import { ScraperError, formatTime, type ScrapeResult } from "./core";
 import { fetchWithTimeout } from "./fetch";
 
 const ENTUR_GRAPHQL_URL = "https://api.entur.io/journey-planner/v3/graphql";

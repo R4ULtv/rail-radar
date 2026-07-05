@@ -1,6 +1,6 @@
 import type { Train } from "@repo/data";
 
-import type { ScrapeResult } from "./index";
+import type { ScrapeResult } from "./core";
 import { fetchWithTimeout } from "./fetch";
 
 const RFI_BASE_URL = "https://iechub.rfi.it/ArriviPartenze/en/ArrivalsDepartures/Monitor";

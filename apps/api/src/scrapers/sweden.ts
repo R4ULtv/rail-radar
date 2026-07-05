@@ -1,6 +1,6 @@
 import type { Train } from "@repo/data";
 
-import { ScraperError, type ScrapeResult } from "./index";
+import { ScraperError, type ScrapeResult } from "./core";
 import { fetchWithTimeout } from "./fetch";
 
 const TRAFIKLAB_BASE_URL = "https://realtime-api.trafiklab.se/v1";

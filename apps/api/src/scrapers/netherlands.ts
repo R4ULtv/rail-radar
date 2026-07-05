@@ -1,6 +1,6 @@
 import type { Train } from "@repo/data";
 
-import { ScraperError, formatTime, type ScrapeResult } from "./index";
+import { ScraperError, formatTime, type ScrapeResult } from "./core";
 import { fetchWithTimeout } from "./fetch";
 
 const NS_BASE_URL = "https://gateway.apiportal.ns.nl/reisinformatie-api/api/v2";

@@ -1,6 +1,6 @@
 import type { Train } from "@repo/data";
 
-import { ScraperError, formatTime, type ScrapeResult } from "./index";
+import { ScraperError, formatTime, type ScrapeResult } from "./core";
 import { fetchWithTimeout } from "./fetch";
 
 const POLAND_BASE_URL = "https://pdp-api.plk-sa.pl/api/v1";

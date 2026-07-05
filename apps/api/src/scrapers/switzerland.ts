@@ -1,6 +1,6 @@
 import type { Train } from "@repo/data";
 
-import { type ScrapeResult, formatTime } from "./index";
+import { type ScrapeResult, formatTime } from "./core";
 import { fetchWithTimeout } from "./fetch";
 
 const SWISS_BASE_URL = "https://transport.opendata.ch/v1/stationboard";

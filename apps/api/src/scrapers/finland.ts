@@ -2,7 +2,7 @@ import { stationById } from "@repo/data/stations";
 import type { Train } from "@repo/data";
 import fiStationCodes from "./codes/fi-codes.json";
 
-import { ScraperError, type ScrapeResult, formatTime } from "./index";
+import { ScraperError, type ScrapeResult, formatTime } from "./core";
 import { fetchWithTimeout } from "./fetch";
 
 const DIGITRAFFIC_BASE_URL = "https://rata.digitraffic.fi/api/v1";

@@ -1,6 +1,6 @@
 import type { Train } from "@repo/data";
 
-import { type ScrapeResult, formatTime } from "./index";
+import { type ScrapeResult, formatTime } from "./core";
 import { fetchWithTimeout } from "./fetch";
 
 const IRAIL_BASE_URL = "https://api.irail.be/v1/liveboard/";

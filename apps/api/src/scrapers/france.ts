@@ -1,6 +1,6 @@
 import type { Train } from "@repo/data";
 
-import { ScraperError, type ScrapeResult } from "./index";
+import { ScraperError, type ScrapeResult } from "./core";
 import { fetchWithTimeout } from "./fetch";
 
 const SNCF_BASE_URL = "https://api.navitia.io/v1/coverage/sncf";

@@ -1,6 +1,6 @@
-import type { ContentfulStatusCode } from "hono/utils/http-status";
 import { getCountry, type CountryCode } from "@repo/data/countries";
-import type { Train } from "@repo/data";
+
+import type { ScrapeResult } from "./core";
 
 import { scrapeBelgiumTrains } from "./belgium";
 import { scrapeFinlandTrains } from "./finland";
@@ -16,36 +16,7 @@ import { scrapeDenmarkTrains } from "./denmark";
 import { scrapePolandTrains } from "./poland";
 import { scrapeFranceTrains } from "./france";
 
-export interface ScraperTiming {
-  fetchMs: number;
-}
-
-export class ScraperError extends Error {
-  constructor(
-    message: string,
-    public statusCode: ContentfulStatusCode,
-    public timing?: ScraperTiming,
-  ) {
-    super(message);
-    this.name = "ScraperError";
-  }
-}
-
-export interface ScrapeResult {
-  trains: Train[];
-  info: string | null;
-  timing: ScraperTiming;
-}
-
-export function formatTime(isoString: string | null, timeZone: string): string {
-  if (!isoString) return "--:--";
-  return new Date(isoString).toLocaleTimeString("en-US", {
-    hour: "2-digit",
-    minute: "2-digit",
-    hour12: false,
-    timeZone,
-  });
-}
+export * from "./core";
 
 type ScrapeFn = (
   stationId: string,
