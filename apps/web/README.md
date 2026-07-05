@@ -24,11 +24,14 @@ Next.js frontend for real-time train tracking across Europe with an interactive 
 
 ## Environment Variables
 
-| Variable                   | Description                                            |
-| -------------------------- | ------------------------------------------------------ |
-| `NEXT_PUBLIC_API_URL`      | API endpoint URL (e.g., `https://api.railradar24.com`) |
-| `NEXT_PUBLIC_MAPBOX_TOKEN` | Mapbox public token for map rendering                  |
-| `MAPBOX_SERVER_TOKEN`      | Server-side Mapbox token for generated OG images       |
+| Variable                   | Description                                                                      |
+| -------------------------- | -------------------------------------------------------------------------------- |
+| `NEXT_PUBLIC_API_URL`      | The base endpoint for the backend API (e.g., `https://api.railradar24.com`)      |
+| `NEXT_PUBLIC_MAPBOX_TOKEN` | Public Mapbox access token required to initialize map components and tiles       |
+| `NEXT_PUBLIC_SITE_URL`     | Public site URL used for Open Graph meta tags and canonical URLs                 |
+| `MAPBOX_SERVER_TOKEN`      | Server-side Mapbox token used to render Open Graph map images                    |
+| `NEXT_PUBLIC_STATIC_URL`   | Static site URL used for the static assets                                       |
+| `NEXT_PUBLIC_POSTHOG_KEY`  | PostHog project API key (EU cloud); events are proxied through t.railradar24.com |
 
 ## Development
 
