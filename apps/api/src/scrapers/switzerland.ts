@@ -99,7 +99,7 @@ export async function scrapeSwissTrains(
 
     const train: Train = {
       brand: entry.operator?.split("-")[0] || null,
-      category: `${entry.category}${lineNumber}` || null,
+      category: entry.category ? `${entry.category}${lineNumber}` : null,
       trainNumber: trainNumber,
       scheduledTime,
       delay: stop.delay,
