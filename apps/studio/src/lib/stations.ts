@@ -105,12 +105,10 @@ export function normalizeNewStation(input: {
     throw new Error("Coordinates are required");
   }
 
-  if (id !== undefined && id !== null && id !== "") {
-    if (typeof id !== "string" || !isValidStationId(id)) {
-      throw new Error(
-        "ID must be a 2-3 letter country prefix followed by at least 3 digits (e.g. IT123, ITM042, BE11007)",
-      );
-    }
+  if (typeof id !== "string" || !isValidStationId(id)) {
+    throw new Error(
+      "ID must be a 2-3 letter country prefix followed by at least 3 digits (e.g. IT123, ITM042, BE11007)",
+    );
   }
 
   const stationType = type === "metro" ? "metro" : type === "light" ? "light" : "rail";
@@ -119,7 +117,7 @@ export function normalizeNewStation(input: {
   const coordinates = geo as { lat: number; lng: number };
 
   return {
-    id: typeof id === "string" && id ? id : `IT-R-${Date.now()}`,
+    id,
     name: name.trim(),
     type: stationType,
     importance: stationImportance,
@@ -142,12 +140,12 @@ export function applyStationUpdates(station: Station, updates: StationUpdates): 
     updates.importance === 4
       ? updates.importance
       : station.importance;
-  const updatedGeo = updates.geo
-    ? {
-        lat: roundCoordinate(updates.geo.lat),
-        lng: roundCoordinate(updates.geo.lng),
-      }
-    : station.geo;
+  const updatedGeo =
+    updates.geo === undefined
+      ? station.geo // keep existing
+      : updates.geo === null
+        ? undefined // explicit clear
+        : { lat: roundCoordinate(updates.geo.lat), lng: roundCoordinate(updates.geo.lng) };
 
   return {
     id: station.id,
