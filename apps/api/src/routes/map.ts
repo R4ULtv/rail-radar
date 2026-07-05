@@ -3,6 +3,7 @@ import { cache } from "hono/cache";
 import { CACHE_TTL } from "../constants";
 import { factory } from "../lib/env";
 import { jsonError } from "../lib/http";
+import { rateLimit } from "../middleware/rate-limit";
 
 const MAPBOX_STYLE = "https://api.mapbox.com/styles/v1/mapbox/dark-v11/static";
 const STATION_ICON_URL = encodeURIComponent("https://static.railradar24.com/station-icon.png");
@@ -31,6 +32,7 @@ function mapImageResponse(res: Response) {
 
 export const mapRoutes = factory.createApp().get(
   "/static",
+  rateLimit,
   cache({
     cacheName: "static-map-cache",
     cacheControl: CACHE_TTL.STATIC_MAP,

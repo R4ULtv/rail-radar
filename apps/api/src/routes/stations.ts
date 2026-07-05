@@ -76,6 +76,7 @@ export const stationsRoutes = factory
   )
   .get(
     "/trending",
+    rateLimit,
     cache({
       cacheName: "analytics-cache",
       cacheControl: CACHE_TTL.ANALYTICS,
@@ -99,6 +100,7 @@ export const stationsRoutes = factory
   )
   .get(
     "/trending/:country",
+    rateLimit,
     cache({
       cacheName: "analytics-cache",
       cacheControl: CACHE_TTL.ANALYTICS,
@@ -125,6 +127,7 @@ export const stationsRoutes = factory
   )
   .get(
     "/:id/stats",
+    rateLimit,
     cache({
       cacheName: "analytics-cache",
       cacheControl: CACHE_TTL.ANALYTICS,
