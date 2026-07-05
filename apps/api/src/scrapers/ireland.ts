@@ -95,16 +95,17 @@ export async function scrapeIrelandTrains(
   const { response, fetchMs } = await fetchWithTimeout(url, "Irish");
 
   const xml = await response.text();
+
+  if (!xml.includes("ArrayOfObjStationData")) {
+    throw new ScraperError("Invalid response from Irish Rail API.", 502);
+  }
+
   const blocks = xml.match(/<objStationData>([\s\S]*?)<\/objStationData>/gi) ?? [];
 
   const trains: Train[] = [];
   for (const block of blocks) {
     const train = parseRecord(block, type);
     if (train) trains.push(train);
-  }
-
-  if (trains.length === 0 && response.status !== 200) {
-    throw new ScraperError("Invalid response from Irish Rail API.", 502);
   }
 
   // Sort by scheduled time, deduplicate by train number, and limit to 16
