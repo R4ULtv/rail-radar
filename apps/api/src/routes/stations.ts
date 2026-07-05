@@ -66,9 +66,14 @@ async function createTrendingResponse(
 
 export const stationsRoutes = factory
   .createApp()
-  .get("/search", rateLimit, (c) => {
-    return c.json(getSearchResults(c.req.query("q")));
-  })
+  .get(
+    "/search",
+    rateLimit,
+    cache({ cacheName: "search-cache", cacheControl: CACHE_TTL.SEARCH }),
+    (c) => {
+      return c.json(getSearchResults(c.req.query("q")));
+    },
+  )
   .get(
     "/trending",
     cache({

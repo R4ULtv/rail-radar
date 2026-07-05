@@ -1,5 +1,6 @@
 export const CACHE_TTL = {
   STATION_DATA: "public, max-age=25, stale-while-revalidate=5",
+  SEARCH: "public, max-age=300, stale-while-revalidate=60",
   ANALYTICS: "public, max-age=300, stale-while-revalidate=60",
   RFI_STATUS: "public, max-age=300, stale-while-revalidate=60",
   STATIC_MAP: "public, max-age=2592000",
