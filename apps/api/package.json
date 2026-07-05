@@ -15,6 +15,7 @@
   },
   "devDependencies": {
     "@repo/typescript-config": "workspace:*",
+    "typescript": "^6.0.3",
     "wrangler": "^4.107.0"
   }
 }

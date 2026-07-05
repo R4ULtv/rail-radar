@@ -4,6 +4,5 @@ packages:
 allowBuilds:
   core-js: true
   esbuild: true
-  msw: true
   sharp: true
   workerd: true
