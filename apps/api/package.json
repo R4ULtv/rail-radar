@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "@repo/data": "workspace:*",
-    "hono": "^4.12.27"
+    "hono": "^4.12.28"
   },
   "devDependencies": {
     "@repo/typescript-config": "workspace:*",
