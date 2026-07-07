@@ -20,6 +20,26 @@ function validDimensions(width: number, height: number) {
   return width >= 1 && width <= MAX_DIMENSION && height >= 1 && height <= MAX_DIMENSION;
 }
 
+function parseBbox(value: string): [number, number, number, number] | null {
+  const parts = value.split(",").map((part) => Number.parseFloat(part));
+  if (parts.length !== 4 || parts.some((part) => !Number.isFinite(part))) {
+    return null;
+  }
+
+  const [west, south, east, north] = parts as [number, number, number, number];
+  if (west < -180 || west > 180 || east < -180 || east > 180) {
+    return null;
+  }
+  if (south < -90 || south > 90 || north < -90 || north > 90) {
+    return null;
+  }
+  if (west >= east || south >= north) {
+    return null;
+  }
+
+  return [west, south, east, north];
+}
+
 function buildMapboxUrl(path: string, size: string, token: string, extra = "") {
   return `${MAPBOX_STYLE}/${path}/${size}@2x?attribution=false&logo=false${extra}&access_token=${token}`;
 }
@@ -50,12 +70,12 @@ export const mapRoutes = factory.createApp().get(
         return jsonError(c, "Invalid dimensions. Max 1280x1280.", 400);
       }
 
-      const parts = bbox.split(",").map(Number);
-      if (parts.length !== 4 || parts.some(Number.isNaN)) {
+      const parsedBbox = parseBbox(bbox);
+      if (!parsedBbox) {
         return jsonError(c, "Invalid bbox. Must be west,south,east,north.", 400);
       }
 
-      mapboxUrl = buildMapboxUrl(`[${bbox}]`, `${width}x${height}`, token, "&padding=40");
+      mapboxUrl = buildMapboxUrl(`[${parsedBbox.join(",")}]`, `${width}x${height}`, token, "&padding=40");
     } else {
       const { width, height } = parseDimensions(c.req.query("w"), c.req.query("h"), [1280, 256]);
 
