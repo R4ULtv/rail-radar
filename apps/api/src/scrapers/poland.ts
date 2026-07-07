@@ -1,6 +1,13 @@
 import type { Train } from "@repo/data";
 
-import { ScraperError, formatTime, type ScrapeResult } from "./core";
+import {
+  STATUS_WINDOW_MS,
+  ScraperError,
+  dedupeSortLimit,
+  formatTime,
+  type ScrapeResult,
+  statusFromWindow,
+} from "./core";
 import { fetchWithTimeout } from "./fetch";
 
 const POLAND_BASE_URL = "https://pdp-api.plk-sa.pl/api/v1";
@@ -276,13 +283,7 @@ function getStatus(stop: PolandOperationStop | undefined, type: PolandBoardType)
 
   const timestamp = new Date(actualTime).getTime();
   const now = Date.now();
-  const fiveMinutes = 5 * 60 * 1000;
-
-  if (timestamp >= now - fiveMinutes && timestamp <= now + fiveMinutes) {
-    return type === "departures" ? "departing" : "incoming";
-  }
-
-  return null;
+  return statusFromWindow(timestamp, now, STATUS_WINDOW_MS, type);
 }
 
 function shouldIncludeTrain(
@@ -598,9 +599,7 @@ export async function scrapePolandTrains(
     };
   }
 
-  const seen = new Set<string>();
-
-  const trains = stationOperations
+  const mappedTrains = stationOperations
     .map((operation) =>
       mapTrain(
         operation,
@@ -610,15 +609,14 @@ export async function scrapePolandTrains(
         stationDict,
       ),
     )
-    .filter((entry): entry is MappedTrain => entry !== null)
-    .sort((a, b) => a.sortTime - b.sortTime)
-    .filter((entry) => {
-      if (seen.has(entry.key)) return false;
-      seen.add(entry.key);
-      return true;
-    })
-    .slice(0, TRAIN_LIMIT)
-    .map((entry) => entry.train);
+    .filter((entry): entry is MappedTrain => entry !== null);
+
+  const trains = dedupeSortLimit(
+    mappedTrains,
+    (entry) => entry.key,
+    (a, b) => a.sortTime - b.sortTime,
+    TRAIN_LIMIT,
+  ).map((entry) => entry.train);
 
   return {
     trains,

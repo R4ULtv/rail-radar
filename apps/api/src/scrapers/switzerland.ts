@@ -1,13 +1,19 @@
 import type { Train } from "@repo/data";
 
-import { type ScrapeResult, formatTime } from "./core";
+import {
+  SHORT_STATUS_WINDOW_MS,
+  type ScrapeResult,
+  formatTime,
+  statusFromWindow,
+  stripCountryPrefix,
+} from "./core";
 import { fetchWithTimeout } from "./fetch";
 
 const SWISS_BASE_URL = "https://transport.opendata.ch/v1/stationboard";
 
 function convertSwissStationId(stationId: string): string {
   // Convert CH station ID to 85 prefix (e.g., "CH06013" -> "8506013")
-  const numericPart = stationId.replace(/^[A-Z]+/, "");
+  const numericPart = stripCountryPrefix(stationId);
   return `85${numericPart}`;
 }
 
@@ -52,7 +58,7 @@ function getSwissPlatform(stop: Stop): string | null {
   return stop.prognosis?.platform ?? stop.platform ?? null;
 }
 
-// Determine status based on 2-minute window (accounting for delay)
+// Determine status based on 3-minute window (accounting for delay)
 function getSwissStatus(
   stop: Stop,
   type: "arrivals" | "departures",
@@ -67,12 +73,7 @@ function getSwissStatus(
   const now = Date.now();
 
   // Within 3 minutes (past or future)
-  const twoMinutes = 3 * 60 * 1000;
-  if (actualTime >= now - twoMinutes && actualTime <= now + twoMinutes) {
-    return type === "departures" ? "departing" : "incoming";
-  }
-
-  return null;
+  return statusFromWindow(actualTime, now, SHORT_STATUS_WINDOW_MS, type);
 }
 
 export async function scrapeSwissTrains(

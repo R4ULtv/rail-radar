@@ -1,6 +1,12 @@
 import type { Train } from "@repo/data";
 
-import { ScraperError, type ScrapeResult } from "./core";
+import {
+  STATUS_WINDOW_MS,
+  ScraperError,
+  type ScrapeResult,
+  statusFromWindow,
+  stripCountryPrefix,
+} from "./core";
 import { fetchWithTimeout } from "./fetch";
 import ukStationCodes from "./codes/uk-codes.json";
 
@@ -61,7 +67,7 @@ interface StationBoardWithDetails {
 // --- Helpers ---
 
 function getCRS(stationId: string): string {
-  const paddedCode = stationId.replace(/^[A-Z]+/, "");
+  const paddedCode = stripCountryPrefix(stationId);
   const crs = stationCodes[paddedCode];
   if (!crs) throw new ScraperError("Unknown UK station.", 404);
   return crs;
@@ -134,11 +140,12 @@ function getStatus(
   if (diff < -720) diff += 1440;
   if (diff > 720) diff -= 1440;
 
-  if (Math.abs(diff) <= 5) {
-    return type === "departures" ? "departing" : "incoming";
-  }
-
-  return null;
+  return statusFromWindow(
+    (nowMinutes + diff) * 60 * 1000,
+    nowMinutes * 60 * 1000,
+    STATUS_WINDOW_MS,
+    type,
+  );
 }
 
 function getBrand(operatorCode?: string): string {

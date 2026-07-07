@@ -1,6 +1,14 @@
 import type { Train } from "@repo/data";
 
-import { type ScrapeResult, formatTime } from "./core";
+import {
+  STATUS_WINDOW_MS,
+  type ScrapeResult,
+  dedupeSortLimit,
+  formatTime,
+  resolveBrand,
+  statusFromWindow,
+  stripCountryPrefix,
+} from "./core";
 import { fetchWithTimeout } from "./fetch";
 
 const DB_BOARD_URL = "https://app.services-bahn.de/mob/bahnhofstafel";
@@ -12,7 +20,7 @@ const NON_RAIL_PRODUCTS = new Set(["BUS", "SCHIFF", "STR", "UBAHN"]);
 
 function convertGermanStationId(stationId: string): string {
   // Convert DE station ID to HAFAS format (e.g., "DE00261" -> "8000261")
-  const numericPart = stationId.replace(/^[A-Z]+/, "");
+  const numericPart = stripCountryPrefix(stationId);
   return `80${numericPart}`;
 }
 
@@ -153,11 +161,8 @@ function getBrand(entry: DbBoardEntry): string | null {
   if (cat === "WB") return "WestfalenBahn";
   if (cat === "VLX") return "Vogtlandbahn";
   // International operators
-  if (cat === "TGV") return "SNCF";
   if (cat === "RJX" || cat === "RJ" || cat === "NJ") return "OBB";
-  if (cat === "EUR") return "Eurostar";
-  if (cat === "THA") return "Thalys";
-  return "DB";
+  return resolveBrand(cat, "DB");
 }
 
 function getDelay(scheduled: string | undefined, realtime: string | undefined): number | null {
@@ -180,13 +185,7 @@ function getStatus(
 
   const actualTime = new Date(timeStr).getTime();
   const now = Date.now();
-  const fiveMinutes = 5 * 60 * 1000;
-
-  if (actualTime >= now - fiveMinutes && actualTime <= now + fiveMinutes) {
-    return type === "departures" ? "departing" : "incoming";
-  }
-
-  return null;
+  return statusFromWindow(actualTime, now, STATUS_WINDOW_MS, type);
 }
 
 function getInfo(entry: DbBoardEntry): string | null {
@@ -230,18 +229,20 @@ export async function scrapeGermanTrains(
       : data.bahnhofstafelAnkunftPositionen) ?? [];
 
   // Exclude non-rail products, collapse DB alias rows, then merge same-service arrival branches.
-  const seen = new Set<string>();
-  const trainEntries = entries.filter((entry) => {
+  const railEntries = entries.filter((entry) => {
     const product = entry.produktGattung?.toUpperCase();
     if (product && NON_RAIL_PRODUCTS.has(product)) return false;
     // Skip non-revenue services (Sonderfahrt etc.) that lack destination/origin
     if (type === "departures" && !entry.richtung) return false;
     if (type === "arrivals" && !entry.abgangsOrt?.name) return false;
-    const dedupKey = getDedupKey(entry, type);
-    if (seen.has(dedupKey)) return false;
-    seen.add(dedupKey);
     return true;
   });
+  const trainEntries = dedupeSortLimit(
+    railEntries,
+    (entry) => getDedupKey(entry, type),
+    () => 0,
+    Number.MAX_SAFE_INTEGER,
+  );
 
   const mappedEntries = trainEntries.map((entry) => {
     const scheduledDep = entry.abgangsDatum;
