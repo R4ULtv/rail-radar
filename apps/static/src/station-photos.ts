@@ -22,7 +22,7 @@ interface StationPhoto {
 
 type AppContext = Context<{ Bindings: AppBindings }>;
 
-const MANIFEST_CACHE = "public, max-age=300, s-maxage=3600";
+const MANIFEST_CACHE = `public, max-age=43200, s-maxage=43200`;
 const MISSING_MANIFEST_CACHE = "public, max-age=60, s-maxage=300";
 const IMAGE_CACHE = "public, max-age=31536000, immutable";
 const SAFE_KEY_SEGMENT = /^[A-Za-z0-9_-]+$/;

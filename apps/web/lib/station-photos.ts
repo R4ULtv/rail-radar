@@ -31,7 +31,7 @@ function normalizePhotoUrl(photo: StationPhoto): StationPhoto {
 export async function getStationPhotos(stationId: string): Promise<StationPhoto[]> {
   try {
     const response = await fetch(staticAssetUrl(`/stations/${stationId}/photos`), {
-      next: { revalidate: 300 },
+      next: { revalidate: 43200 },
     });
 
     if (response.status === 404) {
