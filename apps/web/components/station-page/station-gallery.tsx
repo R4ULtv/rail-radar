@@ -190,31 +190,34 @@ export function StationGallery({ stationName, lat, lng, photos }: StationGallery
     [activeIndex, items.length],
   );
 
-  const handlePointerMove = useCallback((event: PointerEvent<HTMLDivElement>) => {
-    const scroller = scrollerRef.current;
-    const dragState = dragStateRef.current;
+  const handlePointerMove = useCallback(
+    (event: PointerEvent<HTMLDivElement>) => {
+      const scroller = scrollerRef.current;
+      const dragState = dragStateRef.current;
 
-    if (!scroller || dragState?.pointerId !== event.pointerId) {
-      return;
-    }
+      if (!scroller || dragState?.pointerId !== event.pointerId) {
+        return;
+      }
 
-    const deltaX = event.clientX - dragState.startX;
+      const deltaX = event.clientX - dragState.startX;
 
-    if (Math.abs(deltaX) > 2) {
-      dragState.hasDragged = true;
-    }
+      if (Math.abs(deltaX) > 2) {
+        dragState.hasDragged = true;
+      }
 
-    scroller.scrollLeft = dragState.scrollLeft - deltaX;
-    const dragDistance = scroller.scrollLeft - dragState.scrollLeft;
-    const dragThreshold = Math.min(scroller.clientWidth * 0.22, 180);
-    const nextIndex =
-      Math.abs(dragDistance) >= dragThreshold
-        ? dragState.startIndex + Math.sign(dragDistance)
-        : dragState.startIndex;
+      scroller.scrollLeft = dragState.scrollLeft - deltaX;
+      const dragDistance = scroller.scrollLeft - dragState.scrollLeft;
+      const dragThreshold = Math.min(scroller.clientWidth * 0.22, 180);
+      const nextIndex =
+        Math.abs(dragDistance) >= dragThreshold
+          ? dragState.startIndex + Math.sign(dragDistance)
+          : dragState.startIndex;
 
-    setActiveIndex(Math.min(Math.max(nextIndex, 0), items.length - 1));
-    event.preventDefault();
-  }, [items.length]);
+      setActiveIndex(Math.min(Math.max(nextIndex, 0), items.length - 1));
+      event.preventDefault();
+    },
+    [items.length],
+  );
 
   const handleKeyDown = useCallback(
     (event: KeyboardEvent<HTMLDivElement>) => {
@@ -303,7 +306,7 @@ export function StationGallery({ stationName, lat, lng, photos }: StationGallery
       </div>
 
       {items.length > 1 && (
-        <div className="absolute bottom-4 left-1/2 hidden -translate-x-1/2 gap-1.5 md:flex">
+        <div className="absolute bottom-2.5 left-1/2 hidden -translate-x-1/2 gap-1.5 md:flex">
           {items.map((item, index) => (
             <button
               key={item.key}
