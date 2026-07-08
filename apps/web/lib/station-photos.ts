@@ -4,7 +4,7 @@ export interface StationPhotoAttribution {
   author?: string;
   license?: string;
   origin?: string;
-  sourceUrl?: string;
+  sourceUrl?: string | null;
 }
 
 export interface StationPhoto {

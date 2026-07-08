@@ -1,0 +1,17 @@
+{
+  "stationId": "IT1728",
+  "images": [
+    {
+      "key": "front.webp",
+      "width": 1920,
+      "height": 1080,
+      "alt": "Front exterior view of Milano Centrale station",
+      "attribution": {
+        "author": "Photographer name",
+        "license": "CC BY 4.0",
+        "origin": "Wikimedia Commons",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Example.jpg"
+      }
+    }
+  ]
+}

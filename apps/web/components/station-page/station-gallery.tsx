@@ -55,7 +55,7 @@ function attributionParts(attribution?: StationPhotoAttribution) {
 
 function PhotoAttribution({ attribution }: { attribution?: StationPhotoAttribution }) {
   const parts = attributionParts(attribution);
-  const sourceUrl = attribution?.sourceUrl;
+  const sourceUrl = attribution?.sourceUrl ?? undefined;
   const originLabel = attribution?.origin ?? "Origin";
 
   if (parts.length === 0 && !sourceUrl) {
