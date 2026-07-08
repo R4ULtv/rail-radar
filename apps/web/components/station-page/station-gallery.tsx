@@ -155,13 +155,12 @@ export function StationGallery({ stationName, lat, lng, photos }: StationGallery
         {items.map((item, index) => (
           <div key={item.key} className="relative size-full shrink-0 snap-start overflow-hidden">
             {item.type === "map" ? (
-              <StaticMap lat={lat} lng={lng} zoom={14} className="absolute inset-0" />
+              <StaticMap lat={lat} lng={lng} zoom={14} priority className="absolute inset-0" />
             ) : (
               <>
                 <Image
                   unoptimized
                   fill
-                  priority={index === 1}
                   sizes="100vw"
                   src={item.url}
                   alt={item.alt}
