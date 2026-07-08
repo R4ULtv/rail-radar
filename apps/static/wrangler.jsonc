@@ -21,4 +21,12 @@
     "directory": "./public",
     "binding": "ASSETS",
   },
+  "r2_buckets": [
+    {
+      "binding": "STATION_IMAGES",
+      "bucket_name": "rail-radar",
+      "jurisdiction": "eu",
+      "remote": true,
+    },
+  ],
 }
