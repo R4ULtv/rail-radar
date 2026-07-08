@@ -5,16 +5,18 @@ interface StaticMapProps {
   lng: number;
   zoom?: number;
   className?: string;
+  priority?: boolean;
 }
 
-export function StaticMap({ lat, lng, zoom = 15, className }: StaticMapProps) {
+export function StaticMap({ lat, lng, zoom = 15, className, priority = false }: StaticMapProps) {
   const src = `${process.env.NEXT_PUBLIC_API_URL}/map/static?lat=${lat}&lng=${lng}&zoom=${zoom}`;
 
   return (
     <div className={className}>
       <Image
         unoptimized
-        priority
+        priority={priority}
+        fetchPriority={priority ? "high" : undefined}
         fill
         sizes="100vw"
         src={src}

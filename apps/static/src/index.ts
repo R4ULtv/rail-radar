@@ -1,10 +1,12 @@
 import { Hono } from "hono";
+import { getStationPhoto, getStationPhotos } from "./station-photos";
 
-type Bindings = {
+export type AppBindings = {
   ASSETS: Fetcher;
+  STATION_IMAGES: R2Bucket;
 };
 
-const app = new Hono<{ Bindings: Bindings }>();
+const app = new Hono<{ Bindings: AppBindings }>();
 
 app.get("/", (c) => {
   return c.json({
@@ -16,6 +18,9 @@ app.get("/", (c) => {
 app.get("/robots.txt", (c) => {
   return c.text("User-agent: *\nDisallow: /");
 });
+
+app.get("/stations/:id/photos", getStationPhotos);
+app.get("/stations/:id/photo/*", getStationPhoto);
 
 app.notFound((c) => c.text("Not found", 404));
 
