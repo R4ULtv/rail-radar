@@ -341,7 +341,7 @@ export default function StationInfo() {
           </div>
         </DrawerHeader>
 
-        <div className={cn("flex-1", snap === 1 ? "overflow-auto" : "overflow-hidden")}>
+        <div className={cn("flex-1", snap === 1 ? "scroll-fade overflow-auto" : "overflow-hidden")}>
           <TrainListContent trainData={trainData} isLoading={isLoading} error={error} type={type} />
         </div>
       </DrawerContent>
