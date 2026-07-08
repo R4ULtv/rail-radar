@@ -14,9 +14,7 @@ interface StationPhoto {
   alt: string;
   attribution?: {
     author: string;
-    copyright?: string;
     origin?: string;
-    licenseUrl?: string;
     sourceUrl?: string | null;
     license: string;
   };
@@ -85,11 +83,7 @@ function normalizePhotoManifest(value: unknown, stationId: string): StationPhoto
         typeof attribution.license === "string"
           ? {
               author: attribution.author,
-              copyright:
-                typeof attribution.copyright === "string" ? attribution.copyright : undefined,
               origin: typeof attribution.origin === "string" ? attribution.origin : undefined,
-              licenseUrl:
-                typeof attribution.licenseUrl === "string" ? attribution.licenseUrl : undefined,
               sourceUrl:
                 typeof attribution.sourceUrl === "string" || attribution.sourceUrl === null
                   ? attribution.sourceUrl
