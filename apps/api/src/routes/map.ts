@@ -75,7 +75,12 @@ export const mapRoutes = factory.createApp().get(
         return jsonError(c, "Invalid bbox. Must be west,south,east,north.", 400);
       }
 
-      mapboxUrl = buildMapboxUrl(`[${parsedBbox.join(",")}]`, `${width}x${height}`, token, "&padding=40");
+      mapboxUrl = buildMapboxUrl(
+        `[${parsedBbox.join(",")}]`,
+        `${width}x${height}`,
+        token,
+        "&padding=40",
+      );
     } else {
       const { width, height } = parseDimensions(c.req.query("w"), c.req.query("h"), [1280, 256]);
 
