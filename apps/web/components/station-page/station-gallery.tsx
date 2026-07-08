@@ -1,9 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
 import { useCallback, useMemo, useRef, useState } from "react";
-import { Button } from "@repo/ui/components/button";
 import { cn } from "@repo/ui/lib/utils";
 import { StaticMap } from "@/components/static-map";
 import type { StationPhoto, StationPhotoAttribution } from "@/lib/station-photos";
@@ -82,6 +80,7 @@ function PhotoAttribution({ attribution }: { attribution?: StationPhotoAttributi
 
 export function StationGallery({ stationName, lat, lng, photos }: StationGalleryProps) {
   const scrollerRef = useRef<HTMLDivElement>(null);
+  const programmaticScrollIndexRef = useRef<number | null>(null);
   const [activeIndex, setActiveIndex] = useState(0);
   const items = useMemo<GalleryItem[]>(
     () => [
@@ -107,7 +106,14 @@ export function StationGallery({ stationName, lat, lng, photos }: StationGallery
       const scroller = scrollerRef.current;
       const slide = scroller?.children.item(nextIndex) as HTMLElement | null;
 
-      slide?.scrollIntoView({
+      if (!slide) {
+        programmaticScrollIndexRef.current = null;
+        setActiveIndex(nextIndex);
+        return;
+      }
+
+      programmaticScrollIndexRef.current = nextIndex;
+      slide.scrollIntoView({
         behavior: "smooth",
         block: "nearest",
         inline: "start",
@@ -121,6 +127,17 @@ export function StationGallery({ stationName, lat, lng, photos }: StationGallery
     const scroller = scrollerRef.current;
 
     if (!scroller) {
+      return;
+    }
+
+    const programmaticScrollIndex = programmaticScrollIndexRef.current;
+    if (programmaticScrollIndex !== null) {
+      const targetScrollLeft = programmaticScrollIndex * scroller.clientWidth;
+
+      if (Math.abs(scroller.scrollLeft - targetScrollLeft) <= 1) {
+        programmaticScrollIndexRef.current = null;
+      }
+
       return;
     }
 
@@ -168,7 +185,7 @@ export function StationGallery({ stationName, lat, lng, photos }: StationGallery
               aria-current={activeIndex === index}
               onClick={() => scrollToIndex(index)}
               className={cn(
-                "size-1.5 rounded-full bg-white/45 ring-1 ring-black/10 transition-all hover:bg-white/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/80",
+                "size-1.5 rounded-full bg-white/45 ring-1 ring-black/10 transition-[width,background-color] duration-200 ease-out hover:bg-white/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/80",
                 activeIndex === index && "w-5 bg-white/90",
               )}
             />
