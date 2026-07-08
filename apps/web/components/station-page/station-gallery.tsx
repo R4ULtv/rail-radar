@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { useCallback, useMemo, useRef, useState } from "react";
+import type { KeyboardEvent, PointerEvent } from "react";
 import { cn } from "@repo/ui/lib/utils";
 import { StaticMap } from "@/components/static-map";
 import type { StationPhoto, StationPhotoAttribution } from "@/lib/station-photos";
@@ -81,7 +82,15 @@ function PhotoAttribution({ attribution }: { attribution?: StationPhotoAttributi
 export function StationGallery({ stationName, lat, lng, photos }: StationGalleryProps) {
   const scrollerRef = useRef<HTMLDivElement>(null);
   const programmaticScrollIndexRef = useRef<number | null>(null);
+  const dragStateRef = useRef<{
+    pointerId: number;
+    startX: number;
+    startIndex: number;
+    scrollLeft: number;
+    hasDragged: boolean;
+  } | null>(null);
   const [activeIndex, setActiveIndex] = useState(0);
+  const [isDragging, setIsDragging] = useState(false);
   const items = useMemo<GalleryItem[]>(
     () => [
       {
@@ -102,7 +111,7 @@ export function StationGallery({ stationName, lat, lng, photos }: StationGallery
 
   const scrollToIndex = useCallback(
     (index: number) => {
-      const nextIndex = (index + items.length) % items.length;
+      const nextIndex = Math.min(Math.max(index, 0), items.length - 1);
       const scroller = scrollerRef.current;
       const slide = scroller?.children.item(nextIndex) as HTMLElement | null;
 
@@ -123,10 +132,115 @@ export function StationGallery({ stationName, lat, lng, photos }: StationGallery
     [items.length],
   );
 
+  const endDrag = useCallback(
+    (pointerId: number) => {
+      const scroller = scrollerRef.current;
+      const dragState = dragStateRef.current;
+
+      if (!scroller || dragState?.pointerId !== pointerId) {
+        return;
+      }
+
+      dragStateRef.current = null;
+      setIsDragging(false);
+
+      if (scroller.hasPointerCapture(pointerId)) {
+        scroller.releasePointerCapture(pointerId);
+      }
+
+      if (dragState.hasDragged) {
+        const dragDistance = scroller.scrollLeft - dragState.scrollLeft;
+        const dragThreshold = Math.min(scroller.clientWidth * 0.22, 180);
+        const nextIndex =
+          Math.abs(dragDistance) >= dragThreshold
+            ? dragState.startIndex + Math.sign(dragDistance)
+            : dragState.startIndex;
+
+        scrollToIndex(nextIndex);
+      }
+    },
+    [scrollToIndex],
+  );
+
+  const handlePointerDown = useCallback(
+    (event: PointerEvent<HTMLDivElement>) => {
+      const scroller = scrollerRef.current;
+
+      if (
+        !scroller ||
+        event.pointerType !== "mouse" ||
+        items.length <= 1 ||
+        (event.target instanceof Element && event.target.closest("a, button"))
+      ) {
+        return;
+      }
+
+      programmaticScrollIndexRef.current = null;
+      scroller.setPointerCapture(event.pointerId);
+      scroller.focus({ preventScroll: true });
+      dragStateRef.current = {
+        pointerId: event.pointerId,
+        startX: event.clientX,
+        startIndex: activeIndex,
+        scrollLeft: scroller.scrollLeft,
+        hasDragged: false,
+      };
+      setIsDragging(true);
+    },
+    [activeIndex, items.length],
+  );
+
+  const handlePointerMove = useCallback((event: PointerEvent<HTMLDivElement>) => {
+    const scroller = scrollerRef.current;
+    const dragState = dragStateRef.current;
+
+    if (!scroller || dragState?.pointerId !== event.pointerId) {
+      return;
+    }
+
+    const deltaX = event.clientX - dragState.startX;
+
+    if (Math.abs(deltaX) > 2) {
+      dragState.hasDragged = true;
+    }
+
+    scroller.scrollLeft = dragState.scrollLeft - deltaX;
+    const dragDistance = scroller.scrollLeft - dragState.scrollLeft;
+    const dragThreshold = Math.min(scroller.clientWidth * 0.22, 180);
+    const nextIndex =
+      Math.abs(dragDistance) >= dragThreshold
+        ? dragState.startIndex + Math.sign(dragDistance)
+        : dragState.startIndex;
+
+    setActiveIndex(Math.min(Math.max(nextIndex, 0), items.length - 1));
+    event.preventDefault();
+  }, [items.length]);
+
+  const handleKeyDown = useCallback(
+    (event: KeyboardEvent<HTMLDivElement>) => {
+      if (items.length <= 1) {
+        return;
+      }
+
+      if (event.key === "ArrowLeft") {
+        event.preventDefault();
+        scrollToIndex(activeIndex - 1);
+      } else if (event.key === "ArrowRight") {
+        event.preventDefault();
+        scrollToIndex(activeIndex + 1);
+      }
+    },
+    [activeIndex, items.length, scrollToIndex],
+  );
+
   const handleScroll = useCallback(() => {
     const scroller = scrollerRef.current;
 
     if (!scroller) {
+      return;
+    }
+
+    if (dragStateRef.current) {
       return;
     }
 
@@ -150,7 +264,21 @@ export function StationGallery({ stationName, lat, lng, photos }: StationGallery
       <div
         ref={scrollerRef}
         onScroll={handleScroll}
-        className="flex size-full snap-x snap-mandatory overflow-x-auto scroll-smooth scrollbar-none [&::-webkit-scrollbar]:hidden"
+        role="region"
+        aria-label={`${stationName} station image gallery`}
+        tabIndex={items.length > 1 ? 0 : undefined}
+        onKeyDown={handleKeyDown}
+        onPointerDown={handlePointerDown}
+        onPointerMove={handlePointerMove}
+        onPointerUp={(event) => endDrag(event.pointerId)}
+        onPointerCancel={(event) => endDrag(event.pointerId)}
+        onLostPointerCapture={(event) => endDrag(event.pointerId)}
+        onDragStart={(event) => event.preventDefault()}
+        className={cn(
+          "flex size-full snap-x snap-mandatory select-none overflow-x-auto scroll-smooth scrollbar-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/80 focus-visible:ring-inset [&::-webkit-scrollbar]:hidden",
+          items.length > 1 && "md:cursor-grab",
+          isDragging && "snap-none scroll-auto md:cursor-grabbing",
+        )}
       >
         {items.map((item, index) => (
           <div key={item.key} className="relative size-full shrink-0 snap-start overflow-hidden">
