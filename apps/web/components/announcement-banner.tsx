@@ -61,9 +61,6 @@ export function AnnouncementBanner() {
                   <p className="truncate text-sm font-semibold tracking-tight">
                     A fresh look for Rail Radar
                   </p>
-                  <span className="rounded-full bg-primary/10 px-1.5 py-0.5 text-[9px] leading-none font-bold tracking-wider text-primary uppercase">
-                    New
-                  </span>
                 </div>
                 <p className="truncate text-xs text-muted-foreground">
                   <span className="md:hidden">New identity and station photo galleries.</span>
