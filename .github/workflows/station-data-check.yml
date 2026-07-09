@@ -45,7 +45,7 @@ jobs:
       - name: Run validation and diff
         id: validate
         run: |
-          pnpm exec tsx .github/scripts/validate-stations.ts \
+          pnpx tsx .github/scripts/validate-stations.ts \
             --base=/tmp/stations-base.geojson \
             --head=packages/data/src/stations.geojson \
             --output=/tmp/report.md
