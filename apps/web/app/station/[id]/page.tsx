@@ -83,7 +83,7 @@ export default async function StationPage({ params }: StationPageProps) {
   const countryCode = code?.toUpperCase();
   const country = getCountry(station.id, { format: "name" });
   const countrySlug = code ? getCountrySlug(code) : null;
-  const stationPhotos = await getStationPhotos(station.id);
+  const stationPhotos = station.importance === 1 ? await getStationPhotos(station.id) : [];
 
   const jsonLd = {
     "@context": "https://schema.org",
