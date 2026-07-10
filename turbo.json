@@ -2,6 +2,9 @@
   "$schema": "https://turborepo.com/schema.json",
   "ui": "tui",
   "globalEnv": ["VERCEL_TARGET_ENV"],
+  "remoteCache": {
+    "enabled": true
+  },
   "tasks": {
     "build": {
       "dependsOn": ["^build"],
