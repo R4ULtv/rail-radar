@@ -4,6 +4,10 @@ on:
   pull_request:
     branches: [main, preview]
     paths:
+      - ".github/scripts/validate-stations.ts"
+      - ".github/workflows/station-data-check.yml"
+      - "package.json"
+      - "pnpm-lock.yaml"
       - "packages/data/src/stations.geojson"
 
 permissions:
@@ -41,7 +45,7 @@ jobs:
       - name: Run validation and diff
         id: validate
         run: |
-          npx tsx .github/scripts/validate-stations.ts \
+          pnpx tsx .github/scripts/validate-stations.ts \
             --base=/tmp/stations-base.geojson \
             --head=packages/data/src/stations.geojson \
             --output=/tmp/report.md

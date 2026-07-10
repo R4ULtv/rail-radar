@@ -66,11 +66,17 @@ async function createTrendingResponse(
 
 export const stationsRoutes = factory
   .createApp()
-  .get("/search", rateLimit, (c) => {
-    return c.json(getSearchResults(c.req.query("q")));
-  })
+  .get(
+    "/search",
+    rateLimit,
+    cache({ cacheName: "search-cache", cacheControl: CACHE_TTL.SEARCH }),
+    (c) => {
+      return c.json(getSearchResults(c.req.query("q")));
+    },
+  )
   .get(
     "/trending",
+    rateLimit,
     cache({
       cacheName: "analytics-cache",
       cacheControl: CACHE_TTL.ANALYTICS,
@@ -94,6 +100,7 @@ export const stationsRoutes = factory
   )
   .get(
     "/trending/:country",
+    rateLimit,
     cache({
       cacheName: "analytics-cache",
       cacheControl: CACHE_TTL.ANALYTICS,
@@ -120,6 +127,7 @@ export const stationsRoutes = factory
   )
   .get(
     "/:id/stats",
+    rateLimit,
     cache({
       cacheName: "analytics-cache",
       cacheControl: CACHE_TTL.ANALYTICS,

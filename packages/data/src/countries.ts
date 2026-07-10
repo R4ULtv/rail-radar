@@ -42,37 +42,16 @@ export function getCountrySlug(code: CountryCode): string {
   return COUNTRY_SLUG[code];
 }
 
-const ID_PREFIX_TO_COUNTRY: Record<string, CountryCode> = {
-  IT: "it",
-  ITM: "it", // Metro
-  ITL: "it", // Local-Light
-  CH: "ch",
-  FI: "fi",
-  FIM: "fi",
-  BE: "be",
-  BEM: "be",
-  NL: "nl",
-  NLM: "nl",
-  UK: "uk",
-  UKM: "uk",
-  UKL: "uk",
-  IE: "ie",
-  IEL: "ie",
-  NO: "no",
-  NOM: "no",
-  NOL: "no",
-  SE: "se",
-  SEM: "se",
-  SEL: "se",
-  DK: "dk",
-  DKM: "dk",
-  DE: "de",
-  DEM: "de",
-  PL: "pl",
-  PLM: "pl",
-  FR: "fr",
-  FRM: "fr",
-};
+const ID_PREFIX_TO_COUNTRY = Object.fromEntries(
+  COUNTRY_CODES.flatMap((code) => {
+    const prefix = code.toUpperCase();
+    return [
+      [prefix, code],
+      [`${prefix}M`, code],
+      [`${prefix}L`, code],
+    ];
+  }),
+) as Record<string, CountryCode>;
 
 /** Get country from a station ID. Returns code by default, or full name with `format: "name"` */
 export function getCountry(stationId: string, options: { format: "name" }): CountryName | null;

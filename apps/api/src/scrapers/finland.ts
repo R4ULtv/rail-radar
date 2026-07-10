@@ -2,7 +2,15 @@ import { stationById } from "@repo/data/stations";
 import type { Train } from "@repo/data";
 import fiStationCodes from "./codes/fi-codes.json";
 
-import { ScraperError, type ScrapeResult, formatTime } from "./index";
+import {
+  STATUS_WINDOW_MS,
+  ScraperError,
+  type ScrapeResult,
+  dedupeSortLimit,
+  formatTime,
+  statusFromWindow,
+  stripCountryPrefix,
+} from "./core";
 import { fetchWithTimeout } from "./fetch";
 
 const DIGITRAFFIC_BASE_URL = "https://rata.digitraffic.fi/api/v1";
@@ -50,7 +58,7 @@ interface DigitrafficTrain {
 
 function getShortCode(stationId: string): string {
   // Extract padded numeric part from FI station ID (e.g., "FI001" -> "001")
-  const paddedCode = stationId.replace(/^[A-Z]+/, "");
+  const paddedCode = stripCountryPrefix(stationId);
   const shortCode = stationCodes[paddedCode];
   if (!shortCode) throw new ScraperError("Unknown Finnish station.", 404);
   return shortCode;
@@ -80,12 +88,7 @@ function getStatus(
   const timeStr = row.liveEstimateTime ?? row.actualTime ?? row.scheduledTime;
   const time = new Date(timeStr).getTime();
   const now = Date.now();
-  const fiveMinutes = 5 * 60 * 1000;
-
-  if (time >= now - fiveMinutes && time <= now + fiveMinutes) {
-    return type === "departures" ? "departing" : "incoming";
-  }
-  return null;
+  return statusFromWindow(time, now, STATUS_WINDOW_MS, type);
 }
 
 interface MappedTrain {
@@ -158,19 +161,17 @@ export async function scrapeFinlandTrains(
     throw new Error("Invalid response from Finnish train data source.");
   }
 
-  const seen = new Set<string>();
-  const trains: Train[] = data
+  const mappedTrains = data
     .filter((entry) => entry.trainCategory !== "On-track machines")
     .map((entry) => mapTrain(entry, shortCode, type))
-    .filter((t): t is MappedTrain => t !== null)
-    .sort((a, b) => a.sortTime.localeCompare(b.sortTime))
-    .filter((t) => {
-      const key = t.train.trainNumber;
-      if (seen.has(key)) return false;
-      seen.add(key);
-      return true;
-    })
-    .map((t) => t.train);
+    .filter((t): t is MappedTrain => t !== null);
+
+  const trains: Train[] = dedupeSortLimit(
+    mappedTrains,
+    (entry) => entry.train.trainNumber,
+    (a, b) => a.sortTime.localeCompare(b.sortTime),
+    Number.MAX_SAFE_INTEGER,
+  ).map((t) => t.train);
 
   return {
     trains,

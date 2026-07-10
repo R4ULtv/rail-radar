@@ -1,12 +1,17 @@
 import type { Train } from "@repo/data";
 
 import { fetchWithTimeout } from "./fetch";
-import { ScraperError, type ScrapeResult } from "./index";
+import {
+  STATUS_WINDOW_MS,
+  ScraperError,
+  type ScrapeResult,
+  dedupeSortLimit,
+  statusFromWindow,
+} from "./core";
 
 const REJSEPLANEN_BASE_URL = "https://www.rejseplanen.dk/api";
 const DENMARK_TIMEZONE = "Europe/Copenhagen";
 const TRAIN_LIMIT = 24;
-const STATUS_WINDOW_MINUTES = 5;
 
 const NON_RAIL_PRODUCT_TOKENS = ["bus", "metro", "letbane", "tram", "ferry", "taxi", "subway"];
 
@@ -463,11 +468,7 @@ function getStatus(entry: JsonRecord, type: BoardType): Train["status"] {
   }
 
   const now = getCurrentComparableMinutes(DENMARK_TIMEZONE);
-  if (Math.abs(comparableMinutes - now) <= STATUS_WINDOW_MINUTES) {
-    return type === "departures" ? "departing" : "incoming";
-  }
-
-  return null;
+  return statusFromWindow(comparableMinutes * 60 * 1000, now * 60 * 1000, STATUS_WINDOW_MS, type);
 }
 
 function collectHumanTexts(value: unknown, depth = 0): string[] {
@@ -632,20 +633,16 @@ export async function scrapeDenmarkTrains(
 
   const payload = (await response.json()) as unknown;
   const entries = getEntries(payload, type);
-  const trains = entries
+  const mappedTrains = entries
     .filter((entry) => isRailEntry(entry))
-    .map((entry) => mapEntry(entry, type))
-    .filter((train, index, array) => {
-      const key = `${train.trainNumber}-${train.scheduledTime}-${train.origin ?? train.destination ?? ""}`;
-      return (
-        index ===
-        array.findIndex((candidate) => {
-          const candidateKey = `${candidate.trainNumber}-${candidate.scheduledTime}-${candidate.origin ?? candidate.destination ?? ""}`;
-          return candidateKey === key;
-        })
-      );
-    })
-    .slice(0, TRAIN_LIMIT);
+    .map((entry) => mapEntry(entry, type));
+  const trains = dedupeSortLimit(
+    mappedTrains,
+    (train) =>
+      `${train.trainNumber}-${train.scheduledTime}-${train.origin ?? train.destination ?? ""}`,
+    () => 0,
+    TRAIN_LIMIT,
+  );
 
   return {
     trains,

@@ -32,6 +32,10 @@ const LOCATION_OPTIONS: PositionOptions = {
   maximumAge: 30000,
 };
 
+function isMapRoute() {
+  return window.location.pathname === "/";
+}
+
 type InitialPosition = {
   latitude: number;
   longitude: number;
@@ -115,7 +119,7 @@ export function Map() {
     let cancelled = false;
 
     const updateFromPosition = (pos: GeolocationPosition) => {
-      if (cancelled || hasUserInteractedRef.current) return;
+      if (cancelled || hasUserInteractedRef.current || !isMapRoute()) return;
 
       const latitude = Math.round(pos.coords.latitude * 1000000) / 1000000;
       const longitude = Math.round(pos.coords.longitude * 1000000) / 1000000;
@@ -171,6 +175,10 @@ export function Map() {
 
   const handleMoveEnd = useCallback(
     (e: ViewStateChangeEvent) => {
+      // A station flyTo can finish after Next.js has navigated away. In that case,
+      // syncing its final position would add map-only params to the destination URL.
+      if (!isMapRoute()) return;
+
       startTransition(() => {
         setParams({
           lat: Math.round(e.viewState.latitude * 1000000) / 1000000,

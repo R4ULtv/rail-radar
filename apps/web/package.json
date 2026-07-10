@@ -14,12 +14,12 @@
   "dependencies": {
     "@repo/data": "workspace:*",
     "@repo/ui": "workspace:*",
-    "lucide-react": "^1.22.0",
+    "lucide-react": "^1.23.0",
     "mapbox-gl": "^3.25.0",
     "motion": "^12.42.2",
-    "next": "16.2.9",
+    "next": "16.2.10",
     "nuqs": "^2.9.0",
-    "posthog-js": "^1.396.3",
+    "posthog-js": "^1.399.0",
     "react": "^19.2.7",
     "react-dom": "^19.2.7",
     "react-map-gl": "^8.1.1",
@@ -29,10 +29,11 @@
   "devDependencies": {
     "@repo/typescript-config": "workspace:*",
     "@tailwindcss/postcss": "^4.3.2",
-    "@types/node": "^22.20.0",
+    "@types/node": "^22.20.1",
     "@types/react": "^19.2.17",
     "@types/react-dom": "^19.2.3",
     "babel-plugin-react-compiler": "^1.0.0",
-    "tailwindcss": "^4.3.2"
+    "tailwindcss": "^4.3.2",
+    "typescript": "^6.0.3"
   }
 }

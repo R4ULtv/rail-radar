@@ -1,7 +1,6 @@
 import type { Train } from "@repo/data";
 
-import type { ScrapeResult } from "./index";
-import { ScraperError } from "./index";
+import { type ScrapeResult, ScraperError, dedupeSortLimit, stripCountryPrefix } from "./core";
 import { fetchWithTimeout } from "./fetch";
 import ieStationCodes from "./codes/ie-codes.json";
 
@@ -12,7 +11,7 @@ const IE_BASE_URL =
 const stationCodes = ieStationCodes as Record<string, string>;
 
 function buildUrl(stationId: string, numMins = 90): string {
-  const numericId = stationId.replace(/^[A-Z]+/, "");
+  const numericId = stripCountryPrefix(stationId);
   const code = stationCodes[numericId];
   if (!code) {
     throw new ScraperError(`Unknown Irish station ID: ${stationId}`, 400);
@@ -95,6 +94,11 @@ export async function scrapeIrelandTrains(
   const { response, fetchMs } = await fetchWithTimeout(url, "Irish");
 
   const xml = await response.text();
+
+  if (!xml.includes("ArrayOfObjStationData")) {
+    throw new ScraperError("Invalid response from Irish Rail API.", 502);
+  }
+
   const blocks = xml.match(/<objStationData>([\s\S]*?)<\/objStationData>/gi) ?? [];
 
   const trains: Train[] = [];
@@ -103,20 +107,13 @@ export async function scrapeIrelandTrains(
     if (train) trains.push(train);
   }
 
-  if (trains.length === 0 && response.status !== 200) {
-    throw new ScraperError("Invalid response from Irish Rail API.", 502);
-  }
-
   // Sort by scheduled time, deduplicate by train number, and limit to 16
-  trains.sort((a, b) => a.scheduledTime.localeCompare(b.scheduledTime));
-  const seen = new Set<string>();
-  const filtered = trains
-    .filter((t) => {
-      if (seen.has(t.trainNumber)) return false;
-      seen.add(t.trainNumber);
-      return true;
-    })
-    .slice(0, 16);
+  const filtered = dedupeSortLimit(
+    trains,
+    (train) => train.trainNumber,
+    (a, b) => a.scheduledTime.localeCompare(b.scheduledTime),
+    16,
+  );
 
   return {
     trains: filtered,

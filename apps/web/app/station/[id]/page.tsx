@@ -8,8 +8,9 @@ import type { Station } from "@repo/data";
 import { Button } from "@repo/ui/components/button";
 import { Card, CardContent } from "@repo/ui/components/card";
 import { ArrowLeftIcon, ArrowRightIcon } from "lucide-react";
-import { StaticMap } from "@/components/static-map";
 import { staticAssetUrl } from "@/lib/static-assets";
+import { getStationPhotos } from "@/lib/station-photos";
+import { StationGallery } from "@/components/station-page/station-gallery";
 import { StationHeader } from "@/components/station-page/station-header";
 import { StationActions } from "@/components/station-page/station-actions";
 import { StationStats } from "@/components/station-page/station-stats";
@@ -82,6 +83,7 @@ export default async function StationPage({ params }: StationPageProps) {
   const countryCode = code?.toUpperCase();
   const country = getCountry(station.id, { format: "name" });
   const countrySlug = code ? getCountrySlug(code) : null;
+  const stationPhotos = station.importance === 1 ? await getStationPhotos(station.id) : [];
 
   const jsonLd = {
     "@context": "https://schema.org",
@@ -108,13 +110,13 @@ export default async function StationPage({ params }: StationPageProps) {
           __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c"),
         }}
       />
-      {/* Static map hero */}
-      <div className="relative h-48 md:h-64 w-full">
-        <StaticMap
+      {/* Station media */}
+      <div className="relative h-52 w-full md:h-72">
+        <StationGallery
+          stationName={station.name}
           lat={station.geo.lat}
           lng={station.geo.lng}
-          zoom={14}
-          className="absolute inset-0"
+          photos={stationPhotos}
         />
         <Button
           variant="outline"

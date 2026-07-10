@@ -54,7 +54,7 @@ pnpm --filter=studio dev # Admin tool at localhost:3001
 
 ## Media Delivery
 
-Shared media is served by [apps/static](./apps/static) from `static.railradar24.com`. Small, repo-owned assets such as flags, operator logos, screenshots, and other reusable images are deployed through Cloudflare Workers Static Assets. Larger, growing collections such as future station photos are planned for a dedicated R2 bucket behind the same media app rather than being bundled into the web deployment.
+Shared media is served by [apps/static](./apps/static) from `static.railradar24.com`. Small, repo-owned assets such as flags, operator logos, screenshots, and other reusable images are deployed through Cloudflare Workers Static Assets. Curated station photos live in an EU Cloudflare R2 bucket behind the same media app and are described by per-station manifests. See [apps/static/README.md](./apps/static/README.md#station-photos) for the manifest template, image requirements, and upload workflow.
 
 ## Support
 

@@ -76,14 +76,14 @@ export function NearbyStations({ currentStation, allStations }: NearbyStationsPr
   const railStations = allStations.filter((s) => s.type === "rail");
   const metroStations = allStations.filter((s) => s.type === "metro");
   const nearbyRail = calculateNearbyStations(currentStation, railStations, 4);
-  const nearbyMetro = calculateNearbyStations(currentStation, metroStations, 2);
+  const nearbyMetro = calculateNearbyStations(currentStation, metroStations, 1);
   const combined = [...nearbyRail, ...nearbyMetro].sort((a, b) => a.distance - b.distance);
-  // Max 4 total, max 2 metro — pick closest, skipping excess metro
+  // Max 4 total, max 1 metro — pick closest, skipping excess metro
   const nearbyStations: typeof combined = [];
   let metroCount = 0;
   for (const station of combined) {
     if (station.type === "metro") {
-      if (metroCount >= 2) continue;
+      if (metroCount >= 1) continue;
       metroCount++;
     }
     nearbyStations.push(station);

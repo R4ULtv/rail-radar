@@ -1,13 +1,20 @@
 import type { Train } from "@repo/data";
 
-import { type ScrapeResult, formatTime } from "./index";
+import {
+  STATUS_WINDOW_MS,
+  type ScrapeResult,
+  formatTime,
+  resolveBrand,
+  statusFromWindow,
+  stripCountryPrefix,
+} from "./core";
 import { fetchWithTimeout } from "./fetch";
 
 const IRAIL_BASE_URL = "https://api.irail.be/v1/liveboard/";
 
 function convertBelgiumStationId(stationId: string): string {
   // Convert BE station ID to iRail format (e.g., "BE95000" -> "BE.NMBS.008895000")
-  const numericPart = stationId.replace(/^[A-Z]+/, "");
+  const numericPart = stripCountryPrefix(stationId);
   return `BE.NMBS.0088${numericPart}`;
 }
 
@@ -53,16 +60,7 @@ function parseEpochSeconds(value: string | undefined): number | null {
 }
 
 function getBrand(type: string): string {
-  switch (type) {
-    case "EUR":
-      return "Eurostar";
-    case "TGV":
-      return "SNCF";
-    case "ICE":
-      return "DB";
-    default:
-      return "SNCB";
-  }
+  return resolveBrand(type, "SNCB") ?? "SNCB";
 }
 
 function getBelgiumStatus(
@@ -79,13 +77,7 @@ function getBelgiumStatus(
   if (seconds === null) return null;
   const actualTime = (seconds + (parseEpochSeconds(entry.delay) ?? 0)) * 1000;
   const now = Date.now();
-  const fiveMinutes = 5 * 60 * 1000;
-
-  if (actualTime >= now - fiveMinutes && actualTime <= now + fiveMinutes) {
-    return type === "departures" ? "departing" : "incoming";
-  }
-
-  return null;
+  return statusFromWindow(actualTime, now, STATUS_WINDOW_MS, type);
 }
 
 export async function scrapeBelgiumTrains(

@@ -1,13 +1,13 @@
 import type { Train } from "@repo/data";
 
-import type { ScrapeResult } from "./index";
+import { type ScrapeResult, stripCountryPrefix } from "./core";
 import { fetchWithTimeout } from "./fetch";
 
 const RFI_BASE_URL = "https://iechub.rfi.it/ArriviPartenze/en/ArrivalsDepartures/Monitor";
 
 function buildRfiUrl(stationId: string, arrivals: boolean): string {
   // Extract numeric RFI place ID from station ID (e.g. "IT1728" -> "1728")
-  const placeId = stationId.replace(/^[A-Z]+/, "");
+  const placeId = stripCountryPrefix(stationId);
   if (arrivals) {
     return `${RFI_BASE_URL}?placeId=${placeId}&arrivals=True`;
   }

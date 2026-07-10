@@ -3,6 +3,7 @@ import { cache } from "hono/cache";
 import { CACHE_TTL } from "../constants";
 import { factory } from "../lib/env";
 import { jsonError } from "../lib/http";
+import { rateLimit } from "../middleware/rate-limit";
 
 const MAPBOX_STYLE = "https://api.mapbox.com/styles/v1/mapbox/dark-v11/static";
 const STATION_ICON_URL = encodeURIComponent("https://static.railradar24.com/station-icon.png");
@@ -19,6 +20,26 @@ function validDimensions(width: number, height: number) {
   return width >= 1 && width <= MAX_DIMENSION && height >= 1 && height <= MAX_DIMENSION;
 }
 
+function parseBbox(value: string): [number, number, number, number] | null {
+  const parts = value.split(",").map((part) => Number.parseFloat(part));
+  if (parts.length !== 4 || parts.some((part) => !Number.isFinite(part))) {
+    return null;
+  }
+
+  const [west, south, east, north] = parts as [number, number, number, number];
+  if (west < -180 || west > 180 || east < -180 || east > 180) {
+    return null;
+  }
+  if (south < -90 || south > 90 || north < -90 || north > 90) {
+    return null;
+  }
+  if (west >= east || south >= north) {
+    return null;
+  }
+
+  return [west, south, east, north];
+}
+
 function buildMapboxUrl(path: string, size: string, token: string, extra = "") {
   return `${MAPBOX_STYLE}/${path}/${size}@2x?attribution=false&logo=false${extra}&access_token=${token}`;
 }
@@ -31,6 +52,7 @@ function mapImageResponse(res: Response) {
 
 export const mapRoutes = factory.createApp().get(
   "/static",
+  rateLimit,
   cache({
     cacheName: "static-map-cache",
     cacheControl: CACHE_TTL.STATIC_MAP,
@@ -48,12 +70,17 @@ export const mapRoutes = factory.createApp().get(
         return jsonError(c, "Invalid dimensions. Max 1280x1280.", 400);
       }
 
-      const parts = bbox.split(",").map(Number);
-      if (parts.length !== 4 || parts.some(Number.isNaN)) {
+      const parsedBbox = parseBbox(bbox);
+      if (!parsedBbox) {
         return jsonError(c, "Invalid bbox. Must be west,south,east,north.", 400);
       }
 
-      mapboxUrl = buildMapboxUrl(`[${bbox}]`, `${width}x${height}`, token, "&padding=40");
+      mapboxUrl = buildMapboxUrl(
+        `[${parsedBbox.join(",")}]`,
+        `${width}x${height}`,
+        token,
+        "&padding=40",
+      );
     } else {
       const { width, height } = parseDimensions(c.req.query("w"), c.req.query("h"), [1280, 256]);
 

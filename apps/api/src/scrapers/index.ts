@@ -1,6 +1,6 @@
-import type { ContentfulStatusCode } from "hono/utils/http-status";
 import { getCountry, type CountryCode } from "@repo/data/countries";
-import type { Train } from "@repo/data";
+
+import type { ScrapeResult } from "./core";
 
 import { scrapeBelgiumTrains } from "./belgium";
 import { scrapeFinlandTrains } from "./finland";
@@ -16,60 +16,103 @@ import { scrapeDenmarkTrains } from "./denmark";
 import { scrapePolandTrains } from "./poland";
 import { scrapeFranceTrains } from "./france";
 
-export interface ScraperTiming {
-  fetchMs: number;
-}
+export * from "./core";
 
-export class ScraperError extends Error {
-  constructor(
-    message: string,
-    public statusCode: ContentfulStatusCode,
-    public timing?: ScraperTiming,
-  ) {
-    super(message);
-    this.name = "ScraperError";
-  }
-}
-
-export interface ScrapeResult {
-  trains: Train[];
-  info: string | null;
-  timing: ScraperTiming;
-}
-
-export function formatTime(isoString: string | null, timeZone: string): string {
-  if (!isoString) return "--:--";
-  return new Date(isoString).toLocaleTimeString("en-US", {
-    hour: "2-digit",
-    minute: "2-digit",
-    hour12: false,
-    timeZone,
-  });
-}
-
-type ScrapeFn = (
+export type ScrapeFn = (
   stationId: string,
   type?: "arrivals" | "departures",
   env?: Record<string, unknown>,
 ) => Promise<ScrapeResult>;
 
-const scrapers: Partial<Record<CountryCode, ScrapeFn>> = {
-  be: scrapeBelgiumTrains,
-  ch: scrapeSwissTrains,
-  fi: scrapeFinlandTrains,
-  ie: scrapeIrelandTrains,
-  it: scrapeTrains,
-  nl: scrapeNetherlandsTrains,
-  no: scrapeNorwayTrains,
-  se: scrapeSwedenTrains,
-  uk: scrapeUKTrains,
-  de: scrapeGermanTrains,
-  dk: scrapeDenmarkTrains,
-  pl: scrapePolandTrains,
-  fr: scrapeFranceTrains,
+export interface Scraper {
+  regionLabel: string;
+  timeZone: string;
+  trainLimit: number;
+  scrape: ScrapeFn;
+}
+
+const scrapers: Partial<Record<CountryCode, Scraper>> = {
+  be: {
+    regionLabel: "Belgian",
+    timeZone: "Europe/Brussels",
+    trainLimit: 16,
+    scrape: scrapeBelgiumTrains,
+  },
+  ch: {
+    regionLabel: "Swiss",
+    timeZone: "Europe/Zurich",
+    trainLimit: 16,
+    scrape: scrapeSwissTrains,
+  },
+  fi: {
+    regionLabel: "Finnish",
+    timeZone: "Europe/Helsinki",
+    trainLimit: 16,
+    scrape: scrapeFinlandTrains,
+  },
+  ie: {
+    regionLabel: "Irish",
+    timeZone: "Europe/Dublin",
+    trainLimit: 16,
+    scrape: scrapeIrelandTrains,
+  },
+  it: {
+    regionLabel: "Italian",
+    timeZone: "Europe/Rome",
+    trainLimit: 0,
+    scrape: scrapeTrains,
+  },
+  nl: {
+    regionLabel: "Dutch",
+    timeZone: "Europe/Amsterdam",
+    trainLimit: 16,
+    scrape: scrapeNetherlandsTrains,
+  },
+  no: {
+    regionLabel: "Norwegian",
+    timeZone: "Europe/Oslo",
+    trainLimit: 16,
+    scrape: scrapeNorwayTrains,
+  },
+  se: {
+    regionLabel: "Swedish",
+    timeZone: "Europe/Stockholm",
+    trainLimit: 16,
+    scrape: scrapeSwedenTrains,
+  },
+  uk: {
+    regionLabel: "UK",
+    timeZone: "Europe/London",
+    trainLimit: 30,
+    scrape: scrapeUKTrains,
+  },
+  de: {
+    regionLabel: "German",
+    timeZone: "Europe/Berlin",
+    trainLimit: 24,
+    scrape: scrapeGermanTrains,
+  },
+  dk: {
+    regionLabel: "Danish",
+    timeZone: "Europe/Copenhagen",
+    trainLimit: 24,
+    scrape: scrapeDenmarkTrains,
+  },
+  pl: {
+    regionLabel: "Polish",
+    timeZone: "Europe/Warsaw",
+    trainLimit: 24,
+    scrape: scrapePolandTrains,
+  },
+  fr: {
+    regionLabel: "French",
+    timeZone: "Europe/Paris",
+    trainLimit: 24,
+    scrape: scrapeFranceTrains,
+  },
 };
 
 export function getScraperForStation(stationId: string): ScrapeFn | null {
   const country = getCountry(stationId);
-  return country ? (scrapers[country] ?? null) : null;
+  return country ? (scrapers[country]?.scrape ?? null) : null;
 }

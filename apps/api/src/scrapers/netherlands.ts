@@ -1,6 +1,13 @@
 import type { Train } from "@repo/data";
 
-import { ScraperError, formatTime, type ScrapeResult } from "./index";
+import {
+  STATUS_WINDOW_MS,
+  ScraperError,
+  formatTime,
+  type ScrapeResult,
+  resolveBrand,
+  statusFromWindow,
+} from "./core";
 import { fetchWithTimeout } from "./fetch";
 
 const NS_BASE_URL = "https://gateway.apiportal.ns.nl/reisinformatie-api/api/v2";
@@ -61,18 +68,7 @@ interface NSArrivalsResponse {
 }
 
 function getBrand(trainCategory: string): string {
-  switch (trainCategory) {
-    case "ICE":
-      return "DB";
-    case "EUR":
-      return "Eurostar";
-    case "TGV":
-      return "SNCF";
-    case "THA":
-      return "Thalys";
-    default:
-      return "NS";
-  }
+  return resolveBrand(trainCategory, "NS") ?? "NS";
 }
 
 function calculateDelay(planned: string, actual?: string): number | null {
@@ -89,13 +85,7 @@ function getStatus(
 
   const actualTime = new Date(entry.actualDateTime ?? entry.plannedDateTime).getTime();
   const now = Date.now();
-  const fiveMinutes = 5 * 60 * 1000;
-
-  if (actualTime >= now - fiveMinutes && actualTime <= now + fiveMinutes) {
-    return type === "departures" ? "departing" : "incoming";
-  }
-
-  return null;
+  return statusFromWindow(actualTime, now, STATUS_WINDOW_MS, type);
 }
 
 function parseTrainNumber(name: string): string {

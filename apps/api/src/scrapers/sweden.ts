@@ -1,6 +1,13 @@
 import type { Train } from "@repo/data";
 
-import { ScraperError, type ScrapeResult } from "./index";
+import {
+  STATUS_WINDOW_MS,
+  ScraperError,
+  type ScrapeResult,
+  dedupeSortLimit,
+  statusFromWindow,
+  stripCountryPrefix,
+} from "./core";
 import { fetchWithTimeout } from "./fetch";
 
 const TRAFIKLAB_BASE_URL = "https://realtime-api.trafiklab.se/v1";
@@ -49,7 +56,7 @@ interface TrafiklabResponse {
 }
 
 function toTrafiklabAreaId(stationId: string): string {
-  const numericPart = stationId.replace(/^[A-Z]+/, "");
+  const numericPart = stripCountryPrefix(stationId);
   if (!numericPart) {
     throw new ScraperError("Unknown Swedish station.", 404);
   }
@@ -165,13 +172,7 @@ function getStatus(entry: TrafiklabDeparture, type: SwedenBoardType): Train["sta
   if (actualTime == null) return null;
 
   const now = Date.now();
-  const fiveMinutes = 5 * 60 * 1000;
-
-  if (actualTime >= now - fiveMinutes && actualTime <= now + fiveMinutes) {
-    return type === "departures" ? "departing" : "incoming";
-  }
-
-  return null;
+  return statusFromWindow(actualTime, now, STATUS_WINDOW_MS, type);
 }
 
 function getTrainNumber(entry: TrafiklabDeparture): string {
@@ -227,20 +228,18 @@ export async function scrapeSwedenTrains(
   const entries = (type === "departures" ? data.departures : data.arrivals) ?? [];
 
   // Filter to rail only, deduplicate, and limit
-  const seen = new Set<string>();
-  const trains = entries
-    .filter((entry) => {
-      if (!RAIL_MODES.has(entry.route.transport_mode)) return false;
-      // Skip trains terminating at this station (showing in departures but going nowhere)
-      if (type === "departures" && entry.stop.name === entry.route.destination?.name) return false;
-      // Deduplicate by train number + scheduled time
-      const dedupKey = `${getTrainNumber(entry)}-${entry.scheduled}`;
-      if (seen.has(dedupKey)) return false;
-      seen.add(dedupKey);
-      return true;
-    })
-    .slice(0, TRAIN_LIMIT)
-    .map((entry) => mapEntry(entry, type));
+  const railEntries = entries.filter((entry) => {
+    if (!RAIL_MODES.has(entry.route.transport_mode)) return false;
+    // Skip trains terminating at this station (showing in departures but going nowhere)
+    if (type === "departures" && entry.stop.name === entry.route.destination?.name) return false;
+    return true;
+  });
+  const trains = dedupeSortLimit(
+    railEntries,
+    (entry) => `${getTrainNumber(entry)}-${entry.scheduled}`,
+    () => 0,
+    TRAIN_LIMIT,
+  ).map((entry) => mapEntry(entry, type));
 
   return {
     trains,

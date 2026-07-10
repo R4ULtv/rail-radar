@@ -12,11 +12,20 @@
   import { Button } from "$lib/components/ui/button";
   import { Input } from "$lib/components/ui/input";
   import { ScrollArea } from "$lib/components/ui/scroll-area";
+  import * as Select from "$lib/components/ui/select";
   import * as Tabs from "$lib/components/ui/tabs";
   import type { ChangeType } from "$lib/types/contribution";
   import { cn } from "$lib/utils";
 
   type FilterType = "all" | "metro" | "light" | "duplicate";
+  type ImportanceValue = "any" | "1" | "2" | "3" | "4";
+
+  const importanceLabels: Record<Exclude<ImportanceValue, "any">, string> = {
+    "1": "Major",
+    "2": "Important",
+    "3": "Medium",
+    "4": "Minor",
+  };
   const ROW_HEIGHT = 36;
   const OVERSCAN = 12;
 
@@ -34,6 +43,7 @@
 
   let search = $state("");
   let filter = $state<FilterType>("all");
+  let importanceFilter = $state<ImportanceValue>("any");
   let scrollTop = $state(0);
   let viewportHeight = $state(0);
   let scrollContainer = $state<HTMLElement | null>(null);
@@ -49,6 +59,11 @@
 
     if (filter === "metro") result = result.filter((station) => station.type === "metro");
     if (filter === "light") result = result.filter((station) => station.type === "light");
+
+    if (importanceFilter !== "any") {
+      const level = Number(importanceFilter) as 1 | 2 | 3 | 4;
+      result = result.filter((station) => station.importance === level);
+    }
     if (filter === "duplicate") {
       const nameCounts = new Map<string, number>();
       const geoCounts = new Map<string, number>();
@@ -78,7 +93,7 @@
   const offsetY = $derived(startIndex * ROW_HEIGHT);
 
   $effect(() => {
-    const filterKey = `${search}\u0000${filter}`;
+    const filterKey = `${search}\u0000${filter}\u0000${importanceFilter}`;
     if (filterKey === lastFilterKey) return;
     lastFilterKey = filterKey;
     scrollTop = 0;
@@ -225,6 +240,23 @@
         </Tabs.Trigger>
       </Tabs.List>
     </Tabs.Root>
+
+    <Select.Root type="single" bind:value={importanceFilter}>
+      <Select.Trigger class="h-8 w-full text-xs font-normal">
+        {#if importanceFilter === "any"}
+          <span class="text-muted-foreground">Importance: all</span>
+        {:else}
+          Importance: {importanceFilter} - {importanceLabels[importanceFilter]}
+        {/if}
+      </Select.Trigger>
+      <Select.Content>
+        <Select.Item value="any">All importances</Select.Item>
+        <Select.Item value="1">1 - Major</Select.Item>
+        <Select.Item value="2">2 - Important</Select.Item>
+        <Select.Item value="3">3 - Medium</Select.Item>
+        <Select.Item value="4">4 - Minor</Select.Item>
+      </Select.Content>
+    </Select.Root>
   </div>
 
   <ScrollArea bind:viewportRef={scrollContainer} class="min-h-0 flex-1">

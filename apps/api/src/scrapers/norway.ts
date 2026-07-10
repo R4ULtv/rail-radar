@@ -1,6 +1,13 @@
 import type { Train } from "@repo/data";
 
-import { ScraperError, formatTime, type ScrapeResult } from "./index";
+import {
+  STATUS_WINDOW_MS,
+  ScraperError,
+  formatTime,
+  type ScrapeResult,
+  statusFromWindow,
+  stripCountryPrefix,
+} from "./core";
 import { fetchWithTimeout } from "./fetch";
 
 const ENTUR_GRAPHQL_URL = "https://api.entur.io/journey-planner/v3/graphql";
@@ -69,7 +76,7 @@ interface EnturEstimatedCall {
 }
 
 function toEnturStopPlaceId(stationId: string): string {
-  const numericPart = stationId.replace(/^[A-Z]+/, "");
+  const numericPart = stripCountryPrefix(stationId);
   if (!numericPart) {
     throw new ScraperError("Unknown Norwegian station.", 404);
   }
@@ -154,13 +161,7 @@ function getStatus(call: EnturEstimatedCall, type: NorwayBoardType): Train["stat
 
   const expectedTime = new Date(getExpectedIso(call, type)).getTime();
   const now = Date.now();
-  const fiveMinutes = 5 * 60 * 1000;
-
-  if (expectedTime >= now - fiveMinutes && expectedTime <= now + fiveMinutes) {
-    return type === "departures" ? "departing" : "incoming";
-  }
-
-  return null;
+  return statusFromWindow(expectedTime, now, STATUS_WINDOW_MS, type);
 }
 
 function getLineCode(call: EnturEstimatedCall): string | null {

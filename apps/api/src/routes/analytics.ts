@@ -4,9 +4,11 @@ import { getAnalyticsOverview } from "../analytics";
 import { CACHE_TTL } from "../constants";
 import { factory } from "../lib/env";
 import { jsonError } from "../lib/http";
+import { rateLimit } from "../middleware/rate-limit";
 
 export const analyticsRoutes = factory.createApp().get(
   "/overview",
+  rateLimit,
   cache({
     cacheName: "analytics-cache",
     cacheControl: CACHE_TTL.ANALYTICS,

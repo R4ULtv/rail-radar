@@ -1,16 +1,22 @@
 import type { Train } from "@repo/data";
 
-import { ScraperError, type ScrapeResult } from "./index";
+import {
+  STATUS_WINDOW_MS,
+  ScraperError,
+  type ScrapeResult,
+  statusFromWindow,
+  stripCountryPrefix,
+} from "./core";
 import { fetchWithTimeout } from "./fetch";
 
 const SNCF_BASE_URL = "https://api.navitia.io/v1/coverage/sncf";
 const PARIS_TZ = "Europe/Paris";
-const RECENT_WINDOW_MS = 5 * 60 * 1000;
+const RECENT_WINDOW_MS = STATUS_WINDOW_MS;
 const TRAIN_LIMIT = 24;
 
 // Convert FR station ID to its 8-digit UIC code (e.g. "FR686006" -> "87686006").
 function convertFranceStationId(stationId: string): string {
-  const numericPart = stationId.replace(/^[A-Z]+/, "");
+  const numericPart = stripCountryPrefix(stationId);
   return `87${numericPart}`;
 }
 
@@ -182,10 +188,7 @@ function getStatus(
 ): Train["status"] {
   if (!realtime) return null;
   const actualMs = naiveMs(parseNavitiaDateTime(realtime));
-  if (actualMs >= nowMs - RECENT_WINDOW_MS && actualMs <= nowMs + RECENT_WINDOW_MS) {
-    return arrivals ? "incoming" : "departing";
-  }
-  return null;
+  return statusFromWindow(actualMs, nowMs, RECENT_WINDOW_MS, arrivals ? "arrivals" : "departures");
 }
 
 // Navitia formats directions as "Name (City)" — drop the trailing parenthetical.

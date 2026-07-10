@@ -10,10 +10,11 @@
     "cf-typegen": "wrangler types --env-interface CloudflareBindings"
   },
   "dependencies": {
-    "hono": "^4.12.27"
+    "hono": "^4.12.28"
   },
   "devDependencies": {
     "@repo/typescript-config": "workspace:*",
-    "wrangler": "^4.106.0"
+    "typescript": "^6.0.3",
+    "wrangler": "^4.107.1"
   }
 }

@@ -11,7 +11,7 @@ export default function StationLoading() {
   return (
     <div className="min-h-screen bg-background">
       {/* Map hero placeholder */}
-      <div className="relative h-48 md:h-64 w-full">
+      <div className="relative h-52 md:h-72 w-full">
         <Skeleton className="absolute inset-0 rounded-none" />
         {/* Back button placeholder */}
         <div className="absolute top-2 left-2 md:top-4 md:left-4">
