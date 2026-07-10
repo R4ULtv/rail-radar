@@ -19,7 +19,7 @@
     "motion": "^12.42.2",
     "next": "16.2.10",
     "nuqs": "^2.9.0",
-    "posthog-js": "^1.398.4",
+    "posthog-js": "^1.399.0",
     "react": "^19.2.7",
     "react-dom": "^19.2.7",
     "react-map-gl": "^8.1.1",
