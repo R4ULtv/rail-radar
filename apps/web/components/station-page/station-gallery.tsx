@@ -306,7 +306,7 @@ export function StationGallery({ stationName, lat, lng, photos }: StationGallery
       </div>
 
       {items.length > 1 && (
-        <div className="absolute bottom-2.5 left-1/2 hidden -translate-x-1/2 gap-1.5 md:flex">
+        <div className="absolute bottom-3 hidden md:flex md:left-1/2 md:-translate-x-1/2 gap-1.5">
           {items.map((item, index) => (
             <button
               key={item.key}
