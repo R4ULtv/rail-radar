@@ -19,7 +19,7 @@
   "devDependencies": {
     "@fontsource-variable/geist": "^5.2.9",
     "@internationalized/date": "^3.12.2",
-    "@lucide/svelte": "^1.23.0",
+    "@lucide/svelte": "^1.24.0",
     "@repo/data": "workspace:*",
     "@repo/typescript-config": "workspace:*",
     "@sveltejs/adapter-cloudflare": "^7.2.9",
@@ -28,7 +28,7 @@
     "@types/node": "^22.20.1",
     "bits-ui": "^2.18.1",
     "clsx": "^2.1.1",
-    "shadcn-svelte": "^1.4.0",
+    "shadcn-svelte": "^1.4.1",
     "svelte-check": "^4.7.2",
     "tailwind-merge": "^3.6.0",
     "tailwind-variants": "^3.2.2",
