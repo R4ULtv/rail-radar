@@ -28,6 +28,25 @@ const IMAGE_CACHE = "public, max-age=31536000, immutable";
 const SAFE_KEY_SEGMENT = /^[A-Za-z0-9_-]+$/;
 const SAFE_RELATIVE_KEY = /^[A-Za-z0-9][A-Za-z0-9/_-]*\.[A-Za-z0-9]+$/;
 
+async function withEdgeCache(
+  c: AppContext,
+  build: () => Promise<Response>,
+): Promise<Response> {
+  const cache = caches.default;
+  const cacheKey = new Request(c.req.url, { method: "GET" });
+  const cached = await cache.match(cacheKey);
+  if (cached) {
+    return cached;
+  }
+
+  const response = await build();
+  // Only cache successful, cacheable responses (200 with a Cache-Control).
+  if (response.ok && response.headers.has("Cache-Control")) {
+    c.executionCtx.waitUntil(cache.put(cacheKey, response.clone()));
+  }
+  return response;
+}
+
 function isSafeKeySegment(value: string) {
   return SAFE_KEY_SEGMENT.test(value);
 }
@@ -108,7 +127,8 @@ async function getPhotoManifest(bucket: R2Bucket, stationId: string) {
 
   const manifest = normalizePhotoManifest(await object.json(), stationId);
   if (!manifest) {
-    throw new Error(`Invalid station photo manifest for ${stationId}`);
+    console.error(`Invalid station photo manifest for ${stationId}`);
+    return null;
   }
 
   return manifest;
@@ -120,14 +140,16 @@ export async function getStationPhotos(c: AppContext) {
     return c.json({ error: "Invalid station id" }, 400);
   }
 
-  const manifest = await getPhotoManifest(c.env.STATION_IMAGES, stationId);
-  if (!manifest) {
-    c.header("Cache-Control", MISSING_MANIFEST_CACHE);
-    return c.json({ stationId, images: [] }, 404);
-  }
+  return withEdgeCache(c, async () => {
+    const manifest = await getPhotoManifest(c.env.STATION_IMAGES, stationId);
+    if (!manifest) {
+      c.header("Cache-Control", MISSING_MANIFEST_CACHE);
+      return c.json({ stationId, images: [] }, 404);
+    }
 
-  c.header("Cache-Control", MANIFEST_CACHE);
-  return c.json(manifest);
+    c.header("Cache-Control", MANIFEST_CACHE);
+    return c.json(manifest);
+  });
 }
 
 export async function getStationPhoto(c: AppContext) {
@@ -142,22 +164,24 @@ export async function getStationPhoto(c: AppContext) {
     return c.text("Invalid station photo path", 400);
   }
 
-  const manifest = await getPhotoManifest(c.env.STATION_IMAGES, stationId);
-  const image = manifest?.images.find((photo) => photo.key === photoKey);
-  if (!image) {
-    return c.text("Station photo not found", 404);
-  }
+  return withEdgeCache(c, async () => {
+    const manifest = await getPhotoManifest(c.env.STATION_IMAGES, stationId);
+    const image = manifest?.images.find((photo) => photo.key === photoKey);
+    if (!image) {
+      return c.text("Station photo not found", 404);
+    }
 
-  const object = await c.env.STATION_IMAGES.get(`stations/${stationId}/${image.key}`);
-  if (!object) {
-    return c.text("Station photo not found", 404);
-  }
+    const object = await c.env.STATION_IMAGES.get(`stations/${stationId}/${image.key}`);
+    if (!object) {
+      return c.text("Station photo not found", 404);
+    }
 
-  const headers = new Headers();
-  object.writeHttpMetadata(headers);
-  headers.set("Cache-Control", IMAGE_CACHE);
-  headers.set("ETag", object.httpEtag);
-  headers.set("Content-Type", headers.get("Content-Type") ?? "image/webp");
+    const headers = new Headers();
+    object.writeHttpMetadata(headers);
+    headers.set("Cache-Control", IMAGE_CACHE);
+    headers.set("ETag", object.httpEtag);
+    headers.set("Content-Type", headers.get("Content-Type") ?? "image/webp");
 
-  return new Response(object.body, { headers });
+    return new Response(object.body, { headers });
+  });
 }
