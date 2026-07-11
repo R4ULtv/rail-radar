@@ -103,7 +103,7 @@ export async function scrapeSwissTrains(
       category: entry.category ? `${entry.category}${lineNumber}` : null,
       trainNumber: trainNumber,
       scheduledTime,
-      delay: stop.delay,
+      delay: stop.delay != null && stop.delay > 0 ? stop.delay : null,
       platform: getSwissPlatform(stop),
       status: getSwissStatus(stop, type),
       info: null,
