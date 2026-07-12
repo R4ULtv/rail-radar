@@ -22,6 +22,16 @@ interface StationPhoto {
 
 type AppContext = Context<{ Bindings: AppBindings }>;
 
+type PhotoManifestResult =
+  | { status: "found"; manifest: StationPhotoManifest }
+  | { status: "missing" }
+  | { status: "invalid" };
+
+interface CacheResult {
+  response: Response;
+  cacheable: boolean;
+}
+
 const MANIFEST_CACHE = `public, max-age=43200, s-maxage=43200`;
 const MISSING_MANIFEST_CACHE = "public, max-age=60, s-maxage=300";
 const IMAGE_CACHE = "public, max-age=31536000, immutable";
@@ -30,7 +40,7 @@ const SAFE_RELATIVE_KEY = /^[A-Za-z0-9][A-Za-z0-9/_-]*\.[A-Za-z0-9]+$/;
 
 async function withEdgeCache(
   c: AppContext,
-  build: () => Promise<Response>,
+  build: () => Promise<CacheResult>,
 ): Promise<Response> {
   const cache = caches.default;
   const cacheKey = new Request(c.req.url, { method: "GET" });
@@ -39,9 +49,8 @@ async function withEdgeCache(
     return cached;
   }
 
-  const response = await build();
-  // Only cache successful, cacheable responses (200 with a Cache-Control).
-  if (response.ok && response.headers.has("Cache-Control")) {
+  const { response, cacheable } = await build();
+  if (cacheable && response.headers.has("Cache-Control")) {
     c.executionCtx.waitUntil(cache.put(cacheKey, response.clone()));
   }
   return response;
@@ -119,19 +128,22 @@ function normalizePhotoManifest(value: unknown, stationId: string): StationPhoto
   };
 }
 
-async function getPhotoManifest(bucket: R2Bucket, stationId: string) {
+async function getPhotoManifest(
+  bucket: R2Bucket,
+  stationId: string,
+): Promise<PhotoManifestResult> {
   const object = await bucket.get(`stations/${stationId}/manifest.json`);
   if (!object) {
-    return null;
+    return { status: "missing" };
   }
 
   const manifest = normalizePhotoManifest(await object.json(), stationId);
   if (!manifest) {
     console.error(`Invalid station photo manifest for ${stationId}`);
-    return null;
+    return { status: "invalid" };
   }
 
-  return manifest;
+  return { status: "found", manifest };
 }
 
 export async function getStationPhotos(c: AppContext) {
@@ -141,14 +153,21 @@ export async function getStationPhotos(c: AppContext) {
   }
 
   return withEdgeCache(c, async () => {
-    const manifest = await getPhotoManifest(c.env.STATION_IMAGES, stationId);
-    if (!manifest) {
+    const result = await getPhotoManifest(c.env.STATION_IMAGES, stationId);
+    if (result.status === "missing") {
       c.header("Cache-Control", MISSING_MANIFEST_CACHE);
-      return c.json({ stationId, images: [] }, 404);
+      return {
+        response: c.json({ stationId, images: [] }, 404),
+        cacheable: true,
+      };
+    }
+
+    if (result.status === "invalid") {
+      throw new Error(`Invalid station photo manifest for ${stationId}`);
     }
 
     c.header("Cache-Control", MANIFEST_CACHE);
-    return c.json(manifest);
+    return { response: c.json(result.manifest), cacheable: true };
   });
 }
 
@@ -165,15 +184,22 @@ export async function getStationPhoto(c: AppContext) {
   }
 
   return withEdgeCache(c, async () => {
-    const manifest = await getPhotoManifest(c.env.STATION_IMAGES, stationId);
-    const image = manifest?.images.find((photo) => photo.key === photoKey);
+    const result = await getPhotoManifest(c.env.STATION_IMAGES, stationId);
+    if (result.status === "invalid") {
+      throw new Error(`Invalid station photo manifest for ${stationId}`);
+    }
+
+    const image =
+      result.status === "found"
+        ? result.manifest.images.find((photo) => photo.key === photoKey)
+        : undefined;
     if (!image) {
-      return c.text("Station photo not found", 404);
+      return { response: c.text("Station photo not found", 404), cacheable: false };
     }
 
     const object = await c.env.STATION_IMAGES.get(`stations/${stationId}/${image.key}`);
     if (!object) {
-      return c.text("Station photo not found", 404);
+      return { response: c.text("Station photo not found", 404), cacheable: false };
     }
 
     const headers = new Headers();
@@ -182,6 +208,9 @@ export async function getStationPhoto(c: AppContext) {
     headers.set("ETag", object.httpEtag);
     headers.set("Content-Type", headers.get("Content-Type") ?? "image/webp");
 
-    return new Response(object.body, { headers });
+    return {
+      response: new Response(object.body, { headers }),
+      cacheable: true,
+    };
   });
 }
