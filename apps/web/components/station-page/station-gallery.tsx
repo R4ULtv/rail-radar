@@ -52,12 +52,25 @@ function attributionParts(attribution?: StationPhotoAttribution) {
   );
 }
 
+function safeHttpsUrl(value?: string | null) {
+  if (!value) {
+    return undefined;
+  }
+
+  try {
+    const url = new URL(value);
+    return url.protocol === "https:" ? value : undefined;
+  } catch {
+    return undefined;
+  }
+}
+
 function PhotoAttribution({ attribution }: { attribution?: StationPhotoAttribution }) {
   const parts = attributionParts(attribution);
-  const sourceUrl = attribution?.sourceUrl ?? undefined;
+  const sourceUrl = safeHttpsUrl(attribution?.sourceUrl);
   const originLabel = attribution?.origin ?? "Origin";
 
-  if (parts.length === 0 && !sourceUrl) {
+  if (parts.length === 0 && !sourceUrl && !attribution?.sourceUrl) {
     return null;
   }
 
@@ -75,6 +88,8 @@ function PhotoAttribution({ attribution }: { attribution?: StationPhotoAttributi
           {originLabel}
         </a>
       )}
+      {parts.length > 0 && !sourceUrl && attribution?.sourceUrl && <span> · </span>}
+      {!sourceUrl && attribution?.sourceUrl && <span>{originLabel}</span>}
     </div>
   );
 }
