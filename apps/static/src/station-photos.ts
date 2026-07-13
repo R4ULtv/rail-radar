@@ -45,10 +45,7 @@ const IMAGE_CONTENT_TYPES = {
   webp: "image/webp",
 } as const;
 
-async function withEdgeCache(
-  c: AppContext,
-  build: () => Promise<CacheResult>,
-): Promise<Response> {
+async function withEdgeCache(c: AppContext, build: () => Promise<CacheResult>): Promise<Response> {
   const cache = caches.default;
   const cacheKey = new Request(c.req.url, { method: "GET" });
   const cached = await cache.match(cacheKey);
@@ -135,13 +132,6 @@ function normalizePhotoManifest(value: unknown, stationId: string): StationPhoto
       ) {
         return null;
       }
-
-      if (
-        attribution.sourceUrl !== undefined &&
-        normalizeHttpsUrl(attribution.sourceUrl) === undefined
-      ) {
-        return null;
-      }
     }
 
     images.push({
@@ -170,10 +160,7 @@ function normalizePhotoManifest(value: unknown, stationId: string): StationPhoto
   };
 }
 
-async function getPhotoManifest(
-  bucket: R2Bucket,
-  stationId: string,
-): Promise<PhotoManifestResult> {
+async function getPhotoManifest(bucket: R2Bucket, stationId: string): Promise<PhotoManifestResult> {
   const object = await bucket.get(`stations/${stationId}/manifest.json`);
   if (!object) {
     return { status: "missing" };
@@ -196,16 +183,12 @@ export async function getStationPhotos(c: AppContext) {
 
   return withEdgeCache(c, async () => {
     const result = await getPhotoManifest(c.env.STATION_IMAGES, stationId);
-    if (result.status === "missing") {
+    if (result.status !== "found") {
       c.header("Cache-Control", MISSING_MANIFEST_CACHE);
       return {
         response: c.json({ stationId, images: [] }, 404),
         cacheable: true,
       };
-    }
-
-    if (result.status === "invalid") {
-      throw new Error(`Invalid station photo manifest for ${stationId}`);
     }
 
     c.header("Cache-Control", MANIFEST_CACHE);
@@ -227,9 +210,6 @@ export async function getStationPhoto(c: AppContext) {
 
   return withEdgeCache(c, async () => {
     const result = await getPhotoManifest(c.env.STATION_IMAGES, stationId);
-    if (result.status === "invalid") {
-      throw new Error(`Invalid station photo manifest for ${stationId}`);
-    }
 
     const image =
       result.status === "found"
