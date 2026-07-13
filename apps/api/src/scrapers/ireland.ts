@@ -1,7 +1,7 @@
 import type { Train } from "@repo/data";
 
 import { type ScrapeResult, ScraperError, dedupeSortLimit, stripCountryPrefix } from "./core";
-import { fetchWithTimeout } from "./fetch";
+import { fetchTextWithTimeout } from "./fetch";
 import ieStationCodes from "./codes/ie-codes.json";
 
 const IE_BASE_URL =
@@ -91,9 +91,7 @@ export async function scrapeIrelandTrains(
   type: "arrivals" | "departures" = "departures",
 ): Promise<ScrapeResult> {
   const url = buildUrl(stationId);
-  const { response, fetchMs } = await fetchWithTimeout(url, "Irish");
-
-  const xml = await response.text();
+  const { text: xml, fetchMs } = await fetchTextWithTimeout(url, "Irish");
 
   if (!xml.includes("ArrayOfObjStationData")) {
     throw new ScraperError("Invalid response from Irish Rail API.", 502);

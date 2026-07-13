@@ -11,7 +11,7 @@ import {
   statusFromWindow,
   stripCountryPrefix,
 } from "./core";
-import { fetchWithTimeout } from "./fetch";
+import { fetchJsonWithTimeout } from "./fetch";
 
 const DIGITRAFFIC_BASE_URL = "https://rata.digitraffic.fi/api/v1";
 const TRAIN_LIMIT = 16;
@@ -151,11 +151,9 @@ export async function scrapeFinlandTrains(
 ): Promise<ScrapeResult> {
   const shortCode = getShortCode(stationId);
   const url = buildUrl(shortCode, type);
-  const { response, fetchMs } = await fetchWithTimeout(url, "Finnish", {
+  const { data, fetchMs } = await fetchJsonWithTimeout<DigitrafficTrain[]>(url, "Finnish", {
     headers: { "Accept-Encoding": "gzip" },
   });
-
-  const data: DigitrafficTrain[] = await response.json();
 
   if (!Array.isArray(data)) {
     throw new Error("Invalid response from Finnish train data source.");

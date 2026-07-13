@@ -9,7 +9,7 @@ import {
   statusFromWindow,
   stripCountryPrefix,
 } from "./core";
-import { fetchWithTimeout } from "./fetch";
+import { fetchJsonWithTimeout } from "./fetch";
 
 const DB_BOARD_URL = "https://app.services-bahn.de/mob/bahnhofstafel";
 const CONTENT_TYPE = "application/x.db.vendo.mob.bahnhofstafeln.v2+json";
@@ -211,7 +211,7 @@ export async function scrapeGermanTrains(
     verkehrsmittel: ["ALL"],
   });
 
-  const { response, fetchMs } = await fetchWithTimeout(url, "German", {
+  const { data, fetchMs } = await fetchJsonWithTimeout<DbBoardResponse>(url, "German", {
     method: "POST",
     headers: {
       "Content-Type": CONTENT_TYPE,
@@ -220,8 +220,6 @@ export async function scrapeGermanTrains(
     },
     body,
   });
-
-  const data: DbBoardResponse = await response.json();
 
   const entries =
     (type === "departures"

@@ -8,7 +8,7 @@ import {
   statusFromWindow,
   stripCountryPrefix,
 } from "./core";
-import { fetchWithTimeout } from "./fetch";
+import { fetchJsonWithTimeout } from "./fetch";
 
 const TRAFIKLAB_BASE_URL = "https://realtime-api.trafiklab.se/v1";
 const TRAIN_LIMIT = 16;
@@ -219,11 +219,9 @@ export async function scrapeSwedenTrains(
   const path = type === "departures" ? "departures" : "arrivals";
   const url = `${TRAFIKLAB_BASE_URL}/${path}/${areaId}?key=${apiKey}`;
 
-  const { response, fetchMs } = await fetchWithTimeout(url, "Swedish", {
+  const { data, fetchMs } = await fetchJsonWithTimeout<TrafiklabResponse>(url, "Swedish", {
     headers: { Accept: "application/json" },
   });
-
-  const data: TrafiklabResponse = await response.json();
 
   const entries = (type === "departures" ? data.departures : data.arrivals) ?? [];
 

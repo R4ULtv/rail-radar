@@ -7,7 +7,7 @@ import {
   statusFromWindow,
   stripCountryPrefix,
 } from "./core";
-import { fetchWithTimeout } from "./fetch";
+import { fetchJsonWithTimeout } from "./fetch";
 
 const SNCF_BASE_URL = "https://api.navitia.io/v1/coverage/sncf";
 const PARIS_TZ = "Europe/Paris";
@@ -218,14 +218,12 @@ export async function scrapeFranceTrains(
   const fromDatetime = toNavitiaString(nowMs - RECENT_WINDOW_MS);
   const url = buildSncfUrl(stationId, arrivals, fromDatetime);
 
-  const { response, fetchMs } = await fetchWithTimeout(url, "French", {
+  const { data, fetchMs } = await fetchJsonWithTimeout<SncfBoardResponse>(url, "French", {
     headers: {
       // Navitia uses HTTP Basic auth with the API key as the username (empty password).
       Authorization: `Basic ${btoa(`${apiKey}:`)}`,
     },
   });
-
-  const data: SncfBoardResponse = await response.json();
   const passages = ((arrivals ? data.arrivals : data.departures) ?? []).filter(
     (p) => !NON_RAIL_MODES.has(p.display_informations.physical_mode ?? ""),
   );

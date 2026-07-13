@@ -8,7 +8,7 @@ import {
   type ScrapeResult,
   statusFromWindow,
 } from "./core";
-import { fetchWithTimeout } from "./fetch";
+import { fetchJsonWithTimeout } from "./fetch";
 
 const POLAND_BASE_URL = "https://pdp-api.plk-sa.pl/api/v1";
 const POLAND_TIMEZONE = "Europe/Warsaw";
@@ -187,19 +187,19 @@ function isRetryablePolandError(error: unknown): boolean {
   return statusCode === 408 || statusCode === 429 || (statusCode >= 500 && statusCode !== 501);
 }
 
-async function fetchPolandWithRetry(
+async function fetchPolandWithRetry<T>(
   url: string,
   headers: Record<string, string>,
-): Promise<{ response: Response; fetchMs: number }> {
+): Promise<{ data: T; fetchMs: number }> {
   let totalFetchMs = 0;
 
   for (let attempt = 0; attempt <= POLAND_RETRY_DELAYS_MS.length; attempt++) {
     try {
       const result = await withPolandFetchSlot(() =>
-        fetchWithTimeout(url, "Polish", { headers }, POLAND_FETCH_TIMEOUT_MS),
+        fetchJsonWithTimeout<T>(url, "Polish", { headers }, POLAND_FETCH_TIMEOUT_MS),
       );
       return {
-        response: result.response,
+        data: result.data,
         fetchMs: totalFetchMs + result.fetchMs,
       };
     } catch (error) {
@@ -448,8 +448,8 @@ async function fetchPolandSchedules(
     dictionaries: true,
   });
 
-  const schedulesResult = await fetchPolandWithRetry(schedulesUrl, headers);
-  return schedulesResult.response.json();
+  const schedulesResult = await fetchPolandWithRetry<PolandScheduleResponse>(schedulesUrl, headers);
+  return schedulesResult.data;
 }
 
 function getCachedPolandSchedules(
@@ -502,8 +502,11 @@ async function fetchPolandRawData(stationNumber: number, apiKey: string): Promis
   });
   const headers = { ...POLAND_HEADERS, "X-API-Key": apiKey };
 
-  const operationsResult = await fetchPolandWithRetry(operationsUrl, headers);
-  const operationsData: PolandOperationResponse = await operationsResult.response.json();
+  const operationsResult = await fetchPolandWithRetry<PolandOperationResponse>(
+    operationsUrl,
+    headers,
+  );
+  const operationsData: PolandOperationResponse = operationsResult.data;
 
   let schedulesData: PolandScheduleResponse = {};
   try {

@@ -8,7 +8,7 @@ import {
   statusFromWindow,
   stripCountryPrefix,
 } from "./core";
-import { fetchWithTimeout } from "./fetch";
+import { fetchJsonWithTimeout } from "./fetch";
 
 const ENTUR_GRAPHQL_URL = "https://api.entur.io/journey-planner/v3/graphql";
 const ENTUR_CLIENT_NAME = "rail-radar";
@@ -229,19 +229,21 @@ export async function scrapeNorwayTrains(
   stationId: string,
   type: NorwayBoardType = "departures",
 ): Promise<ScrapeResult> {
-  const { response, fetchMs } = await fetchWithTimeout(ENTUR_GRAPHQL_URL, "Norwegian", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "ET-Client-Name": ENTUR_CLIENT_NAME,
+  const { data, fetchMs } = await fetchJsonWithTimeout<EnturGraphQLResponse>(
+    ENTUR_GRAPHQL_URL,
+    "Norwegian",
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "ET-Client-Name": ENTUR_CLIENT_NAME,
+      },
+      body: JSON.stringify({
+        query: buildQuery(type),
+        variables: { id: toEnturStopPlaceId(stationId) },
+      }),
     },
-    body: JSON.stringify({
-      query: buildQuery(type),
-      variables: { id: toEnturStopPlaceId(stationId) },
-    }),
-  });
-
-  const data: EnturGraphQLResponse = await response.json();
+  );
 
   if (data.errors?.length) {
     throw new ScraperError(data.errors[0]?.message ?? "Entur query failed.", 502, { fetchMs });

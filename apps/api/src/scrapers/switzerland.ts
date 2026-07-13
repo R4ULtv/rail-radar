@@ -7,7 +7,7 @@ import {
   statusFromWindow,
   stripCountryPrefix,
 } from "./core";
-import { fetchWithTimeout } from "./fetch";
+import { fetchJsonWithTimeout } from "./fetch";
 
 const SWISS_BASE_URL = "https://transport.opendata.ch/v1/stationboard";
 
@@ -81,9 +81,7 @@ export async function scrapeSwissTrains(
   type: "arrivals" | "departures" = "departures",
 ): Promise<ScrapeResult> {
   const url = buildSwissUrl(stationId, type === "arrivals");
-  const { response, fetchMs } = await fetchWithTimeout(url, "Swiss");
-
-  const data: TransportResponse = await response.json();
+  const { data, fetchMs } = await fetchJsonWithTimeout<TransportResponse>(url, "Swiss");
 
   if (!data.stationboard || !Array.isArray(data.stationboard)) {
     throw new Error("Invalid response from Swiss train data source.");
