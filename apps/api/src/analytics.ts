@@ -67,6 +67,10 @@ export const PROVIDER_IDS = [
   "rfi",
   "nationalrail",
   "sncf",
+  "db",
+  "rejseplanen",
+  "plk",
+  "trafiklab",
 ] as const;
 
 export type ProviderId = (typeof PROVIDER_IDS)[number];
@@ -76,11 +80,15 @@ export type ProviderMetricResult = "success" | "error" | "timeout";
 const COUNTRY_TO_PROVIDER: Partial<Record<CountryCode, ProviderId>> = {
   be: "irail",
   ch: "opendata-ch",
+  de: "db",
+  dk: "rejseplanen",
   fi: "digitraffic",
   ie: "irishrail",
   it: "rfi",
   nl: "ns",
   no: "entur",
+  pl: "plk",
+  se: "trafiklab",
   uk: "nationalrail",
   fr: "sncf",
 };

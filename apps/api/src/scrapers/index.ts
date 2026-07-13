@@ -40,6 +40,8 @@ const scrapers: Partial<Record<CountryCode, ScrapeFn>> = {
   fr: scrapeFranceTrains,
 };
 
+export const SCRAPER_COUNTRIES = Object.freeze(Object.keys(scrapers) as CountryCode[]);
+
 export function getScraperForStation(stationId: string): ScrapeFn | null {
   const country = getCountry(stationId);
   return country ? (scrapers[country] ?? null) : null;
