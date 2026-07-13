@@ -93,12 +93,28 @@ const COUNTRY_TO_PROVIDER: Partial<Record<CountryCode, ProviderId>> = {
   fr: "sncf",
 };
 
-async function hashIP(ip: string): Promise<string> {
+async function hashIP(ip: string, pepper: string): Promise<string> {
   const encoder = new TextEncoder();
-  const data = encoder.encode(ip);
-  const hashBuffer = await crypto.subtle.digest("SHA-256", data);
-  const hashArray = Array.from(new Uint8Array(hashBuffer));
-  return hashArray.map((b) => b.toString(16).padStart(2, "0")).join("");
+  if (!pepper) {
+    // Local dev without the secret: fall back to the legacy unkeyed hash so
+    // the Worker keeps functioning, but say so loudly.
+    console.warn("IP_HASH_PEPPER is not set; falling back to unkeyed SHA-256");
+    const hashBuffer = await crypto.subtle.digest("SHA-256", encoder.encode(ip));
+    return Array.from(new Uint8Array(hashBuffer))
+      .map((b) => b.toString(16).padStart(2, "0"))
+      .join("");
+  }
+  const key = await crypto.subtle.importKey(
+    "raw",
+    encoder.encode(pepper),
+    { name: "HMAC", hash: "SHA-256" },
+    false,
+    ["sign"],
+  );
+  const signature = await crypto.subtle.sign("HMAC", key, encoder.encode(ip));
+  return Array.from(new Uint8Array(signature))
+    .map((b) => b.toString(16).padStart(2, "0"))
+    .join("");
 }
 
 async function queryAnalytics<T>(accountId: string, apiToken: string, query: string): Promise<T> {
@@ -124,8 +140,9 @@ async function queryAnalytics<T>(accountId: string, apiToken: string, query: str
 export async function recordStationVisit(
   analytics: AnalyticsEngineDataset,
   data: { stationId: string; stationName: string; ip: string; type: string; country: string },
+  pepper: string,
 ): Promise<void> {
-  const hashedIP = await hashIP(data.ip);
+  const hashedIP = await hashIP(data.ip, pepper);
   analytics.writeDataPoint({
     blobs: [data.stationName, hashedIP, data.type, data.stationId, data.country],
     doubles: [],

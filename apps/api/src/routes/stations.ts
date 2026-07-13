@@ -208,13 +208,17 @@ export const stationsRoutes = factory
         const ip = c.get("clientIp");
 
         c.executionCtx.waitUntil(
-          recordStationVisit(c.env.STATION_ANALYTICS, {
-            stationId: station.id,
-            stationName: station.name,
-            ip,
-            type,
-            country,
-          }),
+          recordStationVisit(
+            c.env.STATION_ANALYTICS,
+            {
+              stationId: station.id,
+              stationName: station.name,
+              ip,
+              type,
+              country,
+            },
+            c.env.IP_HASH_PEPPER,
+          ),
         );
 
         if (provider) {
