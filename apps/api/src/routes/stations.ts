@@ -18,13 +18,14 @@ import { rateLimit } from "../middleware/rate-limit";
 import { createStationSearch } from "../search";
 import { getScraperForStation, ScraperError } from "../scrapers";
 
-const searchStations = createStationSearch(stations);
+let searchStations: ReturnType<typeof createStationSearch> | undefined;
 
 function stationNotFound(c: Parameters<typeof jsonError>[0]) {
   return jsonError(c, "Station not found. Please try searching for another station.", 404);
 }
 
 function getSearchResults(query: string | undefined) {
+  searchStations ??= createStationSearch(stations);
   return searchStations(query ?? "", STATION_SEARCH_LIMIT);
 }
 
