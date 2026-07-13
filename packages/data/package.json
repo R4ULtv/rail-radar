@@ -5,9 +5,10 @@
   "type": "module",
   "exports": {
     ".": "./src/index.ts",
+    "./countries": "./src/countries.ts",
+    "./directory": "./src/directory.ts",
     "./operators": "./src/operators.ts",
     "./stations": "./src/stations.ts",
-    "./countries": "./src/countries.ts",
     "./types": "./src/types.ts"
   },
   "scripts": {

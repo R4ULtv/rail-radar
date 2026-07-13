@@ -1,5 +1,6 @@
 import { MetadataRoute } from "next";
-import { stations, stationsByCountry } from "@repo/data/stations";
+import { stations } from "@repo/data/stations";
+import { stationsByCountry } from "@repo/data/directory";
 import { operators } from "@repo/data/operators";
 import { COUNTRY_CODES, COUNTRY_SLUG } from "@repo/data/countries";
 import baseUrl from "@/lib/base-url";
