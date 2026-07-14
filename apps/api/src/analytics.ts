@@ -198,56 +198,39 @@ export async function getTrendingStations(
   if (country && !COUNTRY_CODES.includes(country)) {
     throw new Error("Invalid country code");
   }
+  const safeLimit = Number.isFinite(limit)
+    ? Math.min(25, Math.max(1, Math.trunc(limit)))
+    : 5;
   // SECURITY: `country` is validated against COUNTRY_CODES above. Do NOT
   // interpolate any value here that has not been checked against a fixed
   // allowlist/pattern — the Analytics Engine SQL API has no parameterization.
   const countryFilter = country ? `AND blob5 = '${country}'` : "";
   const orderColumn = sortBy === "uniqueVisitors" ? "uniqueVisitors" : "count";
+  const secondaryOrderColumn = sortBy === "uniqueVisitors" ? "count" : "uniqueVisitors";
   const query = `
     SELECT
       index1 as stationId,
-      blob1 as stationName,
-      blob5 as country,
+      argMax(blob1, timestamp) as stationName,
+      argMax(blob5, timestamp) as country,
       sum(_sample_interval) as count,
       count(DISTINCT blob2) as uniqueVisitors
     FROM station_visits
     WHERE timestamp > NOW() - INTERVAL '${value}' ${unit}
     ${countryFilter}
-    GROUP BY index1, blob1, blob5
-    ORDER BY ${orderColumn} DESC, count DESC
+    GROUP BY stationId
+    ORDER BY ${orderColumn} DESC, ${secondaryOrderColumn} DESC, stationId ASC
+    LIMIT ${safeLimit}
   `;
 
   const result = await queryAnalytics<AnalyticsQueryResult>(accountId, apiToken, query);
 
-  // Normalize old numeric IDs (e.g. "1728") to new format ("IT1728") and merge
-  const merged = new Map<string, TopStation>();
-  for (const row of result.data) {
-    const id = /^\d+$/.test(row.stationId) ? `IT${row.stationId}` : row.stationId;
-    const rowCountry = (row.country as CountryCode) || getCountry(id);
-    const visits = Number(row.count);
-    const unique = Number(row.uniqueVisitors);
-    const existing = merged.get(id);
-    if (existing) {
-      existing.visits += visits;
-      existing.uniqueVisitors += unique;
-    } else {
-      merged.set(id, {
-        stationId: id,
-        stationName: row.stationName,
-        country: rowCountry,
-        visits,
-        uniqueVisitors: unique,
-      });
-    }
-  }
-
-  return [...merged.values()]
-    .sort((a, b) =>
-      sortBy === "uniqueVisitors"
-        ? b.uniqueVisitors - a.uniqueVisitors || b.visits - a.visits
-        : b.visits - a.visits || b.uniqueVisitors - a.uniqueVisitors,
-    )
-    .slice(0, limit);
+  return result.data.map((row) => ({
+    stationId: row.stationId,
+    stationName: row.stationName,
+    country: (row.country as CountryCode) || getCountry(row.stationId),
+    visits: Number(row.count),
+    uniqueVisitors: Number(row.uniqueVisitors),
+  }));
 }
 
 export async function getStationStats(
@@ -264,8 +247,6 @@ export async function getStationStats(
 
   const { value, unit } = getPeriodInterval(period);
 
-  // Extract numeric part to match old format data too
-  const numericId = stationId.replace(/^[A-Z]+/, "");
   // SECURITY: `stationId` is validated against STATION_ID_PATTERN above. Do NOT
   // interpolate any value here that has not been checked against a fixed
   // allowlist/pattern — the Analytics Engine SQL API has no parameterization.
@@ -277,7 +258,7 @@ export async function getStationStats(
       count(DISTINCT blob2) as uniqueVisitors
     FROM station_visits
     WHERE timestamp > NOW() - INTERVAL '${value}' ${unit}
-      AND (index1 = '${stationId}' OR index1 = '${numericId}')
+      AND index1 = '${stationId}'
     GROUP BY blob1
   `;
 
