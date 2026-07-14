@@ -7,7 +7,7 @@ import { startTransition, useCallback, useEffect, useReducer, useRef, useState }
 import type { Map as MapboxMap } from "mapbox-gl";
 import type { MapEvent, ViewStateChangeEvent } from "react-map-gl/mapbox";
 
-import { AnnouncementBanner } from "@/components/announcement-banner";
+// import { AnnouncementBanner } from "@/components/announcement-banner";
 import { MapControls } from "@/components/map-controls";
 import MapLoading from "@/components/map-loading";
 import { Search } from "@/components/search";
@@ -246,7 +246,7 @@ export function Map() {
         <SelectedStationProvider>
           <StationMarkers />
           <Search />
-          <AnnouncementBanner />
+          {/*<AnnouncementBanner />*/}
           <MapControls
             userLocation={userLocation}
             onUserLocationChange={handleUserLocationChange}
