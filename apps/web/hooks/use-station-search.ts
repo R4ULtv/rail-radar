@@ -10,7 +10,7 @@ import type { StationSearchResponse } from "@/lib/api";
  * @returns Search results, loading state, and error
  */
 export function useStationSearch(query: string | null) {
-  const { data, error, isLoading } = useSWR<StationSearchResponse>(
+  const { data, error, isLoading, mutate } = useSWR<StationSearchResponse>(
     query ? buildApiUrl(endpoints.stationSearch(query)) : null,
     apiFetcher,
   );
@@ -19,5 +19,6 @@ export function useStationSearch(query: string | null) {
     stations: data ?? [],
     error,
     isLoading,
+    retry: () => void mutate(),
   };
 }

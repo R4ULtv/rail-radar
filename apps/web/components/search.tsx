@@ -123,6 +123,8 @@ const StationList = React.memo(function StationList({
 function SearchContent({
   isSearchActive,
   searchResults,
+  hasSearchError,
+  retrySearch,
   noResults,
   showDefaultLists,
   filteredRecentStations,
@@ -136,6 +138,8 @@ function SearchContent({
 }: {
   isSearchActive: boolean;
   searchResults: Station[];
+  hasSearchError: boolean;
+  retrySearch: () => void;
   noResults: boolean;
   showDefaultLists: boolean;
   filteredRecentStations: Station[];
@@ -149,8 +153,20 @@ function SearchContent({
 }) {
   return (
     <>
+      {/* Search Error */}
+      {hasSearchError && (
+        <div role="alert" className="px-4 py-3 text-sm">
+          <p className="font-medium">Unable to search stations</p>
+          <p className="mt-0.5 text-xs text-muted-foreground">
+            Check your connection and try again.
+          </p>
+          <Button type="button" variant="outline" size="sm" className="mt-3" onClick={retrySearch}>
+            Try again
+          </Button>
+        </div>
+      )}
       {/* Search Results */}
-      {isSearchActive && searchResults.length > 0 && (
+      {isSearchActive && !hasSearchError && searchResults.length > 0 && (
         <>
           <div className="px-4 py-2 not-first:mt-1">
             <p className="text-muted-foreground text-sm flex items-center gap-2">
@@ -263,7 +279,12 @@ export function Search() {
   const [isDrawerOpen, setIsDrawerOpen] = React.useState(() => isMobile && query.length > 0);
 
   // Fetch search results
-  const { stations: searchResultsRaw, isLoading } = useStationSearch(searchQuery);
+  const {
+    stations: searchResultsRaw,
+    error: searchError,
+    isLoading,
+    retry: retrySearch,
+  } = useStationSearch(searchQuery);
   const searchResults = searchResultsRaw;
 
   // Fetch trending stations
@@ -295,13 +316,18 @@ export function Search() {
   const isSearchActive = trimmedQuery.length > 0;
   const isSearchResultsActive = isSearchActive && hasMinimumSearchLength;
   const isSearchReady = hasMinimumSearchLength && trimmedQuery === debouncedQuery;
-  const hasSearched = isSearchActive && isSearchReady && !isLoading;
+  const hasSearchError = isSearchActive && isSearchReady && !isLoading && searchError != null;
+  const hasSearched = isSearchActive && isSearchReady && !isLoading && searchError == null;
 
   const noResults = hasSearched && searchResults.length === 0;
   const showDefaultLists =
-    !isSearchActive || !hasMinimumSearchLength || noResults || (isSearchActive && !hasSearched);
-  const showSearchSpinner = hasMinimumSearchLength && !hasSearched;
-  const showSearchContent = !isSearchActive || !hasMinimumSearchLength || hasSearched;
+    !isSearchActive ||
+    !hasMinimumSearchLength ||
+    noResults ||
+    (isSearchActive && !hasSearched && !hasSearchError);
+  const showSearchSpinner = hasMinimumSearchLength && !hasSearched && !hasSearchError;
+  const showSearchContent =
+    !isSearchActive || !hasMinimumSearchLength || hasSearched || hasSearchError;
 
   const cardHeight = useAnimatedHeight();
 
@@ -326,7 +352,7 @@ export function Search() {
   }, [recentStations, savedStations]);
 
   const visibleStations = React.useMemo(() => {
-    if (isSearchResultsActive && searchResults.length > 0) {
+    if (isSearchResultsActive && !hasSearchError && searchResults.length > 0) {
       return searchResults.slice(0, 10);
     }
     if (!isSearchResultsActive || noResults) {
@@ -335,6 +361,7 @@ export function Search() {
     return [];
   }, [
     isSearchResultsActive,
+    hasSearchError,
     searchResults,
     filteredRecentStations,
     savedStations,
@@ -425,6 +452,8 @@ export function Search() {
   const searchContentProps = {
     isSearchActive: isSearchResultsActive,
     searchResults,
+    hasSearchError,
+    retrySearch,
     noResults,
     showDefaultLists,
     filteredRecentStations,
