@@ -198,9 +198,7 @@ export async function getTrendingStations(
   if (country && !COUNTRY_CODES.includes(country)) {
     throw new Error("Invalid country code");
   }
-  const safeLimit = Number.isFinite(limit)
-    ? Math.min(25, Math.max(1, Math.trunc(limit)))
-    : 5;
+  const safeLimit = Number.isFinite(limit) ? Math.min(25, Math.max(1, Math.trunc(limit))) : 5;
   // SECURITY: `country` is validated against COUNTRY_CODES above. Do NOT
   // interpolate any value here that has not been checked against a fixed
   // allowlist/pattern — the Analytics Engine SQL API has no parameterization.

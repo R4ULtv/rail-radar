@@ -6,6 +6,7 @@
     "dev": "turbo run dev",
     "lint": "turbo run lint",
     "format": "oxfmt",
+    "format:check": "oxfmt --check",
     "check-types": "turbo run check-types",
     "optimize-svgs": "node scripts/optimize-svgs.mjs"
   },
