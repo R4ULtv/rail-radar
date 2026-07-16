@@ -9,6 +9,7 @@
   import StationSidebar from "$lib/components/StationSidebar.svelte";
   import StatusBar from "$lib/components/StatusBar.svelte";
   import UploadPrompt from "$lib/components/UploadPrompt.svelte";
+  import type { StationImportanceFilter, StationTypeFilter } from "$lib/station-filters";
   import { contributionStore } from "$lib/stores/contribution";
   import { historyStore, type HistoryOp } from "$lib/stores/history";
   import { stationStore, type RemoteStationSourceId } from "$lib/stores/stations";
@@ -27,6 +28,9 @@
   let contributionPanelOpen = $state(false);
   let pendingNewStation = $state<{ lat: number; lng: number } | null>(null);
   let toastMessage = $state<string | null>(null);
+  let stationSearch = $state("");
+  let stationTypeFilter = $state<StationTypeFilter>("all");
+  let stationImportanceFilter = $state<StationImportanceFilter>("any");
 
   const stationState = $derived($stationStore);
   const selectedStation = $derived(
@@ -402,6 +406,9 @@
         stations={stationState.stations}
         {selectedStationId}
         changedStationIds={$changedStationIdsStore}
+        bind:search={stationSearch}
+        bind:typeFilter={stationTypeFilter}
+        bind:importanceFilter={stationImportanceFilter}
         onSelectStation={handleSelectStation}
       />
 
@@ -411,6 +418,9 @@
             stations={stationState.stations}
             {selectedStationId}
             {isAddingStation}
+            search={stationSearch}
+            typeFilter={stationTypeFilter}
+            importanceFilter={stationImportanceFilter}
             onSelectStation={handleSelectStation}
             onMarkerDragEnd={handleMarkerDragEnd}
             onMapClick={handleMapClick}
