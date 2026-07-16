@@ -11,6 +11,7 @@ import {
 
 export type DataMode = "local" | "browser";
 export type RemoteStationSourceId = "main" | "preview";
+export type LoadResult = { ok: true } | { ok: false; error: string };
 
 export interface RemoteStationSource {
   id: RemoteStationSourceId;
@@ -121,7 +122,9 @@ function createStationStore() {
         });
       }
     },
-    async loadUploadedFile(file: File) {
+    async loadUploadedFile(file: File): Promise<LoadResult> {
+      store.update((state) => ({ ...state, isLoading: true, error: null }));
+
       try {
         const text = await file.text();
         const geojson = validateGeojson(JSON.parse(text));
@@ -133,16 +136,24 @@ function createStationStore() {
           error: null,
           fileName: file.name,
         });
+        return { ok: true };
       } catch (error) {
+        const message = readJsonError(error, "Failed to read GeoJSON file");
         store.update((state) => ({
           ...state,
-          error: readJsonError(error, "Failed to read GeoJSON file"),
+          isLoading: false,
+          error: message,
         }));
+        return { ok: false, error: message };
       }
     },
-    async loadRemoteSource(sourceId: RemoteStationSourceId) {
+    async loadRemoteSource(sourceId: RemoteStationSourceId): Promise<LoadResult> {
       const source = remoteStationSources.find((item) => item.id === sourceId);
-      if (!source) throw new Error("Unknown station data source");
+      if (!source) {
+        const error = "Unknown station data source";
+        store.update((state) => ({ ...state, isLoading: false, error }));
+        return { ok: false, error };
+      }
 
       store.update((state) => ({ ...state, isLoading: true, error: null }));
 
@@ -163,16 +174,15 @@ function createStationStore() {
           error: null,
           fileName: source.fileName,
         });
+        return { ok: true };
       } catch (error) {
+        const message = readJsonError(error, `Failed to load ${source.label}`);
         store.update((state) => ({
           ...state,
-          stations: [],
-          sourceGeojson: null,
-          mode: "browser",
           isLoading: false,
-          error: readJsonError(error, `Failed to load ${source.label}`),
-          fileName: null,
+          error: message,
         }));
+        return { ok: false, error: message };
       }
     },
     exportGeojson() {

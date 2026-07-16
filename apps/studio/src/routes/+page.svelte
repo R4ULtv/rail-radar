@@ -133,19 +133,34 @@
     selectedStationId = null;
   }
 
-  async function handleImportFile(file: File) {
-    await stationStore.loadUploadedFile(file);
+  function resetEditingSession() {
     historyStore.clear();
+    contributionStore.clearSession();
     selectedStationId = null;
     isAddingStation = false;
+    pendingNewStation = null;
+    contributionPanelOpen = false;
+  }
+
+  async function handleImportFile(file: File) {
+    const result = await stationStore.loadUploadedFile(file);
+    if (!result.ok) {
+      showToast(result.error);
+      return;
+    }
+
+    resetEditingSession();
     showToast(`Imported ${file.name}`);
   }
 
   async function handleLoadRemoteSource(sourceId: RemoteStationSourceId) {
-    await stationStore.loadRemoteSource(sourceId);
-    historyStore.clear();
-    selectedStationId = null;
-    isAddingStation = false;
+    const result = await stationStore.loadRemoteSource(sourceId);
+    if (!result.ok) {
+      showToast(result.error);
+      return;
+    }
+
+    resetEditingSession();
     showToast("Loaded latest station data");
   }
 
