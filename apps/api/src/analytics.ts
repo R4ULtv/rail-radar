@@ -250,14 +250,14 @@ export async function getStationStats(
   // allowlist/pattern — the Analytics Engine SQL API has no parameterization.
   const stationQuery = `
     SELECT
-      '${stationId}' as stationId,
-      blob1 as stationName,
+      index1 as stationId,
+      argMax(blob1, timestamp) as stationName,
       sum(_sample_interval) as count,
       count(DISTINCT blob2) as uniqueVisitors
     FROM station_visits
     WHERE timestamp > NOW() - INTERVAL '${value}' ${unit}
       AND index1 = '${stationId}'
-    GROUP BY blob1
+    GROUP BY stationId
   `;
 
   const [stationResult, trendingResult] = await Promise.all([
