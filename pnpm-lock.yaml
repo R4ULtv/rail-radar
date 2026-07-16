@@ -70,6 +70,9 @@ importers:
       maplibre-gl:
         specifier: ^5.24.0
         version: 5.24.0
+      posthog-js:
+        specifier: ^1.399.4
+        version: 1.399.4
       svelte:
         specifier: ^5.56.4
         version: 5.56.4

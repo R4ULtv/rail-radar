@@ -29,6 +29,12 @@ pnpm --filter=studio build
 pnpm --filter=studio preview
 ```
 
+## Environment variables
+
+| Variable             | Description                                                                       |
+| -------------------- | --------------------------------------------------------------------------------- |
+| `PUBLIC_POSTHOG_KEY` | PostHog project API key (EU cloud); events are proxied through t.railradar24.com. |
+
 ## Modes
 
 **Local mode** — used during development. The custom `localStationApi` Vite plugin installs dev-server middleware under `/api/stations`. Its write operations modify `packages/data/src/stations.geojson` directly, so use `git diff` to review the data changes and run the repository's existing format, lint, and type-check workflow before committing them.
