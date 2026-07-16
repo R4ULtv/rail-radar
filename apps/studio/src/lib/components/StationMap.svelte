@@ -17,8 +17,8 @@
   const SOURCE_ID = "stations-source";
   const LAYER_ID = "stations-layer";
   const SELECTED_STATION_ZOOM = 10;
-  const DIMMED_FILL_OPACITY = 0;
-  const DIMMED_STROKE_OPACITY = 0;
+  const DIMMED_FILL_OPACITY = 0.02;
+  const DIMMED_STROKE_OPACITY = 0.01;
 
   let {
     stations,
