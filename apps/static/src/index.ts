@@ -20,7 +20,7 @@ app.get("/robots.txt", (c) => {
   return c.text("User-agent: *\nDisallow: /");
 });
 
-app.use("/stations/*", async (c, next) => {
+app.use("/stations/:id/photo/*", async (c, next) => {
   const ip = c.req.header("cf-connecting-ip") ?? "unknown";
   const { success } = await c.env.RATE_LIMITER.limit({ key: ip });
   if (!success) {
