@@ -363,8 +363,10 @@ function generateReport(diff: DiffResult, errors: ValidationError[]): string {
   return lines.join("\n");
 }
 
-function escapeMarkdown(text: string): string {
-  return text.replace(/\|/g, "\\|").replace(/[\r\n]/g, " ");
+function escapeMarkdown(value: unknown): string {
+  return String(value)
+    .replace(/\|/g, "\\|")
+    .replace(/[\r\n]/g, " ");
 }
 
 function formatValue(value: unknown): string {
