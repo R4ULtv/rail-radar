@@ -99,6 +99,16 @@ function validateFeatures(features: StationFeature[]): ValidationError[] {
       continue;
     }
 
+    if (/[\r\n]/.test(props.id)) {
+      errors.push({
+        stationId: props.id,
+        stationName: props.name,
+        field: "id",
+        message: "ID must not contain line breaks",
+      });
+      continue;
+    }
+
     // Check for duplicate IDs
     if (seenIds.has(props.id)) {
       errors.push({
@@ -265,7 +275,7 @@ function generateReport(diff: DiffResult, errors: ValidationError[]): string {
     lines.push("|------------|--------------|-------|-------|");
     for (const error of errors) {
       lines.push(
-        `| ${error.stationId} | ${escapeMarkdown(error.stationName)} | \`${error.field}\` | ${escapeMarkdown(error.message)} |`,
+        `| ${escapeMarkdown(error.stationId)} | ${escapeMarkdown(error.stationName)} | \`${error.field}\` | ${escapeMarkdown(error.message)} |`,
       );
     }
     lines.push("");
@@ -284,7 +294,7 @@ function generateReport(diff: DiffResult, errors: ValidationError[]): string {
     lines.push("|----|------|------|-------------|");
     for (const feature of diff.added.slice(0, 50)) {
       lines.push(
-        `| ${feature.properties.id} | ${escapeMarkdown(feature.properties.name)} | ${feature.properties.type} | ${formatCoords(feature)} |`,
+        `| ${escapeMarkdown(feature.properties.id)} | ${escapeMarkdown(feature.properties.name)} | ${feature.properties.type} | ${formatCoords(feature)} |`,
       );
     }
     if (diff.added.length > 50) {
@@ -306,7 +316,7 @@ function generateReport(diff: DiffResult, errors: ValidationError[]): string {
     lines.push("|----|------|------|-------------|");
     for (const feature of diff.removed.slice(0, 50)) {
       lines.push(
-        `| ${feature.properties.id} | ${escapeMarkdown(feature.properties.name)} | ${feature.properties.type} | ${formatCoords(feature)} |`,
+        `| ${escapeMarkdown(feature.properties.id)} | ${escapeMarkdown(feature.properties.name)} | ${feature.properties.type} | ${formatCoords(feature)} |`,
       );
     }
     if (diff.removed.length > 50) {
@@ -325,7 +335,7 @@ function generateReport(diff: DiffResult, errors: ValidationError[]): string {
     );
     lines.push("");
     for (const mod of diff.modified.slice(0, 30)) {
-      lines.push(`#### Station ${mod.id}: ${escapeMarkdown(mod.name)}`);
+      lines.push(`#### Station ${escapeMarkdown(mod.id)}: ${escapeMarkdown(mod.name)}`);
       lines.push("");
       lines.push("| Field | Old Value | New Value |");
       lines.push("|-------|-----------|-----------|");
@@ -354,7 +364,7 @@ function generateReport(diff: DiffResult, errors: ValidationError[]): string {
 }
 
 function escapeMarkdown(text: string): string {
-  return text.replace(/\|/g, "\\|").replace(/\n/g, " ");
+  return text.replace(/\|/g, "\\|").replace(/[\r\n]/g, " ");
 }
 
 function formatValue(value: unknown): string {
