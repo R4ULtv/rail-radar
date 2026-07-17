@@ -39,11 +39,11 @@ export function AnnouncementBanner() {
           >
             <div
               role="status"
-              className="relative flex items-center gap-3 overflow-hidden rounded-xl border bg-card/95 p-2.5 pr-10 shadow-lg shadow-black/8 backdrop-blur-md md:gap-3.5 md:p-3 md:pr-12 dark:shadow-black/25"
+              className="relative flex items-center gap-3 overflow-hidden p-2.5 pr-10 md:gap-3.5 md:p-3 md:pr-12 bg-card border border-input text-card-foreground rounded-md shadow-xs"
             >
               <div
                 aria-hidden="true"
-                className="flex size-10 shrink-0 items-center justify-center rounded-lg border border-border bg-accent text-accent-foreground shadow-xs md:size-11"
+                className="flex size-10 shrink-0 items-center justify-center rounded-md border border-border bg-accent text-accent-foreground shadow-xs md:size-11"
               >
                 <HeartIcon className="size-4.5" fill="currentColor" strokeWidth={1.75} />
               </div>
@@ -67,7 +67,7 @@ export function AnnouncementBanner() {
                 onClick={dismiss}
                 className={cn(
                   buttonVariants({ variant: "default", size: "sm" }),
-                  "hidden rounded-lg transition-transform duration-150 active:scale-[0.97] md:inline-flex",
+                  "hidden transition-transform duration-150 active:scale-[0.97] md:inline-flex",
                 )}
               >
                 Support
@@ -79,7 +79,7 @@ export function AnnouncementBanner() {
                 size="icon-xs"
                 onClick={dismiss}
                 aria-label="Dismiss announcement"
-                className="absolute top-2 right-2 z-10 rounded-full text-muted-foreground hover:text-foreground md:top-2.5 md:right-2.5"
+                className="absolute top-2 right-2 z-10 text-muted-foreground hover:text-foreground md:top-2.5 md:right-2.5"
               >
                 <XIcon className="size-3.5" />
               </Button>
