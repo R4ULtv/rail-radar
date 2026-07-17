@@ -13,9 +13,9 @@
   "dependencies": {
     "@sveltejs/kit": "^2.69.3",
     "maplibre-gl": "^5.24.0",
-    "posthog-js": "^1.400.1",
+    "posthog-js": "^1.402.3",
     "svelte": "^5.56.5",
-    "vite": "^8.1.4"
+    "vite": "^8.1.5"
   },
   "devDependencies": {
     "@fontsource-variable/geist": "^5.2.9",
@@ -30,7 +30,7 @@
     "bits-ui": "^2.18.1",
     "clsx": "^2.1.1",
     "shadcn-svelte": "^1.4.2",
-    "svelte-check": "^4.7.2",
+    "svelte-check": "^4.7.3",
     "tailwind-merge": "^3.6.0",
     "tailwind-variants": "^3.2.2",
     "tailwindcss": "^4.3.2",
