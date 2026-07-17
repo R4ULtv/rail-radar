@@ -53,10 +53,14 @@ jobs:
       - name: Read report
         id: report
         run: |
+          delimiter="$(openssl rand -hex 32)"
+          while grep -Fqx "$delimiter" /tmp/report.md; do
+            delimiter="$(openssl rand -hex 32)"
+          done
           {
-            echo "report<<EOF"
+            echo "report<<$delimiter"
             cat /tmp/report.md
-            echo "EOF"
+            echo "$delimiter"
           } >> "$GITHUB_OUTPUT"
 
       - name: Find existing comment

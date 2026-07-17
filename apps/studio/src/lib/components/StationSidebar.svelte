@@ -14,13 +14,16 @@
   import { ScrollArea } from "$lib/components/ui/scroll-area";
   import * as Select from "$lib/components/ui/select";
   import * as Tabs from "$lib/components/ui/tabs";
+  import {
+    findDuplicateStationIds,
+    stationMatchesFilters,
+    type StationImportanceFilter,
+    type StationTypeFilter,
+  } from "$lib/station-filters";
   import type { ChangeType } from "$lib/types/contribution";
   import { cn } from "$lib/utils";
 
-  type FilterType = "all" | "metro" | "light" | "duplicate";
-  type ImportanceValue = "any" | "1" | "2" | "3" | "4";
-
-  const importanceLabels: Record<Exclude<ImportanceValue, "any">, string> = {
+  const importanceLabels: Record<Exclude<StationImportanceFilter, "any">, string> = {
     "1": "Major",
     "2": "Important",
     "3": "Medium",
@@ -33,59 +36,32 @@
     stations,
     selectedStationId,
     changedStationIds,
+    search = $bindable(""),
+    typeFilter = $bindable<StationTypeFilter>("all"),
+    importanceFilter = $bindable<StationImportanceFilter>("any"),
     onSelectStation,
   }: {
     stations: Station[];
     selectedStationId: string | null;
     changedStationIds: Map<string, ChangeType>;
+    search?: string;
+    typeFilter?: StationTypeFilter;
+    importanceFilter?: StationImportanceFilter;
     onSelectStation: (id: string) => void;
   } = $props();
 
-  let search = $state("");
-  let filter = $state<FilterType>("all");
-  let importanceFilter = $state<ImportanceValue>("any");
   let scrollTop = $state(0);
   let viewportHeight = $state(0);
   let scrollContainer = $state<HTMLElement | null>(null);
   let searchInput = $state<HTMLInputElement | null>(null);
   let lastFilterKey = $state("");
 
-  let filteredStations = $derived.by(() => {
-    let result = stations;
-    if (search.trim()) {
-      const lower = search.toLowerCase();
-      result = result.filter((station) => station.name.toLowerCase().includes(lower));
-    }
-
-    if (filter === "metro") result = result.filter((station) => station.type === "metro");
-    if (filter === "light") result = result.filter((station) => station.type === "light");
-
-    if (importanceFilter !== "any") {
-      const level = Number(importanceFilter) as 1 | 2 | 3 | 4;
-      result = result.filter((station) => station.importance === level);
-    }
-    if (filter === "duplicate") {
-      const nameCounts = new Map<string, number>();
-      const geoCounts = new Map<string, number>();
-      for (const station of stations) {
-        const name = station.name.toLowerCase();
-        nameCounts.set(name, (nameCounts.get(name) ?? 0) + 1);
-        if (station.geo) {
-          const key = `${station.geo.lat},${station.geo.lng}`;
-          geoCounts.set(key, (geoCounts.get(key) ?? 0) + 1);
-        }
-      }
-
-      result = result.filter((station) => {
-        const duplicateName = (nameCounts.get(station.name.toLowerCase()) ?? 0) > 1;
-        const duplicateGeo =
-          station.geo && (geoCounts.get(`${station.geo.lat},${station.geo.lng}`) ?? 0) > 1;
-        return duplicateName || duplicateGeo;
-      });
-    }
-
-    return result;
-  });
+  const duplicateStationIds = $derived(findDuplicateStationIds(stations));
+  const filteredStations = $derived(
+    stations.filter((station) =>
+      stationMatchesFilters(station, search, typeFilter, importanceFilter, duplicateStationIds),
+    ),
+  );
   const totalHeight = $derived(filteredStations.length * ROW_HEIGHT);
   const startIndex = $derived(Math.max(0, Math.floor(scrollTop / ROW_HEIGHT) - OVERSCAN));
   const visibleCount = $derived(Math.ceil(viewportHeight / ROW_HEIGHT) + OVERSCAN * 2);
@@ -93,7 +69,7 @@
   const offsetY = $derived(startIndex * ROW_HEIGHT);
 
   $effect(() => {
-    const filterKey = `${search}\u0000${filter}\u0000${importanceFilter}`;
+    const filterKey = `${search}\u0000${typeFilter}\u0000${importanceFilter}`;
     if (filterKey === lastFilterKey) return;
     lastFilterKey = filterKey;
     scrollTop = 0;
@@ -220,23 +196,23 @@
       {/if}
     </div>
 
-    <Tabs.Root bind:value={filter} class="gap-0">
+    <Tabs.Root bind:value={typeFilter} class="gap-0">
       <Tabs.List class="flex h-8 w-full">
         <Tabs.Trigger value="all" title="All stations" class="gap-1.5">
           <ListIcon class="size-3" />
-          {#if filter === "all"}<span class="text-xs">All</span>{/if}
+          {#if typeFilter === "all"}<span class="text-xs">All</span>{/if}
         </Tabs.Trigger>
         <Tabs.Trigger value="metro" title="Metro" class="gap-1.5">
           <SquareMIcon class="size-3" />
-          {#if filter === "metro"}<span class="text-xs">Metro</span>{/if}
+          {#if typeFilter === "metro"}<span class="text-xs">Metro</span>{/if}
         </Tabs.Trigger>
         <Tabs.Trigger value="light" title="Light rail" class="gap-1.5">
           <TramFrontIcon class="size-3" />
-          {#if filter === "light"}<span class="text-xs">Light</span>{/if}
+          {#if typeFilter === "light"}<span class="text-xs">Light</span>{/if}
         </Tabs.Trigger>
         <Tabs.Trigger value="duplicate" title="Duplicates" class="gap-1.5">
           <CopyIcon class="size-3" />
-          {#if filter === "duplicate"}<span class="text-xs">Duplicates</span>{/if}
+          {#if typeFilter === "duplicate"}<span class="text-xs">Duplicates</span>{/if}
         </Tabs.Trigger>
       </Tabs.List>
     </Tabs.Root>

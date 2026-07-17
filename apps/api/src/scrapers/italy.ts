@@ -1,7 +1,7 @@
 import type { Train } from "@repo/data";
 
 import { type ScrapeResult, stripCountryPrefix } from "./core";
-import { fetchWithTimeout } from "./fetch";
+import { fetchTextWithTimeout } from "./fetch";
 
 const RFI_BASE_URL = "https://iechub.rfi.it/ArriviPartenze/en/ArrivalsDepartures/Monitor";
 
@@ -190,7 +190,7 @@ export async function scrapeTrains(
   type: "arrivals" | "departures" = "departures",
 ): Promise<ScrapeResult> {
   const url = buildRfiUrl(stationId, type === "arrivals");
-  const { response, fetchMs } = await fetchWithTimeout(url, "Italian");
+  const { text, fetchMs } = await fetchTextWithTimeout(url, "Italian");
 
   const state = new ParserState(type);
 
@@ -241,7 +241,7 @@ export async function scrapeTrains(
     });
 
   // Consume the transformed response to trigger parsing
-  await rewriter.transform(response).text();
+  await rewriter.transform(new Response(text)).text();
 
   // Finalize the last row
   if (state.cellIndex >= 0) {

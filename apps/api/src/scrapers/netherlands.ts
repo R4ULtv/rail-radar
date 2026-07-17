@@ -8,7 +8,7 @@ import {
   resolveBrand,
   statusFromWindow,
 } from "./core";
-import { fetchWithTimeout } from "./fetch";
+import { fetchJsonWithTimeout } from "./fetch";
 
 const NS_BASE_URL = "https://gateway.apiportal.ns.nl/reisinformatie-api/api/v2";
 
@@ -108,7 +108,9 @@ export async function scrapeNetherlandsTrains(
   const uicCode = convertNetherlandsStationId(stationId);
   const url = buildNetherlandsUrl(uicCode, type === "arrivals");
 
-  const { response, fetchMs } = await fetchWithTimeout(url, "Dutch", {
+  const { data: rawData, fetchMs } = await fetchJsonWithTimeout<
+    NSArrivalsResponse | NSDeparturesResponse
+  >(url, "Dutch", {
     headers: { "Ocp-Apim-Subscription-Key": apiKey },
   });
 
@@ -116,7 +118,7 @@ export async function scrapeNetherlandsTrains(
   const recentWindow = 5 * 60 * 1000;
 
   if (type === "arrivals") {
-    const data: NSArrivalsResponse = await response.json();
+    const data = rawData as NSArrivalsResponse;
     const entries = data?.payload?.arrivals ?? [];
 
     const filtered = entries.filter((entry) => {
@@ -141,7 +143,7 @@ export async function scrapeNetherlandsTrains(
     return { trains, info: null, timing: { fetchMs } };
   }
 
-  const data: NSDeparturesResponse = await response.json();
+  const data = rawData as NSDeparturesResponse;
   const entries = data?.payload?.departures ?? [];
 
   const filtered = entries.filter((entry) => {

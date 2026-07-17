@@ -139,6 +139,7 @@ Provider-backed scrapers require these Worker secrets:
 
 - `CLOUDFLARE_ACCOUNT_ID`
 - `CLOUDFLARE_API_TOKEN`
+- `IP_HASH_PEPPER`
 - `MAPBOX_TOKEN`
 - `NS_API_KEY`
 - `LDBWS_API_KEY`
@@ -146,6 +147,22 @@ Provider-backed scrapers require these Worker secrets:
 - `PLK_API_KEY`
 - `REJSEPLANEN_API_KEY`
 - `SNCF_API_KEY`
+
+### Visitor IP hash pepper
+
+Generate `IP_HASH_PEPPER` as a high-entropy random secret. The Worker uses it to generate visitor HMACs automatically; do not generate hashes manually.
+
+```bash
+openssl rand -base64 32
+```
+
+Set the generated value for the deployed API:
+
+```bash
+pnpm --filter=api exec wrangler secret put IP_HASH_PEPPER
+```
+
+For local development, put the generated value in `apps/api/.env` as `IP_HASH_PEPPER=...` and do not commit it. If the pepper is absent, the Worker warns and falls back to legacy unkeyed SHA-256. Setting or rotating the pepper resets unique-visitor continuity.
 
 ## Type Generation
 

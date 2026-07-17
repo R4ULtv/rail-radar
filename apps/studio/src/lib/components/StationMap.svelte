@@ -1,17 +1,32 @@
 <script lang="ts">
   import type { Station } from "@repo/data";
-  import maplibregl, { type GeoJSONSource, type Map, type Marker } from "maplibre-gl";
+  import maplibregl, {
+    type ExpressionSpecification,
+    type GeoJSONSource,
+    type Map,
+    type Marker,
+  } from "maplibre-gl";
   import { onDestroy, onMount } from "svelte";
   import { STATION_TYPE_COLOR } from "$lib/station-colors";
+  import {
+    findDuplicateStationIds,
+    type StationImportanceFilter,
+    type StationTypeFilter,
+  } from "$lib/station-filters";
 
   const SOURCE_ID = "stations-source";
   const LAYER_ID = "stations-layer";
   const SELECTED_STATION_ZOOM = 10;
+  const DIMMED_FILL_OPACITY = 0.02;
+  const DIMMED_STROKE_OPACITY = 0.01;
 
   let {
     stations,
     selectedStationId,
     isAddingStation,
+    search,
+    typeFilter,
+    importanceFilter,
     onSelectStation,
     onMarkerDragEnd,
     onMapClick,
@@ -20,6 +35,9 @@
     stations: Station[];
     selectedStationId: string | null;
     isAddingStation: boolean;
+    search: string;
+    typeFilter: StationTypeFilter;
+    importanceFilter: StationImportanceFilter;
     onSelectStation: (id: string) => void;
     onMarkerDragEnd: (id: string, lat: number, lng: number) => void;
     onMapClick: (lat: number, lng: number) => void;
@@ -37,13 +55,21 @@
   const isPlacingStation = $derived(Boolean(selectedStation && !selectedStation.geo));
 
   function makeGeojson() {
+    const duplicateStationIds = findDuplicateStationIds(stations);
+
     return {
       type: "FeatureCollection" as const,
       features: stations
         .filter((station) => station.geo && station.id !== selectedStationId)
         .map((station) => ({
           type: "Feature" as const,
-          properties: { id: station.id, type: station.type },
+          properties: {
+            id: station.id,
+            type: station.type,
+            importance: station.importance,
+            searchName: station.name.toLowerCase(),
+            duplicate: duplicateStationIds.has(station.id),
+          },
           geometry: {
             type: "Point" as const,
             coordinates: [station.geo!.lng, station.geo!.lat],
@@ -56,6 +82,72 @@
     if (!map || !loaded) return;
     const source = map.getSource(SOURCE_ID) as GeoJSONSource | undefined;
     if (source) source.setData(makeGeojson());
+  }
+
+  function makeMatchExpression(
+    searchValue: string,
+    typeFilterValue: StationTypeFilter,
+    importanceFilterValue: StationImportanceFilter,
+  ): boolean | ExpressionSpecification {
+    const conditions: ExpressionSpecification[] = [];
+    const query = searchValue.trim().toLowerCase();
+
+    if (query) conditions.push(["in", query, ["get", "searchName"]]);
+    if (typeFilterValue === "metro" || typeFilterValue === "light") {
+      conditions.push(["==", ["get", "type"], typeFilterValue]);
+    }
+    if (typeFilterValue === "duplicate") {
+      conditions.push(["==", ["get", "duplicate"], true]);
+    }
+    if (importanceFilterValue !== "any") {
+      conditions.push(["==", ["get", "importance"], Number(importanceFilterValue)]);
+    }
+
+    if (conditions.length === 0) return true;
+    if (conditions.length === 1) return conditions[0];
+    return ["all", ...conditions];
+  }
+
+  function makeOpacityExpression(
+    dimmedOpacity: number,
+    searchValue = search,
+    typeFilterValue = typeFilter,
+    importanceFilterValue = importanceFilter,
+  ): number | ExpressionSpecification {
+    const matchExpression = makeMatchExpression(
+      searchValue,
+      typeFilterValue,
+      importanceFilterValue,
+    );
+    return matchExpression === true ? 1 : ["case", matchExpression, 1, dimmedOpacity];
+  }
+
+  function syncFilterOpacity(
+    searchValue: string,
+    typeFilterValue: StationTypeFilter,
+    importanceFilterValue: StationImportanceFilter,
+  ) {
+    if (!map || !loaded) return;
+    map.setPaintProperty(
+      LAYER_ID,
+      "circle-opacity",
+      makeOpacityExpression(
+        DIMMED_FILL_OPACITY,
+        searchValue,
+        typeFilterValue,
+        importanceFilterValue,
+      ),
+    );
+    map.setPaintProperty(
+      LAYER_ID,
+      "circle-stroke-opacity",
+      makeOpacityExpression(
+        DIMMED_STROKE_OPACITY,
+        searchValue,
+        typeFilterValue,
+        importanceFilterValue,
+      ),
+    );
   }
 
   function syncMarker() {
@@ -102,6 +194,10 @@
   });
 
   $effect(() => {
+    syncFilterOpacity(search, typeFilter, importanceFilter);
+  });
+
+  $effect(() => {
     if (map) map.getCanvas().style.cursor = isAddingStation || isPlacingStation ? "crosshair" : "";
   });
 
@@ -144,6 +240,8 @@
           ],
           "circle-stroke-color": "#ffffff",
           "circle-stroke-width": 1,
+          "circle-opacity": makeOpacityExpression(DIMMED_FILL_OPACITY),
+          "circle-stroke-opacity": makeOpacityExpression(DIMMED_STROKE_OPACITY),
         },
       });
 
@@ -157,6 +255,7 @@
       });
 
       loaded = true;
+      syncFilterOpacity(search, typeFilter, importanceFilter);
       syncMarker();
     });
 

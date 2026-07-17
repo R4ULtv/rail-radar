@@ -6,7 +6,6 @@
     MapPinIcon,
     PlusIcon,
     Redo2Icon,
-    TrainFrontIcon,
     Undo2Icon,
     UploadIcon,
   } from "@lucide/svelte";
@@ -69,9 +68,7 @@
     onclick={onHomeClick}
     title="Back to start"
   >
-    <div class="flex size-7 items-center justify-center rounded-none bg-accent text-primary">
-      <TrainFrontIcon class="size-4" />
-    </div>
+    <img src="/icon.svg" alt="" class="size-7 shrink-0" />
     <div class="leading-tight">
       <div class="text-[13px] font-semibold">Rail Studio</div>
       <div class="font-mono text-[10px] uppercase tracking-wider text-muted-foreground">

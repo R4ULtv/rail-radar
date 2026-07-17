@@ -7,7 +7,7 @@ import {
   statusFromWindow,
   stripCountryPrefix,
 } from "./core";
-import { fetchWithTimeout } from "./fetch";
+import { fetchJsonWithTimeout } from "./fetch";
 import ukStationCodes from "./codes/uk-codes.json";
 
 const LDBWS_BASE_URL =
@@ -278,11 +278,9 @@ export async function scrapeUKTrains(
   const crs = getCRS(stationId);
   const url = buildUrl(crs);
 
-  const { response, fetchMs } = await fetchWithTimeout(url, "UK", {
+  const { data, fetchMs } = await fetchJsonWithTimeout<StationBoardWithDetails>(url, "UK", {
     headers: { "x-apikey": apiKey },
   });
-
-  const data: StationBoardWithDetails = await response.json();
 
   if (data.areServicesAvailable === false) {
     return {

@@ -18,13 +18,14 @@ import { rateLimit } from "../middleware/rate-limit";
 import { createStationSearch } from "../search";
 import { getScraperForStation, ScraperError } from "../scrapers";
 
-const searchStations = createStationSearch(stations);
+let searchStations: ReturnType<typeof createStationSearch> | undefined;
 
 function stationNotFound(c: Parameters<typeof jsonError>[0]) {
   return jsonError(c, "Station not found. Please try searching for another station.", 404);
 }
 
 function getSearchResults(query: string | undefined) {
+  searchStations ??= createStationSearch(stations);
   return searchStations(query ?? "", STATION_SEARCH_LIMIT);
 }
 
@@ -177,11 +178,43 @@ export const stationsRoutes = factory
   .get(
     "/:id",
     rateLimit,
+    trainTypeValidator,
+    async (c, next) => {
+      await next();
+
+      if (c.res.status !== 200) {
+        return;
+      }
+
+      const id = c.req.param("id");
+      const station = stationById.get(id);
+
+      if (!station) {
+        return;
+      }
+
+      const { type } = c.req.valid("query");
+      const country = getCountry(station.id) ?? "";
+      const ip = c.get("clientIp");
+
+      c.executionCtx.waitUntil(
+        recordStationVisit(
+          c.env.STATION_ANALYTICS,
+          {
+            stationId: station.id,
+            stationName: station.name,
+            ip,
+            type,
+            country,
+          },
+          c.env.IP_HASH_PEPPER,
+        ),
+      );
+    },
     cache({
       cacheName: "stations-cache",
       cacheControl: CACHE_TTL.STATION_DATA,
     }),
-    trainTypeValidator,
     async (c) => {
       const id = c.req.param("id");
       const station = stationById.get(id);
@@ -205,17 +238,6 @@ export const stationsRoutes = factory
 
       try {
         const { trains, info, timing } = await scraper(id, type, c.env);
-        const ip = c.get("clientIp");
-
-        c.executionCtx.waitUntil(
-          recordStationVisit(c.env.STATION_ANALYTICS, {
-            stationId: station.id,
-            stationName: station.name,
-            ip,
-            type,
-            country,
-          }),
-        );
 
         if (provider) {
           c.executionCtx.waitUntil(

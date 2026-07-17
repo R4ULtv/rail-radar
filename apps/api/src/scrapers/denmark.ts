@@ -1,6 +1,6 @@
 import type { Train } from "@repo/data";
 
-import { fetchWithTimeout } from "./fetch";
+import { fetchJsonWithTimeout } from "./fetch";
 import {
   STATUS_WINDOW_MS,
   ScraperError,
@@ -620,7 +620,7 @@ export async function scrapeDenmarkTrains(
   }
 
   const rejseplanenStationId = toRejseplanenStationId(stationId);
-  const { response, fetchMs } = await fetchWithTimeout(
+  const { data: payload, fetchMs } = await fetchJsonWithTimeout<unknown>(
     buildBoardUrl(rejseplanenStationId, type),
     "Danish",
     {
@@ -630,8 +630,6 @@ export async function scrapeDenmarkTrains(
       },
     },
   );
-
-  const payload = (await response.json()) as unknown;
   const entries = getEntries(payload, type);
   const mappedTrains = entries
     .filter((entry) => isRailEntry(entry))

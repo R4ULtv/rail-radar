@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
 import { COUNTRY_MAP, COUNTRY_CODES, COUNTRY_SLUG } from "@repo/data/countries";
-import { stationsByCountry } from "@repo/data/stations";
+import { stationsByCountry } from "@repo/data/directory";
 import { Card, CardContent } from "@repo/ui/components/card";
 import { ArrowLeftIcon, ArrowRightIcon } from "lucide-react";
 import baseUrl from "@/lib/base-url";

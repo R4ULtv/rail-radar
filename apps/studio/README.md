@@ -8,7 +8,7 @@ Admin tool for managing railway station data across Europe. Add missing coordina
 - MapLibre GL (interactive map)
 - Tailwind CSS 4 + shadcn-svelte / bits-ui
 - Wikidata + Wikipedia for station enrichment
-- Cloudflare adapter for deployment, file-system API for local edits
+- Cloudflare adapter for deployment, custom Vite middleware for local edits
 
 ## Getting Started
 
@@ -20,7 +20,7 @@ pnpm --filter=studio dev
 
 Runs on [http://localhost:3001](http://localhost:3001).
 
-The dev script sets `PUBLIC_STUDIO_LOCAL_MODE=true` and `LOCAL_ENV=true`, which enables the local file API (`/api/stations`) so edits are written straight to `packages/data/src/stations.geojson`.
+The dev script sets `PUBLIC_STUDIO_LOCAL_MODE=true` and `LOCAL_ENV=true`. These flags select local mode in the app and enable the custom Vite middleware that serves `/api/stations` from the development server.
 
 For a production build:
 
@@ -29,13 +29,19 @@ pnpm --filter=studio build
 pnpm --filter=studio preview
 ```
 
+## Environment variables
+
+| Variable             | Description                                                                       |
+| -------------------- | --------------------------------------------------------------------------------- |
+| `PUBLIC_POSTHOG_KEY` | PostHog project API key (EU cloud); events are proxied through t.railradar24.com. |
+
 ## Modes
 
-**Local mode** — used during development. Reads and writes `packages/data/src/stations.geojson` directly through the SvelteKit endpoints under `/api/stations`. Every edit is persisted to disk immediately.
+**Local mode** — used during development. The custom `localStationApi` Vite plugin installs dev-server middleware under `/api/stations`. Its write operations modify `packages/data/src/stations.geojson` directly, so use `git diff` to review the data changes and run the repository's existing format, lint, and type-check workflow before committing them.
 
-**Browser mode** — used in the deployed build. Upload a GeoJSON file, edit in-browser, and export the result. Nothing is written server-side.
+**Browser mode** — used in preview and production builds. Upload a GeoJSON file, edit in-browser, and export the result. Nothing is written server-side.
 
-The mode is selected automatically based on `PUBLIC_STUDIO_LOCAL_MODE`, `LOCAL_ENV`, or `STUDIO_LOCAL_MODE`.
+`pnpm --filter=studio dev` enables local mode through `PUBLIC_STUDIO_LOCAL_MODE=true` and `LOCAL_ENV=true`. The middleware also recognizes `STUDIO_LOCAL_MODE=true`, but it runs only in the Vite development server; it does not use SvelteKit server routing and is unavailable in preview, production, and browser mode.
 
 ## Features
 

@@ -8,7 +8,7 @@ import {
   statusFromWindow,
   stripCountryPrefix,
 } from "./core";
-import { fetchWithTimeout } from "./fetch";
+import { fetchJsonWithTimeout } from "./fetch";
 
 const IRAIL_BASE_URL = "https://api.irail.be/v1/liveboard/";
 
@@ -85,9 +85,7 @@ export async function scrapeBelgiumTrains(
   type: "arrivals" | "departures" = "departures",
 ): Promise<ScrapeResult> {
   const url = buildBelgiumUrl(stationId, type === "arrivals");
-  const { response, fetchMs } = await fetchWithTimeout(url, "Belgian");
-
-  const data: LiveboardResponse = await response.json();
+  const { data, fetchMs } = await fetchJsonWithTimeout<LiveboardResponse>(url, "Belgian");
 
   if (!data || (!data.departures && !data.arrivals)) {
     return { trains: [], info: null, timing: { fetchMs } };

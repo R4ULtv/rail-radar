@@ -7,7 +7,10 @@ import { CACHE_TTL } from "../constants";
 import { factory } from "../lib/env";
 import { jsonError } from "../lib/http";
 
-const stationsGeoJSONBody = JSON.stringify(stationsGeoJSON);
+let stationsGeoJSONBody: string | undefined;
+function getStationsGeoJSONBody() {
+  return (stationsGeoJSONBody ??= JSON.stringify(stationsGeoJSON));
+}
 
 export const stationsGeoJsonRoutes = factory.createApp().get(
   "/",
@@ -30,7 +33,7 @@ export const stationsGeoJsonRoutes = factory.createApp().get(
     c.header("Cache-Control", CACHE_TTL.GEOJSON);
 
     if (!typeFilter && !countryFilter) {
-      return c.body(stationsGeoJSONBody);
+      return c.body(getStationsGeoJSONBody());
     }
 
     const features = stationsGeoJSON.features.filter((feature) => {

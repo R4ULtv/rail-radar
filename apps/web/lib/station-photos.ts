@@ -30,9 +30,10 @@ function normalizePhotoUrl(photo: StationPhoto): StationPhoto {
 
 export async function getStationPhotos(stationId: string): Promise<StationPhoto[]> {
   try {
-    const response = await fetch(staticAssetUrl(`/stations/${stationId}/photos`), {
-      next: { revalidate: 43200 },
-    });
+    // The station page is force-dynamic, so Next does not cache this fetch.
+    // Repeat requests are served from the static.railradar24.com edge cache
+    // (see apps/static/src/station-photos.ts).
+    const response = await fetch(staticAssetUrl(`/stations/${stationId}/photos`));
 
     if (response.status === 404) {
       return [];

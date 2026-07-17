@@ -6,19 +6,20 @@
     "dev": "turbo run dev",
     "lint": "turbo run lint",
     "format": "oxfmt",
+    "format:check": "oxfmt --check",
     "check-types": "turbo run check-types",
     "optimize-svgs": "node scripts/optimize-svgs.mjs"
   },
   "devDependencies": {
-    "eslint-plugin-turbo": "^2.10.4",
-    "oxfmt": "^0.58.0",
-    "oxlint": "^1.73.0",
-    "svgo": "^4.0.1",
-    "turbo": "^2.10.4",
+    "eslint-plugin-turbo": "^2.10.5",
+    "oxfmt": "^0.59.0",
+    "oxlint": "^1.74.0",
+    "svgo": "^4.0.2",
+    "turbo": "^2.10.5",
     "typescript": "^6.0.3"
   },
   "engines": {
     "node": ">=22"
   },
-  "packageManager": "pnpm@11.11.0"
+  "packageManager": "pnpm@11.13.1"
 }

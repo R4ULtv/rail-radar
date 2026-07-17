@@ -9,7 +9,7 @@ import {
   getCountryBySlug,
   type CountryCode,
 } from "@repo/data/countries";
-import { stationsByCountry, countryStationBounds } from "@repo/data/stations";
+import { stationsByCountry, countryStationBounds } from "@repo/data/directory";
 import { Card, CardContent } from "@repo/ui/components/card";
 import { ArrowLeftIcon, ArrowRightIcon, ExpandIcon, TrainFrontIcon } from "lucide-react";
 import baseUrl from "@/lib/base-url";

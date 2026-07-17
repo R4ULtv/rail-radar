@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { env } from "$env/dynamic/public";
+  import posthog from "posthog-js";
   import { onMount } from "svelte";
   import "../app.css";
 
@@ -13,6 +15,17 @@
 
   onMount(() => {
     document.documentElement.classList.add("dark");
+
+    if (env.PUBLIC_POSTHOG_KEY) {
+      posthog.init(env.PUBLIC_POSTHOG_KEY, {
+        api_host: "https://t.railradar24.com",
+        ui_host: "https://eu.posthog.com",
+        defaults: "2026-05-30",
+        persistence: "memory",
+        autocapture: false,
+        capture_performance: { web_vitals: true },
+      });
+    }
   });
 </script>
 

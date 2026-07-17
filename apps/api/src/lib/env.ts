@@ -6,6 +6,7 @@ export type Bindings = {
   PROVIDER_ANALYTICS: AnalyticsEngineDataset;
   CLOUDFLARE_ACCOUNT_ID: string;
   CLOUDFLARE_API_TOKEN: string;
+  IP_HASH_PEPPER: string;
   NS_API_KEY: string;
   LDBWS_API_KEY: string;
   TRAFIKLAB_KEY: string;
