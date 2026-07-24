@@ -501,7 +501,7 @@ export default function AnalyticsReportPage() {
 
         <ArticleSection title="Germany takes the lead as every established market grows">
           <p>
-            Germany recorded 18,710 visits, moving from ninth place in the April report to first.
+            Germany recorded 18,710 visits, moving from fifth place in the April report to first.
             Italy also grew strongly to 15,721 visits, while Switzerland reached 9,185. France and
             Poland appear for the first time and together contributed 4,667 visits.
           </p>
@@ -530,7 +530,7 @@ export default function AnalyticsReportPage() {
           <p>
             Milano Centrale remains a durable anchor. Its visits grew from 845 to 3,791 and its
             unique audience more than doubled from 254 to 552. Bruxelles-Midi and Amsterdam Centraal
-            also remain in both top-five reach lists, evidence that the international audience is
+            also remain in both top-ten leaderboards, evidence that the international audience is
             compounding rather than simply rotating between markets.
           </p>
           <StationLeaderboards />
