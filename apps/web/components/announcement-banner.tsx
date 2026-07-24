@@ -1,13 +1,13 @@
 "use client";
 
 import { useReducer, useRef, useSyncExternalStore } from "react";
-import { ArrowRightIcon, HeartIcon, XIcon } from "lucide-react";
+import { ArrowRightIcon, TrendingUpIcon, XIcon } from "lucide-react";
 import { LazyMotion, domAnimation, m, AnimatePresence } from "motion/react";
 import Link from "next/link";
 import { Button, buttonVariants } from "@repo/ui/components/button";
 import { cn } from "@repo/ui/lib/utils";
 
-const STORAGE_KEY = "banner-dismissed-v12";
+const STORAGE_KEY = "banner-dismissed-report-2026-07-24";
 
 const subscribe = () => () => {};
 const getSnapshot = () => !localStorage.getItem(STORAGE_KEY);
@@ -45,32 +45,32 @@ export function AnnouncementBanner() {
                 aria-hidden="true"
                 className="flex size-10 shrink-0 items-center justify-center rounded-md border border-border bg-accent text-accent-foreground shadow-xs md:size-11"
               >
-                <HeartIcon className="size-4.5" fill="currentColor" strokeWidth={1.75} />
+                <TrendingUpIcon className="size-4.5" strokeWidth={1.75} />
               </div>
 
               <div className="min-w-0 flex-1">
                 <div className="mb-0.5 flex items-center gap-1.5">
                   <p className="truncate text-sm font-semibold tracking-tight">
-                    Rail Radar is growing fast
+                    New: July traffic report
                   </p>
                 </div>
                 <p className="truncate text-xs text-muted-foreground">
-                  <span className="md:hidden">Help one developer keep it free.</span>
+                  <span className="md:hidden">See how Rail Radar grew.</span>
                   <span className="hidden md:inline">
-                    Built by one developer. Help cover the servers that keep it free.
+                    ~70k visits across 13 countries, and Germany takes the lead.
                   </span>
                 </p>
               </div>
 
               <Link
-                href="/donate"
+                href="/report/2026-07-24"
                 onClick={dismiss}
                 className={cn(
                   buttonVariants({ variant: "default", size: "sm" }),
                   "hidden transition-transform duration-150 active:scale-[0.97] md:inline-flex",
                 )}
               >
-                Support
+                Read report
                 <ArrowRightIcon data-icon="inline-end" />
               </Link>
 
@@ -85,12 +85,12 @@ export function AnnouncementBanner() {
               </Button>
 
               <Link
-                href="/donate"
+                href="/report/2026-07-24"
                 onClick={dismiss}
-                aria-label="Support Rail Radar"
+                aria-label="Read the July 2026 Rail Radar traffic report"
                 className="absolute inset-0 rounded-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-inset md:hidden"
               >
-                <span className="sr-only">Support Rail Radar</span>
+                <span className="sr-only">Read the July 2026 Rail Radar traffic report</span>
               </Link>
             </div>
           </m.div>
