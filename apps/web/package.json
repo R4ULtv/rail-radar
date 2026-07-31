@@ -24,7 +24,7 @@
     "react-dom": "^19.2.8",
     "react-map-gl": "^8.1.2",
     "swr": "^2.4.2",
-    "takumi-js": "^1.8.7"
+    "takumi-js": "^2.5.3"
   },
   "devDependencies": {
     "@repo/typescript-config": "workspace:*",
