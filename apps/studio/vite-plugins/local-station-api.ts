@@ -9,7 +9,7 @@ import {
   normalizeNewStation,
   stationToFeature,
   validateGeojson,
-} from "../src/lib/stations";
+} from "../src/lib/stations.ts";
 
 const DATA_FILE_PATH = path.resolve(process.cwd(), "../../packages/data/src/stations.geojson");
 
