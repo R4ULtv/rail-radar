@@ -1,7 +1,7 @@
 import tailwindcss from "@tailwindcss/vite";
 import { sveltekit } from "@sveltejs/kit/vite";
 import { defineConfig } from "vite";
-import { localStationApi } from "./vite-plugins/local-station-api";
+import { localStationApi } from "./vite-plugins/local-station-api.ts";
 
 export default defineConfig({
   plugins: [localStationApi(), tailwindcss(), sveltekit()],
