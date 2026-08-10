@@ -1,6 +1,5 @@
-import type { Metadata } from "next";
-import Link from "next/link";
-import Image from "next/image";
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { metadataToHead, type Metadata } from "@/lib/metadata";
 import { Button } from "@repo/ui/components/button";
 import { Card, CardContent } from "@repo/ui/components/card";
 import {
@@ -13,7 +12,12 @@ import {
   ShieldCheckIcon,
 } from "lucide-react";
 
-export const metadata: Metadata = {
+export const Route = createFileRoute("/donate/")({
+  head: () => metadataToHead(metadata),
+  component: DonatePage,
+});
+
+const metadata: Metadata = {
   title: "Donate",
   description:
     "Support Rail Radar and help keep real-time European train tracking fast, useful, and independent.",
@@ -46,13 +50,13 @@ const impactItems = [
   },
 ];
 
-export default function DonatePage() {
+function DonatePage() {
   const fundedPercent = Math.min(100, Math.round((monthlyFunded / monthlyGoal) * 100));
 
   return (
     <div className="mx-auto max-w-4xl px-4 py-12 md:px-6 md:py-16">
       <Link
-        href="/"
+        to="/"
         className="group/back mb-8 md:mb-12 inline-flex items-center gap-2 text-sm text-muted-foreground transition-colors duration-150 ease-out hover:text-foreground"
       >
         <ArrowLeftIcon className="size-4 transition-transform duration-150 ease-out group-hover/back:-translate-x-0.5" />
@@ -86,7 +90,7 @@ export default function DonatePage() {
             <ExternalLinkIcon data-icon="inline-end" className="size-4" />
           </Button>
 
-          <Button variant="outline" size="lg" nativeButton={false} render={<Link href="/" />}>
+          <Button variant="outline" size="lg" nativeButton={false} render={<Link to="/" />}>
             Open the live map
             <ArrowRightIcon data-icon="inline-end" className="size-4" />
           </Button>
@@ -192,8 +196,7 @@ export default function DonatePage() {
         <Card>
           <CardContent>
             <div className="flex flex-col gap-5 sm:flex-row sm:items-start sm:gap-6">
-              <Image
-                unoptimized
+              <img
                 src="https://github.com/R4ULtv.png"
                 alt="Raul Carini"
                 width={72}

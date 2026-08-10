@@ -1,18 +1,23 @@
-import type { Metadata } from "next";
-import Link from "next/link";
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { metadataToHead, type Metadata } from "@/lib/metadata";
 import { ArrowLeftIcon } from "lucide-react";
 
-export const metadata: Metadata = {
+export const Route = createFileRoute("/terms-of-service")({
+  head: () => metadataToHead(metadata),
+  component: TermsOfServicePage,
+});
+
+const metadata: Metadata = {
   title: "Terms of Service",
   description: "Terms of Service for Rail Radar - Rules and guidelines for using our service.",
   robots: { index: false },
 };
 
-export default function TermsOfServicePage() {
+function TermsOfServicePage() {
   return (
     <div className="mx-auto max-w-4xl px-6 py-16">
       <Link
-        href="/"
+        to="/"
         className="mb-8 inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground"
       >
         <ArrowLeftIcon className="size-4" />

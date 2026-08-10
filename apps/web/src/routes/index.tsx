@@ -1,12 +1,41 @@
-import type { Metadata } from "next";
-import Link from "next/link";
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { metadataToHead, type Metadata } from "@/lib/metadata";
 import { Suspense } from "react";
 import { preconnect } from "react-dom";
 
 import { Map } from "@/components/map";
 import MapLoading from "@/components/map-loading";
 
-export const metadata: Metadata = {
+type MapSearch = {
+  lat?: number;
+  lng?: number;
+  zoom?: number;
+  station?: string;
+  q?: string;
+};
+
+function numberSearch(value: unknown): number | undefined {
+  const parsed = typeof value === "number" ? value : Number(value);
+  return Number.isFinite(parsed) ? parsed : undefined;
+}
+
+function stringSearch(value: unknown): string | undefined {
+  return typeof value === "string" && value.length > 0 ? value : undefined;
+}
+
+export const Route = createFileRoute("/")({
+  validateSearch: (search): MapSearch => ({
+    lat: numberSearch(search.lat),
+    lng: numberSearch(search.lng),
+    zoom: numberSearch(search.zoom),
+    station: stringSearch(search.station),
+    q: stringSearch(search.q),
+  }),
+  head: () => metadataToHead(metadata),
+  component: Home,
+});
+
+const metadata: Metadata = {
   alternates: {
     canonical: "/",
   },
@@ -26,7 +55,7 @@ const jsonLd = {
   },
 };
 
-export default function Home() {
+function Home() {
   preconnect("https://api.mapbox.com", { crossOrigin: "anonymous" });
 
   return (
@@ -92,19 +121,19 @@ export default function Home() {
             <span className="hidden md:inline">{" ·"}</span>
           </span>
           <span>
-            <Link href="/privacy-policy" className="hover:underline">
+            <Link to="/privacy-policy" className="hover:underline">
               Privacy
             </Link>
             {" · "}
-            <Link href="/terms-of-service" className="hover:underline">
+            <Link to="/terms-of-service" className="hover:underline">
               Terms
             </Link>
             {" · "}
-            <Link href="/donate" className="hover:underline">
+            <Link to="/donate" className="hover:underline">
               Donate
             </Link>
             {" · "}
-            <Link href="/stations/" className="hover:underline">
+            <Link to="/stations" className="hover:underline">
               Stations
             </Link>
             {" · "}

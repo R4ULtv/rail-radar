@@ -1,12 +1,11 @@
-import { notFound } from "next/navigation";
-import type { Metadata } from "next";
-import Link from "next/link";
-import Image from "next/image";
+import { createFileRoute, Link, notFound } from "@tanstack/react-router";
+import { metadataToHead, type Metadata } from "@/lib/metadata";
 import { operators, operatorBySlug, type Operator } from "@repo/data/operators";
 import { COUNTRY_MAP, type CountryCode } from "@repo/data/countries";
 import { Badge } from "@repo/ui/components/badge";
 import { Card, CardContent } from "@repo/ui/components/card";
 import { staticAssetUrl } from "@/lib/static-assets";
+import { env } from "@/lib/env";
 import {
   ArrowLeftIcon,
   ArrowRightIcon,
@@ -23,17 +22,21 @@ import {
   UsersIcon,
 } from "lucide-react";
 
-interface OperatorPageProps {
-  params: Promise<{ slug: string }>;
+export const Route = createFileRoute("/operators/$slug")({
+  loader: ({ params }) => {
+    if (!operatorBySlug.has(params.slug)) throw notFound();
+    return { slug: params.slug };
+  },
+  head: ({ params }) => metadataToHead(getOperatorMetadata(params.slug)),
+  component: OperatorRoute,
+});
+
+function OperatorRoute() {
+  const { slug } = Route.useLoaderData();
+  return <OperatorPage slug={slug} />;
 }
 
-export async function generateStaticParams() {
-  return operators.map((operator) => ({ slug: operator.slug }));
-}
-export const dynamicParams = false;
-
-export async function generateMetadata({ params }: OperatorPageProps): Promise<Metadata> {
-  const { slug } = await params;
+function getOperatorMetadata(slug: string): Metadata {
   const operator = operatorBySlug.get(slug);
 
   if (!operator) {
@@ -149,12 +152,11 @@ function getRelatedOperators(operator: Operator): Operator[] {
   return [...sameCountry, ...crossCountry].slice(0, 4);
 }
 
-export default async function OperatorPage({ params }: OperatorPageProps) {
-  const { slug } = await params;
+function OperatorPage({ slug }: { slug: string }) {
   const operator = operatorBySlug.get(slug);
 
   if (!operator) {
-    notFound();
+    return null;
   }
 
   const relatedOperators = getRelatedOperators(operator);
@@ -221,7 +223,7 @@ export default async function OperatorPage({ params }: OperatorPageProps) {
       />
 
       <Link
-        href="/operators"
+        to="/operators"
         className="group/back mb-8 md:mb-12 inline-flex items-center gap-2 text-sm text-muted-foreground transition-colors duration-150 ease-out hover:text-foreground"
       >
         <ArrowLeftIcon className="size-4 transition-transform duration-150 ease-out group-hover/back:-translate-x-0.5" />
@@ -231,8 +233,7 @@ export default async function OperatorPage({ params }: OperatorPageProps) {
       <div className="mb-12">
         <div className="flex items-start gap-5">
           <div className="flex size-20 shrink-0 items-center justify-center overflow-hidden rounded-2xl bg-card">
-            <Image
-              unoptimized
+            <img
               src={staticAssetUrl(`/operators/${operator.logoPath}.svg`)}
               alt={operator.name}
               width={80}
@@ -249,8 +250,7 @@ export default async function OperatorPage({ params }: OperatorPageProps) {
                   className="inline-flex items-center gap-1.5 capitalize"
                   aria-label={COUNTRY_MAP[c]}
                 >
-                  <Image
-                    unoptimized
+                  <img
                     src={staticAssetUrl(`/flags/${c}.svg`)}
                     alt={COUNTRY_MAP[c]}
                     width={16}
@@ -284,19 +284,18 @@ export default async function OperatorPage({ params }: OperatorPageProps) {
       </div>
 
       <Link
-        href={`/?lat=${mapView.lat}&lng=${mapView.lng}&zoom=${mapView.zoom}`}
+        to="/"
+        search={{ lat: mapView.lat, lng: mapView.lng, zoom: mapView.zoom }}
         className="group/map"
       >
         <Card className="mb-6 overflow-hidden py-0">
           <div className="relative aspect-21/9">
-            <Image
-              unoptimized
+            <img
               loading="eager"
-              src={`${process.env.NEXT_PUBLIC_API_URL}/map/static?bbox=${operator.bounds.join(",")}&w=960&h=412`}
+              src={`${env.apiUrl}/map/static?bbox=${operator.bounds.join(",")}&w=960&h=412`}
               alt={`Map of ${operator.name} operating area`}
-              fill
               sizes="(max-width: 768px) calc(100vw - 32px), 848px"
-              className="object-cover"
+              className="absolute inset-0 size-full object-cover"
             />
             <ExpandIcon className="absolute top-4 right-4 size-4 text-muted-foreground opacity-0 scale-95 transition-[transform,opacity] duration-200 ease-out group-hover/map:opacity-100 group-hover/map:scale-100" />
             <div className="absolute inset-x-0 bottom-0 bg-linear-to-t from-card/40 to-transparent p-4 pt-8">
@@ -346,11 +345,11 @@ export default async function OperatorPage({ params }: OperatorPageProps) {
                 {trackedCountries.map((c) => (
                   <Link
                     key={c}
-                    href={`/operators#${c}`}
+                    to="/operators"
+                    hash={c}
                     className="flex items-center gap-3 rounded-lg bg-muted/30 px-3 py-2.5 transition-[background-color,transform] duration-150 ease-out lg:hover:bg-muted/50 active:scale-[0.98]"
                   >
-                    <Image
-                      unoptimized
+                    <img
                       src={staticAssetUrl(`/flags/${c}.svg`)}
                       alt={COUNTRY_MAP[c]}
                       width={18}
@@ -409,12 +408,12 @@ export default async function OperatorPage({ params }: OperatorPageProps) {
                   {relatedOperators.map((b) => (
                     <Link
                       key={b.slug}
-                      href={`/operators/${b.slug}`}
+                      to="/operators/$slug"
+                      params={{ slug: b.slug }}
                       className="group/rel flex items-center gap-3 rounded-lg px-2.5 py-2 -mx-2.5 transition-[background-color,transform] duration-150 ease-out lg:hover:bg-muted/50 active:scale-[0.98]"
                     >
                       <div className="flex size-8 shrink-0 items-center justify-center overflow-hidden rounded-lg bg-background">
-                        <Image
-                          unoptimized
+                        <img
                           src={staticAssetUrl(`/operators/${b.logoPath}.svg`)}
                           alt={b.name}
                           width={32}
@@ -427,9 +426,8 @@ export default async function OperatorPage({ params }: OperatorPageProps) {
                         {getTrackedCountries(b)
                           .slice(0, 2)
                           .map((c) => (
-                            <Image
+                            <img
                               key={c}
-                              unoptimized
                               src={staticAssetUrl(`/flags/${c}.svg`)}
                               alt={COUNTRY_MAP[c]}
                               width={14}

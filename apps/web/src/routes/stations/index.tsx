@@ -1,6 +1,5 @@
-import type { Metadata } from "next";
-import Link from "next/link";
-import Image from "next/image";
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { metadataToHead, type Metadata } from "@/lib/metadata";
 import { COUNTRY_MAP, COUNTRY_CODES, COUNTRY_SLUG } from "@repo/data/countries";
 import { stationsByCountry } from "@repo/data/directory";
 import { Card, CardContent } from "@repo/ui/components/card";
@@ -8,12 +7,17 @@ import { ArrowLeftIcon, ArrowRightIcon } from "lucide-react";
 import baseUrl from "@/lib/base-url";
 import { staticAssetUrl } from "@/lib/static-assets";
 
+export const Route = createFileRoute("/stations/")({
+  head: () => metadataToHead(metadata),
+  component: StationsPage,
+});
+
 const totalStations = COUNTRY_CODES.reduce(
   (sum, code) => sum + (stationsByCountry.get(code)?.length ?? 0),
   0,
 );
 
-export const metadata: Metadata = {
+const metadata: Metadata = {
   title: "Train Stations - Browse by Country",
   description: `Browse ${totalStations.toLocaleString()} train stations across ${COUNTRY_CODES.length} European countries on Rail Radar. Find live departures, arrivals, and real-time schedules for every station.`,
   alternates: {
@@ -31,7 +35,7 @@ export const metadata: Metadata = {
   },
 };
 
-export default function StationsPage() {
+function StationsPage() {
   const countries = COUNTRY_CODES.map((code) => ({
     code,
     name: COUNTRY_MAP[code],
@@ -63,7 +67,7 @@ export default function StationsPage() {
       />
 
       <Link
-        href="/"
+        to="/"
         className="group/back mb-8 md:mb-12 inline-flex items-center gap-2 text-sm text-muted-foreground transition-colors duration-150 ease-out hover:text-foreground"
       >
         <ArrowLeftIcon className="size-4 transition-transform duration-150 ease-out group-hover/back:-translate-x-0.5" />
@@ -84,14 +88,18 @@ export default function StationsPage() {
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
         {countries.map((country) => (
-          <Link key={country.code} href={`/stations/${country.slug}`} className="group">
+          <Link
+            key={country.code}
+            to="/stations/$country"
+            params={{ country: country.slug }}
+            className="group"
+          >
             <Card
               size="sm"
               className="h-full transition-[background-color,box-shadow,transform] ease-[cubic-bezier(0.23,1,0.32,1)] duration-200 lg:group-hover:bg-muted/40 lg:group-hover:ring-foreground/20 group-active:scale-[0.98]"
             >
               <CardContent className="flex items-center gap-3">
-                <Image
-                  unoptimized
+                <img
                   src={staticAssetUrl(`/flags/${country.code}.svg`)}
                   alt={country.name}
                   width={40}

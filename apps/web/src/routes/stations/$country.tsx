@@ -1,7 +1,5 @@
-import { notFound } from "next/navigation";
-import type { Metadata } from "next";
-import Link from "next/link";
-import Image from "next/image";
+import { createFileRoute, Link, notFound } from "@tanstack/react-router";
+import { metadataToHead, type Metadata } from "@/lib/metadata";
 import {
   COUNTRY_MAP,
   COUNTRY_CODES,
@@ -14,15 +12,22 @@ import { Card, CardContent } from "@repo/ui/components/card";
 import { ArrowLeftIcon, ArrowRightIcon, ExpandIcon, TrainFrontIcon } from "lucide-react";
 import baseUrl from "@/lib/base-url";
 import { staticAssetUrl } from "@/lib/static-assets";
+import { env } from "@/lib/env";
 
-interface CountryPageProps {
-  params: Promise<{ country: string }>;
-}
+export const Route = createFileRoute("/stations/$country")({
+  loader: ({ params }) => {
+    const code = getCountryBySlug(params.country);
+    if (!code || (stationsByCountry.get(code)?.length ?? 0) === 0) throw notFound();
+    return { slug: params.country };
+  },
+  head: ({ params }) => metadataToHead(getCountryMetadata(params.country)),
+  component: CountryRoute,
+});
 
-export async function generateStaticParams() {
-  return COUNTRY_CODES.map((code) => ({ country: COUNTRY_SLUG[code] }));
+function CountryRoute() {
+  const { slug } = Route.useLoaderData();
+  return <CountryStationsPage slug={slug} />;
 }
-export const dynamicParams = false;
 
 /**
  * Page copy templates. Kept in one place so a future locale layer can swap the
@@ -35,8 +40,7 @@ function pageCopy(countryName: string, count: number) {
   };
 }
 
-export async function generateMetadata({ params }: CountryPageProps): Promise<Metadata> {
-  const { country: slug } = await params;
+function getCountryMetadata(slug: string): Metadata {
   const code = getCountryBySlug(slug);
 
   if (!code) {
@@ -100,19 +104,18 @@ function boundsToView(bounds: [number, number, number, number]): {
   return { lat: +lat.toFixed(4), lng: +lng.toFixed(4), zoom: Math.min(Math.max(zoom, 3), 18) };
 }
 
-export default async function CountryStationsPage({ params }: CountryPageProps) {
-  const { country: slug } = await params;
+function CountryStationsPage({ slug }: { slug: string }) {
   const code = getCountryBySlug(slug);
 
   if (!code) {
-    notFound();
+    return null;
   }
 
   const countryName = COUNTRY_MAP[code];
   const allStations = stationsByCountry.get(code) ?? [];
 
   if (allStations.length === 0) {
-    notFound();
+    return null;
   }
 
   const bounds = countryStationBounds.get(code)!;
@@ -167,7 +170,7 @@ export default async function CountryStationsPage({ params }: CountryPageProps) 
       />
 
       <Link
-        href="/stations"
+        to="/stations"
         className="group/back mb-8 md:mb-12 inline-flex items-center gap-2 text-sm text-muted-foreground transition-colors duration-150 ease-out hover:text-foreground"
       >
         <ArrowLeftIcon className="size-4 transition-transform duration-150 ease-out group-hover/back:-translate-x-0.5" />
@@ -175,8 +178,7 @@ export default async function CountryStationsPage({ params }: CountryPageProps) 
       </Link>
 
       <div className="mb-10 flex items-start gap-4">
-        <Image
-          unoptimized
+        <img
           src={staticAssetUrl(`/flags/${code}.svg`)}
           alt={countryName}
           width={48}
@@ -199,19 +201,18 @@ export default async function CountryStationsPage({ params }: CountryPageProps) 
 
       {/* Static map hero, linked to the live map */}
       <Link
-        href={`/?lat=${mapView.lat}&lng=${mapView.lng}&zoom=${mapView.zoom}`}
+        to="/"
+        search={{ lat: mapView.lat, lng: mapView.lng, zoom: mapView.zoom }}
         className="group/map"
       >
         <Card className="mb-12 overflow-hidden py-0">
           <div className="relative aspect-21/9">
-            <Image
-              unoptimized
+            <img
               loading="eager"
-              src={`${process.env.NEXT_PUBLIC_API_URL}/map/static?bbox=${bounds.join(",")}&w=960&h=412`}
+              src={`${env.apiUrl}/map/static?bbox=${bounds.join(",")}&w=960&h=412`}
               alt={`Map of train stations in ${countryName}`}
-              fill
               sizes="(max-width: 768px) calc(100vw - 32px), 848px"
-              className="object-cover"
+              className="absolute inset-0 size-full object-cover"
             />
             <ExpandIcon className="absolute top-4 right-4 size-4 text-muted-foreground opacity-0 scale-95 transition-[transform,opacity] duration-200 ease-out group-hover/map:opacity-100 group-hover/map:scale-100" />
             <div className="absolute inset-x-0 bottom-0 bg-linear-to-t from-card/40 to-transparent p-4 pt-8">
@@ -229,7 +230,12 @@ export default async function CountryStationsPage({ params }: CountryPageProps) 
           <h2 className="text-lg font-semibold tracking-tight mb-5">Major stations</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
             {hubs.map((station) => (
-              <Link key={station.id} href={`/station/${station.id}`} className="group">
+              <Link
+                key={station.id}
+                to="/station/$id"
+                params={{ id: station.id }}
+                className="group"
+              >
                 <Card
                   size="sm"
                   className="h-full transition-[background-color,box-shadow,transform] ease-[cubic-bezier(0.23,1,0.32,1)] duration-200 lg:group-hover:bg-muted/40 lg:group-hover:ring-foreground/20 group-active:scale-[0.98]"

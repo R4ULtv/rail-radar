@@ -1,34 +1,31 @@
-import type { Metadata } from "next";
-import Link from "next/link";
-import Image from "next/image";
+import { createFileRoute, Link, redirect } from "@tanstack/react-router";
+import { metadataToHead, type Metadata } from "@/lib/metadata";
 import { Button } from "@repo/ui/components/button";
 import { Card, CardContent } from "@repo/ui/components/card";
 import { ArrowLeftIcon, ExternalLinkIcon, HeartIcon, SparklesIcon } from "lucide-react";
-import { redirect } from "next/navigation";
 
-export const metadata: Metadata = {
+export const Route = createFileRoute("/donate/success")({
+  validateSearch: (search): { checkout_id?: string } => ({
+    checkout_id: typeof search.checkout_id === "string" ? search.checkout_id : undefined,
+  }),
+  beforeLoad: ({ search }) => {
+    if (!search.checkout_id) throw redirect({ to: "/donate" });
+  },
+  head: () => metadataToHead(metadata),
+  component: DonationSuccessPage,
+});
+
+const metadata: Metadata = {
   title: "Thank You",
   description: "Thank you for supporting Rail Radar.",
   robots: { index: false },
 };
 
-type DonationSuccessPageProps = {
-  searchParams: Promise<{
-    checkout_id?: string;
-  }>;
-};
-
-export default async function DonationSuccessPage({ searchParams }: DonationSuccessPageProps) {
-  const { checkout_id } = await searchParams;
-
-  if (!checkout_id) {
-    return redirect("/donate");
-  }
-
+function DonationSuccessPage() {
   return (
     <div className="mx-auto max-w-4xl px-4 py-12 md:px-6 md:py-16">
       <Link
-        href="/"
+        to="/"
         className="group/back mb-8 md:mb-12 inline-flex items-center gap-2 text-sm text-muted-foreground transition-colors duration-150 ease-out hover:text-foreground"
       >
         <ArrowLeftIcon className="size-4 transition-transform duration-150 ease-out group-hover/back:-translate-x-0.5" />
@@ -51,7 +48,7 @@ export default async function DonationSuccessPage({ searchParams }: DonationSucc
         </p>
 
         <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-          <Button size="lg" nativeButton={false} render={<Link href="/" />}>
+          <Button size="lg" nativeButton={false} render={<Link to="/" />}>
             Open the live map
             <SparklesIcon data-icon="inline-end" className="size-4" />
           </Button>
@@ -59,7 +56,7 @@ export default async function DonationSuccessPage({ searchParams }: DonationSucc
             variant="outline"
             size="lg"
             nativeButton={false}
-            render={<Link href="/operators" />}
+            render={<Link to="/operators" />}
           >
             Browse operators
           </Button>
@@ -75,8 +72,7 @@ export default async function DonationSuccessPage({ searchParams }: DonationSucc
         <Card>
           <CardContent>
             <div className="flex flex-col gap-5 sm:flex-row sm:items-start sm:gap-6">
-              <Image
-                unoptimized
+              <img
                 src="https://github.com/R4ULtv.png"
                 alt="Raul Carini"
                 width={72}

@@ -1,6 +1,14 @@
+import { createFileRoute } from "@tanstack/react-router";
 import { ImageResponse } from "takumi-js/response";
 import { stations, stationById } from "@repo/data/stations";
-import type { NextRequest } from "next/server";
+
+export const Route = createFileRoute("/og")({
+  server: {
+    handlers: {
+      GET: ({ request }) => getOgImage(request),
+    },
+  },
+});
 
 const DEG_TO_RAD = Math.PI / 180;
 const EARTH_RADIUS_KM = 6371;
@@ -43,8 +51,8 @@ function getNearbyStations(stationId: string) {
   return nearby.sort((a, b) => a.distance - b.distance).slice(0, 4);
 }
 
-export function GET(request: NextRequest) {
-  const id = request.nextUrl.searchParams.get("id");
+function getOgImage(request: Request) {
+  const id = new URL(request.url).searchParams.get("id");
 
   if (!id) {
     return new Response("Missing id parameter", { status: 400 });
@@ -57,6 +65,7 @@ export function GET(request: NextRequest) {
 
   const nearby = getNearbyStations(id);
   const coords = `${toDMS(station.geo.lat, true)} ${toDMS(station.geo.lng, false)}`;
+  const mapboxServerToken = process.env.MAPBOX_SERVER_TOKEN;
 
   return new ImageResponse(
     <div tw="flex w-full h-full bg-[#1C1917]">
@@ -151,14 +160,17 @@ export function GET(request: NextRequest) {
                 "linear-gradient(to bottom, rgba(0,0,0,0.4) 0%, black 10%, black 90%, rgba(0,0,0,0.4) 100%)",
             }}
           >
-            {/* oxlint-disable-next-line nextjs/no-img-element */}
-            <img
-              width={750}
-              height={630}
-              src={`https://api.mapbox.com/styles/v1/mapbox/dark-v11/static/${station.geo.lng - 0.007},${station.geo.lat},13,0/750x630?attribution=false&logo=false&access_token=${process.env.MAPBOX_SERVER_TOKEN}`}
-              tw="absolute inset-0 w-full h-full object-cover brightness-110"
-              alt=""
-            />
+            {mapboxServerToken ? (
+              <img
+                width={750}
+                height={630}
+                src={`https://api.mapbox.com/styles/v1/mapbox/dark-v11/static/${station.geo.lng - 0.007},${station.geo.lat},13,0/750x630?attribution=false&logo=false&access_token=${mapboxServerToken}`}
+                tw="absolute inset-0 w-full h-full object-cover brightness-110"
+                alt=""
+              />
+            ) : (
+              <div tw="absolute inset-0 bg-[#292524]" />
+            )}
           </div>
         </div>
       </div>

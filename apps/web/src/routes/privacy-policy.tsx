@@ -1,18 +1,23 @@
-import type { Metadata } from "next";
-import Link from "next/link";
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { metadataToHead, type Metadata } from "@/lib/metadata";
 import { ArrowLeftIcon } from "lucide-react";
 
-export const metadata: Metadata = {
+export const Route = createFileRoute("/privacy-policy")({
+  head: () => metadataToHead(metadata),
+  component: PrivacyPolicyPage,
+});
+
+const metadata: Metadata = {
   title: "Privacy Policy",
   description: "Privacy Policy for Rail Radar - Learn how we handle your data.",
   robots: { index: false },
 };
 
-export default function PrivacyPolicyPage() {
+function PrivacyPolicyPage() {
   return (
     <div className="mx-auto max-w-4xl px-6 py-16">
       <Link
-        href="/"
+        to="/"
         className="mb-8 inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground"
       >
         <ArrowLeftIcon className="size-4" />
@@ -107,9 +112,9 @@ export default function PrivacyPolicyPage() {
               security, rate limiting, and analytics data storage
             </li>
             <li>
-              <strong className="text-foreground">Google Fonts via Next.js</strong> &mdash; fonts
-              are downloaded at build time and self-hosted with the app; browsers do not request
-              fonts directly from Google when loading the Service
+              <strong className="text-foreground">Fontsource</strong> &mdash; font files are
+              bundled and self-hosted with the app; browsers do not request fonts from a third-party
+              font service when loading the Service
             </li>
           </ul>
           <p className="mt-3">

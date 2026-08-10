@@ -1,5 +1,5 @@
-import type { Metadata } from "next";
-import Link from "next/link";
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { metadataToHead, type Metadata } from "@/lib/metadata";
 import {
   ActivityIcon,
   ArrowLeftIcon,
@@ -29,11 +29,16 @@ import {
   TableRow,
 } from "@repo/ui/components/table";
 
+export const Route = createFileRoute("/report/2026-07-24")({
+  head: () => metadataToHead(metadata),
+  component: AnalyticsReportPage,
+});
+
 type CountryRow = [string, number, number | null, number];
 type StationRow = [string, string, string, number, number];
 type ProviderRow = [string, number, number, number, number, number];
 
-export const metadata: Metadata = {
+const metadata: Metadata = {
   title: "Rail Radar Traffic Report - July 2026",
   description:
     "Rail Radar's rolling 90-day traffic report for April 25 to July 24, 2026, compared with the first public snapshot from January to April.",
@@ -370,14 +375,14 @@ function ProviderTable() {
   );
 }
 
-export default function AnalyticsReportPage() {
+function AnalyticsReportPage() {
   return (
     <main className="mx-auto max-w-4xl px-4 py-10 md:px-6 md:py-16">
       <Button
         variant="ghost"
         size="sm"
         className="group mb-10 -ml-2.5 text-muted-foreground hover:text-foreground"
-        render={<Link href="/" />}
+        render={<Link to="/" />}
         nativeButton={false}
       >
         <ArrowLeftIcon
@@ -576,7 +581,7 @@ export default function AnalyticsReportPage() {
           </p>
           <p>
             <Link
-              href="/report/2026-04-28"
+              to="/report/2026-04-28"
               className="font-medium text-foreground underline underline-offset-4"
             >
               Read the April 28 baseline report

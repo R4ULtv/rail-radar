@@ -1,5 +1,5 @@
-import type { Metadata } from "next";
-import Link from "next/link";
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { metadataToHead, type Metadata } from "@/lib/metadata";
 import { ActivityIcon, ArrowLeftIcon, GaugeIcon, MapPinnedIcon, UsersIcon } from "lucide-react";
 import { Button } from "@repo/ui/components/button";
 import { Card, CardContent } from "@repo/ui/components/card";
@@ -21,12 +21,17 @@ import {
   TableRow,
 } from "@repo/ui/components/table";
 
+export const Route = createFileRoute("/report/2026-04-28")({
+  head: () => metadataToHead(metadata),
+  component: AnalyticsReportPage,
+});
+
 type CountryRow = [string, number, number, number, number, number, string];
 type StationRow = [string, string, string, number, number];
 type ProviderRow = [string, number, string, string, string, string];
 type ReleaseRow = [string, string, string];
 
-export const metadata: Metadata = {
+const metadata: Metadata = {
   title: "Rail Radar Traffic Report - April 2026",
   description:
     "A public snapshot of Rail Radar traffic from January 26, 2026 to April 28, 2026, covering visits, unique visitors, top stations, country usage, and provider health.",
@@ -345,14 +350,14 @@ function ReleaseTimeline() {
   );
 }
 
-export default function AnalyticsReportPage() {
+function AnalyticsReportPage() {
   return (
     <main className="mx-auto max-w-4xl px-4 py-10 md:px-6 md:py-16">
       <Button
         variant="ghost"
         size="sm"
         className="group mb-10 -ml-2.5 text-muted-foreground hover:text-foreground"
-        render={<Link href="/" />}
+        render={<Link to="/" />}
         nativeButton={false}
       >
         <ArrowLeftIcon className="transition-transform group-hover:-translate-x-0.5" />

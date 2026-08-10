@@ -1,6 +1,5 @@
-import type { Metadata } from "next";
-import Link from "next/link";
-import Image from "next/image";
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { metadataToHead, type Metadata } from "@/lib/metadata";
 import { operators } from "@repo/data/operators";
 import { COUNTRY_MAP, COUNTRY_CODES } from "@repo/data/countries";
 import { Badge } from "@repo/ui/components/badge";
@@ -8,7 +7,13 @@ import { Card, CardContent } from "@repo/ui/components/card";
 import { ArrowLeftIcon, ArrowRightIcon, GlobeIcon } from "lucide-react";
 
 import { staticAssetUrl } from "@/lib/static-assets";
-export const metadata: Metadata = {
+
+export const Route = createFileRoute("/operators/")({
+  head: () => metadataToHead(metadata),
+  component: OperatorsPage,
+});
+
+const metadata: Metadata = {
   title: "Train Operators - All Operators",
   description:
     "Browse all train operators tracked by Rail Radar, including Trenitalia, SBB, VR, SNCB, and more. Find information about each operator, their routes, and services.",
@@ -39,7 +44,7 @@ const serviceTypeLabels: Record<string, string> = {
 
 const OPERATOR_GROUPS = ["international", ...COUNTRY_CODES] as const;
 
-export default function OperatorsPage() {
+function OperatorsPage() {
   const operatorsByCountry = Object.fromEntries(
     Object.entries(
       operators.reduce<Record<string, typeof operators>>((acc, operator) => {
@@ -59,7 +64,7 @@ export default function OperatorsPage() {
   return (
     <div className="mx-auto max-w-4xl px-4 py-12 md:px-6 md:py-16">
       <Link
-        href="/"
+        to="/"
         className="group/back mb-8 md:mb-12 inline-flex items-center gap-2 text-sm text-muted-foreground transition-colors duration-150 ease-out hover:text-foreground"
       >
         <ArrowLeftIcon className="size-4 transition-transform duration-150 ease-out group-hover/back:-translate-x-0.5" />
@@ -92,8 +97,7 @@ export default function OperatorsPage() {
                     <GlobeIcon className="size-7 text-foreground" />
                   </div>
                 ) : (
-                  <Image
-                    unoptimized
+                  <img
                     src={staticAssetUrl(`/flags/${country}.svg`)}
                     alt={countryLabel}
                     width={28}
@@ -112,15 +116,19 @@ export default function OperatorsPage() {
 
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
                 {countryOperators.map((operator) => (
-                  <Link key={operator.slug} href={`/operators/${operator.slug}`} className="group">
+                  <Link
+                    key={operator.slug}
+                    to="/operators/$slug"
+                    params={{ slug: operator.slug }}
+                    className="group"
+                  >
                     <Card
                       size="sm"
                       className="h-full transition-[background-color,box-shadow,transform] ease-[cubic-bezier(0.23,1,0.32,1)] duration-200 lg:group-hover:bg-muted/40 lg:group-hover:ring-foreground/20 group-active:scale-[0.98]"
                     >
                       <CardContent className="flex items-center gap-3">
                         <div className="flex size-10 shrink-0 items-center justify-center overflow-hidden rounded-lg bg-background">
-                          <Image
-                            unoptimized
+                          <img
                             src={staticAssetUrl(`/operators/${operator.logoPath}.svg`)}
                             alt={operator.name}
                             width={40}
