@@ -18,7 +18,7 @@
 | [apps/api](./apps/api)           | Cloudflare Workers API for train data     |
 | [apps/static](./apps/static)     | Cloudflare Worker for shared media assets |
 | [apps/studio](./apps/studio)     | Admin tool for station data management    |
-| [apps/web](./apps/web)           | Next.js frontend with interactive map     |
+| [apps/web](./apps/web)           | TanStack Start frontend on Cloudflare     |
 | [packages/data](./packages/data) | Shared station data and TypeScript types  |
 | [packages/ui](./packages/ui)     | Shared React component library            |
 
@@ -51,6 +51,7 @@ pnpm --filter=studio dev # Admin tool at localhost:3001
 | `pnpm check-types --force`        | Run TypeScript type checking                    |
 | `pnpm --filter=api cf-typegen`    | Generate API Worker types                       |
 | `pnpm --filter=static cf-typegen` | Generate static Worker types                    |
+| `pnpm --filter=web deploy`        | Build and deploy the web Worker to Cloudflare   |
 
 ## Media Delivery
 

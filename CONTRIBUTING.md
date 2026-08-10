@@ -2,7 +2,7 @@
 
 Thanks for your interest in contributing to Rail Radar. This repository is a `pnpm` + Turborepo monorepo with:
 
-- `apps/web`: the public Next.js frontend
+- `apps/web`: the public TanStack Start frontend
 - `apps/api`: the Cloudflare Workers API
 - `apps/static`: the Cloudflare Worker for shared static assets
 - `apps/studio`: the SvelteKit station-data admin tool
