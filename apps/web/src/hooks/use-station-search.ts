@@ -1,4 +1,4 @@
-import useSWR from "swr";
+import { useQuery } from "@tanstack/react-query";
 import { apiFetcher, buildApiUrl, endpoints } from "@/lib/api";
 import type { StationSearchResponse } from "@/lib/api";
 
@@ -10,15 +10,18 @@ import type { StationSearchResponse } from "@/lib/api";
  * @returns Search results, loading state, and error
  */
 export function useStationSearch(query: string | null) {
-  const { data, error, isLoading, mutate } = useSWR<StationSearchResponse>(
-    query ? buildApiUrl(endpoints.stationSearch(query)) : null,
-    apiFetcher,
-  );
+  const { data, error, isLoading, refetch } = useQuery({
+    queryKey: ["station-search", query],
+    queryFn: () =>
+      apiFetcher<StationSearchResponse>(buildApiUrl(endpoints.stationSearch(query!))),
+    enabled: Boolean(query),
+    staleTime: 60_000,
+  });
 
   return {
     stations: data ?? [],
     error,
     isLoading,
-    retry: () => void mutate(),
+    retry: () => void refetch(),
   };
 }

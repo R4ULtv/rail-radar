@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import { useCallback, useMemo, useRef, useState } from "react";
 import type { KeyboardEvent, PointerEvent } from "react";
 import { cn } from "@repo/ui/lib/utils";
@@ -304,13 +303,11 @@ export function StationGallery({ stationName, lat, lng, photos }: StationGallery
               <StaticMap lat={lat} lng={lng} zoom={14} priority className="absolute inset-0" />
             ) : (
               <>
-                <Image
-                  unoptimized
-                  fill
+                <img
                   sizes="100vw"
                   src={item.url}
                   alt={item.alt}
-                  className="object-cover object-center"
+                  className="absolute inset-0 size-full object-cover object-center"
                 />
                 <div className="absolute inset-0 bg-linear-to-t from-background/45 via-transparent to-transparent pointer-events-none" />
                 <PhotoAttribution attribution={item.attribution} />

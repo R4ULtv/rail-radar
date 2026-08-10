@@ -1,5 +1,5 @@
 import type { Train } from "@repo/data";
-import Link from "next/link";
+import { Link } from "@tanstack/react-router";
 import { cn } from "@repo/ui/lib/utils";
 import { Skeleton } from "@repo/ui/components/skeleton";
 import { BrandLogo, getBrandSlug } from "@/components/brands";
@@ -44,7 +44,11 @@ export function TrainRow({ train, type }: TrainRowProps) {
         <div className="flex items-center justify-between gap-2">
           <div className="flex items-center gap-1.5">
             {brandSlug ? (
-              <Link href={`/operators/${brandSlug}`} aria-label={`${train.brand} brand page`}>
+              <Link
+                to="/operators/$slug"
+                params={{ slug: brandSlug }}
+                aria-label={`${train.brand} brand page`}
+              >
                 {brandLogo}
               </Link>
             ) : (

@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { Link } from "@tanstack/react-router";
 import type { Station } from "@repo/data";
 import { SquareMIcon, TrainFrontIcon } from "lucide-react";
 
@@ -107,7 +107,7 @@ export function NearbyStations({ currentStation, allStations }: NearbyStationsPr
           return (
             <li key={station.id}>
               <Link
-                href={href}
+                to={href}
                 className="flex items-center justify-between gap-2 text-sm hover:text-primary transition-colors group"
               >
                 <span className="flex items-center gap-2 truncate">

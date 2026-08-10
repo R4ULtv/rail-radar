@@ -5,6 +5,7 @@ import { useEffect } from "react";
 import { Layer, Source, useMap } from "react-map-gl/mapbox";
 import type { LayerProps } from "react-map-gl/mapbox";
 import { useSelectedStation } from "@/hooks/use-selected-station";
+import { env } from "@/lib/env";
 
 const RAIL_LAYER_ID = "rail-stations";
 const RAIL_ICON_ID = "rail-icon";
@@ -292,7 +293,7 @@ export function StationMarkers() {
       <Source
         id="stations-source"
         type="geojson"
-        data={`${process.env.NEXT_PUBLIC_API_URL}/stations.geojson`}
+        data={`${env.apiUrl}/stations.geojson`}
       >
         <Layer {...metroLayerStyle()} />
         <Layer {...metroLabelStyle()} />

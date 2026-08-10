@@ -10,7 +10,7 @@ import {
   MegaphoneIcon,
   XIcon,
 } from "lucide-react";
-import Link from "next/link";
+import { Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 
 import { hasStationWarning, StationWarning } from "@/components/station-warning";
@@ -232,7 +232,10 @@ export default function StationInfo() {
                         size="icon"
                         nativeButton={false}
                         render={
-                          <Link href={`/station/${selectedStation?.id}`}>
+                          <Link
+                            to="/station/$id"
+                            params={{ id: selectedStation?.id ?? "" }}
+                          >
                             <ArrowRightIcon className="size-4" />
                           </Link>
                         }
@@ -241,7 +244,8 @@ export default function StationInfo() {
                     </CardAction>
                     <CardTitle>
                       <Link
-                        href={`/station/${selectedStation?.id}`}
+                        to="/station/$id"
+                        params={{ id: selectedStation?.id ?? "" }}
                         className="truncate hover:underline block max-w-68"
                       >
                         {selectedStation?.name}
@@ -302,7 +306,8 @@ export default function StationInfo() {
         <DrawerHeader className="pb-3 relative group-data-[swipe-direction=down]/drawer-content:text-left">
           <DrawerTitle className="text-xl pr-20 truncate">
             <Link
-              href={`/station/${selectedStation?.id}`}
+              to="/station/$id"
+              params={{ id: selectedStation?.id ?? "" }}
               className="inline-flex items-center gap-1"
             >
               {selectedStation?.name}
@@ -332,7 +337,7 @@ export default function StationInfo() {
               size="icon"
               nativeButton={false}
               render={
-                <Link href={`/station/${selectedStation?.id}`}>
+                <Link to="/station/$id" params={{ id: selectedStation?.id ?? "" }}>
                   <ArrowRightIcon className="size-4" />
                 </Link>
               }

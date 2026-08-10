@@ -1,12 +1,12 @@
 "use client";
 
 import * as React from "react";
-import { useQueryState, parseAsString } from "nuqs";
 import { useMap } from "react-map-gl/mapbox";
 import type { Station } from "@repo/data";
 import { useIsMobile } from "@repo/ui/hooks/use-mobile";
 import { useSavedStations } from "./use-saved-stations";
 import { useRecentStations } from "./use-recent-stations";
+import { useHomeSearch } from "./use-home-search";
 
 interface SelectedStationContextValue {
   selectedStation: Station | null;
@@ -23,9 +23,11 @@ const SelectedStationContext = React.createContext<SelectedStationContextValue |
 
 export function SelectedStationProvider({ children }: { children: React.ReactNode }) {
   const { current: map } = useMap();
-  const [stationId, setStationId] = useQueryState(
-    "station",
-    parseAsString.withOptions({ history: "push", shallow: true }),
+  const { search, setSearch } = useHomeSearch();
+  const stationId = search.station ?? null;
+  const setStationId = React.useCallback(
+    (value: string | null) => setSearch({ station: value }, false),
+    [setSearch],
   );
 
   const isMobile = useIsMobile();

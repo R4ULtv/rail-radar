@@ -3,7 +3,7 @@
 import { useReducer, useRef, useSyncExternalStore } from "react";
 import { ArrowRightIcon, TrendingUpIcon, XIcon } from "lucide-react";
 import { LazyMotion, domAnimation, m, AnimatePresence } from "motion/react";
-import Link from "next/link";
+import { Link } from "@tanstack/react-router";
 import { Button, buttonVariants } from "@repo/ui/components/button";
 import { cn } from "@repo/ui/lib/utils";
 
@@ -63,7 +63,7 @@ export function AnnouncementBanner() {
               </div>
 
               <Link
-                href="/report/2026-07-24"
+                to="/report/2026-07-24"
                 onClick={dismiss}
                 className={cn(
                   buttonVariants({ variant: "default", size: "sm" }),
@@ -85,7 +85,7 @@ export function AnnouncementBanner() {
               </Button>
 
               <Link
-                href="/report/2026-07-24"
+                to="/report/2026-07-24"
                 onClick={dismiss}
                 aria-label="Read the July 2026 Rail Radar traffic report"
                 className="absolute inset-0 rounded-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-inset md:hidden"

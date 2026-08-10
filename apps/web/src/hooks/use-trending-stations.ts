@@ -1,4 +1,4 @@
-import useSWR from "swr";
+import { useQuery } from "@tanstack/react-query";
 import { apiFetcher, buildApiUrl, endpoints } from "@/lib/api";
 import type { TrendingStationsResponse } from "@/lib/api";
 
@@ -10,14 +10,13 @@ import type { TrendingStationsResponse } from "@/lib/api";
  * @returns Trending stations data, loading state, and error
  */
 export function useTrendingStations(period: string = "week") {
-  const { data, error, isLoading } = useSWR<TrendingStationsResponse>(
-    buildApiUrl(endpoints.trendingStations(period)),
-    apiFetcher,
-    {
-      refreshInterval: 5 * 60 * 1000, // 5 minutes
-      revalidateOnFocus: false,
-    },
-  );
+  const { data, error, isLoading } = useQuery({
+    queryKey: ["trending-stations", period],
+    queryFn: () =>
+      apiFetcher<TrendingStationsResponse>(buildApiUrl(endpoints.trendingStations(period))),
+    refetchInterval: 5 * 60 * 1000,
+    refetchOnWindowFocus: false,
+  });
 
   return {
     data,

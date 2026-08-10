@@ -1,9 +1,17 @@
 "use client";
 
 import "mapbox-gl/dist/mapbox-gl.css";
-import dynamic from "next/dynamic";
-import { parseAsFloat, useQueryStates } from "nuqs";
-import { startTransition, useCallback, useEffect, useReducer, useRef, useState } from "react";
+import { ClientOnly } from "@tanstack/react-router";
+import {
+  lazy,
+  startTransition,
+  Suspense,
+  useCallback,
+  useEffect,
+  useReducer,
+  useRef,
+  useState,
+} from "react";
 import type { Map as MapboxMap } from "mapbox-gl";
 import type { MapEvent, ViewStateChangeEvent } from "react-map-gl/mapbox";
 
@@ -14,11 +22,10 @@ import { Search } from "@/components/search";
 import StationInfo from "@/components/station-info";
 import { StationMarkers } from "@/components/station-markers";
 import { SelectedStationProvider } from "@/hooks/use-selected-station";
+import { useHomeSearch } from "@/hooks/use-home-search";
+import { env } from "@/lib/env";
 
-const MapGL = dynamic(() => import("react-map-gl/mapbox").then((mod) => mod.Map), {
-  ssr: true,
-  loading: () => <MapLoading />,
-});
+const MapGL = lazy(() => import("react-map-gl/mapbox").then((module) => ({ default: module.Map })));
 
 const DEFAULT_VIEW = {
   lat: 50,
@@ -83,17 +90,12 @@ function mapReducer(state: MapState, action: MapAction): MapState {
 }
 
 export function Map() {
-  const [params, setParams] = useQueryStates(
-    {
-      lat: parseAsFloat.withDefault(DEFAULT_VIEW.lat),
-      lng: parseAsFloat.withDefault(DEFAULT_VIEW.lng),
-      zoom: parseAsFloat.withDefault(DEFAULT_VIEW.zoom),
-    },
-    {
-      history: "replace",
-      shallow: true,
-    },
-  );
+  const { search, setSearch } = useHomeSearch();
+  const params = {
+    lat: search.lat ?? DEFAULT_VIEW.lat,
+    lng: search.lng ?? DEFAULT_VIEW.lng,
+    zoom: search.zoom ?? DEFAULT_VIEW.zoom,
+  };
 
   const hasUrlParams =
     params.lat !== DEFAULT_VIEW.lat ||
@@ -126,7 +128,7 @@ export function Map() {
       const nextPosition = { latitude, longitude, zoom: 13 };
 
       dispatch({ type: "setAutoLocation", position: nextPosition });
-      setParams({ lat: latitude, lng: longitude, zoom: 13 });
+      void setSearch({ lat: latitude, lng: longitude, zoom: 13 });
 
       if (mapRef.current) {
         mapRef.current.jumpTo({ center: [longitude, latitude], zoom: 13 });
@@ -171,23 +173,23 @@ export function Map() {
     return () => {
       cancelled = true;
     };
-  }, [hasUrlParams, setParams]);
+  }, [hasUrlParams, setSearch]);
 
   const handleMoveEnd = useCallback(
     (e: ViewStateChangeEvent) => {
-      // A station flyTo can finish after Next.js has navigated away. In that case,
+      // A station flyTo can finish after the router has navigated away. In that case,
       // syncing its final position would add map-only params to the destination URL.
       if (!isMapRoute()) return;
 
       startTransition(() => {
-        setParams({
+        void setSearch({
           lat: Math.round(e.viewState.latitude * 1000000) / 1000000,
           lng: Math.round(e.viewState.longitude * 1000000) / 1000000,
           zoom: Math.round(e.viewState.zoom * 10) / 10,
         });
       });
     },
-    [setParams],
+    [setSearch],
   );
 
   const handleMapLoad = useCallback((event: MapEvent) => {
@@ -219,7 +221,9 @@ export function Map() {
           <MapLoading />
         </div>
       )}
-      <MapGL
+      <ClientOnly fallback={<MapLoading />}>
+        <Suspense fallback={<MapLoading />}>
+          <MapGL
         initialViewState={{
           ...initialPosition,
           bearing: 0,
@@ -232,7 +236,7 @@ export function Map() {
           height: "100%",
         }}
         onLoad={handleMapLoad}
-        mapboxAccessToken={process.env.NEXT_PUBLIC_MAPBOX_TOKEN}
+        mapboxAccessToken={env.mapboxToken}
         mapStyle="mapbox://styles/mapbox/dark-v11?optimize=true"
         projection="mercator"
         maxPitch={0}
@@ -242,18 +246,20 @@ export function Map() {
         reuseMaps
         onDragStart={handleUserInteraction}
         onZoomStart={handleUserInteraction}
-      >
-        <SelectedStationProvider>
-          <StationMarkers />
-          <Search />
-          {/*<AnnouncementBanner />*/}
-          <MapControls
-            userLocation={userLocation}
-            onUserLocationChange={handleUserLocationChange}
-          />
-          <StationInfo />
-        </SelectedStationProvider>
-      </MapGL>
+          >
+            <SelectedStationProvider>
+              <StationMarkers />
+              <Search />
+              {/*<AnnouncementBanner />*/}
+              <MapControls
+                userLocation={userLocation}
+                onUserLocationChange={handleUserLocationChange}
+              />
+              <StationInfo />
+            </SelectedStationProvider>
+          </MapGL>
+        </Suspense>
+      </ClientOnly>
     </div>
   );
 }

@@ -16,7 +16,6 @@ import {
   UserIcon,
 } from "lucide-react";
 import { AnimatePresence, LazyMotion, domAnimation, m } from "motion/react";
-import { parseAsString, useQueryState } from "nuqs";
 
 import {
   Drawer,
@@ -44,8 +43,8 @@ import { useTrendingStations } from "@/hooks/use-trending-stations";
 import { cn } from "@repo/ui/lib/utils";
 import { getCountry } from "@repo/data/countries";
 import type { Station } from "@repo/data";
-import Image from "next/image";
 import { Button } from "@repo/ui/components/button";
+import { useHomeSearch } from "@/hooks/use-home-search";
 
 const StationList = React.memo(function StationList({
   stations,
@@ -97,8 +96,7 @@ const StationList = React.memo(function StationList({
                 <TrainFrontIcon className="size-4 text-muted-foreground" />
               )}
               <span className="max-w-75 md:max-w-61 truncate">{station.name}</span>
-              <Image
-                unoptimized
+              <img
                 src={staticAssetUrl(`/flags/${getCountry(station.id) ?? "xx"}.svg`)}
                 alt={getCountry(station.id)?.toUpperCase() ?? ""}
                 className="size-3 shrink-0 rounded-full object-cover"
@@ -256,12 +254,11 @@ export function Search() {
   const isMobile = useIsMobile();
   const { selectStation, savedStations, recentStations } = useSelectedStation();
   const inputRef = React.useRef<HTMLInputElement>(null);
-  const [urlQuery, setUrlQuery] = useQueryState(
-    "q",
-    parseAsString.withDefault("").withOptions({
-      history: "replace",
-      shallow: true,
-    }),
+  const { search, setSearch } = useHomeSearch();
+  const urlQuery = search.q ?? "";
+  const setUrlQuery = React.useCallback(
+    (value: string | null) => setSearch({ q: value }),
+    [setSearch],
   );
   // Local state for responsive input, initialized from URL for shareability
   const [query, setQuery] = React.useState(urlQuery);

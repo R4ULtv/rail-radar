@@ -1,6 +1,6 @@
 /**
  * Core API client for Rail Radar
- * Provides centralized fetcher and error handling for all SWR hooks
+ * Provides centralized fetch and error handling for TanStack Query hooks.
  */
 
 /**
@@ -20,10 +20,10 @@ export class APIError extends Error {
  * Builds full API URL from relative path
  */
 export function buildApiUrl(path: string): string {
-  const baseUrl = process.env.NEXT_PUBLIC_API_URL;
+  const baseUrl = env.apiUrl;
 
   if (!baseUrl) {
-    throw new Error("NEXT_PUBLIC_API_URL environment variable is not defined");
+    throw new Error("VITE_API_URL environment variable is not defined");
   }
 
   // Ensure path starts with /
@@ -33,7 +33,7 @@ export function buildApiUrl(path: string): string {
 }
 
 /**
- * Generic SWR-compatible fetcher with consistent error handling
+ * Generic JSON fetcher with consistent error handling.
  * Parses API errors from response JSON and provides structured error info
  */
 export async function apiFetcher<T>(url: string): Promise<T> {
@@ -57,3 +57,4 @@ export async function apiFetcher<T>(url: string): Promise<T> {
 
   return response.json();
 }
+import { env } from "@/lib/env";

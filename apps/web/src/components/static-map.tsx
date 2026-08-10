@@ -1,4 +1,4 @@
-import Image from "next/image";
+import { env } from "@/lib/env";
 
 interface StaticMapProps {
   lat: number;
@@ -9,19 +9,17 @@ interface StaticMapProps {
 }
 
 export function StaticMap({ lat, lng, zoom = 15, className, priority = false }: StaticMapProps) {
-  const src = `${process.env.NEXT_PUBLIC_API_URL}/map/static?lat=${lat}&lng=${lng}&zoom=${zoom}`;
+  const src = `${env.apiUrl}/map/static?lat=${lat}&lng=${lng}&zoom=${zoom}`;
 
   return (
     <div className={className}>
-      <Image
-        unoptimized
-        priority={priority}
+      <img
+        loading={priority ? "eager" : "lazy"}
         fetchPriority={priority ? "high" : undefined}
-        fill
         sizes="100vw"
         src={src}
         alt="Station location"
-        className="object-cover object-center"
+        className="absolute inset-0 size-full object-cover object-center"
       />
       {/* Gradient overlay for visual appeal */}
       <div className="absolute inset-0 bg-linear-to-t from-background/70 via-background/30 via-25% to-transparent to-80% pointer-events-none" />

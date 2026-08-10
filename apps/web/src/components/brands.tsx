@@ -1,4 +1,3 @@
-import Image from "next/image";
 
 import { staticAssetUrl } from "@/lib/static-assets";
 // Maps brand names to their SVG file paths (relative to /operators/)
@@ -325,8 +324,7 @@ export function BrandLogo({ brand, className }: BrandLogoProps) {
   if (!path) return null;
 
   return (
-    <Image
-      unoptimized
+    <img
       src={staticAssetUrl(`/operators/${path}.svg`)}
       alt={brand}
       className={className}
