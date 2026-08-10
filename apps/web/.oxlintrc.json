@@ -1,12 +1,7 @@
 {
   "extends": ["../../.oxlintrc.json"],
-  "plugins": ["react", "nextjs"],
-  "settings": {
-    "next": {
-      "rootDir": "."
-    }
-  },
-  "ignorePatterns": [".next/**", "out/**", "build/**", "next-env.d.ts"],
+  "plugins": ["react"],
+  "ignorePatterns": [".output/**", ".vinxi/**", "src/routeTree.gen.ts"],
   "categories": {
     "correctness": "off"
   },

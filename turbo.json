@@ -1,7 +1,6 @@
 {
   "$schema": "https://turborepo.com/schema.json",
   "ui": "tui",
-  "globalEnv": ["VERCEL_TARGET_ENV"],
   "remoteCache": {
     "enabled": true
   },
@@ -9,10 +8,10 @@
     "build": {
       "dependsOn": ["^build"],
       "inputs": ["$TURBO_DEFAULT$", ".env*"],
-      "outputs": [".next/**", "!.next/cache/**"]
+      "outputs": [".output/**", "dist/**"]
     },
     "web#build": {
-      "outputs": [".next/**", "!.next/cache/**"],
+      "outputs": ["dist/**"],
       "env": ["MAPBOX_SERVER_TOKEN"]
     },
     "studio#build": {
