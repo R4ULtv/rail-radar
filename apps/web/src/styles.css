@@ -1,0 +1,37 @@
+@import "@repo/ui/styles/globals.css";
+
+@font-face {
+  font-family: "Geist";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 400 700;
+  src: url("./assets/fonts/Geist/Geist.woff2") format("woff2-variations");
+}
+
+@font-face {
+  font-family: "Geist Mono";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 400;
+  src: url("./assets/fonts/Geist/GeistMono.woff2") format("woff2");
+}
+
+@theme inline {
+  --font-sans: "Geist", sans-serif;
+  --font-heading: "Geist", sans-serif;
+  --font-mono: "Geist Mono", monospace;
+}
+
+.mapboxgl-ctrl-logo {
+  display: none !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
