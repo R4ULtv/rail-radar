@@ -26,6 +26,24 @@
   display: none !important;
 }
 
+@keyframes map-loading-cell {
+  0%,
+  9.999%,
+  60%,
+  100% {
+    opacity: 0;
+  }
+  10%,
+  59.999% {
+    opacity: 1;
+  }
+}
+
+.map-loading-cell-fill {
+  animation: map-loading-cell 1.2s linear infinite;
+  will-change: opacity;
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -33,5 +51,14 @@
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+  }
+
+  .map-loading-cell-fill {
+    animation: none !important;
+    opacity: 0;
+  }
+
+  .map-loading-cell:nth-child(-n + 3) .map-loading-cell-fill {
+    opacity: 1;
   }
 }
