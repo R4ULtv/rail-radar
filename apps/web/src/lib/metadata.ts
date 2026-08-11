@@ -8,7 +8,7 @@ export interface Metadata {
   alternates?: { canonical?: string };
   openGraph?: {
     type?: string;
-    url?: string | URL;
+    url?: string;
     siteName?: string;
     title?: string;
     description?: string;

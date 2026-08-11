@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { createServerOnlyFn } from "@tanstack/react-start";
 import { stations } from "@repo/data/stations";
 import { stationsByCountry } from "@repo/data/directory";
 import { operators } from "@repo/data/operators";
@@ -25,7 +26,7 @@ function xmlEscape(value: string): string {
   });
 }
 
-function sitemapXml() {
+const sitemapXml = createServerOnlyFn(() => {
   const today = new Date().toISOString();
   const entries: SitemapEntry[] = [
     { path: "/", changeFrequency: "daily", priority: 1 },
@@ -53,20 +54,16 @@ function sitemapXml() {
     ),
     ...stations
       .filter((station) => station.type === "rail" && station.geo)
-      .map(
-        (station): SitemapEntry => ({
-          path: `/station/${station.id}`,
-          changeFrequency: "daily",
-          priority: 0.7,
-        }),
-      ),
-    ...operators.map(
-      (operator): SitemapEntry => ({
-        path: `/operators/${operator.slug}`,
-        changeFrequency: "monthly",
-        priority: 0.6,
-      }),
-    ),
+      .map((station): SitemapEntry => ({
+        path: `/station/${station.id}`,
+        changeFrequency: "daily",
+        priority: 0.7,
+      })),
+    ...operators.map((operator): SitemapEntry => ({
+      path: `/operators/${operator.slug}`,
+      changeFrequency: "monthly",
+      priority: 0.6,
+    })),
   ];
 
   const urls = entries
@@ -77,7 +74,7 @@ function sitemapXml() {
     .join("");
 
   return `<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${urls}</urlset>`;
-}
+});
 
 export const Route = createFileRoute("/sitemap.xml")({
   server: {

@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { createServerOnlyFn } from "@tanstack/react-start";
 import { ImageResponse } from "takumi-js/response";
 import { stations, stationById } from "@repo/data/stations";
 
@@ -51,7 +52,7 @@ function getNearbyStations(stationId: string) {
   return nearby.sort((a, b) => a.distance - b.distance).slice(0, 4);
 }
 
-function getOgImage(request: Request) {
+const getOgImage = createServerOnlyFn((request: Request) => {
   const id = new URL(request.url).searchParams.get("id");
 
   if (!id) {
@@ -184,4 +185,4 @@ function getOgImage(request: Request) {
       },
     },
   );
-}
+});

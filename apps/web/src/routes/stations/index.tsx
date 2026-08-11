@@ -1,49 +1,20 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { metadataToHead, type Metadata } from "@/lib/metadata";
-import { COUNTRY_MAP, COUNTRY_CODES, COUNTRY_SLUG } from "@repo/data/countries";
-import { stationsByCountry } from "@repo/data/directory";
+import { metadataToHead } from "@/lib/metadata";
+import { loadStationsDirectoryPage } from "@/lib/station-data.functions";
 import { Card, CardContent } from "@repo/ui/components/card";
 import { ArrowLeftIcon, ArrowRightIcon } from "lucide-react";
 import baseUrl from "@/lib/base-url";
 import { staticAssetUrl } from "@/lib/static-assets";
 
 export const Route = createFileRoute("/stations/")({
-  head: () => metadataToHead(metadata),
+  loader: () => loadStationsDirectoryPage(),
+  head: ({ loaderData }) =>
+    metadataToHead(loaderData?.metadata ?? { title: "Train Stations - Browse by Country" }),
   component: StationsPage,
 });
 
-const totalStations = COUNTRY_CODES.reduce(
-  (sum, code) => sum + (stationsByCountry.get(code)?.length ?? 0),
-  0,
-);
-
-const metadata: Metadata = {
-  title: "Train Stations - Browse by Country",
-  description: `Browse ${totalStations.toLocaleString()} train stations across ${COUNTRY_CODES.length} European countries on Rail Radar. Find live departures, arrivals, and real-time schedules for every station.`,
-  alternates: {
-    canonical: "/stations",
-  },
-  openGraph: {
-    images: [
-      {
-        url: "/operators.webp",
-        width: 1200,
-        height: 630,
-        alt: "Rail Radar - Train stations across Europe",
-      },
-    ],
-  },
-};
-
 function StationsPage() {
-  const countries = COUNTRY_CODES.map((code) => ({
-    code,
-    name: COUNTRY_MAP[code],
-    slug: COUNTRY_SLUG[code],
-    count: stationsByCountry.get(code)?.length ?? 0,
-  }))
-    .filter((c) => c.count > 0)
-    .sort((a, b) => a.name.localeCompare(b.name));
+  const { countries, totalStations } = Route.useLoaderData();
 
   const jsonLd = {
     "@context": "https://schema.org",

@@ -1,8 +1,6 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
-import { metadataToHead, type Metadata } from "@/lib/metadata";
-import { stations, stationById } from "@repo/data/stations";
-import { getCountry, getCountrySlug } from "@repo/data/countries";
-import type { Station } from "@repo/data";
+import { metadataToHead } from "@/lib/metadata";
+import { loadStationPage } from "@/lib/station-data.functions";
 import { Button } from "@repo/ui/components/button";
 import {
   Card,
@@ -23,12 +21,12 @@ import { TrainBoard } from "@/components/station-page/train-board";
 import { Skeleton } from "@repo/ui/components/skeleton";
 
 export const Route = createFileRoute("/station/$id")({
-  loader: ({ params }) => {
-    const station = getStation(params.id);
-    if (!station) throw notFound();
-    return { station };
+  loader: async ({ params }) => {
+    const data = await loadStationPage({ data: { id: params.id } });
+    if (!data) throw notFound();
+    return data;
   },
-  head: ({ params }) => metadataToHead(getStationMetadata(params.id)),
+  head: ({ loaderData }) => metadataToHead(loaderData?.metadata ?? { title: "Station Not Found" }),
   pendingComponent: StationLoading,
   notFoundComponent: StationNotFound,
   component: StationRoute,
@@ -39,59 +37,17 @@ function StationRoute() {
   return <StationPage {...data} />;
 }
 
-type StationWithGeo = Station & { geo: { lat: number; lng: number } };
+type StationPageData = NonNullable<Awaited<ReturnType<typeof loadStationPage>>>;
 
-function getStation(id: string): StationWithGeo | null {
-  const station = stationById.get(id);
-  if (!station?.geo || station.type !== "rail") return null;
-  return station as StationWithGeo;
-}
-
-function getStationMetadata(id: string): Metadata {
-  const station = getStation(id);
-
-  if (!station) {
-    return {
-      title: "Station Not Found",
-    };
-  }
-
-  const country = getCountry(id, { format: "name" });
-  const description = `Live train departures and arrivals at ${station.name}, ${country}. Check real-time delays, platform numbers, and schedules updated every 30 seconds.`;
-
-  return {
-    title: `${station.name} - Live Departures & Arrivals`,
-    description,
-    alternates: {
-      canonical: `/station/${id}`,
-    },
-    openGraph: {
-      title: `${station.name} - Live Departures & Arrivals | Rail Radar`,
-      description,
-      images: [
-        {
-          url: `/og?id=${id}`,
-          width: 1200,
-          height: 630,
-          alt: `${station.name} station map`,
-        },
-      ],
-    },
-    twitter: {
-      card: "summary_large_image",
-      title: `${station.name} - Live Departures & Arrivals | Rail Radar`,
-      description,
-      images: [`/og?id=${id}`],
-    },
-  };
-}
-
-function StationPage({ station }: { station: StationWithGeo }) {
+function StationPage({
+  station,
+  nearbyStations,
+  code,
+  countryCode,
+  country,
+  countrySlug,
+}: StationPageData) {
   const stationPhotos = useStationPhotos(station.id, station.importance === 1);
-  const code = getCountry(station.id);
-  const countryCode = code?.toUpperCase();
-  const country = getCountry(station.id, { format: "name" });
-  const countrySlug = code ? getCountrySlug(code) : null;
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "TrainStation",
@@ -158,7 +114,7 @@ function StationPage({ station }: { station: StationWithGeo }) {
         {/* Stats and nearby stations row */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <StationStats stationId={station.id} />
-          <NearbyStations currentStation={station} allStations={stations} />
+          <NearbyStations stations={nearbyStations} />
         </div>
       </div>
 
@@ -170,11 +126,7 @@ function StationPage({ station }: { station: StationWithGeo }) {
       {/* Discover more stations in the same country */}
       {countrySlug && country && (
         <div className="mx-auto px-3 md:px-4 pt-6 md:pt-0 pb-6 max-w-7xl">
-          <Link
-            to="/stations/$country"
-            params={{ country: countrySlug }}
-            className="group block"
-          >
+          <Link to="/stations/$country" params={{ country: countrySlug }} className="group block">
             <Card
               size="sm"
               className="transition-[background-color,box-shadow,transform] lg:group-hover:bg-muted group-active:scale-[0.99]"

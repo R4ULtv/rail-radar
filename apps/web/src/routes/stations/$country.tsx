@@ -1,13 +1,6 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
-import { metadataToHead, type Metadata } from "@/lib/metadata";
-import {
-  COUNTRY_MAP,
-  COUNTRY_CODES,
-  COUNTRY_SLUG,
-  getCountryBySlug,
-  type CountryCode,
-} from "@repo/data/countries";
-import { stationsByCountry, countryStationBounds } from "@repo/data/directory";
+import { metadataToHead } from "@/lib/metadata";
+import { loadCountryStationsPage } from "@/lib/station-data.functions";
 import { Card, CardContent } from "@repo/ui/components/card";
 import { ArrowLeftIcon, ArrowRightIcon, ExpandIcon, TrainFrontIcon } from "lucide-react";
 import baseUrl from "@/lib/base-url";
@@ -15,127 +8,32 @@ import { staticAssetUrl } from "@/lib/static-assets";
 import { env } from "@/lib/env";
 
 export const Route = createFileRoute("/stations/$country")({
-  loader: ({ params }) => {
-    const code = getCountryBySlug(params.country);
-    if (!code || (stationsByCountry.get(code)?.length ?? 0) === 0) throw notFound();
-    return { slug: params.country };
+  loader: async ({ params }) => {
+    const data = await loadCountryStationsPage({ data: { slug: params.country } });
+    if (!data) throw notFound();
+    return data;
   },
-  head: ({ params }) => metadataToHead(getCountryMetadata(params.country)),
+  head: ({ loaderData }) => metadataToHead(loaderData?.metadata ?? { title: "Country Not Found" }),
   component: CountryRoute,
 });
 
 function CountryRoute() {
-  const { slug } = Route.useLoaderData();
-  return <CountryStationsPage slug={slug} />;
+  const data = Route.useLoaderData();
+  return <CountryStationsPage {...data} />;
 }
 
-/**
- * Page copy templates. Kept in one place so a future locale layer can swap the
- * strings per language without touching the rendering logic.
- */
-function pageCopy(countryName: string, count: number) {
-  return {
-    title: `Train Stations in ${countryName} - Live Departures & Arrivals`,
-    description: `Browse all ${count.toLocaleString()} train stations in ${countryName} on Rail Radar. Find live departures, arrivals, real-time delays, and platform information for every station.`,
-  };
-}
+type CountryStationsPageData = NonNullable<Awaited<ReturnType<typeof loadCountryStationsPage>>>;
 
-function getCountryMetadata(slug: string): Metadata {
-  const code = getCountryBySlug(slug);
-
-  if (!code) {
-    return { title: "Country Not Found" };
-  }
-
-  const countryName = COUNTRY_MAP[code];
-  const count = stationsByCountry.get(code)?.length ?? 0;
-  const { title, description } = pageCopy(countryName, count);
-
-  return {
-    title,
-    description,
-    alternates: {
-      canonical: `/stations/${slug}`,
-    },
-    openGraph: {
-      title: `${title} | Rail Radar`,
-      description,
-      images: [
-        {
-          url: "/operators.webp",
-          width: 1200,
-          height: 630,
-          alt: `Rail Radar - Train stations in ${countryName}`,
-        },
-      ],
-    },
-    twitter: {
-      card: "summary",
-      title: `${title} | Rail Radar`,
-      description,
-      images: ["/operators.webp"],
-    },
-  };
-}
-
-const MAX_HUBS = 24;
-
-/** First alphanumeric character of a name, diacritics stripped; non-letters -> "#" */
-function indexKey(name: string): string {
-  const first = name
-    .normalize("NFD")
-    .replace(/[̀-ͯ]/g, "")
-    .trim()
-    .charAt(0)
-    .toUpperCase();
-  return /[A-Z]/.test(first) ? first : "#";
-}
-
-function boundsToView(bounds: [number, number, number, number]): {
-  lat: number;
-  lng: number;
-  zoom: number;
-} {
-  const [west, south, east, north] = bounds;
-  const lat = (south + north) / 2;
-  const lng = (west + east) / 2;
-  const maxSpan = Math.max(north - south, east - west) || 1;
-  const zoom = Math.floor(Math.log2(360 / maxSpan));
-  return { lat: +lat.toFixed(4), lng: +lng.toFixed(4), zoom: Math.min(Math.max(zoom, 3), 18) };
-}
-
-function CountryStationsPage({ slug }: { slug: string }) {
-  const code = getCountryBySlug(slug);
-
-  if (!code) {
-    return null;
-  }
-
-  const countryName = COUNTRY_MAP[code];
-  const allStations = stationsByCountry.get(code) ?? [];
-
-  if (allStations.length === 0) {
-    return null;
-  }
-
-  const bounds = countryStationBounds.get(code)!;
-  const mapView = boundsToView(bounds);
-
-  const hubs = allStations
-    .filter((s) => s.importance <= 2)
-    .sort((a, b) => a.importance - b.importance || a.name.localeCompare(b.name))
-    .slice(0, MAX_HUBS);
-
-  // Group all stations into alphabetical sections (already name-sorted upstream)
-  const sections = new Map<string, typeof allStations>();
-  for (const station of allStations) {
-    const key = indexKey(station.name);
-    (sections.get(key) ?? sections.set(key, []).get(key)!).push(station);
-  }
-  const letters = [...sections.keys()].sort((a, b) =>
-    a === "#" ? 1 : b === "#" ? -1 : a.localeCompare(b),
-  );
-
+function CountryStationsPage({
+  slug,
+  code,
+  countryName,
+  count,
+  bounds,
+  mapView,
+  hubs,
+  sections,
+}: CountryStationsPageData) {
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "CollectionPage",
@@ -193,8 +91,8 @@ function CountryStationsPage({ slug }: { slug: string }) {
             Train Stations in {countryName}
           </h1>
           <p className="mt-2 text-muted-foreground text-pretty">
-            All {allStations.length.toLocaleString()} train stations in {countryName} with live
-            departures and arrivals on Rail Radar.
+            All {count.toLocaleString()} train stations in {countryName} with live departures and
+            arrivals on Rail Radar.
           </p>
         </div>
       </div>
@@ -262,7 +160,7 @@ function CountryStationsPage({ slug }: { slug: string }) {
           aria-label="Jump to letter"
           className="sticky top-0 z-10 -mx-4 mb-8 flex flex-wrap gap-1 bg-background/90 px-4 py-3 backdrop-blur md:mx-0 md:px-0"
         >
-          {letters.map((letter) => (
+          {sections.map(({ letter }) => (
             <a
               key={letter}
               href={`#letter-${letter === "#" ? "0" : letter}`}
@@ -274,7 +172,7 @@ function CountryStationsPage({ slug }: { slug: string }) {
         </nav>
 
         <div className="flex flex-col gap-10">
-          {letters.map((letter) => (
+          {sections.map(({ letter, stations }) => (
             <div
               key={letter}
               id={`letter-${letter === "#" ? "0" : letter}`}
@@ -285,7 +183,7 @@ function CountryStationsPage({ slug }: { slug: string }) {
                 <div className="h-px w-full bg-muted" />
               </div>
               <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-1.5">
-                {sections.get(letter)!.map((station) => (
+                {stations.map((station) => (
                   <li key={station.id}>
                     <a
                       href={`/station/${station.id}`}
@@ -304,9 +202,9 @@ function CountryStationsPage({ slug }: { slug: string }) {
       <div className="sr-only">
         <h2>Train stations in {countryName}</h2>
         <p>
-          Rail Radar tracks {allStations.length.toLocaleString()} train stations across{" "}
-          {countryName}. Select any station to view real-time departures and arrivals, live delay
-          information, and platform assignments, refreshed every 30 seconds.
+          Rail Radar tracks {count.toLocaleString()} train stations across {countryName}. Select any
+          station to view real-time departures and arrivals, live delay information, and platform
+          assignments, refreshed every 30 seconds.
         </p>
       </div>
     </div>
