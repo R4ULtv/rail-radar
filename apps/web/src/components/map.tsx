@@ -89,7 +89,43 @@ function mapReducer(state: MapState, action: MapAction): MapState {
   }
 }
 
+function MapConfigurationError() {
+  return (
+    <div className="bg-background flex h-full w-full items-center justify-center px-6 text-center">
+      <div className="max-w-md space-y-2">
+        <p className="text-lg font-medium">The map is not configured</p>
+        <p className="text-muted-foreground text-sm">
+          Set <code className="text-foreground font-mono">VITE_MAPBOX_TOKEN</code> in the web app
+          environment, then reload the page.
+        </p>
+      </div>
+    </div>
+  );
+}
+
+function MapLoadError() {
+  return (
+    <div className="bg-background flex h-full w-full items-center justify-center px-6 text-center">
+      <div className="max-w-md space-y-2">
+        <p className="text-lg font-medium">The map could not be loaded</p>
+        <p className="text-muted-foreground text-sm">
+          Check that <code className="text-foreground font-mono">VITE_MAPBOX_TOKEN</code> is valid
+          and allowed for this origin, then reload the page.
+        </p>
+      </div>
+    </div>
+  );
+}
+
 export function Map() {
+  if (!env.mapboxToken) {
+    return <MapConfigurationError />;
+  }
+
+  return <ConfiguredMap />;
+}
+
+function ConfiguredMap() {
   const { search, setSearch } = useHomeSearch();
   const params = {
     lat: search.lat ?? DEFAULT_VIEW.lat,
@@ -114,6 +150,7 @@ export function Map() {
   const hasUserInteractedRef = useRef(false);
   const pendingAutoLocationRef = useRef<InitialPosition | null>(null);
   const [isMapLoaded, setIsMapLoaded] = useState(false);
+  const [hasMapLoadError, setHasMapLoadError] = useState(false);
 
   useEffect(() => {
     if (hasUrlParams || !navigator.geolocation) return;
@@ -194,6 +231,7 @@ export function Map() {
 
   const handleMapLoad = useCallback((event: MapEvent) => {
     mapRef.current = event.target;
+    setHasMapLoadError(false);
     setIsMapLoaded(true);
     const pendingAutoLocation = pendingAutoLocationRef.current;
 
@@ -203,6 +241,12 @@ export function Map() {
         zoom: pendingAutoLocation.zoom,
       });
       pendingAutoLocationRef.current = null;
+    }
+  }, []);
+
+  const handleMapError = useCallback(() => {
+    if (!mapRef.current) {
+      setHasMapLoadError(true);
     }
   }, []);
 
@@ -216,36 +260,41 @@ export function Map() {
 
   return (
     <div style={{ position: "relative", width: "100%", height: "100%" }}>
-      {!isMapLoaded && (
+      {hasMapLoadError ? (
+        <div className="absolute inset-0 z-10">
+          <MapLoadError />
+        </div>
+      ) : !isMapLoaded ? (
         <div className="bg-background absolute inset-0 z-10">
           <MapLoading />
         </div>
-      )}
+      ) : null}
       <ClientOnly fallback={<MapLoading />}>
         <Suspense fallback={<MapLoading />}>
           <MapGL
-        initialViewState={{
-          ...initialPosition,
-          bearing: 0,
-          pitch: 0,
-        }}
-        onMoveEnd={handleMoveEnd}
-        attributionControl={false}
-        style={{
-          width: "100%",
-          height: "100%",
-        }}
-        onLoad={handleMapLoad}
-        mapboxAccessToken={env.mapboxToken}
-        mapStyle="mapbox://styles/mapbox/dark-v11?optimize=true"
-        projection="mercator"
-        maxPitch={0}
-        minZoom={3}
-        maxZoom={18}
-        performanceMetricsCollection={false}
-        reuseMaps
-        onDragStart={handleUserInteraction}
-        onZoomStart={handleUserInteraction}
+            initialViewState={{
+              ...initialPosition,
+              bearing: 0,
+              pitch: 0,
+            }}
+            onMoveEnd={handleMoveEnd}
+            attributionControl={false}
+            style={{
+              width: "100%",
+              height: "100%",
+            }}
+            onLoad={handleMapLoad}
+            onError={handleMapError}
+            mapboxAccessToken={env.mapboxToken}
+            mapStyle="mapbox://styles/mapbox/dark-v11?optimize=true"
+            projection="mercator"
+            maxPitch={0}
+            minZoom={3}
+            maxZoom={18}
+            performanceMetricsCollection={false}
+            reuseMaps
+            onDragStart={handleUserInteraction}
+            onZoomStart={handleUserInteraction}
           >
             <SelectedStationProvider>
               <StationMarkers />
