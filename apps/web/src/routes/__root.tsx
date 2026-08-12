@@ -28,7 +28,10 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { property: "og:type", content: "website" },
       { property: "og:url", content: env.siteUrl },
       { property: "og:site_name", content: "Rail Radar" },
-      { property: "og:image", content: new URL("/og-image.webp", env.siteUrl).toString() },
+      {
+        property: "og:image",
+        content: new URL("/assets/social/og-image.webp", env.siteUrl).toString(),
+      },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "theme-color", content: "#0c0a09" },
       { name: "apple-mobile-web-app-capable", content: "yes" },
@@ -41,7 +44,6 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { rel: "apple-touch-icon", href: "/icon@180px.png" },
       { rel: "manifest", href: "/manifest.webmanifest" },
       { rel: "preconnect", href: env.apiUrl, crossOrigin: "anonymous" as const },
-      { rel: "preconnect", href: env.staticUrl, crossOrigin: "anonymous" as const },
       {
         rel: "preconnect",
         href: "https://api.mapbox.com",
@@ -49,7 +51,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       },
       { rel: "alternate", hrefLang: "en", href: "https://www.railradar24.com" },
       { rel: "alternate", hrefLang: "x-default", href: "https://www.railradar24.com" },
-    ].filter((link) => !('href' in link) || Boolean(link.href)),
+    ].filter((link) => !("href" in link) || Boolean(link.href)),
   }),
   notFoundComponent: RootNotFound,
   component: RootDocument,

@@ -15,8 +15,7 @@ export function useTrainData(
     refetchInterval: 10_000,
     refetchOnWindowFocus: true,
     placeholderData: (previousData) => previousData,
-    },
-  );
+  });
 
   return {
     data: data?.trains ?? null,

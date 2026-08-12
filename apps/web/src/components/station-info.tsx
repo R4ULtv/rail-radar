@@ -232,10 +232,7 @@ export default function StationInfo() {
                         size="icon"
                         nativeButton={false}
                         render={
-                          <Link
-                            to="/station/$id"
-                            params={{ id: selectedStation?.id ?? "" }}
-                          >
+                          <Link to="/station/$id" params={{ id: selectedStation?.id ?? "" }}>
                             <ArrowRightIcon className="size-4" />
                           </Link>
                         }

@@ -44,7 +44,7 @@ const metadata: Metadata = {
     url: "/report/2026-04-28",
     images: [
       {
-        url: "/2026-04-28-report.webp",
+        url: "/assets/social/report-2026-04-28.webp",
         width: 1200,
         height: 630,
         alt: "Rail Radar Traffic Report for April 2026 showing station visits, unique visitors, countries, and top station data.",
@@ -53,7 +53,7 @@ const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    images: ["/2026-04-28-report.webp"],
+    images: ["/assets/social/report-2026-04-28.webp"],
   },
 };
 

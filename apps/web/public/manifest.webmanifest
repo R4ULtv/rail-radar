@@ -42,28 +42,28 @@
   ],
   "screenshots": [
     {
-      "src": "https://static.railradar24.com/screenshots/mobile-home.png",
+      "src": "/assets/screenshots/mobile-home.png",
       "sizes": "828x1792",
       "type": "image/png",
       "form_factor": "narrow",
       "label": "Mobile map view showing nearby stations and live train activity"
     },
     {
-      "src": "https://static.railradar24.com/screenshots/mobile-detail.png",
+      "src": "/assets/screenshots/mobile-detail.png",
       "sizes": "828x1792",
       "type": "image/png",
       "form_factor": "narrow",
       "label": "Mobile station detail view with live departures, platforms, and delays"
     },
     {
-      "src": "https://static.railradar24.com/screenshots/desktop-home.png",
+      "src": "/assets/screenshots/desktop-home.png",
       "sizes": "1920x1080",
       "type": "image/png",
       "form_factor": "wide",
       "label": "Desktop map view for exploring stations across Europe"
     },
     {
-      "src": "https://static.railradar24.com/screenshots/desktop-detail.png",
+      "src": "/assets/screenshots/desktop-detail.png",
       "sizes": "1920x1080",
       "type": "image/png",
       "form_factor": "wide",

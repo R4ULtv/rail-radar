@@ -1,5 +1,3 @@
-import { staticAssetUrl } from "@/lib/static-assets";
-
 export interface StationPhotoAttribution {
   author?: string;
   license?: string;
@@ -21,18 +19,11 @@ interface StationPhotosResponse {
   images: StationPhoto[];
 }
 
-function normalizePhotoUrl(photo: StationPhoto): StationPhoto {
-  return {
-    ...photo,
-    url: photo.url.startsWith("/") ? staticAssetUrl(photo.url as `/${string}`) : photo.url,
-  };
-}
-
 export async function getStationPhotos(stationId: string): Promise<StationPhoto[]> {
   try {
     // Photo manifests load in the browser after hydration, while repeat requests are served from
-    // the static.railradar24.com edge cache.
-    const response = await fetch(staticAssetUrl(`/stations/${stationId}/photos`));
+    // the web Worker's edge cache.
+    const response = await fetch(`/media/stations/${encodeURIComponent(stationId)}/photos`);
 
     if (response.status === 404) {
       return [];
@@ -44,7 +35,7 @@ export async function getStationPhotos(stationId: string): Promise<StationPhoto[
 
     const manifest = (await response.json()) as StationPhotosResponse;
     return manifest.stationId === stationId && Array.isArray(manifest.images)
-      ? manifest.images.map(normalizePhotoUrl)
+      ? manifest.images
       : [];
   } catch (error) {
     console.warn(`Unable to load station photos for ${stationId}`, error);

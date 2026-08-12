@@ -84,7 +84,7 @@ function getStationMetadata(station: StationWithGeo): Metadata {
       description,
       images: [
         {
-          url: `/og?id=${station.id}`,
+          url: `/media/og?id=${station.id}`,
           width: 1200,
           height: 630,
           alt: `${station.name} station map`,
@@ -95,7 +95,7 @@ function getStationMetadata(station: StationWithGeo): Metadata {
       card: "summary_large_image",
       title: `${station.name} - Live Departures & Arrivals | Rail Radar`,
       description,
-      images: [`/og?id=${station.id}`],
+      images: [`/media/og?id=${station.id}`],
     },
   };
 }
@@ -137,7 +137,7 @@ function getCountryMetadata(slug: string, countryName: string, count: number): M
       description,
       images: [
         {
-          url: "/operators.webp",
+          url: "/assets/social/operators.webp",
           width: 1200,
           height: 630,
           alt: `Rail Radar - Train stations in ${countryName}`,
@@ -148,7 +148,7 @@ function getCountryMetadata(slug: string, countryName: string, count: number): M
       card: "summary",
       title: `${title} | Rail Radar`,
       description,
-      images: ["/operators.webp"],
+      images: ["/assets/social/operators.webp"],
     },
   };
 }
@@ -237,7 +237,7 @@ export function getStationsDirectoryPageData() {
       openGraph: {
         images: [
           {
-            url: "/operators.webp",
+            url: "/assets/social/operators.webp",
             width: 1200,
             height: 630,
             alt: "Rail Radar - Train stations across Europe",

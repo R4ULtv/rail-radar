@@ -57,7 +57,7 @@ function getOperatorMetadata(slug: string): Metadata {
       description,
       images: [
         {
-          url: "/operators.webp",
+          url: "/assets/social/operators.webp",
           width: 1200,
           height: 630,
           alt: "Rail Radar - Train operator directory across Europe",
@@ -70,7 +70,7 @@ function getOperatorMetadata(slug: string): Metadata {
       description,
       images: [
         {
-          url: "/operators.webp",
+          url: "/assets/social/operators.webp",
           width: 1200,
           height: 630,
           alt: "Rail Radar - Train operator directory across Europe",

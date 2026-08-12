@@ -1,6 +1,7 @@
 import { defineConfig, loadEnv } from "vite";
 import type { Plugin } from "vite";
 import { readFileSync } from "node:fs";
+import { cloudflare } from "@cloudflare/vite-plugin";
 import { tanstackStart } from "@tanstack/react-start/plugin/vite";
 import viteReact from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
@@ -57,6 +58,7 @@ export default defineConfig(({ mode }) => {
       tsconfigPaths: true,
     },
     plugins: [
+      cloudflare({ viteEnvironment: { name: "ssr" } }),
       geojsonPlugin,
       tailwindcss(),
       tanstackStart({

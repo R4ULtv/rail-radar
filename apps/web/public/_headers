@@ -2,3 +2,18 @@
   X-Content-Type-Options: nosniff
   X-Frame-Options: DENY
   Referrer-Policy: strict-origin-when-cross-origin
+
+/assets/operators/*
+  Cache-Control: public, max-age=604800
+
+/assets/flags/*
+  Cache-Control: public, max-age=604800
+
+/assets/screenshots/*
+  Cache-Control: public, max-age=86400
+
+/assets/maps/*
+  Cache-Control: public, max-age=86400
+
+/assets/social/*
+  Cache-Control: public, max-age=86400

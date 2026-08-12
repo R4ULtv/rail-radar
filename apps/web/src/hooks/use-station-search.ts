@@ -12,8 +12,7 @@ import type { StationSearchResponse } from "@/lib/api";
 export function useStationSearch(query: string | null) {
   const { data, error, isLoading, refetch } = useQuery({
     queryKey: ["station-search", query],
-    queryFn: () =>
-      apiFetcher<StationSearchResponse>(buildApiUrl(endpoints.stationSearch(query!))),
+    queryFn: () => apiFetcher<StationSearchResponse>(buildApiUrl(endpoints.stationSearch(query!))),
     enabled: Boolean(query),
     staleTime: 60_000,
   });

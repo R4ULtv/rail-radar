@@ -1,6 +1,5 @@
-
 import { staticAssetUrl } from "@/lib/static-assets";
-// Maps brand names to their SVG file paths (relative to /operators/)
+// Maps brand names to their SVG file paths (relative to /assets/operators/)
 const brandPaths: Record<string, string> = {
   // Italian brands
   trenitalia: "it/trenitalia",

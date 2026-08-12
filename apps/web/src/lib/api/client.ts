@@ -44,8 +44,13 @@ export async function apiFetcher<T>(url: string): Promise<T> {
     let errorMessage = response.statusText || "An error occurred";
 
     try {
-      const errorData = await response.json();
-      if (errorData.error) {
+      const errorData: unknown = await response.json();
+      if (
+        typeof errorData === "object" &&
+        errorData !== null &&
+        "error" in errorData &&
+        typeof errorData.error === "string"
+      ) {
         errorMessage = errorData.error;
       }
     } catch {

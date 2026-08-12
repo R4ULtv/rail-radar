@@ -112,9 +112,9 @@ function PrivacyPolicyPage() {
               security, rate limiting, and analytics data storage
             </li>
             <li>
-              <strong className="text-foreground">Fontsource</strong> &mdash; font files are
-              bundled and self-hosted with the app; browsers do not request fonts from a third-party
-              font service when loading the Service
+              <strong className="text-foreground">Fontsource</strong> &mdash; font files are bundled
+              and self-hosted with the app; browsers do not request fonts from a third-party font
+              service when loading the Service
             </li>
           </ul>
           <p className="mt-3">

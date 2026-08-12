@@ -290,11 +290,7 @@ export function StationMarkers() {
       <Layer {...railwayLineStyle()} />
       <Layer {...railwayBridgeStyle()} />
 
-      <Source
-        id="stations-source"
-        type="geojson"
-        data={`${env.apiUrl}/stations.geojson`}
-      >
+      <Source id="stations-source" type="geojson" data={`${env.apiUrl}/stations.geojson`}>
         <Layer {...metroLayerStyle()} />
         <Layer {...metroLabelStyle()} />
         <Layer {...lightLayerStyle()} />

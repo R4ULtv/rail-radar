@@ -33,7 +33,11 @@ function imageUrl(image: ImageMetadata): string {
 
 export function metadataToHead(metadata: Metadata) {
   const rawTitle = typeof metadata.title === "string" ? metadata.title : metadata.title?.default;
-  const title = rawTitle?.includes("Rail Radar") ? rawTitle : rawTitle ? `${rawTitle} | Rail Radar` : undefined;
+  const title = rawTitle?.includes("Rail Radar")
+    ? rawTitle
+    : rawTitle
+      ? `${rawTitle} | Rail Radar`
+      : undefined;
   const canonical = metadata.alternates?.canonical;
   const openGraph = metadata.openGraph;
   const twitter = metadata.twitter;
@@ -48,25 +52,29 @@ export function metadataToHead(metadata: Metadata) {
       ...(openGraph?.type ? [{ property: "og:type", content: openGraph.type }] : []),
       ...(openGraph?.url ? [{ property: "og:url", content: absoluteUrl(openGraph.url) }] : []),
       ...(openGraph?.siteName ? [{ property: "og:site_name", content: openGraph.siteName }] : []),
-      ...(openGraph?.title ?? title
+      ...((openGraph?.title ?? title)
         ? [{ property: "og:title", content: openGraph?.title ?? title! }]
         : []),
-      ...(openGraph?.description ?? metadata.description
-        ? [{
-            property: "og:description",
-            content: openGraph?.description ?? metadata.description!,
-          }]
+      ...((openGraph?.description ?? metadata.description)
+        ? [
+            {
+              property: "og:description",
+              content: openGraph?.description ?? metadata.description!,
+            },
+          ]
         : []),
       ...(ogImage ? [{ property: "og:image", content: imageUrl(ogImage) }] : []),
       ...(twitter?.card ? [{ name: "twitter:card", content: twitter.card }] : []),
-      ...(twitter?.title ?? openGraph?.title ?? title
+      ...((twitter?.title ?? openGraph?.title ?? title)
         ? [{ name: "twitter:title", content: twitter?.title ?? openGraph?.title ?? title! }]
         : []),
-      ...(twitter?.description ?? openGraph?.description ?? metadata.description
-        ? [{
-            name: "twitter:description",
-            content: twitter?.description ?? openGraph?.description ?? metadata.description!,
-          }]
+      ...((twitter?.description ?? openGraph?.description ?? metadata.description)
+        ? [
+            {
+              name: "twitter:description",
+              content: twitter?.description ?? openGraph?.description ?? metadata.description!,
+            },
+          ]
         : []),
       ...(twitterImage ? [{ name: "twitter:image", content: imageUrl(twitterImage) }] : []),
     ],
