@@ -15,7 +15,6 @@
       "binding": "STATION_IMAGES",
       "bucket_name": "rail-radar",
       "jurisdiction": "eu",
-      "remote": true,
     },
   ],
   "ratelimits": [

@@ -82,6 +82,11 @@ GET /media/stations/{stationId}/photos
 GET /media/stations/{stationId}/photo/{image-key}.webp
 ```
 
+Station manifests are requested by the browser after hydration and are never read while station
+pages are prerendered. The Vite development server connects to the real bucket so photos remain
+testable locally; production builds keep the R2 binding local, and deployed Workers use the bound
+`rail-radar` bucket.
+
 R2 object keys must use this layout:
 
 ```text

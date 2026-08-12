@@ -43,7 +43,7 @@ const geojsonPlugin: Plugin = {
   },
 };
 
-export default defineConfig(({ mode }) => {
+export default defineConfig(({ command, mode }) => {
   const serverEnv = loadEnv(mode, process.cwd(), "");
   if (serverEnv.MAPBOX_SERVER_TOKEN) {
     process.env.MAPBOX_SERVER_TOKEN = serverEnv.MAPBOX_SERVER_TOKEN;
@@ -58,7 +58,16 @@ export default defineConfig(({ mode }) => {
       tsconfigPaths: true,
     },
     plugins: [
-      cloudflare({ viteEnvironment: { name: "ssr" } }),
+      cloudflare({
+        viteEnvironment: { name: "ssr" },
+        config: (config) => {
+          config.r2_buckets?.forEach((bucket) => {
+            // Development can show the real station photos. Production builds use local R2 so
+            // prerendering never creates a remote connection or reads a manifest.
+            bucket.remote = command === "serve";
+          });
+        },
+      }),
       geojsonPlugin,
       tailwindcss(),
       tanstackStart({
