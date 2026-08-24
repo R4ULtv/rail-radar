@@ -50,11 +50,17 @@ export default defineConfig(({ command, mode }) => {
   }
 
   return {
+    build: {
+      // Mapbox's supported ESM core is a single module just over Vite's default limit.
+      // Keep a narrow ceiling above it so unexpected bundle growth still emits a warning.
+      chunkSizeWarningLimit: 850,
+    },
     server: {
       port: 3000,
     },
     envPrefix: "VITE_",
     resolve: {
+      alias: [{ find: /^mapbox-gl$/, replacement: "mapbox-gl/esm" }],
       tsconfigPaths: true,
     },
     plugins: [
