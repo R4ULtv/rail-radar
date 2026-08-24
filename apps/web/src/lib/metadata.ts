@@ -40,6 +40,7 @@ export function metadataToHead(metadata: Metadata) {
       : undefined;
   const canonical = metadata.alternates?.canonical;
   const openGraph = metadata.openGraph;
+  const openGraphUrl = openGraph?.url ?? canonical;
   const twitter = metadata.twitter;
   const ogImage = openGraph?.images?.[0];
   const twitterImage = twitter?.images?.[0] ?? ogImage;
@@ -50,7 +51,7 @@ export function metadataToHead(metadata: Metadata) {
       ...(metadata.description ? [{ name: "description", content: metadata.description }] : []),
       ...(metadata.robots?.index === false ? [{ name: "robots", content: "noindex" }] : []),
       ...(openGraph?.type ? [{ property: "og:type", content: openGraph.type }] : []),
-      ...(openGraph?.url ? [{ property: "og:url", content: absoluteUrl(openGraph.url) }] : []),
+      ...(openGraphUrl ? [{ property: "og:url", content: absoluteUrl(openGraphUrl) }] : []),
       ...(openGraph?.siteName ? [{ property: "og:site_name", content: openGraph.siteName }] : []),
       ...((openGraph?.title ?? title)
         ? [{ property: "og:title", content: openGraph?.title ?? title! }]

@@ -26,7 +26,6 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
           "Track live train departures, delays, platforms, and arrivals across 18,000+ stations in 12 European countries.",
       },
       { property: "og:type", content: "website" },
-      { property: "og:url", content: env.siteUrl },
       { property: "og:site_name", content: "Rail Radar" },
       {
         property: "og:image",
