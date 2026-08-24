@@ -3,6 +3,7 @@ import { staticAssetUrl } from "@/lib/static-assets";
 const brandPaths: Record<string, string> = {
   // Italian brands
   trenitalia: "it/trenitalia",
+  regionale: "it/regionale",
   intercity: "it/intercity",
   "intercity notte": "it/intercity_notte",
   italo: "it/italo",
@@ -180,6 +181,7 @@ function getBrandPath(brand: string): string | null {
 // Maps raw brand names (lowercased) to brand slugs
 const brandSlugMap: Record<string, string> = {
   trenitalia: "trenitalia",
+  regionale: "regionale",
   italo: "italo",
   ntv: "italo",
   frecciarossa: "frecciarossa",

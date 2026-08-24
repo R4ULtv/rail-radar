@@ -33,6 +33,34 @@
     ]
   },
   {
+    "slug": "regionale",
+    "name": "Regionale",
+    "logoPath": "it/regionale",
+    "countries": ["it"],
+    "operatorTypes": ["passenger"],
+    "bounds": [6.6, 36.6, 18.5, 47.1],
+    "description": "Regionale is Trenitalia's nationwide brand for regional and metropolitan rail services. Introduced with a new identity in 2024, it connects cities, smaller communities, airports, and tourist destinations across Italy, with more than 6,000 daily services and a growing fleet of new-generation electric, hybrid, and double-decker trains.",
+    "website": "https://www.trenitalia.com/en/connections/regionale-trains.html",
+    "founded": 2024,
+    "headquarters": "Rome, Italy",
+    "networkKm": null,
+    "annualPassengers": 400000000,
+    "serviceTypes": ["regional", "commuter"],
+    "parentCompany": "Trenitalia",
+    "links": [
+      {
+        "label": "Official Site",
+        "url": "https://www.trenitalia.com/en/connections/regionale-trains.html",
+        "type": "website"
+      },
+      {
+        "label": "Timetables",
+        "url": "https://www.trenitalia.com/en.html",
+        "type": "timetables"
+      }
+    ]
+  },
+  {
     "slug": "italo",
     "name": "Italo",
     "logoPath": "it/italo",
