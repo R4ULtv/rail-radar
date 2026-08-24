@@ -31,9 +31,19 @@ export const Route = createFileRoute("/media/stations/$stationId/photo/$")({
     handlers: {
       GET: ({ request, params }) =>
         getStationPhotoResponse(request, params.stationId, params._splat ?? ""),
+      HEAD: ({ request, params }) =>
+        getStationPhotoResponse(request, params.stationId, params._splat ?? ""),
+      ANY: () => methodNotAllowed(),
     },
   },
 });
+
+function methodNotAllowed(): Response {
+  return new Response("Method not allowed", {
+    status: 405,
+    headers: { Allow: "GET, HEAD" },
+  });
+}
 
 function isSafeRelativeKey(value: string): boolean {
   return SAFE_RELATIVE_KEY.test(value) && !value.includes("//") && !value.includes("..");

@@ -7,9 +7,18 @@ export const Route = createFileRoute("/media/og")({
   server: {
     handlers: {
       GET: ({ request }) => getOgImage(request),
+      HEAD: ({ request }) => getOgImage(request),
+      ANY: () => methodNotAllowed(),
     },
   },
 });
+
+function methodNotAllowed(): Response {
+  return new Response("Method not allowed", {
+    status: 405,
+    headers: { Allow: "GET, HEAD" },
+  });
+}
 
 const DEG_TO_RAD = Math.PI / 180;
 const EARTH_RADIUS_KM = 6371;
