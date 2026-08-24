@@ -23,6 +23,7 @@
         defaults: "2026-05-30",
         persistence: "memory",
         autocapture: false,
+        disable_surveys: true,
         capture_performance: { web_vitals: true },
       });
     }
