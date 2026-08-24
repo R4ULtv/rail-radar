@@ -14,7 +14,6 @@ export function useTrainData(
     enabled: Boolean(stationId && enabled),
     refetchInterval: 10_000,
     refetchOnWindowFocus: true,
-    placeholderData: (previousData) => previousData,
   });
 
   return {
