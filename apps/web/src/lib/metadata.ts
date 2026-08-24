@@ -44,6 +44,9 @@ export function metadataToHead(metadata: Metadata) {
   const twitter = metadata.twitter;
   const ogImage = openGraph?.images?.[0];
   const twitterImage = twitter?.images?.[0] ?? ogImage;
+  const twitterImageAlt =
+    (typeof twitterImage !== "string" ? twitterImage?.alt : undefined) ??
+    (typeof ogImage !== "string" ? ogImage?.alt : undefined);
 
   return {
     meta: [
@@ -64,7 +67,20 @@ export function metadataToHead(metadata: Metadata) {
             },
           ]
         : []),
-      ...(ogImage ? [{ property: "og:image", content: imageUrl(ogImage) }] : []),
+      ...(ogImage
+        ? [
+            { property: "og:image", content: imageUrl(ogImage) },
+            ...(typeof ogImage !== "string" && ogImage.width !== undefined
+              ? [{ property: "og:image:width", content: String(ogImage.width) }]
+              : []),
+            ...(typeof ogImage !== "string" && ogImage.height !== undefined
+              ? [{ property: "og:image:height", content: String(ogImage.height) }]
+              : []),
+            ...(typeof ogImage !== "string" && ogImage.alt !== undefined
+              ? [{ property: "og:image:alt", content: ogImage.alt }]
+              : []),
+          ]
+        : []),
       ...(twitter?.card ? [{ name: "twitter:card", content: twitter.card }] : []),
       ...((twitter?.title ?? openGraph?.title ?? title)
         ? [{ name: "twitter:title", content: twitter?.title ?? openGraph?.title ?? title! }]
@@ -77,7 +93,14 @@ export function metadataToHead(metadata: Metadata) {
             },
           ]
         : []),
-      ...(twitterImage ? [{ name: "twitter:image", content: imageUrl(twitterImage) }] : []),
+      ...(twitterImage
+        ? [
+            { name: "twitter:image", content: imageUrl(twitterImage) },
+            ...(twitterImageAlt !== undefined
+              ? [{ name: "twitter:image:alt", content: twitterImageAlt }]
+              : []),
+          ]
+        : []),
     ],
     links: canonical ? [{ rel: "canonical", href: absoluteUrl(canonical) }] : [],
   };

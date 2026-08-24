@@ -11,6 +11,13 @@ import { Analytics } from "@/components/analytics";
 import { env } from "@/lib/env";
 import appCss from "../styles.css?url";
 
+const DEFAULT_TITLE = "Rail Radar | Live Train Tracker Across Europe";
+const DEFAULT_DESCRIPTION =
+  "Track live train departures, delays, platforms, and arrivals across 18,000+ stations in 12 European countries.";
+const DEFAULT_OG_IMAGE = new URL("/assets/social/og-image.webp", env.siteUrl).toString();
+const DEFAULT_OG_IMAGE_ALT =
+  "Rail Radar live train tracking map for railway stations across Europe";
+
 export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({
   head: () => ({
     meta: [
@@ -19,19 +26,24 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         name: "viewport",
         content: "width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no",
       },
-      { title: "Rail Radar | Live Train Tracker Across Europe" },
+      { title: DEFAULT_TITLE },
       {
         name: "description",
-        content:
-          "Track live train departures, delays, platforms, and arrivals across 18,000+ stations in 12 European countries.",
+        content: DEFAULT_DESCRIPTION,
       },
       { property: "og:type", content: "website" },
       { property: "og:site_name", content: "Rail Radar" },
-      {
-        property: "og:image",
-        content: new URL("/assets/social/og-image.webp", env.siteUrl).toString(),
-      },
+      { property: "og:title", content: DEFAULT_TITLE },
+      { property: "og:description", content: DEFAULT_DESCRIPTION },
+      { property: "og:image", content: DEFAULT_OG_IMAGE },
+      { property: "og:image:width", content: "1200" },
+      { property: "og:image:height", content: "630" },
+      { property: "og:image:alt", content: DEFAULT_OG_IMAGE_ALT },
       { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: DEFAULT_TITLE },
+      { name: "twitter:description", content: DEFAULT_DESCRIPTION },
+      { name: "twitter:image", content: DEFAULT_OG_IMAGE },
+      { name: "twitter:image:alt", content: DEFAULT_OG_IMAGE_ALT },
       { name: "theme-color", content: "#0c0a09" },
       { name: "apple-mobile-web-app-capable", content: "yes" },
       { name: "apple-mobile-web-app-status-bar-style", content: "black-translucent" },
