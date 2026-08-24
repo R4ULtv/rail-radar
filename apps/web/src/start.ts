@@ -1,13 +1,22 @@
-import { createMiddleware, createStart } from "@tanstack/react-start";
+import { createCsrfMiddleware, createMiddleware, createStart } from "@tanstack/react-start";
 
 const securityHeaders = createMiddleware().server(async ({ next }) => {
   const result = await next();
-  result.response.headers.set("X-Content-Type-Options", "nosniff");
-  result.response.headers.set("X-Frame-Options", "DENY");
-  result.response.headers.set("Referrer-Policy", "strict-origin-when-cross-origin");
+  const response = result.response;
+
+  if (response) {
+    response.headers.set("X-Content-Type-Options", "nosniff");
+    response.headers.set("X-Frame-Options", "DENY");
+    response.headers.set("Referrer-Policy", "strict-origin-when-cross-origin");
+  }
+
   return result;
 });
 
+const csrfMiddleware = createCsrfMiddleware({
+  filter: (context) => context.handlerType === "serverFn",
+});
+
 export const startInstance = createStart(() => ({
-  requestMiddleware: [securityHeaders],
+  requestMiddleware: [securityHeaders, csrfMiddleware],
 }));
