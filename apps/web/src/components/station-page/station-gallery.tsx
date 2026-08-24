@@ -24,6 +24,8 @@ type GalleryItem =
       key: string;
       url: string;
       alt: string;
+      width?: number;
+      height?: number;
       attribution?: StationPhotoAttribution;
     };
 
@@ -117,6 +119,8 @@ export function StationGallery({ stationName, lat, lng, photos }: StationGallery
         key: photo.key,
         url: photo.url,
         alt: photo.alt ?? `${stationName} station photo`,
+        width: photo.width,
+        height: photo.height,
         attribution: photo.attribution,
       })),
     ],
@@ -304,9 +308,13 @@ export function StationGallery({ stationName, lat, lng, photos }: StationGallery
             ) : (
               <>
                 <img
+                  loading="lazy"
+                  decoding="async"
                   sizes="100vw"
                   src={item.url}
                   alt={item.alt}
+                  width={item.width}
+                  height={item.height}
                   className="absolute inset-0 size-full object-cover object-center"
                 />
                 <div className="absolute inset-0 bg-linear-to-t from-background/45 via-transparent to-transparent pointer-events-none" />
