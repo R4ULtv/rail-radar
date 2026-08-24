@@ -2,18 +2,9 @@
 
 import "mapbox-gl/dist/mapbox-gl.css";
 import { ClientOnly } from "@tanstack/react-router";
-import {
-  lazy,
-  startTransition,
-  Suspense,
-  useCallback,
-  useEffect,
-  useReducer,
-  useRef,
-  useState,
-} from "react";
+import { startTransition, useCallback, useEffect, useReducer, useRef, useState } from "react";
 import type { Map as MapboxMap } from "mapbox-gl";
-import type { MapEvent, ViewStateChangeEvent } from "react-map-gl/mapbox";
+import { Map as MapGL, type MapEvent, type ViewStateChangeEvent } from "react-map-gl/mapbox";
 
 // import { AnnouncementBanner } from "@/components/announcement-banner";
 import { MapControls } from "@/components/map-controls";
@@ -24,8 +15,6 @@ import { StationMarkers } from "@/components/station-markers";
 import { SelectedStationProvider } from "@/hooks/use-selected-station";
 import { useHomeSearch } from "@/hooks/use-home-search";
 import { env } from "@/lib/env";
-
-const MapGL = lazy(() => import("react-map-gl/mapbox").then((module) => ({ default: module.Map })));
 
 const DEFAULT_VIEW = {
   lat: 50,
@@ -270,44 +259,42 @@ function ConfiguredMap() {
         </div>
       ) : null}
       <ClientOnly fallback={<MapLoading />}>
-        <Suspense fallback={<MapLoading />}>
-          <MapGL
-            initialViewState={{
-              ...initialPosition,
-              bearing: 0,
-              pitch: 0,
-            }}
-            onMoveEnd={handleMoveEnd}
-            attributionControl={false}
-            style={{
-              width: "100%",
-              height: "100%",
-            }}
-            onLoad={handleMapLoad}
-            onError={handleMapError}
-            mapboxAccessToken={env.mapboxToken}
-            mapStyle="mapbox://styles/mapbox/dark-v11?optimize=true"
-            projection="mercator"
-            maxPitch={0}
-            minZoom={3}
-            maxZoom={18}
-            performanceMetricsCollection={false}
-            reuseMaps
-            onDragStart={handleUserInteraction}
-            onZoomStart={handleUserInteraction}
-          >
-            <SelectedStationProvider>
-              <StationMarkers />
-              <Search />
-              {/*<AnnouncementBanner />*/}
-              <MapControls
-                userLocation={userLocation}
-                onUserLocationChange={handleUserLocationChange}
-              />
-              <StationInfo />
-            </SelectedStationProvider>
-          </MapGL>
-        </Suspense>
+        <MapGL
+          initialViewState={{
+            ...initialPosition,
+            bearing: 0,
+            pitch: 0,
+          }}
+          onMoveEnd={handleMoveEnd}
+          attributionControl={false}
+          style={{
+            width: "100%",
+            height: "100%",
+          }}
+          onLoad={handleMapLoad}
+          onError={handleMapError}
+          mapboxAccessToken={env.mapboxToken}
+          mapStyle="mapbox://styles/mapbox/dark-v11?optimize=true"
+          projection="mercator"
+          maxPitch={0}
+          minZoom={3}
+          maxZoom={18}
+          performanceMetricsCollection={false}
+          reuseMaps
+          onDragStart={handleUserInteraction}
+          onZoomStart={handleUserInteraction}
+        >
+          <SelectedStationProvider>
+            <StationMarkers />
+            <Search />
+            {/*<AnnouncementBanner />*/}
+            <MapControls
+              userLocation={userLocation}
+              onUserLocationChange={handleUserLocationChange}
+            />
+            <StationInfo />
+          </SelectedStationProvider>
+        </MapGL>
       </ClientOnly>
     </div>
   );
