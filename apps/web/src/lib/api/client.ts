@@ -1,3 +1,5 @@
+import { env } from "@/lib/env";
+
 /**
  * Core API client for Rail Radar
  * Provides centralized fetch and error handling for TanStack Query hooks.
@@ -62,4 +64,3 @@ export async function apiFetcher<T>(url: string): Promise<T> {
 
   return response.json();
 }
-import { env } from "@/lib/env";
