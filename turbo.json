@@ -11,7 +11,7 @@
       "outputs": [".output/**", "dist/**"]
     },
     "web#build": {
-      "outputs": ["dist/**"],
+      "outputs": ["dist/**", "!dist/server/.dev.vars"],
       "env": ["MAPBOX_SERVER_TOKEN"]
     },
     "studio#build": {
