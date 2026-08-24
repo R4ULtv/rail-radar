@@ -6,6 +6,7 @@ import { ArrowLeftIcon, ArrowRightIcon, ExpandIcon, TrainFrontIcon } from "lucid
 import baseUrl from "@/lib/base-url";
 import { staticAssetUrl } from "@/lib/static-assets";
 import { env } from "@/lib/env";
+import { getStationPageLinkOptions } from "@/lib/station-navigation";
 
 export const Route = createFileRoute("/stations/$country")({
   loader: async ({ params }) => {
@@ -132,6 +133,7 @@ function CountryStationsPage({
                 key={station.id}
                 to="/station/$id"
                 params={{ id: station.id }}
+                {...getStationPageLinkOptions(station)}
                 className="group"
               >
                 <Card
@@ -152,7 +154,7 @@ function CountryStationsPage({
         </section>
       )}
 
-      {/* Full A–Z index — plain anchors for crawlability and zero prefetch overhead */}
+      {/* Full A–Z index */}
       <section>
         <h2 className="text-lg font-semibold tracking-tight mb-5">All stations</h2>
 
@@ -185,12 +187,14 @@ function CountryStationsPage({
               <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-1.5">
                 {stations.map((station) => (
                   <li key={station.id}>
-                    <a
-                      href={`/station/${station.id}`}
+                    <Link
+                      to="/station/$id"
+                      params={{ id: station.id }}
+                      {...getStationPageLinkOptions(station)}
                       className="block truncate py-0.5 text-sm text-muted-foreground transition-colors hover:text-foreground"
                     >
                       {station.name}
-                    </a>
+                    </Link>
                   </li>
                 ))}
               </ul>

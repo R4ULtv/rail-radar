@@ -1,6 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import type { Station } from "@repo/data";
 import { SquareMIcon, TrainFrontIcon } from "lucide-react";
+import { getStationPageLinkOptions } from "@/lib/station-navigation";
 
 interface NearbyStationsProps {
   stations: Array<Station & { distance: number }>;
@@ -28,10 +29,12 @@ export function NearbyStations({ stations }: NearbyStationsProps) {
           const href = isMetro
             ? `/?lat=${station.geo!.lat}&lng=${station.geo!.lng}&zoom=15`
             : `/station/${station.id}`;
+          const navigationOptions = isMetro ? {} : getStationPageLinkOptions(station);
           return (
             <li key={station.id}>
               <Link
                 to={href}
+                {...navigationOptions}
                 className="flex items-center justify-between gap-2 text-sm hover:text-primary transition-colors group"
               >
                 <span className="flex items-center gap-2 truncate">

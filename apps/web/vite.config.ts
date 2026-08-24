@@ -3,12 +3,13 @@ import type { Plugin } from "vite";
 import { readFileSync } from "node:fs";
 import { cloudflare } from "@cloudflare/vite-plugin";
 import { tanstackStart } from "@tanstack/react-start/plugin/vite";
+import { isStationPagePrerendered } from "./src/lib/station-prerender.ts";
 import viteReact from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
 
 type OperatorRecord = { slug: string };
 type StationFeatureRecord = {
-  properties: { id: string; importance: number; type: "rail" | "metro" | "light" };
+  properties: { id: string; importance: 1 | 2 | 3 | 4; type: "rail" | "metro" | "light" };
 };
 
 const operatorRecords = JSON.parse(
@@ -29,7 +30,7 @@ const prerenderPages = [
   "/report/2026-07-24",
   ...operatorRecords.map(({ slug }) => `/operators/${slug}`),
   ...stationRecords.features
-    .filter(({ properties }) => properties.type === "rail" && properties.importance <= 3)
+    .filter(({ properties }) => isStationPagePrerendered(properties))
     .map(({ properties }) => `/station/${properties.id}`),
 ].map((path) => ({ path }));
 
