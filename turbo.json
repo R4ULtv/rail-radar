@@ -12,7 +12,7 @@
     },
     "web#build": {
       "outputs": ["dist/**", "!dist/server/.dev.vars"],
-      "env": ["MAPBOX_SERVER_TOKEN"]
+      "env": ["MAPBOX_SERVER_TOKEN", "VITE_POSTHOG_KEY"]
     },
     "studio#build": {
       "outputs": [".svelte-kit/**", "!.svelte-kit/cache/**"],
