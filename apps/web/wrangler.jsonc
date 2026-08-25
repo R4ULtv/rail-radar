@@ -6,10 +6,15 @@
   "compatibility_flags": ["nodejs_compat"],
   "routes": [
     {
-      "pattern": "preview.railradar24.com",
+      "pattern": "railradar24.com",
+      "custom_domain": true,
+    },
+    {
+      "pattern": "www.railradar24.com",
       "custom_domain": true,
     },
   ],
+  "preview_urls": true,
   "r2_buckets": [
     {
       "binding": "STATION_IMAGES",

@@ -1,6 +1,6 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "rail-radar",
+  "name": "rail-radar-api",
   "main": "src/index.ts",
   "compatibility_date": "2026-08-04",
   "observability": {
