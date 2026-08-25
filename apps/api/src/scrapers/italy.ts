@@ -5,6 +5,16 @@ import { fetchTextWithTimeout } from "./fetch";
 
 const RFI_BASE_URL = "https://iechub.rfi.it/ArriviPartenze/en/ArrivalsDepartures/Monitor";
 
+function isRegionaleLogo(src: string): boolean {
+  // RFI labels both Regionale logo variants as TRENITALIA. Their GIF payloads are stable,
+  // so a short header-and-palette prefix is enough to distinguish them from Trenitalia.
+  const REGIONALE_LOGO_SIGNATURES = [
+    "data:image/gif;base64,R0lGODlhtQApAOeYAFaxMleyM1+xM2Cy",
+    "data:image/gif;base64,R0lGODlhuAApAOeXAE5QTU9RTlFTUFRW",
+  ] as const;
+  return REGIONALE_LOGO_SIGNATURES.some((signature) => src.startsWith(signature));
+}
+
 function buildRfiUrl(stationId: string, arrivals: boolean): string {
   // Extract numeric RFI place ID from station ID (e.g. "IT1728" -> "1728")
   const placeId = stripCountryPrefix(stationId);
@@ -90,7 +100,10 @@ class ParserState {
 
     switch (this.cellIndex) {
       case 0: // Brand (from img alt)
-        train.brand = imgAlts[0] || null;
+        train.brand =
+          imgAlts[0]?.trim().toUpperCase() === "TRENITALIA" && isRegionaleLogo(imgSrc)
+            ? "REGIONALE"
+            : (imgAlts[0] ?? null);
         break;
       case 1: {
         // Category (from img alt or text)

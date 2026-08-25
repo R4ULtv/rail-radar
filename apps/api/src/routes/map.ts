@@ -1,12 +1,14 @@
 import { cache } from "hono/cache";
 
 import { CACHE_TTL } from "../constants";
+import { STATION_ICON_BYTES } from "../assets/station-icon";
 import { factory } from "../lib/env";
 import { jsonError } from "../lib/http";
 import { rateLimit } from "../middleware/rate-limit";
 
 const MAPBOX_STYLE = "https://api.mapbox.com/styles/v1/mapbox/dark-v11/static";
-const STATION_ICON_URL = encodeURIComponent("https://static.railradar24.com/station-icon.png");
+const LOCAL_STATION_ICON_URL = "https://preview.railradar24.com/assets/maps/station-icon.png";
+const STATION_ICON_CACHE = "public, max-age=31536000, immutable";
 const MAX_DIMENSION = 1280;
 
 function parseDimensions(w: string | undefined, h: string | undefined, defaults: [number, number]) {
@@ -50,83 +52,114 @@ function mapImageResponse(res: Response) {
   });
 }
 
-export const mapRoutes = factory.createApp().get(
-  "/static",
-  rateLimit,
-  cache({
-    cacheName: "static-map-cache",
-    cacheControl: CACHE_TTL.STATIC_MAP,
-  }),
-  async (c) => {
-    const bbox = c.req.query("bbox");
-    const token = c.env.MAPBOX_TOKEN;
+function stationIconUrl(request: Request): string {
+  const url = new URL(request.url);
+  // Wrangler dev rewrites requests to the configured custom domain but keeps the HTTP scheme.
+  const isLocal =
+    url.protocol !== "https:" ||
+    url.hostname === "localhost" ||
+    url.hostname === "127.0.0.1" ||
+    url.hostname === "[::1]";
 
-    let mapboxUrl: string;
+  return isLocal ? LOCAL_STATION_ICON_URL : new URL("/map/station-icon.png", url.origin).toString();
+}
 
-    if (bbox) {
-      const { width, height } = parseDimensions(c.req.query("w"), c.req.query("h"), [960, 412]);
+export const mapRoutes = factory
+  .createApp()
+  .get("/station-icon.png", () => {
+    return new Response(STATION_ICON_BYTES, {
+      headers: {
+        "Cache-Control": STATION_ICON_CACHE,
+        "Content-Length": String(STATION_ICON_BYTES.byteLength),
+        "Content-Type": "image/png",
+      },
+    });
+  })
+  .get(
+    "/static",
+    rateLimit,
+    cache({
+      cacheName: "static-map-cache",
+      cacheControl: CACHE_TTL.STATIC_MAP,
+    }),
+    async (c) => {
+      const bbox = c.req.query("bbox");
+      const token = c.env.MAPBOX_TOKEN;
 
-      if (!validDimensions(width, height)) {
-        return jsonError(c, "Invalid dimensions. Max 1280x1280.", 400);
+      let mapboxUrl: string;
+
+      if (bbox) {
+        const { width, height } = parseDimensions(c.req.query("w"), c.req.query("h"), [960, 412]);
+
+        if (!validDimensions(width, height)) {
+          return jsonError(c, "Invalid dimensions. Max 1280x1280.", 400);
+        }
+
+        const parsedBbox = parseBbox(bbox);
+        if (!parsedBbox) {
+          return jsonError(c, "Invalid bbox. Must be west,south,east,north.", 400);
+        }
+
+        mapboxUrl = buildMapboxUrl(
+          `[${parsedBbox.join(",")}]`,
+          `${width}x${height}`,
+          token,
+          "&padding=40",
+        );
+      } else {
+        const { width, height } = parseDimensions(c.req.query("w"), c.req.query("h"), [1280, 256]);
+
+        if (!validDimensions(width, height)) {
+          return jsonError(c, "Invalid dimensions. Max 1280x1280.", 400);
+        }
+
+        const lat = Number.parseFloat(c.req.query("lat") ?? "");
+        const lng = Number.parseFloat(c.req.query("lng") ?? "");
+        const zoom = Number.parseInt(c.req.query("zoom") ?? "15", 10);
+
+        if (
+          Number.isNaN(lat) ||
+          Number.isNaN(lng) ||
+          lat < -90 ||
+          lat > 90 ||
+          lng < -180 ||
+          lng > 180
+        ) {
+          return jsonError(c, "Invalid coordinates.", 400);
+        }
+        if (Number.isNaN(zoom) || zoom < 0 || zoom > 22) {
+          return jsonError(c, "Invalid zoom level.", 400);
+        }
+
+        const marker = `url-${encodeURIComponent(stationIconUrl(c.req.raw))}(${lng},${lat})`;
+        mapboxUrl = buildMapboxUrl(
+          `${marker}/${lng},${lat},${zoom},0`,
+          `${width}x${height}`,
+          token,
+        );
       }
 
-      const parsedBbox = parseBbox(bbox);
-      if (!parsedBbox) {
-        return jsonError(c, "Invalid bbox. Must be west,south,east,north.", 400);
+      const supportsWebp = /image\/webp/.test(c.req.header("accept") ?? "");
+      const cfOptions = { image: supportsWebp ? { format: "webp" as const } : {}, quality: 100 };
+
+      const response = await fetch(mapboxUrl, { cf: cfOptions });
+      if (!response.ok) {
+        const fallback = await fetch(mapboxUrl);
+        if (!fallback.ok) {
+          return jsonError(c, "Failed to fetch map image.", 502);
+        }
+        return mapImageResponse(fallback);
       }
 
-      mapboxUrl = buildMapboxUrl(
-        `[${parsedBbox.join(",")}]`,
-        `${width}x${height}`,
-        token,
-        "&padding=40",
-      );
-    } else {
-      const { width, height } = parseDimensions(c.req.query("w"), c.req.query("h"), [1280, 256]);
-
-      if (!validDimensions(width, height)) {
-        return jsonError(c, "Invalid dimensions. Max 1280x1280.", 400);
+      const resized = response.headers.get("cf-resized") ?? "";
+      if (resized.includes("err=")) {
+        const fallback = await fetch(mapboxUrl);
+        if (!fallback.ok) {
+          return jsonError(c, "Failed to fetch map image.", 502);
+        }
+        return mapImageResponse(fallback);
       }
 
-      const lat = Number.parseFloat(c.req.query("lat") ?? "");
-      const lng = Number.parseFloat(c.req.query("lng") ?? "");
-      const zoom = Number.parseInt(c.req.query("zoom") ?? "15", 10);
-
-      if (
-        Number.isNaN(lat) ||
-        Number.isNaN(lng) ||
-        lat < -90 ||
-        lat > 90 ||
-        lng < -180 ||
-        lng > 180
-      ) {
-        return jsonError(c, "Invalid coordinates.", 400);
-      }
-      if (Number.isNaN(zoom) || zoom < 0 || zoom > 22) {
-        return jsonError(c, "Invalid zoom level.", 400);
-      }
-
-      const marker = `url-${STATION_ICON_URL}(${lng},${lat})`;
-      mapboxUrl = buildMapboxUrl(`${marker}/${lng},${lat},${zoom},0`, `${width}x${height}`, token);
-    }
-
-    const supportsWebp = /image\/webp/.test(c.req.header("accept") ?? "");
-    const cfOptions = { image: supportsWebp ? { format: "webp" as const } : {}, quality: 100 };
-
-    const response = await fetch(mapboxUrl, { cf: cfOptions });
-    if (!response.ok) {
-      return jsonError(c, "Failed to fetch map image.", 502);
-    }
-
-    const resized = response.headers.get("cf-resized") ?? "";
-    if (resized.includes("err=")) {
-      const fallback = await fetch(mapboxUrl);
-      if (!fallback.ok) {
-        return jsonError(c, "Failed to fetch map image.", 502);
-      }
-      return mapImageResponse(fallback);
-    }
-
-    return mapImageResponse(response);
-  },
-);
+      return mapImageResponse(response);
+    },
+  );
