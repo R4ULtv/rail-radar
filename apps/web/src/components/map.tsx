@@ -107,11 +107,11 @@ function MapLoadError() {
 }
 
 export function Map() {
-  if (!env.mapboxToken) {
-    return <MapConfigurationError />;
-  }
-
-  return <ConfiguredMap />;
+  return (
+    <ClientOnly fallback={<MapLoading />}>
+      {env.mapboxToken ? <ConfiguredMap /> : <MapConfigurationError />}
+    </ClientOnly>
+  );
 }
 
 function ConfiguredMap() {
@@ -258,44 +258,42 @@ function ConfiguredMap() {
           <MapLoading />
         </div>
       ) : null}
-      <ClientOnly fallback={<MapLoading />}>
-        <MapGL
-          initialViewState={{
-            ...initialPosition,
-            bearing: 0,
-            pitch: 0,
-          }}
-          onMoveEnd={handleMoveEnd}
-          attributionControl={false}
-          style={{
-            width: "100%",
-            height: "100%",
-          }}
-          onLoad={handleMapLoad}
-          onError={handleMapError}
-          mapboxAccessToken={env.mapboxToken}
-          mapStyle="mapbox://styles/mapbox/dark-v11?optimize=true"
-          projection="mercator"
-          maxPitch={0}
-          minZoom={3}
-          maxZoom={18}
-          performanceMetricsCollection={false}
-          reuseMaps
-          onDragStart={handleUserInteraction}
-          onZoomStart={handleUserInteraction}
-        >
-          <SelectedStationProvider>
-            <StationMarkers />
-            <Search />
-            {/*<AnnouncementBanner />*/}
-            <MapControls
-              userLocation={userLocation}
-              onUserLocationChange={handleUserLocationChange}
-            />
-            <StationInfo />
-          </SelectedStationProvider>
-        </MapGL>
-      </ClientOnly>
+      <MapGL
+        initialViewState={{
+          ...initialPosition,
+          bearing: 0,
+          pitch: 0,
+        }}
+        onMoveEnd={handleMoveEnd}
+        attributionControl={false}
+        style={{
+          width: "100%",
+          height: "100%",
+        }}
+        onLoad={handleMapLoad}
+        onError={handleMapError}
+        mapboxAccessToken={env.mapboxToken}
+        mapStyle="mapbox://styles/mapbox/dark-v11?optimize=true"
+        projection="mercator"
+        maxPitch={0}
+        minZoom={3}
+        maxZoom={18}
+        performanceMetricsCollection={false}
+        reuseMaps
+        onDragStart={handleUserInteraction}
+        onZoomStart={handleUserInteraction}
+      >
+        <SelectedStationProvider>
+          <StationMarkers />
+          <Search />
+          {/*<AnnouncementBanner />*/}
+          <MapControls
+            userLocation={userLocation}
+            onUserLocationChange={handleUserLocationChange}
+          />
+          <StationInfo />
+        </SelectedStationProvider>
+      </MapGL>
     </div>
   );
 }
