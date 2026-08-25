@@ -40,4 +40,7 @@
       "head_sampling_rate": 0.5,
     },
   },
+  "secrets": {
+    "required": ["MAPBOX_SERVER_TOKEN"],
+  },
 }
