@@ -128,8 +128,8 @@ importers:
         specifier: workspace:*
         version: link:../../packages/ui
       '@tanstack/react-query':
-        specifier: ^5.102.0
-        version: 5.102.0(react@19.2.8)
+        specifier: ^5.102.2
+        version: 5.102.2(react@19.2.8)
       '@tanstack/react-router':
         specifier: ^1.170.32
         version: 1.170.32(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
@@ -158,8 +158,8 @@ importers:
         specifier: ^8.1.2
         version: 8.1.2(mapbox-gl@3.29.0)(maplibre-gl@5.24.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
       takumi-js:
-        specifier: ^2.11.0
-        version: 2.11.0(csstype@3.2.3)(preact@10.29.8)(react@19.2.8)
+        specifier: ^2.12.0
+        version: 2.12.0(csstype@3.2.3)(preact@10.29.8)(react@19.2.8)
     devDependencies:
       '@cloudflare/vite-plugin':
         specifier: 1.51.1
@@ -177,8 +177,8 @@ importers:
         specifier: ^19.2.18
         version: 19.2.18
       '@types/react-dom':
-        specifier: ^19.2.4
-        version: 19.2.4(@types/react@19.2.18)
+        specifier: ^19.2.5
+        version: 19.2.5(@types/react@19.2.18)
       '@vitejs/plugin-react':
         specifier: ^6.1.0
         version: 6.1.0(vite@8.2.2(@types/node@22.20.1)(esbuild@0.28.2)(jiti@2.7.0))
@@ -267,8 +267,8 @@ importers:
         specifier: ^19.2.18
         version: 19.2.18
       '@types/react-dom':
-        specifier: ^19.2.4
-        version: 19.2.4(@types/react@19.2.18)
+        specifier: ^19.2.5
+        version: 19.2.5(@types/react@19.2.18)
       tailwindcss:
         specifier: ^4.3.3
         version: 4.3.3
@@ -1866,60 +1866,60 @@ packages:
     peerDependencies:
       vite: ^5.2.0 || ^6 || ^7 || ^8
 
-  '@takumi-rs/core-darwin-arm64@2.11.0':
-    resolution: {integrity: sha512-oPcfaq0ZjEbCqFcYF9KG7pqlA5hJy6exxDNUrjZNJiOPV3jP4RLDWeSTX7jauK4y4y0lqEwPC0oivTlM4WXl4Q==}
+  '@takumi-rs/core-darwin-arm64@2.12.0':
+    resolution: {integrity: sha512-wa2QodfXJsEUCkMlgDdJBLnOvlGgKeSyw5UKuvwR+GslLavWQj7+w1O4LCc8uMIRc7XyysKrEeJIwehqJ6YkWw==}
     engines: {node: '>=18'}
     cpu: [arm64]
     os: [darwin]
 
-  '@takumi-rs/core-darwin-x64@2.11.0':
-    resolution: {integrity: sha512-TObaoFLaIaDem4UEHnFtiDZ7sjqtzVDccf9JLSzYbHWF5/trsERESH+GWW046E9+ZICb0uF91VZEn2NaabbzqQ==}
+  '@takumi-rs/core-darwin-x64@2.12.0':
+    resolution: {integrity: sha512-9CIAuYZwofOp4QbD7PRNh+STdNsFVCS+3auebVqW4PvTZfbaI7oPLfBvnqgxJVehEBJgs6mqEhc2BJvUws/7MQ==}
     engines: {node: '>=18'}
     cpu: [x64]
     os: [darwin]
 
-  '@takumi-rs/core-linux-arm64-gnu@2.11.0':
-    resolution: {integrity: sha512-fXvUdo+vX0oUMnH9jlJRvOCcjkPg7L872D7TjCzaeIWlEg09KXW8ZIiXlHhJWANVyUapIu51lMHkp0I2oFGfRA==}
+  '@takumi-rs/core-linux-arm64-gnu@2.12.0':
+    resolution: {integrity: sha512-AZwt8CisqCZMTdbtTd3xUP9QXIrS6w+TU5CnW1QVHOxCrzh4+AdHMoRzPTUjkG9qtieQ1QgI6t6BKCcRutz5QQ==}
     engines: {node: '>=18'}
     cpu: [arm64]
     os: [linux]
     libc: [glibc]
 
-  '@takumi-rs/core-linux-arm64-musl@2.11.0':
-    resolution: {integrity: sha512-FhRnAFIQlQ0WR4q5EldMal8cKZY5nbssuR9Qn9TNATY9PN6zlhV2oDud/b2XhYP2wf19+y1Ggouxk6RD4MnYPA==}
+  '@takumi-rs/core-linux-arm64-musl@2.12.0':
+    resolution: {integrity: sha512-qVSgC16zCGQg8NBofKGmce2bFTTC0HFZE1Ql4O9RKHs7ajN8hTVlbvQ7RSUQGnysJ/toeaeKKrJHTfGgIKwDig==}
     engines: {node: '>=18'}
     cpu: [arm64]
     os: [linux]
     libc: [musl]
 
-  '@takumi-rs/core-linux-x64-gnu@2.11.0':
-    resolution: {integrity: sha512-i3IolpGWfDGHHEdKgw8NSW7WOZbxdL6jcVuRGyU47ZsSsWJlr0PguMjBCmprB+NVqCq3Kudw54Z4LVtCSxmuxw==}
+  '@takumi-rs/core-linux-x64-gnu@2.12.0':
+    resolution: {integrity: sha512-/tB1FH7Zp4S0XCnO5+pDA/UTnGH4lR/i4pUI6YEibKyUC3fGJqn8h9DOy5QvSxEYfIeeI4s06L2zgXIhvOCiRA==}
     engines: {node: '>=18'}
     cpu: [x64]
     os: [linux]
     libc: [glibc]
 
-  '@takumi-rs/core-linux-x64-musl@2.11.0':
-    resolution: {integrity: sha512-EMZK8ck8kQuP28s41jx5paM4rznud2qC6x6kI1W2W1eV/w7hWIUQqq5QpZ6pDGkfcuWmVBz5ojeJI9my3aZfoA==}
+  '@takumi-rs/core-linux-x64-musl@2.12.0':
+    resolution: {integrity: sha512-U0BdML6TWwOLQruPhZxibvHyNd5gBspLlCSFnVCsmQcDFZ2GnkYOvBl9KUnQJh+c5ctGX8BjvAU3ekLIbpeopw==}
     engines: {node: '>=18'}
     cpu: [x64]
     os: [linux]
     libc: [musl]
 
-  '@takumi-rs/core-win32-arm64-msvc@2.11.0':
-    resolution: {integrity: sha512-CAGV1TSwfXfIYxCOJehvZGxbuYuEIs/4aqRgC7XcY/2tBv9uc01dBBsfVGdk8wFbJ/WLVperfmX+Hz3w/xEyhw==}
+  '@takumi-rs/core-win32-arm64-msvc@2.12.0':
+    resolution: {integrity: sha512-EjgDZjJWXhPFiDQjaHeJYlD5vFpsirel7mHspaWGuquurhCN06MQUpGRWOwutkEdXfVkkscx3ZphFDRkerPfMQ==}
     engines: {node: '>=18'}
     cpu: [arm64]
     os: [win32]
 
-  '@takumi-rs/core-win32-x64-msvc@2.11.0':
-    resolution: {integrity: sha512-75oyQe8eye6aQrLV+bVK7s7NXksr+KOBDcSeYPVXeQaE/xZ5REn0ooThdsgM5o2G3jjqWxf42Wd8Ajc6wl9Lyw==}
+  '@takumi-rs/core-win32-x64-msvc@2.12.0':
+    resolution: {integrity: sha512-JascumNirNCDS/qaV6YM3aYHazxIENG617PTaAas8NDUMbhYptOa5RZPV917d4unHilEvD3P5L5T9fpiU3N6Ig==}
     engines: {node: '>=18'}
     cpu: [x64]
     os: [win32]
 
-  '@takumi-rs/core@2.11.0':
-    resolution: {integrity: sha512-aAM0TfhNKgHjjtl26gUYL2Gta1sMru3hMQ1jhyFmf5mhqjw+V756OMBtV30LY8R9zH7S4G5zFFPlqlXPN0vluw==}
+  '@takumi-rs/core@2.12.0':
+    resolution: {integrity: sha512-oyP7+pBqxqncbeYA8jiyiXTl4TdvEJLWCcMqjEiWPEnaaX7ziBurgXxe/CvIvUvB5QtreQTT/gFHGDQN0V1oSA==}
     engines: {node: '>=18'}
     peerDependencies:
       csstype: '*'
@@ -1927,8 +1927,8 @@ packages:
       csstype:
         optional: true
 
-  '@takumi-rs/helpers@2.11.0':
-    resolution: {integrity: sha512-Ik2rhAt7yZeWBVWiMRr6EaXk2Ccke1FZTlwB+1LS/SZzxB4v2OawbZftRX1N0ho8U3niq+M4OBPpno696M0XrQ==}
+  '@takumi-rs/helpers@2.12.0':
+    resolution: {integrity: sha512-3DF+spdZEKvFahc3SXQ3roXL9DzQkPoQ/oqopKT0bcXd3QiROTyYncRgzqUnEfBlFp236m9pSFVRSwW2GvLO9w==}
     engines: {node: '>=18'}
     peerDependencies:
       preact: ^10.0.0
@@ -1939,8 +1939,8 @@ packages:
       react:
         optional: true
 
-  '@takumi-rs/wasm@2.11.0':
-    resolution: {integrity: sha512-JSPF7tkcxyI6HqVHKMoJ9aand6XmuXWRfl5UE98KfPPpnq10KeOQT6XU3uaT9SjHo3w5RgiHW9Ee5BMHXxr/Fg==}
+  '@takumi-rs/wasm@2.12.0':
+    resolution: {integrity: sha512-tGwNU96tWZZCqrCogy5nHfablvUW6UtzK52Ydnkld7hnNdzyU3eHrCzxNKmSf+tHYJHHKLgyOpgEnxFBIqriFQ==}
     engines: {node: '>=18'}
     peerDependencies:
       csstype: '*'
@@ -1952,11 +1952,11 @@ packages:
     resolution: {integrity: sha512-DR9t6lfLVdrjgCwpglrR9DR7Ok8/HlXjcOE+goWXF3zyuLUO/ug7vMbSFxTqrQTtbRghJfyhmIZ0S6LhPIy44w==}
     engines: {node: '>=20.19'}
 
-  '@tanstack/query-core@5.102.0':
-    resolution: {integrity: sha512-tvBzr11Q7StuMCEsIJdqX8TAWt6WZIzfw/yrSAjObZDerwTTPeCxeLXN2R8ZSn4ZxFpQV819Xn8QmoO+vtnDvw==}
+  '@tanstack/query-core@5.102.2':
+    resolution: {integrity: sha512-zQ5794PXBlV5Wl7N23SR1/Ss+wPE/h2Ye4XlKpm3omN8i8b/Fd4DAdqpLS2AXj5M/RMObt3k5qy3E7kzt/AvBA==}
 
-  '@tanstack/react-query@5.102.0':
-    resolution: {integrity: sha512-0GyVyEcGt9M7jHPCua16hNVtstUXE2R4HsnNubFYcDs7DJaLzh1dSiXsADDU/cNn/SqrLfa0vRKyjUmbx4rZLA==}
+  '@tanstack/react-query@5.102.2':
+    resolution: {integrity: sha512-KxU8ZyOEuJ81eTSgXa8GQbk/jO/rz0elYtNKt3VMtM2pRjeO8ADIu7sqqmEjFKJKqco9h2N1ojIDuHs6VfDItQ==}
     peerDependencies:
       react: ^18 || ^19
 
@@ -2171,8 +2171,8 @@ packages:
   '@types/node@22.20.1':
     resolution: {integrity: sha512-EANqOCF9QFyra+4pfxUcX9STKJpCLjMbObVzljIJomAWSnuSIEAvyzEU53GaajbXJEgdh0iEcPL+DGvpUd4k1Q==}
 
-  '@types/react-dom@19.2.4':
-    resolution: {integrity: sha512-Bsc+QHgp+P/F02XDzNCY9jnZNCUuLki36KT7VKrTXXLdHf+vHMNZnW1rVu5DNW/rCK+fya3DATySbLM4yhtKUw==}
+  '@types/react-dom@19.2.5':
+    resolution: {integrity: sha512-fMPwH9v7r/pp43yUd2/Mbiex5KouJwwR3dzHkhLREUC6764VyDsqxhAxv6OFEYR1RhjOyD1naqba8ECDBe7ZQg==}
     peerDependencies:
       '@types/react': ^19.2.0
 
@@ -4204,8 +4204,8 @@ packages:
   tailwindcss@4.3.3:
     resolution: {integrity: sha512-gOhV3P7ufE62QDGg1zVaTgCR+EtPv92k2nIhVcVKcLmxT1sUBsQGhnZj175j+MqRt4zLF7ic+sCYjfhxMxj7YQ==}
 
-  takumi-js@2.11.0:
-    resolution: {integrity: sha512-I8JeYRrIF6xStSgaJ91PSThdt0qhgAs1geCfyMwTtUGMPwTvCBLR/wSL4QeWvd0nH+tAntHL13aSYTQamZfmxA==}
+  takumi-js@2.12.0:
+    resolution: {integrity: sha512-A9SoIH7kEEIuL09+8RtVPUDQrelGqEi2AVbbJMf7CWPlnSNjYbvKMwJRVqrVyEkkJl7mEKhxfv5YJqn/xDsr5Q==}
     engines: {node: '>=18'}
 
   tapable@2.3.3:
@@ -5761,55 +5761,55 @@ snapshots:
       tailwindcss: 4.3.3
       vite: 8.2.2(@types/node@22.20.1)(esbuild@0.28.2)(jiti@2.7.0)
 
-  '@takumi-rs/core-darwin-arm64@2.11.0':
+  '@takumi-rs/core-darwin-arm64@2.12.0':
     optional: true
 
-  '@takumi-rs/core-darwin-x64@2.11.0':
+  '@takumi-rs/core-darwin-x64@2.12.0':
     optional: true
 
-  '@takumi-rs/core-linux-arm64-gnu@2.11.0':
+  '@takumi-rs/core-linux-arm64-gnu@2.12.0':
     optional: true
 
-  '@takumi-rs/core-linux-arm64-musl@2.11.0':
+  '@takumi-rs/core-linux-arm64-musl@2.12.0':
     optional: true
 
-  '@takumi-rs/core-linux-x64-gnu@2.11.0':
+  '@takumi-rs/core-linux-x64-gnu@2.12.0':
     optional: true
 
-  '@takumi-rs/core-linux-x64-musl@2.11.0':
+  '@takumi-rs/core-linux-x64-musl@2.12.0':
     optional: true
 
-  '@takumi-rs/core-win32-arm64-msvc@2.11.0':
+  '@takumi-rs/core-win32-arm64-msvc@2.12.0':
     optional: true
 
-  '@takumi-rs/core-win32-x64-msvc@2.11.0':
+  '@takumi-rs/core-win32-x64-msvc@2.12.0':
     optional: true
 
-  '@takumi-rs/core@2.11.0(csstype@3.2.3)(preact@10.29.8)(react@19.2.8)':
+  '@takumi-rs/core@2.12.0(csstype@3.2.3)(preact@10.29.8)(react@19.2.8)':
     dependencies:
-      '@takumi-rs/helpers': 2.11.0(preact@10.29.8)(react@19.2.8)
+      '@takumi-rs/helpers': 2.12.0(preact@10.29.8)(react@19.2.8)
     optionalDependencies:
-      '@takumi-rs/core-darwin-arm64': 2.11.0
-      '@takumi-rs/core-darwin-x64': 2.11.0
-      '@takumi-rs/core-linux-arm64-gnu': 2.11.0
-      '@takumi-rs/core-linux-arm64-musl': 2.11.0
-      '@takumi-rs/core-linux-x64-gnu': 2.11.0
-      '@takumi-rs/core-linux-x64-musl': 2.11.0
-      '@takumi-rs/core-win32-arm64-msvc': 2.11.0
-      '@takumi-rs/core-win32-x64-msvc': 2.11.0
+      '@takumi-rs/core-darwin-arm64': 2.12.0
+      '@takumi-rs/core-darwin-x64': 2.12.0
+      '@takumi-rs/core-linux-arm64-gnu': 2.12.0
+      '@takumi-rs/core-linux-arm64-musl': 2.12.0
+      '@takumi-rs/core-linux-x64-gnu': 2.12.0
+      '@takumi-rs/core-linux-x64-musl': 2.12.0
+      '@takumi-rs/core-win32-arm64-msvc': 2.12.0
+      '@takumi-rs/core-win32-x64-msvc': 2.12.0
       csstype: 3.2.3
     transitivePeerDependencies:
       - preact
       - react
 
-  '@takumi-rs/helpers@2.11.0(preact@10.29.8)(react@19.2.8)':
+  '@takumi-rs/helpers@2.12.0(preact@10.29.8)(react@19.2.8)':
     optionalDependencies:
       preact: 10.29.8
       react: 19.2.8
 
-  '@takumi-rs/wasm@2.11.0(csstype@3.2.3)(preact@10.29.8)(react@19.2.8)':
+  '@takumi-rs/wasm@2.12.0(csstype@3.2.3)(preact@10.29.8)(react@19.2.8)':
     dependencies:
-      '@takumi-rs/helpers': 2.11.0(preact@10.29.8)(react@19.2.8)
+      '@takumi-rs/helpers': 2.12.0(preact@10.29.8)(react@19.2.8)
     optionalDependencies:
       csstype: 3.2.3
     transitivePeerDependencies:
@@ -5818,11 +5818,11 @@ snapshots:
 
   '@tanstack/history@1.162.1': {}
 
-  '@tanstack/query-core@5.102.0': {}
+  '@tanstack/query-core@5.102.2': {}
 
-  '@tanstack/react-query@5.102.0(react@19.2.8)':
+  '@tanstack/react-query@5.102.2(react@19.2.8)':
     dependencies:
-      '@tanstack/query-core': 5.102.0
+      '@tanstack/query-core': 5.102.2
       react: 19.2.8
 
   '@tanstack/react-router@1.170.32(react-dom@19.2.8(react@19.2.8))(react@19.2.8)':
@@ -6107,7 +6107,7 @@ snapshots:
     dependencies:
       undici-types: 6.21.0
 
-  '@types/react-dom@19.2.4(@types/react@19.2.18)':
+  '@types/react-dom@19.2.5(@types/react@19.2.18)':
     dependencies:
       '@types/react': 19.2.18
 
@@ -8107,11 +8107,11 @@ snapshots:
 
   tailwindcss@4.3.3: {}
 
-  takumi-js@2.11.0(csstype@3.2.3)(preact@10.29.8)(react@19.2.8):
+  takumi-js@2.12.0(csstype@3.2.3)(preact@10.29.8)(react@19.2.8):
     dependencies:
-      '@takumi-rs/core': 2.11.0(csstype@3.2.3)(preact@10.29.8)(react@19.2.8)
-      '@takumi-rs/helpers': 2.11.0(preact@10.29.8)(react@19.2.8)
-      '@takumi-rs/wasm': 2.11.0(csstype@3.2.3)(preact@10.29.8)(react@19.2.8)
+      '@takumi-rs/core': 2.12.0(csstype@3.2.3)(preact@10.29.8)(react@19.2.8)
+      '@takumi-rs/helpers': 2.12.0(preact@10.29.8)(react@19.2.8)
+      '@takumi-rs/wasm': 2.12.0(csstype@3.2.3)(preact@10.29.8)(react@19.2.8)
     transitivePeerDependencies:
       - csstype
       - preact
