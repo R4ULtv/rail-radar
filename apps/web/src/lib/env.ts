@@ -1,10 +1,6 @@
-function publicValue(name: keyof ImportMetaEnv): string {
-  return import.meta.env[name] ?? "";
-}
-
 export const env = {
-  apiUrl: publicValue("VITE_API_URL").replace(/\/$/, ""),
-  mapboxToken: publicValue("VITE_MAPBOX_TOKEN"),
-  siteUrl: publicValue("VITE_SITE_URL") || "https://www.railradar24.com",
-  posthogKey: publicValue("VITE_POSTHOG_KEY"),
+  apiUrl: (import.meta.env.VITE_API_URL ?? "").replace(/\/$/, ""),
+  mapboxToken: import.meta.env.VITE_MAPBOX_TOKEN ?? "",
+  siteUrl: import.meta.env.VITE_SITE_URL || "https://www.railradar24.com",
+  posthogKey: import.meta.env.VITE_POSTHOG_KEY ?? "",
 } as const;
