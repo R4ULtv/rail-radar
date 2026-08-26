@@ -12,14 +12,14 @@
   },
   "devDependencies": {
     "eslint-plugin-turbo": "^2.10.11",
-    "oxfmt": "^0.64.0",
-    "oxlint": "^1.79.0",
-    "svgo": "^4.0.2",
+    "oxfmt": "^0.65.0",
+    "oxlint": "^1.80.0",
+    "svgo": "^4.1.0",
     "turbo": "^2.10.11",
     "typescript": "^6.0.3"
   },
   "engines": {
     "node": ">=22"
   },
-  "packageManager": "pnpm@11.23.0"
+  "packageManager": "pnpm@11.24.0"
 }
