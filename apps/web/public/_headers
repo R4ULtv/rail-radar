@@ -3,17 +3,20 @@
   X-Frame-Options: DENY
   Referrer-Policy: strict-origin-when-cross-origin
 
+/assets/*.js
+  Cache-Control: public, max-age=31536000, immutable
+
 /assets/operators/*
-  Cache-Control: public, max-age=604800
+  Cache-Control: public, max-age=1209600
 
 /assets/flags/*
-  Cache-Control: public, max-age=604800
+  Cache-Control: public, max-age=1209600
 
 /assets/screenshots/*
-  Cache-Control: public, max-age=86400
+  Cache-Control: public, max-age=1209600
 
 /assets/maps/*
-  Cache-Control: public, max-age=86400
+  Cache-Control: public, max-age=1209600
 
 /assets/social/*
   Cache-Control: public, max-age=86400
