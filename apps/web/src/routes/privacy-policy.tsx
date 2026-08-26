@@ -24,7 +24,7 @@ function PrivacyPolicyPage() {
         Back to Rail Radar
       </Link>
       <h1 className="mb-8 text-3xl font-semibold">Privacy Policy</h1>
-      <p className="mb-4 text-sm text-muted-foreground">Last updated: July 2, 2026</p>
+      <p className="mb-4 text-sm text-muted-foreground">Last updated: August 26, 2026</p>
 
       <div className="space-y-8 leading-relaxed text-muted-foreground">
         <section>
@@ -108,8 +108,11 @@ function PrivacyPolicyPage() {
               interaction data)
             </li>
             <li>
-              <strong className="text-foreground">Cloudflare</strong> &mdash; for API hosting,
-              security, rate limiting, and analytics data storage
+              <strong className="text-foreground">Cloudflare</strong> &mdash; for hosting the
+              website and API on Cloudflare Workers, serving static assets, security and rate
+              limiting, storing station photos in an EU R2 bucket, and storing operational analytics
+              in Analytics Engine. As our infrastructure provider, Cloudflare may process request
+              information such as IP addresses in accordance with its privacy policy
             </li>
             <li>
               <strong className="text-foreground">Fontsource</strong> &mdash; font files are bundled
@@ -139,8 +142,9 @@ function PrivacyPolicyPage() {
           <p>
             Station visit analytics (containing hashed IP addresses and station metadata) are stored
             in Cloudflare Analytics Engine in accordance with Cloudflare&apos;s retention policies.
-            We do not maintain a separate database of personal user information. Local storage data
-            remains on your device until you clear your browser data.
+            Cloudflare may also retain operational request data according to its policies and our
+            account settings. We do not maintain a separate database of personal user information.
+            Local storage data remains on your device until you clear your browser data.
           </p>
         </section>
 

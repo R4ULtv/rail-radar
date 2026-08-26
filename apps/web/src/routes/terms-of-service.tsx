@@ -24,7 +24,7 @@ function TermsOfServicePage() {
         Back to Rail Radar
       </Link>
       <h1 className="mb-8 text-3xl font-semibold">Terms of Service</h1>
-      <p className="mb-4 text-sm text-muted-foreground">Last updated: May 18, 2026</p>
+      <p className="mb-4 text-sm text-muted-foreground">Last updated: August 26, 2026</p>
 
       <div className="space-y-8 leading-relaxed text-muted-foreground">
         <section>
@@ -234,8 +234,9 @@ function TermsOfServicePage() {
           <h2 className="mb-3 text-xl font-semibold text-foreground">6. Third-Party Services</h2>
           <p>
             The Service relies on third-party services including Mapbox for map rendering,
-            Cloudflare for API hosting, security, and rate limiting, PostHog for website analytics
-            and performance monitoring, and various public transit data providers. Your use of these
+            Cloudflare for website and API hosting, static asset delivery, station photo storage,
+            security, rate limiting, and operational analytics, PostHog for website analytics and
+            performance monitoring, and various public transit data providers. Your use of these
             services is subject to their respective terms and privacy policies.
           </p>
         </section>
