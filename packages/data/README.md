@@ -8,6 +8,7 @@ Shared station data and TypeScript types for Rail Radar.
 src/
 ├── index.ts            # Main entry point
 ├── stations.ts         # Station data exports (GeoJSON + derived arrays)
+├── directory.ts        # Stations grouped by country and country bounds
 ├── countries.ts        # Country codes and lookup utilities
 ├── operators.ts        # Operator data loader and exports
 ├── operators.json      # Train operator dataset
@@ -56,6 +57,12 @@ import type { Station, Operator, Train } from "@repo/data/types";
 import { getCountry, COUNTRY_CODES } from "@repo/data/countries";
 ```
 
+### Subpath Import (`@repo/data/directory`)
+
+```ts
+import { countryStationBounds, stationsByCountry } from "@repo/data/directory";
+```
+
 ## Data
 
 ### `stationsGeoJSON`
@@ -72,7 +79,7 @@ This is served directly by the API as the `/stations.geojson` endpoint and consu
 
 ### `stations`
 
-Derived flat array of `Station` objects (backward compat for API search, server components, etc.).
+Derived flat array of `Station` objects used by API search and server-side web routes.
 
 ### `stationById`
 

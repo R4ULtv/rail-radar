@@ -48,7 +48,18 @@ pnpm --filter=studio dev # Admin tool at localhost:3001
 | `pnpm check-types --force`     | Run TypeScript type checking                  |
 | `pnpm --filter=api cf-typegen` | Generate API Worker types                     |
 | `pnpm --filter=web cf-typegen` | Generate web Worker types                     |
+| `pnpm --filter=api deploy`     | Deploy the API Worker to Cloudflare           |
 | `pnpm --filter=web deploy`     | Build and deploy the web Worker to Cloudflare |
+
+## Deployment Architecture
+
+The public website runs on Cloudflare Workers using TanStack Start, Vite, and the Cloudflare Vite
+plugin. The browser assets are deployed with the Worker through Cloudflare Workers Static Assets,
+while request-time rendering and same-origin `/media/*` routes run in the Worker. The Hono API is a
+separate Cloudflare Worker at `api.railradar24.com`.
+
+The Studio app remains a separate SvelteKit application and uses the Cloudflare adapter for
+production builds.
 
 ## Media Delivery
 
