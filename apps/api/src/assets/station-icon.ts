@@ -1,0 +1,32 @@
+// Keep the API-hosted custom marker self-contained so static maps do not depend on the retired
+// static-assets Worker. This is the base64 form of apps/web/public/assets/maps/station-icon.png.
+const stationIconBase64 = [
+  "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",
+].join("");
+
+export const STATION_ICON_BYTES = Uint8Array.from(atob(stationIconBase64), (character) =>
+  character.charCodeAt(0),
+);

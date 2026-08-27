@@ -73,6 +73,8 @@ Returns `application/geo+json` FeatureCollection consumed directly by Mapbox GL 
 | --------------------- | --------------------------------------- |
 | `/operators`          | 24h cache, 1h stale-while-revalidate    |
 | `/operators/:slug`    | 24h cache, 1h stale-while-revalidate    |
+| `/map/static`         | 30-day cache                            |
+| `/stations/search`    | 5min cache, 1min stale-while-revalidate |
 | `/stations.geojson`   | 24h cache, 1h stale-while-revalidate    |
 | `/stations/:id`       | 25s cache, 5s stale-while-revalidate    |
 | `/stations/:id/stats` | 5min cache, 1min stale-while-revalidate |
@@ -81,7 +83,9 @@ Returns `application/geo+json` FeatureCollection consumed directly by Mapbox GL 
 
 ### Rate Limiting
 
-The `/stations/search` endpoint and `/stations/:id` endpoint are rate-limited per IP (15 requests per 10 seconds) using Cloudflare's Rate Limiting.
+The static-map, station search, live-board, station statistics, trending-station, and analytics
+overview endpoints are rate-limited per IP (15 requests per 10 seconds) using Cloudflare Rate
+Limiting.
 
 ## Project Structure
 

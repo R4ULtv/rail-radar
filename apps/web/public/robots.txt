@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+Disallow: /*?*lat=*
+Disallow: /*?*lng=*
+Disallow: /*?*zoom=*
+Disallow: /*?*station=*
+
+Sitemap: https://www.railradar24.com/sitemap.xml

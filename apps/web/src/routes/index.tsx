@@ -1,0 +1,149 @@
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { metadataToHead, type Metadata } from "@/lib/metadata";
+import { Suspense } from "react";
+import { preconnect } from "react-dom";
+
+import { Map } from "@/components/map";
+import MapLoading from "@/components/map-loading";
+
+type MapSearch = {
+  lat?: number;
+  lng?: number;
+  zoom?: number;
+  station?: string;
+  q?: string;
+};
+
+function numberSearch(value: unknown): number | undefined {
+  if (value === null || value === undefined || value === "") return undefined;
+  const parsed = typeof value === "number" ? value : Number(value);
+  return Number.isFinite(parsed) ? parsed : undefined;
+}
+
+function stringSearch(value: unknown): string | undefined {
+  return typeof value === "string" && value.length > 0 ? value : undefined;
+}
+
+export const Route = createFileRoute("/")({
+  validateSearch: (search): MapSearch => ({
+    lat: numberSearch(search.lat),
+    lng: numberSearch(search.lng),
+    zoom: numberSearch(search.zoom),
+    station: stringSearch(search.station),
+    q: stringSearch(search.q),
+  }),
+  head: () => metadataToHead(metadata),
+  component: Home,
+});
+
+const metadata: Metadata = {
+  alternates: {
+    canonical: "/",
+  },
+};
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  name: "Rail Radar",
+  url: "https://www.railradar24.com",
+  description:
+    "Track trains in real time across 12 European countries, including Poland, Denmark, and Germany. Get live delays, platform numbers, and departure info for over 18,000 train stations.",
+  potentialAction: {
+    "@type": "SearchAction",
+    target: "https://www.railradar24.com/?q={search_term_string}",
+    "query-input": "required name=search_term_string",
+  },
+};
+
+function Home() {
+  preconnect("https://api.mapbox.com", { crossOrigin: "anonymous" });
+
+  return (
+    <main className="h-svh w-svw">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c"),
+        }}
+      />
+      <h1 className="sr-only">
+        Rail Radar - Live Train Tracker for Italy, Switzerland, Germany, Finland, Belgium, Denmark,
+        the Netherlands, Norway, Sweden, Poland, the UK, and Ireland
+      </h1>
+      <div className="sr-only">
+        <p>
+          Rail Radar is a real-time train tracking application covering Italy, Switzerland, Germany,
+          Finland, Belgium, Denmark, the Netherlands, Norway, Sweden, Poland, the United Kingdom,
+          and Ireland. Monitor live departures, arrivals, delays, and platform changes across more
+          than 18,000 train stations on an interactive map. Stay informed with up-to-date data from
+          RFI, Swiss public transport feeds, Deutsche Bahn (DB), Finnish Digitraffic, iRail,
+          Rejseplanen, NS, Entur, Trafiklab, PLK, LDBWS, and Irish Rail, whether you are commuting
+          daily or planning a trip across Europe.
+        </p>
+        <p>
+          Search any station to see upcoming trains, check real-time delay information, and explore
+          trending stations. Rail Radar supports major operators including DB, Trenitalia, Italo,
+          Trenord, SBB, VR, DSB, NMBS/SNCB, NS, Iarnród Éireann, and many regional services.
+          Bookmark your favorite stations for quick access and share live views with friends using
+          shareable map links.
+        </p>
+      </div>
+      <Suspense fallback={<MapLoading />}>
+        <Map />
+        <div className="absolute bottom-2 left-3 flex flex-wrap max-w-60 md:max-w-full gap-x-1 text-[10px] text-foreground/60">
+          <span>
+            <a
+              href="https://www.mapbox.com/about/maps/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:underline"
+            >
+              © Mapbox
+            </a>
+            ,{" "}
+            <a
+              href="http://www.openstreetmap.org/copyright"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:underline"
+            >
+              © OpenStreetMap
+            </a>
+            ,{" "}
+            <a
+              href="https://www.mapbox.com/map-feedback/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:underline"
+            >
+              Improve this map
+            </a>
+            <span className="hidden md:inline">{" ·"}</span>
+          </span>
+          <span>
+            <Link to="/privacy-policy" className="hover:underline">
+              Privacy
+            </Link>
+            {" · "}
+            <Link to="/terms-of-service" className="hover:underline">
+              Terms
+            </Link>
+            {" · "}
+            <Link to="/donate" className="hover:underline">
+              Donate
+            </Link>
+            {" · "}
+            <Link to="/stations" className="hover:underline">
+              Stations
+            </Link>
+            {" · "}
+            <a href="mailto:contact@railradar24.com" className="hover:underline">
+              Contact
+            </a>
+          </span>
+        </div>
+      </Suspense>
+    </main>
+  );
+}

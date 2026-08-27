@@ -1,0 +1,274 @@
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { metadataToHead, type Metadata } from "@/lib/metadata";
+import { ArrowLeftIcon } from "lucide-react";
+
+export const Route = createFileRoute("/terms-of-service")({
+  head: () => metadataToHead(metadata),
+  component: TermsOfServicePage,
+});
+
+const metadata: Metadata = {
+  title: "Terms of Service",
+  description: "Terms of Service for Rail Radar - Rules and guidelines for using our service.",
+  robots: { index: false },
+};
+
+function TermsOfServicePage() {
+  return (
+    <div className="mx-auto max-w-4xl px-6 py-16">
+      <Link
+        to="/"
+        className="mb-8 inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground"
+      >
+        <ArrowLeftIcon className="size-4" />
+        Back to Rail Radar
+      </Link>
+      <h1 className="mb-8 text-3xl font-semibold">Terms of Service</h1>
+      <p className="mb-4 text-sm text-muted-foreground">Last updated: August 26, 2026</p>
+
+      <div className="space-y-8 leading-relaxed text-muted-foreground">
+        <section>
+          <h2 className="mb-3 text-xl font-semibold text-foreground">1. About the Service</h2>
+          <p>
+            Rail Radar is a free, open-source web application that provides real-time train tracking
+            on an interactive map. It displays live train departures, arrivals, delays, and platform
+            information for 21,000+ stations across 13 countries. The source code is available under
+            the{" "}
+            <a
+              href="https://opensource.org/licenses/MIT"
+              className="text-foreground underline"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              MIT License
+            </a>
+            .
+          </p>
+        </section>
+
+        <section>
+          <h2 className="mb-3 text-xl font-semibold text-foreground">2. Data Sources</h2>
+          <p className="mb-3">
+            Train data displayed on Rail Radar is sourced from the following third-party providers.
+            We do not own this data and are not affiliated with these organizations.
+          </p>
+          <ul className="ml-6 list-disc space-y-2">
+            <li>
+              <strong className="text-foreground">Italy</strong> &mdash;{" "}
+              <a
+                href="https://www.rfi.it"
+                className="text-foreground underline"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                RFI (Rete Ferroviaria Italiana)
+              </a>
+            </li>
+            <li>
+              <strong className="text-foreground">Switzerland</strong> &mdash;{" "}
+              <a
+                href="https://transport.opendata.ch"
+                className="text-foreground underline"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                transport.opendata.ch
+              </a>
+            </li>
+            <li>
+              <strong className="text-foreground">Germany</strong> &mdash;{" "}
+              <a
+                href="https://www.bahn.de"
+                className="text-foreground underline"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Deutsche Bahn (DB)
+              </a>
+            </li>
+            <li>
+              <strong className="text-foreground">Finland</strong> &mdash;{" "}
+              <a
+                href="https://www.digitraffic.fi"
+                className="text-foreground underline"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Digitraffic
+              </a>
+            </li>
+            <li>
+              <strong className="text-foreground">Belgium</strong> &mdash;{" "}
+              <a
+                href="https://docs.irail.be"
+                className="text-foreground underline"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                iRail (NMBS/SNCB)
+              </a>
+            </li>
+            <li>
+              <strong className="text-foreground">Denmark</strong> &mdash;{" "}
+              <a
+                href="https://www.rejseplanen.dk/"
+                className="text-foreground underline"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Rejseplanen
+              </a>
+            </li>
+            <li>
+              <strong className="text-foreground">Netherlands</strong> &mdash;{" "}
+              <a
+                href="https://www.ns.nl"
+                className="text-foreground underline"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                NS (Nederlandse Spoorwegen)
+              </a>
+            </li>
+            <li>
+              <strong className="text-foreground">Norway</strong> &mdash;{" "}
+              <a
+                href="https://developer.entur.org"
+                className="text-foreground underline"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Entur
+              </a>
+            </li>
+            <li>
+              <strong className="text-foreground">Sweden</strong> &mdash;{" "}
+              <a
+                href="https://www.trafiklab.se"
+                className="text-foreground underline"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Trafiklab
+              </a>
+            </li>
+            <li>
+              <strong className="text-foreground">Poland</strong> &mdash;{" "}
+              <a
+                href="https://www.plk-sa.pl"
+                className="text-foreground underline"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                PKP Polskie Linie Kolejowe (PLK)
+              </a>
+            </li>
+            <li>
+              <strong className="text-foreground">United Kingdom</strong> &mdash;{" "}
+              <a
+                href="https://lite.realtime.nationalrail.co.uk"
+                className="text-foreground underline"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                LDBWS (National Rail)
+              </a>
+            </li>
+            <li>
+              <strong className="text-foreground">Ireland</strong> &mdash;{" "}
+              <a
+                href="https://www.irishrail.ie"
+                className="text-foreground underline"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Irish Rail (Iarnród Éireann)
+              </a>
+            </li>
+            <li>
+              <strong className="text-foreground">France</strong> &mdash;{" "}
+              <a
+                href="https://numerique.sncf.com/startup/api/"
+                className="text-foreground underline"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                SNCF (Navitia)
+              </a>
+            </li>
+          </ul>
+        </section>
+
+        <section>
+          <h2 className="mb-3 text-xl font-semibold text-foreground">
+            3. No Warranty &amp; Accuracy
+          </h2>
+          <p>
+            The Service is provided &quot;as is&quot; and &quot;as available&quot; without
+            warranties of any kind. We make no guarantees regarding the accuracy, completeness, or
+            timeliness of the data. Always verify travel information with official railway operators
+            before making travel decisions.
+          </p>
+        </section>
+
+        <section>
+          <h2 className="mb-3 text-xl font-semibold text-foreground">4. Limitation of Liability</h2>
+          <p>
+            To the fullest extent permitted by law, Rail Radar shall not be liable for any damages
+            arising out of or related to your use of the Service. This includes, without limitation,
+            any damages resulting from missed trains, incorrect schedule information, or reliance on
+            data provided by the Service.
+          </p>
+        </section>
+
+        <section>
+          <h2 className="mb-3 text-xl font-semibold text-foreground">5. Fair Use</h2>
+          <p>
+            To keep the Service available for everyone, we enforce rate limits on API requests.
+            Deliberately circumventing these limits or using the Service in a way that degrades it
+            for others may result in temporary access restrictions.
+          </p>
+        </section>
+
+        <section>
+          <h2 className="mb-3 text-xl font-semibold text-foreground">6. Third-Party Services</h2>
+          <p>
+            The Service relies on third-party services including Mapbox for map rendering,
+            Cloudflare for website and API hosting, static asset delivery, station photo storage,
+            security, rate limiting, and operational analytics, PostHog for website analytics and
+            performance monitoring, and various public transit data providers. Your use of these
+            services is subject to their respective terms and privacy policies.
+          </p>
+        </section>
+
+        <section>
+          <h2 className="mb-3 text-xl font-semibold text-foreground">7. Service Availability</h2>
+          <p>
+            We may modify, suspend, or discontinue the Service (or any part of it) at any time, with
+            or without notice.
+          </p>
+        </section>
+
+        <section>
+          <h2 className="mb-3 text-xl font-semibold text-foreground">8. Changes to These Terms</h2>
+          <p>
+            We may update these Terms from time to time. Changes will be posted on this page with an
+            updated date. Continued use of the Service after changes constitutes acceptance of the
+            updated terms.
+          </p>
+        </section>
+
+        <section>
+          <h2 className="mb-3 text-xl font-semibold text-foreground">9. Contact Us</h2>
+          <p>
+            If you have any questions, please contact us at{" "}
+            <a href="mailto:contact@railradar24.com" className="text-foreground underline">
+              contact@railradar24.com
+            </a>
+            .
+          </p>
+        </section>
+      </div>
+    </div>
+  );
+}
