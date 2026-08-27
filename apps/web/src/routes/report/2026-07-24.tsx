@@ -50,9 +50,18 @@ const metadata: Metadata = {
     description:
       "A rolling 90-day comparison of Rail Radar traffic, station usage, country growth, and provider health.",
     url: "/report/2026-07-24",
+    images: [
+      {
+        url: "/assets/social/report-report-2026-07-24.webp",
+        width: 1200,
+        height: 630,
+        alt: "Rail Radar Traffic Report for July 2026 showing station visits, unique visitors, countries, and top station data.",
+      },
+    ],
   },
   twitter: {
-    card: "summary",
+    card: "summary_large_image",
+    images: ["/assets/social/report-2026-07-24.webp"],
   },
 };
 
