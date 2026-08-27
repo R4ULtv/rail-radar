@@ -15,6 +15,7 @@ import { StationMarkers } from "@/components/station-markers";
 import { SelectedStationProvider } from "@/hooks/use-selected-station";
 import { useHomeSearch } from "@/hooks/use-home-search";
 import { env } from "@/lib/env";
+import { loadLastUserLocation, saveLastUserLocation, type UserLocation } from "@/lib/user-location";
 
 const DEFAULT_VIEW = {
   lat: 50,
@@ -25,7 +26,7 @@ const DEFAULT_VIEW = {
 const LOCATION_OPTIONS: PositionOptions = {
   enableHighAccuracy: false,
   timeout: 10000,
-  maximumAge: 30000,
+  maximumAge: 0,
 };
 
 function isMapRoute() {
@@ -36,11 +37,6 @@ type InitialPosition = {
   latitude: number;
   longitude: number;
   zoom: number;
-};
-
-type UserLocation = {
-  latitude: number;
-  longitude: number;
 };
 
 type MapState = {
@@ -123,35 +119,52 @@ function ConfiguredMap() {
   };
 
   const hasUrlParams =
-    params.lat !== DEFAULT_VIEW.lat ||
-    params.lng !== DEFAULT_VIEW.lng ||
-    params.zoom !== DEFAULT_VIEW.zoom;
+    search.lat !== undefined || search.lng !== undefined || search.zoom !== undefined;
+  const [hasInitialUrlParams] = useState(hasUrlParams);
 
-  const [{ initialPosition, userLocation }, dispatch] = useReducer(mapReducer, null, () => ({
-    initialPosition: {
-      latitude: params.lat,
-      longitude: params.lng,
-      zoom: params.zoom,
-    },
-    userLocation: null,
-  }));
+  const [{ initialPosition, userLocation }, dispatch] = useReducer(mapReducer, null, () => {
+    const lastUserLocation = loadLastUserLocation();
+
+    return {
+      initialPosition:
+        !hasInitialUrlParams && lastUserLocation
+          ? { ...lastUserLocation, zoom: 13 }
+          : {
+              latitude: params.lat,
+              longitude: params.lng,
+              zoom: params.zoom,
+            },
+      userLocation: lastUserLocation,
+    };
+  });
   const mapRef = useRef<MapboxMap | null>(null);
   const hasUserInteractedRef = useRef(false);
   const pendingAutoLocationRef = useRef<InitialPosition | null>(null);
   const [isMapLoaded, setIsMapLoaded] = useState(false);
   const [hasMapLoadError, setHasMapLoadError] = useState(false);
+  const [isAutoLocating, setIsAutoLocating] = useState(false);
 
   useEffect(() => {
-    if (hasUrlParams || !navigator.geolocation) return;
+    if (!navigator.geolocation) return;
 
     let cancelled = false;
 
     const updateFromPosition = (pos: GeolocationPosition) => {
-      if (cancelled || hasUserInteractedRef.current || !isMapRoute()) return;
+      if (cancelled) return;
+      setIsAutoLocating(false);
+      if (!isMapRoute()) return;
 
       const latitude = Math.round(pos.coords.latitude * 1000000) / 1000000;
       const longitude = Math.round(pos.coords.longitude * 1000000) / 1000000;
+      const location = { latitude, longitude };
       const nextPosition = { latitude, longitude, zoom: 13 };
+
+      saveLastUserLocation(location);
+
+      if (hasInitialUrlParams || hasUserInteractedRef.current) {
+        dispatch({ type: "setUserLocation", location });
+        return;
+      }
 
       dispatch({ type: "setAutoLocation", position: nextPosition });
       void setSearch({ lat: latitude, lng: longitude, zoom: 13 });
@@ -164,9 +177,13 @@ function ConfiguredMap() {
     };
 
     const requestLocation = () => {
+      if (cancelled) return;
+      setIsAutoLocating(true);
+
       navigator.geolocation.getCurrentPosition(
         updateFromPosition,
         () => {
+          if (!cancelled) setIsAutoLocating(false);
           // Location failures should not block the default map load.
         },
         LOCATION_OPTIONS,
@@ -183,23 +200,18 @@ function ConfiguredMap() {
     navigator.permissions
       .query({ name: "geolocation" })
       .then((result) => {
-        const shouldPromptForLocationOnLoad = true;
-
-        if (
-          result.state === "granted" ||
-          (shouldPromptForLocationOnLoad && result.state === "prompt")
-        ) {
+        if (result.state === "granted" || (!hasInitialUrlParams && result.state === "prompt")) {
           requestLocation();
         }
       })
       .catch(() => {
-        // Permissions API failures should not block the default map load.
+        if (!hasInitialUrlParams) requestLocation();
       });
 
     return () => {
       cancelled = true;
     };
-  }, [hasUrlParams, setSearch]);
+  }, [hasInitialUrlParams, setSearch]);
 
   const handleMoveEnd = useCallback(
     (e: ViewStateChangeEvent) => {
@@ -244,6 +256,7 @@ function ConfiguredMap() {
   }, []);
 
   const handleUserLocationChange = useCallback((location: UserLocation) => {
+    saveLastUserLocation(location);
     dispatch({ type: "setUserLocation", location });
   }, []);
 
@@ -289,6 +302,7 @@ function ConfiguredMap() {
           <AnnouncementBanner />
           <MapControls
             userLocation={userLocation}
+            isAutoLocating={isAutoLocating}
             onUserLocationChange={handleUserLocationChange}
           />
           <StationInfo />

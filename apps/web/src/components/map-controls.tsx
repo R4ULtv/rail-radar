@@ -3,6 +3,7 @@ import { Marker, useMap } from "react-map-gl/mapbox";
 import { CompassIcon, LocateFixedIcon, LocateIcon, MinusIcon, PlusIcon } from "lucide-react";
 import { Button } from "@repo/ui/components/button";
 import { ButtonGroup } from "@repo/ui/components/button-group";
+import { Spinner } from "@repo/ui/components/spinner";
 
 const LOCATION_OPTIONS: PositionOptions = {
   enableHighAccuracy: false,
@@ -30,13 +31,33 @@ type UserLocation = {
 
 type MapControlsProps = {
   userLocation: UserLocation | null;
+  isAutoLocating: boolean;
   onUserLocationChange: (location: UserLocation) => void;
 };
 
-export function MapControls({ userLocation, onUserLocationChange }: MapControlsProps) {
+export function MapControls({
+  userLocation,
+  isAutoLocating,
+  onUserLocationChange,
+}: MapControlsProps) {
   const { current: map } = useMap();
   const [bearing, setBearing] = React.useState(0);
-  const [isLocating, setIsLocating] = React.useState(false);
+  const [isRequestingLocation, setIsRequestingLocation] = React.useState(false);
+  const [showLocatingIndicator, setShowLocatingIndicator] = React.useState(false);
+  const isLocating = isAutoLocating || isRequestingLocation;
+
+  React.useEffect(() => {
+    if (!isLocating) {
+      setShowLocatingIndicator(false);
+      return;
+    }
+
+    const timeoutId = setTimeout(() => {
+      setShowLocatingIndicator(true);
+    }, 300);
+
+    return () => clearTimeout(timeoutId);
+  }, [isLocating]);
 
   React.useEffect(() => {
     if (!map) return;
@@ -63,19 +84,19 @@ export function MapControls({ userLocation, onUserLocationChange }: MapControlsP
     (flyTo = false) => {
       if (!navigator.geolocation) return;
 
-      if (flyTo) setIsLocating(true);
+      if (flyTo) setIsRequestingLocation(true);
 
       navigator.geolocation.getCurrentPosition(
         (position) => {
           const { longitude, latitude } = position.coords;
           onUserLocationChange({ longitude, latitude });
-          setIsLocating(false);
+          if (flyTo) setIsRequestingLocation(false);
           if (flyTo) {
             map?.flyTo({ center: [longitude, latitude], zoom: 14 });
           }
         },
         (error) => {
-          setIsLocating(false);
+          if (flyTo) setIsRequestingLocation(false);
           if (flyTo) {
             console.info("Geolocation unavailable:", getGeolocationErrorMessage(error));
           }
@@ -87,8 +108,9 @@ export function MapControls({ userLocation, onUserLocationChange }: MapControlsP
   );
 
   const handleLocate = React.useCallback(() => {
+    if (isLocating) return;
     fetchLocation(true);
-  }, [fetchLocation]);
+  }, [fetchLocation, isLocating]);
 
   React.useEffect(() => {
     if (!navigator.geolocation || !navigator.permissions) return;
@@ -99,7 +121,6 @@ export function MapControls({ userLocation, onUserLocationChange }: MapControlsP
       .query({ name: "geolocation" })
       .then((result) => {
         if (result.state === "granted") {
-          fetchLocation();
           intervalId = setInterval(fetchLocation, 30000);
         }
       })
@@ -179,14 +200,17 @@ export function MapControls({ userLocation, onUserLocationChange }: MapControlsP
           variant="outline"
           size="icon-sm"
           onClick={handleLocate}
-          aria-label="Locate me"
+          disabled={isLocating}
+          aria-label={isLocating ? "Finding your location" : "Locate me"}
           aria-busy={isLocating}
           className="bg-card hover:bg-muted dark:bg-card dark:hover:bg-muted size-9 md:size-8 active:scale-[0.98]"
         >
-          {userLocation || isLocating ? (
-            <LocateFixedIcon className={isLocating ? "motion-safe:animate-pulse" : undefined} />
+          {showLocatingIndicator ? (
+            <Spinner data-icon="inline-start" className="motion-reduce:animate-none" />
+          ) : userLocation ? (
+            <LocateFixedIcon data-icon="inline-start" />
           ) : (
-            <LocateIcon />
+            <LocateIcon data-icon="inline-start" />
           )}
         </Button>
 
