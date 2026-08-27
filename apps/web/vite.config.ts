@@ -25,6 +25,7 @@ const prerenderPages = [
   "/donate",
   "/operators",
   "/privacy-policy",
+  "/sitemap.xml",
   "/terms-of-service",
   "/report/2026-04-28",
   "/report/2026-07-24",
