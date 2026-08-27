@@ -81,6 +81,9 @@ export default defineConfig(({ command, mode }) => {
         pages: prerenderPages,
         prerender: {
           enabled: true,
+          // Emit `/page.html` instead of `/page/index.html` so Cloudflare keeps
+          // the canonical public URL slashless (`/page`, not `/page/`).
+          autoSubfolderIndex: false,
           autoStaticPathsDiscovery: false,
           crawlLinks: false,
           concurrency: 2,
