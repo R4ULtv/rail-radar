@@ -11,11 +11,11 @@
   },
   "dependencies": {
     "@repo/data": "workspace:*",
-    "hono": "^4.13.4"
+    "hono": "^4.13.5"
   },
   "devDependencies": {
     "@repo/typescript-config": "workspace:*",
     "typescript": "^6.0.3",
-    "wrangler": "^4.125.0"
+    "wrangler": "^4.126.0"
   }
 }
