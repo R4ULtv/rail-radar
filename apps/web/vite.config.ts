@@ -3,6 +3,7 @@ import type { Plugin } from "vite";
 import { readFileSync } from "node:fs";
 import { cloudflare } from "@cloudflare/vite-plugin";
 import { tanstackStart } from "@tanstack/react-start/plugin/vite";
+import { COUNTRY_SLUGS } from "../../packages/data/src/countries.ts";
 import { isStationPagePrerendered } from "./src/lib/station-prerender.ts";
 import viteReact from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
@@ -26,10 +27,12 @@ const prerenderPages = [
   "/operators",
   "/privacy-policy",
   "/sitemap.xml",
+  "/stations",
   "/terms-of-service",
   "/report/2026-04-28",
   "/report/2026-07-24",
   ...operatorRecords.map(({ slug }) => `/operators/${slug}`),
+  ...COUNTRY_SLUGS.map((slug) => `/stations/${slug}`),
   ...stationRecords.features
     .filter(({ properties }) => isStationPagePrerendered(properties))
     .map(({ properties }) => `/station/${properties.id}`),
