@@ -52,7 +52,7 @@ const metadata: Metadata = {
     url: "/report/2026-07-24",
     images: [
       {
-        url: "/assets/social/report-report-2026-07-24.webp",
+        url: "/assets/social/report-2026-07-24.webp",
         width: 1200,
         height: 630,
         alt: "Rail Radar Traffic Report for July 2026 showing station visits, unique visitors, countries, and top station data.",
