@@ -44,7 +44,12 @@ const geojsonPlugin: Plugin = {
   load(id) {
     const filename = id.split("?", 1)[0]!;
     if (!filename.endsWith(".geojson")) return null;
-    return `export default ${readFileSync(filename, "utf8")}`;
+    // Emit `JSON.parse("...")` rather than a bare object literal. V8 parses a JSON
+    // string roughly twice as fast as the equivalent JS source, and stations.geojson
+    // is ~6 MB, so this is the single largest contributor to isolate startup CPU.
+    // Minifying first also drops ~2 MB of the source file's indentation.
+    const data = JSON.stringify(JSON.parse(readFileSync(filename, "utf8")));
+    return `export default JSON.parse(${JSON.stringify(data)});`;
   },
 };
 
