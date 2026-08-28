@@ -8,7 +8,7 @@ import {
   getCountryBySlug,
   getCountrySlug,
 } from "@repo/data/countries";
-import { countryStationBounds, stationsByCountry } from "@repo/data/directory";
+import { getCountryStationBounds, getStationsByCountry } from "@repo/data/directory";
 import { stationById, stations } from "@repo/data/stations";
 import type { Station } from "@repo/data";
 import type { Metadata } from "@/lib/metadata";
@@ -182,8 +182,8 @@ export function getCountryStationsPageData(slug: string) {
   const code = getCountryBySlug(slug);
   if (!code) return null;
 
-  const allStations = stationsByCountry.get(code) ?? [];
-  const bounds = countryStationBounds.get(code);
+  const allStations = getStationsByCountry().get(code) ?? [];
+  const bounds = getCountryStationBounds().get(code);
   if (allStations.length === 0 || !bounds) return null;
 
   const countryName = COUNTRY_MAP[code];
@@ -219,7 +219,7 @@ export function getStationsDirectoryPageData() {
     code,
     name: COUNTRY_MAP[code],
     slug: COUNTRY_SLUG[code],
-    count: stationsByCountry.get(code)?.length ?? 0,
+    count: getStationsByCountry().get(code)?.length ?? 0,
   }))
     .filter((country) => country.count > 0)
     .sort((a, b) => a.name.localeCompare(b.name));
