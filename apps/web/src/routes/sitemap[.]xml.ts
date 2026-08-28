@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { createServerOnlyFn } from "@tanstack/react-start";
 import { stations } from "@repo/data/stations";
-import { stationsByCountry } from "@repo/data/directory";
+import { getStationsByCountry } from "@repo/data/directory";
 import { operators } from "@repo/data/operators";
 import { COUNTRY_CODES, COUNTRY_SLUG } from "@repo/data/countries";
 import { env } from "@/lib/env";
@@ -45,7 +45,7 @@ const sitemapXml = createServerOnlyFn(() => {
       changeFrequency: "yearly",
       priority: 0.4,
     },
-    ...COUNTRY_CODES.filter((code) => (stationsByCountry.get(code)?.length ?? 0) > 0).map(
+    ...COUNTRY_CODES.filter((code) => (getStationsByCountry().get(code)?.length ?? 0) > 0).map(
       (code): SitemapEntry => ({
         path: `/stations/${COUNTRY_SLUG[code]}`,
         changeFrequency: "monthly",

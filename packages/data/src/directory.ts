@@ -2,13 +2,25 @@ import { getCountry, type CountryCode } from "./countries";
 import { stations } from "./stations";
 import type { Station } from "./types";
 
-type StationWithGeo = Station & { geo: { lat: number; lng: number } };
+export type StationWithGeo = Station & { geo: { lat: number; lng: number } };
+
+/**
+ * Both structures below are built lazily and memoized rather than at module scope.
+ * Grouping and name-sorting ~19k rail stations costs ~12ms of CPU, which used to be
+ * charged to isolate startup for *every* route that transitively imported this module
+ * — including `/station/[id]`, which never reads either structure. Only the country
+ * directory pages and the sitemap need them.
+ */
+let stationsByCountryCache: Map<CountryCode, StationWithGeo[]> | undefined;
+let countryStationBoundsCache: Map<CountryCode, [number, number, number, number]> | undefined;
 
 /**
  * Rail stations (with geo) grouped by country, sorted by name. These are exactly
  * the stations that have an individual /station/[id] page, used by the directory.
  */
-export const stationsByCountry: Map<CountryCode, StationWithGeo[]> = (() => {
+export function getStationsByCountry(): Map<CountryCode, StationWithGeo[]> {
+  if (stationsByCountryCache) return stationsByCountryCache;
+
   const grouped = new Map<CountryCode, StationWithGeo[]>();
   for (const station of stations) {
     if (station.type !== "rail" || !station.geo) continue;
@@ -19,13 +31,16 @@ export const stationsByCountry: Map<CountryCode, StationWithGeo[]> = (() => {
   for (const list of grouped.values()) {
     list.sort((a, b) => a.name.localeCompare(b.name));
   }
-  return grouped;
-})();
+
+  return (stationsByCountryCache = grouped);
+}
 
 /** [west, south, east, north] bounding box of each country's rail stations */
-export const countryStationBounds: Map<CountryCode, [number, number, number, number]> = (() => {
+export function getCountryStationBounds(): Map<CountryCode, [number, number, number, number]> {
+  if (countryStationBoundsCache) return countryStationBoundsCache;
+
   const bounds = new Map<CountryCode, [number, number, number, number]>();
-  for (const [code, list] of stationsByCountry) {
+  for (const [code, list] of getStationsByCountry()) {
     let west = Infinity;
     let south = Infinity;
     let east = -Infinity;
@@ -38,5 +53,6 @@ export const countryStationBounds: Map<CountryCode, [number, number, number, num
     }
     bounds.set(code, [west, south, east, north]);
   }
-  return bounds;
-})();
+
+  return (countryStationBoundsCache = bounds);
+}
