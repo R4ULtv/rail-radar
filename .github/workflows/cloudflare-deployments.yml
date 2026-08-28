@@ -91,7 +91,7 @@ jobs:
                 ...context.repo,
                 deployment_id,
                 state: 'in_progress',
-                description: 'Building on Cloudflare…',
+                description: `${worker.name} — building on Cloudflare…`,
                 log_url: run.details_url,
                 environment_url: url,
               })
@@ -109,7 +109,7 @@ jobs:
               ...context.repo,
               deployment_id,
               state,
-              description: `Cloudflare build ${run.conclusion}`,
+              description: `${worker.name} — build ${run.conclusion}`,
               log_url: run.details_url,
               auto_inactive: true,
               ...(state === 'success' ? { environment_url: url } : {}),
