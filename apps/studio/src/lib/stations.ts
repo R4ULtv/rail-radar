@@ -273,6 +273,7 @@ export function parseStationFile(
 }
 
 export const STATION_ID_PATTERN = /^[A-Z]{2,3}\d{3,}$/;
+export const IMPORTED_STATION_ID_PATTERN = /^[A-Z]{2,3}\d+$/;
 
 export function isValidStationId(id: string): boolean {
   return STATION_ID_PATTERN.test(id);
@@ -373,7 +374,7 @@ function normalizeImportedStation(input: unknown, sourceLabel: string): Station 
 }
 
 function normalizeImportedId(value: unknown, sourceLabel: string): string {
-  if (typeof value !== "string" || !isValidStationId(value.trim())) {
+  if (typeof value !== "string" || !IMPORTED_STATION_ID_PATTERN.test(value.trim())) {
     throw new Error(`${sourceLabel} has an invalid station ID`);
   }
 
