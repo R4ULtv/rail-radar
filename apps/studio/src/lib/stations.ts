@@ -161,12 +161,44 @@ function parseCsvRow(line: string): string[] {
   return cells.map((cell) => cell.trim());
 }
 
+function splitCsvRecords(csv: string): string[] {
+  const records: string[] = [];
+  let current = "";
+  let inQuotes = false;
+
+  for (let index = 0; index < csv.length; index += 1) {
+    const char = csv[index];
+    const nextChar = csv[index + 1];
+
+    if (char === '"') {
+      if (inQuotes && nextChar === '"') {
+        current += '"';
+        index += 1;
+        continue;
+      }
+
+      current += char;
+      inQuotes = !inQuotes;
+      continue;
+    }
+
+    if ((char === "\n" || char === "\r") && !inQuotes) {
+      if (char === "\r" && nextChar === "\n") index += 1;
+      if (current.trim()) records.push(current);
+      current = "";
+      continue;
+    }
+
+    current += char;
+  }
+
+  if (inQuotes) throw new Error("CSV contains an unterminated quoted field");
+  if (current.trim()) records.push(current);
+  return records;
+}
+
 export function csvToStations(csv: string): Station[] {
-  const lines = csv
-    .replace(/^\uFEFF/, "")
-    .split(/\r?\n/)
-    .map((line) => line.trim())
-    .filter(Boolean);
+  const lines = splitCsvRecords(csv.replace(/^\uFEFF/, ""));
 
   if (lines.length < 2) {
     throw new Error("CSV must include a header row and at least one station");
