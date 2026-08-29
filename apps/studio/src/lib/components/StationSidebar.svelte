@@ -181,10 +181,17 @@
       />
       <Input
         bind:ref={searchInput}
-        class="w-full pl-9"
+        class="w-full pl-9 pr-20"
         placeholder="Search by name or ID..."
         bind:value={search}
       />
+      {#if !search}
+        <kbd
+          class="pointer-events-none absolute right-2 top-1/2 inline-flex h-5 min-w-5 -translate-y-1/2 items-center justify-center gap-1 rounded-sm bg-muted px-1 font-sans text-xs font-medium text-muted-foreground select-none"
+        >
+          ⌘K
+        </kbd>
+      {/if}
       {#if search}
         <Button
           variant="ghost"
