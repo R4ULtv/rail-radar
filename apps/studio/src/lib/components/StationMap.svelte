@@ -93,7 +93,7 @@
     const query = searchValue.trim().toLowerCase();
 
     if (query) conditions.push(["in", query, ["get", "searchName"]]);
-    if (typeFilterValue === "metro" || typeFilterValue === "light") {
+    if (typeFilterValue === "rail" || typeFilterValue === "metro" || typeFilterValue === "light") {
       conditions.push(["==", ["get", "type"], typeFilterValue]);
     }
     if (typeFilterValue === "duplicate") {
