@@ -1,0 +1,14 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "rail-radar-studio",
+  "compatibility_date": "2026-08-29",
+  "assets": {
+    "directory": "build",
+  },
+  "routes": [
+    {
+      "pattern": "studio.railradar24.com",
+      "custom_domain": true,
+    },
+  ],
+}

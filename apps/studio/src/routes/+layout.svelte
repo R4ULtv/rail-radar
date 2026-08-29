@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { env } from "$env/dynamic/public";
   import posthog from "posthog-js";
   import { onMount } from "svelte";
   import "../app.css";
@@ -12,12 +11,11 @@
     "Contributor workspace for curating Rail Radar's train station dataset across Europe.";
   const url = "https://studio.railradar24.com";
   const image = `${url}/og-image.webp`;
+  const posthogKey = import.meta.env.PUBLIC_POSTHOG_KEY;
 
   onMount(() => {
-    document.documentElement.classList.add("dark");
-
-    if (env.PUBLIC_POSTHOG_KEY) {
-      posthog.init(env.PUBLIC_POSTHOG_KEY, {
+    if (posthogKey) {
+      posthog.init(posthogKey, {
         api_host: "https://t.railradar24.com",
         ui_host: "https://eu.posthog.com",
         defaults: "2026-08-29",

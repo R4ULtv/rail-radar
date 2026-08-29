@@ -9,6 +9,7 @@
   import StationSidebar from "$lib/components/StationSidebar.svelte";
   import StatusBar from "$lib/components/StatusBar.svelte";
   import UploadPrompt from "$lib/components/UploadPrompt.svelte";
+  import type { StationFileFormat } from "$lib/stations";
   import type { StationImportanceFilter, StationTypeFilter } from "$lib/station-filters";
   import { contributionStore } from "$lib/stores/contribution";
   import { historyStore, type HistoryOp } from "$lib/stores/history";
@@ -361,9 +362,9 @@
   }
 </script>
 
-{#if stationState.isLoading}
+{#if data.mode === "local" && stationState.isLoading}
   <main class="flex h-screen items-center justify-center">Loading stations...</main>
-{:else if stationState.mode === "local" && stationState.error}
+{:else if data.mode === "local" && stationState.error}
   <main class="flex h-screen items-center justify-center bg-background px-6 text-foreground">
     <div class="max-w-md border border-border bg-card p-6 text-sm shadow-xl">
       <h1 class="text-base font-semibold">Local station file unavailable</h1>
@@ -374,7 +375,7 @@
       </p>
     </div>
   </main>
-{:else if stationState.mode === "browser" && stationState.stations.length === 0}
+{:else if stationState.stations.length === 0}
   <UploadPrompt
     error={stationState.error}
     onImportFile={handleImportFile}
@@ -389,7 +390,7 @@
       {isAddingStation}
       canExport={stationState.stations.length > 0}
       onImportFile={handleImportFile}
-      onExportClick={() => stationStore.exportGeojson()}
+      onExportClick={(format: StationFileFormat) => stationStore.exportFile(format)}
       onAddStationClick={handleAddStationClick}
       onReviewClick={() => (contributionPanelOpen = true)}
       onHomeClick={handleHomeClick}

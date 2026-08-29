@@ -11,7 +11,10 @@
   } from "@lucide/svelte";
   import { Badge } from "$lib/components/ui/badge";
   import { Button } from "$lib/components/ui/button";
+  import * as DropdownMenu from "$lib/components/ui/dropdown-menu";
   import { Separator } from "$lib/components/ui/separator";
+  import StationFileFormatIcon from "$lib/components/StationFileFormatIcon.svelte";
+  import type { StationFileFormat } from "$lib/stations";
 
   let {
     fileName,
@@ -37,7 +40,7 @@
     isAddingStation: boolean;
     canExport: boolean;
     onImportFile: (file: File) => void;
-    onExportClick: () => void;
+    onExportClick: (format: StationFileFormat) => void;
     onAddStationClick: () => void;
     onReviewClick: () => void;
     onHomeClick: () => void;
@@ -152,7 +155,7 @@
     <input
       bind:this={fileInput}
       type="file"
-      accept=".geojson,.json,application/geo+json,application/json"
+      accept=".geojson,.json,.csv,application/geo+json,application/json,text/csv"
       class="hidden"
       onchange={handleFileChange}
     />
@@ -162,9 +165,29 @@
       <span class="hidden sm:inline">Import</span>
     </Button>
 
-    <Button variant="outline" size="sm" disabled={!canExport} onclick={onExportClick}>
-      <DownloadIcon class="size-3.5" />
-      <span class="hidden sm:inline">Export</span>
-    </Button>
+    <DropdownMenu.Root>
+      <DropdownMenu.Trigger>
+        {#snippet child({ props })}
+          <Button variant="outline" size="sm" disabled={!canExport} {...props}>
+            <DownloadIcon class="size-3.5" />
+            <span class="hidden sm:inline">Export</span>
+          </Button>
+        {/snippet}
+      </DropdownMenu.Trigger>
+      <DropdownMenu.Content align="end" class="min-w-40">
+        <DropdownMenu.Item onclick={() => onExportClick("geojson")}>
+          <StationFileFormatIcon format="geojson" class="text-muted-foreground" />
+          <span>GeoJSON</span>
+        </DropdownMenu.Item>
+        <DropdownMenu.Item onclick={() => onExportClick("json")}>
+          <StationFileFormatIcon format="json" class="text-muted-foreground" />
+          <span>JSON</span>
+        </DropdownMenu.Item>
+        <DropdownMenu.Item onclick={() => onExportClick("csv")}>
+          <StationFileFormatIcon format="csv" class="text-muted-foreground" />
+          <span>CSV</span>
+        </DropdownMenu.Item>
+      </DropdownMenu.Content>
+    </DropdownMenu.Root>
   </div>
 </header>

@@ -1,6 +1,6 @@
 import type { Station } from "@repo/data";
 
-export type StationTypeFilter = "all" | "metro" | "light" | "duplicate";
+export type StationTypeFilter = "all" | "rail" | "metro" | "light" | "duplicate";
 export type StationImportanceFilter = "any" | "1" | "2" | "3" | "4";
 
 export function findDuplicateStationIds(stations: Station[]): Set<string> {
@@ -37,8 +37,11 @@ export function stationMatchesFilters(
   duplicateStationIds: Set<string>,
 ): boolean {
   const query = search.trim().toLowerCase();
+  const matchesSearch =
+    station.name.toLowerCase().includes(query) || station.id.toLowerCase().includes(query);
 
-  if (query && !station.name.toLowerCase().includes(query)) return false;
+  if (query && !matchesSearch) return false;
+  if (typeFilter === "rail" && station.type !== "rail") return false;
   if (typeFilter === "metro" && station.type !== "metro") return false;
   if (typeFilter === "light" && station.type !== "light") return false;
   if (typeFilter === "duplicate" && !duplicateStationIds.has(station.id)) return false;

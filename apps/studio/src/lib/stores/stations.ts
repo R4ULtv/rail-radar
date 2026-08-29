@@ -4,8 +4,12 @@ import {
   applyStationUpdates,
   geojsonToStations,
   normalizeNewStation,
+  parseStationFile,
+  stationsToCsv,
   stationsToGeojson,
+  stationsToJson,
   validateGeojson,
+  type StationFileFormat,
   type StationUpdates,
 } from "$lib/stations";
 
@@ -73,6 +77,19 @@ function readJsonError(error: unknown, fallback: string): string {
   return error instanceof Error ? error.message : fallback;
 }
 
+function fileNameForFormat(fileName: string | null, format: StationFileFormat): string {
+  const baseName = (fileName ?? "stations").replace(/\.(geojson|json|csv)$/i, "");
+  if (format === "geojson") return `${baseName}.geojson`;
+  if (format === "json") return `${baseName}.json`;
+  return `${baseName}.csv`;
+}
+
+function mimeTypeForFormat(format: StationFileFormat): string {
+  if (format === "geojson") return "application/geo+json";
+  if (format === "json") return "application/json";
+  return "text/csv;charset=utf-8";
+}
+
 function createStationStore() {
   const store = writable<StationState>(initialState);
 
@@ -127,10 +144,10 @@ function createStationStore() {
 
       try {
         const text = await file.text();
-        const geojson = validateGeojson(JSON.parse(text));
+        const parsed = parseStationFile(text, file.name);
         store.set({
-          stations: geojsonToStations(geojson),
-          sourceGeojson: geojson,
+          stations: parsed.stations,
+          sourceGeojson: parsed.sourceGeojson,
           mode: "browser",
           isLoading: false,
           error: null,
@@ -138,7 +155,7 @@ function createStationStore() {
         });
         return { ok: true };
       } catch (error) {
-        const message = readJsonError(error, "Failed to read GeoJSON file");
+        const message = readJsonError(error, "Failed to read station file");
         store.update((state) => ({
           ...state,
           isLoading: false,
@@ -185,14 +202,20 @@ function createStationStore() {
         return { ok: false, error: message };
       }
     },
-    exportGeojson() {
+    exportFile(format: StationFileFormat) {
       const state = get(store);
-      const geojson = stationsToGeojson(state.stations);
-      const blob = new Blob([JSON.stringify(geojson)], { type: "application/geo+json" });
+      const fileName = fileNameForFormat(state.fileName, format);
+      const content =
+        format === "geojson"
+          ? JSON.stringify(stationsToGeojson(state.stations))
+          : format === "json"
+            ? JSON.stringify(stationsToJson(state.stations), null, 2)
+            : stationsToCsv(state.stations);
+      const blob = new Blob([content], { type: mimeTypeForFormat(format) });
       const url = URL.createObjectURL(blob);
       const link = document.createElement("a");
       link.href = url;
-      link.download = state.fileName ?? "stations.geojson";
+      link.download = fileName;
       link.click();
       URL.revokeObjectURL(url);
     },

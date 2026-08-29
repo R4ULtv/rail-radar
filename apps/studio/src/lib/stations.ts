@@ -7,6 +7,16 @@ export type StationUpdates = {
   importance?: 1 | 2 | 3 | 4;
 };
 
+export type StationFileFormat = "geojson" | "json" | "csv";
+export type StationJsonRecord = {
+  id: string;
+  name: string;
+  type: "rail" | "metro" | "light";
+  importance: 1 | 2 | 3 | 4;
+  lat: number | null;
+  lng: number | null;
+};
+
 export function roundCoordinate(value: number): number {
   return Math.round(Number(value) * 1e6) / 1e6;
 }
@@ -19,6 +29,17 @@ export function featureToStation(feature: StationFeature): Station {
     type: feature.properties.type,
     importance: feature.properties.importance,
     geo: { lat: lat!, lng: lng! },
+  };
+}
+
+export function stationToJsonRecord(station: Station): StationJsonRecord {
+  return {
+    id: station.id,
+    name: station.name,
+    type: station.type,
+    importance: station.importance,
+    lat: station.geo?.lat ?? null,
+    lng: station.geo?.lng ?? null,
   };
 }
 
@@ -53,6 +74,29 @@ export function stationsToGeojson(stations: Station[]): StationFeatureCollection
   };
 }
 
+export function stationsToJson(stations: Station[]): StationJsonRecord[] {
+  return stations.map(stationToJsonRecord);
+}
+
+export function stationsToCsv(stations: Station[]): string {
+  const rows = [
+    ["id", "name", "type", "importance", "lat", "lng"],
+    ...stations.map((station) => {
+      const record = stationToJsonRecord(station);
+      return [
+        record.id,
+        record.name,
+        record.type,
+        String(record.importance),
+        record.lat === null ? "" : String(record.lat),
+        record.lng === null ? "" : String(record.lng),
+      ];
+    }),
+  ];
+
+  return rows.map((row) => row.map((value) => escapeCsvField(value)).join(",")).join("\n");
+}
+
 export function validateGeojson(value: unknown): StationFeatureCollection {
   if (!value || typeof value !== "object") {
     throw new Error("GeoJSON must be an object");
@@ -78,7 +122,190 @@ export function validateGeojson(value: unknown): StationFeatureCollection {
   return geojson;
 }
 
+function escapeCsvField(value: string): string {
+  if (!/[",\n\r]/.test(value)) return value;
+  return `"${value.replaceAll('"', '""')}"`;
+}
+
+function parseCsvRow(line: string): string[] {
+  const cells: string[] = [];
+  let current = "";
+  let inQuotes = false;
+
+  for (let index = 0; index < line.length; index += 1) {
+    const char = line[index];
+
+    if (char === '"') {
+      const nextChar = line[index + 1];
+      if (inQuotes && nextChar === '"') {
+        current += '"';
+        index += 1;
+        continue;
+      }
+
+      inQuotes = !inQuotes;
+      continue;
+    }
+
+    if (char === "," && !inQuotes) {
+      cells.push(current);
+      current = "";
+      continue;
+    }
+
+    current += char;
+  }
+
+  if (inQuotes) throw new Error("CSV contains an unterminated quoted field");
+  cells.push(current);
+  return cells.map((cell) => cell.trim());
+}
+
+function splitCsvRecords(csv: string): string[] {
+  const records: string[] = [];
+  let current = "";
+  let inQuotes = false;
+
+  for (let index = 0; index < csv.length; index += 1) {
+    const char = csv[index];
+    const nextChar = csv[index + 1];
+
+    if (char === '"') {
+      if (inQuotes && nextChar === '"') {
+        current += '"';
+        index += 1;
+        continue;
+      }
+
+      current += char;
+      inQuotes = !inQuotes;
+      continue;
+    }
+
+    if ((char === "\n" || char === "\r") && !inQuotes) {
+      if (char === "\r" && nextChar === "\n") index += 1;
+      if (current.trim()) records.push(current);
+      current = "";
+      continue;
+    }
+
+    current += char;
+  }
+
+  if (inQuotes) throw new Error("CSV contains an unterminated quoted field");
+  if (current.trim()) records.push(current);
+  return records;
+}
+
+export function csvToStations(csv: string): Station[] {
+  const lines = splitCsvRecords(csv.replace(/^\uFEFF/, ""));
+
+  if (lines.length < 2) {
+    throw new Error("CSV must include a header row and at least one station");
+  }
+
+  const headers = parseCsvRow(lines[0]).map((header) => header.toLowerCase());
+  const headerIndex = new Map(headers.map((header, index) => [header, index]));
+
+  const requiredHeaders = ["id", "name", "type", "importance"];
+  for (const header of requiredHeaders) {
+    if (!headerIndex.has(header)) {
+      throw new Error(`CSV is missing required "${header}" column`);
+    }
+  }
+
+  const stations = lines.slice(1).map((line, rowIndex) => {
+    const cells = parseCsvRow(line);
+    const rowNumber = rowIndex + 2;
+
+    const getCell = (header: string): string | undefined => {
+      const index = headerIndex.get(header);
+      return index === undefined ? undefined : cells[index];
+    };
+
+    return normalizeImportedStation(
+      {
+        id: getCell("id"),
+        name: getCell("name"),
+        type: getCell("type"),
+        importance: getCell("importance"),
+        lat: getCell("lat") ?? getCell("latitude"),
+        lng: getCell("lng") ?? getCell("lon") ?? getCell("longitude"),
+      },
+      `CSV row ${rowNumber}`,
+    );
+  });
+
+  return sortStationsByName(stations);
+}
+
+export function jsonToStations(value: unknown): Station[] {
+  if (!Array.isArray(value)) {
+    throw new Error("JSON station import must be an array");
+  }
+
+  const stations = value.map((item, index) =>
+    normalizeImportedStation(item, `JSON item ${index + 1}`),
+  );
+
+  return sortStationsByName(stations);
+}
+
+export function parseStationFile(
+  text: string,
+  fileName?: string,
+): {
+  format: StationFileFormat;
+  stations: Station[];
+  sourceGeojson: StationFeatureCollection | null;
+} {
+  const normalizedFileName = fileName?.toLowerCase() ?? "";
+
+  if (normalizedFileName.endsWith(".csv")) {
+    return {
+      format: "csv",
+      stations: csvToStations(text),
+      sourceGeojson: null,
+    };
+  }
+
+  let parsed: unknown;
+  try {
+    parsed = JSON.parse(text);
+  } catch {
+    if (normalizedFileName.endsWith(".csv")) {
+      return {
+        format: "csv",
+        stations: csvToStations(text),
+        sourceGeojson: null,
+      };
+    }
+
+    throw new Error("Failed to parse file as JSON or CSV");
+  }
+
+  if (
+    parsed &&
+    typeof parsed === "object" &&
+    (parsed as { type?: unknown }).type === "FeatureCollection"
+  ) {
+    const geojson = validateGeojson(parsed);
+    return {
+      format: "geojson",
+      stations: geojsonToStations(geojson),
+      sourceGeojson: geojson,
+    };
+  }
+
+  return {
+    format: "json",
+    stations: jsonToStations(parsed),
+    sourceGeojson: null,
+  };
+}
+
 export const STATION_ID_PATTERN = /^[A-Z]{2,3}\d{3,}$/;
+export const IMPORTED_STATION_ID_PATTERN = /^[A-Z]{2,3}\d+$/;
 
 export function isValidStationId(id: string): boolean {
   return STATION_ID_PATTERN.test(id);
@@ -126,6 +353,107 @@ export function normalizeNewStation(input: {
       lng: roundCoordinate(coordinates.lng),
     },
   };
+}
+
+function normalizeImportedStation(input: unknown, sourceLabel: string): Station {
+  if (!input || typeof input !== "object") {
+    throw new Error(`${sourceLabel} must be an object`);
+  }
+
+  const record = input as {
+    id?: unknown;
+    name?: unknown;
+    type?: unknown;
+    importance?: unknown;
+    lat?: unknown;
+    lng?: unknown;
+    lon?: unknown;
+    latitude?: unknown;
+    longitude?: unknown;
+    geo?: { lat?: unknown; lng?: unknown; lon?: unknown; latitude?: unknown; longitude?: unknown };
+  };
+
+  const id = normalizeImportedId(record.id, sourceLabel);
+  const name = normalizeImportedName(record.name, sourceLabel);
+  const type = normalizeImportedType(record.type, sourceLabel);
+  const importance = normalizeImportedImportance(record.importance, sourceLabel);
+  const lat = readCoordinateValue(
+    record.lat ?? record.latitude ?? record.geo?.lat ?? record.geo?.latitude,
+  );
+  const lng = readCoordinateValue(
+    record.lng ??
+      record.lon ??
+      record.longitude ??
+      record.geo?.lng ??
+      record.geo?.lon ??
+      record.geo?.longitude,
+  );
+
+  if ((lat === null) !== (lng === null)) {
+    throw new Error(`${sourceLabel} must include both lat and lng, or neither`);
+  }
+
+  return {
+    id,
+    name,
+    type,
+    importance,
+    geo:
+      lat === null || lng === null
+        ? undefined
+        : { lat: roundCoordinate(lat), lng: roundCoordinate(lng) },
+  };
+}
+
+function normalizeImportedId(value: unknown, sourceLabel: string): string {
+  if (typeof value !== "string" || !IMPORTED_STATION_ID_PATTERN.test(value.trim())) {
+    throw new Error(`${sourceLabel} has an invalid station ID`);
+  }
+
+  return value.trim();
+}
+
+function normalizeImportedName(value: unknown, sourceLabel: string): string {
+  if (typeof value !== "string" || value.trim().length === 0) {
+    throw new Error(`${sourceLabel} is missing a station name`);
+  }
+
+  return value.trim();
+}
+
+function normalizeImportedType(value: unknown, sourceLabel: string): Station["type"] {
+  if (value === "rail" || value === "metro" || value === "light") return value;
+  throw new Error(`${sourceLabel} has an invalid station type`);
+}
+
+function normalizeImportedImportance(value: unknown, sourceLabel: string): 1 | 2 | 3 | 4 {
+  const parsed =
+    typeof value === "string" && value.trim() !== ""
+      ? Number(value)
+      : typeof value === "number"
+        ? value
+        : NaN;
+
+  if (parsed === 1 || parsed === 2 || parsed === 3 || parsed === 4) {
+    return parsed;
+  }
+
+  throw new Error(`${sourceLabel} has an invalid importance value`);
+}
+
+function readCoordinateValue(value: unknown): number | null {
+  if (value === undefined || value === null || value === "") return null;
+  if (typeof value === "number" && Number.isFinite(value)) return value;
+  if (typeof value === "string" && value.trim() !== "") {
+    const parsed = Number(value);
+    if (Number.isFinite(parsed)) return parsed;
+  }
+
+  throw new Error("Invalid coordinate value");
+}
+
+function sortStationsByName(stations: Station[]): Station[] {
+  return [...stations].sort((a, b) => a.name.localeCompare(b.name));
 }
 
 export function applyStationUpdates(station: Station, updates: StationUpdates): Station {
