@@ -1,19 +1,9 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "rail-radar-studio",
-  "main": ".svelte-kit/cloudflare/_worker.js",
   "compatibility_date": "2026-08-29",
   "assets": {
-    "directory": ".svelte-kit/cloudflare",
-    "binding": "ASSETS",
-  },
-  "observability": {
-    "enabled": true,
-    "head_sampling_rate": 1,
-    "traces": {
-      "enabled": true,
-      "head_sampling_rate": 0.2,
-    },
+    "directory": "build",
   },
   "routes": [
     {

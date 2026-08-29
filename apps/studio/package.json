@@ -27,7 +27,7 @@
     "@lucide/svelte": "^1.35.0",
     "@repo/data": "workspace:*",
     "@repo/typescript-config": "workspace:*",
-    "@sveltejs/adapter-cloudflare": "^7.2.9",
+    "@sveltejs/adapter-static": "^3.0.10",
     "@sveltejs/vite-plugin-svelte": "^7.3.0",
     "@tailwindcss/vite": "^4.3.3",
     "@types/node": "^22.20.1",
