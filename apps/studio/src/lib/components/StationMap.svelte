@@ -67,7 +67,7 @@
             id: station.id,
             type: station.type,
             importance: station.importance,
-            searchName: station.name.toLowerCase(),
+            searchText: `${station.id} ${station.name}`.toLowerCase(),
             duplicate: duplicateStationIds.has(station.id),
           },
           geometry: {
@@ -92,7 +92,7 @@
     const conditions: ExpressionSpecification[] = [];
     const query = searchValue.trim().toLowerCase();
 
-    if (query) conditions.push(["in", query, ["get", "searchName"]]);
+    if (query) conditions.push(["in", query, ["get", "searchText"]]);
     if (typeFilterValue === "rail" || typeFilterValue === "metro" || typeFilterValue === "light") {
       conditions.push(["==", ["get", "type"], typeFilterValue]);
     }

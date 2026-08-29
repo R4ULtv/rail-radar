@@ -182,7 +182,7 @@
       <Input
         bind:ref={searchInput}
         class="w-full pl-9"
-        placeholder="Search stations..."
+        placeholder="Search by name or ID..."
         bind:value={search}
       />
       {#if search}
