@@ -2,6 +2,7 @@
   import { CloudDownloadIcon } from "@lucide/svelte";
   import { Button } from "$lib/components/ui/button";
   import * as Card from "$lib/components/ui/card";
+  import StationFileFormatIcon from "$lib/components/StationFileFormatIcon.svelte";
   import { remoteStationSources, type RemoteStationSourceId } from "$lib/stores/stations";
 
   let {
@@ -26,11 +27,11 @@
   <Card.Root class="w-full max-w-xl shadow-2xl">
     <Card.Header>
       <p class="text-sm font-medium text-accent">Rail Radar Studio Beta</p>
-      <Card.Title class="text-2xl">Open a station GeoJSON file</Card.Title>
+      <Card.Title class="text-2xl">Open a station file</Card.Title>
       <Card.Description class="leading-6">
         The local project version loads the repository data automatically. In deployed browser mode,
-        start from the latest repository data or upload a station `.geojson`, edit it here, then
-        export the updated file.
+        start from the latest repository data or upload a station file in `.geojson`, `.json`, or
+        `.csv`, edit it here, then export the updated file.
       </Card.Description>
     </Card.Header>
 
@@ -67,14 +68,34 @@
       <label
         class="flex cursor-pointer flex-col items-center justify-center rounded-md border border-dashed border-border bg-muted/30 px-4 py-10 text-center transition hover:border-primary"
       >
-        <span class="text-base font-medium">Choose `.geojson` file</span>
-        <span class="mt-1 text-sm text-muted-foreground"
-          >FeatureCollection with station point features</span
-        >
+        <span class="text-base font-medium">Choose `.geojson`, `.json`, or `.csv`</span>
+        <span class="mt-1 text-sm text-muted-foreground">
+          GeoJSON FeatureCollection, JSON array, or CSV table
+        </span>
+        <div class="mt-4 flex flex-wrap items-center justify-center gap-2">
+          <span
+            class="inline-flex items-center gap-1.5 border border-border bg-background px-2 py-1 text-xs text-muted-foreground"
+          >
+            <StationFileFormatIcon format="geojson" />
+            GeoJSON
+          </span>
+          <span
+            class="inline-flex items-center gap-1.5 border border-border bg-background px-2 py-1 text-xs text-muted-foreground"
+          >
+            <StationFileFormatIcon format="json" />
+            JSON
+          </span>
+          <span
+            class="inline-flex items-center gap-1.5 border border-border bg-background px-2 py-1 text-xs text-muted-foreground"
+          >
+            <StationFileFormatIcon format="csv" />
+            CSV
+          </span>
+        </div>
         <input
           class="sr-only"
           type="file"
-          accept=".geojson,application/geo+json,application/json"
+          accept=".geojson,.json,.csv,application/geo+json,application/json,text/csv"
           onchange={handleFile}
         />
       </label>

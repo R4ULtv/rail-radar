@@ -182,7 +182,7 @@
       return;
     }
 
-    const hoveredFeatureId = map.queryRenderedFeatures(point, {
+    const hoveredFeatureId = map.queryRenderedFeatures([point.x, point.y], {
       layers: [LAYER_ID],
     })[0]?.properties?.id;
 
