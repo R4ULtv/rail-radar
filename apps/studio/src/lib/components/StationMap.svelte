@@ -10,6 +10,7 @@
   import { STATION_TYPE_COLOR } from "$lib/station-colors";
   import {
     findDuplicateStationIds,
+    stationMatchesFilters,
     type StationImportanceFilter,
     type StationTypeFilter,
   } from "$lib/station-filters";
@@ -53,10 +54,24 @@
     selectedStationId ? stations.find((station) => station.id === selectedStationId) : null,
   );
   const isPlacingStation = $derived(Boolean(selectedStation && !selectedStation.geo));
+  const duplicateStationIds = $derived(findDuplicateStationIds(stations));
+  const visibleStationIds = $derived(
+    new Set(
+      stations
+        .filter((station) =>
+          stationMatchesFilters(
+            station,
+            search,
+            typeFilter,
+            importanceFilter,
+            duplicateStationIds,
+          ),
+        )
+        .map((station) => station.id),
+    ),
+  );
 
   function makeGeojson() {
-    const duplicateStationIds = findDuplicateStationIds(stations);
-
     return {
       type: "FeatureCollection" as const,
       features: stations
@@ -150,6 +165,30 @@
     );
   }
 
+  function setCanvasCursor(pointerActive = false) {
+    if (!map) return;
+    map.getCanvas().style.cursor =
+      isAddingStation || isPlacingStation ? "crosshair" : pointerActive ? "pointer" : "";
+  }
+
+  function isVisibleFeatureId(id: unknown): id is string {
+    return typeof id === "string" && visibleStationIds.has(id);
+  }
+
+  function syncHoverCursor(point?: { x: number; y: number }) {
+    if (!map) return;
+    if (isAddingStation || isPlacingStation || !point) {
+      setCanvasCursor(false);
+      return;
+    }
+
+    const hoveredFeatureId = map.queryRenderedFeatures(point, {
+      layers: [LAYER_ID],
+    })[0]?.properties?.id;
+
+    setCanvasCursor(isVisibleFeatureId(hoveredFeatureId));
+  }
+
   function syncMarker() {
     if (!map || !loaded) return;
     marker?.remove();
@@ -198,7 +237,7 @@
   });
 
   $effect(() => {
-    if (map) map.getCanvas().style.cursor = isAddingStation || isPlacingStation ? "crosshair" : "";
+    setCanvasCursor(false);
   });
 
   onMount(() => {
@@ -245,13 +284,11 @@
         },
       });
 
-      map.on("mouseenter", LAYER_ID, () => {
-        if (map && !isAddingStation && !isPlacingStation) map.getCanvas().style.cursor = "pointer";
+      map.on("mousemove", (event) => {
+        syncHoverCursor(event.point);
       });
-      map.on("mouseleave", LAYER_ID, () => {
-        if (map) {
-          map.getCanvas().style.cursor = isAddingStation || isPlacingStation ? "crosshair" : "";
-        }
+      map.on("mouseleave", () => {
+        setCanvasCursor(false);
       });
 
       loaded = true;
@@ -265,8 +302,8 @@
         layers: [LAYER_ID],
       });
       const id = features[0]?.properties?.id;
-      if (id && !isAddingStation && !isPlacingStation) {
-        onSelectStation(String(id));
+      if (isVisibleFeatureId(id) && !isAddingStation && !isPlacingStation) {
+        onSelectStation(id);
         return;
       }
 
