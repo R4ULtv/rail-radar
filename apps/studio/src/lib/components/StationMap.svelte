@@ -59,13 +59,7 @@
     new Set(
       stations
         .filter((station) =>
-          stationMatchesFilters(
-            station,
-            search,
-            typeFilter,
-            importanceFilter,
-            duplicateStationIds,
-          ),
+          stationMatchesFilters(station, search, typeFilter, importanceFilter, duplicateStationIds),
         )
         .map((station) => station.id),
     ),

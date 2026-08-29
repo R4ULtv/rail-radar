@@ -94,9 +94,7 @@ export function stationsToCsv(stations: Station[]): string {
     }),
   ];
 
-  return rows
-    .map((row) => row.map((value) => escapeCsvField(value)).join(","))
-    .join("\n");
+  return rows.map((row) => row.map((value) => escapeCsvField(value)).join(",")).join("\n");
 }
 
 export function validateGeojson(value: unknown): StationFeatureCollection {
@@ -126,7 +124,7 @@ export function validateGeojson(value: unknown): StationFeatureCollection {
 
 function escapeCsvField(value: string): string {
   if (!/[",\n\r]/.test(value)) return value;
-  return `"${value.replaceAll("\"", "\"\"")}"`;
+  return `"${value.replaceAll('"', '""')}"`;
 }
 
 function parseCsvRow(line: string): string[] {
@@ -137,10 +135,10 @@ function parseCsvRow(line: string): string[] {
   for (let index = 0; index < line.length; index += 1) {
     const char = line[index];
 
-    if (char === "\"") {
+    if (char === '"') {
       const nextChar = line[index + 1];
-      if (inQuotes && nextChar === "\"") {
-        current += "\"";
+      if (inQuotes && nextChar === '"') {
+        current += '"';
         index += 1;
         continue;
       }
@@ -224,7 +222,11 @@ export function jsonToStations(value: unknown): Station[] {
 export function parseStationFile(
   text: string,
   fileName?: string,
-): { format: StationFileFormat; stations: Station[]; sourceGeojson: StationFeatureCollection | null } {
+): {
+  format: StationFileFormat;
+  stations: Station[];
+  sourceGeojson: StationFeatureCollection | null;
+} {
   const normalizedFileName = fileName?.toLowerCase() ?? "";
 
   if (normalizedFileName.endsWith(".csv")) {
@@ -363,7 +365,10 @@ function normalizeImportedStation(input: unknown, sourceLabel: string): Station 
     name,
     type,
     importance,
-    geo: lat === null || lng === null ? undefined : { lat: roundCoordinate(lat), lng: roundCoordinate(lng) },
+    geo:
+      lat === null || lng === null
+        ? undefined
+        : { lat: roundCoordinate(lat), lng: roundCoordinate(lng) },
   };
 }
 
@@ -390,7 +395,11 @@ function normalizeImportedType(value: unknown, sourceLabel: string): Station["ty
 
 function normalizeImportedImportance(value: unknown, sourceLabel: string): 1 | 2 | 3 | 4 {
   const parsed =
-    typeof value === "string" && value.trim() !== "" ? Number(value) : typeof value === "number" ? value : NaN;
+    typeof value === "string" && value.trim() !== ""
+      ? Number(value)
+      : typeof value === "number"
+        ? value
+        : NaN;
 
   if (parsed === 1 || parsed === 2 || parsed === 3 || parsed === 4) {
     return parsed;
