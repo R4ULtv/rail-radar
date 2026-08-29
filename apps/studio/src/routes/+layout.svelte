@@ -14,8 +14,6 @@
   const posthogKey = import.meta.env.PUBLIC_POSTHOG_KEY;
 
   onMount(() => {
-    document.documentElement.classList.add("dark");
-
     if (posthogKey) {
       posthog.init(posthogKey, {
         api_host: "https://t.railradar24.com",
