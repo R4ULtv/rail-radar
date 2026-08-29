@@ -1,3 +1,4 @@
+import { env } from "cloudflare:workers";
 import { createFileRoute } from "@tanstack/react-router";
 import { createServerOnlyFn } from "@tanstack/react-start";
 import { ImageResponse } from "takumi-js/response";
@@ -61,7 +62,16 @@ function getNearbyStations(stationId: string) {
   return nearby.sort((a, b) => a.distance - b.distance).slice(0, 4);
 }
 
-const getOgImage = createServerOnlyFn((request: Request) => {
+const getOgImage = createServerOnlyFn(async (request: Request) => {
+  const ip = request.headers.get("cf-connecting-ip") ?? "unknown";
+  const { success } = await env.RATE_LIMITER.limit({ key: ip });
+  if (!success) {
+    return new Response("Too many requests. Please wait a moment and try again.", {
+      status: 429,
+      headers: { "Cache-Control": "no-store", "Retry-After": "10" },
+    });
+  }
+
   const id = new URL(request.url).searchParams.get("id");
 
   if (!id) {
