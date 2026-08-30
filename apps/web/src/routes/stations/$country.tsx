@@ -6,7 +6,6 @@ import { ArrowLeftIcon, ArrowRightIcon, ExpandIcon, TrainFrontIcon } from "lucid
 import baseUrl from "@/lib/base-url";
 import { staticAssetUrl } from "@/lib/static-assets";
 import { env } from "@/lib/env";
-import { getStationPageLinkOptions } from "@/lib/station-navigation";
 
 export const Route = createFileRoute("/stations/$country")({
   loader: async ({ params }) => {
@@ -133,7 +132,6 @@ function CountryStationsPage({
                 key={station.id}
                 to="/station/$id"
                 params={{ id: station.id }}
-                {...getStationPageLinkOptions(station)}
                 className="group"
               >
                 <Card
@@ -190,7 +188,6 @@ function CountryStationsPage({
                     <Link
                       to="/station/$id"
                       params={{ id: station.id }}
-                      {...getStationPageLinkOptions(station)}
                       className="block truncate py-0.5 text-sm text-muted-foreground transition-colors hover:text-foreground"
                     >
                       {station.name}

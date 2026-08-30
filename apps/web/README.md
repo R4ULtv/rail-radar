@@ -72,8 +72,9 @@ Only browser-native files remain at the public root: the favicon and app icons, 
 robots file.
 
 Curated station photos live in the EU R2 bucket named `rail-radar`. The web Worker validates each
-station manifest, rate-limits image delivery, streams the image object without buffering it, and
-caches responses at the edge. Generated images and R2-backed files use the `/media/*` namespace.
+station manifest, rate-limits generated and R2-backed image delivery, streams image objects without
+buffering them, and caches responses at the edge. Generated images and R2-backed files use the
+`/media/*` namespace.
 The same-origin endpoints are:
 
 ```text
@@ -149,6 +150,6 @@ pnpm --filter=web deploy
 ```
 
 The Cloudflare Vite plugin builds the TanStack Start SSR handler and deploys the client output as
-Worker static assets. `wrangler.jsonc` also binds the R2 bucket and station-photo rate limiter.
+Worker static assets. `wrangler.jsonc` also binds the R2 bucket and media rate limiter.
 Regenerate `worker-configuration.d.ts` with `pnpm --filter=web cf-typegen` whenever those bindings
 change.

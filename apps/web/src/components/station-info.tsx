@@ -40,7 +40,6 @@ import { useAnimatedHeight } from "@/hooks/use-animated-height";
 import { useIsMobile } from "@repo/ui/hooks/use-mobile";
 import { useSelectedStation } from "@/hooks/use-selected-station";
 import { useTrainData } from "@/hooks/use-train-data";
-import { getStationPageLinkOptions } from "@/lib/station-navigation";
 
 import { cn } from "@repo/ui/lib/utils";
 import { Button } from "@repo/ui/components/button";
@@ -177,10 +176,6 @@ export default function StationInfo() {
 
   // Derive open state from selectedStation
   const isOpen = !!selectedStation;
-  const stationPageLinkOptions = selectedStation
-    ? getStationPageLinkOptions(selectedStation)
-    : { reloadDocument: false, preload: false as const };
-
   useEffect(() => {
     if (!isOpen) return;
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -236,11 +231,7 @@ export default function StationInfo() {
                         size="icon"
                         nativeButton={false}
                         render={
-                          <Link
-                            to="/station/$id"
-                            params={{ id: selectedStation?.id ?? "" }}
-                            {...stationPageLinkOptions}
-                          >
+                          <Link to="/station/$id" params={{ id: selectedStation?.id ?? "" }}>
                             <ArrowRightIcon className="size-4" />
                           </Link>
                         }
@@ -251,7 +242,6 @@ export default function StationInfo() {
                       <Link
                         to="/station/$id"
                         params={{ id: selectedStation?.id ?? "" }}
-                        {...stationPageLinkOptions}
                         className="truncate hover:underline block max-w-68"
                       >
                         {selectedStation?.name}
@@ -314,7 +304,6 @@ export default function StationInfo() {
             <Link
               to="/station/$id"
               params={{ id: selectedStation?.id ?? "" }}
-              {...stationPageLinkOptions}
               className="inline-flex items-center gap-1"
             >
               {selectedStation?.name}
@@ -344,11 +333,7 @@ export default function StationInfo() {
               size="icon"
               nativeButton={false}
               render={
-                <Link
-                  to="/station/$id"
-                  params={{ id: selectedStation?.id ?? "" }}
-                  {...stationPageLinkOptions}
-                >
+                <Link to="/station/$id" params={{ id: selectedStation?.id ?? "" }}>
                   <ArrowRightIcon className="size-4" />
                 </Link>
               }
