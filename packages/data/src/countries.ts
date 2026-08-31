@@ -6,6 +6,7 @@ export const COUNTRY_MAP = {
   nl: "Netherlands",
   uk: "United Kingdom",
   ie: "Ireland",
+  lu: "Luxembourg",
   no: "Norway",
   se: "Sweden",
   dk: "Denmark",

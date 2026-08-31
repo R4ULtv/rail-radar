@@ -13,7 +13,7 @@ TanStack Start frontend for real-time train tracking across Europe, deployed as 
 
 ## Features
 
-- Interactive full-screen map with 21,000+ station markers
+- Interactive full-screen map with 22,000+ station markers
 - Real-time arrivals and departures with background polling
 - Station search with keyboard shortcuts and shareable URL state
 - Operator and station directories, station details, static maps, and photo galleries

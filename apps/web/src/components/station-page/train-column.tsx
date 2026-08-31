@@ -24,6 +24,8 @@ interface TrainColumnProps {
   lastUpdated: Date | null;
   showTypeToggle?: boolean;
   onTypeChange?: (type: "arrivals" | "departures") => void;
+  arrivalsDisabled?: boolean;
+  unavailableMessage?: string;
 }
 
 export function TrainColumn({
@@ -36,6 +38,8 @@ export function TrainColumn({
   lastUpdated,
   showTypeToggle,
   onTypeChange,
+  arrivalsDisabled = false,
+  unavailableMessage,
 }: TrainColumnProps) {
   const Icon = type === "departures" ? ArrowUpRightIcon : ArrowDownLeftIcon;
 
@@ -61,7 +65,12 @@ export function TrainColumn({
                 <ArrowUpRightIcon className="size-3.5" />
                 <span className={type === "departures" ? "" : "hidden"}>Departures</span>
               </ToggleGroupItem>
-              <ToggleGroupItem value="arrivals" className="gap-1 px-2 py-1 h-7 text-xs">
+              <ToggleGroupItem
+                value="arrivals"
+                disabled={arrivalsDisabled}
+                aria-label={arrivalsDisabled ? "Arrivals (coming soon)" : "Arrivals"}
+                className="gap-1 px-2 py-1 h-7 text-xs"
+              >
                 <ArrowDownLeftIcon className="size-3.5" />
                 <span className={type === "arrivals" ? "" : "hidden"}>Arrivals</span>
               </ToggleGroupItem>
@@ -77,7 +86,11 @@ export function TrainColumn({
         </CardDescription>
       </CardHeader>
       <CardContent className="flex-1 px-0 overflow-auto">
-        {isLoading ? (
+        {unavailableMessage ? (
+          <div className="px-4 py-8 text-center text-sm text-muted-foreground">
+            {unavailableMessage}
+          </div>
+        ) : isLoading ? (
           <div>
             {Array.from({ length: 8 }).map((_, i) => (
               <TrainRowSkeleton key={i} />

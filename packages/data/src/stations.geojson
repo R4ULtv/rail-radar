@@ -204455,6 +204455,1176 @@
     {
       "type": "Feature",
       "properties": {
+        "id": "LU110101016",
+        "name": "Clervaux, Gare",
+        "type": "rail",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [6.024627, 50.061583]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "LU110109004",
+        "name": "Drauffelt, Gare",
+        "type": "rail",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [6.007188, 50.016901]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "LU110606008",
+        "name": "Troisvierges, Gare",
+        "type": "rail",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [5.991007, 50.119334]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "LU120603003",
+        "name": "Kautenbach, Gare",
+        "type": "rail",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [6.02209, 49.948625]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "LU120604001",
+        "name": "Merkholtz, Gare",
+        "type": "rail",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [5.981563, 49.956834]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "LU120606005",
+        "name": "Wilwerwiltz, Gare",
+        "type": "rail",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [6.000541, 49.988454]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "LU120903020",
+        "name": "Wiltz, Gare",
+        "type": "rail",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [5.927075, 49.966369]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "LU120913002",
+        "name": "Paradiso, Gare",
+        "type": "rail",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [5.953148, 49.965393]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "LU140304002",
+        "name": "Goebelsmühle, Gare",
+        "type": "rail",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [6.053422, 49.921142]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "LU140307001",
+        "name": "Michelau, Gare",
+        "type": "rail",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [6.092099, 49.896651]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "LU140401018",
+        "name": "Diekirch, Gare",
+        "type": "rail",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [6.15407, 49.864733]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "LU140701022",
+        "name": "Ettelbruck, Gare",
+        "type": "rail",
+        "importance": 2
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [6.107725, 49.847968]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "LU141301003",
+        "name": "Schieren, Gare",
+        "type": "rail",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [6.095222, 49.829798]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "LU141302004",
+        "name": "Colmar-Berg, Gare",
+        "type": "rail",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [6.101071, 49.815019]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "LU160702002",
+        "name": "Lintgen, Gare",
+        "type": "rail",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [6.123084, 49.720684]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "LU160807006",
+        "name": "Lorentzweiler, Gare",
+        "type": "rail",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [6.140417, 49.698461]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "LU160904011",
+        "name": "Mersch, Gare",
+        "type": "rail",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [6.110298, 49.751844]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "LU161001008",
+        "name": "Cruchten, Gare",
+        "type": "rail",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [6.120104, 49.796287]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "LU180103002",
+        "name": "Betzdorf, Gare",
+        "type": "rail",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [6.348666, 49.688801]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "LU180106009",
+        "name": "Roodt-sur-Syre, Gare",
+        "type": "rail",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [6.302918, 49.66654]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "LU180210005",
+        "name": "Wecker-Gare, Gare",
+        "type": "rail",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [6.386509, 49.69989]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "LU180603002",
+        "name": "Manternach, Gare",
+        "type": "rail",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [6.42326, 49.706507]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "LU180701004",
+        "name": "Mertert, Gare",
+        "type": "rail",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [6.478889, 49.703198]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "LU180703009",
+        "name": "Wasserbillig, Gare",
+        "type": "rail",
+        "importance": 3
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [6.499305, 49.712952]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "LU190101027",
+        "name": "Bascharage/Sanem, Gare",
+        "type": "rail",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [5.924589, 49.558417]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "LU190301004",
+        "name": "Dippach-Reckange, Gare",
+        "type": "rail",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [5.995253, 49.572519]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "LU190303002",
+        "name": "Schouweiler, Gare",
+        "type": "rail",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [5.960135, 49.573517]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "LU190901001",
+        "name": "Capellen, Gare",
+        "type": "rail",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [5.982381, 49.638498]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "LU190903008",
+        "name": "Mamer, Gare",
+        "type": "rail",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [6.020215, 49.625768]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "LU190903011",
+        "name": "Mamer (Lycée), Gare",
+        "type": "rail",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [6.029763, 49.618394]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "LU191103004",
+        "name": "Kleinbettingen, Gare",
+        "type": "rail",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [5.917135, 49.643957]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "LU200101024",
+        "name": "Bertrange, Gare",
+        "type": "rail",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [6.059369, 49.613095]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "LU200204007",
+        "name": "Oetrange, Gare",
+        "type": "rail",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [6.258335, 49.60259]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "LU200304014",
+        "name": "Howald, Gare",
+        "type": "rail",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [6.132455, 49.581086]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "LU200405060",
+        "name": "Luxembourg, Gare Centrale",
+        "type": "rail",
+        "importance": 1
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [6.13424, 49.599969]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "LU200406025",
+        "name": "Cents-Hamm, Gare",
+        "type": "rail",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [6.165978, 49.615019]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "LU200409015",
+        "name": "Dommeldange, Gare",
+        "type": "rail",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [6.136892, 49.633834]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "LU200415014",
+        "name": "Hollerich, Gare",
+        "type": "rail",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [6.120862, 49.59539]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "LU200417051",
+        "name": "Pfaffenthal-Kirchberg, Gare",
+        "type": "rail",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [6.132919, 49.618936]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "LU200601016",
+        "name": "Sandweiler-Contern, Gare",
+        "type": "rail",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [6.211775, 49.599093]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "LU200701001",
+        "name": "Munsbach, Gare",
+        "type": "rail",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [6.268481, 49.630556]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "LU200802003",
+        "name": "Heisdorf, Gare",
+        "type": "rail",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [6.139417, 49.6751]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "LU201004001",
+        "name": "Walferdange, Gare",
+        "type": "rail",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [6.136207, 49.66203]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "LU220102018",
+        "name": "Bettembourg, Gare",
+        "type": "rail",
+        "importance": 2
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [6.101676, 49.516515]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "LU220105006",
+        "name": "Noertzange, Gare",
+        "type": "rail",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [6.050881, 49.508006]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "LU220201021",
+        "name": "Differdange, Gare",
+        "type": "rail",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [5.891656, 49.522547]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "LU220201032",
+        "name": "Oberkorn, Gare",
+        "type": "rail",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [5.890928, 49.510715]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "LU220203006",
+        "name": "Niederkorn, Gare",
+        "type": "rail",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [5.893985, 49.536807]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "LU220301012",
+        "name": "Dudelange, Gare-Burange",
+        "type": "rail",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [6.086196, 49.492411]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "LU220301015",
+        "name": "Dudelange (Centre), Gare",
+        "type": "rail",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [6.08215, 49.478696]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "LU220301041",
+        "name": "Dudelange (Usines), Gare",
+        "type": "rail",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [6.079433, 49.472609]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "LU220301082",
+        "name": "Dudelange (Ville), Gare",
+        "type": "rail",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [6.083183, 49.483383]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "LU220401002",
+        "name": "Belval (Université), Gare",
+        "type": "rail",
+        "importance": 3
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [5.946283, 49.49955]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "LU220402046",
+        "name": "Esch-sur-Alzette, Gare",
+        "type": "rail",
+        "importance": 2
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [5.985087, 49.493911]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "LU220601015",
+        "name": "Kayl, Gare",
+        "type": "rail",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [6.035331, 49.485737]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "LU220602002",
+        "name": "Tétange, Gare",
+        "type": "rail",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [6.03498, 49.477379]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "LU220701021",
+        "name": "Leudelange, Gare",
+        "type": "rail",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [6.059345, 49.58705]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "LU220901011",
+        "name": "Lamadelaine, Gare",
+        "type": "rail",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [5.860878, 49.553384]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "LU220902007",
+        "name": "Pétange, Gare",
+        "type": "rail",
+        "importance": 3
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [5.879221, 49.554376]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "LU220903011",
+        "name": "Rodange, Gare",
+        "type": "rail",
+        "importance": 3
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [5.843499, 49.550959]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "LU221101001",
+        "name": "Berchem, Gare",
+        "type": "rail",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [6.133752, 49.542667]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "LU221201014",
+        "name": "Rumelange, Gare",
+        "type": "rail",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [6.032396, 49.460057]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "LU221301002",
+        "name": "Belval-Rédange, Gare",
+        "type": "rail",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [5.923706, 49.503162]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "LU221301010",
+        "name": "Belvaux-Soleuvre, Gare",
+        "type": "rail",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [5.926076, 49.515145]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "LU221301023",
+        "name": "Belval (Lycée), Gare",
+        "type": "rail",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [5.934709, 49.501502]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "LU221401002",
+        "name": "Schifflange, Gare",
+        "type": "rail",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [6.009786, 49.506302]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "LUL200304019",
+        "name": "Howald, Gare (Tram)",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [6.132316, 49.581228]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "LUL200304021",
+        "name": "Howald, Scillas",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [6.136541, 49.583139]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "LUL200404009",
+        "name": "Bonnevoie, Leschte Steiwer / Dernier Sol",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [6.13633, 49.594299]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "LUL200404031",
+        "name": "Bonnevoie, Lycée Bouneweg (Tram)",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [6.138694, 49.590327]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "LUL200405051",
+        "name": "Luxembourg, Place de Metz",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [6.128352, 49.606885]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "LUL200405057",
+        "name": "Hamilius-Centre (Tram)",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [6.126139, 49.611094]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "LUL200405058",
+        "name": "Luxembourg, Paräisser Plaz",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [6.130704, 49.604082]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "LUL200405059",
+        "name": "Luxembourg, Gare Centrale (Tram)",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [6.133411, 49.599939]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "LUL200405061",
+        "name": "Centre, Stäreplaz / Étoile (Tram)",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [6.119604, 49.613676]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "LUL200417014",
+        "name": "Kirchberg, Coque",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [6.154282, 49.622784]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "LUL200417029",
+        "name": "Kirchberg, Europaparlament / Parlement Européen",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [6.148305, 49.620801]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "LUL200417031",
+        "name": "Kirchberg, Philharmonie / Mudam (Tram)",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [6.142026, 49.619486]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "LUL200417045",
+        "name": "Kirchberg, Nationalbibliothéik",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [6.166025, 49.629243]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "LUL200417046",
+        "name": "Kirchberg, Universitéit",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [6.160756, 49.626011]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "LUL200417052",
+        "name": "Kirchberg, Luxexpo",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [6.175902, 49.635423]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "LUL200417058",
+        "name": "Kirchberg, Rout Bréck - Pafendall (Tram)",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [6.136686, 49.618697]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "LUL200417066",
+        "name": "Kirchberg, Alphonse Weicker (Tram)",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [6.170827, 49.632177]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "LUL200419039",
+        "name": "Limpertsberg, Faïencerie",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [6.121265, 49.616038]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "LUL200419041",
+        "name": "Limpertsberg, Theater (Tram)",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [6.125338, 49.617642]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "LUL200423006",
+        "name": "Gasperich, Lycée Vauban",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [6.125341, 49.583707]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "LUL200423008",
+        "name": "Gasperich, Waassertuerm (Tram)",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [6.120625, 49.57991]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "LUL200423009",
+        "name": "Gasperich, Stadion",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [6.110944, 49.576556]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "LUL200501006",
+        "name": "Findel - Luxembourg Airport",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [6.217442, 49.635449]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "LUL200508005",
+        "name": "Senningerberg, Héienhaff P+R",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [6.218337, 49.641606]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
         "id": "NL045",
         "name": "Aalten",
         "type": "rail",

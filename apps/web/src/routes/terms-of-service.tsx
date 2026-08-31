@@ -24,16 +24,15 @@ function TermsOfServicePage() {
         Back to Rail Radar
       </Link>
       <h1 className="mb-8 text-3xl font-semibold">Terms of Service</h1>
-      <p className="mb-4 text-sm text-muted-foreground">Last updated: August 26, 2026</p>
+      <p className="mb-4 text-sm text-muted-foreground">Last updated: August 31, 2026</p>
 
       <div className="space-y-8 leading-relaxed text-muted-foreground">
         <section>
           <h2 className="mb-3 text-xl font-semibold text-foreground">1. About the Service</h2>
           <p>
-            Rail Radar is a free, open-source web application that provides real-time train tracking
-            on an interactive map. It displays live train departures, arrivals, delays, and platform
-            information for 21,000+ stations across 13 countries. The source code is available under
-            the{" "}
+            Rail Radar is a free, open-source web application that maps 22,000+ railway stations
+            across 14 countries. Where a live provider is integrated, it displays train departures,
+            arrivals, delays, and platform information. The source code is available under the{" "}
             <a
               href="https://opensource.org/licenses/MIT"
               className="text-foreground underline"
@@ -195,6 +194,27 @@ function TermsOfServicePage() {
               >
                 SNCF (Navitia)
               </a>
+            </li>
+            <li>
+              <strong className="text-foreground">Luxembourg</strong> &mdash;{" "}
+              <a
+                href="https://data.public.lu/en/datasets/api-mobiliteit-lu/"
+                className="text-foreground underline"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Mobiliteit.lu
+              </a>{" "}
+              ({" "}
+              <a
+                href="https://creativecommons.org/licenses/by/4.0/"
+                className="text-foreground underline"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                CC BY 4.0
+              </a>
+              )
             </li>
           </ul>
         </section>

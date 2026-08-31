@@ -13,7 +13,7 @@ src/
 ├── operators.ts        # Operator data loader and exports
 ├── operators.json      # Train operator dataset
 ├── types.ts            # TypeScript type definitions
-└── stations.geojson    # GeoJSON FeatureCollection (21,000+ stations)
+└── stations.geojson    # GeoJSON FeatureCollection (22,000+ stations)
 ```
 
 ## Exports
@@ -107,6 +107,7 @@ getCountry("PL10009"); // "pl"
 getCountry("UK1072"); // "uk"
 getCountry("IE360"); // "ie"
 getCountry("FR751008"); // "fr"
+getCountry("LU200405060"); // "lu"
 getCountry("IT01700", { format: "name" }); // "Italy"
 ```
 

@@ -13,6 +13,7 @@ export type Bindings = {
   REJSEPLANEN_API_KEY: string;
   PLK_API_KEY: string;
   SNCF_API_KEY: string;
+  MOBILITEIT_API_KEY: string;
   MAPBOX_TOKEN: string;
 };
 
