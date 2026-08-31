@@ -15,6 +15,7 @@ import { scrapeGermanTrains } from "./germany";
 import { scrapeDenmarkTrains } from "./denmark";
 import { scrapePolandTrains } from "./poland";
 import { scrapeFranceTrains } from "./france";
+import { scrapeLuxembourgTrains } from "./luxembourg";
 
 export * from "./core";
 
@@ -38,6 +39,7 @@ const scrapers: Partial<Record<CountryCode, ScrapeFn>> = {
   dk: scrapeDenmarkTrains,
   pl: scrapePolandTrains,
   fr: scrapeFranceTrains,
+  lu: scrapeLuxembourgTrains,
 };
 
 export const SCRAPER_COUNTRIES = Object.freeze(Object.keys(scrapers) as CountryCode[]);

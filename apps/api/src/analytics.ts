@@ -71,6 +71,7 @@ export const PROVIDER_IDS = [
   "rejseplanen",
   "plk",
   "trafiklab",
+  "mobiliteit",
 ] as const;
 
 export type ProviderId = (typeof PROVIDER_IDS)[number];
@@ -91,6 +92,7 @@ const COUNTRY_TO_PROVIDER: Partial<Record<CountryCode, ProviderId>> = {
   se: "trafiklab",
   uk: "nationalrail",
   fr: "sncf",
+  lu: "mobiliteit",
 };
 
 async function hashIP(ip: string, pepper: string): Promise<string> {
