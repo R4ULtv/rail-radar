@@ -26,7 +26,7 @@
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
     "react-map-gl": "^8.1.2",
-    "takumi-js": "^2.13.1"
+    "takumi-js": "^2.13.2"
   },
   "devDependencies": {
     "@cloudflare/vite-plugin": "1.51.1",
