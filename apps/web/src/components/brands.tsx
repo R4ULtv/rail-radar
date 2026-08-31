@@ -31,6 +31,7 @@ const brandPaths: Record<string, string> = {
   flp: "ch/flp",
   // Other
   obb: "obb",
+  cfl: "cfl",
   // French brands (SNCF networks)
   sncf: "fr/sncf",
   "tgv inoui": "fr/inoui",
@@ -215,6 +216,7 @@ const brandSlugMap: Record<string, string> = {
   obb: "obb",
   "obb railjet": "obb",
   "obb nightjet": "obb",
+  cfl: "cfl",
   sncf: "sncf",
   "tgv inoui": "tgv-inoui",
   ouigo: "ouigo",

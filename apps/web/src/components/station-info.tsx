@@ -1,6 +1,7 @@
 "use client";
 
 import type { Train } from "@repo/data";
+import { getCountry } from "@repo/data/countries";
 import {
   ArrowDownLeftIcon,
   ArrowRightIcon,
@@ -141,9 +142,11 @@ function TrainListContent({
 function StationTabs({
   type,
   onTypeChange,
+  arrivalsDisabled = false,
 }: {
   type: "arrivals" | "departures";
   onTypeChange: (type: "arrivals" | "departures") => void;
+  arrivalsDisabled?: boolean;
 }) {
   return (
     <Tabs
@@ -156,7 +159,11 @@ function StationTabs({
           <ArrowUpRightIcon className="size-4" />
           Departures
         </TabsTrigger>
-        <TabsTrigger value="arrivals">
+        <TabsTrigger
+          value="arrivals"
+          disabled={arrivalsDisabled}
+          aria-label={arrivalsDisabled ? "Arrivals (coming soon)" : "Arrivals"}
+        >
           <ArrowDownLeftIcon className="size-4" />
           Arrivals
         </TabsTrigger>
@@ -176,6 +183,8 @@ export default function StationInfo() {
 
   // Derive open state from selectedStation
   const isOpen = !!selectedStation;
+  const arrivalsSupported = selectedStation ? getCountry(selectedStation.id) !== "lu" : true;
+  const activeType = arrivalsSupported ? type : "departures";
   useEffect(() => {
     if (!isOpen) return;
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -194,7 +203,7 @@ export default function StationInfo() {
     error,
     lastUpdated,
     info,
-  } = useTrainData(selectedStation?.id ?? null, type, isOpen);
+  } = useTrainData(selectedStation?.id ?? null, activeType, isOpen);
 
   // Desktop view
   if (!isMobile) {
@@ -257,14 +266,18 @@ export default function StationInfo() {
                     {selectedStation && (
                       <StationWarning stationId={selectedStation.id} className="col-span-2" />
                     )}
-                    <StationTabs type={type} onTypeChange={setType} />
+                    <StationTabs
+                      type={activeType}
+                      onTypeChange={setType}
+                      arrivalsDisabled={!arrivalsSupported}
+                    />
                   </CardHeader>
                   <CardContent className="flex-1 px-0">
                     <TrainListContent
                       trainData={trainData}
                       isLoading={isLoading}
                       error={error}
-                      type={type}
+                      type={activeType}
                       scrollable
                       hasWarning={selectedStation != null && hasStationWarning(selectedStation.id)}
                     />
@@ -325,7 +338,11 @@ export default function StationInfo() {
           {selectedStation && (
             <StationWarning stationId={selectedStation.id} className="col-span-2" />
           )}
-          <StationTabs type={type} onTypeChange={setType} />
+          <StationTabs
+            type={activeType}
+            onTypeChange={setType}
+            arrivalsDisabled={!arrivalsSupported}
+          />
           <div className="absolute top-3.5 right-4 flex gap-1">
             {selectedStation && <SaveButton station={selectedStation} />}
             <Button
@@ -343,7 +360,12 @@ export default function StationInfo() {
         </DrawerHeader>
 
         <div className={cn("flex-1", snap === 1 ? "scroll-fade overflow-auto" : "overflow-hidden")}>
-          <TrainListContent trainData={trainData} isLoading={isLoading} error={error} type={type} />
+          <TrainListContent
+            trainData={trainData}
+            isLoading={isLoading}
+            error={error}
+            type={activeType}
+          />
         </div>
       </DrawerContent>
     </Drawer>
