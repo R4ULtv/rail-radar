@@ -2,7 +2,7 @@
 
 ## Features
 
-- Interactive map with 21,000+ railway stations across Italy, Switzerland, Germany, Finland, Belgium, Denmark, the Netherlands, Norway, Sweden, Poland, the United Kingdom, Ireland, France, and Luxembourg
+- Interactive map with 22,000+ railway stations across Italy, Switzerland, Germany, Finland, Belgium, Denmark, the Netherlands, Norway, Sweden, Poland, the United Kingdom, Ireland, France, and Luxembourg
 - Real-time arrivals and departures, where supported by each official source (RFI, SBB, DB, Digitraffic, iRail, Rejseplanen, NS, Entur, Trafiklab, PLK, LDBWS, Irish Rail, SNCF, Mobiliteit.lu)
 - Station search with fuzzy matching
 - Operator directory with network metadata and static coverage maps

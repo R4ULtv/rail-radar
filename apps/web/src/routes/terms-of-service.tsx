@@ -30,7 +30,7 @@ function TermsOfServicePage() {
         <section>
           <h2 className="mb-3 text-xl font-semibold text-foreground">1. About the Service</h2>
           <p>
-            Rail Radar is a free, open-source web application that maps 21,000+ railway stations
+            Rail Radar is a free, open-source web application that maps 22,000+ railway stations
             across 14 countries. Where a live provider is integrated, it displays train departures,
             arrivals, delays, and platform information. The source code is available under the{" "}
             <a

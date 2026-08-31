@@ -13,7 +13,7 @@ src/
 ├── operators.ts        # Operator data loader and exports
 ├── operators.json      # Train operator dataset
 ├── types.ts            # TypeScript type definitions
-└── stations.geojson    # GeoJSON FeatureCollection (21,000+ stations)
+└── stations.geojson    # GeoJSON FeatureCollection (22,000+ stations)
 ```
 
 ## Exports
