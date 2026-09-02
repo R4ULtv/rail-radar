@@ -473,7 +473,7 @@ export function Search() {
             variant="outline"
             onClick={() => setIsDrawerOpen(true)}
             aria-label="Search stations"
-            className="w-full justify-start bg-card text-muted-foreground dark:bg-card"
+            className="w-full justify-start bg-card text-muted-foreground hover:bg-card dark:bg-card dark:hover:bg-card"
           >
             <SearchIcon className="text-muted-foreground" />
             <span className="flex-1 text-left">Search…</span>
@@ -487,8 +487,8 @@ export function Search() {
         </div>
 
         {/* Full-screen search drawer */}
-        <Drawer open={isDrawerOpen} onOpenChange={setIsDrawerOpen} showSwipeHandle={true}>
-          <DrawerContent className="h-full data-[swipe-direction=down]:max-h-svh -mx-px outline-none bg-card data-[swipe-direction=down]:mt-0 data-[swipe-direction=down]:rounded-none data-[swipe-direction=down]:border-t-0">
+        <Drawer open={isDrawerOpen} onOpenChange={setIsDrawerOpen} showSwipeHandle>
+          <DrawerContent className="h-full data-[swipe-direction=down]:max-h-svh -mx-px outline-none bg-card [&>[data-slot=drawer-swipe-handle]]:mt-2 data-[swipe-direction=down]:my-0 data-[swipe-direction=down]:rounded-none data-[swipe-direction=down]:border-t-0">
             <DrawerHeader className="pb-0">
               <DrawerTitle className="sr-only">Search Stations</DrawerTitle>
               <DrawerDescription className="sr-only">

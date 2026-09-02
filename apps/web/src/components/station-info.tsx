@@ -295,7 +295,7 @@ export default function StationInfo() {
   return (
     <Drawer
       modal={false}
-      showSwipeHandle={true}
+      showSwipeHandle
       disablePointerDismissal
       snapPoints={snapPoints}
       snapPoint={snap}
@@ -309,11 +309,11 @@ export default function StationInfo() {
     >
       <DrawerContent
         className={cn(
-          "h-full max-h-full! -mx-px outline-none bg-card",
-          snap === 1 && "data-[swipe-direction=down]:rounded-t-none",
+          "h-full max-h-full! -mx-px pt-2 outline-none bg-card",
+          snap === 1 && "data-[swipe-direction=down]:my-0 data-[swipe-direction=down]:rounded-none",
         )}
       >
-        <DrawerHeader className="pb-3 relative group-data-[swipe-direction=down]/drawer-content:text-left">
+        <DrawerHeader className="relative pb-3 group-data-[swipe-axis=y]/drawer-popup:text-left">
           <DrawerTitle className="text-xl pr-20 truncate">
             <Link
               to="/station/$id"
