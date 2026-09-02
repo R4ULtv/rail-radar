@@ -285,9 +285,9 @@ export async function scrapeLuxembourgTrains(
   }
 
   const nowMinutes = currentComparableMinutes();
-  const mapped = departures.map((departure) => mapDeparture(departure, nowMinutes)).filter(
-    (departure): departure is MappedDeparture => departure !== null,
-  );
+  const mapped = departures
+    .map((departure) => mapDeparture(departure, nowMinutes))
+    .filter((departure): departure is MappedDeparture => departure !== null);
   const trains = dedupeDepartures(mapped);
 
   return {
