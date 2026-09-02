@@ -494,7 +494,7 @@ export function Search() {
               <DrawerDescription className="sr-only">
                 Search and select a train station from the list
               </DrawerDescription>
-              <InputGroup className="h-10 bg-background">
+              <InputGroup className="h-10">
                 <InputGroupInput
                   ref={inputRef}
                   placeholder="Search..."
