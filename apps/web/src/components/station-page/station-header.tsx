@@ -25,7 +25,7 @@ function formatDms(value: number, type: "lat" | "lng") {
 
 export function StationHeader({ station, info }: StationHeaderProps) {
   return (
-    <div className="space-y-4">
+    <div className="flex flex-col gap-4">
       <div className="flex items-start justify-between gap-4">
         <div>
           <h1 className="text-2xl md:text-3xl font-semibold tracking-tight">{station.name}</h1>
@@ -41,7 +41,7 @@ export function StationHeader({ station, info }: StationHeaderProps) {
       </div>
 
       {info && (
-        <div className="text-sm text-muted-foreground bg-muted px-3 py-2 rounded-md">
+        <div className="rounded-2xl bg-muted px-3 py-2 text-sm text-muted-foreground">
           <MegaphoneIcon className="size-4 inline mr-2" />
           <span>{info}</span>
         </div>

@@ -128,7 +128,7 @@ function DonatePage() {
             return (
               <Card key={item.title} size="sm" className="h-full">
                 <CardContent>
-                  <div className="flex size-9 items-center justify-center rounded-lg bg-muted/50">
+                  <div className="flex size-9 items-center justify-center rounded-2xl bg-muted/50">
                     <Icon className="size-4 text-muted-foreground" />
                   </div>
                   <h3 className="mt-4 text-sm font-medium tracking-tight">{item.title}</h3>

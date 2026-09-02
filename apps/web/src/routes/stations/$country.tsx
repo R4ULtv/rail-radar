@@ -164,7 +164,7 @@ function CountryStationsPage({
             <a
               key={letter}
               href={`#letter-${letter === "#" ? "0" : letter}`}
-              className="flex size-7 items-center justify-center rounded-md text-xs font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+              className="flex size-7 items-center justify-center rounded-full text-xs font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
             >
               {letter}
             </a>

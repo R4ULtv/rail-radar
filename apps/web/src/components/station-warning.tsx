@@ -33,7 +33,7 @@ export function StationWarning({
   return (
     <div
       className={cn(
-        "flex items-start gap-2 rounded-md max-w-fit bg-amber-500/10 px-3 py-2 text-xs text-amber-900 dark:text-amber-200",
+        "flex max-w-fit items-start gap-2 rounded-2xl bg-amber-500/10 px-3 py-2 text-xs text-amber-900 dark:text-amber-200",
         className,
       )}
     >

@@ -127,7 +127,7 @@ function OperatorsPage() {
                       className="h-full transition-[background-color,box-shadow,transform] ease-[cubic-bezier(0.23,1,0.32,1)] duration-200 lg:group-hover:bg-muted/40 lg:group-hover:ring-foreground/20 group-active:scale-[0.98]"
                     >
                       <CardContent className="flex items-center gap-3">
-                        <div className="flex size-10 shrink-0 items-center justify-center overflow-hidden rounded-lg bg-background">
+                        <div className="flex size-10 shrink-0 items-center justify-center overflow-hidden rounded-2xl bg-background">
                           <img
                             src={staticAssetUrl(`/operators/${operator.logoPath}.svg`)}
                             alt={operator.name}

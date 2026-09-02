@@ -39,13 +39,13 @@ export function AnnouncementBanner() {
           >
             <div
               role="status"
-              className="relative flex items-center gap-3 overflow-hidden p-2.5 pr-10 md:gap-3.5 md:p-3 md:pr-12 bg-card border border-input text-card-foreground rounded-md shadow-xs"
+              className="relative flex items-center gap-3 overflow-hidden rounded-3xl bg-card p-2.5 pr-10 text-card-foreground shadow-md ring-1 ring-foreground/5 md:gap-3.5 md:p-3 md:pr-12 dark:ring-foreground/10"
             >
               <img
                 aria-hidden="true"
                 src="/assets/flags/lu.svg"
                 alt=""
-                className="size-10 shrink-0 rounded-md border border-border object-cover shadow-xs md:size-11"
+                className="size-10 shrink-0 rounded-2xl border border-border object-cover md:size-11"
               />
 
               <div className="min-w-0 flex-1">
@@ -87,7 +87,7 @@ export function AnnouncementBanner() {
                 params={{ country: "luxembourg" }}
                 onClick={dismiss}
                 aria-label="Explore train stations in Luxembourg"
-                className="absolute inset-0 rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-inset md:hidden"
+                className="absolute inset-0 rounded-3xl focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/30 focus-visible:ring-inset md:hidden"
               >
                 <span className="sr-only">Explore train stations in Luxembourg</span>
               </Link>

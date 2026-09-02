@@ -33,7 +33,7 @@ function DonationSuccessPage() {
       </Link>
 
       <div className="mb-16">
-        <div className="mb-5 flex size-12 items-center justify-center rounded-xl bg-primary text-primary-foreground">
+        <div className="mb-5 flex size-12 items-center justify-center rounded-2xl bg-primary text-primary-foreground">
           <HeartIcon className="size-6 fill-current" />
         </div>
         <p className="text-xs font-medium uppercase tracking-[0.2em] text-muted-foreground mb-3">

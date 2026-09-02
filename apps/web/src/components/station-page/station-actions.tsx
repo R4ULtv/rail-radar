@@ -49,7 +49,7 @@ export function StationActions({ station }: { station: Station }) {
         station={station}
         size="icon-sm"
         variant="outline"
-        className="bg-card hover:bg-muted dark:bg-card dark:hover:bg-muted dark:border-border size-8 active:scale-[0.98]"
+        className="size-8 bg-card dark:border-border dark:bg-card"
       />
       {station.geo && (
         <Button
@@ -57,7 +57,7 @@ export function StationActions({ station }: { station: Station }) {
           size="icon-sm"
           onClick={handleDirections}
           aria-label="Directions"
-          className="bg-card hover:bg-muted dark:bg-card dark:hover:bg-muted dark:border-border size-8 active:scale-[0.98]"
+          className="size-8 bg-card dark:border-border dark:bg-card"
         >
           <CornerUpRightIcon className="size-4" />
         </Button>
@@ -67,7 +67,7 @@ export function StationActions({ station }: { station: Station }) {
         size="icon-sm"
         onClick={handleShare}
         aria-label="Share"
-        className="bg-card hover:bg-muted dark:bg-card dark:hover:bg-muted dark:border-border size-8 active:scale-[0.98]"
+        className="size-8 bg-card dark:border-border dark:bg-card"
       >
         {copied ? <CheckIcon className="size-4" /> : <ShareIcon className="size-4" />}
       </Button>

@@ -27,7 +27,7 @@ export function TrainRow({ train, type }: TrainRowProps) {
       )}
     >
       {/* Platform badge */}
-      <div className="shrink-0 min-w-12 h-12 px-2 bg-muted rounded-md flex items-center justify-center">
+      <div className="flex h-12 min-w-12 shrink-0 items-center justify-center rounded-2xl bg-muted px-2">
         <span
           className={cn(
             "font-bold text-center",
@@ -55,7 +55,7 @@ export function TrainRow({ train, type }: TrainRowProps) {
               brandLogo
             )}
             {train.category && (
-              <span className="text-xs font-medium text-muted-foreground bg-muted px-1.5 py-0.5 rounded">
+              <span className="rounded-3xl bg-muted px-1.5 py-0.5 text-xs font-medium text-muted-foreground">
                 {train.category}
               </span>
             )}
@@ -101,7 +101,7 @@ export function TrainRowSkeleton() {
   return (
     <div className="flex gap-3 py-3 px-4 border-b border-border last:border-b-0">
       {/* Platform badge skeleton */}
-      <Skeleton className="shrink-0 size-12 rounded-md" />
+      <Skeleton className="size-12 shrink-0 rounded-2xl" />
 
       {/* Train details skeleton */}
       <div className="flex-1 min-w-0">

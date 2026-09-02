@@ -177,7 +177,7 @@ function StationLoading() {
         <Skeleton className="absolute inset-0 rounded-none" />
         {/* Back button placeholder */}
         <div className="absolute top-2 left-2 md:top-4 md:left-4">
-          <Skeleton className="size-8 rounded-md" />
+          <Skeleton className="size-8 rounded-full" />
         </div>
       </div>
 
@@ -191,9 +191,9 @@ function StationLoading() {
               <Skeleton className="h-4 w-40 mt-2" />
             </div>
             <div className="flex gap-2 shrink-0">
-              <Skeleton className="size-8 rounded-md" />
-              <Skeleton className="size-8 rounded-md" />
-              <Skeleton className="size-8 rounded-md" />
+              <Skeleton className="size-8 rounded-full" />
+              <Skeleton className="size-8 rounded-full" />
+              <Skeleton className="size-8 rounded-full" />
             </div>
           </div>
         </div>
@@ -235,7 +235,7 @@ function StationLoading() {
                   <Skeleton className="size-4" />
                   <Skeleton className="h-5 w-24" />
                 </CardTitle>
-                <Skeleton className="h-7 w-32 rounded-md" />
+                <Skeleton className="h-7 w-32 rounded-full" />
               </div>
               <CardDescription>
                 <Skeleton className="h-4 w-32" />
@@ -264,7 +264,7 @@ function StationLoading() {
           {Array.from({ length: 2 }).map((_, columnIndex) => (
             <Card
               key={columnIndex}
-              className="flex flex-col h-[500px] py-4 gap-4 rounded-xl ring-1 shadow-xs"
+              className="flex h-[500px] flex-col gap-4 rounded-4xl py-4 shadow-md ring-1"
             >
               <CardHeader className="px-4">
                 <CardTitle className="flex items-center gap-2 text-base">

@@ -227,13 +227,13 @@ export default function StationInfo() {
               >
                 <XIcon className="size-4" />
               </Button>
-              <m.div style={{ height: cardHeight.height }} className="overflow-hidden rounded-md">
+              <m.div style={{ height: cardHeight.height }} className="overflow-hidden rounded-4xl">
                 <Card
                   ref={cardHeight.contentRef}
-                  className="pt-4 pb-0 gap-2 rounded-md flex flex-col flex-1 w-96"
+                  className="flex w-96 flex-1 flex-col gap-2 pt-4 pb-0"
                 >
                   <CardHeader className="relative px-4">
-                    <CardAction className="space-x-1">
+                    <CardAction className="flex gap-1">
                       {selectedStation && <SaveButton station={selectedStation} />}
                       <Button
                         variant="ghost"
@@ -330,7 +330,7 @@ export default function StationInfo() {
             />
           </DrawerDescription>
           {info != null && snap === 1 && (
-            <div className="text-sm text-muted-foreground bg-muted px-2 py-1 rounded mt-2">
+            <div className="mt-2 rounded-2xl bg-muted px-3 py-2 text-sm text-muted-foreground">
               <MegaphoneIcon className="size-4 inline mr-1" />
               <span className="font-normal">{info}</span>
             </div>

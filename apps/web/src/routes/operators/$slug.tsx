@@ -319,7 +319,7 @@ function OperatorPage({ slug }: { slug: string }) {
                   const Icon = fact.icon;
                   return (
                     <div key={fact.label} className="flex items-start gap-3">
-                      <div className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-muted/50">
+                      <div className="flex size-8 shrink-0 items-center justify-center rounded-2xl bg-muted/50">
                         <Icon className="size-4 text-muted-foreground" />
                       </div>
                       <div className="pt-0.5">
@@ -347,14 +347,14 @@ function OperatorPage({ slug }: { slug: string }) {
                     key={c}
                     to="/operators"
                     hash={c}
-                    className="flex items-center gap-3 rounded-lg bg-muted/30 px-3 py-2.5 transition-[background-color,transform] duration-150 ease-out lg:hover:bg-muted/50 active:scale-[0.98]"
+                    className="flex items-center gap-3 rounded-2xl bg-muted/30 px-3 py-2.5 transition-[background-color,transform] duration-150 ease-out lg:hover:bg-muted/50 active:scale-[0.98]"
                   >
                     <img
                       src={staticAssetUrl(`/flags/${c}.svg`)}
                       alt={COUNTRY_MAP[c]}
                       width={18}
                       height={18}
-                      className="rounded-sm"
+                      className="rounded-lg"
                     />
                     <span className="text-sm font-medium capitalize">{COUNTRY_MAP[c]}</span>
                   </Link>
@@ -379,9 +379,9 @@ function OperatorPage({ slug }: { slug: string }) {
                       href={link.url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="group/link flex items-center gap-3 rounded-lg px-2.5 py-2 -mx-2.5 transition-[background-color,transform] duration-150 ease-out lg:hover:bg-muted/50 active:scale-[0.98]"
+                      className="group/link -mx-2.5 flex items-center gap-3 rounded-2xl px-2.5 py-2 transition-[background-color,transform] duration-150 ease-out lg:hover:bg-muted/50 active:scale-[0.98]"
                     >
-                      <div className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-muted/50 lg:group-hover/link:bg-muted">
+                      <div className="flex size-8 shrink-0 items-center justify-center rounded-2xl bg-muted/50 lg:group-hover/link:bg-muted">
                         <Icon className="size-4 text-muted-foreground" />
                       </div>
                       <div className="min-w-0 flex-1">
@@ -410,9 +410,9 @@ function OperatorPage({ slug }: { slug: string }) {
                       key={b.slug}
                       to="/operators/$slug"
                       params={{ slug: b.slug }}
-                      className="group/rel flex items-center gap-3 rounded-lg px-2.5 py-2 -mx-2.5 transition-[background-color,transform] duration-150 ease-out lg:hover:bg-muted/50 active:scale-[0.98]"
+                      className="group/rel -mx-2.5 flex items-center gap-3 rounded-2xl px-2.5 py-2 transition-[background-color,transform] duration-150 ease-out lg:hover:bg-muted/50 active:scale-[0.98]"
                     >
-                      <div className="flex size-8 shrink-0 items-center justify-center overflow-hidden rounded-lg bg-background">
+                      <div className="flex size-8 shrink-0 items-center justify-center overflow-hidden rounded-2xl bg-background">
                         <img
                           src={staticAssetUrl(`/operators/${b.logoPath}.svg`)}
                           alt={b.name}
