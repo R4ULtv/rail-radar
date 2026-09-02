@@ -274,7 +274,9 @@ export async function scrapeLuxembourgTrains(
     "Luxembourg",
   );
 
-  if (data.errorCode || !Array.isArray(data.Departure)) {
+  const departures = data.Departure === undefined ? [] : data.Departure;
+
+  if (data.errorCode || !Array.isArray(departures)) {
     throw new ScraperError(
       "The Luxembourg transport data source returned an invalid response.",
       502,
@@ -283,7 +285,7 @@ export async function scrapeLuxembourgTrains(
   }
 
   const nowMinutes = currentComparableMinutes();
-  const mapped = data.Departure.map((departure) => mapDeparture(departure, nowMinutes)).filter(
+  const mapped = departures.map((departure) => mapDeparture(departure, nowMinutes)).filter(
     (departure): departure is MappedDeparture => departure !== null,
   );
   const trains = dedupeDepartures(mapped);
