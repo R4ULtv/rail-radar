@@ -487,7 +487,7 @@ export function Search() {
         </div>
 
         {/* Full-screen search drawer */}
-        <Drawer open={isDrawerOpen} onOpenChange={setIsDrawerOpen}>
+        <Drawer open={isDrawerOpen} onOpenChange={setIsDrawerOpen} showSwipeHandle={true}>
           <DrawerContent className="h-full data-[swipe-direction=down]:max-h-svh -mx-px outline-none bg-card data-[swipe-direction=down]:mt-0 data-[swipe-direction=down]:rounded-none data-[swipe-direction=down]:border-t-0">
             <DrawerHeader className="pb-0">
               <DrawerTitle className="sr-only">Search Stations</DrawerTitle>

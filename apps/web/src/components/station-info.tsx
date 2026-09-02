@@ -295,6 +295,7 @@ export default function StationInfo() {
   return (
     <Drawer
       modal={false}
+      showSwipeHandle={true}
       disablePointerDismissal
       snapPoints={snapPoints}
       snapPoint={snap}
