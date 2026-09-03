@@ -108,15 +108,5 @@
         </p>
       {/if}
     </Card.Content>
-
-    <Card.Footer>
-      <Button
-        variant="outline"
-        class="w-full"
-        onclick={() => document.querySelector<HTMLInputElement>('input[type="file"]')?.click()}
-      >
-        Select File
-      </Button>
-    </Card.Footer>
   </Card.Root>
 </main>
