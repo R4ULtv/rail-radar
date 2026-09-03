@@ -256,6 +256,7 @@ export function Search() {
   const inputRef = React.useRef<HTMLInputElement>(null);
   const { search, setSearch } = useHomeSearch();
   const urlQuery = search.q ?? "";
+  const initialUrlQueryRef = React.useRef(urlQuery);
   const setUrlQuery = React.useCallback(
     (value: string | null) => setSearch({ q: value }),
     [setSearch],
@@ -274,6 +275,16 @@ export function Search() {
   const [focusedIndex, setFocusedIndex] = React.useState<number>(-1);
   const previousListStateRef = React.useRef({ query, resultsLength: 0 });
   const [isDrawerOpen, setIsDrawerOpen] = React.useState(() => isMobile && query.length > 0);
+  const initialDrawerOpenConsideredRef = React.useRef(false);
+
+  React.useEffect(() => {
+    if (initialDrawerOpenConsideredRef.current || !isMobile) return;
+
+    initialDrawerOpenConsideredRef.current = true;
+    if (initialUrlQueryRef.current.trim().length > 0) {
+      setIsDrawerOpen(true);
+    }
+  }, [isMobile]);
 
   // Fetch search results
   const {
