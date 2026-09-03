@@ -84,7 +84,7 @@ const StationList = React.memo(function StationList({
               onMouseLeave={() => onFocusIndex?.(-1)}
               tabIndex={-1}
               className={cn(
-                "w-full px-4 py-2.5 md:py-2 text-left text-sm transition-colors duration-75 ease-out flex items-center gap-2",
+                "mx-2 flex w-[calc(100%-1rem)] items-center gap-2 rounded-2xl px-3 py-2.5 text-left text-sm transition-colors duration-100 ease-out md:py-2",
                 isFocused && "bg-muted",
               )}
             >
@@ -473,7 +473,7 @@ export function Search() {
             variant="outline"
             onClick={() => setIsDrawerOpen(true)}
             aria-label="Search stations"
-            className="bg-card text-muted-foreground hover:bg-muted dark:bg-card dark:hover:bg-muted w-full justify-start active:scale-[0.98] transition-transform duration-100"
+            className="w-full justify-start bg-card text-muted-foreground hover:bg-card dark:bg-card dark:hover:bg-card"
           >
             <SearchIcon className="text-muted-foreground" />
             <span className="flex-1 text-left">Search…</span>
@@ -487,14 +487,14 @@ export function Search() {
         </div>
 
         {/* Full-screen search drawer */}
-        <Drawer open={isDrawerOpen} onOpenChange={setIsDrawerOpen}>
-          <DrawerContent className="h-full data-[swipe-direction=down]:max-h-svh -mx-px outline-none bg-card data-[swipe-direction=down]:mt-0 data-[swipe-direction=down]:rounded-none data-[swipe-direction=down]:border-t-0">
+        <Drawer open={isDrawerOpen} onOpenChange={setIsDrawerOpen} showSwipeHandle>
+          <DrawerContent className="h-full data-[swipe-direction=down]:max-h-svh -mx-px outline-none bg-card [&>[data-slot=drawer-swipe-handle]]:mt-2 data-[swipe-direction=down]:my-0 data-[swipe-direction=down]:rounded-none data-[swipe-direction=down]:border-t-0">
             <DrawerHeader className="pb-0">
               <DrawerTitle className="sr-only">Search Stations</DrawerTitle>
               <DrawerDescription className="sr-only">
                 Search and select a train station from the list
               </DrawerDescription>
-              <InputGroup className="h-10 bg-background">
+              <InputGroup className="h-10">
                 <InputGroupInput
                   ref={inputRef}
                   placeholder="Search..."
@@ -544,7 +544,7 @@ export function Search() {
   return (
     <LazyMotion features={domAnimation}>
       <div className="absolute z-50 top-4 left-4 flex flex-col gap-2 md:w-80 w-[calc(100svw-32px)] pointer-events-none font-sans">
-        <InputGroup className="h-9 bg-card dark:bg-card pointer-events-auto">
+        <InputGroup className="pointer-events-auto h-9 bg-card shadow-md dark:bg-card">
           <InputGroupInput
             ref={inputRef}
             placeholder="Search..."
@@ -591,11 +591,11 @@ export function Search() {
               exit={{ opacity: 0, y: -10 }}
               transition={{ duration: 0.15, ease: [0.23, 1, 0.32, 1] }}
               style={{ height: cardHeight.height }}
-              className="rounded-md pointer-events-auto overflow-hidden"
+              className="pointer-events-auto overflow-hidden rounded-3xl"
             >
               <div
                 ref={cardHeight.contentRef}
-                className="bg-card border border-input text-card-foreground rounded-md py-2 shadow-xs flex flex-col"
+                className="flex flex-col rounded-3xl bg-card py-2 text-card-foreground shadow-md ring-1 ring-foreground/5 dark:ring-foreground/10"
               >
                 <div>
                   <SearchContent {...searchContentProps} limit={10} />

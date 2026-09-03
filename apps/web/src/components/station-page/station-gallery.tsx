@@ -76,7 +76,7 @@ function PhotoAttribution({ attribution }: { attribution?: StationPhotoAttributi
   }
 
   return (
-    <div className="absolute right-2 bottom-1.5 max-w-[calc(100%-1rem)] rounded-sm bg-black/45 px-1.5 py-0.5 text-[10px] leading-4 text-white/75 backdrop-blur-sm">
+    <div className="absolute right-2 bottom-1.5 max-w-[calc(100%-1rem)] rounded-lg bg-black/45 px-1.5 py-0.5 text-[10px] leading-4 text-white/75 backdrop-blur-sm">
       {parts.length > 0 && <span>{parts.join(" · ")}</span>}
       {parts.length > 0 && sourceUrl && <span> · </span>}
       {sourceUrl && (

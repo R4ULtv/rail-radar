@@ -9,6 +9,7 @@ const STATION_WARNINGS: Partial<Record<CountryCode, string>> = {
   pl: "Live data for stations in Poland may be unstable or incomplete right now. We are working to improve it.",
   ie: "Platform information is currently unavailable for stations in Ireland. We are working to improve it.",
   fr: "Platform and origin information may be missing for stations in France. We are working to improve it.",
+  lu: "Live arrivals are not available yet for train stations in Luxembourg. We are working to add them.",
 };
 
 /** Whether a station shows a data-quality warning (its header is ~48px taller). */
@@ -32,7 +33,7 @@ export function StationWarning({
   return (
     <div
       className={cn(
-        "flex items-start gap-2 rounded-md max-w-fit bg-amber-500/10 px-3 py-2 text-xs text-amber-900 dark:text-amber-200",
+        "flex max-w-fit items-start gap-2 rounded-2xl bg-amber-500/10 px-3 py-2 text-xs text-amber-900 dark:text-amber-200",
         className,
       )}
     >

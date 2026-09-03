@@ -243,7 +243,7 @@ function ArticleSection({
 
 function CountryTable() {
   return (
-    <Card size="sm" className="not-prose mt-7 rounded-lg bg-muted/25 shadow-none ring-0">
+    <Card size="sm" className="not-prose mt-7 rounded-3xl bg-muted/25 shadow-none ring-0">
       <CardContent>
         <Table className="min-w-175">
           <TableHeader className="[&_tr]:border-0">
@@ -353,7 +353,7 @@ function StationLeaderboards() {
 
 function ProviderTable() {
   return (
-    <Card size="sm" className="not-prose mt-7 rounded-lg bg-muted/25 shadow-none ring-0">
+    <Card size="sm" className="not-prose mt-7 rounded-3xl bg-muted/25 shadow-none ring-0">
       <CardContent>
         <Table className="min-w-170">
           <TableHeader className="[&_tr]:border-0">

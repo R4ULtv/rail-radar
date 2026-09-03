@@ -794,7 +794,7 @@
     "slug": "sncf",
     "name": "SNCF",
     "logoPath": "fr/sncf",
-    "countries": ["fr", "ch", "it", "be"],
+    "countries": ["fr", "ch", "it", "be", "lu"],
     "operatorTypes": ["passenger"],
     "bounds": [-5.1, 42.3, 9.6, 51.1],
     "description": "The French National Railway Company (SNCF) operates one of Europe's largest rail networks. World-renowned for pioneering the TGV high-speed network, it manages everything from rapid international connections (TGV inOui, Ouigo) to extensive regional transit (TER) across France and into neighboring nations.",
@@ -1173,7 +1173,7 @@
     "slug": "sncb",
     "name": "SNCB/NMBS",
     "logoPath": "sncb",
-    "countries": ["be"],
+    "countries": ["be", "lu"],
     "operatorTypes": ["passenger"],
     "bounds": [2.5, 49.5, 6.4, 51.5],
     "description": "The National Railway Company of Belgium (SNCB/NMBS) operates one of the world's most densely spaced railway networks. It provides high-frequency intercity and local services, functioning as a central hub for international transit in Western Europe and managing the comprehensive Brussels RER system.",
@@ -3059,6 +3059,43 @@
       {
         "label": "Wikipedia",
         "url": "https://en.wikipedia.org/wiki/Warsaw_Commuter_Railway",
+        "type": "wikipedia"
+      }
+    ]
+  },
+  {
+    "slug": "cfl",
+    "name": "CFL",
+    "logoPath": "cfl",
+    "countries": ["lu", "be", "fr", "de"],
+    "operatorTypes": ["passenger"],
+    "bounds": [5.5, 49, 7.7, 50.4],
+    "description": "The Société Nationale des Chemins de Fer Luxembourgeois (CFL) is Luxembourg's national railway company and the backbone of the country's passenger rail network. It operates regional and intercity trains throughout Luxembourg as well as cross-border services toward Belgium, France, and Germany.",
+    "website": "https://www.cfl.lu",
+    "founded": 1946,
+    "headquarters": "Luxembourg City, Luxembourg",
+    "networkKm": 271,
+    "annualPassengers": 31400000,
+    "serviceTypes": ["intercity", "regional", "commuter", "international"],
+    "links": [
+      {
+        "label": "Official Site",
+        "url": "https://www.cfl.lu/en-gb/",
+        "type": "website"
+      },
+      {
+        "label": "Timetables",
+        "url": "https://www.cfl.lu/en-gb/timetable/sheets",
+        "type": "timetables"
+      },
+      {
+        "label": "Open API",
+        "url": "https://data.public.lu/en/datasets/api-mobiliteit-lu/",
+        "type": "api"
+      },
+      {
+        "label": "Wikipedia",
+        "url": "https://en.wikipedia.org/wiki/Soci%C3%A9t%C3%A9_Nationale_des_Chemins_de_Fer_Luxembourgeois",
         "type": "wikipedia"
       }
     ]

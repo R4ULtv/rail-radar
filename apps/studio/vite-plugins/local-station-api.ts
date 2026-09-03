@@ -54,17 +54,10 @@ function send(res: import("node:http").ServerResponse, status: number, body: unk
 }
 
 export function localStationApi(): Plugin {
-  const enabled =
-    process.env.PUBLIC_STUDIO_LOCAL_MODE === "true" ||
-    process.env.LOCAL_ENV === "true" ||
-    process.env.STUDIO_LOCAL_MODE === "true";
-
   return {
     name: "studio-local-station-api",
     apply: "serve",
     configureServer(server) {
-      if (!enabled) return;
-
       server.middlewares.use(async (req, res, next) => {
         const url = req.url?.split("?")[0];
         if (!url || !url.startsWith("/api/stations")) return next();

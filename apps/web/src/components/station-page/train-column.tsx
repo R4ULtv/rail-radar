@@ -24,6 +24,8 @@ interface TrainColumnProps {
   lastUpdated: Date | null;
   showTypeToggle?: boolean;
   onTypeChange?: (type: "arrivals" | "departures") => void;
+  arrivalsDisabled?: boolean;
+  unavailableMessage?: string;
 }
 
 export function TrainColumn({
@@ -36,11 +38,13 @@ export function TrainColumn({
   lastUpdated,
   showTypeToggle,
   onTypeChange,
+  arrivalsDisabled = false,
+  unavailableMessage,
 }: TrainColumnProps) {
   const Icon = type === "departures" ? ArrowUpRightIcon : ArrowDownLeftIcon;
 
   return (
-    <Card className="flex flex-col h-full pt-4 pb-0 md:py-4 gap-4 rounded-none ring-0 shadow-none md:rounded-xl md:ring-1 md:shadow-xs">
+    <Card className="flex h-full flex-col gap-4 rounded-none pt-4 pb-0 shadow-none ring-0 md:rounded-4xl md:py-4 md:shadow-md md:ring-1">
       <CardHeader className="px-4">
         <div className="flex items-center justify-between gap-2">
           <CardTitle className="flex items-center gap-2 text-base">
@@ -56,12 +60,22 @@ export function TrainColumn({
               }}
               size="sm"
               variant="outline"
+              spacing={0}
             >
-              <ToggleGroupItem value="departures" className="gap-1 px-2 py-1 h-7 text-xs">
+              <ToggleGroupItem
+                value="departures"
+                aria-label="Departures"
+                className="gap-1 px-2 py-1 h-7 text-xs"
+              >
                 <ArrowUpRightIcon className="size-3.5" />
                 <span className={type === "departures" ? "" : "hidden"}>Departures</span>
               </ToggleGroupItem>
-              <ToggleGroupItem value="arrivals" className="gap-1 px-2 py-1 h-7 text-xs">
+              <ToggleGroupItem
+                value="arrivals"
+                disabled={arrivalsDisabled}
+                aria-label={arrivalsDisabled ? "Arrivals (coming soon)" : "Arrivals"}
+                className="gap-1 px-2 py-1 h-7 text-xs"
+              >
                 <ArrowDownLeftIcon className="size-3.5" />
                 <span className={type === "arrivals" ? "" : "hidden"}>Arrivals</span>
               </ToggleGroupItem>
@@ -77,7 +91,11 @@ export function TrainColumn({
         </CardDescription>
       </CardHeader>
       <CardContent className="flex-1 px-0 overflow-auto">
-        {isLoading ? (
+        {unavailableMessage ? (
+          <div className="px-4 py-8 text-center text-sm text-muted-foreground">
+            {unavailableMessage}
+          </div>
+        ) : isLoading ? (
           <div>
             {Array.from({ length: 8 }).map((_, i) => (
               <TrainRowSkeleton key={i} />

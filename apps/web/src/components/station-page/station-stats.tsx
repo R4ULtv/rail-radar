@@ -13,9 +13,9 @@ export function StationStats({ stationId }: StationStatsProps) {
 
   if (isLoading) {
     return (
-      <div className="space-y-3">
+      <div className="flex flex-col gap-3">
         <h2 className="text-sm font-medium text-muted-foreground">Station Statistics</h2>
-        <div className="space-y-2">
+        <div className="flex flex-col gap-2">
           <Skeleton className="h-5 w-24" />
           <Skeleton className="h-4 w-32" />
         </div>
@@ -26,11 +26,11 @@ export function StationStats({ stationId }: StationStatsProps) {
   const { station, topStation, comparison } = data ?? {};
 
   return (
-    <section className="space-y-3">
+    <section className="flex flex-col gap-3">
       <h2 className="text-sm font-medium text-muted-foreground">Station Statistics</h2>
 
       {station ? (
-        <div className="space-y-2">
+        <div className="flex flex-col gap-2">
           {comparison?.isTopStation && (
             <div className="flex items-center gap-2">
               <TrendingUpIcon className="size-4 text-emerald-500" />
@@ -50,7 +50,7 @@ export function StationStats({ stationId }: StationStatsProps) {
       )}
 
       {station && topStation && comparison && comparison.percentage !== null && (
-        <div className="space-y-2 border-t pt-3">
+        <div className="flex flex-col gap-2 border-t pt-3">
           <p className="text-xs text-muted-foreground">
             {comparison.isTopStation ? (
               <>

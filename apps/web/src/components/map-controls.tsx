@@ -3,7 +3,6 @@ import { Marker, useMap } from "react-map-gl/mapbox";
 import { CompassIcon, LocateFixedIcon, LocateIcon, MinusIcon, PlusIcon } from "lucide-react";
 import { Button } from "@repo/ui/components/button";
 import { ButtonGroup } from "@repo/ui/components/button-group";
-import { Spinner } from "@repo/ui/components/spinner";
 
 const LOCATION_OPTIONS: PositionOptions = {
   enableHighAccuracy: false,
@@ -188,7 +187,7 @@ export function MapControls({
           size="icon-sm"
           onClick={handleResetBearing}
           aria-label="Reset bearing"
-          className="bg-card hover:bg-muted dark:bg-card dark:hover:bg-muted size-9 md:size-8 active:scale-[0.98]"
+          className="size-9 bg-card md:size-8 dark:bg-card"
         >
           <CompassIcon
             style={{ transform: `rotate(${-bearing - 45}deg)` }}
@@ -203,15 +202,14 @@ export function MapControls({
           disabled={isLocating}
           aria-label={isLocating ? "Finding your location" : "Locate me"}
           aria-busy={isLocating}
-          className="bg-card hover:bg-muted dark:bg-card dark:hover:bg-muted size-9 md:size-8 active:scale-[0.98]"
+          className="size-9 bg-card md:size-8 dark:bg-card"
         >
-          {showLocatingIndicator ? (
-            <Spinner data-icon="inline-start" className="motion-reduce:animate-none" />
-          ) : userLocation ? (
-            <LocateFixedIcon data-icon="inline-start" />
-          ) : (
-            <LocateIcon data-icon="inline-start" />
-          )}
+          <span
+            data-icon="inline-start"
+            className={showLocatingIndicator ? "motion-safe:animate-pulse" : undefined}
+          >
+            {userLocation ? <LocateFixedIcon /> : <LocateIcon />}
+          </span>
         </Button>
 
         <ButtonGroup orientation="vertical" className="hidden md:flex">
@@ -220,7 +218,7 @@ export function MapControls({
             size="icon-sm"
             onClick={handleZoomIn}
             aria-label="Zoom in"
-            className="bg-card hover:bg-muted dark:bg-card dark:hover:bg-muted active:scale-[0.98]"
+            className="bg-card dark:bg-card"
           >
             <PlusIcon />
           </Button>
@@ -229,7 +227,7 @@ export function MapControls({
             size="icon-sm"
             onClick={handleZoomOut}
             aria-label="Zoom out"
-            className="bg-card hover:bg-muted dark:bg-card dark:hover:bg-muted active:scale-[0.98]"
+            className="bg-card dark:bg-card"
           >
             <MinusIcon />
           </Button>

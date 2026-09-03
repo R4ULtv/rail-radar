@@ -1,6 +1,7 @@
 "use client";
 
 import type { Train } from "@repo/data";
+import { getCountry } from "@repo/data/countries";
 import {
   ArrowDownLeftIcon,
   ArrowRightIcon,
@@ -141,9 +142,11 @@ function TrainListContent({
 function StationTabs({
   type,
   onTypeChange,
+  arrivalsDisabled = false,
 }: {
   type: "arrivals" | "departures";
   onTypeChange: (type: "arrivals" | "departures") => void;
+  arrivalsDisabled?: boolean;
 }) {
   return (
     <Tabs
@@ -156,7 +159,11 @@ function StationTabs({
           <ArrowUpRightIcon className="size-4" />
           Departures
         </TabsTrigger>
-        <TabsTrigger value="arrivals">
+        <TabsTrigger
+          value="arrivals"
+          disabled={arrivalsDisabled}
+          aria-label={arrivalsDisabled ? "Arrivals (coming soon)" : "Arrivals"}
+        >
           <ArrowDownLeftIcon className="size-4" />
           Arrivals
         </TabsTrigger>
@@ -176,6 +183,8 @@ export default function StationInfo() {
 
   // Derive open state from selectedStation
   const isOpen = !!selectedStation;
+  const arrivalsSupported = selectedStation ? getCountry(selectedStation.id) !== "lu" : true;
+  const activeType = arrivalsSupported ? type : "departures";
   useEffect(() => {
     if (!isOpen) return;
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -194,7 +203,7 @@ export default function StationInfo() {
     error,
     lastUpdated,
     info,
-  } = useTrainData(selectedStation?.id ?? null, type, isOpen);
+  } = useTrainData(selectedStation?.id ?? null, activeType, isOpen);
 
   // Desktop view
   if (!isMobile) {
@@ -218,13 +227,13 @@ export default function StationInfo() {
               >
                 <XIcon className="size-4" />
               </Button>
-              <m.div style={{ height: cardHeight.height }} className="overflow-hidden rounded-md">
+              <m.div style={{ height: cardHeight.height }} className="overflow-hidden rounded-4xl">
                 <Card
                   ref={cardHeight.contentRef}
-                  className="pt-4 pb-0 gap-2 rounded-md flex flex-col flex-1 w-96"
+                  className="flex w-96 flex-1 flex-col gap-2 pt-4 pb-0"
                 >
                   <CardHeader className="relative px-4">
-                    <CardAction className="space-x-1">
+                    <CardAction className="flex gap-1">
                       {selectedStation && <SaveButton station={selectedStation} />}
                       <Button
                         variant="ghost"
@@ -257,14 +266,18 @@ export default function StationInfo() {
                     {selectedStation && (
                       <StationWarning stationId={selectedStation.id} className="col-span-2" />
                     )}
-                    <StationTabs type={type} onTypeChange={setType} />
+                    <StationTabs
+                      type={activeType}
+                      onTypeChange={setType}
+                      arrivalsDisabled={!arrivalsSupported}
+                    />
                   </CardHeader>
                   <CardContent className="flex-1 px-0">
                     <TrainListContent
                       trainData={trainData}
                       isLoading={isLoading}
                       error={error}
-                      type={type}
+                      type={activeType}
                       scrollable
                       hasWarning={selectedStation != null && hasStationWarning(selectedStation.id)}
                     />
@@ -282,6 +295,7 @@ export default function StationInfo() {
   return (
     <Drawer
       modal={false}
+      showSwipeHandle
       disablePointerDismissal
       snapPoints={snapPoints}
       snapPoint={snap}
@@ -295,11 +309,11 @@ export default function StationInfo() {
     >
       <DrawerContent
         className={cn(
-          "h-full max-h-full! -mx-px outline-none bg-card",
-          snap === 1 && "data-[swipe-direction=down]:rounded-t-none",
+          "h-full max-h-full! -mx-px pt-2 outline-none bg-card",
+          snap === 1 && "data-[swipe-direction=down]:my-0 data-[swipe-direction=down]:rounded-none",
         )}
       >
-        <DrawerHeader className="pb-3 relative group-data-[swipe-direction=down]/drawer-content:text-left">
+        <DrawerHeader className="relative pb-3 group-data-[swipe-axis=y]/drawer-popup:text-left">
           <DrawerTitle className="text-xl pr-20 truncate">
             <Link
               to="/station/$id"
@@ -317,7 +331,7 @@ export default function StationInfo() {
             />
           </DrawerDescription>
           {info != null && snap === 1 && (
-            <div className="text-sm text-muted-foreground bg-muted px-2 py-1 rounded mt-2">
+            <div className="mt-2 rounded-2xl bg-muted px-3 py-2 text-sm text-muted-foreground">
               <MegaphoneIcon className="size-4 inline mr-1" />
               <span className="font-normal">{info}</span>
             </div>
@@ -325,7 +339,11 @@ export default function StationInfo() {
           {selectedStation && (
             <StationWarning stationId={selectedStation.id} className="col-span-2" />
           )}
-          <StationTabs type={type} onTypeChange={setType} />
+          <StationTabs
+            type={activeType}
+            onTypeChange={setType}
+            arrivalsDisabled={!arrivalsSupported}
+          />
           <div className="absolute top-3.5 right-4 flex gap-1">
             {selectedStation && <SaveButton station={selectedStation} />}
             <Button
@@ -343,7 +361,12 @@ export default function StationInfo() {
         </DrawerHeader>
 
         <div className={cn("flex-1", snap === 1 ? "scroll-fade overflow-auto" : "overflow-hidden")}>
-          <TrainListContent trainData={trainData} isLoading={isLoading} error={error} type={type} />
+          <TrainListContent
+            trainData={trainData}
+            isLoading={isLoading}
+            error={error}
+            type={activeType}
+          />
         </div>
       </DrawerContent>
     </Drawer>

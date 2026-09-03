@@ -1,11 +1,13 @@
 "use client";
 
 import { useReducer, useRef, useSyncExternalStore } from "react";
-import { XIcon } from "lucide-react";
+import { ArrowRightIcon, XIcon } from "lucide-react";
 import { LazyMotion, domAnimation, m, AnimatePresence } from "motion/react";
-import { Button } from "@repo/ui/components/button";
+import { Link } from "@tanstack/react-router";
+import { Button, buttonVariants } from "@repo/ui/components/button";
+import { cn } from "@repo/ui/lib/utils";
 
-const STORAGE_KEY = "banner-dismissed-v14";
+const STORAGE_KEY = "banner-dismissed-v15";
 
 const subscribe = () => () => {};
 const getSnapshot = () => !localStorage.getItem(STORAGE_KEY);
@@ -37,25 +39,38 @@ export function AnnouncementBanner() {
           >
             <div
               role="status"
-              className="relative flex items-center gap-3 overflow-hidden p-2.5 pr-10 md:gap-3.5 md:p-3 md:pr-12 bg-card border border-input text-card-foreground rounded-md shadow-xs"
+              className="relative flex items-center gap-3 overflow-hidden rounded-3xl bg-card p-2.5 pr-10 text-card-foreground shadow-md ring-1 ring-foreground/5 md:gap-3.5 md:p-3 md:pr-12 dark:ring-foreground/10"
             >
               <img
                 aria-hidden="true"
-                src="/icon.svg"
+                src="/assets/flags/lu.svg"
                 alt=""
-                className="size-10 shrink-0 rounded-md shadow-xs md:size-11"
+                className="size-10 shrink-0 rounded-2xl border border-border object-cover md:size-11"
               />
 
               <div className="min-w-0 flex-1">
                 <div className="mb-0.5 flex items-center gap-1.5">
                   <p className="truncate text-sm font-semibold tracking-tight">
-                    A faster Rail Radar is here
+                    Now live: Luxembourg
                   </p>
                 </div>
                 <p className="truncate text-xs text-muted-foreground">
-                  Rebuilt from the ground up for a smoother ride.
+                  90 new stations with live departures.
                 </p>
               </div>
+
+              <Link
+                to="/stations/$country"
+                params={{ country: "luxembourg" }}
+                onClick={dismiss}
+                className={cn(
+                  buttonVariants({ variant: "default", size: "sm" }),
+                  "hidden transition-transform duration-150 active:scale-[0.97] md:inline-flex",
+                )}
+              >
+                Explore
+                <ArrowRightIcon data-icon="inline-end" />
+              </Link>
 
               <Button
                 variant="ghost"
@@ -66,6 +81,16 @@ export function AnnouncementBanner() {
               >
                 <XIcon className="size-3.5" />
               </Button>
+
+              <Link
+                to="/stations/$country"
+                params={{ country: "luxembourg" }}
+                onClick={dismiss}
+                aria-label="Explore train stations in Luxembourg"
+                className="absolute inset-0 rounded-3xl focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/30 focus-visible:ring-inset md:hidden"
+              >
+                <span className="sr-only">Explore train stations in Luxembourg</span>
+              </Link>
             </div>
           </m.div>
         )}
