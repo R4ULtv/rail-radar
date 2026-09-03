@@ -22,7 +22,7 @@
     "lucide-react": "^1.39.0",
     "mapbox-gl": "^3.29.0",
     "motion": "^12.43.0",
-    "posthog-js": "^1.424.0",
+    "posthog-js": "^1.424.1",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
     "react-map-gl": "^8.1.2",
