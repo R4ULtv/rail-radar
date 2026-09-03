@@ -20,7 +20,7 @@ pnpm --filter=studio dev
 
 Runs on [http://localhost:3001](http://localhost:3001).
 
-The dev script sets `PUBLIC_STUDIO_LOCAL_MODE=true` and `LOCAL_ENV=true`. These flags select local mode in the app and enable the custom Vite middleware that serves `/api/stations` from the development server.
+The dev script automatically selects local mode and enables the custom Vite middleware that serves `/api/stations` from the development server.
 
 For a production build:
 
@@ -41,7 +41,7 @@ pnpm --filter=studio preview
 
 **Browser mode** — used in preview and production builds. Upload a GeoJSON file, edit in-browser, and export the result. Nothing is written server-side.
 
-`pnpm --filter=studio dev` enables local mode through `PUBLIC_STUDIO_LOCAL_MODE=true` and `LOCAL_ENV=true`. The middleware also recognizes `STUDIO_LOCAL_MODE=true`, but it runs only in the Vite development server; it does not use SvelteKit server routing and is unavailable in preview, production, and browser mode.
+`pnpm --filter=studio dev` selects local mode through SvelteKit's development flag. The middleware runs only in the Vite development server; it does not use SvelteKit server routing and is unavailable in preview, production, and browser mode.
 
 ## Features
 

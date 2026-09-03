@@ -370,7 +370,7 @@
       <h1 class="text-base font-semibold">Local station file unavailable</h1>
       <p class="mt-2 text-muted-foreground">{stationState.error}</p>
       <p class="mt-4 text-xs text-muted-foreground">
-        Local mode needs <code>PUBLIC_STUDIO_LOCAL_MODE=true</code> and server file access to
+        Local mode needs the Vite development server and read/write access to
         <code>packages/data/src/stations.geojson</code>.
       </p>
     </div>
