@@ -3,7 +3,6 @@ import { Marker, useMap } from "react-map-gl/mapbox";
 import { CompassIcon, LocateFixedIcon, LocateIcon, MinusIcon, PlusIcon } from "lucide-react";
 import { Button } from "@repo/ui/components/button";
 import { ButtonGroup } from "@repo/ui/components/button-group";
-import { Spinner } from "@repo/ui/components/spinner";
 
 const LOCATION_OPTIONS: PositionOptions = {
   enableHighAccuracy: false,
@@ -205,13 +204,12 @@ export function MapControls({
           aria-busy={isLocating}
           className="size-9 bg-card md:size-8 dark:bg-card"
         >
-          {showLocatingIndicator ? (
-            <Spinner data-icon="inline-start" className="motion-reduce:animate-none" />
-          ) : userLocation ? (
-            <LocateFixedIcon data-icon="inline-start" />
-          ) : (
-            <LocateIcon data-icon="inline-start" />
-          )}
+          <span
+            data-icon="inline-start"
+            className={showLocatingIndicator ? "motion-safe:animate-pulse" : undefined}
+          >
+            {userLocation ? <LocateFixedIcon /> : <LocateIcon />}
+          </span>
         </Button>
 
         <ButtonGroup orientation="vertical" className="hidden md:flex">
