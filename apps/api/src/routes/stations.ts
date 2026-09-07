@@ -13,6 +13,7 @@ import {
 import { CACHE_TTL, STATION_SEARCH_LIMIT, type Period, TRENDING_LIMIT } from "../constants";
 import { factory } from "../lib/env";
 import { jsonError } from "../lib/http";
+import { STATION_STATS_CACHE_CONTROL } from "../lib/top-station-cache";
 import { countryParamValidator, periodValidator, trainTypeValidator } from "../lib/validators";
 import { rateLimit } from "../middleware/rate-limit";
 import { createStationSearch } from "../search";
@@ -131,7 +132,7 @@ export const stationsRoutes = factory
     rateLimit,
     cache({
       cacheName: "analytics-cache",
-      cacheControl: CACHE_TTL.ANALYTICS,
+      cacheControl: STATION_STATS_CACHE_CONTROL,
     }),
     periodValidator,
     async (c) => {
