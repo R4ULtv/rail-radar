@@ -19,14 +19,14 @@
     "@tanstack/react-query": "^5.102.8",
     "@tanstack/react-router": "^1.170.32",
     "@tanstack/react-start": "^1.168.49",
-    "lucide-react": "^1.39.0",
-    "mapbox-gl": "^3.29.0",
+    "lucide-react": "^1.41.0",
+    "mapbox-gl": "^3.30.0",
     "motion": "^12.43.0",
-    "posthog-js": "^1.425.1",
+    "posthog-js": "^1.427.2",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
     "react-map-gl": "^8.1.3",
-    "takumi-js": "^2.13.5"
+    "takumi-js": "^2.13.6"
   },
   "devDependencies": {
     "@cloudflare/vite-plugin": "1.51.1",
@@ -34,11 +34,11 @@
     "@tailwindcss/vite": "^4.3.3",
     "@types/node": "^22.20.1",
     "@types/react": "^19.2.18",
-    "@types/react-dom": "^19.2.5",
+    "@types/react-dom": "^19.2.7",
     "@vitejs/plugin-react": "^6.1.1",
     "tailwindcss": "^4.3.3",
     "typescript": "^6.0.3",
     "vite": "^8.2.2",
-    "wrangler": "^4.128.0"
+    "wrangler": "^4.129.0"
   }
 }
