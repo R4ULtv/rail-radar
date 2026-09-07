@@ -127,8 +127,10 @@ pnpm --filter=web exec wrangler r2 object put rail-radar/stations/IT1728/manifes
   --jurisdiction eu
 ```
 
-Manifest responses are cached for 12 hours. Image responses are immutable for one year. Purge the
-Cloudflare cache if a manifest must change before its normal expiry.
+Manifest responses are cached for 12 hours and reused to validate newly requested images. Image
+responses are immutable for one year. This means newly requested images trust the cached manifest
+until its 12-hour expiry; urgent removals require purging the canonical station manifest cache key
+as well as any immutable image cache entries.
 
 ## Validation
 

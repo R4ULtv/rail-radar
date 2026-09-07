@@ -1,23 +1,13 @@
 import { env, waitUntil } from "cloudflare:workers";
 import { createFileRoute } from "@tanstack/react-router";
-
-interface StationPhotoManifest {
-  stationId: string;
-  images: StationPhoto[];
-}
-
-interface StationPhoto {
-  key: string;
-  alt: string;
-  attribution?: {
-    author: string;
-    license: string;
-  };
-}
+import {
+  SAFE_KEY_SEGMENT,
+  canonicalMediaCacheKey,
+  getStationPhotoManifest,
+  isSafeRelativeKey,
+} from "@/lib/station-photo-manifest.server";
 
 const IMAGE_CACHE = "public, max-age=31536000, immutable";
-const SAFE_KEY_SEGMENT = /^[A-Za-z0-9_-]+$/;
-const SAFE_RELATIVE_KEY = /^[A-Za-z0-9][A-Za-z0-9/_-]*\.(?:avif|jpe?g|png|webp)$/i;
 const IMAGE_CONTENT_TYPES = {
   avif: "image/avif",
   jpeg: "image/jpeg",
@@ -45,10 +35,6 @@ function methodNotAllowed(): Response {
   });
 }
 
-function isSafeRelativeKey(value: string): boolean {
-  return SAFE_RELATIVE_KEY.test(value) && !value.includes("//") && !value.includes("..");
-}
-
 function contentTypeForKey(key: string): string | null {
   const extension = key.split(".").pop()?.toLowerCase();
   return extension && extension in IMAGE_CONTENT_TYPES
@@ -61,66 +47,6 @@ function normalizeImageContentType(value: string | undefined): string | null {
   return contentType && Object.values(IMAGE_CONTENT_TYPES).includes(contentType as never)
     ? contentType
     : null;
-}
-
-function isRecord(value: unknown): value is Record<string, unknown> {
-  return typeof value === "object" && value !== null && !Array.isArray(value);
-}
-
-function normalizePhotoManifest(value: unknown, stationId: string): StationPhotoManifest | null {
-  if (!isRecord(value) || value.stationId !== stationId || !Array.isArray(value.images)) {
-    return null;
-  }
-
-  const images: StationPhoto[] = [];
-
-  for (const image of value.images) {
-    if (
-      !isRecord(image) ||
-      typeof image.alt !== "string" ||
-      image.alt.trim() === "" ||
-      typeof image.key !== "string" ||
-      !isSafeRelativeKey(image.key)
-    ) {
-      return null;
-    }
-
-    const attribution = image.attribution;
-    if (
-      attribution !== undefined &&
-      (!isRecord(attribution) ||
-        typeof attribution.author !== "string" ||
-        typeof attribution.license !== "string")
-    ) {
-      return null;
-    }
-
-    images.push({
-      key: image.key,
-      alt: image.alt,
-      attribution:
-        isRecord(attribution) &&
-        typeof attribution.author === "string" &&
-        typeof attribution.license === "string"
-          ? { author: attribution.author, license: attribution.license }
-          : undefined,
-    });
-  }
-
-  return { stationId, images };
-}
-
-async function getPhotoManifest(stationId: string): Promise<StationPhotoManifest | null> {
-  const object = await env.STATION_IMAGES.get(`stations/${stationId}/manifest.json`);
-  if (!object) {
-    return null;
-  }
-
-  const manifest = normalizePhotoManifest(await object.json(), stationId);
-  if (!manifest) {
-    console.error(JSON.stringify({ message: "Invalid station photo manifest", stationId }));
-  }
-  return manifest;
 }
 
 function internalError(request: Request, error: unknown): Response {
@@ -153,16 +79,22 @@ async function getStationPhotoResponse(
       return new Response("Invalid station photo path", { status: 400 });
     }
 
-    const cache = await caches.open("station-photos");
-    const cacheKey = new Request(request.url, { method: "GET" });
-    const cached = await cache.match(cacheKey);
-    if (cached) {
-      // Cache API responses have immutable headers. Clone the response so the app-wide security
-      // middleware can attach its headers before sending it to the browser.
-      return new Response(cached.body, cached);
+    let cache: Cache | undefined;
+    try {
+      cache = await caches.open("station-photos");
+      const cacheKey = canonicalMediaCacheKey(request);
+      const cached = await cache.match(cacheKey);
+      if (cached) {
+        // Cache API responses have immutable headers. Clone the response so the app-wide security
+        // middleware can attach its headers before sending it to the browser.
+        return new Response(cached.body, cached);
+      }
+    } catch {
+      // A Cache API failure must not prevent serving a valid R2 image.
+      cache = undefined;
     }
 
-    const manifest = await getPhotoManifest(stationId);
+    const { manifest } = await getStationPhotoManifest(request, stationId);
     const image = manifest?.images.find((photo) => photo.key === photoKey);
     if (!image) {
       return new Response("Station photo not found", { status: 404 });
@@ -193,7 +125,10 @@ async function getStationPhotoResponse(
         "X-Content-Type-Options": "nosniff",
       },
     });
-    waitUntil(cache.put(cacheKey, response.clone()));
+    if (cache) {
+      const cacheKey = canonicalMediaCacheKey(request);
+      waitUntil(cache.put(cacheKey, response.clone()).catch(() => undefined));
+    }
     return response;
   } catch (error) {
     return internalError(request, error);
