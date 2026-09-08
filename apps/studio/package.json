@@ -32,7 +32,7 @@
     "@tailwindcss/vite": "^4.3.3",
     "@types/node": "^22.20.1",
     "bits-ui": "^2.19.0",
-    "cn": "^0.2.5",
+    "cn": "^0.2.6",
     "shadcn-svelte": "^1.6.1",
     "svelte-check": "^4.7.6",
     "tailwind-variants": "^3.3.1",
