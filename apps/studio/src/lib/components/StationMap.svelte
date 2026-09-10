@@ -1,11 +1,7 @@
 <script lang="ts">
   import type { Station } from "@repo/data";
-  import maplibregl, {
-    type ExpressionSpecification,
-    type GeoJSONSource,
-    type Map,
-    type Marker,
-  } from "maplibre-gl";
+  import * as maplibregl from "maplibre-gl";
+  import type { ExpressionSpecification, GeoJSONSource, Map, Marker } from "maplibre-gl";
   import { onDestroy, onMount } from "svelte";
   import { STATION_TYPE_COLOR } from "$lib/station-colors";
   import {
@@ -246,9 +242,9 @@
       attributionControl: false,
     });
 
-    map.on("styleimagemissing", (event) => {
-      if (!map || map.hasImage(event.id)) return;
-      map.addImage(event.id, { width: 1, height: 1, data: new Uint8Array(4) });
+    map.setMissingStyleImageResolver((id) => {
+      if (!map || map.hasImage(id)) return;
+      map.addImage(id, { width: 1, height: 1, data: new Uint8Array(4) });
     });
 
     map.on("load", () => {
@@ -281,7 +277,7 @@
       map.on("mousemove", (event) => {
         syncHoverCursor(event.point);
       });
-      map.on("mouseleave", () => {
+      map.on("mouseout", () => {
         setCanvasCursor(false);
       });
 
