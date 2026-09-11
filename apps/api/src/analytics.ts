@@ -1,4 +1,9 @@
 import { getPeriodInterval, STATION_ID_PATTERN, type Period } from "./constants";
+import {
+  getCachedTopStationAggregate,
+  TOP_STATION_CACHE_NAME,
+  type TopStationCache,
+} from "./lib/top-station-cache";
 
 import { COUNTRY_CODES, getCountry, type CountryCode } from "@repo/data/countries";
 
@@ -238,6 +243,7 @@ export async function getStationStats(
   apiToken: string,
   stationId: string,
   period: Period = "day",
+  aggregateCache?: TopStationCache,
 ): Promise<{ station: TopStation | null; topStation: TopStation | null }> {
   // SECURITY: Validate stationId format before use in SQL query.
   // Pattern ensures only alphanumeric station IDs like "IT1728" or "CH123".
@@ -262,9 +268,28 @@ export async function getStationStats(
     GROUP BY stationId
   `;
 
-  const [stationResult, trendingResult] = await Promise.all([
+  const loadTopStation = async () =>
+    (await getTrendingStations(accountId, apiToken, period, 1, undefined, "uniqueVisitors"))[0] ??
+    null;
+
+  const getTopStation = async () => {
+    if (aggregateCache) {
+      return getCachedTopStationAggregate(aggregateCache, accountId, period, loadTopStation);
+    }
+
+    let workerCache: Cache;
+    try {
+      workerCache = await caches.open(TOP_STATION_CACHE_NAME);
+    } catch {
+      return loadTopStation();
+    }
+
+    return getCachedTopStationAggregate(workerCache, accountId, period, loadTopStation);
+  };
+
+  const [stationResult, topStation] = await Promise.all([
     queryAnalytics<AnalyticsQueryResult>(accountId, apiToken, stationQuery),
-    getTrendingStations(accountId, apiToken, period, 1, undefined, "uniqueVisitors"),
+    getTopStation(),
   ]);
 
   const stationData = stationResult.data[0];
@@ -277,8 +302,6 @@ export async function getStationStats(
         uniqueVisitors: Number(stationData.uniqueVisitors),
       }
     : null;
-
-  const topStation = trendingResult[0] ?? null;
 
   return { station, topStation };
 }

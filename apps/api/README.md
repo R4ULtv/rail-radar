@@ -77,9 +77,16 @@ Returns `application/geo+json` FeatureCollection consumed directly by Mapbox GL 
 | `/stations/search`    | 5min cache, 1min stale-while-revalidate |
 | `/stations.geojson`   | 24h cache, 1h stale-while-revalidate    |
 | `/stations/:id`       | 25s cache, 5s stale-while-revalidate    |
-| `/stations/:id/stats` | 5min cache, 1min stale-while-revalidate |
+| `/stations/:id/stats` | 150s cache                              |
 | `/stations/trending`  | 5min cache, 1min stale-while-revalidate |
 | `/analytics/overview` | 5min cache, 1min stale-while-revalidate |
+
+Station statistics reuse the completed global top-station aggregate for 150 seconds within a
+Cloudflare data center. This shortens the full station-statistics response cache from five minutes
+to 150 seconds, keeping composed aggregate freshness within the previous five-minute budget. The
+trade-off is that station-specific statistics may be queried more often; the aggregate cache saves
+queries when traffic covers multiple stations, so representative multi-station traffic should be
+measured when changing either lifetime.
 
 Luxembourg departures use the standard 25-second station-response cache. Mobiliteit.lu enforces
 the account quota of 500 requests/hour and 5,000 requests/day; no application-side quota counter is
