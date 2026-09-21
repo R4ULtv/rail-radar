@@ -11,15 +11,15 @@
     "optimize-svgs": "node scripts/optimize-svgs.mjs"
   },
   "devDependencies": {
-    "eslint-plugin-turbo": "^2.10.12",
-    "oxfmt": "^0.67.0",
-    "oxlint": "^1.82.0",
+    "eslint-plugin-turbo": "^2.11.2",
+    "oxfmt": "^0.68.0",
+    "oxlint": "^1.83.0",
     "svgo": "^4.1.0",
-    "turbo": "^2.10.12",
+    "turbo": "^2.11.2",
     "typescript": "^6.0.3"
   },
   "engines": {
     "node": ">=22"
   },
-  "packageManager": "pnpm@12.4.1"
+  "packageManager": "pnpm@12.4.2"
 }
