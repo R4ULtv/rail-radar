@@ -30,6 +30,7 @@ import {
   InputGroupButton,
   InputGroupInput,
 } from "@repo/ui/components/input-group";
+import { Skeleton } from "@repo/ui/components/skeleton";
 import { Spinner } from "@repo/ui/components/spinner";
 import { Kbd } from "@repo/ui/components/kbd";
 
@@ -121,6 +122,25 @@ const StationList = React.memo(function StationList({
   );
 });
 
+const SKELETON_WIDTHS = ["w-40", "w-28", "w-36", "w-24", "w-32"];
+
+function StationListSkeleton() {
+  return (
+    <ul aria-hidden="true" className="flex flex-col">
+      {SKELETON_WIDTHS.map((width) => (
+        <li
+          key={width}
+          className="mx-2 flex w-[calc(100%-1rem)] items-center gap-2 rounded-2xl px-3 py-2.5 md:py-2"
+        >
+          <Skeleton className="size-4 shrink-0 rounded-md" />
+          <Skeleton className={cn("h-3.5 rounded-full", width)} />
+          <Skeleton className="size-3 shrink-0 rounded-full" />
+        </li>
+      ))}
+    </ul>
+  );
+}
+
 function SearchContent({
   isSearchActive,
   searchResults,
@@ -129,7 +149,6 @@ function SearchContent({
   noResults,
   showDefaultLists,
   isUpdatingResults,
-  hasDisplayedSearchData,
   searchActivationDisabled,
   filteredRecentStations,
   savedStations,
@@ -147,7 +166,6 @@ function SearchContent({
   noResults: boolean;
   showDefaultLists: boolean;
   isUpdatingResults: boolean;
-  hasDisplayedSearchData: boolean;
   searchActivationDisabled: boolean;
   filteredRecentStations: Station[];
   savedStations: Station[];
@@ -158,19 +176,23 @@ function SearchContent({
   setFocusedIndex: (index: number) => void;
   limit?: number;
 }) {
+  // Keep-previous only helps when there are rows on screen. A prior search that
+  // returned nothing leaves us with none, so fall back to skeletons there too —
+  // otherwise every branch is false and the panel collapses to height 0.
+  const hasKeptResults = searchResults.length > 0;
+
   return (
     <div role="region" aria-label="Station search results" aria-busy={isUpdatingResults}>
-      {isUpdatingResults && (
-        <div
-          role="status"
-          aria-live="polite"
-          className={cn(
-            "px-4 py-2 text-xs text-muted-foreground",
-            !hasDisplayedSearchData && "min-h-16 flex items-center",
-          )}
-        >
-          {hasDisplayedSearchData ? "Updating results…" : "Searching…"}
-        </div>
+      {isUpdatingResults && !hasKeptResults && !hasSearchError && (
+        <>
+          <div className="px-4 py-2 not-first:mt-1">
+            <p className="text-muted-foreground text-sm flex items-center gap-2">
+              <ListIcon className="size-3.5" />
+              Search Results
+            </p>
+          </div>
+          <StationListSkeleton />
+        </>
       )}
       {/* Search Error */}
       {hasSearchError && (
@@ -268,6 +290,13 @@ function SearchContent({
           />
         </>
       )}
+      <div role="status" aria-live="polite" className="sr-only">
+        {isUpdatingResults
+          ? hasKeptResults
+            ? "Updating results"
+            : "Searching stations"
+          : ""}
+      </div>
     </div>
   );
 }
@@ -494,7 +523,6 @@ export function Search() {
     noResults,
     showDefaultLists,
     isUpdatingResults,
-    hasDisplayedSearchData: displayedQuery != null,
     searchActivationDisabled,
     filteredRecentStations,
     savedStations,
