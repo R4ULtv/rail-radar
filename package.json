@@ -12,8 +12,8 @@
   },
   "devDependencies": {
     "eslint-plugin-turbo": "^2.11.2",
-    "oxfmt": "^0.68.0",
-    "oxlint": "^1.83.0",
+    "oxfmt": "^0.69.0",
+    "oxlint": "^1.84.0",
     "svgo": "^4.1.0",
     "turbo": "^2.11.2",
     "typescript": "^6.0.3"
