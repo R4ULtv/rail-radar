@@ -193,7 +193,7 @@ function ArticleSection({
 
 function CountryTable() {
   return (
-    <Card size="sm" className="not-prose mt-7 rounded-3xl bg-muted/25 shadow-none ring-0">
+    <Card size="sm" className="mt-7 rounded-3xl bg-muted/25 shadow-none ring-0">
       <CardContent>
         <Table className="min-w-190">
           <TableHeader className="[&_tr]:border-0">
@@ -277,7 +277,7 @@ function StationLeaderboard({
 
 function StationLeaderboards() {
   return (
-    <div className="not-prose mt-7 grid gap-6 md:grid-cols-2">
+    <div className="mt-7 grid gap-6 md:grid-cols-2">
       <StationLeaderboard
         title="Most visited stations"
         caption="Top 5 by visits"
@@ -296,7 +296,7 @@ function StationLeaderboards() {
 
 function ProviderTable() {
   return (
-    <Card size="sm" className="not-prose mt-7 rounded-3xl bg-muted/25 shadow-none ring-0">
+    <Card size="sm" className="mt-7 rounded-3xl bg-muted/25 shadow-none ring-0">
       <CardContent>
         <Table className="min-w-170">
           <TableHeader className="[&_tr]:border-0">
@@ -329,7 +329,7 @@ function ProviderTable() {
 
 function ReleaseTimeline() {
   return (
-    <ItemGroup className="not-prose mt-7">
+    <ItemGroup className="mt-7">
       {report.releases.map(([date, countries, note], index) => (
         <Item key={date} variant="muted" className="items-start">
           <ItemContent className="grid gap-3 sm:grid-cols-[10rem_1fr]">

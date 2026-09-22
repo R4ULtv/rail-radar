@@ -122,21 +122,34 @@ const StationList = React.memo(function StationList({
   );
 });
 
-const SKELETON_WIDTHS = ["w-40", "w-28", "w-36", "w-24", "w-32"];
+function StationSkeletonRow({ children }: { children: React.ReactNode }) {
+  return (
+    <li className="mx-2 flex w-[calc(100%-1rem)] items-center gap-2 rounded-2xl px-3 py-2.5 md:py-2">
+      <Skeleton className="size-4 shrink-0 rounded-md" />
+      {children}
+      <Skeleton className="size-3 shrink-0 rounded-full" />
+    </li>
+  );
+}
 
 function StationListSkeleton() {
   return (
     <ul aria-hidden="true" className="flex flex-col">
-      {SKELETON_WIDTHS.map((width) => (
-        <li
-          key={width}
-          className="mx-2 flex w-[calc(100%-1rem)] items-center gap-2 rounded-2xl px-3 py-2.5 md:py-2"
-        >
-          <Skeleton className="size-4 shrink-0 rounded-md" />
-          <Skeleton className={cn("h-3.5 rounded-full", width)} />
-          <Skeleton className="size-3 shrink-0 rounded-full" />
-        </li>
-      ))}
+      <StationSkeletonRow>
+        <Skeleton className="h-3.5 w-40 rounded-full" />
+      </StationSkeletonRow>
+      <StationSkeletonRow>
+        <Skeleton className="h-3.5 w-28 rounded-full" />
+      </StationSkeletonRow>
+      <StationSkeletonRow>
+        <Skeleton className="h-3.5 w-36 rounded-full" />
+      </StationSkeletonRow>
+      <StationSkeletonRow>
+        <Skeleton className="h-3.5 w-24 rounded-full" />
+      </StationSkeletonRow>
+      <StationSkeletonRow>
+        <Skeleton className="h-3.5 w-32 rounded-full" />
+      </StationSkeletonRow>
     </ul>
   );
 }
@@ -291,11 +304,7 @@ function SearchContent({
         </>
       )}
       <div role="status" aria-live="polite" className="sr-only">
-        {isUpdatingResults
-          ? hasKeptResults
-            ? "Updating results"
-            : "Searching stations"
-          : ""}
+        {isUpdatingResults ? (hasKeptResults ? "Updating results" : "Searching stations") : ""}
       </div>
     </div>
   );
