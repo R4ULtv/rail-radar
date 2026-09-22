@@ -261,7 +261,7 @@ function ConfiguredMap() {
   }, []);
 
   return (
-    <div style={{ position: "relative", width: "100%", height: "100%" }}>
+    <div className="relative h-full w-full">
       {hasMapLoadError ? (
         <div className="absolute inset-0 z-10">
           <MapLoadError />
