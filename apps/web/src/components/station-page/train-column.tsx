@@ -10,6 +10,7 @@ import {
 } from "@repo/ui/components/card";
 import { ToggleGroup, ToggleGroupItem } from "@repo/ui/components/toggle-group";
 import { TrainRow, TrainRowSkeleton } from "@/components/train-row";
+import { TrainBoardNotice } from "@/components/train-board-notice";
 import { ArrowDownLeftIcon, ArrowUpRightIcon } from "lucide-react";
 
 import { UpdatedStatus } from "@/components/updated-status";
@@ -22,6 +23,7 @@ interface TrainColumnProps {
   isValidating: boolean;
   error: string | null;
   lastUpdated: Date | null;
+  onRetry: () => void;
   showTypeToggle?: boolean;
   onTypeChange?: (type: "arrivals" | "departures") => void;
   arrivalsDisabled?: boolean;
@@ -36,11 +38,13 @@ export function TrainColumn({
   isValidating,
   error,
   lastUpdated,
+  onRetry,
   showTypeToggle,
   onTypeChange,
   arrivalsDisabled = false,
   unavailableMessage,
 }: TrainColumnProps) {
+  const hasSnapshot = trainData !== null;
   const Icon = type === "departures" ? ArrowUpRightIcon : ArrowDownLeftIcon;
 
   return (
@@ -85,7 +89,7 @@ export function TrainColumn({
         <CardDescription>
           <UpdatedStatus
             isLoading={isLoading}
-            isValidating={isValidating}
+            isValidating={isValidating && !error}
             lastUpdated={lastUpdated}
           />
         </CardDescription>
@@ -95,28 +99,37 @@ export function TrainColumn({
           <div className="px-4 py-8 text-center text-sm text-muted-foreground">
             {unavailableMessage}
           </div>
-        ) : isLoading ? (
+        ) : !hasSnapshot && error ? (
+          <TrainBoardNotice hasSnapshot={false} isValidating={isValidating} onRetry={onRetry} />
+        ) : !hasSnapshot && isLoading ? (
           <div>
             {Array.from({ length: 8 }).map((_, i) => (
               <TrainRowSkeleton key={i} />
             ))}
           </div>
-        ) : error ? (
-          <div className="px-4 py-8 text-center text-sm text-muted-foreground">{error}</div>
-        ) : !trainData || trainData.length === 0 ? (
-          <div className="px-4 py-8 text-center text-sm text-muted-foreground">
-            No {type} scheduled
-          </div>
-        ) : (
-          <div>
-            {trainData.map((train) => (
-              <TrainRow
-                key={`${train.trainNumber}-${train.scheduledTime}-${train.platform}`}
-                train={train}
-                type={type}
-              />
-            ))}
-          </div>
+        ) : !hasSnapshot ? null : (
+          <>
+            {error && (
+              <TrainBoardNotice hasSnapshot isValidating={isValidating} onRetry={onRetry} />
+            )}
+            {trainData.length === 0 ? (
+              <div className="px-4 py-8 text-center text-sm text-muted-foreground">
+                {error
+                  ? `No ${type} were listed in the last received update.`
+                  : `No ${type} scheduled`}
+              </div>
+            ) : (
+              <div>
+                {trainData.map((train) => (
+                  <TrainRow
+                    key={`${train.trainNumber}-${train.scheduledTime}-${train.platform}`}
+                    train={train}
+                    type={type}
+                  />
+                ))}
+              </div>
+            )}
+          </>
         )}
       </CardContent>
     </Card>
