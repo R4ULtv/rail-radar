@@ -166,9 +166,15 @@ pnpm --filter=web deploy:preview
 ```
 
 Wrangler defaults the Preview name to the current Git branch, so the `preview` branch is always
-available at `https://preview.railradar24.com`. The Preview shares the read-only station-photo R2
-bucket with production and uses its own rate-limit namespace.
+available at `https://preview.railradar24.com`; other branches are served at
+`https://<branch>.railradar24.com`. Previews do not inherit production bindings or secrets: the
+`previews` block shares the read-only station-photo R2 bucket with production and uses its own
+rate-limit namespace. Store the map token for all Previews once with:
+
+```bash
+pnpm --filter=web exec wrangler preview base-config secret put MAPBOX_SERVER_TOKEN
+```
 
 The custom-domain Preview setting must first be applied by a production deployment from a clean
 checkout of the production branch. Once that one-time deployment has completed, Preview deployments
-update only the isolated `preview` branch environment.
+update only the isolated branch environment.
