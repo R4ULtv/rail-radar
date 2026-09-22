@@ -10,6 +10,7 @@ import { Button } from "@repo/ui/components/button";
 import { Analytics } from "@/components/analytics";
 import { env } from "@/lib/env";
 import appCss from "../styles.css?url";
+import geistFont from "../assets/fonts/Geist/Geist.woff2?url";
 
 const DEFAULT_TITLE = "Rail Radar | Live Train Tracker Across Europe";
 const DEFAULT_DESCRIPTION =
@@ -52,6 +53,13 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     ],
     links: [
       { rel: "stylesheet", href: appCss },
+      {
+        rel: "preload",
+        href: geistFont,
+        as: "font",
+        type: "font/woff2",
+        crossOrigin: "anonymous" as const,
+      },
       { rel: "icon", href: "/favicon.ico" },
       { rel: "apple-touch-icon", href: "/icon@180px.png" },
       { rel: "manifest", href: "/manifest.webmanifest" },
