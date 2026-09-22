@@ -8,6 +8,7 @@
     "build": "vite build",
     "start": "vite preview --port 3000",
     "deploy": "wrangler deploy --minify",
+    "deploy:preview": "vite build && wrangler preview",
     "versions": "wrangler versions upload",
     "cf-typegen": "wrangler types",
     "lint": "oxlint --deny warnings",

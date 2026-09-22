@@ -155,3 +155,20 @@ The Cloudflare Vite plugin builds the TanStack Start SSR handler and deploys the
 Worker static assets. `wrangler.jsonc` also binds the R2 bucket and media rate limiter.
 Regenerate `worker-configuration.d.ts` with `pnpm --filter=web cf-typegen` whenever those bindings
 change.
+
+## Preview deployment
+
+Worker Previews use the production custom domain as their base and do not expose `workers.dev`
+URLs. From the `preview` branch, deploy with:
+
+```bash
+pnpm --filter=web deploy:preview
+```
+
+Wrangler defaults the Preview name to the current Git branch, so the `preview` branch is always
+available at `https://preview.railradar24.com`. The Preview shares the read-only station-photo R2
+bucket with production and uses its own rate-limit namespace.
+
+The custom-domain Preview setting must first be applied by a production deployment from a clean
+checkout of the production branch. Once that one-time deployment has completed, Preview deployments
+update only the isolated `preview` branch environment.
