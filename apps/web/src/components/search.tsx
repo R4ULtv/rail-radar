@@ -53,6 +53,7 @@ const StationList = React.memo(function StationList({
   startIndex = 0,
   onFocusIndex,
   counts,
+  activationDisabled = false,
 }: {
   stations: Station[];
   onSelect: (station: Station) => void;
@@ -60,6 +61,7 @@ const StationList = React.memo(function StationList({
   startIndex?: number;
   onFocusIndex?: (index: number) => void;
   counts?: Map<string, { visits: number; uniqueVisitors: number }>;
+  activationDisabled?: boolean;
 }) {
   if (stations.length === 0) return null;
 
@@ -80,11 +82,12 @@ const StationList = React.memo(function StationList({
             <button
               onMouseDown={(e) => e.preventDefault()}
               onClick={() => onSelect(station)}
-              onMouseEnter={() => onFocusIndex?.(globalIndex)}
-              onMouseLeave={() => onFocusIndex?.(-1)}
+              onMouseEnter={() => !activationDisabled && onFocusIndex?.(globalIndex)}
+              onMouseLeave={() => !activationDisabled && onFocusIndex?.(-1)}
+              disabled={activationDisabled}
               tabIndex={-1}
               className={cn(
-                "mx-2 flex w-[calc(100%-1rem)] items-center gap-2 rounded-2xl px-3 py-2.5 text-left text-sm transition-colors duration-100 ease-out md:py-2",
+                "mx-2 flex w-[calc(100%-1rem)] items-center gap-2 rounded-2xl px-3 py-2.5 text-left text-sm transition-colors duration-100 ease-out disabled:cursor-wait disabled:opacity-60 md:py-2",
                 isFocused && "bg-muted",
               )}
             >
@@ -125,6 +128,9 @@ function SearchContent({
   retrySearch,
   noResults,
   showDefaultLists,
+  isUpdatingResults,
+  hasDisplayedSearchData,
+  searchActivationDisabled,
   filteredRecentStations,
   savedStations,
   trendingStations,
@@ -140,6 +146,9 @@ function SearchContent({
   retrySearch: () => void;
   noResults: boolean;
   showDefaultLists: boolean;
+  isUpdatingResults: boolean;
+  hasDisplayedSearchData: boolean;
+  searchActivationDisabled: boolean;
   filteredRecentStations: Station[];
   savedStations: Station[];
   trendingStations: Station[];
@@ -150,7 +159,19 @@ function SearchContent({
   limit?: number;
 }) {
   return (
-    <>
+    <div role="region" aria-label="Station search results" aria-busy={isUpdatingResults}>
+      {isUpdatingResults && (
+        <div
+          role="status"
+          aria-live="polite"
+          className={cn(
+            "px-4 py-2 text-xs text-muted-foreground",
+            !hasDisplayedSearchData && "min-h-16 flex items-center",
+          )}
+        >
+          {hasDisplayedSearchData ? "Updating results…" : "Searching…"}
+        </div>
+      )}
       {/* Search Error */}
       {hasSearchError && (
         <div role="alert" className="px-4 py-3 text-sm">
@@ -164,7 +185,7 @@ function SearchContent({
         </div>
       )}
       {/* Search Results */}
-      {isSearchActive && !hasSearchError && searchResults.length > 0 && (
+      {isSearchActive && searchResults.length > 0 && (
         <>
           <div className="px-4 py-2 not-first:mt-1">
             <p className="text-muted-foreground text-sm flex items-center gap-2">
@@ -178,6 +199,7 @@ function SearchContent({
             focusedIndex={focusedIndex}
             startIndex={0}
             onFocusIndex={setFocusedIndex}
+            activationDisabled={searchActivationDisabled}
           />
         </>
       )}
@@ -246,7 +268,7 @@ function SearchContent({
           />
         </>
       )}
-    </>
+    </div>
   );
 }
 
@@ -272,8 +294,7 @@ export function Search() {
   React.useEffect(() => {
     setUrlQuery(debouncedQuery || null);
   }, [debouncedQuery, setUrlQuery]);
-  const [focusedIndex, setFocusedIndex] = React.useState<number>(-1);
-  const previousListStateRef = React.useRef({ query, resultsLength: 0 });
+  const [focus, setFocus] = React.useState({ listKey: "", index: -1 });
   const [isDrawerOpen, setIsDrawerOpen] = React.useState(() => isMobile && query.length > 0);
   const initialDrawerOpenConsideredRef = React.useRef(false);
 
@@ -289,8 +310,10 @@ export function Search() {
   // Fetch search results
   const {
     stations: searchResultsRaw,
+    displayedQuery,
+    isPlaceholderData,
+    isFetching,
     error: searchError,
-    isLoading,
     retry: retrySearch,
   } = useStationSearch(searchQuery);
   const searchResults = searchResultsRaw;
@@ -323,25 +346,29 @@ export function Search() {
 
   const isSearchActive = trimmedQuery.length > 0;
   const isSearchResultsActive = isSearchActive && hasMinimumSearchLength;
-  const isSearchReady = hasMinimumSearchLength && trimmedQuery === debouncedQuery;
-  const hasSearchError = isSearchActive && isSearchReady && !isLoading && searchError != null;
-  const hasSearched = isSearchActive && isSearchReady && !isLoading && searchError == null;
-
-  const noResults = hasSearched && searchResults.length === 0;
-  const showDefaultLists =
-    !isSearchActive ||
-    !hasMinimumSearchLength ||
-    noResults ||
-    (isSearchActive && !hasSearched && !hasSearchError);
-  const showSearchSpinner = hasMinimumSearchLength && !hasSearched && !hasSearchError;
-  const showSearchContent =
-    !isSearchActive || !hasMinimumSearchLength || hasSearched || hasSearchError;
+  const isCurrentResult =
+    hasMinimumSearchLength &&
+    trimmedQuery === debouncedQuery &&
+    displayedQuery === trimmedQuery &&
+    !isPlaceholderData;
+  const hasSearchError =
+    hasMinimumSearchLength && trimmedQuery === debouncedQuery && searchError != null;
+  const canActivateSearchResults = isCurrentResult && !hasSearchError;
+  const isUpdatingResults = hasMinimumSearchLength && !isCurrentResult && !hasSearchError;
+  const noResults = canActivateSearchResults && searchResults.length === 0;
+  const showDefaultLists = !hasMinimumSearchLength || noResults;
+  const searchActivationDisabled =
+    hasMinimumSearchLength && !noResults && !canActivateSearchResults;
+  const showSearchSpinner = isUpdatingResults || isFetching;
 
   const cardHeight = useAnimatedHeight();
 
   const handleSelectStation = React.useCallback(
     (station: Station) => {
+      if (searchActivationDisabled) return;
+
       selectStation(station);
+      setFocus({ listKey: "", index: -1 });
       if (isMobile) {
         setIsDrawerOpen(false);
         setQuery("");
@@ -350,7 +377,7 @@ export function Search() {
         setQuery("");
       }
     },
-    [selectStation, isMobile, setQuery],
+    [selectStation, isMobile, searchActivationDisabled],
   );
 
   // Filter recent stations to exclude those already in saved stations.
@@ -360,96 +387,98 @@ export function Search() {
   }, [recentStations, savedStations]);
 
   const visibleStations = React.useMemo(() => {
-    if (isSearchResultsActive && !hasSearchError && searchResults.length > 0) {
+    if (canActivateSearchResults && searchResults.length > 0) {
       return searchResults.slice(0, 10);
     }
-    if (!isSearchResultsActive || noResults) {
+    if (!hasMinimumSearchLength || noResults) {
       return [...filteredRecentStations, ...savedStations, ...trendingStations];
     }
     return [];
   }, [
-    isSearchResultsActive,
-    hasSearchError,
+    canActivateSearchResults,
     searchResults,
     filteredRecentStations,
     savedStations,
     noResults,
     trendingStations,
+    hasMinimumSearchLength,
   ]);
 
-  const focusedIndexRef = React.useRef(focusedIndex);
-  const visibleStationsRef = React.useRef(visibleStations);
+  const listKey = JSON.stringify([
+    trimmedQuery,
+    displayedQuery,
+    visibleStations.map((station) => station.id),
+  ]);
+  const focusedIndex =
+    focus.listKey === listKey && focus.index >= 0 && focus.index < visibleStations.length
+      ? focus.index
+      : -1;
+  const setFocusedIndex = React.useCallback(
+    (index: number) => setFocus({ listKey, index }),
+    [listKey],
+  );
+  const handleQueryChange = React.useCallback((value: string) => {
+    setQuery(value);
+    setFocus({ listKey: "", index: -1 });
+  }, []);
 
-  React.useEffect(() => {
-    focusedIndexRef.current = focusedIndex;
-    visibleStationsRef.current = visibleStations;
+  const handleKeyDown = React.useEffectEvent((e: KeyboardEvent) => {
+    // Cmd/Ctrl+K to toggle focus
+    if ((e.metaKey || e.ctrlKey) && e.key === "k") {
+      e.preventDefault();
+      if (document.activeElement === inputRef.current) {
+        inputRef.current?.blur();
+      } else {
+        inputRef.current?.focus();
+      }
+      return;
+    }
+
+    // Escape to blur
+    if (e.key === "Escape" && document.activeElement === inputRef.current) {
+      inputRef.current?.blur();
+      return;
+    }
+
+    // Arrow/Enter navigation only when input is focused
+    if (document.activeElement !== inputRef.current) return;
+
+    if (e.key === "ArrowDown") {
+      e.preventDefault();
+      setFocus((previousFocus) => {
+        if (visibleStations.length === 0) return { listKey, index: -1 };
+        const currentIndex = previousFocus.listKey === listKey ? previousFocus.index : -1;
+        return {
+          listKey,
+          index: Math.min(currentIndex + 1, visibleStations.length - 1),
+        };
+      });
+      return;
+    }
+
+    if (e.key === "ArrowUp") {
+      e.preventDefault();
+      setFocus((previousFocus) => {
+        if (visibleStations.length === 0) return { listKey, index: -1 };
+        const currentIndex = previousFocus.listKey === listKey ? previousFocus.index : -1;
+        return { listKey, index: currentIndex > 0 ? currentIndex - 1 : 0 };
+      });
+      return;
+    }
+
+    if (e.key === "Enter") {
+      e.preventDefault();
+      const station = visibleStations[focusedIndex];
+      if (station) {
+        handleSelectStation(station);
+      }
+    }
   });
 
-  const previousListState = previousListStateRef.current;
-  if (
-    query !== previousListState.query ||
-    searchResults.length !== previousListState.resultsLength
-  ) {
-    previousListStateRef.current = { query, resultsLength: searchResults.length };
-    if (focusedIndex !== -1) {
-      setFocusedIndex(-1);
-    }
-  }
-
   React.useEffect(() => {
-    function handleKeyDown(e: KeyboardEvent) {
-      // Cmd/Ctrl+K to toggle focus
-      if ((e.metaKey || e.ctrlKey) && e.key === "k") {
-        e.preventDefault();
-        if (document.activeElement === inputRef.current) {
-          inputRef.current?.blur();
-        } else {
-          inputRef.current?.focus();
-        }
-        return;
-      }
-
-      // Escape to blur
-      if (e.key === "Escape" && document.activeElement === inputRef.current) {
-        inputRef.current?.blur();
-        return;
-      }
-
-      // Arrow/Enter navigation only when input is focused
-      if (document.activeElement !== inputRef.current) return;
-
-      if (e.key === "ArrowDown") {
-        e.preventDefault();
-        setFocusedIndex((prev) => {
-          if (visibleStationsRef.current.length === 0) return -1;
-          if (prev < visibleStationsRef.current.length - 1) return prev + 1;
-          return prev;
-        });
-        return;
-      }
-
-      if (e.key === "ArrowUp") {
-        e.preventDefault();
-        setFocusedIndex((prev) => {
-          if (prev > 0) return prev - 1;
-          return 0;
-        });
-        return;
-      }
-
-      if (e.key === "Enter") {
-        e.preventDefault();
-        const station = visibleStationsRef.current[focusedIndexRef.current];
-        if (station) {
-          handleSelectStation(station);
-        }
-        return;
-      }
-    }
-
     document.addEventListener("keydown", handleKeyDown);
     return () => document.removeEventListener("keydown", handleKeyDown);
-  }, [handleSelectStation]);
+  }, []);
 
   React.useEffect(() => {
     if (isMobile && isDrawerOpen) {
@@ -464,6 +493,9 @@ export function Search() {
     retrySearch,
     noResults,
     showDefaultLists,
+    isUpdatingResults,
+    hasDisplayedSearchData: displayedQuery != null,
+    searchActivationDisabled,
     filteredRecentStations,
     savedStations,
     trendingStations,
@@ -510,7 +542,7 @@ export function Search() {
                   ref={inputRef}
                   placeholder="Search..."
                   value={query}
-                  onChange={(e) => setQuery(e.target.value)}
+                  onChange={(e) => handleQueryChange(e.target.value)}
                   name="search"
                   autoComplete="off"
                   aria-label="Search stations"
@@ -531,7 +563,7 @@ export function Search() {
                           aria-label="Clear search"
                           title="Clear search"
                           size="icon-xs"
-                          onClick={() => setQuery("")}
+                          onClick={() => handleQueryChange("")}
                         >
                           <XIcon />
                         </InputGroupButton>
@@ -543,7 +575,7 @@ export function Search() {
             </DrawerHeader>
 
             <div className="flex-1 overflow-auto pt-2">
-              {showSearchContent && <SearchContent {...searchContentProps} />}
+              <SearchContent {...searchContentProps} />
             </div>
           </DrawerContent>
         </Drawer>
@@ -560,8 +592,8 @@ export function Search() {
             ref={inputRef}
             placeholder="Search..."
             value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            onBlur={() => setFocusedIndex(-1)}
+            onChange={(e) => handleQueryChange(e.target.value)}
+            onBlur={() => setFocus({ listKey: "", index: -1 })}
             name="search"
             autoComplete="off"
             role="combobox"
@@ -583,7 +615,7 @@ export function Search() {
                 title="Clear search"
                 size="icon-xs"
                 onMouseDown={(e) => e.preventDefault()}
-                onClick={() => setQuery("")}
+                onClick={() => handleQueryChange("")}
               >
                 <XIcon />
               </InputGroupButton>
@@ -594,27 +626,22 @@ export function Search() {
             </InputGroupAddon>
           )}
         </InputGroup>
-        <AnimatePresence>
-          {showSearchContent && (
-            <m.div
-              initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -10 }}
-              transition={{ duration: 0.15, ease: [0.23, 1, 0.32, 1] }}
-              style={{ height: cardHeight.height }}
-              className="pointer-events-auto overflow-hidden rounded-3xl"
-            >
-              <div
-                ref={cardHeight.contentRef}
-                className="flex flex-col rounded-3xl bg-card py-2 text-card-foreground shadow-md ring-1 ring-foreground/5 dark:ring-foreground/10"
-              >
-                <div>
-                  <SearchContent {...searchContentProps} limit={10} />
-                </div>
-              </div>
-            </m.div>
-          )}
-        </AnimatePresence>
+        <m.div
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.15, ease: [0.23, 1, 0.32, 1] }}
+          style={{ height: cardHeight.height }}
+          className="pointer-events-auto overflow-hidden rounded-3xl"
+        >
+          <div
+            ref={cardHeight.contentRef}
+            className="flex flex-col rounded-3xl bg-card py-2 text-card-foreground shadow-md ring-1 ring-foreground/5 dark:ring-foreground/10"
+          >
+            <div>
+              <SearchContent {...searchContentProps} limit={10} />
+            </div>
+          </div>
+        </m.div>
       </div>
     </LazyMotion>
   );
