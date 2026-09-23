@@ -45,6 +45,7 @@ import { useTrainData } from "@/hooks/use-train-data";
 
 import { cn } from "@repo/ui/lib/utils";
 import { Button } from "@repo/ui/components/button";
+import { stationPageLinkProps } from "@/lib/station-prerender";
 
 const REPORT_LINKS = (
   <div className="px-4 py-3 text-center ">
@@ -254,7 +255,11 @@ export default function StationInfo() {
                         size="icon"
                         nativeButton={false}
                         render={
-                          <Link to="/station/$id" params={{ id: selectedStation?.id ?? "" }}>
+                          <Link
+                            to="/station/$id"
+                            params={{ id: selectedStation?.id ?? "" }}
+                            {...stationPageLinkProps(selectedStation)}
+                          >
                             <ArrowRightIcon className="size-4" />
                           </Link>
                         }
@@ -265,6 +270,7 @@ export default function StationInfo() {
                       <Link
                         to="/station/$id"
                         params={{ id: selectedStation?.id ?? "" }}
+                        {...stationPageLinkProps(selectedStation)}
                         className="truncate hover:underline block max-w-68"
                       >
                         {selectedStation?.name}
@@ -334,6 +340,7 @@ export default function StationInfo() {
             <Link
               to="/station/$id"
               params={{ id: selectedStation?.id ?? "" }}
+              {...stationPageLinkProps(selectedStation)}
               className="inline-flex items-center gap-1"
             >
               {selectedStation?.name}
@@ -367,7 +374,11 @@ export default function StationInfo() {
               size="icon"
               nativeButton={false}
               render={
-                <Link to="/station/$id" params={{ id: selectedStation?.id ?? "" }}>
+                <Link
+                  to="/station/$id"
+                  params={{ id: selectedStation?.id ?? "" }}
+                  {...stationPageLinkProps(selectedStation)}
+                >
                   <ArrowRightIcon className="size-4" />
                 </Link>
               }

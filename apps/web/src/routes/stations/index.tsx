@@ -5,6 +5,7 @@ import { Card, CardContent } from "@repo/ui/components/card";
 import { ArrowLeftIcon, ArrowRightIcon } from "lucide-react";
 import baseUrl from "@/lib/base-url";
 import { staticAssetUrl } from "@/lib/static-assets";
+import { prerenderedPageLinkProps } from "@/lib/station-prerender";
 
 export const Route = createFileRoute("/stations/")({
   loader: () => loadStationsDirectoryPage(),
@@ -63,6 +64,7 @@ function StationsPage() {
             key={country.code}
             to="/stations/$country"
             params={{ country: country.slug }}
+            {...prerenderedPageLinkProps}
             className="group"
           >
             <Card

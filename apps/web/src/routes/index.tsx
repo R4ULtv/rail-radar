@@ -5,6 +5,7 @@ import { preconnect } from "react-dom";
 
 import { Map } from "@/components/map";
 import MapLoading from "@/components/map-loading";
+import { prerenderedPageLinkProps } from "@/lib/station-prerender";
 
 type MapSearch = {
   lat?: number;
@@ -134,7 +135,7 @@ function Home() {
               Donate
             </Link>
             {" · "}
-            <Link to="/stations" className="hover:underline">
+            <Link to="/stations" {...prerenderedPageLinkProps} className="hover:underline">
               Stations
             </Link>
             {" · "}

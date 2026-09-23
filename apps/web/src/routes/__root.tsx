@@ -11,6 +11,7 @@ import { Analytics } from "@/components/analytics";
 import { env } from "@/lib/env";
 import appCss from "../styles.css?url";
 import geistFont from "../assets/fonts/Geist/Geist.woff2?url";
+import { prerenderedPageLinkProps } from "@/lib/station-prerender";
 
 const DEFAULT_TITLE = "Rail Radar | Live Train Tracker Across Europe";
 const DEFAULT_DESCRIPTION =
@@ -96,7 +97,11 @@ function RootNotFound() {
           <Button nativeButton={false} render={<Link to="/" />}>
             Back to map
           </Button>
-          <Button variant="outline" nativeButton={false} render={<Link to="/stations" />}>
+          <Button
+            variant="outline"
+            nativeButton={false}
+            render={<Link to="/stations" {...prerenderedPageLinkProps} />}
+          >
             Browse stations
           </Button>
         </div>

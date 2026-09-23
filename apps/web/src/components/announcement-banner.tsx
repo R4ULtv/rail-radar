@@ -6,6 +6,7 @@ import { LazyMotion, domAnimation, m, AnimatePresence } from "motion/react";
 import { Link } from "@tanstack/react-router";
 import { Button, buttonVariants } from "@repo/ui/components/button";
 import { cn } from "@repo/ui/lib/utils";
+import { prerenderedPageLinkProps } from "@/lib/station-prerender";
 
 const STORAGE_KEY = "banner-dismissed-v15";
 
@@ -62,6 +63,7 @@ export function AnnouncementBanner() {
               <Link
                 to="/stations/$country"
                 params={{ country: "luxembourg" }}
+                {...prerenderedPageLinkProps}
                 onClick={dismiss}
                 className={cn(
                   buttonVariants({ variant: "default", size: "sm" }),
@@ -85,6 +87,7 @@ export function AnnouncementBanner() {
               <Link
                 to="/stations/$country"
                 params={{ country: "luxembourg" }}
+                {...prerenderedPageLinkProps}
                 onClick={dismiss}
                 aria-label="Explore train stations in Luxembourg"
                 className="absolute inset-0 rounded-3xl focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/30 focus-visible:ring-inset md:hidden"
