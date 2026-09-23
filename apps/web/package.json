@@ -8,7 +8,7 @@
     "build": "vite build",
     "start": "vite preview --port 3000",
     "deploy": "wrangler deploy --minify",
-    "deploy:preview": "vite build && wrangler preview",
+    "deploy:preview": "if [ \"${WORKERS_CI_BRANCH:-$(git branch --show-current)}\" = preview ]; then vite build && wrangler preview --name preview; else vite build && wrangler deploy --dry-run; fi",
     "versions": "wrangler versions upload",
     "cf-typegen": "wrangler types",
     "lint": "oxlint --deny warnings",
