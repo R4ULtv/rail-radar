@@ -315,7 +315,7 @@ function StationNotFound() {
             <MapIcon className="size-4" />
             Back to Map
           </Button>
-          <Button variant="outline" nativeButton={false} render={<Link to="/" />}>
+          <Button variant="outline" nativeButton={false} render={<Link to="/stations" />}>
             <SearchIcon className="size-4" />
             Search Stations
           </Button>
