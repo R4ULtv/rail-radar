@@ -12,9 +12,16 @@ import { getCountryStationBounds, getStationsByCountry } from "@repo/data/direct
 import { stationById, stations } from "@repo/data/stations";
 import type { Station } from "@repo/data";
 import type { Metadata } from "@/lib/metadata";
+import { isStationPagePrerendered } from "@/lib/station-prerender";
 
 export type StationWithGeo = Station & { geo: { lat: number; lng: number } };
 export type NearbyStation = StationWithGeo & { distance: number };
+/**
+ * The country directory only renders a name and a link per station, and it lists up to
+ * ~6k of them, so its loader data (serialized into the page for hydration) carries only
+ * those. `prerendered` is omitted rather than `false` to keep the payload small.
+ */
+export type DirectoryStation = { id: string; name: string; prerendered?: true };
 
 const DEG_TO_RAD = Math.PI / 180;
 const EARTH_RADIUS_KM = 6371;
@@ -153,6 +160,12 @@ function getCountryMetadata(slug: string, countryName: string, count: number): M
   };
 }
 
+function toDirectoryStation({ id, name, type, importance }: StationWithGeo): DirectoryStation {
+  return isStationPagePrerendered({ type, importance })
+    ? { id, name, prerendered: true }
+    : { id, name };
+}
+
 function indexKey(name: string): string {
   const first = name
     .normalize("NFD")
@@ -187,10 +200,10 @@ export function getCountryStationsPageData(slug: string) {
   if (allStations.length === 0 || !bounds) return null;
 
   const countryName = COUNTRY_MAP[code];
-  const sections = new Map<string, StationWithGeo[]>();
+  const sections = new Map<string, DirectoryStation[]>();
   for (const station of allStations) {
     const key = indexKey(station.name);
-    (sections.get(key) ?? sections.set(key, []).get(key)!).push(station);
+    (sections.get(key) ?? sections.set(key, []).get(key)!).push(toDirectoryStation(station));
   }
 
   const alphabeticalSections = [...sections]
@@ -199,7 +212,8 @@ export function getCountryStationsPageData(slug: string) {
   const hubs = allStations
     .filter((station) => station.importance <= 2)
     .sort((a, b) => a.importance - b.importance || a.name.localeCompare(b.name))
-    .slice(0, MAX_HUBS);
+    .slice(0, MAX_HUBS)
+    .map(toDirectoryStation);
 
   return {
     slug,

@@ -16,8 +16,11 @@ export function isStationPagePrerendered(station: StationPrerenderCandidate): bo
  */
 export const prerenderedPageLinkProps = { reloadDocument: true } as const;
 
-export function stationPageLinkProps(station: StationPrerenderCandidate | null) {
-  return station && isStationPagePrerendered(station)
-    ? prerenderedPageLinkProps
-    : ({ preload: false } as const);
+export function stationPageLinkProps(
+  station: StationPrerenderCandidate | { prerendered?: boolean } | null,
+) {
+  const prerendered =
+    station != null &&
+    ("type" in station ? isStationPagePrerendered(station) : station.prerendered === true);
+  return prerendered ? prerenderedPageLinkProps : ({ preload: false } as const);
 }
