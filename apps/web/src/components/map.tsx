@@ -26,7 +26,7 @@ const DEFAULT_VIEW = {
 const LOCATION_OPTIONS: PositionOptions = {
   enableHighAccuracy: false,
   timeout: 10000,
-  maximumAge: 0,
+  maximumAge: 5 * 60 * 1000,
 };
 
 function isMapRoute() {
@@ -65,6 +65,12 @@ function mapReducer(state: MapState, action: MapAction): MapState {
         },
       };
     case "setUserLocation":
+      if (
+        state.userLocation?.latitude === action.location.latitude &&
+        state.userLocation.longitude === action.location.longitude
+      ) {
+        return state;
+      }
       return {
         ...state,
         userLocation: action.location,
@@ -261,7 +267,7 @@ function ConfiguredMap() {
   }, []);
 
   return (
-    <div style={{ position: "relative", width: "100%", height: "100%" }}>
+    <div className="relative h-full w-full">
       {hasMapLoadError ? (
         <div className="absolute inset-0 z-10">
           <MapLoadError />

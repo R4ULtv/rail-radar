@@ -38,8 +38,11 @@ export function buildApiUrl(path: string): string {
  * Generic JSON fetcher with consistent error handling.
  * Parses API errors from response JSON and provides structured error info
  */
-export async function apiFetcher<T>(url: string): Promise<T> {
-  const response = await fetch(url);
+export async function apiFetcher<T>(
+  url: string,
+  options?: Pick<RequestInit, "signal">,
+): Promise<T> {
+  const response = await fetch(url, options);
 
   if (!response.ok) {
     // Try to parse API error from response

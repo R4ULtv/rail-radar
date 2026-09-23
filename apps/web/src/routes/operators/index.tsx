@@ -102,6 +102,8 @@ function OperatorsPage() {
                     alt={countryLabel}
                     width={28}
                     height={28}
+                    loading="lazy"
+                    decoding="async"
                     className="size-7 rounded-full"
                   />
                 )}
@@ -133,6 +135,8 @@ function OperatorsPage() {
                             alt={operator.name}
                             width={40}
                             height={40}
+                            loading="lazy"
+                            decoding="async"
                             className="size-full object-contain"
                           />
                         </div>

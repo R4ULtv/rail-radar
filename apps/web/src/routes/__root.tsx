@@ -10,6 +10,8 @@ import { Button } from "@repo/ui/components/button";
 import { Analytics } from "@/components/analytics";
 import { env } from "@/lib/env";
 import appCss from "../styles.css?url";
+import geistFont from "../assets/fonts/Geist/Geist.woff2?url";
+import { prerenderedPageLinkProps } from "@/lib/station-prerender";
 
 const DEFAULT_TITLE = "Rail Radar | Live Train Tracker Across Europe";
 const DEFAULT_DESCRIPTION =
@@ -52,6 +54,13 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     ],
     links: [
       { rel: "stylesheet", href: appCss },
+      {
+        rel: "preload",
+        href: geistFont,
+        as: "font",
+        type: "font/woff2",
+        crossOrigin: "anonymous" as const,
+      },
       { rel: "icon", href: "/favicon.ico" },
       { rel: "apple-touch-icon", href: "/icon@180px.png" },
       { rel: "manifest", href: "/manifest.webmanifest" },
@@ -88,7 +97,11 @@ function RootNotFound() {
           <Button nativeButton={false} render={<Link to="/" />}>
             Back to map
           </Button>
-          <Button variant="outline" nativeButton={false} render={<Link to="/stations" />}>
+          <Button
+            variant="outline"
+            nativeButton={false}
+            render={<Link to="/stations" {...prerenderedPageLinkProps} />}
+          >
             Browse stations
           </Button>
         </div>

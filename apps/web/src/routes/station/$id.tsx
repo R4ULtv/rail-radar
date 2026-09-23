@@ -19,6 +19,7 @@ import { StationStats } from "@/components/station-page/station-stats";
 import { NearbyStations } from "@/components/station-page/nearby-stations";
 import { TrainBoard } from "@/components/station-page/train-board";
 import { Skeleton } from "@repo/ui/components/skeleton";
+import { prerenderedPageLinkProps } from "@/lib/station-prerender";
 
 export const Route = createFileRoute("/station/$id")({
   loader: async ({ params }) => {
@@ -126,7 +127,12 @@ function StationPage({
       {/* Discover more stations in the same country */}
       {countrySlug && country && (
         <div className="mx-auto px-3 md:px-4 pt-6 md:pt-0 pb-6 max-w-7xl">
-          <Link to="/stations/$country" params={{ country: countrySlug }} className="group block">
+          <Link
+            to="/stations/$country"
+            params={{ country: countrySlug }}
+            {...prerenderedPageLinkProps}
+            className="group block"
+          >
             <Card
               size="sm"
               className="transition-[background-color,box-shadow,transform] lg:group-hover:bg-muted group-active:scale-[0.99]"
@@ -315,7 +321,11 @@ function StationNotFound() {
             <MapIcon className="size-4" />
             Back to Map
           </Button>
-          <Button variant="outline" nativeButton={false} render={<Link to="/" />}>
+          <Button
+            variant="outline"
+            nativeButton={false}
+            render={<Link to="/stations" {...prerenderedPageLinkProps} />}
+          >
             <SearchIcon className="size-4" />
             Search Stations
           </Button>

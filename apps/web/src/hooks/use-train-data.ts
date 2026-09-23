@@ -7,7 +7,7 @@ export function useTrainData(
   type: "arrivals" | "departures",
   enabled: boolean = true,
 ) {
-  const { data, error, isLoading, isFetching } = useQuery({
+  const { data, error, isLoading, isFetching, refetch } = useQuery({
     queryKey: ["station-trains", stationId, type],
     queryFn: () =>
       apiFetcher<TrainDataResponse>(buildApiUrl(endpoints.stationTrains(stationId!, type))),
@@ -23,5 +23,8 @@ export function useTrainData(
     error: error instanceof APIError ? error.message : (error?.message ?? null),
     lastUpdated: data?.timestamp ? new Date(data.timestamp) : null,
     info: data?.info ?? null,
+    retry: () => {
+      if (stationId && enabled) void refetch();
+    },
   };
 }

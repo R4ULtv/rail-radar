@@ -50,6 +50,7 @@ export function TrainBoard({ stationId }: { stationId: string }) {
           isValidating={departures.isValidating}
           error={departures.error}
           lastUpdated={departures.lastUpdated}
+          onRetry={departures.retry}
         />
         <TrainColumn
           title="Arrivals"
@@ -59,6 +60,7 @@ export function TrainBoard({ stationId }: { stationId: string }) {
           isValidating={arrivals.isValidating}
           error={arrivals.error}
           lastUpdated={arrivals.lastUpdated}
+          onRetry={arrivals.retry}
           unavailableMessage={
             arrivalsSupported ? undefined : "Live arrivals for Luxembourg are coming soon."
           }
@@ -79,6 +81,7 @@ export function TrainBoard({ stationId }: { stationId: string }) {
       isValidating={currentData.isValidating}
       error={currentData.error}
       lastUpdated={currentData.lastUpdated}
+      onRetry={currentData.retry}
       showTypeToggle
       onTypeChange={setType}
       arrivalsDisabled={!arrivalsSupported}

@@ -1,7 +1,10 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "rail-radar-studio",
-  "compatibility_date": "2026-08-29",
+  "compatibility_date": "2026-09-08",
+  "limits": {
+    "cpu_ms": 100,
+  },
   "assets": {
     "directory": "build",
   },

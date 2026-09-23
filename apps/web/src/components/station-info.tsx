@@ -17,6 +17,7 @@ import { useEffect, useState } from "react";
 import { hasStationWarning, StationWarning } from "@/components/station-warning";
 import { SaveButton } from "@/components/save-button";
 import { TrainRow, TrainRowSkeleton } from "@/components/train-row";
+import { TrainBoardNotice } from "@/components/train-board-notice";
 import { UpdatedStatus } from "@/components/updated-status";
 import {
   Card,
@@ -44,6 +45,7 @@ import { useTrainData } from "@/hooks/use-train-data";
 
 import { cn } from "@repo/ui/lib/utils";
 import { Button } from "@repo/ui/components/button";
+import { stationPageLinkProps } from "@/lib/station-prerender";
 
 const REPORT_LINKS = (
   <div className="px-4 py-3 text-center ">
@@ -79,19 +81,29 @@ const REPORT_LINKS = (
 function TrainListContent({
   trainData,
   isLoading,
+  isValidating,
   error,
+  onRetry,
   type,
   scrollable = false,
   hasWarning = false,
 }: {
   trainData: Train[] | null;
   isLoading: boolean;
+  isValidating: boolean;
   error: string | null;
+  onRetry: () => void;
   type: "arrivals" | "departures";
   scrollable?: boolean;
   hasWarning?: boolean;
 }) {
-  if (isLoading) {
+  const hasSnapshot = trainData !== null;
+
+  if (!hasSnapshot && error) {
+    return <TrainBoardNotice hasSnapshot={false} isValidating={isValidating} onRetry={onRetry} />;
+  }
+
+  if (!hasSnapshot && isLoading) {
     return (
       <div>
         {Array.from({ length: 8 }).map((_, i) => (
@@ -101,41 +113,43 @@ function TrainListContent({
     );
   }
 
-  if (error) {
-    return <div className="px-4 py-8 text-center text-sm text-muted-foreground">{error}</div>;
+  if (!hasSnapshot) {
+    return null;
   }
 
-  if (!trainData || trainData.length === 0) {
-    return (
-      <div className="px-4 py-8 text-center text-sm text-muted-foreground">No {type} scheduled</div>
-    );
-  }
-
-  const trainList = trainData.map((train) => (
-    <TrainRow
-      key={`${train.trainNumber}-${train.scheduledTime}-${train.platform}`}
-      train={train}
-      type={type}
-    />
-  ));
+  const content = (
+    <>
+      {error && <TrainBoardNotice hasSnapshot isValidating={isValidating} onRetry={onRetry} />}
+      {trainData.length === 0 ? (
+        <div className="px-4 py-8 text-center text-sm text-muted-foreground">
+          {error ? `No ${type} were listed in the last received update.` : `No ${type} scheduled`}
+        </div>
+      ) : (
+        <>
+          {trainData.map((train) => (
+            <TrainRow
+              key={`${train.trainNumber}-${train.scheduledTime}-${train.platform}`}
+              train={train}
+              type={type}
+            />
+          ))}
+          {REPORT_LINKS}
+        </>
+      )}
+    </>
+  );
 
   if (scrollable) {
     return (
       <ScrollArea
         className={cn("max-h-[calc(100vh-156px)]", hasWarning && "max-h-[calc(100vh-208px)]")}
       >
-        {trainList}
-        {REPORT_LINKS}
+        {content}
       </ScrollArea>
     );
   }
 
-  return (
-    <div>
-      {trainList}
-      {REPORT_LINKS}
-    </div>
-  );
+  return <div>{content}</div>;
 }
 
 // Shared tabs component
@@ -203,6 +217,7 @@ export default function StationInfo() {
     error,
     lastUpdated,
     info,
+    retry,
   } = useTrainData(selectedStation?.id ?? null, activeType, isOpen);
 
   // Desktop view
@@ -240,7 +255,11 @@ export default function StationInfo() {
                         size="icon"
                         nativeButton={false}
                         render={
-                          <Link to="/station/$id" params={{ id: selectedStation?.id ?? "" }}>
+                          <Link
+                            to="/station/$id"
+                            params={{ id: selectedStation?.id ?? "" }}
+                            {...stationPageLinkProps(selectedStation)}
+                          >
                             <ArrowRightIcon className="size-4" />
                           </Link>
                         }
@@ -251,6 +270,7 @@ export default function StationInfo() {
                       <Link
                         to="/station/$id"
                         params={{ id: selectedStation?.id ?? "" }}
+                        {...stationPageLinkProps(selectedStation)}
                         className="truncate hover:underline block max-w-68"
                       >
                         {selectedStation?.name}
@@ -259,7 +279,7 @@ export default function StationInfo() {
                     <CardDescription>
                       <UpdatedStatus
                         isLoading={isLoading}
-                        isValidating={isValidating}
+                        isValidating={isValidating && !error}
                         lastUpdated={lastUpdated}
                       />
                     </CardDescription>
@@ -276,7 +296,9 @@ export default function StationInfo() {
                     <TrainListContent
                       trainData={trainData}
                       isLoading={isLoading}
+                      isValidating={isValidating}
                       error={error}
+                      onRetry={retry}
                       type={activeType}
                       scrollable
                       hasWarning={selectedStation != null && hasStationWarning(selectedStation.id)}
@@ -318,6 +340,7 @@ export default function StationInfo() {
             <Link
               to="/station/$id"
               params={{ id: selectedStation?.id ?? "" }}
+              {...stationPageLinkProps(selectedStation)}
               className="inline-flex items-center gap-1"
             >
               {selectedStation?.name}
@@ -326,7 +349,7 @@ export default function StationInfo() {
           <DrawerDescription className="text-sm text-muted-foreground h-5">
             <UpdatedStatus
               isLoading={isLoading}
-              isValidating={isValidating}
+              isValidating={isValidating && !error}
               lastUpdated={lastUpdated}
             />
           </DrawerDescription>
@@ -351,7 +374,11 @@ export default function StationInfo() {
               size="icon"
               nativeButton={false}
               render={
-                <Link to="/station/$id" params={{ id: selectedStation?.id ?? "" }}>
+                <Link
+                  to="/station/$id"
+                  params={{ id: selectedStation?.id ?? "" }}
+                  {...stationPageLinkProps(selectedStation)}
+                >
                   <ArrowRightIcon className="size-4" />
                 </Link>
               }
@@ -364,7 +391,9 @@ export default function StationInfo() {
           <TrainListContent
             trainData={trainData}
             isLoading={isLoading}
+            isValidating={isValidating}
             error={error}
+            onRetry={retry}
             type={activeType}
           />
         </div>

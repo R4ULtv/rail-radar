@@ -200,7 +200,7 @@ const getOgImage = createServerOnlyFn(async (request: Request) => {
       height: 630,
       format: "webp",
       headers: {
-        "Cache-Control": "public, max-age=86400, s-maxage=86400, stale-while-revalidate=604800",
+        "Cache-Control": "public, max-age=86400, s-maxage=604800, stale-while-revalidate=604800",
       },
     },
   );
