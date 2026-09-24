@@ -23,6 +23,7 @@ import { UserLocationMarker } from "@/components/user-location-marker";
 import { useMapTheme } from "@/hooks/use-map-theme";
 import { useStationsUrl } from "@/hooks/use-stations-url";
 import { addRecentStation } from "@/hooks/use-stored-stations";
+import { haptics } from "@/lib/haptics";
 import { loadLastUserLocation, saveLastUserLocation } from "@/lib/user-location";
 
 const accessToken = process.env.EXPO_PUBLIC_MAPBOX_TOKEN ?? "";
@@ -88,6 +89,7 @@ export function MapScreen() {
 
   const selectStation = useCallback(
     (station: Station, zoomLevel?: number) => {
+      haptics.tap();
       hasMovedMap.current = true;
       setSelectedStation(station);
       if (station.type === "rail") addRecentStation(station);
@@ -191,11 +193,13 @@ export function MapScreen() {
   }, []);
 
   const locateUser = useCallback(async () => {
+    haptics.tap();
     setLocationStatus("locating");
     try {
       if (!(await Location.hasServicesEnabledAsync())) {
         setLocationStatus("off");
         setMessage("Location Services are turned off.");
+        haptics.error();
         return;
       }
 
@@ -203,6 +207,7 @@ export function MapScreen() {
       if (!permission.granted) {
         setLocationStatus(permission.canAskAgain ? "idle" : "off");
         setMessage("Location permission was not granted.");
+        haptics.error();
         return;
       }
 
@@ -218,10 +223,12 @@ export function MapScreen() {
     } catch {
       setLocationStatus("idle");
       setMessage("Your location is unavailable right now.");
+      haptics.error();
     }
   }, []);
 
   const resetHeading = useCallback(() => {
+    haptics.tap();
     camera.current?.setCamera({ heading: 0, animationDuration: 300 });
   }, []);
 

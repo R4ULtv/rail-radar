@@ -14,7 +14,16 @@ import SearchX from "lucide-react-native/icons/search-x";
 import TrendingUp from "lucide-react-native/icons/trending-up";
 import User from "lucide-react-native/icons/user";
 import { Fragment, useEffect, useRef, useState, type ReactNode } from "react";
-import { ActivityIndicator, Image, Keyboard, Linking, StyleSheet, Text, View } from "react-native";
+import {
+  ActivityIndicator,
+  BackHandler,
+  Image,
+  Keyboard,
+  Linking,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
 import Animated, { Extrapolation, interpolate, useAnimatedStyle } from "react-native-reanimated";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
@@ -321,12 +330,23 @@ export function SearchSheet({ isHidden, onSelectStation }: SearchSheetProps) {
   const collapsedHeight = useSearchSheetCollapsedHeight();
   const sheetRef = useRef<BottomSheet>(null);
   const lastIndex = useRef(0);
+  const [isExpanded, setIsExpanded] = useState(false);
   const [surfaceColor, mutedColor] = useThemeColor(["surface", "muted"]);
 
   useEffect(() => {
     if (isHidden) sheetRef.current?.close();
     else sheetRef.current?.snapToIndex(lastIndex.current);
   }, [isHidden]);
+
+  // Android back collapses the open sheet instead of leaving the app.
+  useEffect(() => {
+    if (!isExpanded || isHidden) return;
+    const subscription = BackHandler.addEventListener("hardwareBackPress", () => {
+      sheetRef.current?.snapToIndex(0);
+      return true;
+    });
+    return () => subscription.remove();
+  }, [isExpanded, isHidden]);
 
   return (
     <BottomSheet
@@ -344,6 +364,7 @@ export function SearchSheet({ isHidden, onSelectStation }: SearchSheetProps) {
       handleIndicatorStyle={{ backgroundColor: mutedColor }}
       onChange={(index) => {
         if (index >= 0) lastIndex.current = index;
+        setIsExpanded(index === expandedIndex);
         if (index === 0) Keyboard.dismiss();
       }}
     >

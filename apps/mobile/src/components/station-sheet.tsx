@@ -17,6 +17,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { useStationBoard, type BoardType } from "@/hooks/use-station-board";
 import { MAX_SAVED_STATIONS, useSavedStations } from "@/hooks/use-stored-stations";
+import { haptics } from "@/lib/haptics";
 
 interface StationSheetProps {
   station: Station;
@@ -95,6 +96,18 @@ export function StationSheet({ station, isOpen, onOpenChange }: StationSheetProp
     isOpen && isRail,
   );
 
+  function selectType(next: BoardType) {
+    if (next === type) return;
+    haptics.selection();
+    setType(next);
+  }
+
+  function toggleSavedStation() {
+    if (saved) haptics.toggleOff();
+    else haptics.toggleOn();
+    toggleSaved(station);
+  }
+
   useEffect(() => {
     if (isOpen) sheetRef.current?.snapToIndex(0);
     else sheetRef.current?.close();
@@ -151,7 +164,7 @@ export function StationSheet({ station, isOpen, onOpenChange }: StationSheetProp
               isIconOnly
               size="sm"
               variant="ghost"
-              onPress={() => toggleSaved(station)}
+              onPress={toggleSavedStation}
             >
               <Bookmark
                 size={18}
@@ -200,7 +213,7 @@ export function StationSheet({ station, isOpen, onOpenChange }: StationSheetProp
                   className="flex-1"
                   size="sm"
                   variant={type === "departures" ? "primary" : "secondary"}
-                  onPress={() => setType("departures")}
+                  onPress={() => selectType("departures")}
                 >
                   Departures
                 </Button>
@@ -210,7 +223,7 @@ export function StationSheet({ station, isOpen, onOpenChange }: StationSheetProp
                   className="flex-1"
                   size="sm"
                   variant={type === "arrivals" ? "primary" : "secondary"}
-                  onPress={() => setType("arrivals")}
+                  onPress={() => selectType("arrivals")}
                 >
                   Arrivals
                 </Button>
