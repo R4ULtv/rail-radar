@@ -24,7 +24,7 @@ import { useMapTheme } from "@/hooks/use-map-theme";
 import { useStationsUrl } from "@/hooks/use-stations-url";
 import { addRecentStation } from "@/hooks/use-stored-stations";
 import { haptics } from "@/lib/haptics";
-import { loadLastUserLocation, saveLastUserLocation } from "@/lib/user-location";
+import { loadLastUserLocation, saveLastUserLocation, type UserLocation } from "@/lib/user-location";
 
 const accessToken = process.env.EXPO_PUBLIC_MAPBOX_TOKEN ?? "";
 const defaultCamera = { centerCoordinate: [12, 50] as [number, number], zoomLevel: 4 };
@@ -72,6 +72,7 @@ export function MapScreen() {
   const [selectedStation, setSelectedStation] = useState<Station | null>(null);
   const [sheetOpen, setSheetOpen] = useState(false);
   const [locationStatus, setLocationStatus] = useState<LocationStatus>("idle");
+  const [userLocation, setUserLocation] = useState<UserLocation | null>(null);
   const [message, setMessage] = useState<string | null>(null);
   const [alertColor, backgroundColor] = useThemeColor(["danger", "background"]);
   const mapTheme = useMapTheme();
@@ -166,7 +167,15 @@ export function MapScreen() {
     };
     refresh();
     const subscription = AppState.addEventListener("change", (state) => {
-      if (state === "active") refresh();
+      if (state !== "active") return;
+      refresh();
+      // The user may have moved while the app was in the background.
+      Location.getForegroundPermissionsAsync()
+        .then((permission) => (permission.granted ? findUserLocation() : null))
+        .then((location) => {
+          if (location) setUserLocation(location);
+        })
+        .catch(() => {});
     });
     return () => subscription.remove();
   }, []);
@@ -186,6 +195,7 @@ export function MapScreen() {
       setLocationStatus("locating");
       const location = await findUserLocation();
       if (cancelled) return;
+      setUserLocation(location);
       setLocationStatus("located");
       if (hasMovedMap.current) return;
       camera.current?.setCamera({
@@ -224,6 +234,7 @@ export function MapScreen() {
       }
 
       const location = await findUserLocation();
+      setUserLocation(location);
       hasMovedMap.current = true;
       setLocationStatus("located");
       setMessage(null);
@@ -311,7 +322,11 @@ export function MapScreen() {
         </Alert>
       ) : null}
 
-      <SearchSheet isHidden={sheetOpen} onSelectStation={handleSearchSelect} />
+      <SearchSheet
+        isHidden={sheetOpen}
+        userLocation={userLocation}
+        onSelectStation={handleSearchSelect}
+      />
 
       {selectedStation ? (
         <StationSheet

@@ -17,6 +17,11 @@ function isStoredStation(value: unknown): value is Station {
   );
 }
 
+/** Only the station itself, not extras like the popular list's visitor counts. */
+function toStoredStation({ id, name, type, importance, geo }: Station): Station {
+  return { id, name, type, importance, geo };
+}
+
 function createStationStore(fileName: string) {
   const file = new File(Paths.document, fileName);
   const listeners = new Set<() => void>();
@@ -26,7 +31,9 @@ function createStationStore(fileName: string) {
     if (stations) return stations;
     try {
       const parsed: unknown = file.exists ? JSON.parse(file.textSync()) : [];
-      stations = Array.isArray(parsed) ? parsed.filter(isStoredStation) : emptyStations;
+      stations = Array.isArray(parsed)
+        ? parsed.filter(isStoredStation).map(toStoredStation)
+        : emptyStations;
     } catch {
       stations = emptyStations;
     }
@@ -67,7 +74,7 @@ export function useSavedStations() {
       if (current.some((saved) => saved.id === station.id)) {
         savedStore.write(current.filter((saved) => saved.id !== station.id));
       } else if (current.length < MAX_SAVED_STATIONS) {
-        savedStore.write([station, ...current]);
+        savedStore.write([toStoredStation(station), ...current]);
       }
     },
   };
@@ -80,7 +87,7 @@ export function useRecentStations() {
 export function addRecentStation(station: Station) {
   const current = recentStore.read();
   recentStore.write(
-    [station, ...current.filter((recent) => recent.id !== station.id)].slice(
+    [toStoredStation(station), ...current.filter((recent) => recent.id !== station.id)].slice(
       0,
       MAX_RECENT_STATIONS,
     ),

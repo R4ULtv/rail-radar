@@ -32,7 +32,9 @@ import { CountryFlag } from "@/components/country-flag";
 import { useStationSearch } from "@/hooks/use-station-search";
 import { useRecentStations, useSavedStations } from "@/hooks/use-stored-stations";
 import { useTrendingStations, type TrendingStation } from "@/hooks/use-trending-stations";
+import { distanceKm, formatDistance } from "@/lib/distance";
 import { stationIcons } from "@/lib/station-icons";
+import type { UserLocation } from "@/lib/user-location";
 
 const handleHeight = 24;
 const searchFieldHeight = 48;
@@ -79,15 +81,27 @@ function VisitorCounts({ station }: { station: TrendingStation }) {
   );
 }
 
-function StationSection({
+function StationDistance({ station, from }: { station: Station; from: UserLocation }) {
+  if (!station.geo) return null;
+  return (
+    <Text className="text-xs text-muted" style={styles.tabularNums}>
+      {formatDistance(distanceKm(from, station.geo))}
+    </Text>
+  );
+}
+
+function StationSection<T extends Station>({
   title,
   icon,
   stations,
+  renderSuffix,
   onSelect,
 }: {
   title: string;
   icon?: ReactNode;
-  stations: (Station | TrendingStation)[];
+  stations: T[];
+  /** Shown on the right of each row, e.g. visitor counts or the distance. */
+  renderSuffix?: (station: T) => ReactNode;
   onSelect: (station: Station) => void;
 }) {
   if (stations.length === 0) return null;
@@ -120,10 +134,8 @@ function StationSection({
                       <CountryFlag stationId={station.id} />
                     </View>
                   </ListGroup.ItemContent>
-                  {"visits" in station ? (
-                    <ListGroup.ItemSuffix>
-                      <VisitorCounts station={station} />
-                    </ListGroup.ItemSuffix>
+                  {renderSuffix ? (
+                    <ListGroup.ItemSuffix>{renderSuffix(station)}</ListGroup.ItemSuffix>
                   ) : null}
                 </ListGroup.Item>
               </PressableFeedback.Scale>
@@ -161,7 +173,13 @@ function EmptyState({ children }: { children: ReactNode }) {
   return <View style={styles.emptyState}>{children}</View>;
 }
 
-function SearchSheetContent({ onSelectStation }: { onSelectStation: (station: Station) => void }) {
+function SearchSheetContent({
+  userLocation,
+  onSelectStation,
+}: {
+  userLocation: UserLocation | null;
+  onSelectStation: (station: Station) => void;
+}) {
   const insets = useSafeAreaInsets();
   const keyboardHeight = useKeyboardHeight();
   const { animatedIndex, snapToIndex } = useBottomSheet();
@@ -291,6 +309,11 @@ function SearchSheetContent({ onSelectStation }: { onSelectStation: (station: St
                 )
               }
               stations={search.stations}
+              renderSuffix={
+                userLocation
+                  ? (station) => <StationDistance station={station} from={userLocation} />
+                  : undefined
+              }
               onSelect={selectStation}
             />
           ) : noResults ? (
@@ -324,6 +347,7 @@ function SearchSheetContent({ onSelectStation }: { onSelectStation: (station: St
                 title="Popular Stations (7-day trending)"
                 icon={<TrendingUp size={14} color={mutedColor} />}
                 stations={trendingStations}
+                renderSuffix={(station) => <VisitorCounts station={station} />}
                 onSelect={selectStation}
               />
               {!search.isActive && !hasDefaultLists ? (
@@ -345,10 +369,12 @@ function SearchSheetContent({ onSelectStation }: { onSelectStation: (station: St
 interface SearchSheetProps {
   /** Hides the sheet while another sheet (e.g. a station board) is shown. */
   isHidden: boolean;
+  /** Where the user is, for the distance to each search result. */
+  userLocation: UserLocation | null;
   onSelectStation: (station: Station) => void;
 }
 
-export function SearchSheet({ isHidden, onSelectStation }: SearchSheetProps) {
+export function SearchSheet({ isHidden, userLocation, onSelectStation }: SearchSheetProps) {
   const insets = useSafeAreaInsets();
   const collapsedHeight = useSearchSheetCollapsedHeight();
   const sheetRef = useRef<BottomSheet>(null);
@@ -391,7 +417,7 @@ export function SearchSheet({ isHidden, onSelectStation }: SearchSheetProps) {
         if (index === 0) Keyboard.dismiss();
       }}
     >
-      <SearchSheetContent onSelectStation={onSelectStation} />
+      <SearchSheetContent userLocation={userLocation} onSelectStation={onSelectStation} />
     </BottomSheet>
   );
 }
