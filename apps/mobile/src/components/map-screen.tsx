@@ -324,6 +324,7 @@ export function MapScreen() {
 
       <SearchSheet
         isHidden={sheetOpen}
+        stationsUrl={stationsUrl}
         userLocation={userLocation}
         onSelectStation={handleSearchSelect}
       />

@@ -1,68 +1,68 @@
 import type { Station } from "@repo/data/types";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
-import { fetchApi } from "@/lib/api";
+import { useDebounce } from "@/hooks/use-debounce";
+import { loadStationSearch, type StationSearch } from "@/lib/station-search";
+import type { UserLocation } from "@/lib/user-location";
 
-const debounceMs = 250;
-const minQueryLength = 2;
+// Searching runs on the device, so it can start from the first character.
+const minQueryLength = 1;
+const resultLimit = 20;
+// Typing stays smooth: the list only re-renders once typing pauses.
+const debounceMs = 150;
 
-interface SearchState {
-  query: string;
-  stations: Station[];
-  error: string | null;
-  isLoading: boolean;
+interface UseStationSearchOptions {
+  /** The station GeoJSON to search; null until it is ready. */
+  stationsUrl: string | null;
+  /** Closer stations come first among ones that match the query equally well. */
+  userLocation: UserLocation | null;
 }
 
-const idleState: SearchState = { query: "", stations: [], error: null, isLoading: false };
-
-export function useStationSearch(input: string) {
+export function useStationSearch(
+  input: string,
+  { stationsUrl, userLocation }: UseStationSearchOptions,
+) {
   const query = input.trim();
   const isActive = query.length >= minQueryLength;
+  const debouncedQuery = useDebounce(query, debounceMs);
+  const isDebouncing = debouncedQuery !== query;
   const [retryCount, setRetryCount] = useState(0);
-  const [state, setState] = useState<SearchState>(idleState);
+  const [search, setSearch] = useState<StationSearch | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!isActive) {
-      setState(idleState);
-      return;
-    }
+    if (!isActive || !stationsUrl) return;
 
-    // Keep showing the previous results while the next query is typed.
-    setState((current) => ({ ...current, error: null, isLoading: true }));
-
-    const controller = new AbortController();
-    const timeout = setTimeout(async () => {
-      try {
-        const response = await fetchApi(`/stations/search?q=${encodeURIComponent(query)}`, {
-          signal: controller.signal,
-        });
-        if (!response.ok) throw new Error("Stations could not be searched.");
-
-        const stations = (await response.json()) as Station[];
-        if (!Array.isArray(stations)) throw new Error("Search returned an invalid response.");
-
-        setState({ query, stations, error: null, isLoading: false });
-      } catch (error) {
-        if (controller.signal.aborted) return;
-        setState({
-          query,
-          stations: [],
-          error: error instanceof Error ? error.message : "Stations could not be searched.",
-          isLoading: false,
-        });
-      }
-    }, debounceMs);
+    let cancelled = false;
+    setError(null);
+    loadStationSearch(stationsUrl)
+      .then((loadedSearch) => {
+        if (!cancelled) setSearch(() => loadedSearch);
+      })
+      .catch(() => {
+        if (!cancelled) setError("Stations could not be loaded.");
+      });
 
     return () => {
-      clearTimeout(timeout);
-      controller.abort();
+      cancelled = true;
     };
-  }, [query, isActive, retryCount]);
+  }, [isActive, stationsUrl, retryCount]);
+
+  // Keeps showing the previous results while the next query is typed.
+  const stations = useMemo<Station[]>(() => {
+    if (!search) return [];
+    if (debouncedQuery.length < minQueryLength) return [];
+    return search(debouncedQuery, { limit: resultLimit, near: userLocation });
+  }, [search, debouncedQuery, userLocation]);
+
+  const isLoading = isActive && (!search || isDebouncing) && !error;
 
   return {
-    ...state,
+    stations: isActive ? stations : [],
+    error: isActive ? error : null,
     isActive,
-    hasResult: isActive && !state.isLoading && state.query === query,
+    isLoading,
+    hasResult: isActive && search !== null && !isDebouncing,
     retry: () => setRetryCount((count) => count + 1),
   };
 }

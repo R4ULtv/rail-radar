@@ -174,9 +174,11 @@ function EmptyState({ children }: { children: ReactNode }) {
 }
 
 function SearchSheetContent({
+  stationsUrl,
   userLocation,
   onSelectStation,
 }: {
+  stationsUrl: string | null;
   userLocation: UserLocation | null;
   onSelectStation: (station: Station) => void;
 }) {
@@ -196,7 +198,7 @@ function SearchSheetContent({
     if (keyboardHeight === 0) inputRef.current?.blur();
   }, [keyboardHeight]);
   const [query, setQuery] = useState("");
-  const search = useStationSearch(query);
+  const search = useStationSearch(query, { stationsUrl, userLocation });
   const { savedStations } = useSavedStations();
   const recentStations = useRecentStations();
   const trendingStations = useTrendingStations();
@@ -285,9 +287,7 @@ function SearchSheetContent({
               <Text className="text-sm font-medium text-danger-soft-foreground">
                 Unable to search stations
               </Text>
-              <Text className="mt-0.5 text-xs text-danger-soft-foreground">
-                Check your connection and try again.
-              </Text>
+              <Text className="mt-0.5 text-xs text-danger-soft-foreground">{search.error}</Text>
               <Button
                 className="mt-3 self-start"
                 size="sm"
@@ -301,13 +301,7 @@ function SearchSheetContent({
           ) : search.stations.length > 0 ? (
             <StationSection
               title="Search Results"
-              icon={
-                search.isLoading ? (
-                  <ActivityIndicator size="small" color={accentColor} />
-                ) : (
-                  <List size={14} color={mutedColor} />
-                )
-              }
+              icon={<List size={14} color={mutedColor} />}
               stations={search.stations}
               renderSuffix={
                 userLocation
@@ -369,12 +363,19 @@ function SearchSheetContent({
 interface SearchSheetProps {
   /** Hides the sheet while another sheet (e.g. a station board) is shown. */
   isHidden: boolean;
-  /** Where the user is, for the distance to each search result. */
+  /** The station GeoJSON the map shows, which search runs on. */
+  stationsUrl: string | null;
+  /** Where the user is: nearby stations rank higher and results show their distance. */
   userLocation: UserLocation | null;
   onSelectStation: (station: Station) => void;
 }
 
-export function SearchSheet({ isHidden, userLocation, onSelectStation }: SearchSheetProps) {
+export function SearchSheet({
+  isHidden,
+  stationsUrl,
+  userLocation,
+  onSelectStation,
+}: SearchSheetProps) {
   const insets = useSafeAreaInsets();
   const collapsedHeight = useSearchSheetCollapsedHeight();
   const sheetRef = useRef<BottomSheet>(null);
@@ -417,7 +418,11 @@ export function SearchSheet({ isHidden, userLocation, onSelectStation }: SearchS
         if (index === 0) Keyboard.dismiss();
       }}
     >
-      <SearchSheetContent userLocation={userLocation} onSelectStation={onSelectStation} />
+      <SearchSheetContent
+        stationsUrl={stationsUrl}
+        userLocation={userLocation}
+        onSelectStation={onSelectStation}
+      />
     </BottomSheet>
   );
 }
