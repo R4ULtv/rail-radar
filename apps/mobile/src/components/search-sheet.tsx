@@ -13,13 +13,14 @@ import RefreshCw from "lucide-react-native/icons/refresh-cw";
 import SearchX from "lucide-react-native/icons/search-x";
 import TrendingUp from "lucide-react-native/icons/trending-up";
 import User from "lucide-react-native/icons/user";
-import { Fragment, useEffect, useRef, useState, type ReactNode } from "react";
+import { Fragment, useEffect, useRef, useState, type ComponentRef, type ReactNode } from "react";
 import {
   ActivityIndicator,
   BackHandler,
   Image,
   Keyboard,
   Linking,
+  Pressable,
   StyleSheet,
   Text,
   View,
@@ -169,6 +170,13 @@ function SearchSheetContent({ onSelectStation }: { onSelectStation: (station: St
     opacity: interpolate(animatedIndex.value, [0, 0.4], [0, 1], Extrapolation.CLAMP),
   }));
   const { onFocus, onBlur } = useBottomSheetAwareHandlers();
+  const inputRef = useRef<ComponentRef<typeof SearchField.Input>>(null);
+  const [isFocused, setIsFocused] = useState(false);
+
+  // Android's back button hides the keyboard but leaves the field focused.
+  useEffect(() => {
+    if (keyboardHeight === 0) inputRef.current?.blur();
+  }, [keyboardHeight]);
   const [query, setQuery] = useState("");
   const search = useStationSearch(query);
   const { savedStations } = useSavedStations();
@@ -199,6 +207,7 @@ function SearchSheetContent({ onSelectStation }: { onSelectStation: (station: St
           <SearchField.Group>
             <SearchField.SearchIcon />
             <SearchField.Input
+              ref={inputRef}
               variant="secondary"
               // No focus outline: iOS draws it outside the field, where the sheet clips it.
               className="ios:focus:outline-transparent android:focus:border-transparent"
@@ -208,10 +217,24 @@ function SearchSheetContent({ onSelectStation }: { onSelectStation: (station: St
               onSubmitEditing={() => Keyboard.dismiss()}
               onFocus={(event) => {
                 onFocus(event);
+                setIsFocused(true);
                 snapToIndex(expandedIndex);
               }}
-              onBlur={onBlur}
+              onBlur={(event) => {
+                onBlur(event);
+                setIsFocused(false);
+              }}
             />
+            {isFocused ? null : (
+              // Android text fields keep any touch that starts on them, so a drag from the
+              // field never reached the sheet. Until it's focused, taps go through this cover.
+              <Pressable
+                accessible={false}
+                importantForAccessibility="no"
+                style={StyleSheet.absoluteFill}
+                onPress={() => inputRef.current?.focus()}
+              />
+            )}
             <SearchField.ClearButton />
             {query.length === 0 && savedStations.length > 0 ? (
               // Same spot as the clear button, which only shows once there's a query.
