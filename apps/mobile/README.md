@@ -1,0 +1,120 @@
+# Rail Radar mobile map prototype
+
+A small Expo + native Mapbox test for iOS and Android. It ships the station
+GeoJSON from `@repo/data`, draws the web map's station icons and railway
+lines at the same zoom levels, opens a live
+departures and arrivals bottom sheet for rail stations, and can center the map
+on the device's location. The map controls, sheet controls, and notices use
+HeroUI Native with Uniwind and Lucide icons; the sheet gesture container uses
+Gorhom Bottom Sheet. The sheet links to the existing web station page and
+refreshes live data while it is open and the app is active.
+
+This is pinned to Expo SDK 55 and `@rnmapbox/maps` 10.3.5 so it can be compiled
+with Xcode 26.3. Expo SDK 56 and 57 require Xcode 26.4 or newer. It uses React
+Native's New Architecture.
+The mobile workspace uses `@types/react` 19.3 to keep React types consistent
+across the monorepo; this types-only package is excluded from Expo's version
+check intentionally.
+
+## Layout
+
+```text
+index.ts            Expo entry; registers src/app.tsx
+src/
+  app.tsx           Root providers (gesture handler, safe area, HeroUI)
+  global.css        Uniwind + HeroUI theme
+  components/       Screens, sheets and map layers
+  hooks/            Data and storage hooks
+  lib/              API client and shared helpers
+assets/station-icons/  Map icons rendered from the web SVGs
+scripts/            Asset generators
+```
+
+Imports from `src` use the `@/` alias, as in `apps/web`. Files are kebab-case.
+`station-markers.tsx` mirrors `apps/web/src/components/station-markers.tsx`;
+keep the zoom levels in sync. After changing the web icon SVGs, run
+`pnpm --filter=mobile generate:station-icons` to re-render the PNGs.
+Country flags import the web's SVGs from `apps/web/public/assets/flags` directly;
+`react-native-svg-transformer` compiles them into `react-native-svg` components at
+build time. `country-flag.tsx` is typed against `CountryCode`, so a new country fails
+the type check until its flag is imported.
+After changing `apps/web/public/icon.svg`, run
+`pnpm --filter=mobile generate:app-icon` to update the launcher, splash, and favicon art.
+
+## Credentials
+
+Copy `.env.example` to `.env.local` and set `EXPO_PUBLIC_MAPBOX_TOKEN` to a
+**public** Mapbox token (`pk.…`). Check that the token is allowed for native
+mobile requests; a token restricted to the website's URL may not work.
+
+The Mapbox SDK artifacts used by this prototype downloaded without a secret
+token on both platforms. If an older SDK or a different build environment
+returns HTTP 401 while fetching Mapbox artifacts, create a separate **secret**
+Mapbox token with the `DOWNLOADS:READ` scope and put it in your own machine's
+credential files:
+
+- iOS `~/.netrc`:
+
+  ```text
+  machine api.mapbox.com
+    login mapbox
+    password YOUR_DOWNLOADS_READ_TOKEN
+  ```
+
+- Android `~/.gradle/gradle.properties`:
+
+  ```properties
+  MAPBOX_DOWNLOADS_TOKEN=YOUR_DOWNLOADS_READ_TOKEN
+  ```
+
+Keep the download token out of `.env.local`, `app.json`, and Git. The Mapbox
+config plugin reads the local credentials during native builds.
+
+## Run
+
+From the repository root, install dependencies with `pnpm install`, then run:
+
+```sh
+pnpm --filter mobile ios
+pnpm --filter mobile android
+```
+
+For local Android builds, use Java 21 and point `ANDROID_HOME` at your Android
+SDK. On the Mac used for this prototype:
+
+```sh
+export JAVA_HOME=/opt/homebrew/opt/openjdk@21/libexec/openjdk.jdk/Contents/Home
+export ANDROID_HOME="$HOME/Library/Android/sdk"
+pnpm --filter mobile android
+```
+
+The Android command needs a connected device or a configured emulator.
+
+These commands build and install a custom development app. **Expo Go cannot run
+Mapbox's native module.** Once a development app is installed, use
+`pnpm --filter mobile start` for JavaScript changes. Changes to native
+dependencies or app config require rebuilding the development app.
+
+Stations are bundled: `packages/data/src/stations.geojson` ships as an app asset
+and the native map reads it from disk, so a launch needs no station request.
+30 seconds after launch, at most once a day, the app downloads
+`https://api.railradar24.com/stations.geojson` in the background and uses it from
+the next launch. The download is tied to the bundled file's hash, so an app
+update with newer bundled stations replaces it. The selected rail station's board
+is fetched from `/stations/:id` every 30 seconds while the sheet is open and the
+app is active.
+
+Requests to the Rail Radar API send `X-RailRadar-Client: mobile`, including the
+background station download. The API writes structured
+`api_request` logs for tagged requests, with `client`, `method`, `path`, `status`,
+and `durationMs`. In Cloudflare Workers Logs, filter `client = mobile` to see
+requests from the app. The header identifies the client for logging; it is not
+an authentication mechanism.
+
+The search sheet stays open at the bottom of the map, showing only the search bar
+until it is dragged up or focused. It queries `/stations/search?q=` (debounced,
+2+ characters) and, when the query is empty, lists recent rail stations (up to 3)
+and saved stations (up to 7). Both lists are stored as JSON files in the app's
+document directory through `expo-file-system`.
+Below them it shows the 7-day trending stations from `/stations/trending?period=week`,
+refreshed every 5 minutes while the app is open, with unique visitors and visits.

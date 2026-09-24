@@ -9,6 +9,7 @@
     "./directory": "./src/directory.ts",
     "./operators": "./src/operators.ts",
     "./stations": "./src/stations.ts",
+    "./stations.geojson": "./src/stations.geojson",
     "./types": "./src/types.ts"
   },
   "scripts": {

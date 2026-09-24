@@ -1,0 +1,328 @@
+import type { Station } from "@repo/data/types";
+import Mapbox from "@rnmapbox/maps";
+import * as Location from "expo-location";
+import { StatusBar } from "expo-status-bar";
+import { Alert } from "heroui-native/alert";
+import { Card } from "heroui-native/card";
+import { useThemeColor } from "heroui-native/hooks";
+import CircleAlert from "lucide-react-native/icons/circle-alert";
+import { useCallback, useEffect, useRef, useState, type ComponentProps } from "react";
+import { AppState, StyleSheet, View, useWindowDimensions } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+
+import {
+  Compass,
+  LocateButton,
+  useMapHeading,
+  type LocationStatus,
+} from "@/components/map-controls";
+import { SearchSheet } from "@/components/search-sheet";
+import { RailwayLines, StationImages, StationLayers } from "@/components/station-markers";
+import { StationSheet } from "@/components/station-sheet";
+import { UserLocationMarker } from "@/components/user-location-marker";
+import { useMapTheme } from "@/hooks/use-map-theme";
+import { useStationsUrl } from "@/hooks/use-stations-url";
+import { addRecentStation } from "@/hooks/use-stored-stations";
+import { loadLastUserLocation, saveLastUserLocation } from "@/lib/user-location";
+
+const accessToken = process.env.EXPO_PUBLIC_MAPBOX_TOKEN ?? "";
+const defaultCamera = { centerCoordinate: [12, 50] as [number, number], zoomLevel: 4 };
+// Same zoom levels as the web: 13 when opening on the user, 14 after tapping locate.
+const userZoomLevel = 13;
+const locateZoomLevel = 14;
+const locationMaxAge = 5 * 60 * 1000;
+const stationSheetRatio = 0.64;
+
+if (accessToken) {
+  Mapbox.setAccessToken(accessToken);
+}
+
+/** Location is "off" when services are disabled or permission can no longer be asked for. */
+async function readLocationStatus(): Promise<LocationStatus> {
+  const [permission, servicesEnabled] = await Promise.all([
+    Location.getForegroundPermissionsAsync(),
+    Location.hasServicesEnabledAsync(),
+  ]);
+  if (!servicesEnabled || (!permission.granted && !permission.canAskAgain)) return "off";
+  return permission.granted ? "located" : "idle";
+}
+
+/** A recent fix if there is one (like the web's maximumAge), otherwise a fresh one. */
+async function findUserLocation() {
+  const lastKnown = await Location.getLastKnownPositionAsync({ maxAge: locationMaxAge });
+  const { coords } =
+    lastKnown ?? (await Location.getCurrentPositionAsync({ accuracy: Location.Accuracy.Balanced }));
+  const location = { latitude: coords.latitude, longitude: coords.longitude };
+  saveLastUserLocation(location);
+  return location;
+}
+
+type StationPressEvent = Parameters<
+  NonNullable<ComponentProps<typeof Mapbox.ShapeSource>["onPress"]>
+>[0];
+
+export function MapScreen() {
+  const insets = useSafeAreaInsets();
+  const { height } = useWindowDimensions();
+  const camera = useRef<Mapbox.Camera>(null);
+  const stationsUrl = useStationsUrl();
+  const [selectedStation, setSelectedStation] = useState<Station | null>(null);
+  const [sheetOpen, setSheetOpen] = useState(false);
+  const [locationStatus, setLocationStatus] = useState<LocationStatus>("idle");
+  const [message, setMessage] = useState<string | null>(null);
+  const [alertColor, backgroundColor] = useThemeColor(["danger", "background"]);
+  const mapTheme = useMapTheme();
+  const { heading, direction, isRotated, onHeadingChange } = useMapHeading();
+  // Open on the last known position, then follow the user once they're found.
+  const [initialCamera] = useState(() => {
+    const lastLocation = loadLastUserLocation();
+    return lastLocation
+      ? {
+          centerCoordinate: [lastLocation.longitude, lastLocation.latitude] as [number, number],
+          zoomLevel: userZoomLevel,
+        }
+      : defaultCamera;
+  });
+  // Once the user moves the map, finding their location shouldn't move it back.
+  const hasMovedMap = useRef(false);
+
+  const selectStation = useCallback(
+    (station: Station, zoomLevel?: number) => {
+      hasMovedMap.current = true;
+      setSelectedStation(station);
+      if (station.type === "rail") addRecentStation(station);
+      if (!station.geo) return;
+
+      // Keep the station visible above the station sheet.
+      camera.current?.setCamera({
+        centerCoordinate: [station.geo.lng, station.geo.lat],
+        zoomLevel,
+        padding: {
+          paddingTop: insets.top,
+          paddingBottom: Math.round(height * stationSheetRatio),
+          paddingLeft: 0,
+          paddingRight: 0,
+        },
+        animationDuration: 700,
+      });
+    },
+    [height, insets.top],
+  );
+
+  const handleStationPress = useCallback(
+    (event: StationPressEvent) => {
+      const feature = event.features[0];
+      const properties = feature?.properties;
+      if (
+        typeof properties?.id !== "string" ||
+        typeof properties.name !== "string" ||
+        !["rail", "metro", "light"].includes(properties.type)
+      ) {
+        return;
+      }
+
+      const [lng, lat] = feature?.geometry.type === "Point" ? feature.geometry.coordinates : [];
+      selectStation({
+        id: properties.id,
+        name: properties.name,
+        type: properties.type as Station["type"],
+        importance: [1, 2, 3, 4].includes(properties.importance) ? properties.importance : 4,
+        geo: typeof lat === "number" && typeof lng === "number" ? { lat, lng } : undefined,
+      });
+    },
+    [selectStation],
+  );
+
+  const handleSearchSelect = useCallback(
+    (station: Station) => selectStation(station, station.type === "rail" ? 13 : 14),
+    [selectStation],
+  );
+
+  useEffect(() => {
+    if (selectedStation) setSheetOpen(true);
+  }, [selectedStation]);
+
+  // Pick up permission and Location Services changes made in Settings.
+  useEffect(() => {
+    const refresh = () => {
+      readLocationStatus()
+        .then((status) =>
+          setLocationStatus((current) => (current === "locating" ? current : status)),
+        )
+        .catch(() => {});
+    };
+    refresh();
+    const subscription = AppState.addEventListener("change", (state) => {
+      if (state === "active") refresh();
+    });
+    return () => subscription.remove();
+  }, []);
+
+  // Like the web, look for the user on launch and ask for permission if it hasn't been decided.
+  useEffect(() => {
+    let cancelled = false;
+
+    (async () => {
+      if (!(await Location.hasServicesEnabledAsync())) return;
+      let permission = await Location.getForegroundPermissionsAsync();
+      if (!permission.granted && permission.canAskAgain) {
+        permission = await Location.requestForegroundPermissionsAsync();
+      }
+      if (!permission.granted || cancelled) return;
+
+      setLocationStatus("locating");
+      const location = await findUserLocation();
+      if (cancelled) return;
+      setLocationStatus("located");
+      if (hasMovedMap.current) return;
+      camera.current?.setCamera({
+        centerCoordinate: [location.longitude, location.latitude],
+        zoomLevel: userZoomLevel,
+        animationDuration: 0,
+      });
+    })().catch(() => {
+      // Location failures should not block the default map load.
+      if (!cancelled) setLocationStatus("idle");
+    });
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  const locateUser = useCallback(async () => {
+    setLocationStatus("locating");
+    try {
+      if (!(await Location.hasServicesEnabledAsync())) {
+        setLocationStatus("off");
+        setMessage("Location Services are turned off.");
+        return;
+      }
+
+      const permission = await Location.requestForegroundPermissionsAsync();
+      if (!permission.granted) {
+        setLocationStatus(permission.canAskAgain ? "idle" : "off");
+        setMessage("Location permission was not granted.");
+        return;
+      }
+
+      const location = await findUserLocation();
+      hasMovedMap.current = true;
+      setLocationStatus("located");
+      setMessage(null);
+      camera.current?.setCamera({
+        centerCoordinate: [location.longitude, location.latitude],
+        zoomLevel: locateZoomLevel,
+        animationDuration: 700,
+      });
+    } catch {
+      setLocationStatus("idle");
+      setMessage("Your location is unavailable right now.");
+    }
+  }, []);
+
+  const resetHeading = useCallback(() => {
+    camera.current?.setCamera({ heading: 0, animationDuration: 300 });
+  }, []);
+
+  if (!accessToken) {
+    return (
+      <View style={[styles.missingToken, { backgroundColor }]}>
+        <Card style={styles.missingTokenCard}>
+          <Card.Body>
+            <Card.Title>Mapbox token needed</Card.Title>
+            <Card.Description>
+              Add EXPO_PUBLIC_MAPBOX_TOKEN to apps/mobile/.env.local, then restart Expo.
+            </Card.Description>
+          </Card.Body>
+        </Card>
+      </View>
+    );
+  }
+
+  return (
+    <View style={[styles.screen, { backgroundColor }]}>
+      <StatusBar style="auto" />
+      <Mapbox.MapView
+        style={styles.map}
+        styleURL={mapTheme.styleURL}
+        projection="mercator"
+        pitchEnabled={false}
+        scaleBarEnabled={false}
+        // Attribution is shown in the search sheet instead, like the web footer.
+        logoEnabled={false}
+        attributionEnabled={false}
+        onCameraChanged={(state) => {
+          if (state.gestures.isGestureActive) hasMovedMap.current = true;
+          onHeadingChange(state.properties.heading);
+        }}
+        onMapLoadingError={() => setMessage("The map could not be loaded.")}
+      >
+        <Mapbox.Camera
+          ref={camera}
+          defaultSettings={initialCamera}
+          minZoomLevel={3}
+          maxZoomLevel={18}
+        />
+        <StationImages />
+        <RailwayLines />
+        {stationsUrl ? <StationLayers url={stationsUrl} onPress={handleStationPress} /> : null}
+        {locationStatus === "located" ? <UserLocationMarker /> : null}
+      </Mapbox.MapView>
+
+      <View pointerEvents="box-none" style={[styles.controls, { top: insets.top + 12 }]}>
+        <LocateButton status={locationStatus} onPress={locateUser} />
+        <Compass
+          heading={heading}
+          direction={direction}
+          isRotated={isRotated}
+          onPress={resetHeading}
+        />
+      </View>
+
+      {message ? (
+        <Alert status="danger" style={[styles.message, { top: insets.top + 12 }]}>
+          <Alert.Indicator>
+            <CircleAlert size={20} color={alertColor} />
+          </Alert.Indicator>
+          <Alert.Content>
+            <Alert.Description>{message}</Alert.Description>
+          </Alert.Content>
+        </Alert>
+      ) : null}
+
+      <SearchSheet isHidden={sheetOpen} onSelectStation={handleSearchSelect} />
+
+      {selectedStation ? (
+        <StationSheet
+          key={selectedStation.id}
+          station={selectedStation}
+          isOpen={sheetOpen}
+          onOpenChange={setSheetOpen}
+        />
+      ) : null}
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  screen: { flex: 1 },
+  map: { flex: 1 },
+  controls: {
+    position: "absolute",
+    right: 16,
+    gap: 10,
+  },
+  message: {
+    position: "absolute",
+    left: 16,
+    right: 68,
+  },
+  missingToken: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+    padding: 32,
+  },
+  missingTokenCard: { width: "100%" },
+});

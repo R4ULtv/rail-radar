@@ -1,0 +1,40 @@
+{
+  "expo": {
+    "name": "Rail Radar",
+    "slug": "rail-radar",
+    "version": "0.1.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "automatic",
+    "plugins": [
+      "@rnmapbox/maps",
+      [
+        "expo-location",
+        {
+          "locationWhenInUsePermission": "Show your position on the railway map."
+        }
+      ],
+      "expo-asset"
+    ],
+    "splash": {
+      "image": "./assets/splash-icon.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#6363ff"
+    },
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.railradar24.app"
+    },
+    "android": {
+      "package": "com.railradar24.app",
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#6363ff"
+      },
+      "predictiveBackGestureEnabled": false
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    }
+  }
+}

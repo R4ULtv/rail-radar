@@ -1,0 +1,73 @@
+@import "tailwindcss";
+@import "uniwind";
+@import "heroui-native/styles";
+
+@source "../node_modules/heroui-native/lib";
+
+/*
+ * Mirrors packages/ui/src/styles/globals.css (web): light from :root, dark from .dark.
+ * The web's light accent is a neutral hover gray, so light mode keeps the brand indigo.
+ */
+@layer theme {
+  :root {
+    @variant light {
+      --background: oklch(1 0 0);
+      --foreground: oklch(0.147 0.004 49.25);
+
+      --surface: oklch(1 0 0);
+      --surface-secondary: oklch(0.97 0.001 106.424);
+      --surface-tertiary: oklch(0.923 0.003 48.717);
+      --overlay: oklch(1 0 0);
+
+      --muted: oklch(0.553 0.013 58.071);
+
+      --default: oklch(0.97 0.001 106.424);
+      --default-foreground: oklch(0.216 0.006 56.043);
+
+      --accent: oklch(0.5912 0.2254 276.99);
+      --accent-foreground: oklch(0.985 0.001 106.423);
+
+      --field-background: oklch(0.97 0.001 106.424);
+      --field-foreground: oklch(0.147 0.004 49.25);
+
+      --danger: oklch(0.577 0.245 27.325);
+      --danger-foreground: oklch(0.985 0.001 106.423);
+
+      --segment: oklch(1 0 0);
+
+      --border: oklch(0.923 0.003 48.717);
+      --separator: oklch(0.923 0.003 48.717);
+      --focus: oklch(0.709 0.01 56.259);
+    }
+
+    @variant dark {
+      --background: oklch(0.147 0.004 49.25);
+      --foreground: oklch(0.985 0.001 106.423);
+
+      --surface: oklch(0.216 0.006 56.043);
+      --surface-secondary: oklch(0.268 0.007 34.298);
+      --surface-tertiary: oklch(0.374 0.01 67.558);
+      --overlay: oklch(0.216 0.006 56.043);
+
+      --muted: oklch(0.709 0.01 56.259);
+
+      --default: oklch(0.268 0.007 34.298);
+      --default-foreground: oklch(0.985 0.001 106.423);
+
+      --accent: oklch(0.5912 0.2254 276.99);
+      --accent-foreground: oklch(0.985 0.001 106.423);
+
+      --field-background: oklch(0.268 0.007 34.298);
+      --field-foreground: oklch(0.985 0.001 106.423);
+
+      --danger: oklch(0.704 0.191 22.216);
+      --danger-foreground: oklch(0.985 0.001 106.423);
+
+      --segment: oklch(0.374 0.01 67.558);
+
+      --border: oklch(1 0 0 / 10%);
+      --separator: oklch(1 0 0 / 15%);
+      --focus: oklch(0.553 0.013 58.071);
+    }
+  }
+}
