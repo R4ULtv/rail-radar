@@ -10,6 +10,7 @@
     "lint": "oxlint --deny warnings",
     "check-types": "tsc --noEmit",
     "generate:app-icon": "node scripts/generate-app-icon.mjs",
+    "generate:location-puck": "node scripts/generate-location-puck.mjs",
     "generate:station-icons": "node scripts/generate-station-icons.mjs"
   },
   "dependencies": {
