@@ -33,6 +33,8 @@ const userZoomLevel = 13;
 const locateZoomLevel = 14;
 const locationMaxAge = 5 * 60 * 1000;
 const stationSheetRatio = 0.64;
+// Mapbox keeps the last camera padding, so moves that should be centered have to clear it.
+const noPadding = { paddingTop: 0, paddingBottom: 0, paddingLeft: 0, paddingRight: 0 };
 
 if (accessToken) {
   Mapbox.setAccessToken(accessToken);
@@ -144,6 +146,15 @@ export function MapScreen() {
     if (selectedStation) setSheetOpen(true);
   }, [selectedStation]);
 
+  // Once the station sheet closes, drop its padding so the station slides back to the center.
+  const wasSheetOpen = useRef(false);
+  useEffect(() => {
+    if (wasSheetOpen.current && !sheetOpen) {
+      camera.current?.setCamera({ padding: noPadding, animationDuration: 500 });
+    }
+    wasSheetOpen.current = sheetOpen;
+  }, [sheetOpen]);
+
   // Pick up permission and Location Services changes made in Settings.
   useEffect(() => {
     const refresh = () => {
@@ -180,6 +191,7 @@ export function MapScreen() {
       camera.current?.setCamera({
         centerCoordinate: [location.longitude, location.latitude],
         zoomLevel: userZoomLevel,
+        padding: noPadding,
         animationDuration: 0,
       });
     })().catch(() => {
@@ -218,6 +230,7 @@ export function MapScreen() {
       camera.current?.setCamera({
         centerCoordinate: [location.longitude, location.latitude],
         zoomLevel: locateZoomLevel,
+        padding: noPadding,
         animationDuration: 700,
       });
     } catch {
