@@ -18,12 +18,12 @@
     "@repo/data": "workspace:*",
     "@repo/ui": "workspace:*",
     "@tanstack/react-query": "^5.103.2",
-    "@tanstack/react-router": "^1.170.38",
-    "@tanstack/react-start": "^1.168.57",
-    "lucide-react": "^1.47.0",
+    "@tanstack/react-router": "^1.170.39",
+    "@tanstack/react-start": "^1.168.58",
+    "lucide-react": "^1.48.0",
     "mapbox-gl": "^3.31.0",
     "motion": "^12.43.0",
-    "posthog-js": "^1.434.7",
+    "posthog-js": "^1.434.12",
     "react": "^19.3.0",
     "react-dom": "^19.3.0",
     "react-map-gl": "^8.1.3",
@@ -40,6 +40,6 @@
     "tailwindcss": "^4.3.3",
     "typescript": "^6.0.3",
     "vite": "^8.3.0",
-    "wrangler": "^4.136.1"
+    "wrangler": "^4.137.0"
   }
 }
