@@ -93,3 +93,7 @@ export function addRecentStation(station: Station) {
     ),
   );
 }
+
+export function clearRecentStations() {
+  recentStore.write(emptyStations);
+}

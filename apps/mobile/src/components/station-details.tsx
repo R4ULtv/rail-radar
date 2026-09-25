@@ -18,7 +18,7 @@ import { ScrollView } from "react-native-gesture-handler";
 import { withUniwind } from "uniwind";
 
 import { CountryFlag } from "@/components/country-flag";
-import { StationSection } from "@/components/station-list";
+import { SectionTitle, StationSection } from "@/components/station-list";
 import {
   useNearbyStations,
   useStationPhotos,
@@ -36,15 +36,6 @@ const photoHeaders = { "User-Agent": USER_AGENT };
 
 // expo-image caches the full-size photos and decodes them at the thumbnail's size.
 const StyledImage = withUniwind(Image);
-
-function SectionTitle({ icon, children }: { icon: ReactNode; children: ReactNode }) {
-  return (
-    <View className="mb-2 ml-2 flex-row items-center gap-1.5">
-      {icon}
-      <Text className="text-sm font-medium text-muted">{children}</Text>
-    </View>
-  );
-}
 
 function photoCredit({ attribution }: StationPhoto) {
   return [attribution?.author, attribution?.license].filter(Boolean).join(" · ");

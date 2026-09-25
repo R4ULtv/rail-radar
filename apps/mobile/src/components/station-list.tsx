@@ -12,6 +12,15 @@ export function StationTypeIcon({ type }: { type: Station["type"] }) {
   return <Image source={stationIcons[type]} style={styles.stationIcon} />;
 }
 
+export function SectionTitle({ icon, children }: { icon?: ReactNode; children: ReactNode }) {
+  return (
+    <View className="mb-2 ml-2 flex-row items-center gap-1.5">
+      {icon}
+      <Text className="text-sm font-medium text-muted">{children}</Text>
+    </View>
+  );
+}
+
 export function StationSection<T extends Station>({
   title,
   icon,
@@ -30,10 +39,7 @@ export function StationSection<T extends Station>({
 
   return (
     <View className="mt-5">
-      <View className="mb-2 ml-2 flex-row items-center gap-1.5">
-        {icon}
-        <Text className="text-sm font-medium text-muted">{title}</Text>
-      </View>
+      <SectionTitle icon={icon}>{title}</SectionTitle>
       <ListGroup variant="secondary">
         {stations.map((station, index) => (
           <Fragment key={station.id}>

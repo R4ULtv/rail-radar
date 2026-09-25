@@ -10,7 +10,10 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 import { ErrorBoundary } from "@/components/error-boundary";
 import { MapScreen } from "@/components/map-screen";
 import { bugReportUrl } from "@/lib/links";
+import { applySavedTheme } from "@/lib/theme";
 import "./global.css";
+
+applySavedTheme();
 
 /** Shown instead of the map if it crashes, rather than closing the app. */
 function AppError({ onRetry }: { onRetry: () => void }) {
