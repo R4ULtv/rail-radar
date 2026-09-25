@@ -2,21 +2,36 @@ import { useThemeColor } from "heroui-native/hooks";
 import Locate from "lucide-react-native/icons/locate";
 import LocateFixed from "lucide-react-native/icons/locate-fixed";
 import LocateOff from "lucide-react-native/icons/locate-off";
-import { useCallback, useState } from "react";
-import { Pressable, StyleSheet, Text, type PressableProps } from "react-native";
+import Settings from "lucide-react-native/icons/settings";
+import { useCallback, useState, type ReactNode } from "react";
+import {
+  Pressable,
+  StyleSheet,
+  Text,
+  useWindowDimensions,
+  type PressableProps,
+} from "react-native";
 import Animated, {
+  Extrapolation,
+  interpolate,
+  useAnimatedReaction,
   useAnimatedStyle,
+  useDerivedValue,
   useSharedValue,
   withTiming,
   type SharedValue,
 } from "react-native-reanimated";
 import Svg, { Line, Path } from "react-native-svg";
+import { scheduleOnRN } from "react-native-worklets";
 
 // Round map buttons, modelled on Apple Maps.
 const controlSize = 40;
 const center = controlSize / 2;
 // Headings closer to north than this count as north-up.
 const northThreshold = 1;
+const controlGap = 10;
+// Controls above the sheets are gone halfway from a sheet's smallest size to its next one.
+const sheetControlsHiddenAt = 0.5;
 
 type Direction = "N" | "E" | "S" | "W";
 const directions: Direction[] = ["N", "E", "S", "W"];
@@ -67,6 +82,78 @@ function MapControl(props: Omit<PressableProps, "style">) {
       ]}
       {...props}
     />
+  );
+}
+
+export function SettingsButton({ onPress }: { onPress: () => void }) {
+  const foreground = useThemeColor("foreground");
+
+  return (
+    <MapControl accessibilityLabel="Settings" onPress={onPress}>
+      <Settings size={20} color={foreground} />
+    </MapControl>
+  );
+}
+
+/** A sheet's snap index and the top of the sheet, as Gorhom Bottom Sheet reports them. */
+export interface SheetPosition {
+  animatedIndex: SharedValue<number>;
+  animatedPosition: SharedValue<number>;
+}
+
+/** Starts closed: index -1, at the bottom of the screen. */
+export function useSheetPosition(): SheetPosition {
+  const { height } = useWindowDimensions();
+  const animatedIndex = useSharedValue(-1);
+  const animatedPosition = useSharedValue(height);
+  return { animatedIndex, animatedPosition };
+}
+
+/**
+ * Keeps its controls just above the sheets, like Apple Maps, following them as they're dragged.
+ * They fade out as a sheet opens beyond its smallest size.
+ */
+export function SheetControls({
+  sheets,
+  children,
+}: {
+  sheets: SheetPosition[];
+  children: ReactNode;
+}) {
+  const { height } = useWindowDimensions();
+  const controlsHeight = useSharedValue(0);
+  const [isVisible, setIsVisible] = useState(true);
+  const sheetTop = useDerivedValue(() =>
+    sheets.reduce((top, sheet) => Math.min(top, sheet.animatedPosition.value), height),
+  );
+  const sheetIndex = useDerivedValue(() =>
+    sheets.reduce((index, sheet) => Math.max(index, sheet.animatedIndex.value), -1),
+  );
+
+  useAnimatedReaction(
+    () => sheetIndex.value < sheetControlsHiddenAt,
+    (visible, previous) => {
+      if (visible !== previous) scheduleOnRN(setIsVisible, visible);
+    },
+  );
+
+  const style = useAnimatedStyle(() => ({
+    opacity: interpolate(sheetIndex.value, [0, sheetControlsHiddenAt], [1, 0], Extrapolation.CLAMP),
+    transform: [{ translateY: sheetTop.value - controlsHeight.value - controlGap }],
+  }));
+
+  return (
+    <Animated.View
+      pointerEvents={isVisible ? "box-none" : "none"}
+      accessibilityElementsHidden={!isVisible}
+      importantForAccessibility={isVisible ? "auto" : "no-hide-descendants"}
+      style={[styles.sheetControls, style]}
+      onLayout={(event) => {
+        controlsHeight.value = event.nativeEvent.layout.height;
+      }}
+    >
+      {children}
+    </Animated.View>
   );
 }
 
@@ -172,4 +259,5 @@ const styles = StyleSheet.create({
     elevation: 4,
   },
   direction: { fontSize: 13, fontWeight: "600" },
+  sheetControls: { position: "absolute", top: 0, right: 16, gap: controlGap },
 });

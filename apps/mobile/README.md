@@ -129,7 +129,9 @@ Below them it shows the 7-day trending stations from `/stations/trending?period=
 with unique visitors and visits. They load on launch and refresh every 5 minutes, but only
 while the search sheet is open and the app is active.
 
-The gear next to the search bar opens settings: a page sheet on iOS and a full-screen page
-on Android. It has the appearance (system, light or dark, saved to `theme.json` and applied
-before the first render), location access, which opens the system settings, clearing recent
-stations, and links for support, the website, the legal pages and the source code.
+As in Apple Maps, the locate button and the compass sit just above the open sheet and follow
+it, fading out once it's opened past its smallest size. The gear in the top-right corner opens
+settings: a page sheet on iOS and a full-screen page on Android. It has the appearance
+(system, light or dark, saved to `theme.json` and applied before the first render), location
+access, which opens the system settings, clearing recent stations, and links for support, the
+website, the legal pages and the source code.

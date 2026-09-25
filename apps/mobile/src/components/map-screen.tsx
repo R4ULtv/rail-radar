@@ -13,7 +13,10 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import {
   Compass,
   LocateButton,
+  SettingsButton,
+  SheetControls,
   useMapHeading,
+  useSheetPosition,
   type LocationStatus,
 } from "@/components/map-controls";
 import { SearchSheet } from "@/components/search-sheet";
@@ -102,6 +105,9 @@ export function MapScreen() {
   const [isSearchExpanded, setIsSearchExpanded] = useState(false);
   const [isStationExpanded, setIsStationExpanded] = useState(false);
   const isMapLocked = isSearchExpanded || isStationExpanded;
+  // Where the sheets are, for the controls that sit above them.
+  const searchSheetPosition = useSheetPosition();
+  const stationSheetPosition = useSheetPosition();
 
   // A map that failed to load, e.g. on a first launch without a connection, is loaded again
   // once the connection comes back. Mapbox keeps what it loaded, so later launches work offline.
@@ -335,15 +341,19 @@ export function MapScreen() {
         {locationStatus === "located" ? <UserLocationMarker /> : null}
       </Mapbox.MapView>
 
-      <View pointerEvents="box-none" style={[styles.controls, { top: insets.top + 12 }]}>
-        <LocateButton status={locationStatus} onPress={locateUser} />
+      <View style={[styles.settings, { top: insets.top + 12 }]}>
+        <SettingsButton onPress={openSettings} />
+      </View>
+
+      <SheetControls sheets={[searchSheetPosition, stationSheetPosition]}>
         <Compass
           heading={heading}
           direction={direction}
           isRotated={isRotated}
           onPress={resetHeading}
         />
-      </View>
+        <LocateButton status={locationStatus} onPress={locateUser} />
+      </SheetControls>
 
       {alertMessage ? (
         <Alert status="danger" style={[styles.message, { top: insets.top + 12 }]}>
@@ -361,8 +371,8 @@ export function MapScreen() {
         stationsUrl={stationsUrl}
         userLocation={userLocation}
         onSelectStation={handleSearchSelect}
-        onOpenSettings={openSettings}
         onExpandedChange={setIsSearchExpanded}
+        position={searchSheetPosition}
       />
 
       {selectedStation ? (
@@ -374,6 +384,7 @@ export function MapScreen() {
           onOpenChange={setSheetOpen}
           onSelectStation={selectStation}
           onExpandedChange={setIsStationExpanded}
+          position={stationSheetPosition}
         />
       ) : null}
 
@@ -389,10 +400,9 @@ export function MapScreen() {
 const styles = StyleSheet.create({
   screen: { flex: 1 },
   map: { flex: 1 },
-  controls: {
+  settings: {
     position: "absolute",
     right: 16,
-    gap: 10,
   },
   message: {
     position: "absolute",

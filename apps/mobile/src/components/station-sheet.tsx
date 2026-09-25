@@ -30,6 +30,7 @@ import {
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { CountryFlag } from "@/components/country-flag";
+import type { SheetPosition } from "@/components/map-controls";
 import { ErrorBoundary } from "@/components/error-boundary";
 import { StationDetails } from "@/components/station-details";
 import { TrainRow, TrainRowSkeleton, trainKey } from "@/components/train-row";
@@ -564,6 +565,8 @@ interface StationSheetProps {
   onSelectStation: (station: Station) => void;
   /** Whether the sheet is fully open, so the map can ignore gestures in the strip above it. */
   onExpandedChange: (isExpanded: boolean) => void;
+  /** Where the sheet is, for the map controls that sit above it. */
+  position: SheetPosition;
 }
 
 export function StationSheet({
@@ -574,6 +577,7 @@ export function StationSheet({
   onOpenChange,
   onSelectStation,
   onExpandedChange,
+  position,
 }: StationSheetProps) {
   const insets = useSafeAreaInsets();
   const sheetRef = useRef<BottomSheet>(null);
@@ -612,6 +616,8 @@ export function StationSheet({
       index={initialIndex}
       snapPoints={[peekHeight, "60%", "100%"]}
       topInset={insets.top + 8}
+      animatedIndex={position.animatedIndex}
+      animatedPosition={position.animatedPosition}
       enableDynamicSizing={false}
       enableOverDrag={false}
       enablePanDownToClose

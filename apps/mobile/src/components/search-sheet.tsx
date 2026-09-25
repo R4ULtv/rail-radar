@@ -8,7 +8,6 @@ import History from "lucide-react-native/icons/rotate-ccw-clock";
 import List from "lucide-react-native/icons/list";
 import RefreshCw from "lucide-react-native/icons/refresh-cw";
 import SearchX from "lucide-react-native/icons/search-x";
-import Settings from "lucide-react-native/icons/settings";
 import TrendingUp from "lucide-react-native/icons/trending-up";
 import User from "lucide-react-native/icons/user";
 import {
@@ -33,6 +32,7 @@ import {
 import Animated, { Extrapolation, interpolate, useAnimatedStyle } from "react-native-reanimated";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
+import type { SheetPosition } from "@/components/map-controls";
 import { StationSection } from "@/components/station-list";
 import { useStationSearch } from "@/hooks/use-station-search";
 import { useRecentStations, useSavedStations } from "@/hooks/use-stored-stations";
@@ -121,13 +121,11 @@ const SearchSheetContent = memo(function SearchSheetContent({
   userLocation,
   trendingStations,
   onSelectStation,
-  onOpenSettings,
 }: {
   stationsUrl: string | null;
   userLocation: UserLocation | null;
   trendingStations: TrendingStation[];
   onSelectStation: (station: Station) => void;
-  onOpenSettings: () => void;
 }) {
   const insets = useSafeAreaInsets();
   const keyboardHeight = useKeyboardHeight();
@@ -168,11 +166,8 @@ const SearchSheetContent = memo(function SearchSheetContent({
 
   return (
     <View style={styles.content}>
-      <View
-        className="flex-row items-center gap-2 px-4"
-        style={{ paddingTop: searchFieldTopSpacing }}
-      >
-        <SearchField className="flex-1" value={query} onChange={setQuery}>
+      <View className="px-4" style={{ paddingTop: searchFieldTopSpacing }}>
+        <SearchField value={query} onChange={setQuery}>
           <SearchField.Group>
             <SearchField.SearchIcon />
             <SearchField.Input
@@ -220,14 +215,6 @@ const SearchSheetContent = memo(function SearchSheetContent({
             ) : null}
           </SearchField.Group>
         </SearchField>
-        <Button
-          isIconOnly
-          variant="secondary"
-          accessibilityLabel="Settings"
-          onPress={onOpenSettings}
-        >
-          <Settings size={20} color={foregroundColor} />
-        </Button>
       </View>
 
       <Animated.View style={[styles.content, listStyle]}>
@@ -325,9 +312,10 @@ interface SearchSheetProps {
   /** Where the user is: nearby stations rank higher and results show their distance. */
   userLocation: UserLocation | null;
   onSelectStation: (station: Station) => void;
-  onOpenSettings: () => void;
   /** Whether the sheet is fully open, so the map can ignore gestures in the strip above it. */
   onExpandedChange: (isExpanded: boolean) => void;
+  /** Where the sheet is, for the map controls that sit above it. */
+  position: SheetPosition;
 }
 
 export function SearchSheet({
@@ -335,8 +323,8 @@ export function SearchSheet({
   stationsUrl,
   userLocation,
   onSelectStation,
-  onOpenSettings,
   onExpandedChange,
+  position,
 }: SearchSheetProps) {
   const insets = useSafeAreaInsets();
   const collapsedHeight = useSearchSheetCollapsedHeight();
@@ -369,6 +357,8 @@ export function SearchSheet({
       // Collapsed to the search bar or fully open; the half step is for the station sheet.
       snapPoints={[collapsedHeight, "100%"]}
       topInset={insets.top + 8}
+      animatedIndex={position.animatedIndex}
+      animatedPosition={position.animatedPosition}
       enableDynamicSizing={false}
       enablePanDownToClose={false}
       keyboardBehavior="extend"
@@ -388,7 +378,6 @@ export function SearchSheet({
         userLocation={userLocation}
         trendingStations={trendingStations}
         onSelectStation={onSelectStation}
-        onOpenSettings={onOpenSettings}
       />
     </BottomSheet>
   );
