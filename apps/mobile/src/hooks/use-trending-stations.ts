@@ -2,6 +2,7 @@ import type { Station } from "@repo/data/types";
 import { useCallback, useEffect, useRef, useState } from "react";
 
 import { useAppIsActive } from "@/hooks/use-app-is-active";
+import { useIsOnline } from "@/hooks/use-is-online";
 import { fetchApi } from "@/lib/api";
 
 const refreshIntervalMs = 5 * 60 * 1000;
@@ -46,10 +47,12 @@ async function loadTrendingStations(): Promise<TrendingStation[] | null> {
 /**
  * Most visited stations over the last 7 days. Loaded on launch, so the list is ready the first
  * time it's shown, then refreshed every 5 minutes only while it's `visible` and the app is active.
+ * A failed load is tried again the next time the list is shown while online.
  */
 export function useTrendingStations(visible: boolean) {
   const [stations, setStations] = useState<TrendingStation[]>([]);
   const appIsActive = useAppIsActive();
+  const isOnline = useIsOnline();
   const loadedAt = useRef(0);
   const isLoading = useRef(false);
 
@@ -74,7 +77,7 @@ export function useTrendingStations(visible: boolean) {
   }, [refresh]);
 
   useEffect(() => {
-    if (!visible || !appIsActive) return;
+    if (!visible || !appIsActive || !isOnline) return;
 
     // Showing the list again only reloads it once it's older than the refresh interval.
     let interval: ReturnType<typeof setInterval> | undefined;
@@ -89,7 +92,7 @@ export function useTrendingStations(visible: boolean) {
       clearTimeout(timeout);
       clearInterval(interval);
     };
-  }, [visible, appIsActive, refresh]);
+  }, [visible, appIsActive, isOnline, refresh]);
 
   return stations;
 }

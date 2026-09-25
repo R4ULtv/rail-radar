@@ -20,6 +20,7 @@ import { SearchSheet } from "@/components/search-sheet";
 import { RailwayLines, StationImages, StationLayers } from "@/components/station-markers";
 import { StationSheet } from "@/components/station-sheet";
 import { UserLocationMarker } from "@/components/user-location-marker";
+import { useIsOnline } from "@/hooks/use-is-online";
 import { useMapTheme } from "@/hooks/use-map-theme";
 import { useStationsUrl } from "@/hooks/use-stations-url";
 import { addRecentStation } from "@/hooks/use-stored-stations";
@@ -72,6 +73,11 @@ export function MapScreen() {
   const [locationStatus, setLocationStatus] = useState<LocationStatus>("idle");
   const [userLocation, setUserLocation] = useState<UserLocation | null>(null);
   const [message, setMessage] = useState<string | null>(null);
+  const isOnline = useIsOnline();
+  const [mapFailed, setMapFailed] = useState(false);
+  const [mapKey, setMapKey] = useState(0);
+  const wasOnline = useRef(isOnline);
+  const hasLoadedMap = useRef(false);
   const [alertColor, backgroundColor] = useThemeColor(["danger", "background"]);
   const mapTheme = useMapTheme();
   const { heading, direction, isRotated, onHeadingChange } = useMapHeading();
@@ -91,6 +97,17 @@ export function MapScreen() {
   const [isSearchExpanded, setIsSearchExpanded] = useState(false);
   const [isStationExpanded, setIsStationExpanded] = useState(false);
   const isMapLocked = isSearchExpanded || isStationExpanded;
+
+  // A map that failed to load, e.g. on a first launch without a connection, is loaded again
+  // once the connection comes back. Mapbox keeps what it loaded, so later launches work offline.
+  useEffect(() => {
+    const isBackOnline = isOnline && !wasOnline.current;
+    wasOnline.current = isOnline;
+    if (isBackOnline && mapFailed) {
+      setMapFailed(false);
+      setMapKey((key) => key + 1);
+    }
+  }, [isOnline, mapFailed]);
 
   const selectStation = useCallback((station: Station, zoomLevel?: number) => {
     haptics.tap();
@@ -255,10 +272,19 @@ export function MapScreen() {
     );
   }
 
+  const alertMessage =
+    message ??
+    (mapFailed
+      ? isOnline
+        ? "The map could not be loaded."
+        : "You're offline. The map will load once you're back online."
+      : null);
+
   return (
     <View style={[styles.screen, { backgroundColor }]}>
       <StatusBar style="auto" />
       <Mapbox.MapView
+        key={mapKey}
         style={styles.map}
         styleURL={mapTheme.styleURL}
         projection="mercator"
@@ -274,7 +300,14 @@ export function MapScreen() {
           if (state.gestures.isGestureActive) hasMovedMap.current = true;
           onHeadingChange(state.properties.heading);
         }}
-        onMapLoadingError={() => setMessage("The map could not be loaded.")}
+        // Missing tiles once the map is up, e.g. panning offline, aren't a failed map.
+        onMapLoadingError={() => {
+          if (!hasLoadedMap.current) setMapFailed(true);
+        }}
+        onDidFinishLoadingMap={() => {
+          hasLoadedMap.current = true;
+          setMapFailed(false);
+        }}
       >
         <Mapbox.Camera
           ref={camera}
@@ -298,13 +331,13 @@ export function MapScreen() {
         />
       </View>
 
-      {message ? (
+      {alertMessage ? (
         <Alert status="danger" style={[styles.message, { top: insets.top + 12 }]}>
           <Alert.Indicator>
             <CircleAlert size={20} color={alertColor} />
           </Alert.Indicator>
           <Alert.Content>
-            <Alert.Description>{message}</Alert.Description>
+            <Alert.Description>{alertMessage}</Alert.Description>
           </Alert.Content>
         </Alert>
       ) : null}

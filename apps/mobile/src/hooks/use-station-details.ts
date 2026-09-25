@@ -1,6 +1,7 @@
 import type { Station } from "@repo/data/types";
 import { useEffect, useState } from "react";
 
+import { useIsOnline } from "@/hooks/use-is-online";
 import { fetchApi, fetchWithUserAgent } from "@/lib/api";
 import { findNearbyStations, loadStations, type NearbyStation } from "@/lib/stations";
 
@@ -32,12 +33,16 @@ function createCache<T>(load: (stationId: string) => Promise<T>, maxAgeMs = Infi
   };
 }
 
-/** Loads a station's details while `enabled`; null until they arrive or if they fail. */
+/**
+ * Loads a station's details while `enabled`; null until they arrive or if they fail. A failed
+ * load is tried again once the connection comes back.
+ */
 function useStationResource<T>(
   stationId: string,
   enabled: boolean,
   load: (stationId: string) => Promise<T>,
 ) {
+  const isOnline = useIsOnline();
   const [state, setState] = useState<{ stationId: string; value: T } | null>(null);
 
   useEffect(() => {
@@ -51,7 +56,7 @@ function useStationResource<T>(
     return () => {
       cancelled = true;
     };
-  }, [stationId, enabled, load]);
+  }, [stationId, enabled, isOnline, load]);
 
   return state?.stationId === stationId ? state.value : null;
 }

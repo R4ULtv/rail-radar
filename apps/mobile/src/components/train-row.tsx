@@ -26,7 +26,16 @@ const statusBarClassNames = {
   cancelled: "bg-danger",
 };
 
-function TrainStatus({ status }: { status: NonNullable<Train["status"]> }) {
+type TrainStatusType = keyof typeof statusLabels;
+
+/** Null for a status this version doesn't know, so a new one from the API is left out. */
+function knownStatus(status: string | null): TrainStatusType | null {
+  return status && Object.prototype.hasOwnProperty.call(statusLabels, status)
+    ? (status as TrainStatusType)
+    : null;
+}
+
+function TrainStatus({ status }: { status: TrainStatusType }) {
   const [accentColor, successColor, dangerColor] = useThemeColor(["accent", "success", "danger"]);
   const Icon = { departing: ArrowRight, incoming: ArrowDown, cancelled: Ban }[status];
   const color = { departing: accentColor, incoming: successColor, cancelled: dangerColor }[status];
@@ -65,14 +74,13 @@ export const TrainRow = memo(function TrainRow({
   const mutedColor = useThemeColor("muted");
   const route = type === "arrivals" ? train.origin : train.destination;
   const hasDelay = train.delay !== null && train.delay > 0;
-  const isCancelled = train.status === "cancelled";
+  const status = knownStatus(train.status);
+  const isCancelled = status === "cancelled";
   const platform = train.platform ?? "–";
 
   const row = (
     <View className="flex-row gap-3 border-b border-separator px-4 py-3">
-      {train.status ? (
-        <View className={statusBarClassNames[train.status]} style={styles.statusBar} />
-      ) : null}
+      {status ? <View className={statusBarClassNames[status]} style={styles.statusBar} /> : null}
       <View
         className="h-12 min-w-12 items-center justify-center rounded-2xl bg-default px-2"
         accessibilityLabel={train.platform ? `Platform ${train.platform}` : "Platform unknown"}
@@ -120,7 +128,7 @@ export const TrainRow = memo(function TrainRow({
           <Text className="flex-1 text-sm text-muted" numberOfLines={1}>
             {route ? `${type === "arrivals" ? "From" : "To"} ${route}` : "–"}
           </Text>
-          {train.status ? <TrainStatus status={train.status} /> : null}
+          {status ? <TrainStatus status={status} /> : null}
         </View>
 
         {train.info && isExpanded ? (

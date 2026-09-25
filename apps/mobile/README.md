@@ -104,6 +104,13 @@ update with newer bundled stations replaces it. The selected rail station's boar
 is fetched from `/stations/:id` every 30 seconds while the sheet is open and the
 app is active.
 
+Offline, the map, search and nearby stations keep working from the bundled data and
+Mapbox's cache. Requests time out after 15 seconds. `expo-network` tells the app when
+it's offline, so the live board can say so, and the board, station stats, photos,
+trending list and a map that failed to load are loaded again once the connection is back.
+A crash shows a "Something went wrong" screen, or a message in the station sheet if only
+the station failed, instead of closing the app.
+
 Requests from the app send a `User-Agent` such as `RailRadar/0.1.0 (iOS 18.2)` or
 `RailRadar/0.1.0 (Android 15)`, with the version from `app.json`. This covers the API,
 the background station download, and the web's station photos. The photos load through

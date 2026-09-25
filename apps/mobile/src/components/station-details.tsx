@@ -28,10 +28,10 @@ import {
 } from "@/hooks/use-station-details";
 import { USER_AGENT } from "@/lib/api";
 import { formatDistance } from "@/lib/distance";
+import { bugReportUrl, featureRequestUrl } from "@/lib/links";
 
 const photoWidth = 240;
 const photoHeight = 135;
-const issuesUrl = "https://github.com/R4ULtv/rail-radar/issues/new";
 const photoHeaders = { "User-Agent": USER_AGENT };
 
 // expo-image caches the full-size photos and decodes them at the thumbnail's size.
@@ -204,8 +204,8 @@ function StationAbout({ station, mutedColor }: { station: Station; mutedColor: s
 
 function ReportLinks({ mutedColor }: { mutedColor: string }) {
   const links = [
-    { label: "Report a problem", icon: Bug, url: `${issuesUrl}?template=bug_report.yml` },
-    { label: "Feature request", icon: Lightbulb, url: `${issuesUrl}?template=feature_request.yml` },
+    { label: "Report a problem", icon: Bug, url: bugReportUrl },
+    { label: "Feature request", icon: Lightbulb, url: featureRequestUrl },
   ];
 
   return (

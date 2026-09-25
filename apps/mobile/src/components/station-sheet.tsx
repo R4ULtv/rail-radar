@@ -30,6 +30,7 @@ import {
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { CountryFlag } from "@/components/country-flag";
+import { ErrorBoundary } from "@/components/error-boundary";
 import { StationDetails } from "@/components/station-details";
 import { TrainRow, TrainRowSkeleton, trainKey } from "@/components/train-row";
 import { useStationBoard, type BoardType } from "@/hooks/use-station-board";
@@ -59,7 +60,7 @@ function formatUpdated(secondsAgo: number) {
 }
 
 /** "Updated 12s ago", ticking every second. */
-function useUpdatedLabel(timestamp: string | undefined, hasError: boolean) {
+function useUpdatedLabel(timestamp: string | undefined, hasError: boolean, isOnline: boolean) {
   const [, tick] = useReducer((count: number) => count + 1, 0);
 
   useEffect(() => {
@@ -68,7 +69,8 @@ function useUpdatedLabel(timestamp: string | undefined, hasError: boolean) {
     return () => clearInterval(interval);
   }, [timestamp]);
 
-  if (!timestamp) return hasError ? "Live trains unavailable" : "Updating…";
+  if (!timestamp)
+    return hasError ? (isOnline ? "Live trains unavailable" : "Offline") : "Updating…";
   const secondsAgo = Math.max(0, Math.floor((Date.now() - new Date(timestamp).getTime()) / 1000));
   return formatUpdated(secondsAgo);
 }
@@ -78,12 +80,19 @@ interface StationSubtitleProps {
   /** When the board was updated; only for train stations. */
   timestamp: string | undefined;
   hasError: boolean;
+  isOnline: boolean;
   userLocation: UserLocation | null;
 }
 
 // Its own component, so the label's every-second tick only re-renders this line.
-function StationSubtitle({ station, timestamp, hasError, userLocation }: StationSubtitleProps) {
-  const updatedLabel = useUpdatedLabel(timestamp, hasError);
+function StationSubtitle({
+  station,
+  timestamp,
+  hasError,
+  isOnline,
+  userLocation,
+}: StationSubtitleProps) {
+  const updatedLabel = useUpdatedLabel(timestamp, hasError, isOnline);
   const distance =
     userLocation && station.geo ? formatDistance(distanceKm(userLocation, station.geo)) : null;
   const subtitle = [
@@ -288,7 +297,7 @@ const LiveBoard = memo(function LiveBoard({
   const [foregroundColor, warningColor] = useThemeColor(["default-foreground", "warning"]);
   const [showAll, setShowAll] = useState(false);
   const [expandedTrain, setExpandedTrain] = useState<string | null>(null);
-  const { data, error, retry } = board;
+  const { data, error, isOnline, retry } = board;
 
   // One train's info at a time, so the board stays compact.
   const toggleTrain = useCallback(
@@ -296,18 +305,28 @@ const LiveBoard = memo(function LiveBoard({
     [],
   );
 
-  const retryButton = (
+  // Offline, the board reloads by itself once the connection is back.
+  const retryButton = isOnline ? (
     <Button className="self-start" size="sm" variant="tertiary" onPress={retry}>
       <RefreshCw size={15} color={foregroundColor} />
       <Button.Label>Retry</Button.Label>
     </Button>
-  );
+  ) : null;
 
   if (!data) {
     if (error) {
       return (
         <View className="gap-3 px-4 py-4" onLayout={onFirstItemLayout}>
-          <Text className="text-sm text-muted">Unable to load live trains. Please try again.</Text>
+          <View className="gap-0.5">
+            <Text className="text-sm font-medium text-foreground">
+              {isOnline ? "Unable to load live trains" : "You're offline"}
+            </Text>
+            <Text className="text-sm text-muted">
+              {isOnline
+                ? (error.message ?? "Check your connection and try again.")
+                : "Live trains will load once you're back online."}
+            </Text>
+          </View>
           {retryButton}
         </View>
       );
@@ -330,7 +349,9 @@ const LiveBoard = memo(function LiveBoard({
       {error ? (
         <View className="mb-2 gap-2 px-4">
           <Text className="text-sm text-muted">
-            Live updates are unavailable. Showing the last received data.
+            {isOnline
+              ? "Live updates are unavailable. Showing the last received data."
+              : "You're offline. Showing the last received data."}
           </Text>
           {retryButton}
         </View>
@@ -465,6 +486,7 @@ function StationSheetContent({
               station={station}
               timestamp={board.data?.timestamp}
               hasError={board.error !== null}
+              isOnline={board.isOnline}
               userLocation={userLocation}
             />
           </View>
@@ -507,6 +529,27 @@ function StationSheetContent({
           />
         ) : null}
       </BottomSheetScrollView>
+    </View>
+  );
+}
+
+/** Shown in the sheet if the station fails to render, so the map stays usable. */
+function StationError({ onRetry, onClose }: { onRetry: () => void; onClose: () => void }) {
+  const foregroundColor = useThemeColor("default-foreground");
+
+  return (
+    <View className="gap-3 px-4 pb-4">
+      <View className="flex-row items-start gap-3">
+        <View style={styles.title}>
+          <Text className="text-xl font-semibold text-foreground">Something went wrong</Text>
+          <Text className="mt-1 text-sm text-muted">This station couldn't be shown.</Text>
+        </View>
+        <CloseButton accessibilityLabel="Close station" onPress={onClose} />
+      </View>
+      <Button className="self-start" size="sm" variant="tertiary" onPress={onRetry}>
+        <RefreshCw size={15} color={foregroundColor} />
+        <Button.Label>Try again</Button.Label>
+      </Button>
     </View>
   );
 }
@@ -580,19 +623,23 @@ export function StationSheet({
         if (next === -1 && isOpen) onOpenChange(false);
       }}
     >
-      <StationSheetContent
+      <ErrorBoundary
         key={station.id}
-        station={station}
-        isOpen={isOpen}
-        stationsUrl={stationsUrl}
-        userLocation={userLocation}
-        // Below the peek, and slow to render with the nearby stations, so they're added once
-        // the sheet has opened rather than delaying it.
-        showDetails={index >= 0}
-        onClose={() => onOpenChange(false)}
-        onSelectStation={onSelectStation}
-        onPeekHeightChange={setPeekHeight}
-      />
+        fallback={(reset) => <StationError onRetry={reset} onClose={() => onOpenChange(false)} />}
+      >
+        <StationSheetContent
+          station={station}
+          isOpen={isOpen}
+          stationsUrl={stationsUrl}
+          userLocation={userLocation}
+          // Below the peek, and slow to render with the nearby stations, so they're added once
+          // the sheet has opened rather than delaying it.
+          showDetails={index >= 0}
+          onClose={() => onOpenChange(false)}
+          onSelectStation={onSelectStation}
+          onPeekHeightChange={setPeekHeight}
+        />
+      </ErrorBoundary>
     </BottomSheet>
   );
 }
