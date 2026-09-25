@@ -77,3 +77,15 @@ export function saveLastUserLocation(location: UserLocation) {
     // Location caching should never block the live map experience.
   }
 }
+
+export function hasLastUserLocation() {
+  return file.exists;
+}
+
+export function forgetLastUserLocation() {
+  try {
+    if (file.exists) file.delete();
+  } catch {
+    // The file is replaced with the next fix anyway.
+  }
+}

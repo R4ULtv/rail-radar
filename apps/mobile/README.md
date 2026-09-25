@@ -131,7 +131,16 @@ while the search sheet is open and the app is active.
 
 As in Apple Maps, the locate button and the compass sit just above the open sheet and follow
 it, fading out once it's opened past its smallest size. The gear in the top-right corner opens
-settings: a page sheet on iOS and a full-screen page on Android. It has the appearance
-(system, light or dark, saved to `theme.json` and applied before the first render), location
-access, which opens the system settings, clearing recent stations, and links for support, the
-website, the legal pages and the source code.
+settings: a page sheet on iOS, with a handle like the bottom sheets, and a full-screen page on
+Android. It has the appearance (system, light or dark, saved to `theme.json` and applied before
+the first render), location access, which opens the system settings, and links for support, the
+website, the legal pages and the source code. Its "On this device" section clears the recent
+and saved stations, forgets the last location (`user-location.json`), resets the stations to
+the bundled copy by deleting the download (the map switches right away, and the next launch
+downloads them again), and clears the Mapbox tile cache and `expo-image`'s photo caches.
+
+The user's location never leaves the device: it's only used to show them on the map and sort
+stations by distance, and the last one is kept for a day so the map opens there. Mapbox's
+telemetry, which would send location events to Mapbox, is turned off with
+`Mapbox.setTelemetryEnabled(false)`. That's also the opt-out Mapbox's terms require, which its
+attribution button would offer; the button is hidden, and the attribution is in the search sheet.

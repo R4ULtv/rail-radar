@@ -43,6 +43,9 @@ const noPadding = { paddingTop: 0, paddingBottom: 0, paddingLeft: 0, paddingRigh
 if (accessToken) {
   Mapbox.setAccessToken(accessToken);
 }
+// Mapbox's telemetry would send the user's location to Mapbox; it stays on the device instead.
+// This is also the opt-out Mapbox requires, which its hidden attribution button would offer.
+Mapbox.setTelemetryEnabled(false);
 
 /** Location is "off" when services are disabled or permission can no longer be asked for. */
 async function readLocationStatus(): Promise<LocationStatus> {
