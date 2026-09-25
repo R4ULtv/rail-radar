@@ -4,6 +4,7 @@ import BottomSheet, { BottomSheetScrollView } from "@gorhom/bottom-sheet";
 import { Button } from "heroui-native/button";
 import { CloseButton } from "heroui-native/close-button";
 import { useThemeColor } from "heroui-native/hooks";
+import { PressableFeedback } from "heroui-native/pressable-feedback";
 import { Tabs } from "heroui-native/tabs";
 import ArrowDownLeft from "lucide-react-native/icons/arrow-down-left";
 import ArrowUpRight from "lucide-react-native/icons/arrow-up-right";
@@ -30,7 +31,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { CountryFlag } from "@/components/country-flag";
 import { StationDetails } from "@/components/station-details";
-import { TrainRow, TrainRowSkeleton } from "@/components/train-row";
+import { TrainRow, TrainRowSkeleton, trainKey } from "@/components/train-row";
 import { useStationBoard, type BoardType } from "@/hooks/use-station-board";
 import { MAX_SAVED_STATIONS, useSavedStations } from "@/hooks/use-stored-stations";
 import { distanceKm, formatDistance } from "@/lib/distance";
@@ -216,6 +217,35 @@ const BoardTabs = memo(function BoardTabs({
   );
 });
 
+/** The station's notice from the live board: one line until it's pressed. */
+function StationInfo({ info }: { info: string }) {
+  const [foregroundColor, mutedColor] = useThemeColor(["default-foreground", "muted"]);
+  const [isExpanded, setIsExpanded] = useState(false);
+
+  return (
+    <PressableFeedback
+      accessibilityRole="button"
+      accessibilityState={{ expanded: isExpanded }}
+      accessibilityHint={isExpanded ? "Shows less" : "Shows the whole notice"}
+      className="mx-4 mb-2 flex-row items-start gap-2 rounded-2xl bg-default px-3 py-2.5"
+      onPress={() => {
+        haptics.selection();
+        setIsExpanded((current) => !current);
+      }}
+    >
+      <View style={styles.noticeIcon}>
+        <Megaphone size={15} color={mutedColor} />
+      </View>
+      <Text className="flex-1 text-sm leading-5 text-muted" numberOfLines={isExpanded ? 0 : 1}>
+        {info}
+      </Text>
+      <View style={[styles.noticeIcon, isExpanded && styles.chevronUp]}>
+        <ChevronDown size={16} color={foregroundColor} />
+      </View>
+    </PressableFeedback>
+  );
+}
+
 function Notice({
   icon,
   children,
@@ -255,13 +285,16 @@ const LiveBoard = memo(function LiveBoard({
   warning,
   onFirstItemLayout,
 }: LiveBoardProps) {
-  const [foregroundColor, mutedColor, warningColor] = useThemeColor([
-    "default-foreground",
-    "muted",
-    "warning",
-  ]);
+  const [foregroundColor, warningColor] = useThemeColor(["default-foreground", "warning"]);
   const [showAll, setShowAll] = useState(false);
+  const [expandedTrain, setExpandedTrain] = useState<string | null>(null);
   const { data, error, retry } = board;
+
+  // One train's info at a time, so the board stays compact.
+  const toggleTrain = useCallback(
+    (key: string) => setExpandedTrain((current) => (current === key ? null : key)),
+    [],
+  );
 
   const retryButton = (
     <Button className="self-start" size="sm" variant="tertiary" onPress={retry}>
@@ -293,11 +326,7 @@ const LiveBoard = memo(function LiveBoard({
 
   return (
     <View>
-      {data.info ? (
-        <Notice className="mb-2" icon={<Megaphone size={15} color={mutedColor} />}>
-          {data.info}
-        </Notice>
-      ) : null}
+      {data.info ? <StationInfo info={data.info} /> : null}
       {error ? (
         <View className="mb-2 gap-2 px-4">
           <Text className="text-sm text-muted">
@@ -316,6 +345,8 @@ const LiveBoard = memo(function LiveBoard({
             key={`${train.trainNumber}-${train.scheduledTime}-${train.platform ?? ""}-${index}`}
             train={train}
             type={type}
+            isExpanded={expandedTrain === trainKey(train)}
+            onToggle={toggleTrain}
             onLayout={index === 0 ? onFirstItemLayout : undefined}
           />
         ))

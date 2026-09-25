@@ -4,12 +4,15 @@ import { Skeleton } from "heroui-native/skeleton";
 import ArrowDown from "lucide-react-native/icons/arrow-down";
 import ArrowRight from "lucide-react-native/icons/arrow-right";
 import Ban from "lucide-react-native/icons/ban";
+import Info from "lucide-react-native/icons/info";
+import { PressableFeedback } from "heroui-native/pressable-feedback";
 import { memo } from "react";
 import type { LayoutChangeEvent } from "react-native";
 import { StyleSheet, Text, View } from "react-native";
 
 import { BrandLogo } from "@/components/brand-logo";
 import type { BoardType } from "@/hooks/use-station-board";
+import { haptics } from "@/lib/haptics";
 
 const statusLabels = { departing: "Departing", incoming: "Incoming", cancelled: "Cancelled" };
 const statusClassNames = {
@@ -38,24 +41,35 @@ function TrainStatus({ status }: { status: NonNullable<Train["status"]> }) {
   );
 }
 
+/** Identifies a train across refreshes, e.g. to keep its info open. */
+export function trainKey(train: Train) {
+  return `${train.trainNumber}-${train.scheduledTime}`;
+}
+
 interface TrainRowProps {
   train: Train;
   type: BoardType;
+  /** Whether the train's info is shown; it's hidden until the train is pressed. */
+  isExpanded: boolean;
+  onToggle: (key: string) => void;
   onLayout?: (event: LayoutChangeEvent) => void;
 }
 
-export const TrainRow = memo(function TrainRow({ train, type, onLayout }: TrainRowProps) {
+export const TrainRow = memo(function TrainRow({
+  train,
+  type,
+  isExpanded,
+  onToggle,
+  onLayout,
+}: TrainRowProps) {
+  const mutedColor = useThemeColor("muted");
   const route = type === "arrivals" ? train.origin : train.destination;
   const hasDelay = train.delay !== null && train.delay > 0;
   const isCancelled = train.status === "cancelled";
   const platform = train.platform ?? "–";
 
-  return (
-    <View
-      className="flex-row gap-3 border-b border-separator px-4 py-3"
-      accessible
-      onLayout={onLayout}
-    >
+  const row = (
+    <View className="flex-row gap-3 border-b border-separator px-4 py-3">
       {train.status ? (
         <View className={statusBarClassNames[train.status]} style={styles.statusBar} />
       ) : null}
@@ -85,6 +99,7 @@ export const TrainRow = memo(function TrainRow({ train, type, onLayout }: TrainR
             <Text className="shrink font-medium text-foreground" numberOfLines={1}>
               {train.trainNumber}
             </Text>
+            {train.info ? <Info size={14} color={mutedColor} /> : null}
           </View>
           <View className="flex-row items-center gap-1.5">
             <Text
@@ -108,13 +123,36 @@ export const TrainRow = memo(function TrainRow({ train, type, onLayout }: TrainR
           {train.status ? <TrainStatus status={train.status} /> : null}
         </View>
 
-        {train.info ? (
-          <Text className="mt-1 text-xs text-muted" numberOfLines={2}>
-            {train.info}
-          </Text>
+        {train.info && isExpanded ? (
+          <Text className="mt-2 text-sm leading-5 text-muted">{train.info}</Text>
         ) : null}
       </View>
     </View>
+  );
+
+  if (!train.info) {
+    return (
+      <View accessible onLayout={onLayout}>
+        {row}
+      </View>
+    );
+  }
+
+  return (
+    <PressableFeedback
+      accessibilityRole="button"
+      accessibilityState={{ expanded: isExpanded }}
+      accessibilityHint={isExpanded ? "Hides the train's info" : "Shows the train's info"}
+      animation={false}
+      onLayout={onLayout}
+      onPress={() => {
+        haptics.selection();
+        onToggle(trainKey(train));
+      }}
+    >
+      <PressableFeedback.Highlight />
+      {row}
+    </PressableFeedback>
   );
 });
 
