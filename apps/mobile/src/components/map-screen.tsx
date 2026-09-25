@@ -101,6 +101,8 @@ export function MapScreen() {
   });
   // Once the user moves the map, finding their location shouldn't move it back.
   const hasMovedMap = useRef(false);
+  // Whether the map is on the user's location, which fills the locate button.
+  const [isCentered, setIsCentered] = useState(false);
   // While a sheet is fully open, the strip of map above it stays still.
   const [isSearchExpanded, setIsSearchExpanded] = useState(false);
   const [isStationExpanded, setIsStationExpanded] = useState(false);
@@ -123,6 +125,7 @@ export function MapScreen() {
   const selectStation = useCallback((station: Station, zoomLevel?: number) => {
     haptics.tap();
     hasMovedMap.current = true;
+    setIsCentered(false);
     setSelectedStation(station);
     // Opened in the same update, so the first station sheet mounts already open.
     setSheetOpen(true);
@@ -210,6 +213,7 @@ export function MapScreen() {
       setUserLocation(location);
       setLocationStatus("located");
       if (hasMovedMap.current) return;
+      setIsCentered(true);
       camera.current?.setCamera({
         centerCoordinate: [location.longitude, location.latitude],
         zoomLevel: userZoomLevel,
@@ -249,6 +253,7 @@ export function MapScreen() {
       setUserLocation(location);
       hasMovedMap.current = true;
       setLocationStatus("located");
+      setIsCentered(true);
       setMessage(null);
       camera.current?.setCamera({
         centerCoordinate: [location.longitude, location.latitude],
@@ -314,7 +319,10 @@ export function MapScreen() {
         logoEnabled={false}
         attributionEnabled={false}
         onCameraChanged={(state) => {
-          if (state.gestures.isGestureActive) hasMovedMap.current = true;
+          if (state.gestures.isGestureActive) {
+            hasMovedMap.current = true;
+            setIsCentered(false);
+          }
           onHeadingChange(state.properties.heading);
         }}
         // Missing tiles once the map is up, e.g. panning offline, aren't a failed map.
@@ -352,7 +360,7 @@ export function MapScreen() {
           isRotated={isRotated}
           onPress={resetHeading}
         />
-        <LocateButton status={locationStatus} onPress={locateUser} />
+        <LocateButton status={locationStatus} isCentered={isCentered} onPress={locateUser} />
       </SheetControls>
 
       {alertMessage ? (

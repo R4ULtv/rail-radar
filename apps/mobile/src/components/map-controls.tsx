@@ -1,7 +1,6 @@
 import { useThemeColor } from "heroui-native/hooks";
-import Locate from "lucide-react-native/icons/locate";
-import LocateFixed from "lucide-react-native/icons/locate-fixed";
-import LocateOff from "lucide-react-native/icons/locate-off";
+import Navigation from "lucide-react-native/icons/navigation";
+import NavigationOff from "lucide-react-native/icons/navigation-off";
 import Settings from "lucide-react-native/icons/settings";
 import { useCallback, useState, type ReactNode } from "react";
 import {
@@ -32,6 +31,10 @@ const northThreshold = 1;
 const controlGap = 10;
 // Controls above the sheets are gone halfway from a sheet's smallest size to its next one.
 const sheetControlsHiddenAt = 0.5;
+const locateIconSize = 20;
+// Lucide's arrow is weighted to the top right: its shape centers on (13.67, 10.33) of 24.
+// Shifting it back by that much centers it in the button.
+const arrowOffset = ((13.67 - 12) / 24) * locateIconSize;
 
 type Direction = "N" | "E" | "S" | "W";
 const directions: Direction[] = ["N", "E", "S", "W"];
@@ -166,20 +169,42 @@ const locateLabels: Record<LocationStatus, string> = {
   off: "Location is off",
 };
 
-/** Same icons as the web map: locate, then locate-fixed once found; locate-off when unavailable. */
-export function LocateButton({ status, onPress }: { status: LocationStatus; onPress: () => void }) {
+/**
+ * Apple Maps' location arrow: an outline once the user is found, filled while the map is
+ * centered on them, and crossed out when location is unavailable.
+ */
+export function LocateButton({
+  status,
+  isCentered,
+  onPress,
+}: {
+  status: LocationStatus;
+  /** Whether the map is on the user's location, until they move it. */
+  isCentered: boolean;
+  onPress: () => void;
+}) {
   const [foreground, accent, muted] = useThemeColor(["foreground", "accent", "muted"]);
-  const Icon = status === "off" ? LocateOff : status === "located" ? LocateFixed : Locate;
+  const Icon = status === "off" ? NavigationOff : Navigation;
   const color = status === "off" ? muted : status === "located" ? accent : foreground;
+  const isFilled = status === "located" && isCentered;
 
   return (
     <MapControl
       accessibilityLabel={locateLabels[status]}
-      accessibilityState={{ busy: status === "locating" }}
+      accessibilityState={{ busy: status === "locating", selected: isFilled }}
       disabled={status === "locating"}
       onPress={onPress}
     >
-      <Icon size={20} color={color} style={{ opacity: status === "locating" ? 0.5 : 1 }} />
+      <Icon
+        size={locateIconSize}
+        color={color}
+        fill={isFilled ? color : "none"}
+        style={{
+          opacity: status === "locating" ? 0.5 : 1,
+          transform:
+            status === "off" ? [] : [{ translateX: -arrowOffset }, { translateY: arrowOffset }],
+        }}
+      />
     </MapControl>
   );
 }
