@@ -1,5 +1,5 @@
 import type { Train } from "@repo/data/types";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { AppState } from "react-native";
 
 import { fetchApi } from "@/lib/api";
@@ -94,8 +94,9 @@ export function useStationBoard(stationId: string, type: BoardType, enabled: boo
     };
   }, [stationId, type, enabled, appIsActive, retryCount, key]);
 
-  return {
-    ...(state.key === key ? state : initialState(key)),
-    retry: () => setRetryCount((count) => count + 1),
-  };
+  const retry = useCallback(() => setRetryCount((count) => count + 1), []);
+  const current = state.key === key ? state : null;
+
+  // Stable between refreshes, so the memoized board only re-renders when its data changes.
+  return useMemo(() => ({ ...(current ?? initialState(key)), retry }), [current, key, retry]);
 }

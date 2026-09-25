@@ -98,6 +98,8 @@ export function MapScreen() {
       haptics.tap();
       hasMovedMap.current = true;
       setSelectedStation(station);
+      // Opened in the same update, so the first station sheet mounts already open.
+      setSheetOpen(true);
       if (station.type === "rail") addRecentStation(station);
       if (!station.geo) return;
 
@@ -145,10 +147,6 @@ export function MapScreen() {
     (station: Station) => selectStation(station, station.type === "rail" ? 13 : 14),
     [selectStation],
   );
-
-  useEffect(() => {
-    if (selectedStation) setSheetOpen(true);
-  }, [selectedStation]);
 
   // Once the station sheet closes, drop its padding so the station slides back to the center.
   const wasSheetOpen = useRef(false);

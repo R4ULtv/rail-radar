@@ -4,6 +4,7 @@ import { Skeleton } from "heroui-native/skeleton";
 import ArrowDown from "lucide-react-native/icons/arrow-down";
 import ArrowRight from "lucide-react-native/icons/arrow-right";
 import Ban from "lucide-react-native/icons/ban";
+import { memo } from "react";
 import type { LayoutChangeEvent } from "react-native";
 import { StyleSheet, Text, View } from "react-native";
 
@@ -43,7 +44,7 @@ interface TrainRowProps {
   onLayout?: (event: LayoutChangeEvent) => void;
 }
 
-export function TrainRow({ train, type, onLayout }: TrainRowProps) {
+export const TrainRow = memo(function TrainRow({ train, type, onLayout }: TrainRowProps) {
   const route = type === "arrivals" ? train.origin : train.destination;
   const hasDelay = train.delay !== null && train.delay > 0;
   const isCancelled = train.status === "cancelled";
@@ -115,7 +116,7 @@ export function TrainRow({ train, type, onLayout }: TrainRowProps) {
       </View>
     </View>
   );
-}
+});
 
 export function TrainRowSkeleton({ onLayout }: { onLayout?: (event: LayoutChangeEvent) => void }) {
   return (

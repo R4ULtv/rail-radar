@@ -11,7 +11,7 @@ import Info from "lucide-react-native/icons/info";
 import Lightbulb from "lucide-react-native/icons/lightbulb";
 import MapPin from "lucide-react-native/icons/map-pin";
 import TrendingUp from "lucide-react-native/icons/trending-up";
-import type { ReactNode } from "react";
+import { memo, type ReactNode } from "react";
 import { Image, Linking, Pressable, StyleSheet, Text, View } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 
@@ -232,7 +232,7 @@ interface StationDetailsProps {
 }
 
 /** Everything about the station besides its live trains: photos, nearby stations, stats. */
-export function StationDetails({
+export const StationDetails = memo(function StationDetails({
   station,
   isOpen,
   stationsUrl,
@@ -262,7 +262,7 @@ export function StationDetails({
       <ReportLinks mutedColor={mutedColor} />
     </View>
   );
-}
+});
 
 const styles = StyleSheet.create({
   photoScroll: { marginHorizontal: -16 },

@@ -15,7 +15,7 @@ import RefreshCw from "lucide-react-native/icons/refresh-cw";
 import Share from "lucide-react-native/icons/share";
 import Share2 from "lucide-react-native/icons/share-2";
 import TriangleAlert from "lucide-react-native/icons/triangle-alert";
-import { useEffect, useReducer, useRef, useState, type ReactNode } from "react";
+import { memo, useCallback, useEffect, useReducer, useRef, useState, type ReactNode } from "react";
 import {
   BackHandler,
   Linking,
@@ -70,13 +70,43 @@ function useUpdatedLabel(timestamp: string | undefined, hasError: boolean) {
   return formatUpdated(secondsAgo);
 }
 
+interface StationSubtitleProps {
+  station: Station;
+  /** When the board was updated; only for train stations. */
+  timestamp: string | undefined;
+  hasError: boolean;
+  userLocation: UserLocation | null;
+}
+
+// Its own component, so the label's every-second tick only re-renders this line.
+function StationSubtitle({ station, timestamp, hasError, userLocation }: StationSubtitleProps) {
+  const updatedLabel = useUpdatedLabel(timestamp, hasError);
+  const distance =
+    userLocation && station.geo ? formatDistance(distanceKm(userLocation, station.geo)) : null;
+  const subtitle = [
+    station.type === "rail" ? updatedLabel : stationTypeLabels[station.type],
+    distance,
+  ]
+    .filter(Boolean)
+    .join(" · ");
+
+  return (
+    <View className="mt-1 flex-row items-center gap-1.5">
+      <CountryFlag stationId={station.id} />
+      <Text className="text-sm text-muted" numberOfLines={1} style={styles.tabularNums}>
+        {subtitle}
+      </Text>
+    </View>
+  );
+}
+
 function directionsUrl({ lat, lng }: NonNullable<Station["geo"]>) {
   return Platform.OS === "ios"
     ? `https://maps.apple.com/?daddr=${lat},${lng}`
     : `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`;
 }
 
-function QuickActions({ station }: { station: Station }) {
+const QuickActions = memo(function QuickActions({ station }: { station: Station }) {
   const [foregroundColor, accentColor] = useThemeColor(["default-foreground", "accent"]);
   const { isSaved, isFull, toggleSaved } = useSavedStations();
   const saved = isSaved(station.id);
@@ -143,9 +173,9 @@ function QuickActions({ station }: { station: Station }) {
       </Button>
     </View>
   );
-}
+});
 
-function BoardTabs({
+const BoardTabs = memo(function BoardTabs({
   type,
   arrivalsSupported,
   onChange,
@@ -182,7 +212,7 @@ function BoardTabs({
       </Tabs.List>
     </Tabs>
   );
-}
+});
 
 function Notice({
   icon,
@@ -217,7 +247,12 @@ interface LiveBoardProps {
   onFirstItemLayout: (event: LayoutChangeEvent) => void;
 }
 
-function LiveBoard({ board, type, warning, onFirstItemLayout }: LiveBoardProps) {
+const LiveBoard = memo(function LiveBoard({
+  board,
+  type,
+  warning,
+  onFirstItemLayout,
+}: LiveBoardProps) {
   const [foregroundColor, mutedColor, warningColor] = useThemeColor([
     "default-foreground",
     "muted",
@@ -308,7 +343,7 @@ function LiveBoard({ board, type, warning, onFirstItemLayout }: LiveBoardProps) 
       ) : null}
     </View>
   );
-}
+});
 
 interface StationSheetContentProps {
   station: Station;
@@ -334,13 +369,13 @@ function StationSheetContent({
   const isRail = station.type === "rail";
   const arrivalsSupported = getCountry(station.id) !== "lu";
   const board = useStationBoard(station.id, type, isOpen && isRail);
-  const updatedLabel = useUpdatedLabel(board.data?.timestamp, board.error !== null);
 
   // The sheet peeks down to the end of the first train. It's measured once the board has
   // loaded, and then kept, so refreshes and tab switches don't move the sheet.
   const [layout, setLayout] = useState({ header: 0, boardTop: 0, firstItemBottom: 0 });
   const isPeekFinal = useRef(false);
-  const hasBoard = !isRail || board.data !== null || board.error !== null;
+  const hasBoard = useRef(false);
+  hasBoard.current = !isRail || board.data !== null || board.error !== null;
 
   useEffect(() => {
     if (!layout.header || !layout.firstItemBottom) return;
@@ -353,30 +388,31 @@ function StationSheetContent({
     );
   }, [layout, insets.bottom, onPeekHeightChange]);
 
-  function measure(key: keyof typeof layout, value: number) {
+  // Stable callbacks, so the memoized board and details skip the sheet's other re-renders.
+  const measure = useCallback((key: keyof typeof layout, value: number) => {
     if (isPeekFinal.current) return;
     setLayout((current) =>
       Math.abs(current[key] - value) < 1 ? current : { ...current, [key]: value },
     );
-  }
+  }, []);
 
-  function onFirstItemLayout(event: LayoutChangeEvent) {
-    const { y, height } = event.nativeEvent.layout;
-    measure("firstItemBottom", y + height);
-    if (hasBoard) isPeekFinal.current = true;
-  }
+  const onFirstItemLayout = useCallback(
+    (event: LayoutChangeEvent) => {
+      const { y, height } = event.nativeEvent.layout;
+      measure("firstItemBottom", y + height);
+      if (hasBoard.current) isPeekFinal.current = true;
+    },
+    [measure],
+  );
 
-  function selectType(next: BoardType) {
-    if (next === type) return;
-    haptics.selection();
-    setType(next);
-  }
-
-  const distance =
-    userLocation && station.geo ? formatDistance(distanceKm(userLocation, station.geo)) : null;
-  const subtitle = [isRail ? updatedLabel : stationTypeLabels[station.type], distance]
-    .filter(Boolean)
-    .join(" · ");
+  const selectType = useCallback(
+    (next: BoardType) => {
+      if (next === type) return;
+      haptics.selection();
+      setType(next);
+    },
+    [type],
+  );
 
   return (
     <View style={styles.content}>
@@ -389,12 +425,12 @@ function StationSheetContent({
             <Text className="text-xl font-semibold text-foreground" numberOfLines={2}>
               {station.name}
             </Text>
-            <View className="mt-1 flex-row items-center gap-1.5">
-              <CountryFlag stationId={station.id} />
-              <Text className="text-sm text-muted" numberOfLines={1} style={styles.tabularNums}>
-                {subtitle}
-              </Text>
-            </View>
+            <StationSubtitle
+              station={station}
+              timestamp={board.data?.timestamp}
+              hasError={board.error !== null}
+              userLocation={userLocation}
+            />
           </View>
           <CloseButton accessibilityLabel="Close station" onPress={onClose} />
         </View>
@@ -463,8 +499,16 @@ export function StationSheet({
   const [peekHeight, setPeekHeight] = useState(defaultStationPeekHeight);
   const [surfaceColor, mutedColor] = useThemeColor(["surface", "muted"]);
 
+  // The sheet mounts open, since calls made before it has measured itself are dropped.
+  const [initialIndex] = useState(isOpen ? 0 : -1);
+  const isMounted = useRef(false);
+
   // Opens small on every station, including when picking another one from the open sheet.
   useEffect(() => {
+    if (!isMounted.current) {
+      isMounted.current = true;
+      return;
+    }
     if (isOpen) sheetRef.current?.snapToIndex(0);
     else sheetRef.current?.close();
   }, [isOpen, station.id]);
@@ -487,7 +531,7 @@ export function StationSheet({
   return (
     <BottomSheet
       ref={sheetRef}
-      index={-1}
+      index={initialIndex}
       snapPoints={[peekHeight, "60%", "100%"]}
       topInset={insets.top + 8}
       enableDynamicSizing={false}
