@@ -2,10 +2,7 @@ import type { Station } from "@repo/data/types";
 import BottomSheet, { BottomSheetScrollView, useBottomSheet } from "@gorhom/bottom-sheet";
 import { Button } from "heroui-native/button";
 import { useBottomSheetAwareHandlers, useThemeColor } from "heroui-native/hooks";
-import { ListGroup } from "heroui-native/list-group";
-import { PressableFeedback } from "heroui-native/pressable-feedback";
 import { SearchField } from "heroui-native/search-field";
-import { Separator } from "heroui-native/separator";
 import Bookmark from "lucide-react-native/icons/bookmark";
 import History from "lucide-react-native/icons/rotate-ccw-clock";
 import List from "lucide-react-native/icons/list";
@@ -17,7 +14,6 @@ import { Fragment, useEffect, useRef, useState, type ComponentRef, type ReactNod
 import {
   ActivityIndicator,
   BackHandler,
-  Image,
   Keyboard,
   Linking,
   Pressable,
@@ -28,12 +24,11 @@ import {
 import Animated, { Extrapolation, interpolate, useAnimatedStyle } from "react-native-reanimated";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-import { CountryFlag } from "@/components/country-flag";
+import { StationSection } from "@/components/station-list";
 import { useStationSearch } from "@/hooks/use-station-search";
 import { useRecentStations, useSavedStations } from "@/hooks/use-stored-stations";
 import { useTrendingStations, type TrendingStation } from "@/hooks/use-trending-stations";
 import { distanceKm, formatDistance } from "@/lib/distance";
-import { stationIcons } from "@/lib/station-icons";
 import type { UserLocation } from "@/lib/user-location";
 
 const handleHeight = 24;
@@ -65,10 +60,6 @@ function useKeyboardHeight() {
   return height;
 }
 
-function StationTypeIcon({ type }: { type: Station["type"] }) {
-  return <Image source={stationIcons[type]} style={styles.stationIcon} />;
-}
-
 function VisitorCounts({ station }: { station: TrendingStation }) {
   const color = useThemeColor("muted");
   return (
@@ -87,64 +78,6 @@ function StationDistance({ station, from }: { station: Station; from: UserLocati
     <Text className="text-xs text-muted" style={styles.tabularNums}>
       {formatDistance(distanceKm(from, station.geo))}
     </Text>
-  );
-}
-
-function StationSection<T extends Station>({
-  title,
-  icon,
-  stations,
-  renderSuffix,
-  onSelect,
-}: {
-  title: string;
-  icon?: ReactNode;
-  stations: T[];
-  /** Shown on the right of each row, e.g. visitor counts or the distance. */
-  renderSuffix?: (station: T) => ReactNode;
-  onSelect: (station: Station) => void;
-}) {
-  if (stations.length === 0) return null;
-
-  return (
-    <View className="mt-5">
-      <View className="mb-2 ml-2 flex-row items-center gap-1.5">
-        {icon}
-        <Text className="text-sm font-medium text-muted">{title}</Text>
-      </View>
-      <ListGroup variant="secondary">
-        {stations.map((station, index) => (
-          <Fragment key={station.id}>
-            {index > 0 ? <Separator className="mx-4" /> : null}
-            <PressableFeedback
-              accessibilityRole="button"
-              animation={false}
-              onPress={() => onSelect(station)}
-            >
-              <PressableFeedback.Scale>
-                <ListGroup.Item disabled>
-                  <ListGroup.ItemPrefix>
-                    <StationTypeIcon type={station.type} />
-                  </ListGroup.ItemPrefix>
-                  <ListGroup.ItemContent>
-                    <View className="flex-row items-center gap-2">
-                      <ListGroup.ItemTitle numberOfLines={1} className="shrink">
-                        {station.name}
-                      </ListGroup.ItemTitle>
-                      <CountryFlag stationId={station.id} />
-                    </View>
-                  </ListGroup.ItemContent>
-                  {renderSuffix ? (
-                    <ListGroup.ItemSuffix>{renderSuffix(station)}</ListGroup.ItemSuffix>
-                  ) : null}
-                </ListGroup.Item>
-              </PressableFeedback.Scale>
-              <PressableFeedback.Ripple />
-            </PressableFeedback>
-          </Fragment>
-        ))}
-      </ListGroup>
-    </View>
   );
 }
 
@@ -429,7 +362,6 @@ export function SearchSheet({
 
 const styles = StyleSheet.create({
   content: { flex: 1 },
-  stationIcon: { width: 24, height: 24 },
   tabularNums: { fontVariant: ["tabular-nums"] },
   emptyState: { alignItems: "center", justifyContent: "center", paddingVertical: 40 },
 });

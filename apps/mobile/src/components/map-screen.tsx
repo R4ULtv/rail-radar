@@ -7,7 +7,7 @@ import { Card } from "heroui-native/card";
 import { useThemeColor } from "heroui-native/hooks";
 import CircleAlert from "lucide-react-native/icons/circle-alert";
 import { useCallback, useEffect, useRef, useState, type ComponentProps } from "react";
-import { AppState, StyleSheet, View, useWindowDimensions } from "react-native";
+import { AppState, StyleSheet, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import {
@@ -18,7 +18,7 @@ import {
 } from "@/components/map-controls";
 import { SearchSheet } from "@/components/search-sheet";
 import { RailwayLines, StationImages, StationLayers } from "@/components/station-markers";
-import { StationSheet } from "@/components/station-sheet";
+import { defaultStationPeekHeight, StationSheet } from "@/components/station-sheet";
 import { UserLocationMarker } from "@/components/user-location-marker";
 import { useMapTheme } from "@/hooks/use-map-theme";
 import { useStationsUrl } from "@/hooks/use-stations-url";
@@ -32,7 +32,6 @@ const defaultCamera = { centerCoordinate: [12, 50] as [number, number], zoomLeve
 const userZoomLevel = 13;
 const locateZoomLevel = 14;
 const locationMaxAge = 5 * 60 * 1000;
-const stationSheetRatio = 0.64;
 // Mapbox keeps the last camera padding, so moves that should be centered have to clear it.
 const noPadding = { paddingTop: 0, paddingBottom: 0, paddingLeft: 0, paddingRight: 0 };
 
@@ -66,7 +65,6 @@ type StationPressEvent = Parameters<
 
 export function MapScreen() {
   const insets = useSafeAreaInsets();
-  const { height } = useWindowDimensions();
   const camera = useRef<Mapbox.Camera>(null);
   const stationsUrl = useStationsUrl();
   const [selectedStation, setSelectedStation] = useState<Station | null>(null);
@@ -89,6 +87,11 @@ export function MapScreen() {
   });
   // Once the user moves the map, finding their location shouldn't move it back.
   const hasMovedMap = useRef(false);
+  // How far the station sheet opens, so the selected station stays in view above it.
+  const stationPeekHeight = useRef(defaultStationPeekHeight);
+  const handleStationPeekHeightChange = useCallback((peekHeight: number) => {
+    stationPeekHeight.current = peekHeight;
+  }, []);
 
   const selectStation = useCallback(
     (station: Station, zoomLevel?: number) => {
@@ -104,14 +107,14 @@ export function MapScreen() {
         zoomLevel,
         padding: {
           paddingTop: insets.top,
-          paddingBottom: Math.round(height * stationSheetRatio),
+          paddingBottom: Math.round(stationPeekHeight.current),
           paddingLeft: 0,
           paddingRight: 0,
         },
         animationDuration: 700,
       });
     },
-    [height, insets.top],
+    [insets.top],
   );
 
   const handleStationPress = useCallback(
@@ -331,10 +334,13 @@ export function MapScreen() {
 
       {selectedStation ? (
         <StationSheet
-          key={selectedStation.id}
           station={selectedStation}
           isOpen={sheetOpen}
+          stationsUrl={stationsUrl}
+          userLocation={userLocation}
           onOpenChange={setSheetOpen}
+          onSelectStation={selectStation}
+          onPeekHeightChange={handleStationPeekHeightChange}
         />
       ) : null}
     </View>
