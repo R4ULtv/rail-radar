@@ -14,7 +14,8 @@
           "locationWhenInUsePermission": "Show your position on the railway map."
         }
       ],
-      "expo-asset"
+      "expo-asset",
+      "expo-image"
     ],
     "splash": {
       "image": "./assets/splash-icon.png",

@@ -1,5 +1,6 @@
 import { getCountry } from "@repo/data/countries";
 import type { Station } from "@repo/data/types";
+import { Image } from "expo-image";
 import { useThemeColor } from "heroui-native/hooks";
 import { ListGroup } from "heroui-native/list-group";
 import { Separator } from "heroui-native/separator";
@@ -12,8 +13,9 @@ import Lightbulb from "lucide-react-native/icons/lightbulb";
 import MapPin from "lucide-react-native/icons/map-pin";
 import TrendingUp from "lucide-react-native/icons/trending-up";
 import { memo, type ReactNode } from "react";
-import { Image, Linking, Pressable, StyleSheet, Text, View } from "react-native";
+import { Linking, Pressable, StyleSheet, Text, View } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
+import { withUniwind } from "uniwind";
 
 import { CountryFlag } from "@/components/country-flag";
 import { StationSection } from "@/components/station-list";
@@ -24,11 +26,16 @@ import {
   type StationPhoto,
   type StationStats,
 } from "@/hooks/use-station-details";
+import { USER_AGENT } from "@/lib/api";
 import { formatDistance } from "@/lib/distance";
 
 const photoWidth = 240;
 const photoHeight = 135;
 const issuesUrl = "https://github.com/R4ULtv/rail-radar/issues/new";
+const photoHeaders = { "User-Agent": USER_AGENT };
+
+// expo-image caches the full-size photos and decodes them at the thumbnail's size.
+const StyledImage = withUniwind(Image);
 
 function SectionTitle({ icon, children }: { icon: ReactNode; children: ReactNode }) {
   return (
@@ -69,9 +76,13 @@ function StationPhotos({ photos, mutedColor }: { photos: StationPhoto[]; mutedCo
                 if (sourceUrl) void Linking.openURL(sourceUrl);
               }}
             >
-              <Image
-                source={{ uri: photo.url }}
+              <StyledImage
+                source={{ uri: photo.url, headers: photoHeaders }}
                 accessibilityIgnoresInvertColors
+                cachePolicy="memory-disk"
+                contentFit="cover"
+                recyclingKey={photo.key}
+                transition={150}
                 className="rounded-2xl bg-default"
                 style={styles.photo}
               />

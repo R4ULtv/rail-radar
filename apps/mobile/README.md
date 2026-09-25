@@ -106,7 +106,8 @@ app is active.
 
 Requests from the app send a `User-Agent` such as `RailRadar/0.1.0 (iOS 18.2)` or
 `RailRadar/0.1.0 (Android 15)`, with the version from `app.json`. This covers the API,
-the background station download, and the web's station photos. Operator logos are
+the background station download, and the web's station photos. The photos load through
+`expo-image`, which keeps them in its memory and disk caches. Operator logos are
 bundled from `apps/web/public/assets/operators` by `pnpm --filter=mobile generate:brand-logos`.
 In Cloudflare Workers Logs, filter on a user agent starting with `RailRadar/` to see
 requests from the app. It identifies the app for logging; it is not an
