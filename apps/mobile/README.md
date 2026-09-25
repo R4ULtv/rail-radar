@@ -118,4 +118,5 @@ until it is dragged up or focused. It queries `/stations/search?q=` (debounced,
 and saved stations (up to 7). Both lists are stored as JSON files in the app's
 document directory through `expo-file-system`.
 Below them it shows the 7-day trending stations from `/stations/trending?period=week`,
-refreshed every 5 minutes while the app is open, with unique visitors and visits.
+with unique visitors and visits. They load on launch and refresh every 5 minutes, but only
+while the search sheet is open and the app is active.

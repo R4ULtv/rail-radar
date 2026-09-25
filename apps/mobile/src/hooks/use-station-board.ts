@@ -1,7 +1,7 @@
 import type { Train } from "@repo/data/types";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { AppState } from "react-native";
 
+import { useAppIsActive } from "@/hooks/use-app-is-active";
 import { fetchApi } from "@/lib/api";
 
 export type BoardType = "departures" | "arrivals";
@@ -27,16 +27,9 @@ function initialState(key: string): BoardState {
 
 export function useStationBoard(stationId: string, type: BoardType, enabled: boolean) {
   const key = `${stationId}:${type}`;
-  const [appIsActive, setAppIsActive] = useState(AppState.currentState !== "background");
+  const appIsActive = useAppIsActive();
   const [retryCount, setRetryCount] = useState(0);
   const [state, setState] = useState<BoardState>(() => initialState(key));
-
-  useEffect(() => {
-    const subscription = AppState.addEventListener("change", (nextState) => {
-      setAppIsActive(nextState === "active");
-    });
-    return () => subscription.remove();
-  }, []);
 
   useEffect(() => {
     if (!enabled || !appIsActive) return;

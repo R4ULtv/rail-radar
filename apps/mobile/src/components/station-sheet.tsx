@@ -40,7 +40,9 @@ import type { UserLocation } from "@/lib/user-location";
 
 const handleHeight = 24;
 // Before the sheet has measured itself: the header, the tabs and one train.
-export const defaultStationPeekHeight = 300;
+const defaultStationPeekHeight = 300;
+// The last snap point, where the sheet covers the map.
+const expandedIndex = 2;
 // Long boards are cut short so the station details below them stay in reach.
 const collapsedTrainCount = 10;
 const stationTypeLabels = {
@@ -485,8 +487,8 @@ interface StationSheetProps {
   userLocation: UserLocation | null;
   onOpenChange: (isOpen: boolean) => void;
   onSelectStation: (station: Station) => void;
-  /** The height the sheet opens at, so the map can keep the station in view above it. */
-  onPeekHeightChange: (height: number) => void;
+  /** Whether the sheet is fully open, so the map can ignore gestures in the strip above it. */
+  onExpandedChange: (isExpanded: boolean) => void;
 }
 
 export function StationSheet({
@@ -496,7 +498,7 @@ export function StationSheet({
   userLocation,
   onOpenChange,
   onSelectStation,
-  onPeekHeightChange,
+  onExpandedChange,
 }: StationSheetProps) {
   const insets = useSafeAreaInsets();
   const sheetRef = useRef<BottomSheet>(null);
@@ -517,10 +519,6 @@ export function StationSheet({
     if (isOpen) sheetRef.current?.snapToIndex(0);
     else sheetRef.current?.close();
   }, [isOpen, station.id]);
-
-  useEffect(() => {
-    onPeekHeightChange(peekHeight);
-  }, [peekHeight, onPeekHeightChange]);
 
   // Android back shrinks the sheet back to its peek, then closes it.
   useEffect(() => {
@@ -546,6 +544,7 @@ export function StationSheet({
       handleIndicatorStyle={{ backgroundColor: mutedColor }}
       onChange={(next) => {
         setIndex(next);
+        onExpandedChange(next === expandedIndex);
         if (next === -1 && isOpen) onOpenChange(false);
       }}
     >

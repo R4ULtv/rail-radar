@@ -18,7 +18,7 @@ import {
 } from "@/components/map-controls";
 import { SearchSheet } from "@/components/search-sheet";
 import { RailwayLines, StationImages, StationLayers } from "@/components/station-markers";
-import { defaultStationPeekHeight, StationSheet } from "@/components/station-sheet";
+import { StationSheet } from "@/components/station-sheet";
 import { UserLocationMarker } from "@/components/user-location-marker";
 import { useMapTheme } from "@/hooks/use-map-theme";
 import { useStationsUrl } from "@/hooks/use-stations-url";
@@ -87,40 +87,32 @@ export function MapScreen() {
   });
   // Once the user moves the map, finding their location shouldn't move it back.
   const hasMovedMap = useRef(false);
-  // How far the station sheet opens, so the selected station stays in view above it.
-  const stationPeekHeight = useRef(defaultStationPeekHeight);
-  const handleStationPeekHeightChange = useCallback((peekHeight: number) => {
-    stationPeekHeight.current = peekHeight;
+  // While a sheet is fully open, the strip of map above it stays still.
+  const [isSearchExpanded, setIsSearchExpanded] = useState(false);
+  const [isStationExpanded, setIsStationExpanded] = useState(false);
+  const isMapLocked = isSearchExpanded || isStationExpanded;
+
+  const selectStation = useCallback((station: Station, zoomLevel?: number) => {
+    haptics.tap();
+    hasMovedMap.current = true;
+    setSelectedStation(station);
+    // Opened in the same update, so the first station sheet mounts already open.
+    setSheetOpen(true);
+    if (station.type === "rail") addRecentStation(station);
+    if (!station.geo) return;
+
+    // Centered on the whole screen, so opening, resizing and closing the sheet never move it.
+    camera.current?.setCamera({
+      centerCoordinate: [station.geo.lng, station.geo.lat],
+      zoomLevel,
+      padding: noPadding,
+      animationDuration: 700,
+    });
   }, []);
-
-  const selectStation = useCallback(
-    (station: Station, zoomLevel?: number) => {
-      haptics.tap();
-      hasMovedMap.current = true;
-      setSelectedStation(station);
-      // Opened in the same update, so the first station sheet mounts already open.
-      setSheetOpen(true);
-      if (station.type === "rail") addRecentStation(station);
-      if (!station.geo) return;
-
-      // Keep the station visible above the station sheet.
-      camera.current?.setCamera({
-        centerCoordinate: [station.geo.lng, station.geo.lat],
-        zoomLevel,
-        padding: {
-          paddingTop: insets.top,
-          paddingBottom: Math.round(stationPeekHeight.current),
-          paddingLeft: 0,
-          paddingRight: 0,
-        },
-        animationDuration: 700,
-      });
-    },
-    [insets.top],
-  );
 
   const handleStationPress = useCallback(
     (event: StationPressEvent) => {
+      if (isMapLocked) return;
       const feature = event.features[0];
       const properties = feature?.properties;
       if (
@@ -140,22 +132,13 @@ export function MapScreen() {
         geo: typeof lat === "number" && typeof lng === "number" ? { lat, lng } : undefined,
       });
     },
-    [selectStation],
+    [isMapLocked, selectStation],
   );
 
   const handleSearchSelect = useCallback(
     (station: Station) => selectStation(station, station.type === "rail" ? 13 : 14),
     [selectStation],
   );
-
-  // Once the station sheet closes, drop its padding so the station slides back to the center.
-  const wasSheetOpen = useRef(false);
-  useEffect(() => {
-    if (wasSheetOpen.current && !sheetOpen) {
-      camera.current?.setCamera({ padding: noPadding, animationDuration: 500 });
-    }
-    wasSheetOpen.current = sheetOpen;
-  }, [sheetOpen]);
 
   // Pick up permission and Location Services changes made in Settings.
   useEffect(() => {
@@ -280,6 +263,9 @@ export function MapScreen() {
         styleURL={mapTheme.styleURL}
         projection="mercator"
         pitchEnabled={false}
+        scrollEnabled={!isMapLocked}
+        zoomEnabled={!isMapLocked}
+        rotateEnabled={!isMapLocked}
         scaleBarEnabled={false}
         // Attribution is shown in the search sheet instead, like the web footer.
         logoEnabled={false}
@@ -328,6 +314,7 @@ export function MapScreen() {
         stationsUrl={stationsUrl}
         userLocation={userLocation}
         onSelectStation={handleSearchSelect}
+        onExpandedChange={setIsSearchExpanded}
       />
 
       {selectedStation ? (
@@ -338,7 +325,7 @@ export function MapScreen() {
           userLocation={userLocation}
           onOpenChange={setSheetOpen}
           onSelectStation={selectStation}
-          onPeekHeightChange={handleStationPeekHeightChange}
+          onExpandedChange={setIsStationExpanded}
         />
       ) : null}
     </View>

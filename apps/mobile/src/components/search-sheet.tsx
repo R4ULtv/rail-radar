@@ -118,10 +118,12 @@ function EmptyState({ children }: { children: ReactNode }) {
 const SearchSheetContent = memo(function SearchSheetContent({
   stationsUrl,
   userLocation,
+  trendingStations,
   onSelectStation,
 }: {
   stationsUrl: string | null;
   userLocation: UserLocation | null;
+  trendingStations: TrendingStation[];
   onSelectStation: (station: Station) => void;
 }) {
   const insets = useSafeAreaInsets();
@@ -143,7 +145,6 @@ const SearchSheetContent = memo(function SearchSheetContent({
   const search = useStationSearch(query, { stationsUrl, userLocation });
   const { savedStations } = useSavedStations();
   const recentStations = useRecentStations();
-  const trendingStations = useTrendingStations();
   const [mutedColor, foregroundColor, accentColor] = useThemeColor([
     "muted",
     "default-foreground",
@@ -310,6 +311,8 @@ interface SearchSheetProps {
   /** Where the user is: nearby stations rank higher and results show their distance. */
   userLocation: UserLocation | null;
   onSelectStation: (station: Station) => void;
+  /** Whether the sheet is fully open, so the map can ignore gestures in the strip above it. */
+  onExpandedChange: (isExpanded: boolean) => void;
 }
 
 export function SearchSheet({
@@ -317,6 +320,7 @@ export function SearchSheet({
   stationsUrl,
   userLocation,
   onSelectStation,
+  onExpandedChange,
 }: SearchSheetProps) {
   const insets = useSafeAreaInsets();
   const collapsedHeight = useSearchSheetCollapsedHeight();
@@ -324,6 +328,8 @@ export function SearchSheet({
   const lastIndex = useRef(0);
   const [isExpanded, setIsExpanded] = useState(false);
   const [surfaceColor, mutedColor] = useThemeColor(["surface", "muted"]);
+  // The list only shows while the sheet is open, so it isn't refreshed while collapsed or hidden.
+  const trendingStations = useTrendingStations(isExpanded && !isHidden);
 
   useEffect(() => {
     if (isHidden) sheetRef.current?.close();
@@ -357,12 +363,14 @@ export function SearchSheet({
       onChange={(index) => {
         if (index >= 0) lastIndex.current = index;
         setIsExpanded(index === expandedIndex);
+        onExpandedChange(index === expandedIndex);
         if (index === 0) Keyboard.dismiss();
       }}
     >
       <SearchSheetContent
         stationsUrl={stationsUrl}
         userLocation={userLocation}
+        trendingStations={trendingStations}
         onSelectStation={onSelectStation}
       />
     </BottomSheet>
