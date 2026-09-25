@@ -23,7 +23,7 @@
       "backgroundColor": "#6363ff"
     },
     "ios": {
-      "supportsTablet": true,
+      "supportsTablet": false,
       "bundleIdentifier": "com.railradar24.app"
     },
     "android": {
