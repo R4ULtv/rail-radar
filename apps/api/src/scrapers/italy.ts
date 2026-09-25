@@ -63,8 +63,13 @@ function decodeHtmlEntities(text: string): string {
     .replace(/&apos;/gi, "'");
 }
 
+/** RFI escapes apostrophes more than once, so "PONTE D'ADDA" arrives as "PONTE D''''ADDA". */
+function cleanText(text: string): string {
+  return decodeHtmlEntities(text).replace(/'{2,}/g, "'").trim();
+}
+
 function parseInfo(text: string): string | null {
-  const trimmed = text.trim();
+  const trimmed = cleanText(text);
   if (!trimmed) return null;
   const match = trimmed.match(/STOPS AT:\s*(.+)/i);
   if (match?.[1]) {
@@ -93,7 +98,7 @@ class ParserState {
   }
 
   processCellData(): void {
-    const text = this.cellText.trim();
+    const text = cleanText(this.cellText);
     const imgAlts = this.cellImgAlts;
     const imgSrc = this.cellImgSrc;
     const train = this.currentTrain;
@@ -261,7 +266,7 @@ export async function scrapeTrains(
     state.finalizeRow();
   }
 
-  const stationInfo = decodeHtmlEntities(state.stationInfo).trim();
+  const stationInfo = cleanText(state.stationInfo);
   return {
     trains: state.trains,
     info: stationInfo || null,
