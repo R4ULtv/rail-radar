@@ -1,7 +1,7 @@
 import type { Station } from "@repo/data/types";
 import { useEffect, useState } from "react";
 
-import { fetchApi } from "@/lib/api";
+import { fetchApi, fetchWithUserAgent } from "@/lib/api";
 import { findNearbyStations, loadStations, type NearbyStation } from "@/lib/stations";
 
 const webBaseUrl = "https://www.railradar24.com";
@@ -83,7 +83,7 @@ export interface StationPhoto {
 }
 
 const loadPhotos = createCache(async (stationId): Promise<StationPhoto[]> => {
-  const response = await fetch(
+  const response = await fetchWithUserAgent(
     `${webBaseUrl}/media/stations/${encodeURIComponent(stationId)}/photos`,
   );
   if (response.status === 404) return [];

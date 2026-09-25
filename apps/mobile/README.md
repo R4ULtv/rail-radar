@@ -104,12 +104,12 @@ update with newer bundled stations replaces it. The selected rail station's boar
 is fetched from `/stations/:id` every 30 seconds while the sheet is open and the
 app is active.
 
-Requests to the Rail Radar API send `X-RailRadar-Client: mobile`, including the
-background station download. The API writes structured
-`api_request` logs for tagged requests, with `client`, `method`, `path`, `status`,
-and `durationMs`. In Cloudflare Workers Logs, filter `client = mobile` to see
-requests from the app. The header identifies the client for logging; it is not
-an authentication mechanism.
+Requests from the app send a `User-Agent` such as `RailRadar/0.1.0 (iOS 18.2)` or
+`RailRadar/0.1.0 (Android 15)`, with the version from `app.json`. This covers the API,
+the background station download, and the web's station photos and operator logos.
+In Cloudflare Workers Logs, filter on a user agent starting with `RailRadar/` to see
+requests from the app. It identifies the app for logging; it is not an
+authentication mechanism.
 
 The search sheet stays open at the bottom of the map, showing only the search bar
 until it is dragged up or focused. It queries `/stations/search?q=` (debounced,

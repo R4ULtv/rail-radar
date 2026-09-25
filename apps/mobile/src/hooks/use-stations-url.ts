@@ -2,7 +2,7 @@ import { Asset } from "expo-asset";
 import { File, Paths } from "expo-file-system";
 import { useEffect, useState } from "react";
 
-import { API_BASE_URL, CLIENT_HEADER, CLIENT_VALUE } from "@/lib/api";
+import { API_BASE_URL, USER_AGENT } from "@/lib/api";
 
 // Stations ship with the app. Updates are downloaded in the background and used
 // from the next launch; bigger changes (new countries) come with an app update.
@@ -33,7 +33,7 @@ function readDownloadInfo(): DownloadInfo | null {
 async function downloadStations() {
   const temporary = new File(Paths.cache, "stations.download.geojson");
   await File.downloadFileAsync(`${API_BASE_URL}/stations.geojson`, temporary, {
-    headers: { [CLIENT_HEADER]: CLIENT_VALUE },
+    headers: { "User-Agent": USER_AGENT },
     idempotent: true,
   });
   if (temporary.size === 0) throw new Error("Downloaded stations are empty.");

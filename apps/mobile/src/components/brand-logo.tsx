@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { View } from "react-native";
 import { SvgXml } from "react-native-svg";
 
+import { fetchWithUserAgent } from "@/lib/api";
 import { getBrandLogoUrl } from "@/lib/brands";
 
 // Every row of a board shows the same few logos, so each one is downloaded once per launch.
@@ -10,7 +11,7 @@ const logos = new Map<string, Promise<string | null>>();
 function loadLogo(url: string) {
   let logo = logos.get(url);
   if (!logo) {
-    logo = fetch(url)
+    logo = fetchWithUserAgent(url)
       .then((response) => (response.ok ? response.text() : null))
       .catch(() => {
         logos.delete(url);
