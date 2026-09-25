@@ -107,7 +107,7 @@ export function useNearbyStations(station: Station, stationsUrl: string | null) 
     if (!stationsUrl) return;
     let cancelled = false;
     loadStations(stationsUrl)
-      .then(({ stations }) => {
+      .then((stations) => {
         if (!cancelled) {
           setState({ stationId: station.id, stations: findNearbyStations(stations, station) });
         }

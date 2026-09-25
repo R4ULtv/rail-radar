@@ -10,7 +10,15 @@ import RefreshCw from "lucide-react-native/icons/refresh-cw";
 import SearchX from "lucide-react-native/icons/search-x";
 import TrendingUp from "lucide-react-native/icons/trending-up";
 import User from "lucide-react-native/icons/user";
-import { Fragment, useEffect, useRef, useState, type ComponentRef, type ReactNode } from "react";
+import {
+  Fragment,
+  memo,
+  useEffect,
+  useRef,
+  useState,
+  type ComponentRef,
+  type ReactNode,
+} from "react";
 import {
   ActivityIndicator,
   BackHandler,
@@ -106,7 +114,8 @@ function EmptyState({ children }: { children: ReactNode }) {
   return <View style={styles.emptyState}>{children}</View>;
 }
 
-function SearchSheetContent({
+// Memoized, so hiding and showing the sheet around a station sheet doesn't re-render its lists.
+const SearchSheetContent = memo(function SearchSheetContent({
   stationsUrl,
   userLocation,
   onSelectStation,
@@ -291,7 +300,7 @@ function SearchSheetContent({
       </Animated.View>
     </View>
   );
-}
+});
 
 interface SearchSheetProps {
   /** Hides the sheet while another sheet (e.g. a station board) is shown. */

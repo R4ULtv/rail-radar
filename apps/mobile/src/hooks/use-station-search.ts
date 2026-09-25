@@ -2,7 +2,7 @@ import type { Station } from "@repo/data/types";
 import { useEffect, useMemo, useState } from "react";
 
 import { useDebounce } from "@/hooks/use-debounce";
-import { loadStations, type StationSearch } from "@/lib/stations";
+import { loadStationSearch, type StationSearch } from "@/lib/stations";
 import type { UserLocation } from "@/lib/user-location";
 
 // Searching runs on the device, so it can start from the first character.
@@ -35,9 +35,9 @@ export function useStationSearch(
 
     let cancelled = false;
     setError(null);
-    loadStations(stationsUrl)
+    loadStationSearch(stationsUrl)
       .then((loaded) => {
-        if (!cancelled) setSearch(() => loaded.search);
+        if (!cancelled) setSearch(() => loaded);
       })
       .catch(() => {
         if (!cancelled) setError("Stations could not be loaded.");

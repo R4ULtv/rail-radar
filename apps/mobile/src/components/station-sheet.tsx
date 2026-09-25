@@ -350,6 +350,8 @@ interface StationSheetContentProps {
   isOpen: boolean;
   stationsUrl: string | null;
   userLocation: UserLocation | null;
+  /** The details below the live board, left out until the sheet has opened. */
+  showDetails: boolean;
   onClose: () => void;
   onSelectStation: (station: Station) => void;
   onPeekHeightChange: (height: number) => void;
@@ -360,6 +362,7 @@ function StationSheetContent({
   isOpen,
   stationsUrl,
   userLocation,
+  showDetails,
   onClose,
   onSelectStation,
   onPeekHeightChange,
@@ -461,12 +464,14 @@ function StationSheetContent({
             </Text>
           )}
         </View>
-        <StationDetails
-          station={station}
-          isOpen={isOpen}
-          stationsUrl={stationsUrl}
-          onSelectStation={onSelectStation}
-        />
+        {showDetails ? (
+          <StationDetails
+            station={station}
+            isOpen={isOpen}
+            stationsUrl={stationsUrl}
+            onSelectStation={onSelectStation}
+          />
+        ) : null}
       </BottomSheetScrollView>
     </View>
   );
@@ -550,6 +555,9 @@ export function StationSheet({
         isOpen={isOpen}
         stationsUrl={stationsUrl}
         userLocation={userLocation}
+        // Below the peek, and slow to render with the nearby stations, so they're added once
+        // the sheet has opened rather than delaying it.
+        showDetails={index >= 0}
         onClose={() => onOpenChange(false)}
         onSelectStation={onSelectStation}
         onPeekHeightChange={setPeekHeight}

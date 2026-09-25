@@ -7,12 +7,13 @@ import { createStationSearch } from "@/lib/station-search-index";
 export type StationSearch = ReturnType<typeof createStationSearch>;
 export type NearbyStation = Station & { distance: number };
 
-export interface Stations {
-  stations: Station[];
-  search: StationSearch;
+interface LoadedStations {
+  url: string;
+  stations: Promise<Station[]>;
+  search?: Promise<StationSearch>;
 }
 
-let loaded: { url: string; stations: Promise<Stations> } | null = null;
+let loaded: LoadedStations | null = null;
 
 async function readStations(url: string): Promise<Station[]> {
   const collection = JSON.parse(await new File(url).text()) as StationFeatureCollection;
@@ -27,24 +28,35 @@ async function readStations(url: string): Promise<Station[]> {
   }));
 }
 
-/**
- * Reads the station GeoJSON the map shows (bundled, or the downloaded update), so searching
- * and nearby stations work offline and the location never leaves the device.
- * The stations are read and indexed once per file.
- */
-export function loadStations(url: string): Promise<Stations> {
+function load(url: string): LoadedStations {
   if (loaded?.url !== url) {
-    const stations = readStations(url).then((list) => ({
-      stations: list,
-      search: createStationSearch(list),
-    }));
+    const stations = readStations(url);
     // A failed load is retried on the next call.
     stations.catch(() => {
       if (loaded?.stations === stations) loaded = null;
     });
     loaded = { url, stations };
   }
-  return loaded.stations;
+  return loaded;
+}
+
+/**
+ * Reads the station GeoJSON the map shows (bundled, or the downloaded update), so searching
+ * and nearby stations work offline and the location never leaves the device.
+ * The stations are read once per file.
+ */
+export function loadStations(url: string): Promise<Station[]> {
+  return load(url).stations;
+}
+
+/**
+ * The search index over the same stations. It is built on the first search rather than with
+ * the stations, since it takes several times as long as reading them.
+ */
+export function loadStationSearch(url: string): Promise<StationSearch> {
+  const current = load(url);
+  current.search ??= current.stations.then(createStationSearch);
+  return current.search;
 }
 
 function nearestStations(
