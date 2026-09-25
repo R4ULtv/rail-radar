@@ -1,7 +1,6 @@
 import Mapbox, { type LineLayerStyle, type SymbolLayerStyle } from "@rnmapbox/maps";
 import type { ComponentProps } from "react";
 
-import { useMapTheme } from "@/hooks/use-map-theme";
 import { stationIcons } from "@/lib/station-icons";
 
 // Mirrors apps/web/src/components/station-markers.tsx. Keep the icons, zoom
@@ -44,7 +43,7 @@ function typeFilter(type: string, minZoomFilter: unknown[]) {
   return ["all", ["==", ["get", "type"], type], minZoomFilter] as LayerFilter;
 }
 
-type LabelColors = { labelColor: string; labelHaloColor: string };
+export type LabelColors = { labelColor: string; labelHaloColor: string };
 
 function labelStyle(textSize: number, colors: LabelColors): SymbolLayerStyle {
   return {
@@ -119,13 +118,13 @@ export function RailwayLines() {
 
 export function StationLayers({
   url,
+  labelColors,
   onPress,
 }: {
   url: string;
+  labelColors: LabelColors;
   onPress: (event: ShapeSourcePressEvent) => void;
 }) {
-  const mapTheme = useMapTheme();
-
   return (
     <Mapbox.ShapeSource id="stations-source" url={url} onPress={onPress}>
       <Mapbox.SymbolLayer
@@ -141,7 +140,7 @@ export function StationLayers({
       <Mapbox.SymbolLayer
         id="metro-labels"
         filter={typeFilter("metro", LABEL_MINZOOM_FILTER)}
-        style={labelStyle(12, mapTheme)}
+        style={labelStyle(12, labelColors)}
       />
       <Mapbox.SymbolLayer
         id="light-stations"
@@ -167,7 +166,7 @@ export function StationLayers({
       <Mapbox.SymbolLayer
         id="light-labels"
         filter={typeFilter("light", LABEL_MINZOOM_FILTER)}
-        style={labelStyle(12, mapTheme)}
+        style={labelStyle(12, labelColors)}
       />
       <Mapbox.SymbolLayer
         id="rail-stations"
@@ -193,7 +192,7 @@ export function StationLayers({
       <Mapbox.SymbolLayer
         id="rail-labels"
         filter={typeFilter("rail", LABEL_MINZOOM_FILTER)}
-        style={labelStyle(13, mapTheme)}
+        style={labelStyle(13, labelColors)}
       />
     </Mapbox.ShapeSource>
   );

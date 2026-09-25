@@ -80,6 +80,9 @@ export function MapScreen() {
   const hasLoadedMap = useRef(false);
   const [alertColor, backgroundColor] = useThemeColor(["danger", "background"]);
   const mapTheme = useMapTheme();
+  // Station labels change color once the new map style has loaded. Changing them while it
+  // loads makes Mapbox update layers that aren't in the style yet, which logs errors.
+  const [labelColors, setLabelColors] = useState(mapTheme);
   const { heading, direction, isRotated, onHeadingChange } = useMapHeading();
   // Open on the last known position, then follow the user once they're found.
   const [initialCamera] = useState(() => {
@@ -282,7 +285,7 @@ export function MapScreen() {
 
   return (
     <View style={[styles.screen, { backgroundColor }]}>
-      <StatusBar style="auto" />
+      <StatusBar style={mapTheme.statusBarStyle} />
       <Mapbox.MapView
         key={mapKey}
         style={styles.map}
@@ -304,6 +307,7 @@ export function MapScreen() {
         onMapLoadingError={() => {
           if (!hasLoadedMap.current) setMapFailed(true);
         }}
+        onDidFinishLoadingStyle={() => setLabelColors(mapTheme)}
         onDidFinishLoadingMap={() => {
           hasLoadedMap.current = true;
           setMapFailed(false);
@@ -317,7 +321,9 @@ export function MapScreen() {
         />
         <StationImages />
         <RailwayLines />
-        {stationsUrl ? <StationLayers url={stationsUrl} onPress={handleStationPress} /> : null}
+        {stationsUrl ? (
+          <StationLayers url={stationsUrl} labelColors={labelColors} onPress={handleStationPress} />
+        ) : null}
         {locationStatus === "located" ? <UserLocationMarker /> : null}
       </Mapbox.MapView>
 
