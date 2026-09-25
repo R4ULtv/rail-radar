@@ -475,7 +475,8 @@ function StationSheetContent({
 
       <BottomSheetScrollView
         stickyHeaderIndices={isRail ? [0] : undefined}
-        contentContainerStyle={{ paddingBottom: insets.bottom + 24 }}
+        // The same space below the report links as above them, clear of the home indicator.
+        contentContainerStyle={{ paddingBottom: Math.max(insets.bottom, 32) }}
       >
         {isRail ? (
           <View className="bg-surface px-4 pb-3">
