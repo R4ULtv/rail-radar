@@ -143,4 +143,7 @@ The user's location never leaves the device: it's only used to show them on the 
 stations by distance, and the last one is kept for a day so the map opens there. Mapbox's
 telemetry, which would send location events to Mapbox, is turned off with
 `Mapbox.setTelemetryEnabled(false)`. That's also the opt-out Mapbox's terms require, which its
-attribution button would offer; the button is hidden, and the attribution is in the search sheet.
+attribution button would offer; the button is hidden, and the attribution is at the bottom of the
+search sheet and in the settings' Map section, with Mapbox's privacy policy and the telemetry
+shown as off. "Improve this map" opens Mapbox's feedback where the map is, which the map screen
+keeps in a ref from `onCameraChanged`.

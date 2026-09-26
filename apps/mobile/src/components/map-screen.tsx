@@ -28,6 +28,7 @@ import { useMapTheme } from "@/hooks/use-map-theme";
 import { useStationsUrl } from "@/hooks/use-stations-url";
 import { addRecentStation } from "@/hooks/use-stored-stations";
 import { haptics } from "@/lib/haptics";
+import { mapFeedbackUrl, type MapPosition } from "@/lib/links";
 import { loadLastUserLocation, saveLastUserLocation, type UserLocation } from "@/lib/user-location";
 
 const accessToken = process.env.EXPO_PUBLIC_MAPBOX_TOKEN ?? "";
@@ -102,6 +103,12 @@ export function MapScreen() {
   });
   // Once the user moves the map, finding their location shouldn't move it back.
   const hasMovedMap = useRef(false);
+  // Kept without re-rendering, for the "Improve this map" links.
+  const mapPosition = useRef<MapPosition>({
+    center: initialCamera.centerCoordinate,
+    zoom: initialCamera.zoomLevel,
+  });
+  const getMapFeedbackUrl = useCallback(() => mapFeedbackUrl(mapPosition.current), []);
   // Whether the map is on the user's location, which fills the locate button.
   const [isCentered, setIsCentered] = useState(false);
   // While a sheet is fully open, the strip of map above it stays still.
@@ -319,6 +326,8 @@ export function MapScreen() {
             setIsCentered(false);
           }
           onHeadingChange(state.properties.heading);
+          const [longitude = 0, latitude = 0] = state.properties.center;
+          mapPosition.current = { center: [longitude, latitude], zoom: state.properties.zoom };
         }}
         // Missing tiles once the map is up, e.g. panning offline, aren't a failed map.
         onMapLoadingError={() => {
@@ -345,7 +354,7 @@ export function MapScreen() {
       </Mapbox.MapView>
 
       <View style={[styles.settings, { top: insets.top + 12 }]}>
-        <Settings locationStatus={locationStatus} />
+        <Settings locationStatus={locationStatus} getMapFeedbackUrl={getMapFeedbackUrl} />
       </View>
 
       <SheetControls sheets={[searchSheetPosition, stationSheetPosition]}>
@@ -371,6 +380,7 @@ export function MapScreen() {
         onSelectStation={handleSearchSelect}
         onExpandedChange={setIsSearchExpanded}
         position={searchSheetPosition}
+        getMapFeedbackUrl={getMapFeedbackUrl}
       />
 
       {selectedStation ? (

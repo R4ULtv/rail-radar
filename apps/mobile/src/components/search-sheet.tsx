@@ -38,6 +38,7 @@ import { useStationSearch } from "@/hooks/use-station-search";
 import { useRecentStations, useSavedStations } from "@/hooks/use-stored-stations";
 import { useTrendingStations, type TrendingStation } from "@/hooks/use-trending-stations";
 import { distanceKm, formatDistance } from "@/lib/distance";
+import { mapboxUrl, openStreetMapUrl } from "@/lib/links";
 import type { UserLocation } from "@/lib/user-location";
 
 const handleHeight = 24;
@@ -90,19 +91,19 @@ function StationDistance({ station, from }: { station: Station; from: UserLocati
   );
 }
 
-const attributionLinks = [
-  { label: "© Mapbox", url: "https://www.mapbox.com/about/maps/" },
-  { label: "© OpenStreetMap", url: "http://www.openstreetmap.org/copyright" },
-  { label: "Improve this map", url: "https://www.mapbox.com/map-feedback/" },
-];
+function MapAttribution({ getMapFeedbackUrl }: { getMapFeedbackUrl: () => string }) {
+  const links = [
+    { label: "© Mapbox", url: () => mapboxUrl },
+    { label: "© OpenStreetMap", url: () => openStreetMapUrl },
+    { label: "Improve this map", url: getMapFeedbackUrl },
+  ];
 
-function MapAttribution() {
   return (
     <Text className="mt-8 text-center text-xs text-muted">
-      {attributionLinks.map((link, index) => (
-        <Fragment key={link.url}>
+      {links.map((link, index) => (
+        <Fragment key={link.label}>
           {index > 0 ? ", " : null}
-          <Text accessibilityRole="link" onPress={() => void Linking.openURL(link.url)}>
+          <Text accessibilityRole="link" onPress={() => void Linking.openURL(link.url())}>
             {link.label}
           </Text>
         </Fragment>
@@ -121,11 +122,13 @@ const SearchSheetContent = memo(function SearchSheetContent({
   userLocation,
   trendingStations,
   onSelectStation,
+  getMapFeedbackUrl,
 }: {
   stationsUrl: string | null;
   userLocation: UserLocation | null;
   trendingStations: TrendingStation[];
   onSelectStation: (station: Station) => void;
+  getMapFeedbackUrl: () => string;
 }) {
   const insets = useSafeAreaInsets();
   const keyboardHeight = useKeyboardHeight();
@@ -297,7 +300,7 @@ const SearchSheetContent = memo(function SearchSheetContent({
               ) : null}
             </>
           ) : null}
-          <MapAttribution />
+          <MapAttribution getMapFeedbackUrl={getMapFeedbackUrl} />
         </BottomSheetScrollView>
       </Animated.View>
     </View>
@@ -316,6 +319,8 @@ interface SearchSheetProps {
   onExpandedChange: (isExpanded: boolean) => void;
   /** Where the sheet is, for the map controls that sit above it. */
   position: SheetPosition;
+  /** "Improve this map" for where the map is now, for the map credits. */
+  getMapFeedbackUrl: () => string;
 }
 
 export function SearchSheet({
@@ -325,6 +330,7 @@ export function SearchSheet({
   onSelectStation,
   onExpandedChange,
   position,
+  getMapFeedbackUrl,
 }: SearchSheetProps) {
   const insets = useSafeAreaInsets();
   const collapsedHeight = useSearchSheetCollapsedHeight();
@@ -378,6 +384,7 @@ export function SearchSheet({
         userLocation={userLocation}
         trendingStations={trendingStations}
         onSelectStation={onSelectStation}
+        getMapFeedbackUrl={getMapFeedbackUrl}
       />
     </BottomSheet>
   );

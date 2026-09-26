@@ -9,6 +9,7 @@ import ArrowUpRight from "lucide-react-native/icons/arrow-up-right";
 import Bookmark from "lucide-react-native/icons/bookmark";
 import BrushCleaning from "lucide-react-native/icons/brush-cleaning";
 import Bug from "lucide-react-native/icons/bug";
+import ChartNoAxes from "lucide-react-native/icons/chart-no-axes-column";
 import Code from "lucide-react-native/icons/code-xml";
 import FileText from "lucide-react-native/icons/file-text";
 import Globe from "lucide-react-native/icons/globe";
@@ -17,7 +18,9 @@ import Info from "lucide-react-native/icons/info";
 import LifeBuoy from "lucide-react-native/icons/life-buoy";
 import Lightbulb from "lucide-react-native/icons/lightbulb";
 import Mail from "lucide-react-native/icons/mail";
+import MapIcon from "lucide-react-native/icons/map";
 import MapPin from "lucide-react-native/icons/map-pin";
+import MapPinPen from "lucide-react-native/icons/map-pin-pen";
 import MapPinX from "lucide-react-native/icons/map-pin-x";
 import Moon from "lucide-react-native/icons/moon";
 import Palette from "lucide-react-native/icons/palette";
@@ -26,6 +29,7 @@ import Shield from "lucide-react-native/icons/shield";
 import Smartphone from "lucide-react-native/icons/smartphone";
 import Sun from "lucide-react-native/icons/sun";
 import TrainFront from "lucide-react-native/icons/train-front";
+import Users from "lucide-react-native/icons/users";
 import { Fragment, memo, useCallback, useState, type ComponentType, type ReactNode } from "react";
 import {
   Alert,
@@ -55,6 +59,9 @@ import {
   bugReportUrl,
   contactUrl,
   featureRequestUrl,
+  mapboxPrivacyPolicyUrl,
+  mapboxUrl,
+  openStreetMapUrl,
   privacyPolicyUrl,
   sourceCodeUrl,
   termsOfServiceUrl,
@@ -127,17 +134,18 @@ function Row({
   isDestructive?: boolean;
   isDisabled?: boolean;
   accessibilityRole?: "button" | "link";
-  onPress: () => void;
+  /** Without it, the row only shows information. */
+  onPress?: () => void;
 }) {
   const [foregroundColor, dangerColor] = useThemeColor(["foreground", "danger"]);
 
   return (
     <ListGroup.Item
-      accessibilityRole={accessibilityRole}
+      accessibilityRole={onPress ? accessibilityRole : undefined}
       // A plain highlight, like the system settings. The animated press feedback the station
       // lists use is slow to mount, and made the settings slow to open.
-      className="active:bg-surface-tertiary"
-      disabled={isDisabled}
+      className={onPress ? "active:bg-surface-tertiary" : undefined}
+      disabled={isDisabled || !onPress}
       style={{ opacity: isDisabled ? 0.5 : 1 }}
       onPress={onPress}
     >
@@ -342,9 +350,11 @@ function DataRows() {
 // Memoized, so closing the settings doesn't render them once more on the way out.
 const SettingsContent = memo(function SettingsContent({
   locationStatus,
+  getMapFeedbackUrl,
   onClose,
 }: {
   locationStatus: LocationStatus;
+  getMapFeedbackUrl: () => string;
   onClose: () => void;
 }) {
   const insets = useSafeAreaInsets();
@@ -407,6 +417,45 @@ const SettingsContent = memo(function SettingsContent({
           />
         </Section>
 
+        <Section title="Map" icon={<MapIcon size={14} color={mutedColor} />}>
+          <LinkRows
+            links={[
+              {
+                icon: MapIcon,
+                title: "© Mapbox",
+                description: "Map design and map tiles.",
+                url: mapboxUrl,
+              },
+              {
+                icon: Users,
+                title: "© OpenStreetMap",
+                description:
+                  "Map data by OpenStreetMap contributors, available under the Open Database License.",
+                url: openStreetMapUrl,
+              },
+              {
+                icon: MapPinPen,
+                title: "Improve this map",
+                description: "Report a mistake in the map to Mapbox, where you're looking.",
+                url: getMapFeedbackUrl(),
+              },
+              {
+                icon: Shield,
+                title: "Mapbox privacy policy",
+                description: "How Mapbox handles the requests made to load the map.",
+                url: mapboxPrivacyPolicyUrl,
+              },
+            ]}
+          />
+          <Separator className="mx-4" />
+          <Row
+            icon={ChartNoAxes}
+            title="Mapbox telemetry"
+            description="Anonymous usage and location reports to Mapbox. Always off in Rail Radar."
+            suffix={<Text className="text-sm text-muted">Off</Text>}
+          />
+        </Section>
+
         <Section title="About" icon={<Info size={14} color={mutedColor} />}>
           <LinkRows
             links={[
@@ -432,9 +481,12 @@ const SettingsContent = memo(function SettingsContent({
  */
 export const Settings = memo(function Settings({
   locationStatus,
+  getMapFeedbackUrl,
 }: {
   /** Shown on the location access row, which opens the system settings to change it. */
   locationStatus: LocationStatus;
+  /** "Improve this map" for where the map is now, read when the settings open. */
+  getMapFeedbackUrl: () => string;
 }) {
   const surfaceColor = useThemeColor("surface");
   const [isOpen, setIsOpen] = useState(false);
@@ -457,7 +509,11 @@ export const Settings = memo(function Settings({
       >
         {/* Its own provider, since the modal's insets aren't the screen's. */}
         <SafeAreaProvider style={{ backgroundColor: surfaceColor }}>
-          <SettingsContent locationStatus={locationStatus} onClose={close} />
+          <SettingsContent
+            locationStatus={locationStatus}
+            getMapFeedbackUrl={getMapFeedbackUrl}
+            onClose={close}
+          />
         </SafeAreaProvider>
       </Modal>
     </>
