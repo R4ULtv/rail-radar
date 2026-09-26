@@ -31,21 +31,12 @@ import Sun from "lucide-react-native/icons/sun";
 import TrainFront from "lucide-react-native/icons/train-front";
 import Users from "lucide-react-native/icons/users";
 import { Fragment, memo, useCallback, useState, type ComponentType, type ReactNode } from "react";
-import {
-  Alert,
-  Linking,
-  Modal,
-  Platform,
-  ScrollView,
-  StyleSheet,
-  Text,
-  useWindowDimensions,
-  View,
-} from "react-native";
+import { Alert, Linking, Modal, Platform, ScrollView, StyleSheet, Text, View } from "react-native";
 import { SafeAreaProvider, SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { expo } from "../../app.json";
 import { SettingsButton, type LocationStatus } from "@/components/map-controls";
+import { PageSheetHandle } from "@/components/page-sheet-handle";
 import { SectionTitle } from "@/components/station-list";
 import { resetStations, useStationsDownloadedAt } from "@/hooks/use-stations-url";
 import {
@@ -227,21 +218,6 @@ async function clearCache() {
   await Promise.all([Mapbox.clearData(), Image.clearDiskCache(), Image.clearMemoryCache()]);
 }
 
-/** Like the bottom sheets' handle; only on iOS, where the page sheet can be swiped down. */
-function Handle() {
-  const mutedColor = useThemeColor("muted");
-  const { width } = useWindowDimensions();
-
-  if (Platform.OS !== "ios") return null;
-  return (
-    <View style={styles.handle} accessibilityElementsHidden importantForAccessibility="no">
-      <View
-        style={[styles.handleIndicator, { width: width * 0.075, backgroundColor: mutedColor }]}
-      />
-    </View>
-  );
-}
-
 function DataRows() {
   const recentStations = useRecentStations();
   const { savedStations } = useSavedStations();
@@ -362,7 +338,7 @@ const SettingsContent = memo(function SettingsContent({
 
   return (
     <SafeAreaView edges={["top", "left", "right"]} style={styles.content}>
-      <Handle />
+      <PageSheetHandle />
       <View
         className={`flex-row items-center gap-3 px-4 pb-1 ${Platform.OS === "ios" ? "" : "pt-4"}`}
       >
@@ -522,7 +498,5 @@ export const Settings = memo(function Settings({
 
 const styles = StyleSheet.create({
   content: { flex: 1 },
-  handle: { height: 24, justifyContent: "center" },
-  handleIndicator: { alignSelf: "center", height: 4, borderRadius: 4 },
   tabularNums: { fontVariant: ["tabular-nums"] },
 });

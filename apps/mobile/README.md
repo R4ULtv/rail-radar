@@ -132,6 +132,10 @@ Below them it shows the 7-day trending stations from `/stations/trending?period=
 with unique visitors and visits. They load on launch and refresh every 5 minutes, but only
 while the search sheet is open and the app is active.
 
+On the first launch, a welcome page sheet thanks the user for buying the app and lists what it
+does. Closing it, with "Get started" or by swiping it down, saves `welcome.json` so it isn't shown
+again. The location permission prompt waits until it's closed, so the prompt doesn't cover it.
+
 As in Apple Maps, the locate button and the compass sit just above the open sheet and follow
 it, fading out once it's opened past its smallest size. The gear in the top-right corner opens
 settings: a page sheet on iOS, with a handle like the bottom sheets, and a full-screen page on
