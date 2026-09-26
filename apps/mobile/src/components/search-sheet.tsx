@@ -286,6 +286,7 @@ const SearchSheetContent = memo(function SearchSheetContent({
                 icon={Bookmark}
                 stations={savedStations}
                 onSelect={selectStation}
+                collapsedCount={5}
               />
               <StationSection
                 title="Popular Stations (7-day trending)"

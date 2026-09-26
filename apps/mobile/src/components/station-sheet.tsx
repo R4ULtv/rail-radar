@@ -35,7 +35,7 @@ import { ErrorBoundary } from "@/components/error-boundary";
 import { StationDetails } from "@/components/station-details";
 import { TrainRow, TrainRowSkeleton, trainKey } from "@/components/train-row";
 import { useStationBoard, type BoardType } from "@/hooks/use-station-board";
-import { MAX_SAVED_STATIONS, useSavedStations } from "@/hooks/use-stored-stations";
+import { useSavedStations } from "@/hooks/use-stored-stations";
 import { distanceKm, formatDistance } from "@/lib/distance";
 import { haptics } from "@/lib/haptics";
 import { getStationWarning } from "@/lib/station-warnings";
@@ -121,7 +121,7 @@ function directionsUrl({ lat, lng }: NonNullable<Station["geo"]>) {
 
 const QuickActions = memo(function QuickActions({ station }: { station: Station }) {
   const [foregroundColor, accentColor] = useThemeColor(["default-foreground", "accent"]);
-  const { isSaved, isFull, toggleSaved } = useSavedStations();
+  const { isSaved, toggleSaved } = useSavedStations();
   const saved = isSaved(station.id);
   const ShareIcon = Platform.OS === "ios" ? Share : Share2;
 
@@ -145,16 +145,10 @@ const QuickActions = memo(function QuickActions({ station }: { station: Station 
   return (
     <View className="mt-3 flex-row gap-2">
       <Button
-        accessibilityLabel={
-          saved
-            ? "Remove from saved stations"
-            : isFull
-              ? `Maximum ${MAX_SAVED_STATIONS} saved stations reached`
-              : "Save station"
-        }
+        accessibilityLabel={saved ? "Remove from saved stations" : "Save station"}
         accessibilityState={{ selected: saved }}
         className="flex-1"
-        isDisabled={!station.geo || (!saved && isFull)}
+        isDisabled={!station.geo}
         size="sm"
         variant={saved ? "secondary" : "tertiary"}
         onPress={toggleSavedStation}

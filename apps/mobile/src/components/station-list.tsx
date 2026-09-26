@@ -1,12 +1,15 @@
 import type { Station } from "@repo/data/types";
+import { Button } from "heroui-native/button";
 import { useThemeColor } from "heroui-native/hooks";
 import { ListGroup } from "heroui-native/list-group";
 import { Separator } from "heroui-native/separator";
 import { Skeleton } from "heroui-native/skeleton";
-import { Fragment, memo, type ComponentType, type ReactNode } from "react";
+import { ChevronDown } from "lucide-react-native";
+import { Fragment, memo, useState, type ComponentType, type ReactNode } from "react";
 import { Image, StyleSheet, Text, View } from "react-native";
 
 import { CountryFlag } from "@/components/country-flag";
+import { haptics } from "@/lib/haptics";
 import { stationIcons } from "@/lib/station-icons";
 
 /** A Lucide icon, drawn at the section title's size and color. */
@@ -74,6 +77,7 @@ function StationSectionContent<T extends Station>({
   stations,
   renderSuffix,
   onSelect,
+  collapsedCount,
 }: {
   title: string;
   icon: SectionIcon;
@@ -81,22 +85,65 @@ function StationSectionContent<T extends Station>({
   /** Shown on the right of each row, e.g. visitor counts or the distance. */
   renderSuffix?: (station: T) => ReactNode;
   onSelect: (station: Station) => void;
+  /** Shows only this many stations, with a row to show the rest. */
+  collapsedCount?: number;
 }) {
+  const [isExpanded, setIsExpanded] = useState(false);
   if (stations.length === 0) return null;
+
+  const canCollapse = collapsedCount !== undefined && stations.length > collapsedCount;
+  const visibleStations = canCollapse && !isExpanded ? stations.slice(0, collapsedCount) : stations;
 
   return (
     <View className="mt-5">
       <StationSectionTitle icon={icon} title={title} />
       {/* Clipped, so a pressed first or last row keeps the rounded corners. */}
       <ListGroup variant="secondary" className="overflow-hidden">
-        {stations.map((station, index) => (
+        {visibleStations.map((station, index) => (
           <Fragment key={station.id}>
             {index > 0 ? <Separator className="mx-4" /> : null}
             <StationRow station={station} renderSuffix={renderSuffix} onSelect={onSelect} />
           </Fragment>
         ))}
       </ListGroup>
+      {canCollapse ? (
+        <ShowAllButton
+          count={stations.length}
+          isExpanded={isExpanded}
+          onPress={() => setIsExpanded((expanded) => !expanded)}
+        />
+      ) : null}
     </View>
+  );
+}
+
+/** Like the live board's button for more trains. */
+function ShowAllButton({
+  count,
+  isExpanded,
+  onPress,
+}: {
+  count: number;
+  isExpanded: boolean;
+  onPress: () => void;
+}) {
+  const foregroundColor = useThemeColor("default-foreground");
+
+  return (
+    <Button
+      className="mt-3"
+      size="sm"
+      variant="tertiary"
+      onPress={() => {
+        haptics.tap();
+        onPress();
+      }}
+    >
+      <Button.Label>{isExpanded ? "Show fewer" : `Show all ${count} stations`}</Button.Label>
+      <View style={isExpanded ? styles.chevronUp : undefined}>
+        <ChevronDown size={16} color={foregroundColor} />
+      </View>
+    </Button>
   );
 }
 
@@ -141,4 +188,5 @@ export function StationSectionSkeleton({ title, icon }: { title: string; icon: S
 
 const styles = StyleSheet.create({
   stationIcon: { width: 24, height: 24 },
+  chevronUp: { transform: [{ rotate: "180deg" }] },
 });

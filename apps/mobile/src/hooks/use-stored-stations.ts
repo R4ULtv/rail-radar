@@ -2,7 +2,6 @@ import type { Station } from "@repo/data/types";
 import { File, Paths } from "expo-file-system";
 import { useSyncExternalStore } from "react";
 
-export const MAX_SAVED_STATIONS = 7;
 const MAX_RECENT_STATIONS = 3;
 const emptyStations: Station[] = [];
 
@@ -68,12 +67,11 @@ export function useSavedStations() {
   return {
     savedStations,
     isSaved: (id: string) => savedStations.some((station) => station.id === id),
-    isFull: savedStations.length >= MAX_SAVED_STATIONS,
     toggleSaved: (station: Station) => {
       const current = savedStore.read();
       if (current.some((saved) => saved.id === station.id)) {
         savedStore.write(current.filter((saved) => saved.id !== station.id));
-      } else if (current.length < MAX_SAVED_STATIONS) {
+      } else {
         savedStore.write([toStoredStation(station), ...current]);
       }
     },
