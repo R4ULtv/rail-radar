@@ -3,7 +3,6 @@ import { Image } from "expo-image";
 import { CloseButton } from "heroui-native/close-button";
 import { useThemeColor } from "heroui-native/hooks";
 import { ListGroup } from "heroui-native/list-group";
-import { PressableFeedback } from "heroui-native/pressable-feedback";
 import { Separator } from "heroui-native/separator";
 import { Tabs } from "heroui-native/tabs";
 import ArrowUpRight from "lucide-react-native/icons/arrow-up-right";
@@ -27,7 +26,7 @@ import Shield from "lucide-react-native/icons/shield";
 import Smartphone from "lucide-react-native/icons/smartphone";
 import Sun from "lucide-react-native/icons/sun";
 import TrainFront from "lucide-react-native/icons/train-front";
-import { Fragment, useState, type ComponentType, type ReactNode } from "react";
+import { Fragment, memo, useCallback, useState, type ComponentType, type ReactNode } from "react";
 import {
   Alert,
   Linking,
@@ -42,7 +41,7 @@ import {
 import { SafeAreaProvider, SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { expo } from "../../app.json";
-import type { LocationStatus } from "@/components/map-controls";
+import { SettingsButton, type LocationStatus } from "@/components/map-controls";
 import { SectionTitle } from "@/components/station-list";
 import { resetStations, useStationsDownloadedAt } from "@/hooks/use-stations-url";
 import {
@@ -102,7 +101,10 @@ function Section({
   return (
     <View className="mt-5">
       <SectionTitle icon={icon}>{title}</SectionTitle>
-      <ListGroup variant="secondary">{children}</ListGroup>
+      {/* Clipped, so a pressed first or last row keeps the rounded corners. */}
+      <ListGroup variant="secondary" className="overflow-hidden">
+        {children}
+      </ListGroup>
       {footer ? <Text className="mt-2 px-4 text-xs text-muted">{footer}</Text> : null}
     </View>
   );
@@ -130,31 +132,26 @@ function Row({
   const [foregroundColor, dangerColor] = useThemeColor(["foreground", "danger"]);
 
   return (
-    <PressableFeedback
+    <ListGroup.Item
       accessibilityRole={accessibilityRole}
-      accessibilityState={{ disabled: isDisabled }}
-      animation={false}
-      isDisabled={isDisabled}
+      // A plain highlight, like the system settings. The animated press feedback the station
+      // lists use is slow to mount, and made the settings slow to open.
+      className="active:bg-surface-tertiary"
+      disabled={isDisabled}
+      style={{ opacity: isDisabled ? 0.5 : 1 }}
       onPress={onPress}
     >
-      <PressableFeedback.Scale>
-        <ListGroup.Item disabled style={{ opacity: isDisabled ? 0.5 : 1 }}>
-          <ListGroup.ItemPrefix>
-            <Icon size={20} color={isDestructive ? dangerColor : foregroundColor} />
-          </ListGroup.ItemPrefix>
-          <ListGroup.ItemContent>
-            <ListGroup.ItemTitle className={isDestructive ? "text-danger" : undefined}>
-              {title}
-            </ListGroup.ItemTitle>
-            {description ? (
-              <ListGroup.ItemDescription>{description}</ListGroup.ItemDescription>
-            ) : null}
-          </ListGroup.ItemContent>
-          {suffix ? <ListGroup.ItemSuffix>{suffix}</ListGroup.ItemSuffix> : null}
-        </ListGroup.Item>
-      </PressableFeedback.Scale>
-      <PressableFeedback.Ripple />
-    </PressableFeedback>
+      <ListGroup.ItemPrefix>
+        <Icon size={20} color={isDestructive ? dangerColor : foregroundColor} />
+      </ListGroup.ItemPrefix>
+      <ListGroup.ItemContent>
+        <ListGroup.ItemTitle className={isDestructive ? "text-danger" : undefined}>
+          {title}
+        </ListGroup.ItemTitle>
+        {description ? <ListGroup.ItemDescription>{description}</ListGroup.ItemDescription> : null}
+      </ListGroup.ItemContent>
+      {suffix ? <ListGroup.ItemSuffix>{suffix}</ListGroup.ItemSuffix> : null}
+    </ListGroup.Item>
   );
 }
 
@@ -342,7 +339,8 @@ function DataRows() {
   );
 }
 
-function SettingsContent({
+// Memoized, so closing the settings doesn't render them once more on the way out.
+const SettingsContent = memo(function SettingsContent({
   locationStatus,
   onClose,
 }: {
@@ -425,35 +423,46 @@ function SettingsContent({
       </ScrollView>
     </SafeAreaView>
   );
-}
+});
 
-interface SettingsSheetProps {
-  isOpen: boolean;
+/**
+ * The settings button and the settings it opens: a page sheet on iOS, which can be swiped down
+ * to close, and full screen on Android. It keeps whether they're open itself, so opening and
+ * closing them doesn't re-render the map screen.
+ */
+export const Settings = memo(function Settings({
+  locationStatus,
+}: {
   /** Shown on the location access row, which opens the system settings to change it. */
   locationStatus: LocationStatus;
-  onClose: () => void;
-}
-
-/** A page sheet on iOS, which can be swiped down to close; full screen on Android. */
-export function SettingsSheet({ isOpen, locationStatus, onClose }: SettingsSheetProps) {
+}) {
   const surfaceColor = useThemeColor("surface");
+  const [isOpen, setIsOpen] = useState(false);
+  const open = useCallback(() => {
+    haptics.tap();
+    setIsOpen(true);
+  }, []);
+  const close = useCallback(() => setIsOpen(false), []);
 
   return (
-    <Modal
-      visible={isOpen}
-      animationType="slide"
-      presentationStyle="pageSheet"
-      statusBarTranslucent
-      navigationBarTranslucent
-      onRequestClose={onClose}
-    >
-      {/* Its own provider, since the modal's insets aren't the screen's. */}
-      <SafeAreaProvider style={{ backgroundColor: surfaceColor }}>
-        <SettingsContent locationStatus={locationStatus} onClose={onClose} />
-      </SafeAreaProvider>
-    </Modal>
+    <>
+      <SettingsButton onPress={open} />
+      <Modal
+        visible={isOpen}
+        animationType="slide"
+        presentationStyle="pageSheet"
+        statusBarTranslucent
+        navigationBarTranslucent
+        onRequestClose={close}
+      >
+        {/* Its own provider, since the modal's insets aren't the screen's. */}
+        <SafeAreaProvider style={{ backgroundColor: surfaceColor }}>
+          <SettingsContent locationStatus={locationStatus} onClose={close} />
+        </SafeAreaProvider>
+      </Modal>
+    </>
   );
-}
+});
 
 const styles = StyleSheet.create({
   content: { flex: 1 },

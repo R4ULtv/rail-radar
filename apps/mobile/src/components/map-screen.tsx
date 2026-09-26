@@ -13,14 +13,13 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import {
   Compass,
   LocateButton,
-  SettingsButton,
   SheetControls,
   useMapHeading,
   useSheetPosition,
   type LocationStatus,
 } from "@/components/map-controls";
 import { SearchSheet } from "@/components/search-sheet";
-import { SettingsSheet } from "@/components/settings-sheet";
+import { Settings } from "@/components/settings-sheet";
 import { RailwayLines, StationImages, StationLayers } from "@/components/station-markers";
 import { StationSheet } from "@/components/station-sheet";
 import { UserLocationMarker } from "@/components/user-location-marker";
@@ -77,7 +76,6 @@ export function MapScreen() {
   const stationsUrl = useStationsUrl();
   const [selectedStation, setSelectedStation] = useState<Station | null>(null);
   const [sheetOpen, setSheetOpen] = useState(false);
-  const [settingsOpen, setSettingsOpen] = useState(false);
   const [locationStatus, setLocationStatus] = useState<LocationStatus>("idle");
   const [userLocation, setUserLocation] = useState<UserLocation | null>(null);
   const [message, setMessage] = useState<string | null>(null);
@@ -271,12 +269,6 @@ export function MapScreen() {
     }
   }, []);
 
-  const openSettings = useCallback(() => {
-    haptics.tap();
-    setSettingsOpen(true);
-  }, []);
-  const closeSettings = useCallback(() => setSettingsOpen(false), []);
-
   const resetHeading = useCallback(() => {
     haptics.tap();
     camera.current?.setCamera({ heading: 0, animationDuration: 300 });
@@ -353,7 +345,7 @@ export function MapScreen() {
       </Mapbox.MapView>
 
       <View style={[styles.settings, { top: insets.top + 12 }]}>
-        <SettingsButton onPress={openSettings} />
+        <Settings locationStatus={locationStatus} />
       </View>
 
       <SheetControls sheets={[searchSheetPosition, stationSheetPosition]}>
@@ -398,12 +390,6 @@ export function MapScreen() {
           position={stationSheetPosition}
         />
       ) : null}
-
-      <SettingsSheet
-        isOpen={settingsOpen}
-        locationStatus={locationStatus}
-        onClose={closeSettings}
-      />
     </View>
   );
 }
