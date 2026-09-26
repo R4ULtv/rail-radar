@@ -126,8 +126,9 @@ the first character, so it works offline. Focusing the field builds the index. A
 visits the stations whose names contain the query's longest word, found with `indexOf` in one
 string of every name, and results render in the background with `useDeferredValue`. Until the
 first results, it shows a skeleton like the web's. When the query is empty, it lists recent rail
-stations (up to 3) and saved stations, the first 5 with a "Show all" button for the rest. Both
-lists are stored as JSON files in the app's document directory through `expo-file-system`.
+stations (up to 10, the first 3 shown) and saved stations (the first 5 shown), each with a
+"Show all" button for the rest. Both lists are stored as JSON files in the app's document
+directory through `expo-file-system`.
 Below them it shows the 7-day trending stations from `/stations/trending?period=week`,
 with unique visitors and visits. They load on launch and refresh every 5 minutes, but only
 while the search sheet is open and the app is active.

@@ -2,7 +2,7 @@ import type { Station } from "@repo/data/types";
 import { File, Paths } from "expo-file-system";
 import { useSyncExternalStore } from "react";
 
-const MAX_RECENT_STATIONS = 3;
+const MAX_RECENT_STATIONS = 10;
 const emptyStations: Station[] = [];
 
 function isStoredStation(value: unknown): value is Station {

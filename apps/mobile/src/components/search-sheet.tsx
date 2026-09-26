@@ -280,6 +280,7 @@ const SearchSheetContent = memo(function SearchSheetContent({
                 icon={History}
                 stations={unsavedRecentStations}
                 onSelect={selectStation}
+                collapsedCount={3}
               />
               <StationSection
                 title="Saved Stations"
