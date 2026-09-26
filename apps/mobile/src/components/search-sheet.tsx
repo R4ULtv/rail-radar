@@ -329,15 +329,16 @@ export function SearchSheet({
   const insets = useSafeAreaInsets();
   const collapsedHeight = useSearchSheetCollapsedHeight();
   const sheetRef = useRef<BottomSheet>(null);
-  const lastIndex = useRef(0);
   const [isExpanded, setIsExpanded] = useState(false);
   const [surfaceColor, mutedColor] = useThemeColor(["surface", "muted"]);
   // The list only shows while the sheet is open, so it isn't refreshed while collapsed or hidden.
   const trendingStations = useTrendingStations(isExpanded && !isHidden);
 
+  // Back from a station, the sheet comes back collapsed. Its content stays mounted while hidden,
+  // so the query and results are still there when it's opened again.
   useEffect(() => {
     if (isHidden) sheetRef.current?.close();
-    else sheetRef.current?.snapToIndex(lastIndex.current);
+    else sheetRef.current?.snapToIndex(0);
   }, [isHidden]);
 
   // Android back collapses the open sheet instead of leaving the app.
@@ -367,7 +368,6 @@ export function SearchSheet({
       backgroundStyle={{ backgroundColor: surfaceColor, borderRadius: 24 }}
       handleIndicatorStyle={{ backgroundColor: mutedColor }}
       onChange={(index) => {
-        if (index >= 0) lastIndex.current = index;
         setIsExpanded(index === expandedIndex);
         onExpandedChange(index === expandedIndex);
         if (index === 0) Keyboard.dismiss();
