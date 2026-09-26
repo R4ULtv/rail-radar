@@ -17,6 +17,7 @@ import Animated, {
   useAnimatedStyle,
   useDerivedValue,
   useSharedValue,
+  withSpring,
   withTiming,
   type SharedValue,
 } from "react-native-reanimated";
@@ -39,37 +40,40 @@ const arrowOffset = ((13.67 - 12) / 24) * locateIconSize;
 type Direction = "N" | "E" | "S" | "W";
 const directions: Direction[] = ["N", "E", "S", "W"];
 
+// Critically damped and quick: the dial catches up with the map without bouncing.
+const dialSpring = { stiffness: 1500, damping: 2 * Math.sqrt(1500), mass: 1 };
+
 function normalizeHeading(heading: number) {
+  "worklet";
   return ((heading % 360) + 360) % 360;
 }
 
-function isRotated(heading: number) {
+function isNorthUp(heading: number) {
+  "worklet";
   const normalized = normalizeHeading(heading);
-  return Math.min(normalized, 360 - normalized) > northThreshold;
+  return Math.min(normalized, 360 - normalized) <= northThreshold;
 }
 
 /** The cardinal direction the map faces, like the letter in Apple Maps' compass. */
 function facingDirection(heading: number): Direction {
+  "worklet";
   return directions[Math.round(normalizeHeading(heading) / 90) % 4];
 }
 
-/** Tracks the map heading for the compass without re-rendering on every camera frame. */
+/**
+ * Tracks the map heading for the compass. It's only a shared value, so the map screen doesn't
+ * re-render as the map turns.
+ */
 export function useMapHeading() {
   const heading = useSharedValue(0);
-  const [rotated, setRotated] = useState(false);
-  const [direction, setDirection] = useState<Direction>("N");
-
   const onHeadingChange = useCallback(
     (value: number) => {
       heading.value = value;
-      // React skips the re-render unless one of these actually changes.
-      setRotated(isRotated(value));
-      setDirection(facingDirection(value));
     },
     [heading],
   );
 
-  return { heading, direction, isRotated: rotated, onHeadingChange };
+  return { heading, onHeadingChange };
 }
 
 function MapControl(props: Omit<PressableProps, "style">) {
@@ -240,21 +244,47 @@ function CompassDial() {
  */
 export function Compass({
   heading,
-  direction,
-  isRotated,
   onPress,
 }: {
   heading: SharedValue<number>;
-  direction: Direction;
-  isRotated: boolean;
   onPress: () => void;
 }) {
   const foreground = useThemeColor("foreground");
+  // Only these re-render the compass, and only when they change.
+  const [isRotated, setIsRotated] = useState(false);
+  const [direction, setDirection] = useState<Direction>("N");
+  useAnimatedReaction(
+    () => !isNorthUp(heading.value),
+    (rotated, previous) => {
+      if (rotated !== previous) scheduleOnRN(setIsRotated, rotated);
+    },
+  );
+  useAnimatedReaction(
+    () => facingDirection(heading.value),
+    (facing, previous) => {
+      if (facing !== previous) scheduleOnRN(setDirection, facing);
+    },
+  );
+
+  // The map's heading arrives from JS, unevenly on Android, so the dial springs towards it on
+  // every frame instead of jumping from one heading to the next. It's unwrapped, so turning
+  // past north goes from 359° to 361° rather than all the way back round.
+  const dialHeading = useSharedValue(0);
+  const dialTarget = useSharedValue(0);
+  useAnimatedReaction(
+    () => heading.value,
+    (value) => {
+      const turn = ((((value - dialTarget.value) % 360) + 540) % 360) - 180;
+      dialTarget.value += turn;
+      dialHeading.value = withSpring(dialTarget.value, dialSpring);
+    },
+  );
+
   const containerStyle = useAnimatedStyle(() => ({
     opacity: withTiming(isRotated ? 1 : 0, { duration: 200 }),
   }));
   const dialStyle = useAnimatedStyle(() => ({
-    transform: [{ rotate: `${-heading.value}deg` }],
+    transform: [{ rotate: `${-dialHeading.value}deg` }],
   }));
 
   return (

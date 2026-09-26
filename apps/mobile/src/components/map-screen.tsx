@@ -89,7 +89,7 @@ export function MapScreen() {
   // Station labels change color once the new map style has loaded. Changing them while it
   // loads makes Mapbox update layers that aren't in the style yet, which logs errors.
   const [labelColors, setLabelColors] = useState(mapTheme);
-  const { heading, direction, isRotated, onHeadingChange } = useMapHeading();
+  const { heading, onHeadingChange } = useMapHeading();
   // Open on the last known position, then follow the user once they're found.
   const [initialCamera] = useState(() => {
     const lastLocation = loadLastUserLocation();
@@ -349,12 +349,7 @@ export function MapScreen() {
       </View>
 
       <SheetControls sheets={[searchSheetPosition, stationSheetPosition]}>
-        <Compass
-          heading={heading}
-          direction={direction}
-          isRotated={isRotated}
-          onPress={resetHeading}
-        />
+        <Compass heading={heading} onPress={resetHeading} />
         <LocateButton status={locationStatus} isCentered={isCentered} onPress={locateUser} />
       </SheetControls>
 
