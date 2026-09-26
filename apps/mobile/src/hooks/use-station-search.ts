@@ -16,11 +16,20 @@ interface UseStationSearchOptions {
   userLocation: UserLocation | null;
   /** Builds the search index before the first character, e.g. once the field is focused. */
   preload?: boolean;
+  /** Come first when they match, then the recent stations. */
+  savedStations?: readonly Station[];
+  recentStations?: readonly Station[];
 }
 
 export function useStationSearch(
   input: string,
-  { stationsUrl, userLocation, preload = false }: UseStationSearchOptions,
+  {
+    stationsUrl,
+    userLocation,
+    preload = false,
+    savedStations = noStations,
+    recentStations = noStations,
+  }: UseStationSearchOptions,
 ) {
   const query = input.trim();
   const isActive = query.length >= minQueryLength;
@@ -53,8 +62,13 @@ export function useStationSearch(
   // next query renders.
   const results = useMemo<Station[] | null>(() => {
     if (!search || deferredQuery.length < minQueryLength) return null;
-    return search(deferredQuery, { limit: resultLimit, near: userLocation });
-  }, [search, deferredQuery, userLocation]);
+    return search(deferredQuery, {
+      limit: resultLimit,
+      near: userLocation,
+      saved: savedStations,
+      recent: recentStations,
+    });
+  }, [search, deferredQuery, userLocation, savedStations, recentStations]);
 
   return {
     stations: (isActive && results) || noStations,

@@ -146,9 +146,15 @@ const SearchSheetContent = memo(function SearchSheetContent({
   }, [keyboardHeight]);
   const [query, setQuery] = useState("");
   // Focusing the field starts building the search index, before the first character is typed.
-  const search = useStationSearch(query, { stationsUrl, userLocation, preload: isFocused });
   const { savedStations } = useSavedStations();
   const recentStations = useRecentStations();
+  const search = useStationSearch(query, {
+    stationsUrl,
+    userLocation,
+    preload: isFocused,
+    savedStations,
+    recentStations,
+  });
   const [mutedColor, foregroundColor] = useThemeColor(["muted", "default-foreground"]);
 
   // The lists are memoized, so they only render again when these change.
