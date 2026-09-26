@@ -8,7 +8,8 @@ import type { UserLocation } from "@/lib/user-location";
 
 type IndexedVariant = {
   normalizedName: string;
-  words: string[];
+  /** Split on first use: most searches rule a station in or out before its words are needed. */
+  words?: string[];
 };
 
 type IndexedStation = {
@@ -17,12 +18,26 @@ type IndexedStation = {
   variants: IndexedVariant[];
 };
 
+type SearchIndex = {
+  indexedStations: IndexedStation[];
+  exactIdMap: Map<string, IndexedStation>;
+  /**
+   * Every station's names, each on its own line. Any match contains the query's longest word,
+   * so finding it here with `indexOf` skips the stations that can't match without visiting them.
+   */
+  names: string;
+  /** Where each station's lines start in `names`, plus the end. */
+  nameStarts: Int32Array;
+};
+
 type SearchResult = {
   station: Station;
   rank: number;
   /** Orders stations that match equally well: importance, weighted by distance when known. */
   score: number;
   variantLength: number;
+  /** The full name without accents or case, to order the remaining ties alphabetically. */
+  sortName: string;
 };
 
 export type StationSearchOptions = {
@@ -33,58 +48,88 @@ export type StationSearchOptions = {
 
 // The same station ID shape as the API's STATION_ID_PATTERN.
 const STATION_ID_REGEX = /^[A-Z]{2,3}\d+$/;
+const PRINTABLE_ASCII_REGEX = /^[ -~]*$/;
 const DIACRITICS_REGEX = /[\u0300-\u036f]/g;
 const WHITESPACE_REGEX = /\s+/g;
+const WORD_SEPARATOR_REGEX = /[^\p{L}\p{N}]+/u;
+const WORST_RANK = 7;
+/** Ranks up to this one need a name starting with the query. */
+const PREFIX_RANK = 3;
 
 function normalizeText(text: string): string {
-  return text.normalize("NFD").replace(DIACRITICS_REGEX, "").toLowerCase().trim();
+  // Plain ASCII has no diacritics to strip, and skipping the Unicode normalization for it keeps
+  // building the index fast.
+  const stripped = PRINTABLE_ASCII_REGEX.test(text)
+    ? text
+    : text.normalize("NFD").replace(DIACRITICS_REGEX, "");
+  return stripped.toLowerCase().trim();
 }
 
-function tokenizeText(text: string): string[] {
-  return normalizeText(text)
-    .split(/[^\p{L}\p{N}]+/u)
-    .filter(Boolean);
+function splitWords(normalizedText: string): string[] {
+  return normalizedText.split(WORD_SEPARATOR_REGEX).filter(Boolean);
+}
+
+function getWords(variant: IndexedVariant): string[] {
+  variant.words ??= splitWords(variant.normalizedName);
+  return variant.words;
 }
 
 function normalizeStationId(text: string): string {
   return text.trim().replace(WHITESPACE_REGEX, "").toUpperCase();
 }
 
-function getNameVariants(name: string): string[] {
-  const variants = new Map<string, string>();
+function getNameVariants(name: string): IndexedVariant[] {
+  const candidates = name.includes("/") ? [name, ...name.split("/")] : [name];
+  const normalizedNames = new Set<string>();
 
-  for (const candidate of [name, ...name.split("/").map((part) => part.trim())]) {
-    if (!candidate) continue;
-
+  for (const candidate of candidates) {
     const normalized = normalizeText(candidate);
-    if (!normalized || variants.has(normalized)) continue;
-    variants.set(normalized, candidate);
+    if (normalized) normalizedNames.add(normalized);
   }
 
-  return [...variants.values()];
+  return [...normalizedNames].map((normalizedName) => ({ normalizedName }));
 }
 
-function buildSearchIndex(sourceStations: Station[]): {
-  indexedStations: IndexedStation[];
-  exactIdMap: Map<string, IndexedStation>;
-} {
+function buildSearchIndex(sourceStations: Station[]): SearchIndex {
   const exactIdMap = new Map<string, IndexedStation>();
+  const nameLines: string[] = [];
+  const nameStarts = new Int32Array(sourceStations.length + 1);
+  // Starts with a line break too, so every name follows one.
+  let offset = 1;
 
-  const indexedStations = sourceStations.map((station) => {
+  const indexedStations = sourceStations.map((station, index) => {
     const indexedStation: IndexedStation = {
       station,
       normalizedId: normalizeStationId(station.id),
-      variants: getNameVariants(station.name).map((variant) => ({
-        normalizedName: normalizeText(variant),
-        words: tokenizeText(variant),
-      })),
+      variants: getNameVariants(station.name),
     };
-
     exactIdMap.set(indexedStation.normalizedId, indexedStation);
+
+    // A line break never ends up in a query, so a match can't span two stations.
+    const lines = `${indexedStation.variants.map((variant) => variant.normalizedName).join("\n")}\n`;
+    nameStarts[index] = offset;
+    nameLines.push(lines);
+    offset += lines.length;
+
     return indexedStation;
   });
+  nameStarts[sourceStations.length] = offset;
 
-  return { indexedStations, exactIdMap };
+  return { indexedStations, exactIdMap, names: `\n${nameLines.join("")}`, nameStarts };
+}
+
+/** The station whose lines in `names` contain `position`, searching from `from` on. */
+function findStationAt(nameStarts: Int32Array, position: number, from: number): number {
+  let low = from;
+  let high = nameStarts.length - 2;
+
+  while (low < high) {
+    const middle = (low + high + 1) >> 1;
+    if (nameStarts[middle]! <= position) low = middle;
+    else high = middle - 1;
+  }
+
+  return low;
 }
 
 // One importance step is worth the distance growing ~1.6x (e^0.5). So the main
@@ -97,31 +142,32 @@ function getScore(station: Station, near: UserLocation | null | undefined): numb
   return Math.log1p(distanceKm(near, station.geo)) + (station.importance - 1) * IMPORTANCE_WEIGHT;
 }
 
+// Not localeCompare: it's called for many ties, and it's slow on the device's JS engine.
+// Comparing the normalized names instead gets close to alphabetical order.
+function compareText(a: string, b: string): number {
+  return a < b ? -1 : a > b ? 1 : 0;
+}
+
 function compareSearchResults(a: SearchResult, b: SearchResult): number {
   return (
     a.rank - b.rank ||
     a.score - b.score ||
     a.variantLength - b.variantLength ||
-    a.station.name.localeCompare(b.station.name) ||
-    a.station.id.localeCompare(b.station.id)
+    compareText(a.sortName, b.sortName) ||
+    compareText(a.station.name, b.station.name) ||
+    compareText(a.station.id, b.station.id)
   );
 }
 
 function insertTopResult(results: SearchResult[], candidate: SearchResult, limit: number): void {
-  let insertAt = results.length;
-
-  for (let i = 0; i < results.length; i++) {
-    if (compareSearchResults(candidate, results[i]!) < 0) {
-      insertAt = i;
-      break;
-    }
+  // Most candidates don't beat the last result, so that's checked first.
+  if (results.length === limit && compareSearchResults(candidate, results[limit - 1]!) >= 0) {
+    return;
   }
 
-  if (insertAt === results.length) {
-    if (results.length < limit) {
-      results.push(candidate);
-    }
-    return;
+  let insertAt = results.length;
+  while (insertAt > 0 && compareSearchResults(candidate, results[insertAt - 1]!) < 0) {
+    insertAt--;
   }
 
   results.splice(insertAt, 0, candidate);
@@ -151,10 +197,12 @@ function matchesWordPrefixes(queryWords: string[], nameWords: string[]): boolean
   );
 }
 
+/** Ranks worse than `maxRank` can't make the results, so they aren't checked. */
 function getVariantRank(
   variant: IndexedVariant,
   normalizedQuery: string,
   queryWords: string[],
+  maxRank: number,
 ): number | null {
   if (variant.normalizedName === normalizedQuery) {
     return 2;
@@ -164,18 +212,24 @@ function getVariantRank(
     return 3;
   }
 
-  if (queryWords.length > 0 && matchesWordPrefixesInOrder(queryWords, variant.words)) {
+  if (maxRank < 4) return null;
+  const words = getWords(variant);
+
+  if (queryWords.length > 0 && matchesWordPrefixesInOrder(queryWords, words)) {
     return 4;
   }
 
-  if (queryWords.length > 0 && matchesWordPrefixes(queryWords, variant.words)) {
+  if (maxRank < 5) return null;
+  if (queryWords.length > 0 && matchesWordPrefixes(queryWords, words)) {
     return 5;
   }
 
-  if (variant.words.some((word) => word.startsWith(normalizedQuery))) {
+  if (maxRank < 6) return null;
+  if (words.some((word) => word.startsWith(normalizedQuery))) {
     return 6;
   }
 
+  if (maxRank < 7) return null;
   if (variant.normalizedName.includes(normalizedQuery)) {
     return 7;
   }
@@ -187,17 +241,19 @@ function getStationMatch(
   indexedStation: IndexedStation,
   normalizedQuery: string,
   queryWords: string[],
+  maxRank: number,
 ): Omit<SearchResult, "score"> | null {
   let bestMatch: Omit<SearchResult, "score"> | null = null;
 
   for (const variant of indexedStation.variants) {
-    const rank = getVariantRank(variant, normalizedQuery, queryWords);
+    const rank = getVariantRank(variant, normalizedQuery, queryWords, bestMatch?.rank ?? maxRank);
     if (rank === null) continue;
 
     const candidate = {
       station: indexedStation.station,
       rank,
       variantLength: variant.normalizedName.length,
+      sortName: indexedStation.variants[0]!.normalizedName,
     };
 
     // Same station, so only the rank and the variant's length can differ.
@@ -212,8 +268,17 @@ function getStationMatch(
   return bestMatch;
 }
 
+function longestText(texts: string[]): string | undefined {
+  let longest: string | undefined;
+  for (const text of texts) {
+    if (!longest || text.length > longest.length) longest = text;
+  }
+  return longest;
+}
+
 export function createStationSearch(sourceStations: Station[]) {
   const searchIndex = buildSearchIndex(sourceStations);
+  const { indexedStations, names, nameStarts } = searchIndex;
 
   return function searchStations(
     query: string,
@@ -234,9 +299,8 @@ export function createStationSearch(sourceStations: Station[]) {
       return [];
     }
 
-    const queryWords = tokenizeText(trimmedQuery);
+    const queryWords = splitWords(normalizedQuery);
     const results: SearchResult[] = [];
-    const seenStationIds = new Set<string>();
 
     if (exactIdMatch) {
       insertTopResult(
@@ -246,19 +310,42 @@ export function createStationSearch(sourceStations: Station[]) {
           rank: 1,
           score: 0,
           variantLength: exactIdMatch.station.id.length,
+          sortName: "",
         },
         limit,
       );
-      seenStationIds.add(exactIdMatch.station.id);
     }
 
-    for (const indexedStation of searchIndex.indexedStations) {
-      if (seenStationIds.has(indexedStation.station.id)) continue;
+    // Every rank needs the name to contain the whole query, or each of its words.
+    const requiredText = longestText(queryWords) ?? normalizedQuery;
+    const prefixText = `\n${normalizedQuery}`;
+    const getMaxRank = () => (results.length === limit ? results[limit - 1]!.rank : WORST_RANK);
 
-      const match = getStationMatch(indexedStation, normalizedQuery, queryWords);
-      if (!match) continue;
+    function findNextMatch(from: number): number {
+      // Once only names starting with the query can still make the results, as with most
+      // single letters, just those are visited.
+      if (getMaxRank() <= PREFIX_RANK) {
+        const lineBreak = names.indexOf(prefixText, from - 1);
+        return lineBreak === -1 ? -1 : lineBreak + 1;
+      }
+      return names.indexOf(requiredText, from);
+    }
 
-      insertTopResult(results, { ...match, score: getScore(match.station, near) }, limit);
+    let stationIndex = 0;
+    let position = findNextMatch(nameStarts[0]!);
+
+    while (position !== -1) {
+      stationIndex = findStationAt(nameStarts, position, stationIndex);
+      const indexedStation = indexedStations[stationIndex]!;
+
+      if (indexedStation !== exactIdMatch) {
+        const match = getStationMatch(indexedStation, normalizedQuery, queryWords, getMaxRank());
+        if (match) {
+          insertTopResult(results, { ...match, score: getScore(match.station, near) }, limit);
+        }
+      }
+
+      position = findNextMatch(nameStarts[stationIndex + 1]!);
     }
 
     return results.map(({ station }) => station);

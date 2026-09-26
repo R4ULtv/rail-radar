@@ -29,6 +29,7 @@ import {
 import { USER_AGENT } from "@/lib/api";
 import { formatDistance } from "@/lib/distance";
 import { bugReportUrl, featureRequestUrl } from "@/lib/links";
+import type { NearbyStation } from "@/lib/stations";
 
 const photoWidth = 240;
 const photoHeight = 135;
@@ -36,6 +37,14 @@ const photoHeaders = { "User-Agent": USER_AGENT };
 
 // expo-image caches the full-size photos and decodes them at the thumbnail's size.
 const StyledImage = withUniwind(Image);
+
+function renderNearbyDistance(nearby: NearbyStation) {
+  return (
+    <Text className="text-xs text-muted" style={styles.tabularNums}>
+      {formatDistance(nearby.distance)}
+    </Text>
+  );
+}
 
 function photoCredit({ attribution }: StationPhoto) {
   return [attribution?.author, attribution?.license].filter(Boolean).join(" · ");
@@ -250,13 +259,9 @@ export const StationDetails = memo(function StationDetails({
       <StationPhotos photos={photos} mutedColor={mutedColor} />
       <StationSection
         title="Nearby Stations"
-        icon={<MapPin size={14} color={mutedColor} />}
+        icon={MapPin}
         stations={nearbyStations}
-        renderSuffix={(nearby) => (
-          <Text className="text-xs text-muted" style={styles.tabularNums}>
-            {formatDistance(nearby.distance)}
-          </Text>
-        )}
+        renderSuffix={renderNearbyDistance}
         onSelect={onSelectStation}
       />
       <StationPopularity stats={stats} mutedColor={mutedColor} successColor={successColor} />

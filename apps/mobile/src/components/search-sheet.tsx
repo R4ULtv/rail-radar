@@ -13,27 +13,20 @@ import User from "lucide-react-native/icons/user";
 import {
   Fragment,
   memo,
+  useCallback,
   useEffect,
+  useMemo,
   useRef,
   useState,
   type ComponentRef,
   type ReactNode,
 } from "react";
-import {
-  ActivityIndicator,
-  BackHandler,
-  Keyboard,
-  Linking,
-  Pressable,
-  StyleSheet,
-  Text,
-  View,
-} from "react-native";
+import { BackHandler, Keyboard, Linking, Pressable, StyleSheet, Text, View } from "react-native";
 import Animated, { Extrapolation, interpolate, useAnimatedStyle } from "react-native-reanimated";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import type { SheetPosition } from "@/components/map-controls";
-import { StationSection } from "@/components/station-list";
+import { StationSection, StationSectionSkeleton } from "@/components/station-list";
 import { useStationSearch } from "@/hooks/use-station-search";
 import { useRecentStations, useSavedStations } from "@/hooks/use-stored-stations";
 import { useTrendingStations, type TrendingStation } from "@/hooks/use-trending-stations";
@@ -82,6 +75,10 @@ function VisitorCounts({ station }: { station: TrendingStation }) {
   );
 }
 
+function renderVisitorCounts(station: TrendingStation) {
+  return <VisitorCounts station={station} />;
+}
+
 function StationDistance({ station, from }: { station: Station; from: UserLocation }) {
   if (!station.geo) return null;
   return (
@@ -116,6 +113,8 @@ function EmptyState({ children }: { children: ReactNode }) {
   return <View style={styles.emptyState}>{children}</View>;
 }
 
+const searchResultsTitle = "Search Results";
+
 // Memoized, so hiding and showing the sheet around a station sheet doesn't re-render its lists.
 const SearchSheetContent = memo(function SearchSheetContent({
   stationsUrl,
@@ -146,26 +145,36 @@ const SearchSheetContent = memo(function SearchSheetContent({
     if (keyboardHeight === 0) inputRef.current?.blur();
   }, [keyboardHeight]);
   const [query, setQuery] = useState("");
-  const search = useStationSearch(query, { stationsUrl, userLocation });
+  // Focusing the field starts building the search index, before the first character is typed.
+  const search = useStationSearch(query, { stationsUrl, userLocation, preload: isFocused });
   const { savedStations } = useSavedStations();
   const recentStations = useRecentStations();
-  const [mutedColor, foregroundColor, accentColor] = useThemeColor([
-    "muted",
-    "default-foreground",
-    "accent",
-  ]);
+  const [mutedColor, foregroundColor] = useThemeColor(["muted", "default-foreground"]);
 
-  const savedIds = new Set(savedStations.map((station) => station.id));
-  const unsavedRecentStations = recentStations.filter((station) => !savedIds.has(station.id));
+  // The lists are memoized, so they only render again when these change.
+  const unsavedRecentStations = useMemo(() => {
+    const savedIds = new Set(savedStations.map((station) => station.id));
+    return recentStations.filter((station) => !savedIds.has(station.id));
+  }, [recentStations, savedStations]);
+  const renderDistance = useMemo(
+    () =>
+      userLocation
+        ? (station: Station) => <StationDistance station={station} from={userLocation} />
+        : undefined,
+    [userLocation],
+  );
   const noResults = search.hasResult && !search.error && search.stations.length === 0;
   const showDefaultLists = !search.isActive || noResults;
   const hasDefaultLists =
     unsavedRecentStations.length > 0 || savedStations.length > 0 || trendingStations.length > 0;
 
-  function selectStation(station: Station) {
-    Keyboard.dismiss();
-    onSelectStation(station);
-  }
+  const selectStation = useCallback(
+    (station: Station) => {
+      Keyboard.dismiss();
+      onSelectStation(station);
+    },
+    [onSelectStation],
+  );
 
   return (
     <View style={styles.content}>
@@ -247,14 +256,10 @@ const SearchSheetContent = memo(function SearchSheetContent({
             </View>
           ) : search.stations.length > 0 ? (
             <StationSection
-              title="Search Results"
-              icon={<List size={14} color={mutedColor} />}
+              title={searchResultsTitle}
+              icon={List}
               stations={search.stations}
-              renderSuffix={
-                userLocation
-                  ? (station) => <StationDistance station={station} from={userLocation} />
-                  : undefined
-              }
+              renderSuffix={renderDistance}
               onSelect={selectStation}
             />
           ) : noResults ? (
@@ -266,29 +271,27 @@ const SearchSheetContent = memo(function SearchSheetContent({
               </View>
             </View>
           ) : (
-            <EmptyState>
-              <ActivityIndicator color={accentColor} />
-            </EmptyState>
+            <StationSectionSkeleton title={searchResultsTitle} icon={List} />
           )}
           {showDefaultLists ? (
             <>
               <StationSection
                 title="Recent Stations"
-                icon={<History size={14} color={mutedColor} />}
+                icon={History}
                 stations={unsavedRecentStations}
                 onSelect={selectStation}
               />
               <StationSection
                 title="Saved Stations"
-                icon={<Bookmark size={14} color={mutedColor} />}
+                icon={Bookmark}
                 stations={savedStations}
                 onSelect={selectStation}
               />
               <StationSection
                 title="Popular Stations (7-day trending)"
-                icon={<TrendingUp size={14} color={mutedColor} />}
+                icon={TrendingUp}
                 stations={trendingStations}
-                renderSuffix={(station) => <VisitorCounts station={station} />}
+                renderSuffix={renderVisitorCounts}
                 onSelect={selectStation}
               />
               {!search.isActive && !hasDefaultLists ? (
