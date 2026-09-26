@@ -1,4 +1,5 @@
 import { useThemeColor } from "heroui-native/hooks";
+import MapIcon from "lucide-react-native/icons/map";
 import Navigation from "lucide-react-native/icons/navigation";
 import NavigationOff from "lucide-react-native/icons/navigation-off";
 import Settings from "lucide-react-native/icons/settings";
@@ -7,6 +8,7 @@ import {
   Pressable,
   StyleSheet,
   Text,
+  View,
   useWindowDimensions,
   type PressableProps,
 } from "react-native";
@@ -23,6 +25,8 @@ import Animated, {
 } from "react-native-reanimated";
 import Svg, { Line, Path } from "react-native-svg";
 import { scheduleOnRN } from "react-native-worklets";
+
+import { haptics } from "@/lib/haptics";
 
 // Round map buttons, modelled on Apple Maps.
 const controlSize = 40;
@@ -76,20 +80,40 @@ export function useMapHeading() {
   return { heading, onHeadingChange };
 }
 
-function MapControl(props: Omit<PressableProps, "style">) {
+/** The round, raised surface behind a control or a group of them. */
+function MapControlSurface({ children }: { children: ReactNode }) {
   const [surface, border] = useThemeColor(["surface", "border"]);
 
+  return (
+    <View style={[styles.surface, { backgroundColor: surface, borderColor: border }]}>
+      {children}
+    </View>
+  );
+}
+
+/** A control's button, without its surface. Pressing it dims the icon, as in Apple Maps. */
+function MapControlButton(props: Omit<PressableProps, "style">) {
   return (
     <Pressable
       accessibilityRole="button"
       hitSlop={4}
-      style={({ pressed }) => [
-        styles.control,
-        { backgroundColor: surface, borderColor: border, opacity: pressed ? 0.7 : 1 },
-      ]}
+      style={({ pressed }) => [styles.button, { opacity: pressed ? 0.5 : 1 }]}
       {...props}
     />
   );
+}
+
+function MapControl(props: Omit<PressableProps, "style">) {
+  return (
+    <MapControlSurface>
+      <MapControlButton {...props} />
+    </MapControlSurface>
+  );
+}
+
+/** Controls stacked on one surface, like Apple Maps' map and location buttons. */
+export function MapControlGroup({ children }: { children: ReactNode }) {
+  return <MapControlSurface>{children}</MapControlSurface>;
 }
 
 export function SettingsButton({ onPress }: { onPress: () => void }) {
@@ -164,6 +188,23 @@ export function SheetControls({
   );
 }
 
+/** Opens the map style sheet. */
+export function MapStyleButton({ onPress }: { onPress: () => void }) {
+  const foreground = useThemeColor("foreground");
+
+  return (
+    <MapControlButton
+      accessibilityLabel="Map style"
+      onPress={() => {
+        haptics.tap();
+        onPress();
+      }}
+    >
+      <MapIcon size={20} color={foreground} />
+    </MapControlButton>
+  );
+}
+
 export type LocationStatus = "idle" | "locating" | "located" | "off";
 
 const locateLabels: Record<LocationStatus, string> = {
@@ -175,7 +216,8 @@ const locateLabels: Record<LocationStatus, string> = {
 
 /**
  * Apple Maps' location arrow: an outline once the user is found, filled while the map is
- * centered on them, and crossed out when location is unavailable.
+ * centered on them, and crossed out when location is unavailable. It goes in a
+ * `MapControlGroup`, under the map style button.
  */
 export function LocateButton({
   status,
@@ -193,7 +235,7 @@ export function LocateButton({
   const isFilled = status === "located" && isCentered;
 
   return (
-    <MapControl
+    <MapControlButton
       accessibilityLabel={locateLabels[status]}
       accessibilityState={{ busy: status === "locating", selected: isFilled }}
       disabled={status === "locating"}
@@ -209,7 +251,7 @@ export function LocateButton({
             status === "off" ? [] : [{ translateX: -arrowOffset }, { translateY: arrowOffset }],
         }}
       />
-    </MapControl>
+    </MapControlButton>
   );
 }
 
@@ -300,18 +342,20 @@ export function Compass({
 }
 
 const styles = StyleSheet.create({
-  control: {
-    width: controlSize,
-    height: controlSize,
+  surface: {
     borderRadius: controlSize / 2,
     borderWidth: StyleSheet.hairlineWidth,
-    alignItems: "center",
-    justifyContent: "center",
     shadowColor: "#000",
     shadowOpacity: 0.3,
     shadowRadius: 6,
     shadowOffset: { width: 0, height: 2 },
     elevation: 4,
+  },
+  button: {
+    width: controlSize,
+    height: controlSize,
+    alignItems: "center",
+    justifyContent: "center",
   },
   direction: { fontSize: 13, fontWeight: "600" },
   sheetControls: { position: "absolute", top: 0, right: 16, gap: controlGap },

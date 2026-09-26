@@ -13,11 +13,14 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import {
   Compass,
   LocateButton,
+  MapControlGroup,
+  MapStyleButton,
   SheetControls,
   useMapHeading,
   useSheetPosition,
   type LocationStatus,
 } from "@/components/map-controls";
+import { MapStyleSheet } from "@/components/map-style-sheet";
 import { SearchSheet } from "@/components/search-sheet";
 import { Settings } from "@/components/settings-sheet";
 import { RailwayLines, StationImages, StationLayers } from "@/components/station-markers";
@@ -125,6 +128,8 @@ export function MapScreen() {
   // Where the sheets are, for the controls that sit above them.
   const searchSheetPosition = useSheetPosition();
   const stationSheetPosition = useSheetPosition();
+  const mapStyleSheetPosition = useSheetPosition();
+  const [isMapStyleOpen, setIsMapStyleOpen] = useState(false);
 
   // A map that failed to load, e.g. on a first launch without a connection, is loaded again
   // once the connection comes back. Mapbox keeps what it loaded, so later launches work offline.
@@ -355,9 +360,28 @@ export function MapScreen() {
           maxZoomLevel={18}
         />
         <StationImages />
-        <RailwayLines />
+        {mapTheme.isStreets ? (
+          <Mapbox.StyleImport
+            id="basemap"
+            existing
+            config={{
+              lightPreset: mapTheme.lightPreset,
+              // The station layers name the stations, and the map is always seen from above.
+              showTransitLabels: false,
+              show3dObjects: false,
+            }}
+          />
+        ) : null}
         {stationsUrl ? (
-          <StationLayers url={stationsUrl} labelColors={labelColors} onPress={handleStationPress} />
+          <>
+            <StationLayers
+              url={stationsUrl}
+              labelColors={labelColors}
+              onPress={handleStationPress}
+            />
+            {/* Mounted after the stations, so the lines' layer below them exists already. */}
+            <RailwayLines isStreets={mapTheme.isStreets} />
+          </>
         ) : null}
         {locationStatus === "located" ? <UserLocationMarker /> : null}
       </Mapbox.MapView>
@@ -366,9 +390,12 @@ export function MapScreen() {
         <Settings locationStatus={locationStatus} getMapFeedbackUrl={getMapFeedbackUrl} />
       </View>
 
-      <SheetControls sheets={[searchSheetPosition, stationSheetPosition]}>
+      <SheetControls sheets={[searchSheetPosition, stationSheetPosition, mapStyleSheetPosition]}>
         <Compass heading={heading} onPress={resetHeading} />
-        <LocateButton status={locationStatus} isCentered={isCentered} onPress={locateUser} />
+        <MapControlGroup>
+          <MapStyleButton onPress={() => setIsMapStyleOpen(true)} />
+          <LocateButton status={locationStatus} isCentered={isCentered} onPress={locateUser} />
+        </MapControlGroup>
       </SheetControls>
 
       {alertMessage ? (
@@ -402,6 +429,14 @@ export function MapScreen() {
           onSelectStation={selectStation}
           onExpandedChange={setIsStationExpanded}
           position={stationSheetPosition}
+        />
+      ) : null}
+
+      {isMapStyleOpen ? (
+        <MapStyleSheet
+          position={mapStyleSheetPosition}
+          onClose={() => setIsMapStyleOpen(false)}
+          getMapFeedbackUrl={getMapFeedbackUrl}
         />
       ) : null}
 

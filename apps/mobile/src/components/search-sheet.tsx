@@ -11,7 +11,6 @@ import SearchX from "lucide-react-native/icons/search-x";
 import TrendingUp from "lucide-react-native/icons/trending-up";
 import User from "lucide-react-native/icons/user";
 import {
-  Fragment,
   memo,
   useCallback,
   useEffect,
@@ -21,17 +20,17 @@ import {
   type ComponentRef,
   type ReactNode,
 } from "react";
-import { BackHandler, Keyboard, Linking, Pressable, StyleSheet, Text, View } from "react-native";
+import { BackHandler, Keyboard, Pressable, StyleSheet, Text, View } from "react-native";
 import Animated, { Extrapolation, interpolate, useAnimatedStyle } from "react-native-reanimated";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
+import { MapAttribution } from "@/components/map-attribution";
 import type { SheetPosition } from "@/components/map-controls";
 import { StationSection, StationSectionSkeleton } from "@/components/station-list";
 import { useStationSearch } from "@/hooks/use-station-search";
 import { useRecentStations, useSavedStations } from "@/hooks/use-stored-stations";
 import { useTrendingStations, type TrendingStation } from "@/hooks/use-trending-stations";
 import { distanceKm, formatDistance } from "@/lib/distance";
-import { mapboxUrl, openStreetMapUrl } from "@/lib/links";
 import type { UserLocation } from "@/lib/user-location";
 
 const handleHeight = 24;
@@ -84,27 +83,6 @@ function StationDistance({ station, from }: { station: Station; from: UserLocati
   return (
     <Text className="text-xs text-muted" style={styles.tabularNums}>
       {formatDistance(distanceKm(from, station.geo))}
-    </Text>
-  );
-}
-
-function MapAttribution({ getMapFeedbackUrl }: { getMapFeedbackUrl: () => string }) {
-  const links = [
-    { label: "© Mapbox", url: () => mapboxUrl },
-    { label: "© OpenStreetMap", url: () => openStreetMapUrl },
-    { label: "Improve this map", url: getMapFeedbackUrl },
-  ];
-
-  return (
-    <Text className="mt-8 text-center text-xs text-muted">
-      {links.map((link, index) => (
-        <Fragment key={link.label}>
-          {index > 0 ? ", " : null}
-          <Text accessibilityRole="link" onPress={() => void Linking.openURL(link.url())}>
-            {link.label}
-          </Text>
-        </Fragment>
-      ))}
     </Text>
   );
 }
@@ -311,7 +289,7 @@ const SearchSheetContent = memo(function SearchSheetContent({
               ) : null}
             </>
           ) : null}
-          <MapAttribution getMapFeedbackUrl={getMapFeedbackUrl} />
+          <MapAttribution className="mt-8" getMapFeedbackUrl={getMapFeedbackUrl} />
         </BottomSheetScrollView>
       </Animated.View>
     </View>

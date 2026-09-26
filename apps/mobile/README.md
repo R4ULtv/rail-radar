@@ -140,21 +140,34 @@ On the first launch, a welcome page sheet thanks the user for buying the app and
 does. Closing it, with "Get started" or by swiping it down, saves `welcome.json` so it isn't shown
 again. The location permission prompt waits until it's closed, so the prompt doesn't cover it.
 
-As in Apple Maps, the locate button and the compass sit just above the open sheet and follow
-it, fading out once it's opened past its smallest size. The gear in the top-right corner opens
-settings: a page sheet on iOS, with a handle like the bottom sheets, and a full-screen page on
-Android. It has the appearance (system, light or dark, saved to `theme.json` and applied before
-the first render), location access, which opens the system settings, and links for support, the
-website, the legal pages and the source code. Its "On this device" section clears the recent
-and saved stations, forgets the last location (`user-location.json`), resets the stations to
-the bundled copy by deleting the download (the map switches right away, and the next launch
-downloads them again), and clears the Mapbox tile cache and `expo-image`'s photo caches.
+As in Apple Maps, the compass and the map and locate buttons, grouped on one surface, sit just above
+the open sheet and follow it, fading out once it's opened past its smallest size. The map button
+opens a sheet to pick the simple map (Mapbox's light and dark styles, the default) or the street map
+(Mapbox Standard with its day or night light preset, without transit labels or 3D objects), each
+with a preview. The choice is saved to `map-style.json`. Standard keeps its Mapbox Streets tiles
+inside its import, so the street map loads them as a source of its own for the railway lines. The
+station layers use full emissive strength so Standard's night lighting doesn't darken them. A style
+switch adds the railway lines to the map again, so they're pinned below the station layers with
+`belowLayerID` and mounted after them: on iOS, rnmapbox 10.3.5 never adds a layer that waits for one
+that isn't on the map yet (rnmapbox/maps#4288). The previews in `assets/map-styles` are Milano
+Centrale at zoom 14 in each style and theme, captured from the app on an iPhone simulator: a 660 ×
+495 px crop of the screen's center, resized to 520 × 390 px JPEGs. Capture them again after changing
+how the map looks.
+
+The gear in the top-right corner opens settings: a page sheet on iOS, with a handle like the
+bottom sheets, and a full-screen page on Android. It has the appearance (system, light or dark,
+saved to `theme.json` and applied before the first render), location access, which opens the
+system settings, and links for support, the website, the legal pages and the source code. Its
+"On this device" section clears the recent and saved stations, forgets the last location
+(`user-location.json`), resets the stations to the bundled copy by deleting the download (the
+map switches right away, and the next launch downloads them again), and clears the Mapbox tile
+cache and `expo-image`'s photo caches.
 
 The user's location never leaves the device: it's only used to show them on the map and sort
 stations by distance, and the last one is kept for a day so the map opens there. Mapbox's
 telemetry, which would send location events to Mapbox, is turned off with
 `Mapbox.setTelemetryEnabled(false)`. That's also the opt-out Mapbox's terms require, which its
 attribution button would offer; the button is hidden, and the attribution is at the bottom of the
-search sheet and in the settings' Map section, with Mapbox's privacy policy and the telemetry
-shown as off. "Improve this map" opens Mapbox's feedback where the map is, which the map screen
-keeps in a ref from `onCameraChanged`.
+search sheet and the map style sheet, and in the settings' Map section, with Mapbox's privacy
+policy and the telemetry shown as off. "Improve this map" opens Mapbox's feedback where the map
+is, which the map screen keeps in a ref from `onCameraChanged`.

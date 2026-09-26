@@ -56,6 +56,7 @@ function labelStyle(textSize: number, colors: LabelColors): SymbolLayerStyle {
     textHaloColor: colors.labelHaloColor,
     textHaloWidth: 1.5,
     textHaloBlur: 1,
+    textEmissiveStrength: 1,
   };
 }
 
@@ -71,12 +72,30 @@ const railwayLineWidth: LineLayerStyle["lineWidth"] = [
   2,
 ];
 
-export function RailwayLines() {
-  return (
+// Mapbox Standard lights the map for the time of day, which would darken the lines, icons and
+// labels at night. Full emissive strength keeps their colors; the simple styles aren't lit.
+const railwayLineStyle: LineLayerStyle = {
+  lineColor: "#4B61D1",
+  lineWidth: railwayLineWidth,
+  lineEmissiveStrength: 1,
+};
+
+const RAILWAYS_SOURCE_ID = "railways-source";
+// The bottom station layer. A style switch adds the railway lines again on top of the stations,
+// so they're kept below it. Mount them after the stations: on iOS, rnmapbox 10.3.5 never adds a
+// layer that waits for one that doesn't exist yet (rnmapbox/maps#4288).
+const FIRST_STATION_LAYER_ID = "metro-stations";
+
+export function RailwayLines({ isStreets }: { isStreets: boolean }) {
+  // The simple styles have Mapbox Streets as their "composite" source. Standard's sources stay
+  // inside its import, so the street map loads the same tiles as a source of its own.
+  const sourceID = isStreets ? RAILWAYS_SOURCE_ID : "composite";
+  const layers = (
     <>
       <Mapbox.LineLayer
         id="railway-lines-tunnel"
-        sourceID="composite"
+        sourceID={sourceID}
+        belowLayerID={FIRST_STATION_LAYER_ID}
         sourceLayerID="road"
         filter={[
           "all",
@@ -84,35 +103,44 @@ export function RailwayLines() {
           ["==", ["get", "class"], "major_rail"],
         ]}
         style={{
-          lineColor: "#4B61D1",
-          lineWidth: railwayLineWidth,
+          ...railwayLineStyle,
           lineOpacity: 0.4,
           lineDasharray: [2, 2],
         }}
       />
       <Mapbox.LineLayer
         id="railway-lines"
-        sourceID="composite"
+        sourceID={sourceID}
+        belowLayerID={FIRST_STATION_LAYER_ID}
         sourceLayerID="road"
         filter={[
           "all",
           ["==", ["get", "class"], "major_rail"],
           ["match", ["get", "structure"], ["none", "ford"], true, false],
         ]}
-        style={{ lineColor: "#4B61D1", lineWidth: railwayLineWidth, lineOpacity: 0.6 }}
+        style={{ ...railwayLineStyle, lineOpacity: 0.6 }}
       />
       <Mapbox.LineLayer
         id="railway-lines-bridge"
-        sourceID="composite"
+        sourceID={sourceID}
+        belowLayerID={FIRST_STATION_LAYER_ID}
         sourceLayerID="road"
         filter={[
           "all",
           ["==", ["get", "structure"], "bridge"],
           ["==", ["get", "class"], "major_rail"],
         ]}
-        style={{ lineColor: "#4B61D1", lineWidth: railwayLineWidth, lineOpacity: 0.6 }}
+        style={{ ...railwayLineStyle, lineOpacity: 0.6 }}
       />
     </>
+  );
+
+  return isStreets ? (
+    <Mapbox.VectorSource id={RAILWAYS_SOURCE_ID} url="mapbox://mapbox.mapbox-streets-v8">
+      {layers}
+    </Mapbox.VectorSource>
+  ) : (
+    layers
   );
 }
 
@@ -128,13 +156,14 @@ export function StationLayers({
   return (
     <Mapbox.ShapeSource id="stations-source" url={url} onPress={onPress}>
       <Mapbox.SymbolLayer
-        id="metro-stations"
+        id={FIRST_STATION_LAYER_ID}
         filter={typeFilter("metro", MINZOOM_FILTER)}
         style={{
           iconImage: METRO_ICON_ID,
           iconSize: ["interpolate", ["linear"], ["zoom"], 14, 0.25, 16, 0.35],
           iconAllowOverlap: false,
           iconAnchor: "center",
+          iconEmissiveStrength: 1,
         }}
       />
       <Mapbox.SymbolLayer
@@ -160,6 +189,7 @@ export function StationLayers({
           ],
           iconAllowOverlap: false,
           iconAnchor: "center",
+          iconEmissiveStrength: 1,
           symbolSortKey: ["get", "importance"],
         }}
       />
@@ -186,6 +216,7 @@ export function StationLayers({
           ],
           iconAllowOverlap: false,
           iconAnchor: "center",
+          iconEmissiveStrength: 1,
           symbolSortKey: ["get", "importance"],
         }}
       />
