@@ -1,173 +1,109 @@
-# Rail Radar mobile map prototype
+# Rail Radar for iOS and Android
 
-A small Expo + native Mapbox test for iOS and Android. It ships the station
-GeoJSON from `@repo/data`, draws the web map's station icons and railway
-lines at the same zoom levels, opens a live
-departures and arrivals bottom sheet for rail stations, and can center the map
-on the device's location. The map controls, sheet controls, and notices use
-HeroUI Native with Uniwind and Lucide icons; the sheet gesture container uses
-Gorhom Bottom Sheet. The sheet links to the existing web station page and
-refreshes live data while it is open and the app is active.
+> **Coming soon.** The app isn't public yet, and won't be before **October 10, 2026**. Google
+> Play has to run it as a closed test for 14 days before it can be published. Until then, Rail
+> Radar is free on the web at [railradar24.com](https://www.railradar24.com).
 
-This is pinned to Expo SDK 55 and `@rnmapbox/maps` 10.3.5 so it can be compiled
-with Xcode 26.3. Expo SDK 56 and 57 require Xcode 26.4 or newer. It uses React
-Native's New Architecture.
-The mobile workspace uses `@types/react` 19.3 to keep React types consistent
-across the monorepo; this types-only package is excluded from Expo's version
-check intentionally.
+Rail Radar's European railway map as a native app: every station on the map, its live
+departures and arrivals a tap away, and a search that works even without a connection. It's a
+paid app. Buying it supports the project and keeps the website free for everyone.
 
-## Layout
+## Features
 
-```text
-index.ts            Expo entry; registers src/app.tsx
-src/
-  app.tsx           Root providers (gesture handler, safe area, HeroUI)
-  global.css        Uniwind + HeroUI theme
-  components/       Screens, sheets and map layers
-  hooks/            Data and storage hooks
-  lib/              API client and shared helpers
-assets/station-icons/  Map icons rendered from the web SVGs
-scripts/            Asset generators
-```
+- **Live departures and arrivals.** Tap a station to see its trains with their operators' logos,
+  updated every 30 seconds, wherever the official sources provide them.
+- **22,000+ stations across 14 countries**, the same coverage as the website, with the railway
+  lines drawn on the map.
+- **Instant search, even offline.** Every station is stored on the phone, and results appear from
+  the first letter, with saved and recent stations first and nearby stations before distant ones.
+- **Your stations, one tap away.** Save any number of stations and find the last 10 you opened
+  in the search.
+- **Trending stations** of the week, ranked by unique visitors.
+- **Station details** with photos and visit stats, and a Share button that sends a link to the
+  station's page on the website.
+- **Two maps, light and dark.** A simple map that keeps the railway in front, or Mapbox's street
+  map, following the system appearance or set in the settings.
+- **Works offline.** The map, search and nearby stations keep working from the stations bundled
+  with the app and Mapbox's cache, and live data comes back as soon as the connection does.
+- **Private by design.** No account. The location is only used on the device to show you on the
+  map and sort stations by distance, and Mapbox's telemetry is turned off.
 
-Imports from `src` use the `@/` alias, as in `apps/web`. Files are kebab-case.
-`station-markers.tsx` mirrors `apps/web/src/components/station-markers.tsx`;
-keep the zoom levels in sync. After changing the web icon SVGs, run
-`pnpm --filter=mobile generate:station-icons` to re-render the PNGs.
-Country flags import the web's SVGs from `apps/web/public/assets/flags` directly;
-`react-native-svg-transformer` compiles them into `react-native-svg` components at
-build time. `country-flag.tsx` is typed against `CountryCode`, so a new country fails
-the type check until its flag is imported.
-After changing `apps/web/public/icon.svg`, run
-`pnpm --filter=mobile generate:app-icon` to update the launcher, splash, and favicon art.
+## Development
 
-## Credentials
+The app is built with Expo SDK 55 and React Native 0.83 (New Architecture), with
+`@rnmapbox/maps` 10.3.5 for the map, HeroUI Native with Uniwind for the UI, and Gorhom Bottom
+Sheet for the sheets. It's pinned to Expo SDK 55 so it builds with Xcode 26.3; SDK 56 and 57
+need Xcode 26.4 or newer.
 
-Copy `.env.example` to `.env.local` and set `EXPO_PUBLIC_MAPBOX_TOKEN` to a
-**public** Mapbox token (`pk.…`). Check that the token is allowed for native
-mobile requests; a token restricted to the website's URL may not work.
+### Setup
 
-The Mapbox SDK artifacts used by this prototype downloaded without a secret
-token on both platforms. If an older SDK or a different build environment
-returns HTTP 401 while fetching Mapbox artifacts, create a separate **secret**
-Mapbox token with the `DOWNLOADS:READ` scope and put it in your own machine's
-credential files:
+Copy `.env.example` to `.env.local` and set `EXPO_PUBLIC_MAPBOX_TOKEN` to a **public** Mapbox
+token (`pk.…`) that is allowed for native mobile requests.
 
-- iOS `~/.netrc`:
+The Mapbox SDK downloads without a secret token. If a build returns HTTP 401 while fetching
+Mapbox artifacts, create a secret token with the `DOWNLOADS:READ` scope and put it in
+`~/.netrc` for iOS and in `~/.gradle/gradle.properties` as `MAPBOX_DOWNLOADS_TOKEN` for
+Android, never in the repository.
 
-  ```text
-  machine api.mapbox.com
-    login mapbox
-    password YOUR_DOWNLOADS_READ_TOKEN
-  ```
+### Run
 
-- Android `~/.gradle/gradle.properties`:
-
-  ```properties
-  MAPBOX_DOWNLOADS_TOKEN=YOUR_DOWNLOADS_READ_TOKEN
-  ```
-
-Keep the download token out of `.env.local`, `app.json`, and Git. The Mapbox
-config plugin reads the local credentials during native builds.
-
-## Run
-
-From the repository root, install dependencies with `pnpm install`, then run:
+From the repository root, run `pnpm install`, then:
 
 ```sh
 pnpm --filter mobile ios
 pnpm --filter mobile android
 ```
 
-For local Android builds, use Java 21 and point `ANDROID_HOME` at your Android
-SDK. On the Mac used for this prototype:
+Android builds need JDK 17 and `ANDROID_HOME` set to the Android SDK:
 
 ```sh
-export JAVA_HOME=/opt/homebrew/opt/openjdk@21/libexec/openjdk.jdk/Contents/Home
+export JAVA_HOME=/opt/homebrew/opt/openjdk@17/libexec/openjdk.jdk/Contents/Home
 export ANDROID_HOME="$HOME/Library/Android/sdk"
-pnpm --filter mobile android
 ```
 
-The Android command needs a connected device or a configured emulator.
+These commands build a development app; Expo Go can't run Mapbox's native module. Once it's
+installed, `pnpm --filter mobile start` serves JavaScript changes. Native dependency or app config
+changes need a new build.
 
-These commands build and install a custom development app. **Expo Go cannot run
-Mapbox's native module.** Once a development app is installed, use
-`pnpm --filter mobile start` for JavaScript changes. Changes to native
-dependencies or app config require rebuilding the development app.
+### Layout
 
-Stations are bundled: `packages/data/src/stations.geojson` ships as an app asset
-and the native map reads it from disk, so a launch needs no station request.
-30 seconds after launch, at most once a day, the app downloads
-`https://api.railradar24.com/stations.geojson` in the background and uses it from
-the next launch. The download is tied to the bundled file's hash, so an app
-update with newer bundled stations replaces it. The selected rail station's board
-is fetched from `/stations/:id` every 30 seconds while the sheet is open and the
-app is active.
+```text
+index.ts               Expo entry; registers src/app.tsx
+src/
+  app.tsx              Root providers (gesture handler, safe area, HeroUI)
+  global.css           Uniwind + HeroUI theme
+  components/          Screens, sheets and map layers
+  hooks/               Data and storage hooks
+  lib/                 API client and shared helpers
+assets/station-icons/  Map icons rendered from the web SVGs
+assets/map-styles/     Map style previews
+scripts/               Asset generators
+```
 
-Offline, the map, search and nearby stations keep working from the bundled data and
-Mapbox's cache. Requests time out after 15 seconds. `expo-network` tells the app when
-it's offline, so the live board can say so, and the board, station stats, photos,
-trending list and a map that failed to load are loaded again once the connection is back.
-A crash shows a "Something went wrong" screen, or a message in the station sheet if only
-the station failed, instead of closing the app.
+Imports from `src` use the `@/` alias, and files are kebab-case, as in `apps/web`.
 
-Requests from the app send a `User-Agent` such as `RailRadar/0.1.0 (iOS 18.2)` or
-`RailRadar/0.1.0 (Android 15)`, with the version from `app.json`. This covers the API,
-the background station download, and the web's station photos. The photos load through
-`expo-image`, which keeps them in its memory and disk caches. Operator logos are
-bundled from `apps/web/public/assets/operators` by `pnpm --filter=mobile generate:brand-logos`.
-In Cloudflare Workers Logs, filter on a user agent starting with `RailRadar/` to see
-requests from the app. It identifies the app for logging; it is not an
-authentication mechanism.
+### Keeping it in sync with the web
 
-The search sheet stays open at the bottom of the map, showing only the search bar
-until it is dragged up or focused. It searches the same station GeoJSON on the device, from
-the first character, so it works offline. Saved stations come first, then recent ones, if a word
-in their name starts with the query. After how well the name matches, results are ordered by
-distance band (under 10 km, 100 km, 300 km, then farther), then rail before metro and light
-rail, then importance, then distance. Focusing the field builds the index.
-A search only visits the stations whose names contain the query's longest word, found with
-`indexOf` in one string of every name, and results render in the background with
-`useDeferredValue`. Until the first results, it shows a skeleton like the web's. When the query
-is empty, it lists recent rail stations (up to 10, the first 3 shown) and saved stations (the
-first 5 shown), each with a "Show all" button for the rest. Both lists are stored as JSON files
-in the app's document directory through `expo-file-system`.
-Below them it shows the 7-day trending stations from `/stations/trending?period=week`,
-with unique visitors and visits. They load on launch and refresh every 5 minutes, but only
-while the search sheet is open and the app is active.
+- `station-markers.tsx` mirrors `apps/web/src/components/station-markers.tsx`; keep the zoom
+  levels the same.
+- After changing the web's station icon SVGs, run `pnpm --filter=mobile generate:station-icons`.
+- After changing `apps/web/public/icon.svg`, run `pnpm --filter=mobile generate:app-icon`.
+- After adding operator logos, run `pnpm --filter=mobile generate:brand-logos`.
+- Country flags import the web's SVGs directly, and a new country fails the type check until its
+  flag is imported in `country-flag.tsx`.
+- The previews in `assets/map-styles` are Milano Centrale at zoom 14 in each style and theme,
+  captured on an iPhone simulator: a 660 × 495 px crop of the screen's center, resized to
+  520 × 390 px JPEGs. Capture them again after changing how the map looks.
 
-On the first launch, a welcome page sheet thanks the user for buying the app and lists what it
-does. Closing it, with "Get started" or by swiping it down, saves `welcome.json` so it isn't shown
-again. The location permission prompt waits until it's closed, so the prompt doesn't cover it.
+### Notes
 
-As in Apple Maps, the compass and the map and locate buttons, grouped on one surface, sit just above
-the open sheet and follow it, fading out once it's opened past its smallest size. The map button
-opens a sheet to pick the simple map (Mapbox's light and dark styles, the default) or the street map
-(Mapbox Standard with its day or night light preset, without transit labels or 3D objects), each
-with a preview. The choice is saved to `map-style.json`. Standard keeps its Mapbox Streets tiles
-inside its import, so the street map loads them as a source of its own for the railway lines. The
-station layers use full emissive strength so Standard's night lighting doesn't darken them. A style
-switch adds the railway lines to the map again, so they're pinned below the station layers with
-`belowLayerID` and mounted after them: on iOS, rnmapbox 10.3.5 never adds a layer that waits for one
-that isn't on the map yet (rnmapbox/maps#4288). The previews in `assets/map-styles` are Milano
-Centrale at zoom 14 in each style and theme, captured from the app on an iPhone simulator: a 660 ×
-495 px crop of the screen's center, resized to 520 × 390 px JPEGs. Capture them again after changing
-how the map looks.
-
-The gear in the top-right corner opens settings: a page sheet on iOS, with a handle like the
-bottom sheets, and a full-screen page on Android. It has the appearance (system, light or dark,
-saved to `theme.json` and applied before the first render), location access, which opens the
-system settings, and links for support, the website, the legal pages and the source code. Its
-"On this device" section clears the recent and saved stations, forgets the last location
-(`user-location.json`), resets the stations to the bundled copy by deleting the download (the
-map switches right away, and the next launch downloads them again), and clears the Mapbox tile
-cache and `expo-image`'s photo caches.
-
-The user's location never leaves the device: it's only used to show them on the map and sort
-stations by distance, and the last one is kept for a day so the map opens there. Mapbox's
-telemetry, which would send location events to Mapbox, is turned off with
-`Mapbox.setTelemetryEnabled(false)`. That's also the opt-out Mapbox's terms require, which its
-attribution button would offer; the button is hidden, and the attribution is at the bottom of the
-search sheet and the map style sheet, and in the settings' Map section, with Mapbox's privacy
-policy and the telemetry shown as off. "Improve this map" opens Mapbox's feedback where the map
-is, which the map screen keeps in a ref from `onCameraChanged`.
+- Stations ship with the app from `packages/data/src/stations.geojson`. At most once a day, the
+  app downloads the latest `stations.geojson` from the API in the background and uses it from the
+  next launch.
+- Requests send a `User-Agent` such as `RailRadar/0.1.0 (iOS 18.2)`, with the version from
+  `app.json`. Filter on `RailRadar/` in Cloudflare Workers Logs to see the app's requests.
+- Mapbox's attribution button is hidden, since telemetry is off. The credits are at the bottom of
+  the search and map style sheets and in the settings.
+- The railway lines are pinned below the station layers and mounted after them: on iOS, rnmapbox
+  10.3.5 never adds a layer that waits for one that isn't on the map yet
+  ([rnmapbox/maps#4288](https://github.com/rnmapbox/maps/pull/4288)).
