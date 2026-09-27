@@ -62,9 +62,13 @@ function decodeHtmlEntities(text: string): string {
     .replace(/&quot;/gi, '"')
     .replace(/&apos;/gi, "'");
 }
+/** RFI escapes apostrophes more than once, so "PONTE D'ADDA" arrives as "PONTE D''''ADDA". */
+function cleanText(text: string): string {
+  return decodeHtmlEntities(text).replace(/'{2,}/g, "'").trim();
+}
 
 function parseStationInfo(text: string): string | null {
-  const decoded = decodeHtmlEntities(text).replace(/'{2,}/g, "'").trim();
+  const decoded = cleanText(text);
   if (!decoded) return null;
 
   // RFI appends an English translation after a slash in station notices.
