@@ -63,9 +63,16 @@ function decodeHtmlEntities(text: string): string {
     .replace(/&apos;/gi, "'");
 }
 
-/** RFI escapes apostrophes more than once, so "PONTE D'ADDA" arrives as "PONTE D''''ADDA". */
-function cleanText(text: string): string {
-  return decodeHtmlEntities(text).replace(/'{2,}/g, "'").trim();
+function parseStationInfo(text: string): string | null {
+  const decoded = decodeHtmlEntities(text).replace(/'{2,}/g, "'").trim();
+  if (!decoded) return null;
+
+  // RFI appends an English translation after a slash in station notices.
+  const italian = decoded.split(
+    /\s*\/\s*(?=(?:FROM|DUE TO|THE|TRAINS?|SERVICES?|PLEASE|FOR|UNTIL|BETWEEN|ON|IN THE|IN CASE)\b)/i,
+    1,
+  )[0];
+  return italian?.trim() || null;
 }
 
 function parseInfo(text: string): string | null {
@@ -266,10 +273,9 @@ export async function scrapeTrains(
     state.finalizeRow();
   }
 
-  const stationInfo = cleanText(state.stationInfo);
   return {
     trains: state.trains,
-    info: stationInfo || null,
+    info: parseStationInfo(state.stationInfo),
     timing: {
       fetchMs,
     },
