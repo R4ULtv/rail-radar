@@ -41,3 +41,7 @@
 
 /sitemap.xml
   Cache-Control: public, max-age=3600, s-maxage=86400
+
+/.well-known/*
+  Content-Type: application/json
+  Cache-Control: public, max-age=3600

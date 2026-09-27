@@ -1,0 +1,12 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.railradar24.app",
+      "sha256_cert_fingerprints": [
+        "7C:16:78:46:12:B7:A4:86:77:60:3A:35:B0:F0:33:B2:9A:F0:B8:8A:D8:1F:65:41:07:11:55:DB:01:46:1A:B2"
+      ]
+    }
+  }
+]

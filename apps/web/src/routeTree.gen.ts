@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AppRouteImport } from './routes/app'
 import { Route as PrivacyPolicyRouteImport } from './routes/privacy-policy'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as TermsOfServiceRouteImport } from './routes/terms-of-service'
@@ -29,6 +30,11 @@ import { Route as MediaStationsStationIdPhotoSplatRouteImport } from './routes/m
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AppRoute = AppRouteImport.update({
+  id: '/app',
+  path: '/app',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PrivacyPolicyRoute = PrivacyPolicyRouteImport.update({
@@ -111,6 +117,7 @@ const MediaStationsStationIdPhotoSplatRoute =
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/app': typeof AppRoute
   '/privacy-policy': typeof PrivacyPolicyRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/terms-of-service': typeof TermsOfServiceRoute
@@ -129,6 +136,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/app': typeof AppRoute
   '/privacy-policy': typeof PrivacyPolicyRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/terms-of-service': typeof TermsOfServiceRoute
@@ -148,6 +156,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/app': typeof AppRoute
   '/privacy-policy': typeof PrivacyPolicyRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/terms-of-service': typeof TermsOfServiceRoute
@@ -168,6 +177,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/app'
     | '/privacy-policy'
     | '/sitemap.xml'
     | '/terms-of-service'
@@ -186,6 +196,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/app'
     | '/privacy-policy'
     | '/sitemap.xml'
     | '/terms-of-service'
@@ -204,6 +215,7 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/app'
     | '/privacy-policy'
     | '/sitemap.xml'
     | '/terms-of-service'
@@ -223,6 +235,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AppRoute: typeof AppRoute
   PrivacyPolicyRoute: typeof PrivacyPolicyRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   TermsOfServiceRoute: typeof TermsOfServiceRoute
@@ -247,6 +260,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/app': {
+      id: '/app'
+      path: '/app'
+      fullPath: '/app'
+      preLoaderRoute: typeof AppRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/privacy-policy': {
@@ -359,6 +379,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AppRoute: AppRoute,
   PrivacyPolicyRoute: PrivacyPolicyRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   TermsOfServiceRoute: TermsOfServiceRoute,
