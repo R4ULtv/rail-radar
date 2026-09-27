@@ -16,6 +16,14 @@
       ],
       "expo-asset",
       "expo-image",
+      [
+        "expo-build-properties",
+        {
+          "android": {
+            "minSdkVersion": 30
+          }
+        }
+      ],
       "./plugins/with-release-signing"
     ],
     "splash": {

@@ -20,6 +20,7 @@
     "@rnmapbox/maps": "10.3.5",
     "expo": "~55.0.31",
     "expo-asset": "~55.0.20",
+    "expo-build-properties": "~55.0.18",
     "expo-dev-client": "~55.0.40",
     "expo-file-system": "~55.0.26",
     "expo-haptics": "~55.0.18",
