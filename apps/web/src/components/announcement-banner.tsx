@@ -6,7 +6,7 @@ import { LazyMotion, domAnimation, m, AnimatePresence } from "motion/react";
 import { Link } from "@tanstack/react-router";
 import { Button, buttonVariants } from "@repo/ui/components/button";
 import { cn } from "@repo/ui/lib/utils";
-import { useDeviceCheck } from "@/hooks/use-device-check";
+import { MIN_ANDROID_VERSION, useDeviceCheck } from "@/hooks/use-device-check";
 import { prerenderedPageLinkProps } from "@/lib/station-prerender";
 
 const STORAGE_KEY = "banner-dismissed-v16";
@@ -17,12 +17,14 @@ const getServerSnapshot = () => false;
 
 export function AnnouncementBanner() {
   const shouldShow = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
-  // The beta is on Google Play only, so the banner is for Android visitors.
-  const { platform } = useDeviceCheck();
+  // The beta is on Google Play only, so the banner is for Android phones that can install it.
+  const { platform, androidVersion } = useDeviceCheck();
+  const canInstall =
+    platform === "android" && (androidVersion === null || androidVersion >= MIN_ANDROID_VERSION);
   const dismissedRef = useRef(false);
   const [, rerender] = useReducer((value: number) => value + 1, 0);
 
-  const visible = shouldShow && platform === "android" && !dismissedRef.current;
+  const visible = shouldShow && canInstall && !dismissedRef.current;
 
   const dismiss = () => {
     dismissedRef.current = true;

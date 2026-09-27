@@ -3,7 +3,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { AnimatePresence, LazyMotion, domAnimation, m, useReducedMotion } from "motion/react";
 import { joinBeta } from "@/lib/beta-signup.functions";
 import { metadataToHead, type Metadata } from "@/lib/metadata";
-import { useDeviceCheck, type DeviceCheck } from "@/hooks/use-device-check";
+import { MIN_ANDROID_VERSION, useDeviceCheck, type DeviceCheck } from "@/hooks/use-device-check";
 import { Button } from "@repo/ui/components/button";
 import { Card, CardContent } from "@repo/ui/components/card";
 import { Input } from "@repo/ui/components/input";
@@ -610,8 +610,29 @@ function getRequirements(device: DeviceCheck): Requirement[] {
             state: "unknown",
           };
 
+  const { androidVersion } = device;
+  const version: Requirement =
+    androidVersion === null
+      ? {
+          title: `Android ${MIN_ANDROID_VERSION} or later`,
+          detail: "You can check yours in Settings, under About phone.",
+          state: "unknown",
+        }
+      : androidVersion >= MIN_ANDROID_VERSION
+        ? {
+            title: `Android ${MIN_ANDROID_VERSION} or later`,
+            detail: `Your phone runs Android ${androidVersion}.`,
+            state: "pass",
+          }
+        : {
+            title: `Android ${MIN_ANDROID_VERSION} or later`,
+            detail: `Your phone runs Android ${androidVersion}, so Google Play won't install the app on it.`,
+            state: "fail",
+          };
+
   return [
     phone,
+    version,
     {
       title: "A Google account on the Play Store",
       detail: "The invite goes to its email, and only that account can join the test.",
