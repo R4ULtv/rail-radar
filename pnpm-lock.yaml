@@ -301,7 +301,7 @@ importers:
         specifier: ^0.35.4
         version: 0.35.4(@types/node@22.20.4)
       typescript:
-        specifier: ~5.9.2
+        specifier: ~5.9.3
         version: 5.9.3
 
   apps/studio:
