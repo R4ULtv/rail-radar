@@ -6,9 +6,10 @@ import { LazyMotion, domAnimation, m, AnimatePresence } from "motion/react";
 import { Link } from "@tanstack/react-router";
 import { Button, buttonVariants } from "@repo/ui/components/button";
 import { cn } from "@repo/ui/lib/utils";
+import { useDeviceCheck } from "@/hooks/use-device-check";
 import { prerenderedPageLinkProps } from "@/lib/station-prerender";
 
-const STORAGE_KEY = "banner-dismissed-v15";
+const STORAGE_KEY = "banner-dismissed-v16";
 
 const subscribe = () => () => {};
 const getSnapshot = () => !localStorage.getItem(STORAGE_KEY);
@@ -16,10 +17,12 @@ const getServerSnapshot = () => false;
 
 export function AnnouncementBanner() {
   const shouldShow = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
+  // The beta is on Google Play only, so the banner is for Android visitors.
+  const { platform } = useDeviceCheck();
   const dismissedRef = useRef(false);
   const [, rerender] = useReducer((value: number) => value + 1, 0);
 
-  const visible = shouldShow && !dismissedRef.current;
+  const visible = shouldShow && platform === "android" && !dismissedRef.current;
 
   const dismiss = () => {
     dismissedRef.current = true;
@@ -44,25 +47,24 @@ export function AnnouncementBanner() {
             >
               <img
                 aria-hidden="true"
-                src="/assets/flags/lu.svg"
+                src="/icon.svg"
                 alt=""
-                className="size-10 shrink-0 rounded-2xl border border-border object-cover md:size-11"
+                className="size-10 shrink-0 rounded-2xl md:size-11"
               />
 
               <div className="min-w-0 flex-1">
                 <div className="mb-0.5 flex items-center gap-1.5">
                   <p className="truncate text-sm font-semibold tracking-tight">
-                    Now live: Luxembourg
+                    Rail Radar for Android
                   </p>
                 </div>
                 <p className="truncate text-xs text-muted-foreground">
-                  90 new stations with live departures.
+                  Join the closed beta on Google Play.
                 </p>
               </div>
 
               <Link
-                to="/stations/$country"
-                params={{ country: "luxembourg" }}
+                to="/app"
                 {...prerenderedPageLinkProps}
                 onClick={dismiss}
                 className={cn(
@@ -70,7 +72,7 @@ export function AnnouncementBanner() {
                   "hidden transition-transform duration-150 active:scale-[0.97] md:inline-flex",
                 )}
               >
-                Explore
+                Join the beta
                 <ArrowRightIcon data-icon="inline-end" />
               </Link>
 
@@ -85,14 +87,13 @@ export function AnnouncementBanner() {
               </Button>
 
               <Link
-                to="/stations/$country"
-                params={{ country: "luxembourg" }}
+                to="/app"
                 {...prerenderedPageLinkProps}
                 onClick={dismiss}
-                aria-label="Explore train stations in Luxembourg"
+                aria-label="Join the Rail Radar Android beta"
                 className="absolute inset-0 rounded-3xl focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/30 focus-visible:ring-inset md:hidden"
               >
-                <span className="sr-only">Explore train stations in Luxembourg</span>
+                <span className="sr-only">Join the Rail Radar Android beta</span>
               </Link>
             </div>
           </m.div>
