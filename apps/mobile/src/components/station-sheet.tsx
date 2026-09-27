@@ -38,6 +38,7 @@ import { useStationBoard, type BoardType } from "@/hooks/use-station-board";
 import { useSavedStations } from "@/hooks/use-stored-stations";
 import { distanceKm, formatDistance } from "@/lib/distance";
 import { haptics } from "@/lib/haptics";
+import { stationUrl } from "@/lib/links";
 import { getStationWarning } from "@/lib/station-warnings";
 import type { UserLocation } from "@/lib/user-location";
 
@@ -133,7 +134,7 @@ const QuickActions = memo(function QuickActions({ station }: { station: Station 
 
   function share() {
     haptics.tap();
-    const url = `https://www.railradar24.com/station/${encodeURIComponent(station.id)}`;
+    const url = stationUrl(station.id);
     // iOS shares the link on its own; Android only shares the message.
     void NativeShare.share(
       Platform.OS === "ios"

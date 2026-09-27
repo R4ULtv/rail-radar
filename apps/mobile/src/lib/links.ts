@@ -3,6 +3,22 @@ export const privacyPolicyUrl = `${websiteUrl}/privacy-policy`;
 export const termsOfServiceUrl = `${websiteUrl}/terms-of-service`;
 export const contactUrl = "mailto:contact@railradar24.com";
 
+/** A station's page on the website, which also opens the station in the app if it's installed. */
+export function stationUrl(id: string) {
+  return `${websiteUrl}/station/${encodeURIComponent(id)}`;
+}
+
+/** The station a website link opened the app on, or null for any other link. */
+export function stationIdFromUrl(url: string): string | null {
+  const match = /^https:\/\/(?:www\.)?railradar24\.com\/station\/([^/?#]+)\/?(?:[?#]|$)/.exec(url);
+  if (!match) return null;
+  try {
+    return decodeURIComponent(match[1]!);
+  } catch {
+    return null;
+  }
+}
+
 export const sourceCodeUrl = "https://github.com/R4ULtv/rail-radar";
 const issuesUrl = `${sourceCodeUrl}/issues/new`;
 

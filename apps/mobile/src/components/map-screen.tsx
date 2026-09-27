@@ -29,6 +29,7 @@ import { UserLocationMarker } from "@/components/user-location-marker";
 import { WelcomeSheet } from "@/components/welcome-sheet";
 import { useIsOnline } from "@/hooks/use-is-online";
 import { useMapTheme } from "@/hooks/use-map-theme";
+import { useStationLinks } from "@/hooks/use-station-links";
 import { useStationsUrl } from "@/hooks/use-stations-url";
 import { addRecentStation } from "@/hooks/use-stored-stations";
 import { haptics } from "@/lib/haptics";
@@ -190,6 +191,8 @@ export function MapScreen() {
     (station: Station) => selectStation(station, station.type === "rail" ? 13 : 14),
     [selectStation],
   );
+  // A shared station link opens the station like a search result.
+  useStationLinks(stationsUrl, handleSearchSelect);
 
   // Pick up permission and Location Services changes made in Settings.
   useEffect(() => {
