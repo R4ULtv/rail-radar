@@ -65,6 +65,34 @@ These commands build a development app; Expo Go can't run Mapbox's native module
 installed, `pnpm --filter mobile start` serves JavaScript changes. Native dependency or app config
 changes need a new build.
 
+### Google Play release
+
+Google Play signs the app with a key it keeps. Uploads are signed with an upload key kept
+outside the repository and named in `~/.gradle/gradle.properties`:
+
+```properties
+RAILRADAR_UPLOAD_STORE_FILE=/Users/you/.android-keys/railradar-upload.jks
+RAILRADAR_UPLOAD_KEY_ALIAS=upload
+RAILRADAR_UPLOAD_STORE_PASSWORD=…
+RAILRADAR_UPLOAD_KEY_PASSWORD=…
+```
+
+`plugins/with-release-signing.js` signs release builds with it, and without it they keep the
+debug key, which Google Play rejects. Raise `android.versionCode` in `app.json` before each
+upload, then build the bundle in `android/app/build/outputs/bundle/release/`:
+
+```sh
+npx expo prebuild -p android
+cd android && ./gradlew app:bundleRelease
+```
+
+`app.json` blocks the permissions the app doesn't use: drawing over other apps, which Expo's
+template adds for development, and the shared storage ones from `expo-image` and
+`expo-file-system`. Release builds aren't shrunk with R8: with it, the map ignores its camera,
+the stations don't appear and the search sheet loses its width. So Google Play's warning about a
+missing deobfuscation file doesn't apply. The app doesn't use an advertising ID, so the Play
+Console's advertising ID declaration is "No".
+
 ### Layout
 
 ```text

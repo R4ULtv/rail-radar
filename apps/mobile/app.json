@@ -2,7 +2,7 @@
   "expo": {
     "name": "Rail Radar",
     "slug": "rail-radar",
-    "version": "0.1.0",
+    "version": "0.1.1",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "automatic",
@@ -15,7 +15,8 @@
         }
       ],
       "expo-asset",
-      "expo-image"
+      "expo-image",
+      "./plugins/with-release-signing"
     ],
     "splash": {
       "image": "./assets/splash-icon.png",
@@ -28,11 +29,17 @@
     },
     "android": {
       "package": "com.railradar24.app",
+      "versionCode": 2,
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#6363ff"
       },
-      "predictiveBackGestureEnabled": false
+      "predictiveBackGestureEnabled": false,
+      "blockedPermissions": [
+        "android.permission.SYSTEM_ALERT_WINDOW",
+        "android.permission.READ_EXTERNAL_STORAGE",
+        "android.permission.WRITE_EXTERNAL_STORAGE"
+      ]
     },
     "web": {
       "favicon": "./assets/favicon.png"
