@@ -34,6 +34,20 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#6363ff"
       },
+      "intentFilters": [
+        {
+          "action": "VIEW",
+          "autoVerify": true,
+          "data": [
+            {
+              "scheme": "https",
+              "host": "www.railradar24.com",
+              "pathPrefix": "/station/"
+            }
+          ],
+          "category": ["BROWSABLE", "DEFAULT"]
+        }
+      ],
       "predictiveBackGestureEnabled": false,
       "blockedPermissions": [
         "android.permission.SYSTEM_ALERT_WINDOW",
