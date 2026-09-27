@@ -23,6 +23,7 @@ const stationRecords = JSON.parse(
 
 const prerenderPages = [
   "/",
+  "/app",
   "/donate",
   "/operators",
   "/privacy-policy",
