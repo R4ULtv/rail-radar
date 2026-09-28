@@ -20,7 +20,9 @@
         "expo-build-properties",
         {
           "android": {
-            "minSdkVersion": 30
+            "minSdkVersion": 30,
+            "enableMinifyInReleaseBuilds": true,
+            "enableShrinkResourcesInReleaseBuilds": true
           }
         }
       ],
