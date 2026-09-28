@@ -12,7 +12,7 @@ function osVersion() {
   return Platform.OS === "android" ? Platform.constants.Release : Platform.Version;
 }
 
-/** Shows up in Cloudflare logs, e.g. "RailRadar/0.1.0 (iOS 18.2)" or "RailRadar/0.1.0 (Android 15)". */
+/** Shows up in Cloudflare logs, e.g. "RailRadar/<version> (iOS 18.2)" or "RailRadar/<version> (Android 15)". */
 export const USER_AGENT = `RailRadar/${expo.version} (${Platform.OS === "ios" ? "iOS" : "Android"} ${osVersion()})`;
 
 /** Fetches with the app's User-Agent and a timeout; used for the API and the web's photos. */

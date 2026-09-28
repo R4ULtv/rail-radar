@@ -78,8 +78,30 @@ RAILRADAR_UPLOAD_KEY_PASSWORD=…
 ```
 
 `plugins/with-release-signing.js` signs release builds with it, and without it they keep the
-debug key, which Google Play rejects. Raise `android.versionCode` in `app.json` before each
-upload, then build the bundle in `android/app/build/outputs/bundle/release/`:
+debug key, which Google Play rejects. Before each upload, bump the app version and build number
+from the repository root:
+
+```sh
+pnpm --filter mobile bump-version
+```
+
+This increments the patch version and build number. Pass `minor`, `major`, or an explicit version
+to choose another version, and optionally pass a build number (for example,
+`pnpm --filter mobile bump-version 0.2.0 4`). The script updates `app.json`, `package.json`,
+`CHANGELOG.md`, and existing generated Android and iOS project files. Add release notes under
+`Unreleased` before running it, or fill in the new release entry afterward.
+
+Pass `--tag` to commit only the three tracked release files and create an annotated tag such as
+`mobile-v0.2.0`. Use `--tag-current` to commit and tag a version that was already bumped. Both
+options only create local tags; they do not push to GitHub. Existing staged changes must be
+committed or unstaged first, so the release commit stays focused.
+
+```sh
+pnpm --filter mobile bump-version minor --tag
+pnpm --filter mobile bump-version --tag-current
+```
+
+Then build the bundle in `android/app/build/outputs/bundle/release/`:
 
 ```sh
 npx expo prebuild -p android
@@ -128,7 +150,7 @@ Imports from `src` use the `@/` alias, and files are kebab-case, as in `apps/web
 - Stations ship with the app from `packages/data/src/stations.geojson`. At most once a day, the
   app downloads the latest `stations.geojson` from the API in the background and uses it from the
   next launch.
-- Requests send a `User-Agent` such as `RailRadar/0.1.0 (iOS 18.2)`, with the version from
+- Requests send a `User-Agent` such as `RailRadar/<version> (iOS 18.2)`, with the version from
   `app.json`. Filter on `RailRadar/` in Cloudflare Workers Logs to see the app's requests.
 - Mapbox's attribution button is hidden, since telemetry is off. The credits are at the bottom of
   the search and map style sheets and in the settings.

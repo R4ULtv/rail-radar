@@ -9,6 +9,7 @@
     "ios": "expo run:ios",
     "lint": "oxlint --deny warnings",
     "check-types": "tsc --noEmit",
+    "bump-version": "node scripts/bump-version.mjs",
     "generate:app-icon": "node scripts/generate-app-icon.mjs",
     "generate:brand-logos": "node scripts/generate-brand-logos.mjs",
     "generate:location-puck": "node scripts/generate-location-puck.mjs",
