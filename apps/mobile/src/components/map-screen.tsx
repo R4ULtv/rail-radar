@@ -45,6 +45,10 @@ const defaultCamera = { centerCoordinate: [12, 50] as [number, number], zoomLeve
 // Same zoom levels as the web: 13 when opening on the user, 14 after tapping locate.
 const userZoomLevel = 13;
 const locateZoomLevel = 14;
+const stationCameraAnimationMs = 700;
+const stationDetailsFallbackMs = stationCameraAnimationMs + 100;
+const stationCenterTolerance = 0.0001;
+const stationZoomTolerance = 0.05;
 const locationMaxAge = 5 * 60 * 1000;
 // Mapbox keeps the last camera padding, so moves that should be centered have to clear it.
 const noPadding = { paddingTop: 0, paddingBottom: 0, paddingLeft: 0, paddingRight: 0 };
@@ -105,12 +109,25 @@ type StationPressEvent = Parameters<
   NonNullable<ComponentProps<typeof Mapbox.ShapeSource>["onPress"]>
 >[0];
 
+type PendingStationCamera = {
+  id: string;
+  center: [number, number];
+  zoomLevel?: number;
+  token: number;
+  timeout: ReturnType<typeof setTimeout>;
+};
+
 export function MapScreen() {
   const insets = useSafeAreaInsets();
   const camera = useRef<Mapbox.Camera>(null);
   const stationsUrl = useStationsUrl();
   const [selectedStation, setSelectedStation] = useState<Station | null>(null);
   const [sheetOpen, setSheetOpen] = useState(false);
+  const selectedStationId = useRef<string | null>(null);
+  const stationSheetIsOpen = useRef(false);
+  const [settledStationId, setSettledStationId] = useState<string | null>(null);
+  const pendingStationCamera = useRef<PendingStationCamera | null>(null);
+  const stationCameraToken = useRef(0);
   const [locationStatus, setLocationStatus] = useState<LocationStatus>("idle");
   const [userLocation, setUserLocation] = useState<UserLocation | null>(null);
   const [message, setMessage] = useState<string | null>(null);
@@ -169,24 +186,79 @@ export function MapScreen() {
     }
   }, [isOnline, mapFailed]);
 
-  const selectStation = useCallback((station: Station, zoomLevel?: number) => {
-    haptics.tap();
-    hasMovedMap.current = true;
-    setIsCentered(false);
-    setSelectedStation(station);
-    // Opened in the same update, so the first station sheet mounts already open.
-    setSheetOpen(true);
-    if (station.type === "rail") addRecentStation(station);
-    if (!station.geo) return;
-
-    // Centered on the whole screen, so opening, resizing and closing the sheet never move it.
-    camera.current?.setCamera({
-      centerCoordinate: [station.geo.lng, station.geo.lat],
-      zoomLevel,
-      padding: noPadding,
-      animationDuration: 700,
-    });
+  const finishStationCamera = useCallback((token: number) => {
+    const pending = pendingStationCamera.current;
+    if (!pending || pending.token !== token) return;
+    clearTimeout(pending.timeout);
+    pendingStationCamera.current = null;
+    setSettledStationId(pending.id);
   }, []);
+
+  const onStationSheetOpenChange = useCallback((isOpen: boolean) => {
+    stationSheetIsOpen.current = isOpen;
+    setSheetOpen(isOpen);
+  }, []);
+
+  useEffect(() => {
+    return () => {
+      if (pendingStationCamera.current) clearTimeout(pendingStationCamera.current.timeout);
+    };
+  }, []);
+
+  const selectStation = useCallback(
+    (station: Station, zoomLevel?: number) => {
+      haptics.tap();
+      hasMovedMap.current = true;
+      setIsCentered(false);
+      const hadPendingCamera = pendingStationCamera.current !== null;
+      if (pendingStationCamera.current) clearTimeout(pendingStationCamera.current.timeout);
+      pendingStationCamera.current = null;
+      // The first station still shows its details as soon as the sheet opens. Only switching
+      // between stations can start detail work during the existing camera and sheet animations.
+      const isSwitchingStation =
+        stationSheetIsOpen.current &&
+        selectedStationId.current !== null &&
+        selectedStationId.current !== station.id;
+      const mapCamera = camera.current;
+      const mapIsAtStation =
+        !hadPendingCamera &&
+        station.geo &&
+        Math.abs(mapPosition.current.center[0] - station.geo.lng) <= stationCenterTolerance &&
+        Math.abs(mapPosition.current.center[1] - station.geo.lat) <= stationCenterTolerance &&
+        (zoomLevel === undefined ||
+          Math.abs(mapPosition.current.zoom - zoomLevel) <= stationZoomTolerance);
+      const deferDetails = isSwitchingStation && !!station.geo && !!mapCamera && !mapIsAtStation;
+      selectedStationId.current = station.id;
+      stationSheetIsOpen.current = true;
+      setSettledStationId(deferDetails ? null : station.id);
+      setSelectedStation(station);
+      // Opened in the same update, so the first station sheet mounts already open.
+      setSheetOpen(true);
+      if (station.type === "rail") addRecentStation(station);
+
+      if (!station.geo || !mapCamera) return;
+
+      if (deferDetails) {
+        const token = ++stationCameraToken.current;
+        pendingStationCamera.current = {
+          id: station.id,
+          center: [station.geo.lng, station.geo.lat],
+          zoomLevel,
+          token,
+          // Mapbox may not report idle after an unchanged camera or a style reload.
+          timeout: setTimeout(() => finishStationCamera(token), stationDetailsFallbackMs),
+        };
+      }
+      // Centered on the whole screen, so opening, resizing and closing the sheet never move it.
+      mapCamera.setCamera({
+        centerCoordinate: [station.geo.lng, station.geo.lat],
+        zoomLevel,
+        padding: noPadding,
+        animationDuration: stationCameraAnimationMs,
+      });
+    },
+    [finishStationCamera],
+  );
 
   const handleStationPress = useCallback(
     (event: StationPressEvent) => {
@@ -369,6 +441,21 @@ export function MapScreen() {
           const [longitude = 0, latitude = 0] = state.properties.center;
           mapPosition.current = { center: [longitude, latitude], zoom: state.properties.zoom };
         }}
+        onMapIdle={(state) => {
+          const pending = pendingStationCamera.current;
+          if (!pending || state.gestures.isGestureActive) return;
+          const [longitude, latitude] = state.properties.center;
+          if (
+            typeof longitude === "number" &&
+            typeof latitude === "number" &&
+            Math.abs(longitude - pending.center[0]) <= stationCenterTolerance &&
+            Math.abs(latitude - pending.center[1]) <= stationCenterTolerance &&
+            (pending.zoomLevel === undefined ||
+              Math.abs(state.properties.zoom - pending.zoomLevel) <= stationZoomTolerance)
+          ) {
+            finishStationCamera(pending.token);
+          }
+        }}
         // Missing tiles once the map is up, e.g. panning offline, aren't a failed map.
         onMapLoadingError={() => {
           if (!hasLoadedMap.current) setMapFailed(true);
@@ -454,9 +541,10 @@ export function MapScreen() {
         <StationSheet
           station={selectedStation}
           isOpen={sheetOpen}
+          detailsReady={settledStationId === selectedStation.id}
           stationsUrl={stationsUrl}
           userLocation={userLocation}
-          onOpenChange={setSheetOpen}
+          onOpenChange={onStationSheetOpenChange}
           onSelectStation={selectStation}
           position={stationSheetPosition}
         />
