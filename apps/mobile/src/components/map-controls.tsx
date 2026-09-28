@@ -167,34 +167,45 @@ export function useIsSheetFullyOpen(sheets: SheetPosition[]) {
 
 /**
  * Keeps its controls just above the sheets, like Apple Maps, following them as they're dragged.
- * They fade out as a sheet opens beyond its smallest size.
+ * They fade out as a sheet opens beyond its smallest size, or as an overlay opens at all.
  */
 export function SheetControls({
   sheets,
+  overlays = [],
   children,
 }: {
   sheets: SheetPosition[];
+  /** Sheets with a single size, which hide the controls while they're open. */
+  overlays?: SheetPosition[];
   children: ReactNode;
 }) {
   const { height } = useWindowDimensions();
   const controlsHeight = useSharedValue(0);
   const [isVisible, setIsVisible] = useState(true);
   const sheetTop = useDerivedValue(() =>
-    sheets.reduce((top, sheet) => Math.min(top, sheet.animatedPosition.value), height),
+    [...sheets, ...overlays].reduce(
+      (top, sheet) => Math.min(top, sheet.animatedPosition.value),
+      height,
+    ),
   );
-  const sheetIndex = useDerivedValue(() =>
-    sheets.reduce((index, sheet) => Math.max(index, sheet.animatedIndex.value), -1),
+  // How far the controls are from hidden, from 0 (shown) to 1 (hidden). An overlay counts from
+  // closed rather than from its smallest size, since that's its only one.
+  const hiddenProgress = useDerivedValue(() =>
+    Math.max(
+      ...sheets.map((sheet) => sheet.animatedIndex.value / sheetControlsHiddenAt),
+      ...overlays.map((sheet) => (sheet.animatedIndex.value + 1) / sheetControlsHiddenAt),
+    ),
   );
 
   useAnimatedReaction(
-    () => sheetIndex.value < sheetControlsHiddenAt,
+    () => hiddenProgress.value < 1,
     (visible, previous) => {
       if (visible !== previous) scheduleOnRN(setIsVisible, visible);
     },
   );
 
   const style = useAnimatedStyle(() => ({
-    opacity: interpolate(sheetIndex.value, [0, sheetControlsHiddenAt], [1, 0], Extrapolation.CLAMP),
+    opacity: interpolate(hiddenProgress.value, [0, 1], [1, 0], Extrapolation.CLAMP),
     transform: [{ translateY: sheetTop.value - controlsHeight.value - controlGap }],
   }));
 

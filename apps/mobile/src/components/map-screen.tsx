@@ -396,7 +396,10 @@ export function MapScreen() {
         <Settings locationStatus={locationStatus} getMapFeedbackUrl={getMapFeedbackUrl} />
       </TopControls>
 
-      <SheetControls sheets={[searchSheetPosition, stationSheetPosition, mapStyleSheetPosition]}>
+      <SheetControls
+        sheets={[searchSheetPosition, stationSheetPosition]}
+        overlays={[mapStyleSheetPosition]}
+      >
         <Compass heading={heading} onPress={resetHeading} />
         <MapControlGroup>
           <MapStyleButton onPress={() => setIsMapStyleOpen(true)} />
