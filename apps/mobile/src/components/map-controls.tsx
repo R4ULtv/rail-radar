@@ -37,10 +37,11 @@ const northThreshold = 1;
 const controlGap = 10;
 // Controls above the sheets are gone halfway from a sheet's smallest size to its next one.
 const sheetControlsHiddenAt = 0.5;
-const locateIconSize = 20;
+// Small enough to leave the buttons some room around their icons.
+const iconSize = 18;
 // Lucide's arrow is weighted to the top right: its shape centers on (13.67, 10.33) of 24.
 // Shifting it back by that much centers it in the button.
-const arrowOffset = ((13.67 - 12) / 24) * locateIconSize;
+const arrowOffset = ((13.67 - 12) / 24) * iconSize;
 
 type Direction = "N" | "E" | "S" | "W";
 const directions: Direction[] = ["N", "E", "S", "W"];
@@ -122,7 +123,7 @@ export function SettingsButton({ onPress }: { onPress: () => void }) {
 
   return (
     <MapControl accessibilityLabel="Settings" onPress={onPress}>
-      <Settings size={20} color={foreground} />
+      <Settings size={iconSize} color={foreground} />
     </MapControl>
   );
 }
@@ -276,7 +277,7 @@ export function MapStyleButton({ onPress }: { onPress: () => void }) {
         onPress();
       }}
     >
-      <MapIcon size={20} color={foreground} />
+      <MapIcon size={iconSize} color={foreground} />
     </MapControlButton>
   );
 }
@@ -318,7 +319,7 @@ export function LocateButton({
       onPress={onPress}
     >
       <Icon
-        size={locateIconSize}
+        size={iconSize}
         color={color}
         fill={isFilled ? color : "none"}
         style={{
