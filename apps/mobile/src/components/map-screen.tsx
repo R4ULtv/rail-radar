@@ -52,6 +52,8 @@ const stationZoomTolerance = 0.05;
 const locationMaxAge = 5 * 60 * 1000;
 // Mapbox keeps the last camera padding, so moves that should be centered have to clear it.
 const noPadding = { paddingTop: 0, paddingBottom: 0, paddingLeft: 0, paddingRight: 0 };
+// Place selected stations 64 points above screen center, clear of the sheet's peek position.
+const stationPadding = { ...noPadding, paddingBottom: 128 };
 
 if (accessToken) {
   Mapbox.setAccessToken(accessToken);
@@ -249,11 +251,11 @@ export function MapScreen() {
           timeout: setTimeout(() => finishStationCamera(token), stationDetailsFallbackMs),
         };
       }
-      // Centered on the whole screen, so opening, resizing and closing the sheet never move it.
+      // Keep the station slightly above center without moving the map as the sheet changes size.
       mapCamera.setCamera({
         centerCoordinate: [station.geo.lng, station.geo.lat],
         zoomLevel,
-        padding: noPadding,
+        padding: stationPadding,
         animationDuration: stationCameraAnimationMs,
       });
     },
