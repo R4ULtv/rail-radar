@@ -2,9 +2,9 @@ import { Image } from "expo-image";
 import { Button } from "heroui-native/button";
 import { useThemeColor } from "heroui-native/hooks";
 import Bookmark from "lucide-react-native/icons/bookmark";
-import Search from "lucide-react-native/icons/search";
-import Shield from "lucide-react-native/icons/shield";
-import TrainFront from "lucide-react-native/icons/train-front";
+import MapPin from "lucide-react-native/icons/map-pin";
+import Palette from "lucide-react-native/icons/palette";
+import WifiOff from "lucide-react-native/icons/wifi-off";
 import { memo, type ComponentType } from "react";
 import { Modal, ScrollView, StyleSheet, Text, View } from "react-native";
 import { SafeAreaProvider, SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
@@ -14,30 +14,31 @@ import { haptics } from "@/lib/haptics";
 
 const appIcon = require("../../assets/icon.png");
 
+// Only what the app adds to the website, which has the live boards too.
 const features: {
   icon: ComponentType<{ size?: number; color?: string }>;
   title: string;
   description: string;
 }[] = [
   {
-    icon: TrainFront,
-    title: "Live departures and arrivals",
-    description: "Tap any station on the map to see its trains, updated every 30 seconds.",
+    icon: WifiOff,
+    title: "Search without a connection",
+    description: "Every station is on your phone, so results show up as you type.",
   },
   {
-    icon: Search,
-    title: "Instant search, even offline",
-    description: "Every station is stored on your phone, so search works without a connection.",
+    icon: MapPin,
+    title: "Stations near you first",
+    description: "Search puts nearby stations higher and shows how far away they are.",
   },
   {
     icon: Bookmark,
-    title: "Your stations, one tap away",
-    description: "Save the stations you use to have them ready in the search.",
+    title: "Save as many stations as you like",
+    description: "They stay on your phone and come first in search.",
   },
   {
-    icon: Shield,
-    title: "Private by design",
-    description: "No account needed. If you share your location, it never leaves this device.",
+    icon: Palette,
+    title: "A map that suits you",
+    description: "Pick a simple or a streets map, in light or dark.",
   },
 ];
 
@@ -48,20 +49,20 @@ const WelcomeContent = memo(function WelcomeContent({ onClose }: { onClose: () =
   return (
     <SafeAreaView edges={["top", "left", "right"]} style={styles.content}>
       <PageSheetHandle />
+      {/* Fits on the screen; it only scrolls with very large text. */}
       <ScrollView contentContainerStyle={styles.scroll}>
         <Image source={appIcon} style={styles.icon} accessibilityIgnoresInvertColors />
-        <Text className="mt-6 text-center text-3xl font-bold text-foreground">
-          Welcome to Rail Radar
+        <Text className="mt-5 text-center text-2xl font-bold text-foreground">
+          Thanks for testing Rail Radar
         </Text>
-        <Text className="mt-3 text-center text-base text-muted">
-          Thank you for buying the app! It supports Rail Radar&apos;s development and helps keep
-          railradar24.com free for everyone.
+        <Text className="mt-2 text-center text-base text-muted">
+          You&apos;re one of the first to try the app. Here&apos;s what it adds to railradar24.com.
         </Text>
 
-        <View className="mt-10 gap-7">
+        <View className="mt-8 gap-5">
           {features.map(({ icon: Icon, title, description }) => (
             <View key={title} className="flex-row items-center gap-4">
-              <Icon size={28} color={accentColor} />
+              <Icon size={24} color={accentColor} />
               <View className="flex-1 gap-0.5">
                 <Text className="text-base font-semibold text-foreground">{title}</Text>
                 <Text className="text-sm text-muted">{description}</Text>
@@ -69,6 +70,10 @@ const WelcomeContent = memo(function WelcomeContent({ onClose }: { onClose: () =
             </View>
           ))}
         </View>
+
+        <Text className="mt-8 text-center text-sm text-muted">
+          And there&apos;s more on the way before version 1.0.
+        </Text>
       </ScrollView>
 
       <View className="px-6 pt-3" style={{ paddingBottom: insets.bottom + 16 }}>
@@ -87,8 +92,8 @@ const WelcomeContent = memo(function WelcomeContent({ onClose }: { onClose: () =
 });
 
 /**
- * Shown on the first launch, to thank the user and show what the app does: a page sheet on iOS,
- * like the settings, and full screen on Android. Swiping it down closes it too.
+ * Shown on the first launch, to thank beta testers and show what the app adds to the website: a
+ * page sheet on iOS, like the settings, and full screen on Android. Swiping it down closes it too.
  */
 export const WelcomeSheet = memo(function WelcomeSheet({
   isOpen,
@@ -118,6 +123,6 @@ export const WelcomeSheet = memo(function WelcomeSheet({
 
 const styles = StyleSheet.create({
   content: { flex: 1 },
-  scroll: { paddingHorizontal: 32, paddingTop: 40, paddingBottom: 24 },
-  icon: { width: 88, height: 88, borderRadius: 20, alignSelf: "center" },
+  scroll: { flexGrow: 1, justifyContent: "center", paddingHorizontal: 32, paddingVertical: 24 },
+  icon: { width: 64, height: 64, borderRadius: 15, alignSelf: "center" },
 });
