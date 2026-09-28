@@ -30,6 +30,7 @@ import {
   useSheetTopInset,
   type SheetPosition,
 } from "@/components/map-controls";
+import { SheetHeaderFade, useSheetScrollOffset } from "@/components/sheet-header";
 import { StationSection, StationSectionSkeleton } from "@/components/station-list";
 import { useStationSearch } from "@/hooks/use-station-search";
 import { useRecentStations, useSavedStations } from "@/hooks/use-stored-stations";
@@ -120,6 +121,7 @@ const SearchSheetContent = memo(function SearchSheetContent({
   }));
   const { onFocus, onBlur } = useBottomSheetAwareHandlers();
   const inputRef = useRef<ComponentRef<typeof SearchField.Input>>(null);
+  const [scrollRef, scrollOffset] = useSheetScrollOffset();
   const [isFocused, setIsFocused] = useState(false);
 
   // Android's back button hides the keyboard but leaves the field focused.
@@ -137,7 +139,11 @@ const SearchSheetContent = memo(function SearchSheetContent({
     savedStations,
     recentStations,
   });
-  const [mutedColor, foregroundColor] = useThemeColor(["muted", "default-foreground"]);
+  const [mutedColor, foregroundColor, surfaceColor] = useThemeColor([
+    "muted",
+    "default-foreground",
+    "surface",
+  ]);
 
   // The lists are memoized, so they only render again when these change.
   const unsavedRecentStations = useMemo(() => {
@@ -168,61 +174,68 @@ const SearchSheetContent = memo(function SearchSheetContent({
     // The search bar is the list's sticky header, so the sheet can measure all of its content
     // and open only as tall as it needs.
     <BottomSheetScrollView
+      ref={scrollRef}
       stickyHeaderIndices={[0]}
       keyboardDismissMode="on-drag"
       keyboardShouldPersistTaps="handled"
       // With the keyboard up, the same space above it instead.
       contentContainerStyle={{ paddingBottom: Math.max(keyboardHeight + 16, bottomInset) }}
     >
-      <View className="bg-surface px-4" style={{ paddingTop: searchFieldTopSpacing }}>
-        <SearchField value={query} onChange={setQuery}>
-          <SearchField.Group>
-            <SearchField.SearchIcon />
-            <SearchField.Input
-              ref={inputRef}
-              variant="secondary"
-              // No focus outline: iOS draws it outside the field, where the sheet clips it.
-              className="ios:focus:outline-transparent android:focus:border-transparent"
-              placeholder="Search stations"
-              autoCorrect={false}
-              returnKeyType="search"
-              onSubmitEditing={() => Keyboard.dismiss()}
-              onFocus={(event) => {
-                onFocus(event);
-                setIsFocused(true);
-                snapToIndex(expandedIndex);
-              }}
-              onBlur={(event) => {
-                onBlur(event);
-                setIsFocused(false);
-              }}
-            />
-            {isFocused ? null : (
-              // Android text fields keep any touch that starts on them, so a drag from the
-              // field never reached the sheet. Until it's focused, taps go through this cover.
-              <Pressable
-                accessible={false}
-                importantForAccessibility="no"
-                style={StyleSheet.absoluteFill}
-                onPress={() => inputRef.current?.focus()}
+      {/* A sticky header's style moves to a wrapper, so the background goes with the padding;
+          as a class it stays inside, and the list shows above the search bar. */}
+      <View style={{ paddingTop: searchFieldTopSpacing, backgroundColor: surfaceColor }}>
+        <View className="px-4">
+          <SearchField value={query} onChange={setQuery}>
+            <SearchField.Group>
+              <SearchField.SearchIcon />
+              <SearchField.Input
+                ref={inputRef}
+                variant="secondary"
+                // No focus outline: iOS draws it outside the field, where the sheet clips it.
+                className="ios:focus:outline-transparent android:focus:border-transparent"
+                placeholder="Search stations"
+                autoCorrect={false}
+                returnKeyType="search"
+                onSubmitEditing={() => Keyboard.dismiss()}
+                onFocus={(event) => {
+                  onFocus(event);
+                  setIsFocused(true);
+                  snapToIndex(expandedIndex);
+                }}
+                onBlur={(event) => {
+                  onBlur(event);
+                  setIsFocused(false);
+                }}
               />
-            )}
-            <SearchField.ClearButton />
-            {query.length === 0 && savedStations.length > 0 ? (
-              // Same spot as the clear button, which only shows once there's a query.
-              <View
-                pointerEvents="none"
-                accessibilityLabel={`${savedStations.length} saved stations`}
-                className="absolute end-3 flex-row items-center gap-1"
-              >
-                <Text className="text-xs text-muted" style={styles.tabularNums}>
-                  {savedStations.length}
-                </Text>
-                <Bookmark size={14} color={mutedColor} />
-              </View>
-            ) : null}
-          </SearchField.Group>
-        </SearchField>
+              {isFocused ? null : (
+                // Android text fields keep any touch that starts on them, so a drag from the
+                // field never reached the sheet. Until it's focused, taps go through this cover.
+                <Pressable
+                  accessible={false}
+                  importantForAccessibility="no"
+                  style={StyleSheet.absoluteFill}
+                  onPress={() => inputRef.current?.focus()}
+                />
+              )}
+              <SearchField.ClearButton />
+              {query.length === 0 && savedStations.length > 0 ? (
+                // Same spot as the clear button, which only shows once there's a query.
+                <View
+                  pointerEvents="none"
+                  accessibilityLabel={`${savedStations.length} saved stations`}
+                  className="absolute end-3 flex-row items-center gap-1"
+                >
+                  <Text className="text-xs text-muted" style={styles.tabularNums}>
+                    {savedStations.length}
+                  </Text>
+                  <Bookmark size={14} color={mutedColor} />
+                </View>
+              ) : null}
+            </SearchField.Group>
+          </SearchField>
+        </View>
+        {/* Its gap is part of the lists' top margin. */}
+        <SheetHeaderFade scrollOffset={scrollOffset} />
       </View>
 
       <Animated.View className="px-4" style={listStyle}>

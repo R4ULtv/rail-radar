@@ -36,7 +36,7 @@ import {
   type SheetPosition,
 } from "@/components/map-controls";
 import { ErrorBoundary } from "@/components/error-boundary";
-import { SheetHeader } from "@/components/sheet-header";
+import { SheetHeader, SheetHeaderFade, useSheetScrollOffset } from "@/components/sheet-header";
 import { StationDetails } from "@/components/station-details";
 import { TrainRow, TrainRowSkeleton, trainKey } from "@/components/train-row";
 import { useStationBoard, type BoardType } from "@/hooks/use-station-board";
@@ -56,6 +56,8 @@ const middleStep = 0.6;
 const minStepGap = 80;
 // Long boards are cut short so the station details below them stay in reach.
 const collapsedTrainCount = 10;
+// Between the tabs and the first train, with room for the header fade's gap.
+const boardTopSpacing = 20;
 const stationTypeLabels = {
   rail: "Train station",
   metro: "Metro station",
@@ -437,6 +439,7 @@ function StationSheetContent({
   // loaded, and then kept, so refreshes and tab switches don't move the sheet.
   const [layout, setLayout] = useState({ boardTop: 0, firstItemBottom: 0 });
   const isPeekFinal = useRef(false);
+  const [scrollRef, scrollOffset] = useSheetScrollOffset();
   const hasBoard = !isRail || board.data !== null || board.error !== null;
 
   useEffect(() => {
@@ -476,33 +479,40 @@ function StationSheetContent({
     // The header is the board's sticky header, so the sheet can measure all of its content and
     // open only as tall as it needs.
     <BottomSheetScrollView
+      ref={scrollRef}
       stickyHeaderIndices={[0]}
       contentContainerStyle={{ paddingBottom: bottomInset }}
       onContentSizeChange={(_, height) => onContentHeightChange(height)}
     >
-      <View className="bg-surface px-4 pb-3">
-        <SheetHeader
-          title={station.name}
-          titleLines={2}
-          closeLabel="Close station"
-          onClose={onClose}
-        >
-          <StationSubtitle
-            station={station}
-            timestamp={board.data?.timestamp}
-            hasError={board.error !== null}
-            isOnline={board.isOnline}
-            userLocation={userLocation}
-          />
-        </SheetHeader>
-        <QuickActions station={station} />
-        {isRail ? (
-          <View className="pt-3">
-            <BoardTabs type={type} arrivalsSupported={arrivalsSupported} onChange={selectType} />
-          </View>
-        ) : null}
+      <View className="bg-surface">
+        <View className="px-4">
+          <SheetHeader
+            title={station.name}
+            titleLines={2}
+            closeLabel="Close station"
+            onClose={onClose}
+          >
+            <StationSubtitle
+              station={station}
+              timestamp={board.data?.timestamp}
+              hasError={board.error !== null}
+              isOnline={board.isOnline}
+              userLocation={userLocation}
+            />
+          </SheetHeader>
+          <QuickActions station={station} />
+          {isRail ? (
+            <View className="pt-3">
+              <BoardTabs type={type} arrivalsSupported={arrivalsSupported} onChange={selectType} />
+            </View>
+          ) : null}
+        </View>
+        <SheetHeaderFade scrollOffset={scrollOffset} />
       </View>
-      <View onLayout={(event) => measure("boardTop", event.nativeEvent.layout.y)}>
+      <View
+        style={{ paddingTop: boardTopSpacing }}
+        onLayout={(event) => measure("boardTop", event.nativeEvent.layout.y)}
+      >
         {isRail ? (
           <LiveBoard
             key={type}
