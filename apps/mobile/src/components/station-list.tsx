@@ -4,7 +4,7 @@ import { useThemeColor } from "heroui-native/hooks";
 import { ListGroup } from "heroui-native/list-group";
 import { Separator } from "heroui-native/separator";
 import { Skeleton } from "heroui-native/skeleton";
-import { ChevronDown } from "lucide-react-native";
+import ChevronDown from "lucide-react-native/icons/chevron-down";
 import { Fragment, memo, useState, type ComponentType, type ReactNode } from "react";
 import { Image, StyleSheet, Text, View } from "react-native";
 
