@@ -1,5 +1,6 @@
 import type { Station } from "@repo/data/types";
 import { File, Paths } from "expo-file-system";
+import { writeAsStringAsync } from "expo-file-system/legacy";
 import { useSyncExternalStore } from "react";
 
 const MAX_RECENT_STATIONS = 10;
@@ -21,10 +22,11 @@ function toStoredStation({ id, name, type, importance, geo }: Station): Station 
   return { id, name, type, importance, geo };
 }
 
-function createStationStore(fileName: string) {
+function createStationStore(fileName: string, writeMode: "sync" | "async" = "sync") {
   const file = new File(Paths.document, fileName);
   const listeners = new Set<() => void>();
   let stations: Station[] | null = null;
+  let pendingWrite: Promise<void> = Promise.resolve();
 
   function read(): Station[] {
     if (stations) return stations;
@@ -42,6 +44,14 @@ function createStationStore(fileName: string) {
   function write(next: Station[]) {
     stations = next;
     listeners.forEach((listener) => listener());
+    if (writeMode === "async") {
+      // Keep the search list current, but serialize disk writes off the tap path. The queue
+      // preserves selection order and prevents a pending add from undoing a later clear.
+      pendingWrite = pendingWrite
+        .then(() => writeAsStringAsync(file.uri, JSON.stringify(next)))
+        .catch(() => {});
+      return;
+    }
     try {
       if (!file.exists) file.create();
       file.write(JSON.stringify(next));
@@ -59,7 +69,7 @@ function createStationStore(fileName: string) {
 }
 
 const savedStore = createStationStore("saved-stations.json");
-const recentStore = createStationStore("recent-stations.json");
+const recentStore = createStationStore("recent-stations.json", "async");
 
 export function useSavedStations() {
   const savedStations = useSyncExternalStore(savedStore.subscribe, savedStore.read);

@@ -236,7 +236,8 @@ export function MapScreen() {
       setSelectedStation(station);
       // Opened in the same update, so the first station sheet mounts already open.
       setSheetOpen(true);
-      if (station.type === "rail") addRecentStation(station);
+      // Let the camera move start before updating the search sheet's recent list.
+      if (station.type === "rail") setTimeout(() => addRecentStation(station), 0);
 
       if (!station.geo || !mapCamera) return;
 
