@@ -1,10 +1,27 @@
 # Changelog
 
 All notable changes to the Rail Radar mobile app. Versions match `version` in `app.json`, and the
-build number in parentheses matches `android.versionCode`. Each release notes the commit it was
-built from.
+build number in parentheses matches `android.versionCode`. When known, release entries also note
+the commit they were built from.
 
 ## [Unreleased]
+
+## [0.1.2] (3) – 2026-09-28
+
+Built from `a6bbaca`.
+
+### Added
+
+- A release command that updates the app version, Android and iOS build numbers, and changelog
+  together.
+
+### Changed
+
+- Search and station sheets open to fit their content. The map stays interactive until a sheet
+  reaches the top of the screen, and the settings button fades as a sheet approaches it.
+- Map control icons are smaller, and the controls fade away when the map style sheet opens.
+- Sheet headers and spacing are consistent, with clearer search errors and empty states.
+- The first-launch welcome thanks beta testers and highlights what the app adds to the website.
 
 ## [0.1.1] (2) – 2026-09-27
 
