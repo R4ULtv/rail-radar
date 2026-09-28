@@ -133930,6 +133930,19 @@
     {
       "type": "Feature",
       "properties": {
+        "id": "FR318964",
+        "name": "Avignon TGV",
+        "type": "rail",
+        "importance": 2
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [4.786079, 43.921586]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
         "id": "FR319012",
         "name": "Aix-en-Provence TGV",
         "type": "rail",
@@ -143415,19 +143428,6 @@
       "geometry": {
         "type": "Point",
         "coordinates": [2.325671, 48.86079]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "FR547315",
-        "name": "Saint-Michel Notre-Dame",
-        "type": "rail",
-        "importance": 3
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [2.34545, 48.85348]
       }
     },
     {
@@ -160463,14 +160463,14 @@
     {
       "type": "Feature",
       "properties": {
-        "id": "FR981902",
-        "name": "Avignon TGV",
+        "id": "FR785436",
+        "name": "Saint-Michel Notre-Dame",
         "type": "rail",
-        "importance": 2
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
-        "coordinates": [4.786079, 43.921586]
+        "coordinates": [2.34545, 48.85348]
       }
     },
     {
