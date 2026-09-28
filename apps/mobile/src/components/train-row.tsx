@@ -64,6 +64,32 @@ interface TrainRowProps {
   onLayout?: (event: LayoutChangeEvent) => void;
 }
 
+// A record, so a new train field fails to type-check until it's compared too.
+const trainFields = Object.keys({
+  brand: true,
+  category: true,
+  trainNumber: true,
+  origin: true,
+  destination: true,
+  scheduledTime: true,
+  delay: true,
+  platform: true,
+  status: true,
+  info: true,
+} satisfies Record<keyof Train, true>) as (keyof Train)[];
+
+// Every refresh brings new train objects, so rows compare what they show and only the trains
+// that changed re-render.
+function areRowPropsEqual(previous: TrainRowProps, next: TrainRowProps) {
+  return (
+    previous.type === next.type &&
+    previous.isExpanded === next.isExpanded &&
+    previous.onToggle === next.onToggle &&
+    previous.onLayout === next.onLayout &&
+    trainFields.every((field) => previous.train[field] === next.train[field])
+  );
+}
+
 export const TrainRow = memo(function TrainRow({
   train,
   type,
@@ -162,7 +188,7 @@ export const TrainRow = memo(function TrainRow({
       {row}
     </PressableFeedback>
   );
-});
+}, areRowPropsEqual);
 
 export function TrainRowSkeleton({ onLayout }: { onLayout?: (event: LayoutChangeEvent) => void }) {
   return (
