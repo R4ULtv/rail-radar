@@ -6,7 +6,8 @@ import { API_BASE_URL, USER_AGENT } from "@/lib/api";
 
 // Stations ship with the app. Updates are downloaded in the background and used
 // from the next launch; bigger changes (new countries) come with an app update.
-const bundledStations = Asset.fromModule(require("@repo/data/stations.geojson"));
+// A minified copy of @repo/data's stations, written by metro.config.js.
+const bundledStations = Asset.fromModule(require("../../assets/generated/stations.geojson"));
 const downloadedStations = new File(Paths.document, "stations.geojson");
 const downloadInfo = new File(Paths.document, "stations-download.json");
 const refreshDelayMs = 30_000;
