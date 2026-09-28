@@ -437,8 +437,7 @@ function StationSheetContent({
   // loaded, and then kept, so refreshes and tab switches don't move the sheet.
   const [layout, setLayout] = useState({ boardTop: 0, firstItemBottom: 0 });
   const isPeekFinal = useRef(false);
-  const hasBoard = useRef(false);
-  hasBoard.current = !isRail || board.data !== null || board.error !== null;
+  const hasBoard = !isRail || board.data !== null || board.error !== null;
 
   useEffect(() => {
     if (!layout.boardTop || !layout.firstItemBottom) return;
@@ -459,9 +458,9 @@ function StationSheetContent({
     (event: LayoutChangeEvent) => {
       const { y, height } = event.nativeEvent.layout;
       measure("firstItemBottom", y + height);
-      if (hasBoard.current) isPeekFinal.current = true;
+      if (hasBoard) isPeekFinal.current = true;
     },
-    [measure],
+    [measure, hasBoard],
   );
 
   const selectType = useCallback(

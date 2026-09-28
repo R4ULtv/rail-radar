@@ -59,16 +59,12 @@ export function useTrendingStations(visible: boolean) {
   const refresh = useCallback(async () => {
     if (isLoading.current) return;
     isLoading.current = true;
-    try {
-      const next = await loadTrendingStations();
-      if (next) {
-        loadedAt.current = Date.now();
-        setStations(next);
-      }
-    } catch {
-      // Trending is optional; keep the last list if a refresh fails.
-    } finally {
-      isLoading.current = false;
+    // Trending is optional; keep the last list if a refresh fails.
+    const next = await loadTrendingStations().catch(() => null);
+    isLoading.current = false;
+    if (next) {
+      loadedAt.current = Date.now();
+      setStations(next);
     }
   }, []);
 

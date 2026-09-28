@@ -75,6 +75,31 @@ async function findUserLocation() {
   return location;
 }
 
+type LocateResult =
+  | { location: UserLocation }
+  | { location?: never; status: LocationStatus; message: string };
+
+/** Asks for permission if needed, then finds the user. Kept out of the component so it compiles. */
+async function requestUserLocation(): Promise<LocateResult> {
+  try {
+    if (!(await Location.hasServicesEnabledAsync())) {
+      return { status: "off", message: "Location Services are turned off." };
+    }
+
+    const permission = await Location.requestForegroundPermissionsAsync();
+    if (!permission.granted) {
+      return {
+        status: permission.canAskAgain ? "idle" : "off",
+        message: "Location permission was not granted.",
+      };
+    }
+
+    return { location: await findUserLocation() };
+  } catch {
+    return { status: "idle", message: "Your location is unavailable right now." };
+  }
+}
+
 type StationPressEvent = Parameters<
   NonNullable<ComponentProps<typeof Mapbox.ShapeSource>["onPress"]>
 >[0];
@@ -258,39 +283,26 @@ export function MapScreen() {
   const locateUser = useCallback(async () => {
     haptics.tap();
     setLocationStatus("locating");
-    try {
-      if (!(await Location.hasServicesEnabledAsync())) {
-        setLocationStatus("off");
-        setMessage("Location Services are turned off.");
-        haptics.error();
-        return;
-      }
-
-      const permission = await Location.requestForegroundPermissionsAsync();
-      if (!permission.granted) {
-        setLocationStatus(permission.canAskAgain ? "idle" : "off");
-        setMessage("Location permission was not granted.");
-        haptics.error();
-        return;
-      }
-
-      const location = await findUserLocation();
-      setUserLocation(location);
-      hasMovedMap.current = true;
-      setLocationStatus("located");
-      setIsCentered(true);
-      setMessage(null);
-      camera.current?.setCamera({
-        centerCoordinate: [location.longitude, location.latitude],
-        zoomLevel: locateZoomLevel,
-        padding: noPadding,
-        animationDuration: 700,
-      });
-    } catch {
-      setLocationStatus("idle");
-      setMessage("Your location is unavailable right now.");
+    const result = await requestUserLocation();
+    if (!result.location) {
+      setLocationStatus(result.status);
+      setMessage(result.message);
       haptics.error();
+      return;
     }
+
+    const { location } = result;
+    setUserLocation(location);
+    hasMovedMap.current = true;
+    setLocationStatus("located");
+    setIsCentered(true);
+    setMessage(null);
+    camera.current?.setCamera({
+      centerCoordinate: [location.longitude, location.latitude],
+      zoomLevel: locateZoomLevel,
+      padding: noPadding,
+      animationDuration: 700,
+    });
   }, []);
 
   const resetHeading = useCallback(() => {

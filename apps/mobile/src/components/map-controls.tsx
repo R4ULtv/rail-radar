@@ -74,7 +74,7 @@ export function useMapHeading() {
   const heading = useSharedValue(0);
   const onHeadingChange = useCallback(
     (value: number) => {
-      heading.value = value;
+      heading.set(value);
     },
     [heading],
   );
@@ -170,6 +170,24 @@ export function useIsSheetFullyOpen(sheets: SheetPosition[]) {
   return isFullyOpen;
 }
 
+// Named worklets rather than inline callbacks: the React Compiler hoists callbacks that capture
+// nothing out of the worklet that calls them, and a hoisted plain function can't run on the UI
+// thread.
+function highestTop(top: number, sheet: SheetPosition) {
+  "worklet";
+  return Math.min(top, sheet.animatedPosition.value);
+}
+
+function sheetHiddenProgress(sheet: SheetPosition) {
+  "worklet";
+  return sheet.animatedIndex.value / sheetControlsHiddenAt;
+}
+
+function overlayHiddenProgress(sheet: SheetPosition) {
+  "worklet";
+  return (sheet.animatedIndex.value + 1) / sheetControlsHiddenAt;
+}
+
 /**
  * Keeps its controls just above the sheets, like Apple Maps, following them as they're dragged.
  * They fade out as a sheet opens beyond its smallest size, or as an overlay opens at all.
@@ -187,19 +205,11 @@ export function SheetControls({
   const { height } = useWindowDimensions();
   const controlsHeight = useSharedValue(0);
   const [isVisible, setIsVisible] = useState(true);
-  const sheetTop = useDerivedValue(() =>
-    [...sheets, ...overlays].reduce(
-      (top, sheet) => Math.min(top, sheet.animatedPosition.value),
-      height,
-    ),
-  );
+  const sheetTop = useDerivedValue(() => [...sheets, ...overlays].reduce(highestTop, height));
   // How far the controls are from hidden, from 0 (shown) to 1 (hidden). An overlay counts from
   // closed rather than from its smallest size, since that's its only one.
   const hiddenProgress = useDerivedValue(() =>
-    Math.max(
-      ...sheets.map((sheet) => sheet.animatedIndex.value / sheetControlsHiddenAt),
-      ...overlays.map((sheet) => (sheet.animatedIndex.value + 1) / sheetControlsHiddenAt),
-    ),
+    Math.max(...sheets.map(sheetHiddenProgress), ...overlays.map(overlayHiddenProgress)),
   );
 
   useAnimatedReaction(
@@ -221,7 +231,7 @@ export function SheetControls({
       importantForAccessibility={isVisible ? "auto" : "no-hide-descendants"}
       style={[styles.sheetControls, style]}
       onLayout={(event) => {
-        controlsHeight.value = event.nativeEvent.layout.height;
+        controlsHeight.set(event.nativeEvent.layout.height);
       }}
     >
       {children}
@@ -245,9 +255,7 @@ export function TopControls({
   const { height } = useWindowDimensions();
   const controlsHeight = useSharedValue(0);
   const [isVisible, setIsVisible] = useState(true);
-  const sheetTop = useDerivedValue(() =>
-    sheets.reduce((min, sheet) => Math.min(min, sheet.animatedPosition.value), height),
-  );
+  const sheetTop = useDerivedValue(() => sheets.reduce(highestTop, height));
   const controlsBottom = useDerivedValue(() => top + controlsHeight.value);
 
   useAnimatedReaction(
@@ -273,7 +281,7 @@ export function TopControls({
       importantForAccessibility={isVisible ? "auto" : "no-hide-descendants"}
       style={[styles.topControls, { top }, style]}
       onLayout={(event) => {
-        controlsHeight.value = event.nativeEvent.layout.height;
+        controlsHeight.set(event.nativeEvent.layout.height);
       }}
     >
       {children}
@@ -409,9 +417,10 @@ export function Compass({
   useAnimatedReaction(
     () => heading.value,
     (value) => {
-      const turn = ((((value - dialTarget.value) % 360) + 540) % 360) - 180;
-      dialTarget.value += turn;
-      dialHeading.value = withSpring(dialTarget.value, dialSpring);
+      const turn = ((((value - dialTarget.get()) % 360) + 540) % 360) - 180;
+      const target = dialTarget.get() + turn;
+      dialTarget.set(target);
+      dialHeading.set(withSpring(target, dialSpring));
     },
   );
 
