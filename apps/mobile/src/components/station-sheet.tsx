@@ -2,7 +2,6 @@ import { getCountry } from "@repo/data/countries";
 import type { Station } from "@repo/data/types";
 import BottomSheet, { BottomSheetScrollView, BottomSheetView } from "@gorhom/bottom-sheet";
 import { Button } from "heroui-native/button";
-import { CloseButton } from "heroui-native/close-button";
 import { useThemeColor } from "heroui-native/hooks";
 import { PressableFeedback } from "heroui-native/pressable-feedback";
 import { Tabs } from "heroui-native/tabs";
@@ -31,8 +30,13 @@ import {
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { CountryFlag } from "@/components/country-flag";
-import { useSheetTopInset, type SheetPosition } from "@/components/map-controls";
+import {
+  useSheetBottomInset,
+  useSheetTopInset,
+  type SheetPosition,
+} from "@/components/map-controls";
 import { ErrorBoundary } from "@/components/error-boundary";
+import { SheetHeader } from "@/components/sheet-header";
 import { StationDetails } from "@/components/station-details";
 import { TrainRow, TrainRowSkeleton, trainKey } from "@/components/train-row";
 import { useStationBoard, type BoardType } from "@/hooks/use-station-board";
@@ -242,7 +246,7 @@ function StationInfo({ info }: { info: string }) {
       }}
     >
       <View style={styles.noticeIcon}>
-        <Megaphone size={15} color={mutedColor} />
+        <Megaphone size={16} color={mutedColor} />
       </View>
       <Text className="flex-1 text-sm leading-5 text-muted" numberOfLines={isExpanded ? 0 : 1}>
         {info}
@@ -307,8 +311,8 @@ const LiveBoard = memo(function LiveBoard({
   // Offline, the board reloads by itself once the connection is back.
   const retryButton = isOnline ? (
     <Button className="self-start" size="sm" variant="tertiary" onPress={retry}>
-      <RefreshCw size={15} color={foregroundColor} />
-      <Button.Label>Retry</Button.Label>
+      <RefreshCw size={16} color={foregroundColor} />
+      <Button.Label>Try again</Button.Label>
     </Button>
   ) : null;
 
@@ -390,7 +394,7 @@ const LiveBoard = memo(function LiveBoard({
         </Button>
       ) : null}
       {warning ? (
-        <Notice className="mt-3" isWarning icon={<TriangleAlert size={15} color={warningColor} />}>
+        <Notice className="mt-3" isWarning icon={<TriangleAlert size={16} color={warningColor} />}>
           {warning}
         </Notice>
       ) : null}
@@ -423,6 +427,7 @@ function StationSheetContent({
   onContentHeightChange,
 }: StationSheetContentProps) {
   const insets = useSafeAreaInsets();
+  const bottomInset = useSheetBottomInset();
   const [type, setType] = useState<BoardType>("departures");
   const isRail = station.type === "rail";
   const arrivalsSupported = getCountry(station.id) !== "lu";
@@ -473,26 +478,24 @@ function StationSheetContent({
     // open only as tall as it needs.
     <BottomSheetScrollView
       stickyHeaderIndices={[0]}
-      // The same space below the report links as above them, clear of the home indicator.
-      contentContainerStyle={{ paddingBottom: Math.max(insets.bottom, 32) }}
+      contentContainerStyle={{ paddingBottom: bottomInset }}
       onContentSizeChange={(_, height) => onContentHeightChange(height)}
     >
       <View className="bg-surface px-4 pb-3">
-        <View className="flex-row items-start gap-3">
-          <View style={styles.title}>
-            <Text className="text-xl font-semibold text-foreground" numberOfLines={2}>
-              {station.name}
-            </Text>
-            <StationSubtitle
-              station={station}
-              timestamp={board.data?.timestamp}
-              hasError={board.error !== null}
-              isOnline={board.isOnline}
-              userLocation={userLocation}
-            />
-          </View>
-          <CloseButton accessibilityLabel="Close station" onPress={onClose} />
-        </View>
+        <SheetHeader
+          title={station.name}
+          titleLines={2}
+          closeLabel="Close station"
+          onClose={onClose}
+        >
+          <StationSubtitle
+            station={station}
+            timestamp={board.data?.timestamp}
+            hasError={board.error !== null}
+            isOnline={board.isOnline}
+            userLocation={userLocation}
+          />
+        </SheetHeader>
         <QuickActions station={station} />
         {isRail ? (
           <View className="pt-3">
@@ -529,20 +532,16 @@ function StationSheetContent({
 
 /** Shown in the sheet if the station fails to render, so the map stays usable. */
 function StationError({ onRetry, onClose }: { onRetry: () => void; onClose: () => void }) {
-  const insets = useSafeAreaInsets();
+  const bottomInset = useSheetBottomInset();
   const foregroundColor = useThemeColor("default-foreground");
 
   return (
-    <BottomSheetView className="gap-3 px-4" style={{ paddingBottom: Math.max(insets.bottom, 16) }}>
-      <View className="flex-row items-start gap-3">
-        <View style={styles.title}>
-          <Text className="text-xl font-semibold text-foreground">Something went wrong</Text>
-          <Text className="mt-1 text-sm text-muted">This station couldn't be shown.</Text>
-        </View>
-        <CloseButton accessibilityLabel="Close station" onPress={onClose} />
-      </View>
+    <BottomSheetView className="gap-3 px-4" style={{ paddingBottom: bottomInset }}>
+      <SheetHeader title="Something went wrong" closeLabel="Close station" onClose={onClose}>
+        <Text className="mt-1 text-sm text-muted">This station couldn't be shown.</Text>
+      </SheetHeader>
       <Button className="self-start" size="sm" variant="tertiary" onPress={onRetry}>
-        <RefreshCw size={15} color={foregroundColor} />
+        <RefreshCw size={16} color={foregroundColor} />
         <Button.Label>Try again</Button.Label>
       </Button>
     </BottomSheetView>
@@ -648,7 +647,6 @@ export function StationSheet({
 }
 
 const styles = StyleSheet.create({
-  title: { flex: 1, minWidth: 0 },
   noticeIcon: { marginTop: 2 },
   chevronUp: { transform: [{ rotate: "180deg" }] },
   tabularNums: { fontVariant: ["tabular-nums"] },

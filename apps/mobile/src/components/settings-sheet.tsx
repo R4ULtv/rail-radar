@@ -1,6 +1,5 @@
 import Mapbox from "@rnmapbox/maps";
 import { Image } from "expo-image";
-import { CloseButton } from "heroui-native/close-button";
 import { useThemeColor } from "heroui-native/hooks";
 import { ListGroup } from "heroui-native/list-group";
 import { Separator } from "heroui-native/separator";
@@ -32,11 +31,16 @@ import TrainFront from "lucide-react-native/icons/train-front";
 import Users from "lucide-react-native/icons/users";
 import { Fragment, memo, useCallback, useState, type ComponentType, type ReactNode } from "react";
 import { Alert, Linking, Modal, Platform, ScrollView, StyleSheet, Text, View } from "react-native";
-import { SafeAreaProvider, SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
+import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 
 import { expo } from "../../app.json";
-import { SettingsButton, type LocationStatus } from "@/components/map-controls";
+import {
+  SettingsButton,
+  useSheetBottomInset,
+  type LocationStatus,
+} from "@/components/map-controls";
 import { PageSheetHandle } from "@/components/page-sheet-handle";
+import { SheetHeader } from "@/components/sheet-header";
 import { SectionTitle } from "@/components/station-list";
 import { resetStations, useStationsDownloadedAt } from "@/hooks/use-stations-url";
 import {
@@ -333,22 +337,17 @@ const SettingsContent = memo(function SettingsContent({
   getMapFeedbackUrl: () => string;
   onClose: () => void;
 }) {
-  const insets = useSafeAreaInsets();
+  const bottomInset = useSheetBottomInset();
   const mutedColor = useThemeColor("muted");
 
   return (
     <SafeAreaView edges={["top", "left", "right"]} style={styles.content}>
       <PageSheetHandle />
-      <View
-        className={`flex-row items-center gap-3 px-4 pb-1 ${Platform.OS === "ios" ? "" : "pt-4"}`}
-      >
-        <Text className="flex-1 text-xl font-semibold text-foreground">Settings</Text>
-        <CloseButton accessibilityLabel="Close settings" onPress={onClose} />
+      <View className={`px-4 pb-1 ${Platform.OS === "ios" ? "" : "pt-4"}`}>
+        <SheetHeader title="Settings" closeLabel="Close settings" onClose={onClose} />
       </View>
 
-      <ScrollView
-        contentContainerStyle={{ paddingHorizontal: 16, paddingBottom: insets.bottom + 32 }}
-      >
+      <ScrollView contentContainerStyle={{ paddingHorizontal: 16, paddingBottom: bottomInset }}>
         <View className="mt-5">
           <SectionTitle icon={<Palette size={14} color={mutedColor} />}>Appearance</SectionTitle>
           <ThemeTabs />

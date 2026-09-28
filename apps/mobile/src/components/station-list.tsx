@@ -21,7 +21,7 @@ export function StationTypeIcon({ type }: { type: Station["type"] }) {
 
 export function SectionTitle({ icon, children }: { icon?: ReactNode; children: ReactNode }) {
   return (
-    <View className="mb-2 ml-2 flex-row items-center gap-1.5">
+    <View className="mx-4 mb-2 flex-row items-center gap-1.5">
       {icon}
       <Text className="text-sm font-medium text-muted">{children}</Text>
     </View>

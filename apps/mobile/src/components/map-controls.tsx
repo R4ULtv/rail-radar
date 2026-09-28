@@ -147,6 +147,11 @@ export function useSheetTopInset() {
   return useSafeAreaInsets().top + 8;
 }
 
+/** The space below every sheet's content, clear of the home indicator. */
+export function useSheetBottomInset() {
+  return useSafeAreaInsets().bottom + 16;
+}
+
 /**
  * Whether one of the sheets is fully open. Sheets are only as tall as their content, so an open
  * sheet can still leave most of the map uncovered.

@@ -25,7 +25,11 @@ import Animated, { Extrapolation, interpolate, useAnimatedStyle } from "react-na
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { MapAttribution } from "@/components/map-attribution";
-import { useSheetTopInset, type SheetPosition } from "@/components/map-controls";
+import {
+  useSheetBottomInset,
+  useSheetTopInset,
+  type SheetPosition,
+} from "@/components/map-controls";
 import { StationSection, StationSectionSkeleton } from "@/components/station-list";
 import { useStationSearch } from "@/hooks/use-station-search";
 import { useRecentStations, useSavedStations } from "@/hooks/use-stored-stations";
@@ -67,7 +71,7 @@ function VisitorCounts({ station }: { station: TrendingStation }) {
   return (
     <View className="flex-row items-center gap-1">
       <User size={14} color={color} />
-      <Text className="text-xs text-muted" style={styles.tabularNums}>
+      <Text className="text-sm text-muted" style={styles.tabularNums}>
         {station.uniqueVisitors.toLocaleString()} ({station.visits.toLocaleString()})
       </Text>
     </View>
@@ -81,7 +85,7 @@ function renderVisitorCounts(station: TrendingStation) {
 function StationDistance({ station, from }: { station: Station; from: UserLocation }) {
   if (!station.geo) return null;
   return (
-    <Text className="text-xs text-muted" style={styles.tabularNums}>
+    <Text className="text-sm text-muted" style={styles.tabularNums}>
       {formatDistance(distanceKm(from, station.geo))}
     </Text>
   );
@@ -91,7 +95,7 @@ function EmptyState({ children }: { children: ReactNode }) {
   return <View style={styles.emptyState}>{children}</View>;
 }
 
-const searchResultsTitle = "Search Results";
+const searchResultsTitle = "Search results";
 
 // Memoized, so hiding and showing the sheet around a station sheet doesn't re-render its lists.
 const SearchSheetContent = memo(function SearchSheetContent({
@@ -107,7 +111,7 @@ const SearchSheetContent = memo(function SearchSheetContent({
   onSelectStation: (station: Station) => void;
   getMapFeedbackUrl: () => string;
 }) {
-  const insets = useSafeAreaInsets();
+  const bottomInset = useSheetBottomInset();
   const keyboardHeight = useKeyboardHeight();
   const { animatedIndex, snapToIndex } = useBottomSheet();
   // Only the search bar is visible while collapsed; fade the lists in as the sheet opens.
@@ -167,7 +171,8 @@ const SearchSheetContent = memo(function SearchSheetContent({
       stickyHeaderIndices={[0]}
       keyboardDismissMode="on-drag"
       keyboardShouldPersistTaps="handled"
-      contentContainerStyle={{ paddingBottom: Math.max(keyboardHeight, insets.bottom) + 24 }}
+      // With the keyboard up, the same space above it instead.
+      contentContainerStyle={{ paddingBottom: Math.max(keyboardHeight + 16, bottomInset) }}
     >
       <View className="bg-surface px-4" style={{ paddingTop: searchFieldTopSpacing }}>
         <SearchField value={query} onChange={setQuery}>
@@ -222,18 +227,14 @@ const SearchSheetContent = memo(function SearchSheetContent({
 
       <Animated.View className="px-4" style={listStyle}>
         {!search.isActive ? null : search.error ? (
-          <View className="mt-5 rounded-2xl bg-danger-soft p-4">
-            <Text className="text-sm font-medium text-danger-soft-foreground">
-              Unable to search stations
-            </Text>
-            <Text className="mt-0.5 text-xs text-danger-soft-foreground">{search.error}</Text>
-            <Button
-              className="mt-3 self-start"
-              size="sm"
-              variant="secondary"
-              onPress={search.retry}
-            >
-              <RefreshCw size={15} color={foregroundColor} />
+          // Like the live board's error.
+          <View className="mt-5 gap-3 px-4">
+            <View className="gap-0.5">
+              <Text className="text-sm font-medium text-foreground">Unable to search stations</Text>
+              <Text className="text-sm text-muted">{search.error}</Text>
+            </View>
+            <Button className="self-start" size="sm" variant="tertiary" onPress={search.retry}>
+              <RefreshCw size={16} color={foregroundColor} />
               <Button.Label>Try again</Button.Label>
             </Button>
           </View>
@@ -246,11 +247,11 @@ const SearchSheetContent = memo(function SearchSheetContent({
             onSelect={selectStation}
           />
         ) : noResults ? (
-          <View className="mt-5 flex-row items-center gap-3 px-2">
+          <View className="mt-5 items-center gap-2 px-4 py-4">
             <SearchX size={20} color={mutedColor} />
-            <View className="gap-0.5">
+            <View className="items-center gap-0.5">
               <Text className="text-sm font-medium text-foreground">No stations found</Text>
-              <Text className="text-xs text-muted">Try a different search term</Text>
+              <Text className="text-sm text-muted">Try a different search term.</Text>
             </View>
           </View>
         ) : (
@@ -259,21 +260,21 @@ const SearchSheetContent = memo(function SearchSheetContent({
         {showDefaultLists ? (
           <>
             <StationSection
-              title="Recent Stations"
+              title="Recent stations"
               icon={History}
               stations={unsavedRecentStations}
               onSelect={selectStation}
               collapsedCount={3}
             />
             <StationSection
-              title="Saved Stations"
+              title="Saved stations"
               icon={Bookmark}
               stations={savedStations}
               onSelect={selectStation}
               collapsedCount={5}
             />
             <StationSection
-              title="Popular Stations (7-day trending)"
+              title="Trending (last 7 days)"
               icon={TrendingUp}
               stations={trendingStations}
               renderSuffix={renderVisitorCounts}

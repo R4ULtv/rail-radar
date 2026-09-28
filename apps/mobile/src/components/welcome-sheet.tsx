@@ -7,8 +7,9 @@ import Palette from "lucide-react-native/icons/palette";
 import WifiOff from "lucide-react-native/icons/wifi-off";
 import { memo, type ComponentType } from "react";
 import { Modal, ScrollView, StyleSheet, Text, View } from "react-native";
-import { SafeAreaProvider, SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
+import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 
+import { useSheetBottomInset } from "@/components/map-controls";
 import { PageSheetHandle } from "@/components/page-sheet-handle";
 import { haptics } from "@/lib/haptics";
 
@@ -43,7 +44,7 @@ const features: {
 ];
 
 const WelcomeContent = memo(function WelcomeContent({ onClose }: { onClose: () => void }) {
-  const insets = useSafeAreaInsets();
+  const bottomInset = useSheetBottomInset();
   const accentColor = useThemeColor("accent");
 
   return (
@@ -76,7 +77,7 @@ const WelcomeContent = memo(function WelcomeContent({ onClose }: { onClose: () =
         </Text>
       </ScrollView>
 
-      <View className="px-6 pt-3" style={{ paddingBottom: insets.bottom + 16 }}>
+      <View className="px-6 pt-3" style={{ paddingBottom: bottomInset }}>
         <Button
           size="lg"
           onPress={() => {

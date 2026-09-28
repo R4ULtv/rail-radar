@@ -4,15 +4,14 @@ import BottomSheet, {
   type BottomSheetBackdropProps,
 } from "@gorhom/bottom-sheet";
 import { Image } from "expo-image";
-import { CloseButton } from "heroui-native/close-button";
 import { useThemeColor } from "heroui-native/hooks";
 import { useEffect, useRef } from "react";
 import { BackHandler, Pressable, StyleSheet, Text, View } from "react-native";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useUniwind } from "uniwind";
 
 import { MapAttribution } from "@/components/map-attribution";
-import type { SheetPosition } from "@/components/map-controls";
+import { useSheetBottomInset, type SheetPosition } from "@/components/map-controls";
+import { SheetHeader } from "@/components/sheet-header";
 import { haptics } from "@/lib/haptics";
 import { setMapStyle, useMapStyle, type MapStyle } from "@/lib/map-style";
 
@@ -93,7 +92,7 @@ export function MapStyleSheet({
   /** "Improve this map" for where the map is now, for the map credits. */
   getMapFeedbackUrl: () => string;
 }) {
-  const insets = useSafeAreaInsets();
+  const bottomInset = useSheetBottomInset();
   const sheetRef = useRef<BottomSheet>(null);
   const [surfaceColor, mutedColor] = useThemeColor(["surface", "muted"]);
   const mapStyle = useMapStyle();
@@ -121,16 +120,12 @@ export function MapStyleSheet({
       handleIndicatorStyle={{ backgroundColor: mutedColor }}
       onClose={onClose}
     >
-      <BottomSheetView style={[styles.content, { paddingBottom: insets.bottom + 16 }]}>
-        {/* Centered on the sheet like Apple Maps' map modes, with the close button on top. */}
-        <View className="flex-row items-center justify-end">
-          <View pointerEvents="none" style={styles.title}>
-            <Text accessibilityRole="header" className="text-xl font-semibold text-foreground">
-              Map style
-            </Text>
-          </View>
-          <CloseButton accessibilityLabel="Close map" onPress={() => sheetRef.current?.close()} />
-        </View>
+      <BottomSheetView style={[styles.content, { paddingBottom: bottomInset }]}>
+        <SheetHeader
+          title="Map style"
+          closeLabel="Close map style"
+          onClose={() => sheetRef.current?.close()}
+        />
         <View accessibilityRole="radiogroup" className="mt-4 flex-row gap-3">
           {options.map(({ value, label }) => (
             <MapStyleOption
@@ -141,7 +136,7 @@ export function MapStyleSheet({
             />
           ))}
         </View>
-        <MapAttribution className="mt-6" getMapFeedbackUrl={getMapFeedbackUrl} />
+        <MapAttribution className="mt-8" getMapFeedbackUrl={getMapFeedbackUrl} />
       </BottomSheetView>
     </BottomSheet>
   );
@@ -149,7 +144,6 @@ export function MapStyleSheet({
 
 const styles = StyleSheet.create({
   content: { paddingHorizontal: 16 },
-  title: { ...StyleSheet.absoluteFill, alignItems: "center", justifyContent: "center" },
   option: { flex: 1, alignItems: "center", gap: 8 },
   // The ring sits outside the preview with a gap, like a selected Apple Maps mode.
   previewRing: {

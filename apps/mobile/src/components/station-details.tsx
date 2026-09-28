@@ -40,7 +40,7 @@ const StyledImage = withUniwind(Image);
 
 function renderNearbyDistance(nearby: NearbyStation) {
   return (
-    <Text className="text-xs text-muted" style={styles.tabularNums}>
+    <Text className="text-sm text-muted" style={styles.tabularNums}>
       {formatDistance(nearby.distance)}
     </Text>
   );
@@ -205,7 +205,7 @@ function StationAbout({ station, mutedColor }: { station: Station; mutedColor: s
 function ReportLinks({ mutedColor }: { mutedColor: string }) {
   const links = [
     { label: "Report a problem", icon: Bug, url: bugReportUrl },
-    { label: "Feature request", icon: Lightbulb, url: featureRequestUrl },
+    { label: "Request a feature", icon: Lightbulb, url: featureRequestUrl },
   ];
 
   return (
@@ -258,7 +258,7 @@ export const StationDetails = memo(function StationDetails({
     <View className="px-4">
       <StationPhotos photos={photos} mutedColor={mutedColor} />
       <StationSection
-        title="Nearby Stations"
+        title="Nearby stations"
         icon={MapPin}
         stations={nearbyStations}
         renderSuffix={renderNearbyDistance}
