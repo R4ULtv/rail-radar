@@ -25,7 +25,7 @@ import Animated, { Extrapolation, interpolate, useAnimatedStyle } from "react-na
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { MapAttribution } from "@/components/map-attribution";
-import type { SheetPosition } from "@/components/map-controls";
+import { useSheetTopInset, type SheetPosition } from "@/components/map-controls";
 import { StationSection, StationSectionSkeleton } from "@/components/station-list";
 import { useStationSearch } from "@/hooks/use-station-search";
 import { useRecentStations, useSavedStations } from "@/hooks/use-stored-stations";
@@ -161,8 +161,15 @@ const SearchSheetContent = memo(function SearchSheetContent({
   );
 
   return (
-    <View style={styles.content}>
-      <View className="px-4" style={{ paddingTop: searchFieldTopSpacing }}>
+    // The search bar is the list's sticky header, so the sheet can measure all of its content
+    // and open only as tall as it needs.
+    <BottomSheetScrollView
+      stickyHeaderIndices={[0]}
+      keyboardDismissMode="on-drag"
+      keyboardShouldPersistTaps="handled"
+      contentContainerStyle={{ paddingBottom: Math.max(keyboardHeight, insets.bottom) + 24 }}
+    >
+      <View className="bg-surface px-4" style={{ paddingTop: searchFieldTopSpacing }}>
         <SearchField value={query} onChange={setQuery}>
           <SearchField.Group>
             <SearchField.SearchIcon />
@@ -213,86 +220,77 @@ const SearchSheetContent = memo(function SearchSheetContent({
         </SearchField>
       </View>
 
-      <Animated.View style={[styles.content, listStyle]}>
-        <BottomSheetScrollView
-          keyboardDismissMode="on-drag"
-          keyboardShouldPersistTaps="handled"
-          contentContainerStyle={{
-            paddingHorizontal: 16,
-            paddingBottom: Math.max(keyboardHeight, insets.bottom) + 24,
-          }}
-        >
-          {!search.isActive ? null : search.error ? (
-            <View className="mt-5 rounded-2xl bg-danger-soft p-4">
-              <Text className="text-sm font-medium text-danger-soft-foreground">
-                Unable to search stations
-              </Text>
-              <Text className="mt-0.5 text-xs text-danger-soft-foreground">{search.error}</Text>
-              <Button
-                className="mt-3 self-start"
-                size="sm"
-                variant="secondary"
-                onPress={search.retry}
-              >
-                <RefreshCw size={15} color={foregroundColor} />
-                <Button.Label>Try again</Button.Label>
-              </Button>
+      <Animated.View className="px-4" style={listStyle}>
+        {!search.isActive ? null : search.error ? (
+          <View className="mt-5 rounded-2xl bg-danger-soft p-4">
+            <Text className="text-sm font-medium text-danger-soft-foreground">
+              Unable to search stations
+            </Text>
+            <Text className="mt-0.5 text-xs text-danger-soft-foreground">{search.error}</Text>
+            <Button
+              className="mt-3 self-start"
+              size="sm"
+              variant="secondary"
+              onPress={search.retry}
+            >
+              <RefreshCw size={15} color={foregroundColor} />
+              <Button.Label>Try again</Button.Label>
+            </Button>
+          </View>
+        ) : search.stations.length > 0 ? (
+          <StationSection
+            title={searchResultsTitle}
+            icon={List}
+            stations={search.stations}
+            renderSuffix={renderDistance}
+            onSelect={selectStation}
+          />
+        ) : noResults ? (
+          <View className="mt-5 flex-row items-center gap-3 px-2">
+            <SearchX size={20} color={mutedColor} />
+            <View className="gap-0.5">
+              <Text className="text-sm font-medium text-foreground">No stations found</Text>
+              <Text className="text-xs text-muted">Try a different search term</Text>
             </View>
-          ) : search.stations.length > 0 ? (
+          </View>
+        ) : (
+          <StationSectionSkeleton title={searchResultsTitle} icon={List} />
+        )}
+        {showDefaultLists ? (
+          <>
             <StationSection
-              title={searchResultsTitle}
-              icon={List}
-              stations={search.stations}
-              renderSuffix={renderDistance}
+              title="Recent Stations"
+              icon={History}
+              stations={unsavedRecentStations}
+              onSelect={selectStation}
+              collapsedCount={3}
+            />
+            <StationSection
+              title="Saved Stations"
+              icon={Bookmark}
+              stations={savedStations}
+              onSelect={selectStation}
+              collapsedCount={5}
+            />
+            <StationSection
+              title="Popular Stations (7-day trending)"
+              icon={TrendingUp}
+              stations={trendingStations}
+              renderSuffix={renderVisitorCounts}
               onSelect={selectStation}
             />
-          ) : noResults ? (
-            <View className="mt-5 flex-row items-center gap-3 px-2">
-              <SearchX size={20} color={mutedColor} />
-              <View className="gap-0.5">
-                <Text className="text-sm font-medium text-foreground">No stations found</Text>
-                <Text className="text-xs text-muted">Try a different search term</Text>
-              </View>
-            </View>
-          ) : (
-            <StationSectionSkeleton title={searchResultsTitle} icon={List} />
-          )}
-          {showDefaultLists ? (
-            <>
-              <StationSection
-                title="Recent Stations"
-                icon={History}
-                stations={unsavedRecentStations}
-                onSelect={selectStation}
-                collapsedCount={3}
-              />
-              <StationSection
-                title="Saved Stations"
-                icon={Bookmark}
-                stations={savedStations}
-                onSelect={selectStation}
-                collapsedCount={5}
-              />
-              <StationSection
-                title="Popular Stations (7-day trending)"
-                icon={TrendingUp}
-                stations={trendingStations}
-                renderSuffix={renderVisitorCounts}
-                onSelect={selectStation}
-              />
-              {!search.isActive && !hasDefaultLists ? (
-                <EmptyState>
-                  <Text className="text-center text-sm text-muted">
-                    Search for a station by name, or save one from its live board to find it here.
-                  </Text>
-                </EmptyState>
-              ) : null}
-            </>
-          ) : null}
-          <MapAttribution className="mt-8" getMapFeedbackUrl={getMapFeedbackUrl} />
-        </BottomSheetScrollView>
+            {!search.isActive && !hasDefaultLists ? (
+              <EmptyState>
+                <Text className="text-center text-sm text-muted">
+                  Search for a station by name, or save one from its live board to find it here.
+                </Text>
+              </EmptyState>
+            ) : null}
+          </>
+        ) : null}
+        <MapAttribution className="mt-8" getMapFeedbackUrl={getMapFeedbackUrl} />
       </Animated.View>
-    </View>
+    </BottomSheetScrollView>
   );
 });
 
@@ -304,8 +302,6 @@ interface SearchSheetProps {
   /** Where the user is: nearby stations rank higher and results show their distance. */
   userLocation: UserLocation | null;
   onSelectStation: (station: Station) => void;
-  /** Whether the sheet is fully open, so the map can ignore gestures in the strip above it. */
-  onExpandedChange: (isExpanded: boolean) => void;
   /** Where the sheet is, for the map controls that sit above it. */
   position: SheetPosition;
   /** "Improve this map" for where the map is now, for the map credits. */
@@ -317,11 +313,10 @@ export function SearchSheet({
   stationsUrl,
   userLocation,
   onSelectStation,
-  onExpandedChange,
   position,
   getMapFeedbackUrl,
 }: SearchSheetProps) {
-  const insets = useSafeAreaInsets();
+  const topInset = useSheetTopInset();
   const collapsedHeight = useSearchSheetCollapsedHeight();
   const sheetRef = useRef<BottomSheet>(null);
   const [isExpanded, setIsExpanded] = useState(false);
@@ -350,12 +345,11 @@ export function SearchSheet({
     <BottomSheet
       ref={sheetRef}
       index={0}
-      // Collapsed to the search bar or fully open; the half step is for the station sheet.
-      snapPoints={[collapsedHeight, "100%"]}
-      topInset={insets.top + 8}
+      // Collapsed to the search bar, or open as tall as the lists, up to the top of the screen.
+      snapPoints={[collapsedHeight]}
+      topInset={topInset}
       animatedIndex={position.animatedIndex}
       animatedPosition={position.animatedPosition}
-      enableDynamicSizing={false}
       enablePanDownToClose={false}
       keyboardBehavior="extend"
       keyboardBlurBehavior="none"
@@ -364,7 +358,6 @@ export function SearchSheet({
       handleIndicatorStyle={{ backgroundColor: mutedColor }}
       onChange={(index) => {
         setIsExpanded(index === expandedIndex);
-        onExpandedChange(index === expandedIndex);
         if (index === 0) Keyboard.dismiss();
       }}
     >
@@ -380,7 +373,6 @@ export function SearchSheet({
 }
 
 const styles = StyleSheet.create({
-  content: { flex: 1 },
   tabularNums: { fontVariant: ["tabular-nums"] },
   emptyState: { alignItems: "center", justifyContent: "center", paddingVertical: 40 },
 });

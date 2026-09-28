@@ -16,6 +16,8 @@ import {
   MapControlGroup,
   MapStyleButton,
   SheetControls,
+  TopControls,
+  useIsSheetFullyOpen,
   useMapHeading,
   useSheetPosition,
   type LocationStatus,
@@ -122,13 +124,11 @@ export function MapScreen() {
   const getMapFeedbackUrl = useCallback(() => mapFeedbackUrl(mapPosition.current), []);
   // Whether the map is on the user's location, which fills the locate button.
   const [isCentered, setIsCentered] = useState(false);
-  // While a sheet is fully open, the strip of map above it stays still.
-  const [isSearchExpanded, setIsSearchExpanded] = useState(false);
-  const [isStationExpanded, setIsStationExpanded] = useState(false);
-  const isMapLocked = isSearchExpanded || isStationExpanded;
   // Where the sheets are, for the controls that sit above them.
   const searchSheetPosition = useSheetPosition();
   const stationSheetPosition = useSheetPosition();
+  // While a sheet is fully open, the strip of map above it stays still.
+  const isMapLocked = useIsSheetFullyOpen([searchSheetPosition, stationSheetPosition]);
   const mapStyleSheetPosition = useSheetPosition();
   const [isMapStyleOpen, setIsMapStyleOpen] = useState(false);
 
@@ -389,9 +389,12 @@ export function MapScreen() {
         {locationStatus === "located" ? <UserLocationMarker /> : null}
       </Mapbox.MapView>
 
-      <View style={[styles.settings, { top: insets.top + 12 }]}>
+      <TopControls
+        sheets={[searchSheetPosition, stationSheetPosition, mapStyleSheetPosition]}
+        top={insets.top + 12}
+      >
         <Settings locationStatus={locationStatus} getMapFeedbackUrl={getMapFeedbackUrl} />
-      </View>
+      </TopControls>
 
       <SheetControls sheets={[searchSheetPosition, stationSheetPosition, mapStyleSheetPosition]}>
         <Compass heading={heading} onPress={resetHeading} />
@@ -417,7 +420,6 @@ export function MapScreen() {
         stationsUrl={stationsUrl}
         userLocation={userLocation}
         onSelectStation={handleSearchSelect}
-        onExpandedChange={setIsSearchExpanded}
         position={searchSheetPosition}
         getMapFeedbackUrl={getMapFeedbackUrl}
       />
@@ -430,7 +432,6 @@ export function MapScreen() {
           userLocation={userLocation}
           onOpenChange={setSheetOpen}
           onSelectStation={selectStation}
-          onExpandedChange={setIsStationExpanded}
           position={stationSheetPosition}
         />
       ) : null}
@@ -451,10 +452,6 @@ export function MapScreen() {
 const styles = StyleSheet.create({
   screen: { flex: 1 },
   map: { flex: 1 },
-  settings: {
-    position: "absolute",
-    right: 16,
-  },
   message: {
     position: "absolute",
     left: 16,

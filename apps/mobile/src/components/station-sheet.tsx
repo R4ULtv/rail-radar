@@ -1,6 +1,6 @@
 import { getCountry } from "@repo/data/countries";
 import type { Station } from "@repo/data/types";
-import BottomSheet, { BottomSheetScrollView } from "@gorhom/bottom-sheet";
+import BottomSheet, { BottomSheetScrollView, BottomSheetView } from "@gorhom/bottom-sheet";
 import { Button } from "heroui-native/button";
 import { CloseButton } from "heroui-native/close-button";
 import { useThemeColor } from "heroui-native/hooks";
@@ -25,12 +25,13 @@ import {
   StyleSheet,
   Text,
   View,
+  useWindowDimensions,
   type LayoutChangeEvent,
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { CountryFlag } from "@/components/country-flag";
-import type { SheetPosition } from "@/components/map-controls";
+import { useSheetTopInset, type SheetPosition } from "@/components/map-controls";
 import { ErrorBoundary } from "@/components/error-boundary";
 import { StationDetails } from "@/components/station-details";
 import { TrainRow, TrainRowSkeleton, trainKey } from "@/components/train-row";
@@ -45,8 +46,10 @@ import type { UserLocation } from "@/lib/user-location";
 const handleHeight = 24;
 // Before the sheet has measured itself: the header, the tabs and one train.
 const defaultStationPeekHeight = 300;
-// The last snap point, where the sheet covers the map.
-const expandedIndex = 2;
+// The step between the peek and the fully open sheet, as a share of the screen.
+const middleStep = 0.6;
+// How much further the content has to go for that step to be worth a stop.
+const minStepGap = 80;
 // Long boards are cut short so the station details below them stay in reach.
 const collapsedTrainCount = 10;
 const stationTypeLabels = {
@@ -405,6 +408,7 @@ interface StationSheetContentProps {
   onClose: () => void;
   onSelectStation: (station: Station) => void;
   onPeekHeightChange: (height: number) => void;
+  onContentHeightChange: (height: number) => void;
 }
 
 function StationSheetContent({
@@ -416,6 +420,7 @@ function StationSheetContent({
   onClose,
   onSelectStation,
   onPeekHeightChange,
+  onContentHeightChange,
 }: StationSheetContentProps) {
   const insets = useSafeAreaInsets();
   const [type, setType] = useState<BoardType>("departures");
@@ -425,19 +430,15 @@ function StationSheetContent({
 
   // The sheet peeks down to the end of the first train. It's measured once the board has
   // loaded, and then kept, so refreshes and tab switches don't move the sheet.
-  const [layout, setLayout] = useState({ header: 0, boardTop: 0, firstItemBottom: 0 });
+  const [layout, setLayout] = useState({ boardTop: 0, firstItemBottom: 0 });
   const isPeekFinal = useRef(false);
   const hasBoard = useRef(false);
   hasBoard.current = !isRail || board.data !== null || board.error !== null;
 
   useEffect(() => {
-    if (!layout.header || !layout.firstItemBottom) return;
+    if (!layout.boardTop || !layout.firstItemBottom) return;
     onPeekHeightChange(
-      handleHeight +
-        layout.header +
-        layout.boardTop +
-        layout.firstItemBottom +
-        Math.max(insets.bottom, 12),
+      handleHeight + layout.boardTop + layout.firstItemBottom + Math.max(insets.bottom, 12),
     );
   }, [layout, insets.bottom, onPeekHeightChange]);
 
@@ -468,11 +469,15 @@ function StationSheetContent({
   );
 
   return (
-    <View style={styles.content}>
-      <View
-        className="px-4 pb-3"
-        onLayout={(event) => measure("header", event.nativeEvent.layout.height)}
-      >
+    // The header is the board's sticky header, so the sheet can measure all of its content and
+    // open only as tall as it needs.
+    <BottomSheetScrollView
+      stickyHeaderIndices={[0]}
+      // The same space below the report links as above them, clear of the home indicator.
+      contentContainerStyle={{ paddingBottom: Math.max(insets.bottom, 32) }}
+      onContentSizeChange={(_, height) => onContentHeightChange(height)}
+    >
+      <View className="bg-surface px-4 pb-3">
         <View className="flex-row items-start gap-3">
           <View style={styles.title}>
             <Text className="text-xl font-semibold text-foreground" numberOfLines={2}>
@@ -489,52 +494,46 @@ function StationSheetContent({
           <CloseButton accessibilityLabel="Close station" onPress={onClose} />
         </View>
         <QuickActions station={station} />
-      </View>
-
-      <BottomSheetScrollView
-        stickyHeaderIndices={isRail ? [0] : undefined}
-        // The same space below the report links as above them, clear of the home indicator.
-        contentContainerStyle={{ paddingBottom: Math.max(insets.bottom, 32) }}
-      >
         {isRail ? (
-          <View className="bg-surface px-4 pb-3">
+          <View className="pt-3">
             <BoardTabs type={type} arrivalsSupported={arrivalsSupported} onChange={selectType} />
           </View>
         ) : null}
-        <View onLayout={(event) => measure("boardTop", event.nativeEvent.layout.y)}>
-          {isRail ? (
-            <LiveBoard
-              key={type}
-              board={board}
-              type={type}
-              warning={getStationWarning(station.id)}
-              onFirstItemLayout={onFirstItemLayout}
-            />
-          ) : (
-            <Text className="px-4 pb-2 text-sm text-muted" onLayout={onFirstItemLayout}>
-              Live trains are shown for train stations only.
-            </Text>
-          )}
-        </View>
-        {showDetails ? (
-          <StationDetails
-            station={station}
-            isOpen={isOpen}
-            stationsUrl={stationsUrl}
-            onSelectStation={onSelectStation}
+      </View>
+      <View onLayout={(event) => measure("boardTop", event.nativeEvent.layout.y)}>
+        {isRail ? (
+          <LiveBoard
+            key={type}
+            board={board}
+            type={type}
+            warning={getStationWarning(station.id)}
+            onFirstItemLayout={onFirstItemLayout}
           />
-        ) : null}
-      </BottomSheetScrollView>
-    </View>
+        ) : (
+          <Text className="px-4 pb-2 text-sm text-muted" onLayout={onFirstItemLayout}>
+            Live trains are shown for train stations only.
+          </Text>
+        )}
+      </View>
+      {showDetails ? (
+        <StationDetails
+          station={station}
+          isOpen={isOpen}
+          stationsUrl={stationsUrl}
+          onSelectStation={onSelectStation}
+        />
+      ) : null}
+    </BottomSheetScrollView>
   );
 }
 
 /** Shown in the sheet if the station fails to render, so the map stays usable. */
 function StationError({ onRetry, onClose }: { onRetry: () => void; onClose: () => void }) {
+  const insets = useSafeAreaInsets();
   const foregroundColor = useThemeColor("default-foreground");
 
   return (
-    <View className="gap-3 px-4 pb-4">
+    <BottomSheetView className="gap-3 px-4" style={{ paddingBottom: Math.max(insets.bottom, 16) }}>
       <View className="flex-row items-start gap-3">
         <View style={styles.title}>
           <Text className="text-xl font-semibold text-foreground">Something went wrong</Text>
@@ -546,7 +545,7 @@ function StationError({ onRetry, onClose }: { onRetry: () => void; onClose: () =
         <RefreshCw size={15} color={foregroundColor} />
         <Button.Label>Try again</Button.Label>
       </Button>
-    </View>
+    </BottomSheetView>
   );
 }
 
@@ -558,8 +557,6 @@ interface StationSheetProps {
   userLocation: UserLocation | null;
   onOpenChange: (isOpen: boolean) => void;
   onSelectStation: (station: Station) => void;
-  /** Whether the sheet is fully open, so the map can ignore gestures in the strip above it. */
-  onExpandedChange: (isExpanded: boolean) => void;
   /** Where the sheet is, for the map controls that sit above it. */
   position: SheetPosition;
 }
@@ -571,13 +568,19 @@ export function StationSheet({
   userLocation,
   onOpenChange,
   onSelectStation,
-  onExpandedChange,
   position,
 }: StationSheetProps) {
-  const insets = useSafeAreaInsets();
+  const topInset = useSheetTopInset();
+  const { height: screenHeight } = useWindowDimensions();
   const sheetRef = useRef<BottomSheet>(null);
   const [index, setIndex] = useState(-1);
   const [peekHeight, setPeekHeight] = useState(defaultStationPeekHeight);
+  const [contentHeight, setContentHeight] = useState(0);
+  // The sheet opens as tall as its content, up to the top of the screen. The step in between is
+  // only there when the content goes well past it.
+  const hasMiddleStep =
+    contentHeight === 0 ||
+    handleHeight + contentHeight > (screenHeight - topInset) * middleStep + minStepGap;
   const [surfaceColor, mutedColor] = useThemeColor(["surface", "muted"]);
 
   // The sheet mounts open, since calls made before it has measured itself are dropped.
@@ -609,18 +612,16 @@ export function StationSheet({
     <BottomSheet
       ref={sheetRef}
       index={initialIndex}
-      snapPoints={[peekHeight, "60%", "100%"]}
-      topInset={insets.top + 8}
+      snapPoints={hasMiddleStep ? [peekHeight, `${middleStep * 100}%`] : [peekHeight]}
+      topInset={topInset}
       animatedIndex={position.animatedIndex}
       animatedPosition={position.animatedPosition}
-      enableDynamicSizing={false}
       enableOverDrag={false}
       enablePanDownToClose
       backgroundStyle={{ backgroundColor: surfaceColor, borderRadius: 24 }}
       handleIndicatorStyle={{ backgroundColor: mutedColor }}
       onChange={(next) => {
         setIndex(next);
-        onExpandedChange(next === expandedIndex);
         if (next === -1 && isOpen) onOpenChange(false);
       }}
     >
@@ -639,6 +640,7 @@ export function StationSheet({
           onClose={() => onOpenChange(false)}
           onSelectStation={onSelectStation}
           onPeekHeightChange={setPeekHeight}
+          onContentHeightChange={setContentHeight}
         />
       </ErrorBoundary>
     </BottomSheet>
@@ -646,7 +648,6 @@ export function StationSheet({
 }
 
 const styles = StyleSheet.create({
-  content: { flex: 1 },
   title: { flex: 1, minWidth: 0 },
   noticeIcon: { marginTop: 2 },
   chevronUp: { transform: [{ rotate: "180deg" }] },

@@ -23,6 +23,7 @@ import Animated, {
   withTiming,
   type SharedValue,
 } from "react-native-reanimated";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Svg, { Line, Path } from "react-native-svg";
 import { scheduleOnRN } from "react-native-worklets";
 
@@ -140,6 +141,29 @@ export function useSheetPosition(): SheetPosition {
   return { animatedIndex, animatedPosition };
 }
 
+/** Where a fully open sheet stops, just below the status bar. */
+export function useSheetTopInset() {
+  return useSafeAreaInsets().top + 8;
+}
+
+/**
+ * Whether one of the sheets is fully open. Sheets are only as tall as their content, so an open
+ * sheet can still leave most of the map uncovered.
+ */
+export function useIsSheetFullyOpen(sheets: SheetPosition[]) {
+  const topInset = useSheetTopInset();
+  const [isFullyOpen, setIsFullyOpen] = useState(false);
+
+  useAnimatedReaction(
+    () => sheets.some((sheet) => sheet.animatedPosition.value <= topInset + 1),
+    (fullyOpen, previous) => {
+      if (fullyOpen !== previous) scheduleOnRN(setIsFullyOpen, fullyOpen);
+    },
+  );
+
+  return isFullyOpen;
+}
+
 /**
  * Keeps its controls just above the sheets, like Apple Maps, following them as they're dragged.
  * They fade out as a sheet opens beyond its smallest size.
@@ -179,6 +203,58 @@ export function SheetControls({
       accessibilityElementsHidden={!isVisible}
       importantForAccessibility={isVisible ? "auto" : "no-hide-descendants"}
       style={[styles.sheetControls, style]}
+      onLayout={(event) => {
+        controlsHeight.value = event.nativeEvent.layout.height;
+      }}
+    >
+      {children}
+    </Animated.View>
+  );
+}
+
+/**
+ * Keeps its controls at the top of the screen, fading them out as a sheet comes up to them. A sheet
+ * that stops just short of the top would otherwise leave them sitting on its edge.
+ */
+export function TopControls({
+  sheets,
+  top,
+  children,
+}: {
+  sheets: SheetPosition[];
+  top: number;
+  children: ReactNode;
+}) {
+  const { height } = useWindowDimensions();
+  const controlsHeight = useSharedValue(0);
+  const [isVisible, setIsVisible] = useState(true);
+  const sheetTop = useDerivedValue(() =>
+    sheets.reduce((min, sheet) => Math.min(min, sheet.animatedPosition.value), height),
+  );
+  const controlsBottom = useDerivedValue(() => top + controlsHeight.value);
+
+  useAnimatedReaction(
+    () => sheetTop.value > controlsBottom.value,
+    (visible, previous) => {
+      if (visible !== previous) scheduleOnRN(setIsVisible, visible);
+    },
+  );
+
+  const style = useAnimatedStyle(() => ({
+    opacity: interpolate(
+      sheetTop.value,
+      [controlsBottom.value, controlsBottom.value + controlGap * 2],
+      [0, 1],
+      Extrapolation.CLAMP,
+    ),
+  }));
+
+  return (
+    <Animated.View
+      pointerEvents={isVisible ? "box-none" : "none"}
+      accessibilityElementsHidden={!isVisible}
+      importantForAccessibility={isVisible ? "auto" : "no-hide-descendants"}
+      style={[styles.topControls, { top }, style]}
       onLayout={(event) => {
         controlsHeight.value = event.nativeEvent.layout.height;
       }}
@@ -359,4 +435,5 @@ const styles = StyleSheet.create({
   },
   direction: { fontSize: 13, fontWeight: "600" },
   sheetControls: { position: "absolute", top: 0, right: 16, gap: controlGap },
+  topControls: { position: "absolute", right: 16, gap: controlGap },
 });
