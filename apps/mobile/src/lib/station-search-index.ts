@@ -109,19 +109,28 @@ function getNameVariants(name: string): IndexedVariant[] {
   return [...normalizedNames].map((normalizedName) => ({ normalizedName }));
 }
 
-function buildSearchIndex(sourceStations: Station[]): SearchIndex {
+// Yield while preparing the index so opening the search field cannot occupy one long JS frame.
+// A time budget also keeps batches short on slower phones, where each station costs more.
+const indexBuildBudgetMs = 4;
+const indexBuildCheckInterval = 64;
+
+async function buildSearchIndex(sourceStations: Station[]): Promise<SearchIndex> {
   const exactIdMap = new Map<string, IndexedStation>();
   const nameLines: string[] = [];
   const nameStarts = new Int32Array(sourceStations.length + 1);
+  const indexedStations: IndexedStation[] = [];
   // Starts with a line break too, so every name follows one.
   let offset = 1;
+  let batchStartedAt = performance.now();
 
-  const indexedStations = sourceStations.map((station, index) => {
+  for (let index = 0; index < sourceStations.length; index++) {
+    const station = sourceStations[index]!;
     const indexedStation: IndexedStation = {
       station,
       normalizedId: normalizeStationId(station.id),
       variants: getNameVariants(station.name),
     };
+    indexedStations.push(indexedStation);
     exactIdMap.set(indexedStation.normalizedId, indexedStation);
 
     // A line break never ends up in a query, so a match can't span two stations.
@@ -130,8 +139,15 @@ function buildSearchIndex(sourceStations: Station[]): SearchIndex {
     nameLines.push(lines);
     offset += lines.length;
 
-    return indexedStation;
-  });
+    if (
+      (index + 1) % indexBuildCheckInterval === 0 &&
+      index + 1 < sourceStations.length &&
+      performance.now() - batchStartedAt >= indexBuildBudgetMs
+    ) {
+      await new Promise<void>((resolve) => setTimeout(resolve, 0));
+      batchStartedAt = performance.now();
+    }
+  }
   nameStarts[sourceStations.length] = offset;
 
   return { indexedStations, exactIdMap, names: `\n${nameLines.join("")}`, nameStarts };
@@ -325,8 +341,8 @@ function longestText(texts: string[]): string | undefined {
   return longest;
 }
 
-export function createStationSearch(sourceStations: Station[]) {
-  const searchIndex = buildSearchIndex(sourceStations);
+export async function createStationSearch(sourceStations: Station[]) {
+  const searchIndex = await buildSearchIndex(sourceStations);
   const { indexedStations, names, nameStarts } = searchIndex;
 
   return function searchStations(

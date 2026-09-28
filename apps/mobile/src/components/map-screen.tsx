@@ -36,7 +36,7 @@ import { useStationsUrl } from "@/hooks/use-stations-url";
 import { addRecentStation } from "@/hooks/use-stored-stations";
 import { haptics } from "@/lib/haptics";
 import { mapFeedbackUrl, type MapPosition } from "@/lib/links";
-import { loadStations } from "@/lib/stations";
+import { loadStationSearch } from "@/lib/stations";
 import { loadLastUserLocation, saveLastUserLocation, type UserLocation } from "@/lib/user-location";
 import { hasSeenWelcome, markWelcomeSeen } from "@/lib/welcome";
 
@@ -220,12 +220,12 @@ export function MapScreen() {
   // A shared station link opens the station like a search result.
   useStationLinks(stationsUrl, handleSearchSelect);
 
-  // Reads the stations once the app is idle, so opening the first station or search doesn't
-  // wait for them to be parsed.
+  // Prepare the search index while the app is idle, so the first search can show results at once.
+  // This also reads the stations needed by the first station sheet and shared links.
   useEffect(() => {
     if (!stationsUrl) return;
     const idle = requestIdleCallback(() => {
-      loadStations(stationsUrl).catch(() => {});
+      loadStationSearch(stationsUrl).catch(() => {});
     });
     return () => cancelIdleCallback(idle);
   }, [stationsUrl]);

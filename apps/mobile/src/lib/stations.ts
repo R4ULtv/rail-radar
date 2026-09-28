@@ -4,7 +4,7 @@ import { File } from "expo-file-system";
 import { distanceKm } from "@/lib/distance";
 import { createStationSearch } from "@/lib/station-search-index";
 
-export type StationSearch = ReturnType<typeof createStationSearch>;
+export type StationSearch = Awaited<ReturnType<typeof createStationSearch>>;
 export type NearbyStation = Station & { distance: number };
 
 interface LoadedStations {
@@ -50,12 +50,18 @@ export function loadStations(url: string): Promise<Station[]> {
 }
 
 /**
- * The search index over the same stations. It is built on the first search rather than with
- * the stations, since it takes several times as long as reading them.
+ * The search index over the same stations. Its preparation yields between batches so the map,
+ * keyboard and sheets remain responsive while it is built.
  */
 export function loadStationSearch(url: string): Promise<StationSearch> {
   const current = load(url);
-  current.search ??= current.stations.then(createStationSearch);
+  if (!current.search) {
+    const search = current.stations.then(createStationSearch);
+    search.catch(() => {
+      if (current.search === search) current.search = undefined;
+    });
+    current.search = search;
+  }
   return current.search;
 }
 
