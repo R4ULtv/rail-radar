@@ -7,7 +7,6 @@ import ArrowUpRight from "lucide-react-native/icons/arrow-up-right";
 import Bookmark from "lucide-react-native/icons/bookmark";
 import BrushCleaning from "lucide-react-native/icons/brush-cleaning";
 import Bug from "lucide-react-native/icons/bug";
-import ChartNoAxes from "lucide-react-native/icons/chart-no-axes-column";
 import Code from "lucide-react-native/icons/code-xml";
 import FileText from "lucide-react-native/icons/file-text";
 import Globe from "lucide-react-native/icons/globe";
@@ -134,18 +133,17 @@ function Row({
   /** Red, like the confirmation it asks for. */
   isDestructive?: boolean;
   accessibilityRole?: "button" | "link";
-  /** Without it, the row only shows information. */
-  onPress?: () => void;
+  onPress: () => void;
 }) {
   const iconColor = useThemeColor(isDestructive ? "danger-foreground" : "accent-foreground");
 
   return (
     <ListGroup.Item
-      accessibilityRole={onPress ? accessibilityRole : undefined}
+      accessibilityRole={accessibilityRole}
       // A plain highlight, like the system settings. The animated press feedback the station
       // lists use is slow to mount, and made the settings slow to open.
-      className={onPress ? "active:bg-surface-tertiary" : undefined}
-      disabled={isDisabled || !onPress}
+      className="active:bg-surface-tertiary"
+      disabled={isDisabled}
       style={{ opacity: isDisabled ? 0.5 : 1 }}
       onPress={onPress}
     >
@@ -421,7 +419,11 @@ const SettingsContent = memo(function SettingsContent({
           />
         </Section>
 
-        <Section title="Map" icon={<MapIcon size={14} color={mutedColor} />}>
+        <Section
+          title="Map"
+          icon={<MapIcon size={14} color={mutedColor} />}
+          footer="Mapbox telemetry, its anonymous usage reports, is always off in Rail Radar."
+        >
           <LinkRows
             links={[
               {
@@ -450,13 +452,6 @@ const SettingsContent = memo(function SettingsContent({
                 url: mapboxPrivacyPolicyUrl,
               },
             ]}
-          />
-          <RowSeparator />
-          <Row
-            icon={ChartNoAxes}
-            title="Mapbox telemetry"
-            description="Anonymous usage reports to Mapbox. Always off in Rail Radar."
-            suffix={<Status>Off</Status>}
           />
         </Section>
 
