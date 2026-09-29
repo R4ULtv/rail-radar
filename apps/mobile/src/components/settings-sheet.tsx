@@ -470,7 +470,7 @@ const SettingsContent = memo(function SettingsContent({
           <View className="items-center gap-0.5">
             <Text className="text-sm font-semibold text-foreground">Rail Radar</Text>
             <Text className="text-xs text-muted" style={styles.tabularNums}>
-              Version {expo.version} · Free and open source
+              Version {expo.version} · Open source
             </Text>
           </View>
         </View>

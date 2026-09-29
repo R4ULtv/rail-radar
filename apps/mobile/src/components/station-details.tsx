@@ -291,8 +291,7 @@ function ReportLinks({ mutedColor }: { mutedColor: string }) {
         ))}
       </View>
       <Text className="text-center text-xs text-muted">
-        Rail Radar is free and open source. Reports from users help improve station and live-train
-        data.
+        Rail Radar is open source. Reports from users help improve station and live-train data.
       </Text>
     </View>
   );
