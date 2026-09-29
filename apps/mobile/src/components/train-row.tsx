@@ -51,6 +51,14 @@ function TrainStatus({ status }: { status: TrainStatusType }) {
   );
 }
 
+/** Minutes late, in hours from an hour on: "+4h 40m" reads faster than "+280 min", and is no wider. */
+function formatDelay(minutes: number) {
+  if (minutes < 60) return `+${minutes} min`;
+  const hours = Math.floor(minutes / 60);
+  const rest = minutes % 60;
+  return rest ? `+${hours}h ${rest}m` : `+${hours}h`;
+}
+
 /** Identifies a train across refreshes, e.g. to keep its info open. */
 export function trainKey(train: Train) {
   return `${train.trainNumber}-${train.scheduledTime}`;
@@ -100,7 +108,7 @@ export const TrainRow = memo(function TrainRow({
 }: TrainRowProps) {
   const mutedColor = useThemeColor("muted");
   const route = type === "arrivals" ? train.origin : train.destination;
-  const hasDelay = train.delay !== null && train.delay > 0;
+  const delay = train.delay !== null && train.delay > 0 ? formatDelay(train.delay) : null;
   const status = knownStatus(train.status);
   const isCancelled = status === "cancelled";
   const { platform } = train;
@@ -147,9 +155,9 @@ export const TrainRow = memo(function TrainRow({
             >
               {train.scheduledTime}
             </Text>
-            {hasDelay ? (
+            {delay ? (
               <Text className="text-xs font-medium text-danger" style={styles.tabularNums}>
-                +{train.delay} min
+                {delay}
               </Text>
             ) : null}
           </View>
