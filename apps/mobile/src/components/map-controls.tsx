@@ -3,7 +3,7 @@ import MapIcon from "lucide-react-native/icons/map";
 import Navigation from "lucide-react-native/icons/navigation";
 import NavigationOff from "lucide-react-native/icons/navigation-off";
 import Settings from "lucide-react-native/icons/settings";
-import { useCallback, useRef, useState, type ReactNode } from "react";
+import { Children, Fragment, useCallback, useRef, useState, type ReactNode } from "react";
 import {
   Pressable,
   StyleSheet,
@@ -120,7 +120,20 @@ function MapControl(props: Omit<PressableProps, "style">) {
 
 /** Controls stacked on one surface, like Apple Maps' map and location buttons. */
 export function MapControlGroup({ children }: { children: ReactNode }) {
-  return <MapControlSurface>{children}</MapControlSurface>;
+  const separator = useThemeColor("separator");
+
+  return (
+    <MapControlSurface>
+      {Children.toArray(children).map((child, index) => (
+        <Fragment key={index}>
+          {index > 0 ? (
+            <View style={[styles.groupSeparator, { backgroundColor: separator }]} />
+          ) : null}
+          {child}
+        </Fragment>
+      ))}
+    </MapControlSurface>
+  );
 }
 
 export function SettingsButton({ onPress }: { onPress: () => void }) {
@@ -464,6 +477,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
+  groupSeparator: { height: StyleSheet.hairlineWidth, marginHorizontal: 8 },
   direction: { fontSize: 13, fontWeight: "600" },
   sheetControls: { position: "absolute", top: 0, right: 16, gap: controlGap },
   topControls: { position: "absolute", right: 16, gap: controlGap },
