@@ -65,7 +65,7 @@ const handleHeight = 24;
 // Before the sheet has measured itself: the header, the tabs and one train.
 const defaultStationPeekHeight = 300;
 // The step between the peek and the fully open sheet, as a share of the screen.
-const middleStep = 0.6;
+export const middleStep = 0.6;
 // How much further the content has to go for that step to be worth a stop.
 const minStepGap = 80;
 // Long boards are cut short so the station details below them stay in reach.

@@ -7,7 +7,7 @@ import { Card } from "heroui-native/card";
 import { useThemeColor } from "heroui-native/hooks";
 import CircleAlert from "lucide-react-native/icons/circle-alert";
 import { useCallback, useEffect, useRef, useState, type ComponentProps } from "react";
-import { AppState, StyleSheet, View } from "react-native";
+import { AppState, Dimensions, StyleSheet, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import {
@@ -26,7 +26,7 @@ import { MapStyleSheet } from "@/components/map-style-sheet";
 import { SearchSheet } from "@/components/search-sheet";
 import { Settings } from "@/components/settings-sheet";
 import { RailwayLines, StationImages, StationLayers } from "@/components/station-markers";
-import { StationSheet } from "@/components/station-sheet";
+import { middleStep, StationSheet } from "@/components/station-sheet";
 import { UserLocationMarker } from "@/components/user-location-marker";
 import { WelcomeSheet } from "@/components/welcome-sheet";
 import { useIsOnline } from "@/hooks/use-is-online";
@@ -52,8 +52,15 @@ const stationZoomTolerance = 0.05;
 const locationMaxAge = 5 * 60 * 1000;
 // Mapbox keeps the last camera padding, so moves that should be centered have to clear it.
 const noPadding = { paddingTop: 0, paddingBottom: 0, paddingLeft: 0, paddingRight: 0 };
-// Place selected stations 64 points above screen center, clear of the sheet's peek position.
-const stationPadding = { ...noPadding, paddingBottom: 128 };
+// How far a selected station sits above the station sheet's middle step, leaving room for its label.
+const stationSheetClearance = 48;
+
+/** Keeps a selected station clear of the station sheet at its middle step, and so at its peek too. */
+function stationPadding() {
+  const { height } = Dimensions.get("window");
+  const stationY = height * (1 - middleStep) - stationSheetClearance;
+  return { ...noPadding, paddingBottom: Math.max(height - 2 * stationY, 0) };
+}
 
 if (accessToken) {
   Mapbox.setAccessToken(accessToken);
@@ -256,7 +263,7 @@ export function MapScreen() {
       mapCamera.setCamera({
         centerCoordinate: [station.geo.lng, station.geo.lat],
         zoomLevel,
-        padding: stationPadding,
+        padding: stationPadding(),
         animationDuration: stationCameraAnimationMs,
       });
     },
