@@ -45,7 +45,12 @@ import {
   type SheetPosition,
 } from "@/components/map-controls";
 import { ErrorBoundary } from "@/components/error-boundary";
-import { SheetHeader, SheetHeaderFade, useSheetScrollOffset } from "@/components/sheet-header";
+import {
+  sheetBackgroundStyle,
+  SheetHeader,
+  SheetHeaderFade,
+  useSheetScrollOffset,
+} from "@/components/sheet-header";
 import { StationDetails } from "@/components/station-details";
 import { TrainRow, TrainRowSeparator, TrainRowSkeleton, trainKey } from "@/components/train-row";
 import { useStationBoard, type BoardType } from "@/hooks/use-station-board";
@@ -659,7 +664,7 @@ export function StationSheet({
       animatedPosition={position.animatedPosition}
       enableOverDrag={false}
       enablePanDownToClose
-      backgroundStyle={{ backgroundColor: surfaceColor, borderRadius: 24 }}
+      backgroundStyle={[sheetBackgroundStyle, { backgroundColor: surfaceColor }]}
       handleIndicatorStyle={{ backgroundColor: mutedColor }}
       onChange={(next) => {
         setIndex(next);

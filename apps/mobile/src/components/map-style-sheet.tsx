@@ -11,7 +11,7 @@ import { useUniwind } from "uniwind";
 
 import { MapAttribution } from "@/components/map-attribution";
 import { useSheetBottomInset, type SheetPosition } from "@/components/map-controls";
-import { SheetHeader } from "@/components/sheet-header";
+import { sheetBackgroundStyle, SheetHeader } from "@/components/sheet-header";
 import { haptics } from "@/lib/haptics";
 import { setMapStyle, useMapStyle, type MapStyle } from "@/lib/map-style";
 
@@ -116,7 +116,7 @@ export function MapStyleSheet({
       enableOverDrag={false}
       enablePanDownToClose
       backdropComponent={Backdrop}
-      backgroundStyle={{ backgroundColor: surfaceColor, borderRadius: 24 }}
+      backgroundStyle={[sheetBackgroundStyle, { backgroundColor: surfaceColor }]}
       handleIndicatorStyle={{ backgroundColor: mutedColor }}
       onClose={onClose}
     >

@@ -30,7 +30,11 @@ import {
   useSheetTopInset,
   type SheetPosition,
 } from "@/components/map-controls";
-import { SheetHeaderFade, useSheetScrollOffset } from "@/components/sheet-header";
+import {
+  sheetBackgroundStyle,
+  SheetHeaderFade,
+  useSheetScrollOffset,
+} from "@/components/sheet-header";
 import { StationSection, StationSectionSkeleton } from "@/components/station-list";
 import { useStationSearch } from "@/hooks/use-station-search";
 import { useRecentStations, useSavedStations } from "@/hooks/use-stored-stations";
@@ -380,7 +384,7 @@ export function SearchSheet({
       keyboardBehavior="extend"
       keyboardBlurBehavior="none"
       android_keyboardInputMode="adjustResize"
-      backgroundStyle={{ backgroundColor: surfaceColor, borderRadius: 24 }}
+      backgroundStyle={[sheetBackgroundStyle, { backgroundColor: surfaceColor }]}
       handleIndicatorStyle={{ backgroundColor: mutedColor }}
       onChange={(index) => {
         setIsExpanded(index === expandedIndex);

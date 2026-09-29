@@ -11,6 +11,16 @@ import Animated, {
 } from "react-native-reanimated";
 import Svg, { Defs, LinearGradient, Rect, Stop } from "react-native-svg";
 
+/** The map sheets' rounded background, with a shadow that sets it apart from a light map. */
+export const sheetBackgroundStyle = {
+  borderRadius: 24,
+  shadowColor: "#000",
+  shadowOpacity: 0.12,
+  shadowRadius: 12,
+  shadowOffset: { width: 0, height: -2 },
+  elevation: 12,
+} as const;
+
 /** Every sheet's title, on the left with the close button across from it. */
 export function SheetHeader({
   title,
