@@ -310,6 +310,38 @@ function Notice({
   );
 }
 
+/** Above a board that couldn't be refreshed, whose trains are the last ones received. */
+function StaleBoardNotice({ isOnline, onRetry }: { isOnline: boolean; onRetry: () => void }) {
+  const [foregroundColor, mutedColor] = useThemeColor(["default-foreground", "muted"]);
+
+  // Offline, the board refreshes by itself once the connection is back.
+  if (!isOnline) {
+    return (
+      <Notice icon={<CloudOff size={16} color={mutedColor} />} className="mb-2">
+        You're offline. Showing the last received data.
+      </Notice>
+    );
+  }
+  return (
+    <PressableFeedback
+      accessibilityRole="button"
+      accessibilityHint="Loads the live trains again"
+      className="mx-4 mb-2 flex-row items-start gap-2 rounded-2xl bg-default px-3 py-2.5"
+      onPress={onRetry}
+    >
+      <View style={styles.noticeIcon}>
+        <CircleAlert size={16} color={mutedColor} />
+      </View>
+      <Text className="flex-1 text-sm leading-5 text-muted">
+        Live updates are unavailable. Showing the last received data.
+      </Text>
+      <View style={styles.noticeIcon}>
+        <RefreshCw size={16} color={foregroundColor} />
+      </View>
+    </PressableFeedback>
+  );
+}
+
 interface LiveBoardProps {
   board: ReturnType<typeof useStationBoard>;
   type: BoardType;
@@ -373,21 +405,7 @@ const LiveBoard = memo(function LiveBoard({
   return (
     <View>
       {data.info ? <StationInfo info={data.info} /> : null}
-      {error ? (
-        <View className="mb-2 gap-2 px-4">
-          <Text className="text-sm text-muted">
-            {isOnline
-              ? "Live updates are unavailable. Showing the last received data."
-              : "You're offline. Showing the last received data."}
-          </Text>
-          {isOnline ? (
-            <Button className="self-start" size="sm" variant="tertiary" onPress={retry}>
-              <RefreshCw size={16} color={foregroundColor} />
-              <Button.Label>Try again</Button.Label>
-            </Button>
-          ) : null}
-        </View>
-      ) : null}
+      {error ? <StaleBoardNotice isOnline={isOnline} onRetry={retry} /> : null}
       {trains.length === 0 ? (
         <Text className="px-4 py-8 text-center text-sm text-muted" onLayout={onFirstItemLayout}>
           {error ? `No ${type} were listed in the last received update.` : `No ${type} scheduled`}
