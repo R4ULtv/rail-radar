@@ -27,6 +27,7 @@ import { SearchSheet } from "@/components/search-sheet";
 import { Settings } from "@/components/settings-sheet";
 import { RailwayLines, StationImages, StationLayers } from "@/components/station-markers";
 import { middleStep, StationSheet } from "@/components/station-sheet";
+import { StatusBarBlur } from "@/components/status-bar-blur";
 import { UserLocationMarker } from "@/components/user-location-marker";
 import { WelcomeSheet } from "@/components/welcome-sheet";
 import { useIsOnline } from "@/hooks/use-is-online";
@@ -508,6 +509,8 @@ export function MapScreen() {
         ) : null}
         {locationStatus === "located" ? <UserLocationMarker /> : null}
       </Mapbox.MapView>
+
+      <StatusBarBlur />
 
       <TopControls
         sheets={[searchSheetPosition, stationSheetPosition, mapStyleSheetPosition]}
