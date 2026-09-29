@@ -30,7 +30,8 @@ import Sun from "lucide-react-native/icons/sun";
 import TrainFront from "lucide-react-native/icons/train-front";
 import Users from "lucide-react-native/icons/users";
 import { Fragment, memo, useCallback, useState, type ComponentType, type ReactNode } from "react";
-import { Alert, Linking, Modal, Platform, ScrollView, StyleSheet, Text, View } from "react-native";
+import { Alert, Linking, Modal, Platform, StyleSheet, Text, View } from "react-native";
+import Animated from "react-native-reanimated";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 
 import { expo } from "../../app.json";
@@ -40,7 +41,7 @@ import {
   type LocationStatus,
 } from "@/components/map-controls";
 import { PageSheetHandle } from "@/components/page-sheet-handle";
-import { SheetHeader } from "@/components/sheet-header";
+import { SheetHeader, SheetHeaderFade, useSheetScrollOffset } from "@/components/sheet-header";
 import { SectionTitle } from "@/components/station-list";
 import { resetStations, useStationsDownloadedAt } from "@/hooks/use-stations-url";
 import {
@@ -65,6 +66,8 @@ import {
 import { setThemePreference, useThemePreference, type ThemePreference } from "@/lib/theme";
 import { forgetLastUserLocation, hasLastUserLocation } from "@/lib/user-location";
 
+const appIcon = require("../../assets/icon.png");
+
 type Icon = ComponentType<{ size?: number; color?: string }>;
 
 const themes: { value: ThemePreference; label: string; icon: Icon }[] = [
@@ -79,6 +82,8 @@ const locationLabels: Record<LocationStatus, string> = {
   located: "Allowed",
   off: "Off",
 };
+
+const cacheStatusLabels = { clearing: "Clearing…", cleared: "Cleared", failed: "Failed" };
 
 const dayMs = 24 * 60 * 60 * 1000;
 
@@ -117,7 +122,6 @@ function Row({
   title,
   description,
   suffix,
-  isDestructive = false,
   isDisabled = false,
   accessibilityRole = "button",
   onPress,
@@ -126,13 +130,12 @@ function Row({
   title: string;
   description?: string;
   suffix?: ReactNode;
-  isDestructive?: boolean;
   isDisabled?: boolean;
   accessibilityRole?: "button" | "link";
   /** Without it, the row only shows information. */
   onPress?: () => void;
 }) {
-  const [foregroundColor, dangerColor] = useThemeColor(["foreground", "danger"]);
+  const iconColor = useThemeColor("accent-foreground");
 
   return (
     <ListGroup.Item
@@ -145,12 +148,13 @@ function Row({
       onPress={onPress}
     >
       <ListGroup.ItemPrefix>
-        <Icon size={20} color={isDestructive ? dangerColor : foregroundColor} />
+        {/* A rounded tile, like the station icons in the other lists. */}
+        <View className="size-7 items-center justify-center rounded-lg bg-accent">
+          <Icon size={16} color={iconColor} />
+        </View>
       </ListGroup.ItemPrefix>
       <ListGroup.ItemContent>
-        <ListGroup.ItemTitle className={isDestructive ? "text-danger" : undefined}>
-          {title}
-        </ListGroup.ItemTitle>
+        <ListGroup.ItemTitle>{title}</ListGroup.ItemTitle>
         {description ? <ListGroup.ItemDescription>{description}</ListGroup.ItemDescription> : null}
       </ListGroup.ItemContent>
       {suffix ? <ListGroup.ItemSuffix>{suffix}</ListGroup.ItemSuffix> : null}
@@ -210,6 +214,14 @@ function ThemeTabs() {
   );
 }
 
+function Status({ children }: { children: ReactNode }) {
+  return (
+    <Text className="text-sm text-muted" style={styles.tabularNums}>
+      {children}
+    </Text>
+  );
+}
+
 function confirm(title: string, message: string, action: string, onConfirm: () => void) {
   Alert.alert(title, message, [
     { text: "Cancel", style: "cancel" },
@@ -237,7 +249,7 @@ function DataRows() {
       <Row
         icon={History}
         title="Clear recent stations"
-        isDestructive
+        suffix={recentStations.length > 0 ? <Status>{recentStations.length}</Status> : null}
         isDisabled={recentStations.length === 0}
         onPress={() =>
           confirm("Clear recent stations?", "Saved stations are kept.", "Clear", () => {
@@ -249,7 +261,7 @@ function DataRows() {
       <Row
         icon={Bookmark}
         title="Clear saved stations"
-        isDestructive
+        suffix={savedStations.length > 0 ? <Status>{savedStations.length}</Status> : null}
         isDisabled={savedStations.length === 0}
         onPress={() =>
           confirm(
@@ -267,7 +279,6 @@ function DataRows() {
         icon={MapPinX}
         title="Forget last location"
         description="Kept for a day, so the map opens where you were."
-        isDestructive
         isDisabled={!hasLocation}
         onPress={() => {
           forgetLastUserLocation();
@@ -282,9 +293,8 @@ function DataRows() {
         description={
           stationsDownloadedAt === null
             ? "Using the stations built into the app."
-            : `Updated ${formatDownloadAge(stationsDownloadedAt)}. Goes back to the stations built into the app.`
+            : `Updated ${formatDownloadAge(stationsDownloadedAt)}.`
         }
-        isDestructive
         isDisabled={stationsDownloadedAt === null}
         onPress={() =>
           confirm(
@@ -300,14 +310,7 @@ function DataRows() {
         icon={BrushCleaning}
         title="Clear cache"
         description="Map tiles and station photos, downloaded again when needed."
-        suffix={
-          cacheStatus === "cleared" || cacheStatus === "failed" ? (
-            <Text className="text-sm text-muted">
-              {cacheStatus === "cleared" ? "Cleared" : "Failed"}
-            </Text>
-          ) : null
-        }
-        isDestructive
+        suffix={cacheStatus === "idle" ? null : <Status>{cacheStatusLabels[cacheStatus]}</Status>}
         isDisabled={cacheStatus === "clearing" || cacheStatus === "cleared"}
         onPress={() => {
           setCacheStatus("clearing");
@@ -339,15 +342,23 @@ const SettingsContent = memo(function SettingsContent({
 }) {
   const bottomInset = useSheetBottomInset();
   const mutedColor = useThemeColor("muted");
+  const [scrollRef, scrollOffset] = useSheetScrollOffset();
 
   return (
     <SafeAreaView edges={["top", "left", "right"]} style={styles.content}>
       <PageSheetHandle />
-      <View className={`px-4 pb-1 ${Platform.OS === "ios" ? "" : "pt-4"}`}>
-        <SheetHeader title="Settings" closeLabel="Close settings" onClose={onClose} />
+      {/* Above the list, so it fades out under the header like in the other sheets. */}
+      <View style={styles.header}>
+        <View className={`px-4 pb-1 ${Platform.OS === "ios" ? "" : "pt-4"}`}>
+          <SheetHeader title="Settings" closeLabel="Close settings" onClose={onClose} />
+        </View>
+        <SheetHeaderFade scrollOffset={scrollOffset} />
       </View>
 
-      <ScrollView contentContainerStyle={{ paddingHorizontal: 16, paddingBottom: bottomInset }}>
+      <Animated.ScrollView
+        ref={scrollRef}
+        contentContainerStyle={{ paddingHorizontal: 16, paddingBottom: bottomInset }}
+      >
         <View className="mt-5">
           <SectionTitle icon={<Palette size={14} color={mutedColor} />}>Appearance</SectionTitle>
           <ThemeTabs />
@@ -361,8 +372,8 @@ const SettingsContent = memo(function SettingsContent({
           <Row
             icon={MapPin}
             title="Location access"
-            description="Only used on this device, to show you on the map and sort stations by distance. It's never sent to us or anyone else."
-            suffix={<Text className="text-sm text-muted">{locationLabels[locationStatus]}</Text>}
+            description="Only used on this device, to show you on the map and sort stations by distance."
+            suffix={<Status>{locationLabels[locationStatus]}</Status>}
             onPress={() => void Linking.openSettings()}
           />
           <Separator className="mx-4" />
@@ -405,13 +416,13 @@ const SettingsContent = memo(function SettingsContent({
                 icon: Users,
                 title: "© OpenStreetMap",
                 description:
-                  "Map data by OpenStreetMap contributors, available under the Open Database License.",
+                  "Map data by OpenStreetMap contributors, under the Open Database License.",
                 url: openStreetMapUrl,
               },
               {
                 icon: MapPinPen,
                 title: "Improve this map",
-                description: "Report a mistake in the map to Mapbox, where you're looking.",
+                description: "Report a mistake in the map where you're looking.",
                 url: getMapFeedbackUrl(),
               },
               {
@@ -426,8 +437,8 @@ const SettingsContent = memo(function SettingsContent({
           <Row
             icon={ChartNoAxes}
             title="Mapbox telemetry"
-            description="Anonymous usage and location reports to Mapbox. Always off in Rail Radar."
-            suffix={<Text className="text-sm text-muted">Off</Text>}
+            description="Anonymous usage reports to Mapbox. Always off in Rail Radar."
+            suffix={<Status>Off</Status>}
           />
         </Section>
 
@@ -441,10 +452,16 @@ const SettingsContent = memo(function SettingsContent({
           />
         </Section>
 
-        <Text className="mt-8 text-center text-xs text-muted" style={styles.tabularNums}>
-          Rail Radar {expo.version}
-        </Text>
-      </ScrollView>
+        <View className="mt-8 items-center gap-2">
+          <Image source={appIcon} style={styles.appIcon} accessibilityIgnoresInvertColors />
+          <View className="items-center gap-0.5">
+            <Text className="text-sm font-semibold text-foreground">Rail Radar</Text>
+            <Text className="text-xs text-muted" style={styles.tabularNums}>
+              Version {expo.version} · Free and open source
+            </Text>
+          </View>
+        </View>
+      </Animated.ScrollView>
     </SafeAreaView>
   );
 });
@@ -497,5 +514,7 @@ export const Settings = memo(function Settings({
 
 const styles = StyleSheet.create({
   content: { flex: 1 },
+  header: { zIndex: 1 },
+  appIcon: { width: 48, height: 48, borderRadius: 12 },
   tabularNums: { fontVariant: ["tabular-nums"] },
 });
