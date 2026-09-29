@@ -103,21 +103,25 @@ export const TrainRow = memo(function TrainRow({
   const hasDelay = train.delay !== null && train.delay > 0;
   const status = knownStatus(train.status);
   const isCancelled = status === "cancelled";
-  const platform = train.platform ?? "–";
+  const { platform } = train;
 
   const row = (
     <View className="flex-row gap-3 px-4 py-3">
       {status ? <View className={statusBarClassNames[status]} style={styles.statusBar} /> : null}
       <View
         className="h-12 min-w-12 items-center justify-center rounded-2xl bg-default px-2"
-        accessibilityLabel={train.platform ? `Platform ${train.platform}` : "Platform unknown"}
+        accessibilityLabel={platform ? `Platform ${platform}` : "Platform unknown"}
       >
-        <Text
-          className={`font-bold text-foreground ${platform.length > 2 ? "text-sm" : "text-xl"}`}
-          numberOfLines={1}
-        >
-          {platform}
-        </Text>
+        {platform ? (
+          <Text
+            className={`font-bold text-foreground ${platform.length > 2 ? "text-sm" : "text-xl"}`}
+            numberOfLines={1}
+          >
+            {platform}
+          </Text>
+        ) : (
+          <Text className="text-base font-medium text-muted">–</Text>
+        )}
       </View>
 
       <View style={styles.details}>
