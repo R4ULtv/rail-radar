@@ -75,10 +75,16 @@ function useKeyboardHeight() {
 function VisitorCounts({ station }: { station: TrendingStation }) {
   const color = useThemeColor("muted");
   return (
-    <View className="flex-row items-center gap-1">
+    // Only the unique visitors, which the ranking and the station's popularity use. The station
+    // sheet has both counts, spelled out.
+    <View
+      accessible
+      accessibilityLabel={`${formatCount(station.uniqueVisitors)} unique visitors, ${formatCount(station.visits)} visits`}
+      className="flex-row items-center gap-1"
+    >
       <User size={14} color={color} />
       <Text className="text-sm text-muted" style={styles.tabularNums}>
-        {formatCount(station.uniqueVisitors)} ({formatCount(station.visits)})
+        {formatCount(station.uniqueVisitors)}
       </Text>
     </View>
   );
