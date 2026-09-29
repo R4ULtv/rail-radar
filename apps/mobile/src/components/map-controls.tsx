@@ -3,7 +3,7 @@ import MapIcon from "lucide-react-native/icons/map";
 import Navigation from "lucide-react-native/icons/navigation";
 import NavigationOff from "lucide-react-native/icons/navigation-off";
 import Settings from "lucide-react-native/icons/settings";
-import { useCallback, useState, type ReactNode } from "react";
+import { useCallback, useRef, useState, type ReactNode } from "react";
 import {
   Pressable,
   StyleSheet,
@@ -72,8 +72,13 @@ function facingDirection(heading: number): Direction {
  */
 export function useMapHeading() {
   const heading = useSharedValue(0);
+  const lastHeading = useRef(0);
+  // The camera reports its heading on every frame, also while only panning or zooming. Setting
+  // the shared value always schedules work on the UI thread, so unchanged headings are skipped.
   const onHeadingChange = useCallback(
     (value: number) => {
+      if (value === lastHeading.current) return;
+      lastHeading.current = value;
       heading.set(value);
     },
     [heading],

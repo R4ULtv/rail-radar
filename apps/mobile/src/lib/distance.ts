@@ -19,9 +19,16 @@ export function distanceKm(from: UserLocation, to: NonNullable<Station["geo"]>) 
   return earthRadiusKm * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 }
 
+// Created once: toLocaleString builds a new formatter on every call, which is slow on the
+// device's JS engine, and search rows format a distance each.
+const oneDecimalKm = new Intl.NumberFormat(undefined, {
+  minimumFractionDigits: 1,
+  maximumFractionDigits: 1,
+});
+const wholeKm = new Intl.NumberFormat(undefined, { maximumFractionDigits: 0 });
+
 /** Meters under 1 km and one decimal under 10 km, like the web; whole km beyond that. */
 export function formatDistance(km: number) {
   if (km < 1) return `${Math.round(km * 1000)} m`;
-  const digits = km < 10 ? 1 : 0;
-  return `${km.toLocaleString(undefined, { minimumFractionDigits: digits, maximumFractionDigits: digits })} km`;
+  return `${(km < 10 ? oneDecimalKm : wholeKm).format(km)} km`;
 }

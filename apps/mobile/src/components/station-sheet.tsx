@@ -70,15 +70,20 @@ function formatUpdated(secondsAgo: number) {
   return `Updated ${Math.floor(secondsAgo / 60)} min ago`;
 }
 
-/** "Updated 12s ago", ticking every second. */
-function useUpdatedLabel(timestamp: string | undefined, hasError: boolean, isOnline: boolean) {
+/** "Updated 12s ago", ticking every second while the sheet is open. */
+function useUpdatedLabel(
+  timestamp: string | undefined,
+  hasError: boolean,
+  isOnline: boolean,
+  isOpen: boolean,
+) {
   const [, tick] = useReducer((count: number) => count + 1, 0);
 
   useEffect(() => {
-    if (!timestamp) return;
+    if (!timestamp || !isOpen) return;
     const interval = setInterval(tick, 1000);
     return () => clearInterval(interval);
-  }, [timestamp]);
+  }, [timestamp, isOpen]);
 
   if (!timestamp)
     return hasError ? (isOnline ? "Live trains unavailable" : "Offline") : "Updating…";
@@ -92,6 +97,8 @@ interface StationSubtitleProps {
   timestamp: string | undefined;
   hasError: boolean;
   isOnline: boolean;
+  /** The label only ticks while the sheet is open. */
+  isOpen: boolean;
   userLocation: UserLocation | null;
 }
 
@@ -101,9 +108,10 @@ function StationSubtitle({
   timestamp,
   hasError,
   isOnline,
+  isOpen,
   userLocation,
 }: StationSubtitleProps) {
-  const updatedLabel = useUpdatedLabel(timestamp, hasError, isOnline);
+  const updatedLabel = useUpdatedLabel(timestamp, hasError, isOnline, isOpen);
   const distance =
     userLocation && station.geo ? formatDistance(distanceKm(userLocation, station.geo)) : null;
   const subtitle = [
@@ -347,6 +355,7 @@ const LiveBoard = memo(function LiveBoard({
 
   const trains = showAll ? data.trains : data.trains.slice(0, collapsedTrainCount);
   const hiddenCount = data.trains.length - collapsedTrainCount;
+  const keyCounts = new Map<string, number>();
 
   return (
     <View>
@@ -366,16 +375,23 @@ const LiveBoard = memo(function LiveBoard({
           {error ? `No ${type} were listed in the last received update.` : `No ${type} scheduled`}
         </Text>
       ) : (
-        trains.map((train, index) => (
-          <TrainRow
-            key={`${train.trainNumber}-${train.scheduledTime}-${train.platform ?? ""}-${index}`}
-            train={train}
-            type={type}
-            isExpanded={expandedTrain === trainKey(train)}
-            onToggle={toggleTrain}
-            onLayout={index === 0 ? onFirstItemLayout : undefined}
-          />
-        ))
+        trains.map((train, index) => {
+          // Keyed by the train, not its position, so a refresh where trains have left keeps
+          // the other rows mounted instead of re-creating the whole board.
+          const key = trainKey(train);
+          const occurrence = keyCounts.get(key) ?? 0;
+          keyCounts.set(key, occurrence + 1);
+          return (
+            <TrainRow
+              key={occurrence ? `${key}-${occurrence}` : key}
+              train={train}
+              type={type}
+              isExpanded={expandedTrain === key}
+              onToggle={toggleTrain}
+              onLayout={index === 0 ? onFirstItemLayout : undefined}
+            />
+          );
+        })
       )}
       {hiddenCount > 0 ? (
         <Button
@@ -497,6 +513,7 @@ function StationSheetContent({
               timestamp={board.data?.timestamp}
               hasError={board.error !== null}
               isOnline={board.isOnline}
+              isOpen={isOpen}
               userLocation={userLocation}
             />
           </SheetHeader>

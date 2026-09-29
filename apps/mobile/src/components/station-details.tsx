@@ -28,6 +28,7 @@ import {
 } from "@/hooks/use-station-details";
 import { USER_AGENT } from "@/lib/api";
 import { formatDistance } from "@/lib/distance";
+import { formatCount } from "@/lib/format";
 import { bugReportUrl, featureRequestUrl } from "@/lib/links";
 import type { NearbyStation } from "@/lib/stations";
 
@@ -122,8 +123,8 @@ function StationPopularity({
           </View>
         ) : null}
         <Text className="text-sm text-foreground">
-          <Text className="font-semibold">{station.uniqueVisitors.toLocaleString()}</Text> unique
-          visitors · {station.visits.toLocaleString()} visits
+          <Text className="font-semibold">{formatCount(station.uniqueVisitors)}</Text> unique
+          visitors · {formatCount(station.visits)} visits
         </Text>
         {topStation && comparison.percentage !== null && !comparison.isTopStation ? (
           <View className="gap-2">

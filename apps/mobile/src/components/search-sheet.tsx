@@ -36,6 +36,7 @@ import { useStationSearch } from "@/hooks/use-station-search";
 import { useRecentStations, useSavedStations } from "@/hooks/use-stored-stations";
 import { useTrendingStations, type TrendingStation } from "@/hooks/use-trending-stations";
 import { distanceKm, formatDistance } from "@/lib/distance";
+import { formatCount } from "@/lib/format";
 import type { UserLocation } from "@/lib/user-location";
 
 const handleHeight = 24;
@@ -73,7 +74,7 @@ function VisitorCounts({ station }: { station: TrendingStation }) {
     <View className="flex-row items-center gap-1">
       <User size={14} color={color} />
       <Text className="text-sm text-muted" style={styles.tabularNums}>
-        {station.uniqueVisitors.toLocaleString()} ({station.visits.toLocaleString()})
+        {formatCount(station.uniqueVisitors)} ({formatCount(station.visits)})
       </Text>
     </View>
   );
