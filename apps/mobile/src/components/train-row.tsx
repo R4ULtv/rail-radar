@@ -207,6 +207,7 @@ export function TrainRowSkeleton({ onLayout }: { onLayout?: (event: LayoutChange
 
 const styles = StyleSheet.create({
   details: { flex: 1, minWidth: 0 },
-  statusBar: { position: "absolute", left: 0, top: 0, bottom: 0, width: 3 },
+  // Beside the platform, as tall as it, rather than along the sheet's edge.
+  statusBar: { position: "absolute", left: 6, top: 12, bottom: 12, width: 3, borderRadius: 1.5 },
   tabularNums: { fontVariant: ["tabular-nums"] },
 });
