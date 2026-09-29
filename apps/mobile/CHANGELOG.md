@@ -6,6 +6,40 @@ the commit they were built from.
 
 ## [Unreleased]
 
+## [0.2.0] (4) – 2026-09-29
+
+### Added
+
+- The map is blurred under the status bar, like Apple Maps, so the clock and icons stay legible.
+  Android gets a plain scrim.
+- Loading skeletons for the station sections that load late.
+
+### Changed
+
+- Faster: the React Compiler is on, the board, map and search re-render less, the stations are
+  bundled minified and preloaded while the map is idle, the search index is built in short
+  batches, and station details wait until the map settles. The Android release build is shrunk
+  with R8.
+- Error and empty states are centered, with an icon and a centered Try again button. A station
+  that fails to show keeps its name in the sheet header.
+- Stale live trains are marked with a notice like the station info above them; online, tapping it
+  loads the trains again.
+- Delays of an hour or more are shown in hours.
+- Visual polish: shadows on the map sheets, fading sheet headers, a divider between the grouped
+  map buttons, list separators inset to the row titles, train rows separated like the other
+  lists, a visible popularity bar track and a muted dash for unknown platforms.
+- Settings match the other sheets: icons sized like the station icons, destructive rows in red,
+  external rows marked with ↗, and the Mapbox telemetry note as a footer.
+- Trending shows one visitor count per station.
+- The app no longer says it's free, only open source.
+
+### Fixed
+
+- Offline, switching between departures and arrivals no longer loses the trains already received.
+- Selected stations stay clear of the station sheet, above the map's center.
+- Train status strips no longer touch the sheet's edge.
+- Recent stations are saved without blocking the app.
+
 ## [0.1.2] (3) – 2026-09-28
 
 Built from `a6bbaca`.
