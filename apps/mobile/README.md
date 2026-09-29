@@ -113,11 +113,11 @@ template adds for development, and the shared storage ones from `expo-image` and
 `expo-file-system`. The app doesn't use an advertising ID, so the Play Console's advertising ID
 declaration is "No".
 
-Release builds are shrunk with R8, which removes unused code and resources. Upload
-`android/app/build/outputs/mapping/release/mapping.txt` with each bundle as its deobfuscation
-file, so the Play Console's crash reports are readable. An early R8 build broke the map's camera,
-the stations and the search sheet's width, so after changing native dependencies, check those on
-a release build. To test the bundle on a device or emulator, build an APK from it:
+Release builds are shrunk with R8, which removes unused code and resources. The bundle includes
+R8's mapping file, so the Play Console's crash reports are readable without uploading
+`android/app/build/outputs/mapping/release/mapping.txt` separately. An early R8 build broke the
+map's camera, the stations and the search sheet's width, so after changing native dependencies,
+check those on a release build. To test the bundle on a device or emulator, build an APK from it:
 
 ```sh
 cd android && ./gradlew app:packageReleaseUniversalApk
