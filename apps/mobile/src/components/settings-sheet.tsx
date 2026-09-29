@@ -147,9 +147,9 @@ function Row({
       onPress={onPress}
     >
       <ListGroup.ItemPrefix>
-        {/* A rounded tile, like the station icons in the other lists. */}
-        <View className="size-7 items-center justify-center rounded-lg bg-accent">
-          <Icon size={16} color={iconColor} />
+        {/* A rounded tile, as big as the station icons in the other lists. */}
+        <View className="size-6 items-center justify-center rounded-md bg-accent">
+          <Icon size={14} color={iconColor} />
         </View>
       </ListGroup.ItemPrefix>
       <ListGroup.ItemContent>
