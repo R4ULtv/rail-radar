@@ -15,7 +15,16 @@ import RefreshCw from "lucide-react-native/icons/refresh-cw";
 import Share from "lucide-react-native/icons/share";
 import Share2 from "lucide-react-native/icons/share-2";
 import TriangleAlert from "lucide-react-native/icons/triangle-alert";
-import { memo, useCallback, useEffect, useReducer, useRef, useState, type ReactNode } from "react";
+import {
+  Fragment,
+  memo,
+  useCallback,
+  useEffect,
+  useReducer,
+  useRef,
+  useState,
+  type ReactNode,
+} from "react";
 import {
   BackHandler,
   Linking,
@@ -38,7 +47,7 @@ import {
 import { ErrorBoundary } from "@/components/error-boundary";
 import { SheetHeader, SheetHeaderFade, useSheetScrollOffset } from "@/components/sheet-header";
 import { StationDetails } from "@/components/station-details";
-import { TrainRow, TrainRowSkeleton, trainKey } from "@/components/train-row";
+import { TrainRow, TrainRowSeparator, TrainRowSkeleton, trainKey } from "@/components/train-row";
 import { useStationBoard, type BoardType } from "@/hooks/use-station-board";
 import { useSavedStations } from "@/hooks/use-stored-stations";
 import { distanceKm, formatDistance } from "@/lib/distance";
@@ -347,7 +356,9 @@ const LiveBoard = memo(function LiveBoard({
     return (
       <View>
         <TrainRowSkeleton onLayout={onFirstItemLayout} />
+        <TrainRowSeparator />
         <TrainRowSkeleton />
+        <TrainRowSeparator />
         <TrainRowSkeleton />
       </View>
     );
@@ -382,14 +393,16 @@ const LiveBoard = memo(function LiveBoard({
           const occurrence = keyCounts.get(key) ?? 0;
           keyCounts.set(key, occurrence + 1);
           return (
-            <TrainRow
-              key={occurrence ? `${key}-${occurrence}` : key}
-              train={train}
-              type={type}
-              isExpanded={expandedTrain === key}
-              onToggle={toggleTrain}
-              onLayout={index === 0 ? onFirstItemLayout : undefined}
-            />
+            <Fragment key={occurrence ? `${key}-${occurrence}` : key}>
+              {index > 0 ? <TrainRowSeparator /> : null}
+              <TrainRow
+                train={train}
+                type={type}
+                isExpanded={expandedTrain === key}
+                onToggle={toggleTrain}
+                onLayout={index === 0 ? onFirstItemLayout : undefined}
+              />
+            </Fragment>
           );
         })
       )}

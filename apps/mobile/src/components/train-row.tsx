@@ -6,6 +6,7 @@ import ArrowRight from "lucide-react-native/icons/arrow-right";
 import Ban from "lucide-react-native/icons/ban";
 import Info from "lucide-react-native/icons/info";
 import { PressableFeedback } from "heroui-native/pressable-feedback";
+import { Separator } from "heroui-native/separator";
 import { memo } from "react";
 import type { LayoutChangeEvent } from "react-native";
 import { StyleSheet, Text, View } from "react-native";
@@ -105,7 +106,7 @@ export const TrainRow = memo(function TrainRow({
   const platform = train.platform ?? "–";
 
   const row = (
-    <View className="flex-row gap-3 border-b border-separator px-4 py-3">
+    <View className="flex-row gap-3 px-4 py-3">
       {status ? <View className={statusBarClassNames[status]} style={styles.statusBar} /> : null}
       <View
         className="h-12 min-w-12 items-center justify-center rounded-2xl bg-default px-2"
@@ -190,9 +191,14 @@ export const TrainRow = memo(function TrainRow({
   );
 }, areRowPropsEqual);
 
+/** The line between two rows, inset to the train's details like the lists' separators. */
+export function TrainRowSeparator() {
+  return <Separator className="mr-4 ml-19" />;
+}
+
 export function TrainRowSkeleton({ onLayout }: { onLayout?: (event: LayoutChangeEvent) => void }) {
   return (
-    <View className="flex-row gap-3 border-b border-separator px-4 py-3" onLayout={onLayout}>
+    <View className="flex-row gap-3 px-4 py-3" onLayout={onLayout}>
       <Skeleton className="h-12 w-12 rounded-2xl" />
       <View style={styles.details} className="justify-center gap-2">
         <View className="flex-row justify-between">
