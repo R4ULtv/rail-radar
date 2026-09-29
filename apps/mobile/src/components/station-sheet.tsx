@@ -9,6 +9,8 @@ import ArrowDownLeft from "lucide-react-native/icons/arrow-down-left";
 import ArrowUpRight from "lucide-react-native/icons/arrow-up-right";
 import Bookmark from "lucide-react-native/icons/bookmark";
 import ChevronDown from "lucide-react-native/icons/chevron-down";
+import CircleAlert from "lucide-react-native/icons/circle-alert";
+import CloudOff from "lucide-react-native/icons/cloud-off";
 import CornerUpRight from "lucide-react-native/icons/corner-up-right";
 import Megaphone from "lucide-react-native/icons/megaphone";
 import RefreshCw from "lucide-react-native/icons/refresh-cw";
@@ -52,6 +54,7 @@ import {
   useSheetScrollOffset,
 } from "@/components/sheet-header";
 import { StationDetails } from "@/components/station-details";
+import { StatusMessage } from "@/components/status-message";
 import { TrainRow, TrainRowSeparator, TrainRowSkeleton, trainKey } from "@/components/train-row";
 import { useStationBoard, type BoardType } from "@/hooks/use-station-board";
 import { useSavedStations } from "@/hooks/use-stored-stations";
@@ -332,30 +335,24 @@ const LiveBoard = memo(function LiveBoard({
     [],
   );
 
-  // Offline, the board reloads by itself once the connection is back.
-  const retryButton = isOnline ? (
-    <Button className="self-start" size="sm" variant="tertiary" onPress={retry}>
-      <RefreshCw size={16} color={foregroundColor} />
-      <Button.Label>Try again</Button.Label>
-    </Button>
-  ) : null;
-
   if (!data) {
     if (error) {
-      return (
-        <View className="gap-3 px-4 py-4" onLayout={onFirstItemLayout}>
-          <View className="gap-0.5">
-            <Text className="text-sm font-medium text-foreground">
-              {isOnline ? "Unable to load live trains" : "You're offline"}
-            </Text>
-            <Text className="text-sm text-muted">
-              {isOnline
-                ? (error.message ?? "Check your connection and try again.")
-                : "Live trains will load once you're back online."}
-            </Text>
-          </View>
-          {retryButton}
-        </View>
+      // Offline, the board reloads by itself once the connection is back.
+      return isOnline ? (
+        <StatusMessage
+          icon={CircleAlert}
+          title="Unable to load live trains"
+          description={error.message ?? "Check your connection and try again."}
+          onRetry={retry}
+          onLayout={onFirstItemLayout}
+        />
+      ) : (
+        <StatusMessage
+          icon={CloudOff}
+          title="You're offline"
+          description="Live trains will load once you're back online."
+          onLayout={onFirstItemLayout}
+        />
       );
     }
     return (
@@ -383,7 +380,12 @@ const LiveBoard = memo(function LiveBoard({
               ? "Live updates are unavailable. Showing the last received data."
               : "You're offline. Showing the last received data."}
           </Text>
-          {retryButton}
+          {isOnline ? (
+            <Button className="self-start" size="sm" variant="tertiary" onPress={retry}>
+              <RefreshCw size={16} color={foregroundColor} />
+              <Button.Label>Try again</Button.Label>
+            </Button>
+          ) : null}
         </View>
       ) : null}
       {trains.length === 0 ? (
@@ -575,19 +577,31 @@ function StationSheetContent({
 }
 
 /** Shown in the sheet if the station fails to render, so the map stays usable. */
-function StationError({ onRetry, onClose }: { onRetry: () => void; onClose: () => void }) {
+function StationError({
+  station,
+  onRetry,
+  onClose,
+}: {
+  station: Station;
+  onRetry: () => void;
+  onClose: () => void;
+}) {
   const bottomInset = useSheetBottomInset();
-  const foregroundColor = useThemeColor("default-foreground");
 
   return (
-    <BottomSheetView className="gap-3 px-4" style={{ paddingBottom: bottomInset }}>
-      <SheetHeader title="Something went wrong" closeLabel="Close station" onClose={onClose}>
-        <Text className="mt-1 text-sm text-muted">This station couldn't be shown.</Text>
-      </SheetHeader>
-      <Button className="self-start" size="sm" variant="tertiary" onPress={onRetry}>
-        <RefreshCw size={16} color={foregroundColor} />
-        <Button.Label>Try again</Button.Label>
-      </Button>
+    <BottomSheetView className="gap-2 px-4" style={{ paddingBottom: bottomInset }}>
+      <SheetHeader
+        title={station.name}
+        titleLines={2}
+        closeLabel="Close station"
+        onClose={onClose}
+      />
+      <StatusMessage
+        icon={CircleAlert}
+        title="Something went wrong"
+        description="This station couldn't be shown."
+        onRetry={onRetry}
+      />
     </BottomSheetView>
   );
 }
@@ -673,7 +687,9 @@ export function StationSheet({
     >
       <ErrorBoundary
         key={station.id}
-        fallback={(reset) => <StationError onRetry={reset} onClose={() => onOpenChange(false)} />}
+        fallback={(reset) => (
+          <StationError station={station} onRetry={reset} onClose={() => onOpenChange(false)} />
+        )}
       >
         <StationSheetContent
           station={station}

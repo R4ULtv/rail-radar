@@ -1,12 +1,11 @@
 import type { Station } from "@repo/data/types";
 import BottomSheet, { BottomSheetScrollView, useBottomSheet } from "@gorhom/bottom-sheet";
-import { Button } from "heroui-native/button";
 import { useBottomSheetAwareHandlers, useThemeColor } from "heroui-native/hooks";
 import { SearchField } from "heroui-native/search-field";
 import Bookmark from "lucide-react-native/icons/bookmark";
+import CircleAlert from "lucide-react-native/icons/circle-alert";
 import History from "lucide-react-native/icons/rotate-ccw-clock";
 import List from "lucide-react-native/icons/list";
-import RefreshCw from "lucide-react-native/icons/refresh-cw";
 import SearchX from "lucide-react-native/icons/search-x";
 import TrendingUp from "lucide-react-native/icons/trending-up";
 import User from "lucide-react-native/icons/user";
@@ -36,6 +35,7 @@ import {
   useSheetScrollOffset,
 } from "@/components/sheet-header";
 import { StationSection, StationSectionSkeleton } from "@/components/station-list";
+import { StatusMessage } from "@/components/status-message";
 import { useStationSearch } from "@/hooks/use-station-search";
 import { useRecentStations, useSavedStations } from "@/hooks/use-stored-stations";
 import { useTrendingStations, type TrendingStation } from "@/hooks/use-trending-stations";
@@ -154,11 +154,7 @@ const SearchSheetContent = memo(function SearchSheetContent({
     savedStations,
     recentStations,
   });
-  const [mutedColor, foregroundColor, surfaceColor] = useThemeColor([
-    "muted",
-    "default-foreground",
-    "surface",
-  ]);
+  const [mutedColor, surfaceColor] = useThemeColor(["muted", "surface"]);
 
   // The lists are memoized, so they only render again when these change.
   const unsavedRecentStations = useMemo(() => {
@@ -258,17 +254,13 @@ const SearchSheetContent = memo(function SearchSheetContent({
 
       <Animated.View className="px-4" style={listStyle}>
         {!search.isActive ? null : search.error ? (
-          // Like the live board's error.
-          <View className="mt-5 gap-3 px-4">
-            <View className="gap-0.5">
-              <Text className="text-sm font-medium text-foreground">Unable to search stations</Text>
-              <Text className="text-sm text-muted">{search.error}</Text>
-            </View>
-            <Button className="self-start" size="sm" variant="tertiary" onPress={search.retry}>
-              <RefreshCw size={16} color={foregroundColor} />
-              <Button.Label>Try again</Button.Label>
-            </Button>
-          </View>
+          <StatusMessage
+            className="mt-5"
+            icon={CircleAlert}
+            title="Unable to search stations"
+            description={search.error}
+            onRetry={search.retry}
+          />
         ) : search.stations.length > 0 ? (
           <StationSection
             title={searchResultsTitle}
@@ -278,13 +270,12 @@ const SearchSheetContent = memo(function SearchSheetContent({
             onSelect={selectStation}
           />
         ) : noResults ? (
-          <View className="mt-5 items-center gap-2 px-4 py-4">
-            <SearchX size={20} color={mutedColor} />
-            <View className="items-center gap-0.5">
-              <Text className="text-sm font-medium text-foreground">No stations found</Text>
-              <Text className="text-sm text-muted">Try a different search term.</Text>
-            </View>
-          </View>
+          <StatusMessage
+            className="mt-5"
+            icon={SearchX}
+            title="No stations found"
+            description="Try a different search term."
+          />
         ) : (
           <StationSectionSkeleton title={searchResultsTitle} icon={List} />
         )}
