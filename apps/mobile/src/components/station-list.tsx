@@ -28,6 +28,11 @@ export function SectionTitle({ icon, children }: { icon?: ReactNode; children: R
   );
 }
 
+/** The line between two rows that start with an icon, inset to their titles. */
+export function RowSeparator() {
+  return <Separator className="mr-4 ml-13" />;
+}
+
 interface StationRowProps<T extends Station> {
   station: T;
   renderSuffix?: (station: T) => ReactNode;
@@ -101,7 +106,7 @@ function StationSectionContent<T extends Station>({
       <ListGroup variant="secondary" className="overflow-hidden">
         {visibleStations.map((station, index) => (
           <Fragment key={station.id}>
-            {index > 0 ? <Separator className="mx-4" /> : null}
+            {index > 0 ? <RowSeparator /> : null}
             <StationRow station={station} renderSuffix={renderSuffix} onSelect={onSelect} />
           </Fragment>
         ))}
@@ -179,7 +184,7 @@ export function StationSectionSkeleton({
       <ListGroup variant="secondary" importantForAccessibility="no-hide-descendants">
         {skeletonNameClassNames.slice(0, count).map((className, index) => (
           <Fragment key={className}>
-            {index > 0 ? <Separator className="mx-4" /> : null}
+            {index > 0 ? <RowSeparator /> : null}
             <ListGroup.Item disabled>
               <ListGroup.ItemPrefix>
                 <Skeleton className="size-6 rounded-md" />

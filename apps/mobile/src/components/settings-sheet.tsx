@@ -2,7 +2,6 @@ import Mapbox from "@rnmapbox/maps";
 import { Image } from "expo-image";
 import { useThemeColor } from "heroui-native/hooks";
 import { ListGroup } from "heroui-native/list-group";
-import { Separator } from "heroui-native/separator";
 import { Tabs } from "heroui-native/tabs";
 import ArrowUpRight from "lucide-react-native/icons/arrow-up-right";
 import Bookmark from "lucide-react-native/icons/bookmark";
@@ -42,7 +41,7 @@ import {
 } from "@/components/map-controls";
 import { PageSheetHandle } from "@/components/page-sheet-handle";
 import { SheetHeader, SheetHeaderFade, useSheetScrollOffset } from "@/components/sheet-header";
-import { SectionTitle } from "@/components/station-list";
+import { RowSeparator, SectionTitle } from "@/components/station-list";
 import { resetStations, useStationsDownloadedAt } from "@/hooks/use-stations-url";
 import {
   clearRecentStations,
@@ -171,7 +170,7 @@ function LinkRows({
 
   return links.map(({ icon, title, description, url }, index) => (
     <Fragment key={url}>
-      {index > 0 ? <Separator className="mx-4" /> : null}
+      {index > 0 ? <RowSeparator /> : null}
       <Row
         icon={icon}
         title={title}
@@ -257,7 +256,7 @@ function DataRows() {
           })
         }
       />
-      <Separator className="mx-4" />
+      <RowSeparator />
       <Row
         icon={Bookmark}
         title="Clear saved stations"
@@ -274,7 +273,7 @@ function DataRows() {
           )
         }
       />
-      <Separator className="mx-4" />
+      <RowSeparator />
       <Row
         icon={MapPinX}
         title="Forget last location"
@@ -286,7 +285,7 @@ function DataRows() {
           haptics.tap();
         }}
       />
-      <Separator className="mx-4" />
+      <RowSeparator />
       <Row
         icon={TrainFront}
         title="Reset station data"
@@ -305,7 +304,7 @@ function DataRows() {
           )
         }
       />
-      <Separator className="mx-4" />
+      <RowSeparator />
       <Row
         icon={BrushCleaning}
         title="Clear cache"
@@ -376,7 +375,7 @@ const SettingsContent = memo(function SettingsContent({
             suffix={<Status>{locationLabels[locationStatus]}</Status>}
             onPress={() => void Linking.openSettings()}
           />
-          <Separator className="mx-4" />
+          <RowSeparator />
           <LinkRows
             links={[
               {
@@ -433,7 +432,7 @@ const SettingsContent = memo(function SettingsContent({
               },
             ]}
           />
-          <Separator className="mx-4" />
+          <RowSeparator />
           <Row
             icon={ChartNoAxes}
             title="Mapbox telemetry"
