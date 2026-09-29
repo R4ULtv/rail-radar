@@ -7,58 +7,98 @@ import { findNearbyStations, loadStations, type NearbyStation } from "@/lib/stat
 
 const webBaseUrl = "https://www.railradar24.com";
 const statsMaxAgeMs = 5 * 60 * 1000;
+const noNearbyStations: NearbyStation[] = [];
 
 interface Cached<T> {
   value: Promise<T>;
   loadedAt: number;
+  /** Set once the load has succeeded. */
+  result?: { value: T };
+}
+
+interface StationCache<T> {
+  load: (stationId: string) => Promise<T>;
+  /** The last loaded value, even if it's being refreshed, so reopening skips the skeleton. */
+  peek: (stationId: string) => { value: T } | undefined;
 }
 
 /**
  * Keeps each station's details while the app runs, so reopening a station shows them at once.
  * Failed loads are dropped, so they're tried again the next time.
  */
-function createCache<T>(load: (stationId: string) => Promise<T>, maxAgeMs = Infinity) {
+function createCache<T>(
+  load: (stationId: string) => Promise<T>,
+  maxAgeMs = Infinity,
+): StationCache<T> {
   const cache = new Map<string, Cached<T>>();
-  return (stationId: string) => {
-    const cached = cache.get(stationId);
-    if (cached && Date.now() - cached.loadedAt < maxAgeMs) return cached.value;
+  return {
+    load: (stationId) => {
+      const cached = cache.get(stationId);
+      if (cached && Date.now() - cached.loadedAt < maxAgeMs) return cached.value;
 
-    const value = load(stationId);
-    const entry = { value, loadedAt: Date.now() };
-    cache.set(stationId, entry);
-    value.catch(() => {
-      if (cache.get(stationId) === entry) cache.delete(stationId);
-    });
-    return value;
+      const value = load(stationId);
+      const entry: Cached<T> = { value, loadedAt: Date.now(), result: cached?.result };
+      cache.set(stationId, entry);
+      value.then(
+        (result) => {
+          entry.result = { value: result };
+        },
+        () => {
+          if (cache.get(stationId) === entry) cache.delete(stationId);
+        },
+      );
+      return value;
+    },
+    peek: (stationId) => cache.get(stationId)?.result,
   };
 }
 
+interface StationResource<T> {
+  /** Null until it arrives, or if it failed. */
+  value: T | null;
+  /** Nothing has arrived yet, and the load hasn't failed. */
+  isLoading: boolean;
+}
+
 /**
- * Loads a station's details while `enabled`; null until they arrive or if they fail. A failed
- * load is tried again once the connection comes back.
+ * Loads a station's details while `enabled`. A failed load is tried again once the connection
+ * comes back.
  */
 function useStationResource<T>(
   stationId: string,
   enabled: boolean,
-  load: (stationId: string) => Promise<T>,
-) {
+  cache: StationCache<T>,
+): StationResource<T> {
   const isOnline = useIsOnline();
-  const [state, setState] = useState<{ stationId: string; value: T } | null>(null);
+  // A null value is a failed load.
+  const [state, setState] = useState<{ stationId: string; value: T | null } | null>(null);
 
   useEffect(() => {
     if (!enabled) return;
     let cancelled = false;
-    load(stationId)
+    cache
+      .load(stationId)
       .then((value) => {
         if (!cancelled) setState({ stationId, value });
       })
-      .catch(() => {});
+      .catch(() => {
+        if (!cancelled) {
+          // Keep what was shown if a refresh fails.
+          setState((current) =>
+            current?.stationId === stationId && current.value !== null
+              ? current
+              : { stationId, value: null },
+          );
+        }
+      });
     return () => {
       cancelled = true;
     };
-  }, [stationId, enabled, isOnline, load]);
+  }, [stationId, enabled, isOnline, cache]);
 
-  return state?.stationId === stationId ? state.value : null;
+  if (state?.stationId === stationId) return { value: state.value, isLoading: false };
+  const cached = cache.peek(stationId);
+  return cached ? { value: cached.value, isLoading: false } : { value: null, isLoading: true };
 }
 
 export interface StationStats {
@@ -67,7 +107,7 @@ export interface StationStats {
   comparison: { percentage: number | null; isTopStation: boolean };
 }
 
-const loadStats = createCache(async (stationId) => {
+const statsCache = createCache(async (stationId) => {
   const response = await fetchApi(`/stations/${encodeURIComponent(stationId)}/stats?period=week`);
   if (!response.ok) throw new Error("Station stats could not be loaded.");
   return (await response.json()) as StationStats;
@@ -75,7 +115,7 @@ const loadStats = createCache(async (stationId) => {
 
 /** Visits in the last 7 days, compared with the week's most visited station. */
 export function useStationStats(stationId: string, enabled: boolean) {
-  return useStationResource(stationId, enabled, loadStats);
+  return useStationResource(stationId, enabled, statsCache);
 }
 
 export interface StationPhoto {
@@ -87,7 +127,7 @@ export interface StationPhoto {
   attribution?: { author?: string; license?: string; origin?: string; sourceUrl?: string | null };
 }
 
-const loadPhotos = createCache(async (stationId): Promise<StationPhoto[]> => {
+const photosCache = createCache(async (stationId): Promise<StationPhoto[]> => {
   const response = await fetchWithUserAgent(
     `${webBaseUrl}/media/stations/${encodeURIComponent(stationId)}/photos`,
   );
@@ -101,12 +141,18 @@ const loadPhotos = createCache(async (stationId): Promise<StationPhoto[]> => {
 
 /** The web's station photos. Like the web, only the main stations have them. */
 export function useStationPhotos(station: Station, enabled: boolean) {
-  return useStationResource(station.id, enabled && station.importance === 1, loadPhotos) ?? [];
+  const hasPhotos = station.importance === 1;
+  const { value, isLoading } = useStationResource(station.id, enabled && hasPhotos, photosCache);
+  return { photos: value ?? [], isLoading: hasPhotos && isLoading };
 }
 
 /** The closest stations, found in the same station file the map shows. */
 export function useNearbyStations(station: Station, stationsUrl: string | null) {
-  const [state, setState] = useState<{ stationId: string; stations: NearbyStation[] } | null>(null);
+  // Null stations are a failed load.
+  const [state, setState] = useState<{
+    stationId: string;
+    stations: NearbyStation[] | null;
+  } | null>(null);
 
   useEffect(() => {
     if (!stationsUrl) return;
@@ -117,11 +163,18 @@ export function useNearbyStations(station: Station, stationsUrl: string | null) 
           setState({ stationId: station.id, stations: findNearbyStations(stations, station) });
         }
       })
-      .catch(() => {});
+      .catch(() => {
+        if (!cancelled) setState({ stationId: station.id, stations: null });
+      });
     return () => {
       cancelled = true;
     };
   }, [station, stationsUrl]);
 
-  return state?.stationId === station.id ? state.stations : [];
+  const current = state?.stationId === station.id ? state : null;
+  return {
+    stations: current?.stations ?? noNearbyStations,
+    // A station without coordinates has no nearby stations to find.
+    isLoading: !!station.geo && current === null,
+  };
 }

@@ -51,21 +51,24 @@ async function loadTrendingStations(): Promise<TrendingStation[] | null> {
  */
 export function useTrendingStations(visible: boolean) {
   const [stations, setStations] = useState<TrendingStation[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   const appIsActive = useAppIsActive();
   const isOnline = useIsOnline();
   const loadedAt = useRef(0);
-  const isLoading = useRef(false);
+  const isRefreshing = useRef(false);
 
   const refresh = useCallback(async () => {
-    if (isLoading.current) return;
-    isLoading.current = true;
+    if (isRefreshing.current) return;
+    isRefreshing.current = true;
+    setIsLoading(true);
     // Trending is optional; keep the last list if a refresh fails.
     const next = await loadTrendingStations().catch(() => null);
-    isLoading.current = false;
+    isRefreshing.current = false;
     if (next) {
       loadedAt.current = Date.now();
       setStations(next);
     }
+    setIsLoading(false);
   }, []);
 
   useEffect(() => {
@@ -90,5 +93,6 @@ export function useTrendingStations(visible: boolean) {
     };
   }, [visible, appIsActive, isOnline, refresh]);
 
-  return stations;
+  // Only the first list is a loading state; refreshes keep showing the last one.
+  return { stations, isLoading: isLoading && stations.length === 0 };
 }

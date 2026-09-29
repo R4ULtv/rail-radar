@@ -160,12 +160,24 @@ const skeletonNameClassNames = [
 ];
 
 /** A station section while its stations load, like the web's search skeleton. */
-export function StationSectionSkeleton({ title, icon }: { title: string; icon: SectionIcon }) {
+export function StationSectionSkeleton({
+  title,
+  icon,
+  count = skeletonNameClassNames.length,
+  hasSuffix = false,
+}: {
+  title: string;
+  icon: SectionIcon;
+  /** As many rows as the section will show, so it doesn't jump once they arrive. */
+  count?: number;
+  /** For sections with a distance or visitor count on the right of each row. */
+  hasSuffix?: boolean;
+}) {
   return (
     <View className="mt-5" accessibilityLabel="Loading stations">
       <StationSectionTitle icon={icon} title={title} />
       <ListGroup variant="secondary" importantForAccessibility="no-hide-descendants">
-        {skeletonNameClassNames.map((className, index) => (
+        {skeletonNameClassNames.slice(0, count).map((className, index) => (
           <Fragment key={className}>
             {index > 0 ? <Separator className="mx-4" /> : null}
             <ListGroup.Item disabled>
@@ -178,6 +190,11 @@ export function StationSectionSkeleton({ title, icon }: { title: string; icon: S
                   <Skeleton className="size-3.5 rounded-full" />
                 </View>
               </ListGroup.ItemContent>
+              {hasSuffix ? (
+                <ListGroup.ItemSuffix>
+                  <Skeleton className="h-3.5 w-14 rounded-full" />
+                </ListGroup.ItemSuffix>
+              ) : null}
             </ListGroup.Item>
           </Fragment>
         ))}

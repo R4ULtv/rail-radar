@@ -98,18 +98,22 @@ function EmptyState({ children }: { children: ReactNode }) {
 }
 
 const searchResultsTitle = "Search results";
+const trendingTitle = "Trending (last 7 days)";
 
 // Memoized, so hiding and showing the sheet around a station sheet doesn't re-render its lists.
 const SearchSheetContent = memo(function SearchSheetContent({
   stationsUrl,
   userLocation,
   trendingStations,
+  isTrendingLoading,
   onSelectStation,
   getMapFeedbackUrl,
 }: {
   stationsUrl: string | null;
   userLocation: UserLocation | null;
   trendingStations: TrendingStation[];
+  /** The first trending list is still loading. */
+  isTrendingLoading: boolean;
   onSelectStation: (station: Station) => void;
   getMapFeedbackUrl: () => string;
 }) {
@@ -161,7 +165,10 @@ const SearchSheetContent = memo(function SearchSheetContent({
   const noResults = search.hasResult && !search.error && search.stations.length === 0;
   const showDefaultLists = !search.isActive || noResults;
   const hasDefaultLists =
-    unsavedRecentStations.length > 0 || savedStations.length > 0 || trendingStations.length > 0;
+    unsavedRecentStations.length > 0 ||
+    savedStations.length > 0 ||
+    trendingStations.length > 0 ||
+    isTrendingLoading;
 
   const selectStation = useCallback(
     (station: Station) => {
@@ -287,13 +294,17 @@ const SearchSheetContent = memo(function SearchSheetContent({
               onSelect={selectStation}
               collapsedCount={5}
             />
-            <StationSection
-              title="Trending (last 7 days)"
-              icon={TrendingUp}
-              stations={trendingStations}
-              renderSuffix={renderVisitorCounts}
-              onSelect={selectStation}
-            />
+            {isTrendingLoading ? (
+              <StationSectionSkeleton title={trendingTitle} icon={TrendingUp} hasSuffix />
+            ) : (
+              <StationSection
+                title={trendingTitle}
+                icon={TrendingUp}
+                stations={trendingStations}
+                renderSuffix={renderVisitorCounts}
+                onSelect={selectStation}
+              />
+            )}
             {!search.isActive && !hasDefaultLists ? (
               <EmptyState>
                 <Text className="text-center text-sm text-muted">
@@ -337,7 +348,7 @@ export function SearchSheet({
   const [isExpanded, setIsExpanded] = useState(false);
   const [surfaceColor, mutedColor] = useThemeColor(["surface", "muted"]);
   // The list only shows while the sheet is open, so it isn't refreshed while collapsed or hidden.
-  const trendingStations = useTrendingStations(isExpanded && !isHidden);
+  const trending = useTrendingStations(isExpanded && !isHidden);
 
   // Back from a station, the sheet comes back collapsed. Its content stays mounted while hidden,
   // so the query and results are still there when it's opened again.
@@ -379,7 +390,8 @@ export function SearchSheet({
       <SearchSheetContent
         stationsUrl={stationsUrl}
         userLocation={userLocation}
-        trendingStations={trendingStations}
+        trendingStations={trending.stations}
+        isTrendingLoading={trending.isLoading}
         onSelectStation={onSelectStation}
         getMapFeedbackUrl={getMapFeedbackUrl}
       />
