@@ -110,10 +110,19 @@ cd android && ./gradlew app:bundleRelease
 
 `app.json` blocks the permissions the app doesn't use: drawing over other apps, which Expo's
 template adds for development, and the shared storage ones from `expo-image` and
-`expo-file-system`. Release builds aren't shrunk with R8: with it, the map ignores its camera,
-the stations don't appear and the search sheet loses its width. So Google Play's warning about a
-missing deobfuscation file doesn't apply. The app doesn't use an advertising ID, so the Play
-Console's advertising ID declaration is "No".
+`expo-file-system`. The app doesn't use an advertising ID, so the Play Console's advertising ID
+declaration is "No".
+
+Release builds are shrunk with R8, which removes unused code and resources. Upload
+`android/app/build/outputs/mapping/release/mapping.txt` with each bundle as its deobfuscation
+file, so the Play Console's crash reports are readable. An early R8 build broke the map's camera,
+the stations and the search sheet's width, so after changing native dependencies, check those on
+a release build. To test the bundle on a device or emulator, build an APK from it:
+
+```sh
+cd android && ./gradlew app:packageReleaseUniversalApk
+adb install -r app/build/outputs/apk_from_bundle/release/app-release-universal.apk
+```
 
 ### Layout
 
