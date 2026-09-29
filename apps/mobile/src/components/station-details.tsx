@@ -193,7 +193,7 @@ function StationPopularity({
                   {comparison.percentage.toFixed(1)}% of the visitors of the week's #1,{" "}
                   {topStation.stationName}.
                 </Text>
-                <View className="h-1.5 overflow-hidden rounded-full bg-default">
+                <View className="h-1.5 overflow-hidden rounded-full bg-surface-tertiary">
                   <View
                     className="h-full rounded-full bg-success"
                     style={{ width: `${Math.min(comparison.percentage, 100)}%` }}
