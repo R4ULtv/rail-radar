@@ -122,6 +122,7 @@ function Row({
   description,
   suffix,
   isDisabled = false,
+  isDestructive = false,
   accessibilityRole = "button",
   onPress,
 }: {
@@ -130,11 +131,13 @@ function Row({
   description?: string;
   suffix?: ReactNode;
   isDisabled?: boolean;
+  /** Red, like the confirmation it asks for. */
+  isDestructive?: boolean;
   accessibilityRole?: "button" | "link";
   /** Without it, the row only shows information. */
   onPress?: () => void;
 }) {
-  const iconColor = useThemeColor("accent-foreground");
+  const iconColor = useThemeColor(isDestructive ? "danger-foreground" : "accent-foreground");
 
   return (
     <ListGroup.Item
@@ -148,12 +151,16 @@ function Row({
     >
       <ListGroup.ItemPrefix>
         {/* A rounded tile, as big as the station icons in the other lists. */}
-        <View className="size-6 items-center justify-center rounded-md bg-accent">
+        <View
+          className={`size-6 items-center justify-center rounded-md ${isDestructive ? "bg-danger" : "bg-accent"}`}
+        >
           <Icon size={14} color={iconColor} />
         </View>
       </ListGroup.ItemPrefix>
       <ListGroup.ItemContent>
-        <ListGroup.ItemTitle>{title}</ListGroup.ItemTitle>
+        <ListGroup.ItemTitle className={isDestructive ? "text-danger" : undefined}>
+          {title}
+        </ListGroup.ItemTitle>
         {description ? <ListGroup.ItemDescription>{description}</ListGroup.ItemDescription> : null}
       </ListGroup.ItemContent>
       {suffix ? <ListGroup.ItemSuffix>{suffix}</ListGroup.ItemSuffix> : null}
@@ -161,13 +168,17 @@ function Row({
   );
 }
 
+/** Marks a row that leaves the app. */
+function ExternalIcon() {
+  const mutedColor = useThemeColor("muted");
+  return <ArrowUpRight size={16} color={mutedColor} />;
+}
+
 function LinkRows({
   links,
 }: {
   links: { icon: Icon; title: string; description?: string; url: string }[];
 }) {
-  const mutedColor = useThemeColor("muted");
-
   return links.map(({ icon, title, description, url }, index) => (
     <Fragment key={url}>
       {index > 0 ? <RowSeparator /> : null}
@@ -176,7 +187,7 @@ function LinkRows({
         title={title}
         description={description}
         accessibilityRole="link"
-        suffix={<ArrowUpRight size={16} color={mutedColor} />}
+        suffix={<ExternalIcon />}
         onPress={() => void Linking.openURL(url)}
       />
     </Fragment>
@@ -250,6 +261,7 @@ function DataRows() {
         title="Clear recent stations"
         suffix={recentStations.length > 0 ? <Status>{recentStations.length}</Status> : null}
         isDisabled={recentStations.length === 0}
+        isDestructive
         onPress={() =>
           confirm("Clear recent stations?", "Saved stations are kept.", "Clear", () => {
             clearRecentStations();
@@ -262,6 +274,7 @@ function DataRows() {
         title="Clear saved stations"
         suffix={savedStations.length > 0 ? <Status>{savedStations.length}</Status> : null}
         isDisabled={savedStations.length === 0}
+        isDestructive
         onPress={() =>
           confirm(
             "Clear saved stations?",
@@ -295,6 +308,7 @@ function DataRows() {
             : `Updated ${formatDownloadAge(stationsDownloadedAt)}.`
         }
         isDisabled={stationsDownloadedAt === null}
+        isDestructive
         onPress={() =>
           confirm(
             "Reset station data?",
@@ -372,7 +386,12 @@ const SettingsContent = memo(function SettingsContent({
             icon={MapPin}
             title="Location access"
             description="Only used on this device, to show you on the map and sort stations by distance."
-            suffix={<Status>{locationLabels[locationStatus]}</Status>}
+            suffix={
+              <View className="flex-row items-center gap-1">
+                <Status>{locationLabels[locationStatus]}</Status>
+                <ExternalIcon />
+              </View>
+            }
             onPress={() => void Linking.openSettings()}
           />
           <RowSeparator />
