@@ -43,12 +43,24 @@ function parseDelay(text: string): DelayResult {
 
 function parseCategory(text: string | null): string | null {
   if (!text) return null;
-  return (
-    text
-      .replace(/^Categoria\s+/i, "")
-      .replace(/&#?\w+;/g, "") // Remove HTML entities like &#39; &nbsp; etc.
-      .trim() || null
-  );
+  const category = text
+    .replace(/^Categoria\s+/i, "")
+    .replace(/&#?\w+;/g, "") // Remove HTML entities like &#39; &nbsp; etc.
+    .trim();
+  if (/^ALTA\s+VELOCIT[AÀ]['’]?$/i.test(category)) return "AV";
+
+  switch (category.toUpperCase().replace(/\s+/g, " ")) {
+    case "INTERCITY":
+      return "IC";
+    case "INTERCITY NOTTE":
+      return "ICN";
+    case "REGIONALE":
+      return "REG";
+    case "REGIONALE VELOCE":
+      return "RV";
+    default:
+      return category || null;
+  }
 }
 
 function decodeHtmlEntities(text: string): string {
