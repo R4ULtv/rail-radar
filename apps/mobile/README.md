@@ -124,6 +124,30 @@ cd android && ./gradlew app:packageReleaseUniversalApk
 adb install -r app/build/outputs/apk_from_bundle/release/app-release-universal.apk
 ```
 
+### Diagnosing an error screen
+
+The app catches React rendering errors and keeps running, so a "Something went wrong" screen
+usually won't produce a crash in Play Console's Android vitals. The error screen's **Report a
+problem** button prefills the issue with the exception, JavaScript and React component stacks,
+app version/build, Android device model, and display settings. **Share error details** shares the
+full report, including stacks too long for the issue URL. Nothing is uploaded automatically.
+
+For an older build without those details, connect the affected phone with USB debugging enabled,
+start this command, reproduce the problem, then stop it with Ctrl+C:
+
+```sh
+adb logcat -v threadtime ReactNativeJS:E AndroidRuntime:E '*:S' > rail-radar-error.txt
+```
+
+Keep `android/app/build/generated/sourcemaps/react/release/index.android.bundle.map` with each
+released bundle, before the next build overwrites it. R8's mapping file decodes Java/Kotlin
+stacks; Hermes JavaScript stacks need this source map from the **exact same build**. From
+`apps/mobile`, decode a captured JavaScript stack with:
+
+```sh
+npx metro-symbolicate android/app/build/generated/sourcemaps/react/release/index.android.bundle.map < rail-radar-error.txt
+```
+
 ### Layout
 
 ```text

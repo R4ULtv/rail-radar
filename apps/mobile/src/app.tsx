@@ -3,27 +3,29 @@ import { useThemeColor } from "heroui-native/hooks";
 import { HeroUINativeProvider } from "heroui-native/provider";
 import Bug from "lucide-react-native/icons/bug";
 import RefreshCw from "lucide-react-native/icons/refresh-cw";
-import { Linking, StyleSheet, Text, View } from "react-native";
+import Share2 from "lucide-react-native/icons/share-2";
+import { Alert, Linking, ScrollView, Share, StyleSheet, Text, View } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 
 import { ErrorBoundary } from "@/components/error-boundary";
 import { MapScreen } from "@/components/map-screen";
-import { bugReportUrl } from "@/lib/links";
+import { createErrorReport, type CapturedError } from "@/lib/error-report";
 import { applySavedTheme } from "@/lib/theme";
 import "./global.css";
 
 applySavedTheme();
 
 /** Shown instead of the map if it crashes, rather than closing the app. */
-function AppError({ onRetry }: { onRetry: () => void }) {
+function AppError({ onRetry, failure }: { onRetry: () => void; failure: CapturedError }) {
   const [accentForegroundColor, foregroundColor] = useThemeColor([
     "accent-foreground",
     "default-foreground",
   ]);
+  const report = createErrorReport(failure);
 
   return (
-    <View style={styles.error}>
+    <ScrollView contentContainerStyle={styles.error}>
       <Text className="text-center text-lg font-semibold text-foreground">
         Something went wrong
       </Text>
@@ -35,12 +37,30 @@ function AppError({ onRetry }: { onRetry: () => void }) {
           <RefreshCw size={16} color={accentForegroundColor} />
           <Button.Label>Try again</Button.Label>
         </Button>
-        <Button variant="tertiary" onPress={() => void Linking.openURL(bugReportUrl)}>
+        <Button
+          variant="tertiary"
+          onPress={() => {
+            void Linking.openURL(report.url).catch(() =>
+              Alert.alert("Couldn't open the report", "Use Share error details to send the error."),
+            );
+          }}
+        >
           <Bug size={16} color={foregroundColor} />
           <Button.Label>Report a problem</Button.Label>
         </Button>
+        <Button
+          variant="ghost"
+          onPress={() => {
+            void Share.share({ title: "Rail Radar error report", message: report.message }).catch(
+              () => Alert.alert("Couldn't share the error", "Try Report a problem instead."),
+            );
+          }}
+        >
+          <Share2 size={16} color={foregroundColor} />
+          <Button.Label>Share error details</Button.Label>
+        </Button>
       </View>
-    </View>
+    </ScrollView>
   );
 }
 
@@ -51,7 +71,9 @@ export default function App() {
     <GestureHandlerRootView style={[styles.root, { backgroundColor }]}>
       <SafeAreaProvider>
         <HeroUINativeProvider>
-          <ErrorBoundary fallback={(reset) => <AppError onRetry={reset} />}>
+          <ErrorBoundary
+            fallback={(reset, failure) => <AppError onRetry={reset} failure={failure} />}
+          >
             <MapScreen />
           </ErrorBoundary>
         </HeroUINativeProvider>
@@ -62,5 +84,5 @@ export default function App() {
 
 const styles = StyleSheet.create({
   root: { flex: 1 },
-  error: { flex: 1, alignItems: "center", justifyContent: "center", padding: 32 },
+  error: { flexGrow: 1, alignItems: "center", justifyContent: "center", padding: 32 },
 });

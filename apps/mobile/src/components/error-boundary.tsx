@@ -1,22 +1,33 @@
-import { Component, type ReactNode } from "react";
+import { Component, type ErrorInfo, type ReactNode } from "react";
+
+import type { CapturedError } from "@/lib/error-report";
 
 interface ErrorBoundaryProps {
   children: ReactNode;
   /** Shown in place of the children after they throw; `reset` renders them again. */
-  fallback: (reset: () => void) => ReactNode;
+  fallback: (reset: () => void, failure: CapturedError) => ReactNode;
 }
 
 /** Keeps a rendering error from closing the app; React logs it. Only possible as a class. */
-export class ErrorBoundary extends Component<ErrorBoundaryProps, { hasError: boolean }> {
-  state = { hasError: false };
+export class ErrorBoundary extends Component<
+  ErrorBoundaryProps,
+  { failure: CapturedError | null }
+> {
+  state: { failure: CapturedError | null } = { failure: null };
 
-  static getDerivedStateFromError() {
-    return { hasError: true };
+  static getDerivedStateFromError(error: unknown) {
+    return { failure: { error, componentStack: "" } };
   }
 
-  reset = () => this.setState({ hasError: false });
+  componentDidCatch(error: unknown, info: ErrorInfo) {
+    this.setState({ failure: { error, componentStack: info.componentStack ?? "" } });
+  }
+
+  reset = () => this.setState({ failure: null });
 
   render() {
-    return this.state.hasError ? this.props.fallback(this.reset) : this.props.children;
+    return this.state.failure
+      ? this.props.fallback(this.reset, this.state.failure)
+      : this.props.children;
   }
 }
