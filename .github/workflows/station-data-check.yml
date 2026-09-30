@@ -6,9 +6,13 @@ on:
     paths:
       - ".github/scripts/validate-stations.ts"
       - ".github/workflows/station-data-check.yml"
-      - "package.json"
-      - "pnpm-lock.yaml"
+      # The validator uses only Node built-ins; dependency updates do not affect it.
       - "packages/data/src/stations.geojson"
+
+concurrency:
+  # Only the latest run for a PR should spend time generating its station report.
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
 
 permissions:
   contents: read
@@ -21,31 +25,27 @@ jobs:
     timeout-minutes: 5
 
     steps:
-      - name: Checkout PR head
+      - name: Checkout PR merge commit
         uses: actions/checkout@v6
-        with:
-          fetch-depth: 0
-
-      - name: Install pnpm
-        uses: pnpm/action-setup@v6
 
       - name: Setup Node.js
         uses: actions/setup-node@v6
         with:
           node-version: 24
-          cache: "pnpm"
-
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
 
       - name: Get base branch file
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
         run: |
-          git show origin/${{ github.base_ref }}:packages/data/src/stations.geojson > /tmp/stations-base.geojson
+          # Fetch only the event's base commit; the diff does not need full history.
+          git fetch --no-tags --depth=1 origin "$BASE_SHA"
+          git show "$BASE_SHA:packages/data/src/stations.geojson" > /tmp/stations-base.geojson
 
+      # Node 24 runs this dependency-free TypeScript validator without tsx or pnpm.
       - name: Run validation and diff
         id: validate
         run: |
-          pnpx --allow-build=esbuild tsx .github/scripts/validate-stations.ts \
+          node .github/scripts/validate-stations.ts \
             --base=/tmp/stations-base.geojson \
             --head=packages/data/src/stations.geojson \
             --output=/tmp/report.md

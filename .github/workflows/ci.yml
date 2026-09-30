@@ -23,6 +23,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v6
         with:
+          # Turbo --affected needs history to select changed packages safely.
           fetch-depth: 0
 
       - name: Install pnpm
@@ -40,8 +41,6 @@ jobs:
       - name: Check formatting
         run: pnpm format:check
 
-      - name: Run linting
-        run: pnpm lint --affected
-
-      - name: Run type checking
-        run: pnpm check-types --affected
+      # Share Turbo startup and run independent checks together, even if one fails.
+      - name: Run linting and type checking
+        run: pnpm exec turbo run lint check-types --affected --continue=always

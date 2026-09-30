@@ -17,8 +17,11 @@ export type StationJsonRecord = {
   lng: number | null;
 };
 
+export const COORDINATE_DECIMAL_PLACES = 5;
+
 export function roundCoordinate(value: number): number {
-  return Math.round(Number(value) * 1e6) / 1e6;
+  const scale = 10 ** COORDINATE_DECIMAL_PLACES;
+  return Math.round(Number(value) * scale) / scale;
 }
 
 export function featureToStation(feature: StationFeature): Station {

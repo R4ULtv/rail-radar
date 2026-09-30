@@ -15,6 +15,7 @@
   import { ScrollArea } from "$lib/components/ui/scroll-area";
   import * as Select from "$lib/components/ui/select";
   import { Separator } from "$lib/components/ui/separator";
+  import { COORDINATE_DECIMAL_PLACES, roundCoordinate } from "$lib/stations";
   import { stationStore } from "$lib/stores/stations";
 
   let {
@@ -86,7 +87,7 @@
     if (Number.isNaN(parsedLat) || Number.isNaN(parsedLng)) return;
     onSave({
       name,
-      geo: { lat: parsedLat, lng: parsedLng },
+      geo: { lat: roundCoordinate(parsedLat), lng: roundCoordinate(parsedLng) },
       type,
       importance: Number(importance) as 1 | 2 | 3 | 4,
     });
@@ -176,7 +177,7 @@
           <Input
             id="station-lat"
             type="number"
-            step="0.000001"
+            step={1 / 10 ** COORDINATE_DECIMAL_PLACES}
             bind:value={lat}
             onpaste={handleLatPaste}
           />
@@ -184,7 +185,12 @@
         <div class="flex flex-col gap-1.5">
           <Label for="station-lng">Longitude</Label>
           <p class="text-xs text-muted-foreground">East-west position</p>
-          <Input id="station-lng" type="number" step="0.000001" bind:value={lng} />
+          <Input
+            id="station-lng"
+            type="number"
+            step={1 / 10 ** COORDINATE_DECIMAL_PLACES}
+            bind:value={lng}
+          />
         </div>
       </div>
 
