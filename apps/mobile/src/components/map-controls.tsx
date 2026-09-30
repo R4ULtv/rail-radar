@@ -360,16 +360,19 @@ export function LocateButton({
       disabled={status === "locating"}
       onPress={onPress}
     >
-      <Icon
-        size={iconSize}
-        color={color}
-        fill={isFilled ? color : "none"}
+      {/* Styled on a wrapper: Lucide passes an icon's style to each of its paths too, and
+          react-native-svg throws on a path with an empty transform. */}
+      <View
         style={{
           opacity: status === "locating" ? 0.5 : 1,
           transform:
-            status === "off" ? [] : [{ translateX: -arrowOffset }, { translateY: arrowOffset }],
+            status === "off"
+              ? undefined
+              : [{ translateX: -arrowOffset }, { translateY: arrowOffset }],
         }}
-      />
+      >
+        <Icon size={iconSize} color={color} fill={isFilled ? color : "none"} />
+      </View>
     </MapControlButton>
   );
 }
