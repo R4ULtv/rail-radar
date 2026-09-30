@@ -382,15 +382,39 @@ function getCategory(entry: JsonRecord): string | null {
     const categoryCandidates = [
       extractPreferredString(product.catOutS, ["text", "#text", "value", "name"]),
       extractPreferredString(product.catOut, ["text", "#text", "value", "name"]),
-      extractPreferredString(product.catIn, ["text", "#text", "value", "name"]),
       extractPreferredString(product.catOutL, ["text", "#text", "value", "name"]),
+    ];
+
+    // Category codes such as IC and ICL are useful here, even though the notice-text filter rejects them.
+    const shortCategory = categoryCandidates.find(
+      (value) => value && /^[A-ZÆØÅ]{1,4}[+-]?$/i.test(value),
+    );
+    if (shortCategory) return shortCategory;
+
+    categoryCandidates.push(
+      extractPreferredString(product.catIn, ["text", "#text", "value", "name"]),
       extractPreferredString(product.name, ["text", "#text", "value", "name"]),
       extractPreferredString(product.internalName, ["text", "#text", "value", "name"]),
-    ];
+    );
 
     const category = categoryCandidates.find((value) => value && !isCodeLikeText(value)) ?? null;
     if (category) {
-      return category;
+      const numberSuffix = ` ${getTrainNumber(entry)}`;
+      const label = category.endsWith(numberSuffix)
+        ? category.slice(0, -numberSuffix.length)
+        : category;
+
+      switch (label.toLowerCase()) {
+        case "intercity":
+          return "IC";
+        case "intercitylyn":
+          return "ICL";
+        case "s-tog":
+        case "s-train":
+          return "S";
+        default:
+          return label;
+      }
     }
   }
 

@@ -10,6 +10,7 @@
     type StationImportanceFilter,
     type StationTypeFilter,
   } from "$lib/station-filters";
+  import { roundCoordinate } from "$lib/stations";
 
   const SOURCE_ID = "stations-source";
   const LAYER_ID = "stations-layer";
@@ -202,11 +203,7 @@
     marker.on("dragend", () => {
       const lngLat = marker?.getLngLat();
       if (!lngLat || !selectedStationId) return;
-      onMarkerDragEnd(
-        selectedStationId,
-        Math.round(lngLat.lat * 1e6) / 1e6,
-        Math.round(lngLat.lng * 1e6) / 1e6,
-      );
+      onMarkerDragEnd(selectedStationId, roundCoordinate(lngLat.lat), roundCoordinate(lngLat.lng));
     });
 
     map.flyTo({
@@ -297,8 +294,8 @@
         return;
       }
 
-      const lat = Math.round(event.lngLat.lat * 1e6) / 1e6;
-      const lng = Math.round(event.lngLat.lng * 1e6) / 1e6;
+      const lat = roundCoordinate(event.lngLat.lat);
+      const lng = roundCoordinate(event.lngLat.lng);
       if (isAddingStation) onMapClick(lat, lng);
       else if (isPlacingStation) onSetStationLocation(lat, lng);
     });

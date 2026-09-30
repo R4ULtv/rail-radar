@@ -24,7 +24,7 @@ function PrivacyPolicyPage() {
         Back to Rail Radar
       </Link>
       <h1 className="mb-8 text-3xl font-semibold">Privacy Policy</h1>
-      <p className="mb-4 text-sm text-muted-foreground">Last updated: August 26, 2026</p>
+      <p className="mb-4 text-sm text-muted-foreground">Last updated: September 27, 2026</p>
 
       <div className="space-y-8 leading-relaxed text-muted-foreground">
         <section>
@@ -76,6 +76,14 @@ function PrivacyPolicyPage() {
             me&quot; feature. Your location data is used locally in the browser and is not sent to
             our servers.
           </p>
+
+          <h3 className="mb-2 mt-4 text-lg font-medium text-foreground">2.4 Android Beta Signup</h3>
+          <p>
+            If you sign up for the Android beta, we store the email address you enter. We use it to
+            add your Google account to the closed test on Google Play and to email you about the
+            beta, your invite, any promo code, and the app&apos;s launch. To have your email
+            removed, reply to any beta email or contact us.
+          </p>
         </section>
 
         <section>
@@ -88,6 +96,7 @@ function PrivacyPolicyPage() {
             <li>Analyze usage patterns to improve the Service (e.g., trending stations)</li>
             <li>Monitor and prevent technical issues</li>
             <li>Enforce rate limits to protect the Service from abuse</li>
+            <li>Send emails about the Android beta to people who sign up for it</li>
           </ul>
         </section>
 
@@ -113,6 +122,11 @@ function PrivacyPolicyPage() {
               limiting, storing station photos in an EU R2 bucket, and storing operational analytics
               in Analytics Engine. As our infrastructure provider, Cloudflare may process request
               information such as IP addresses in accordance with its privacy policy
+            </li>
+            <li>
+              <strong className="text-foreground">Resend</strong> &mdash; for storing Android beta
+              signups and sending beta emails. Resend processes your email address and email
+              delivery data, such as opens and bounces, in accordance with its privacy policy
             </li>
             <li>
               <strong className="text-foreground">Fontsource</strong> &mdash; font files are bundled

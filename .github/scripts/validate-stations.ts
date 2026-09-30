@@ -1,4 +1,4 @@
-#!/usr/bin/env npx tsx
+#!/usr/bin/env node
 
 /**
  * Station Data Validator and Diff Reporter

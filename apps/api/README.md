@@ -81,6 +81,12 @@ Returns `application/geo+json` FeatureCollection consumed directly by Mapbox GL 
 | `/stations/trending`  | 5min cache, 1min stale-while-revalidate |
 | `/analytics/overview` | 5min cache, 1min stale-while-revalidate |
 
+Static map generation has a separate allowance of five Mapbox requests per minute per client IP.
+All map parameters share that allowance, including fallback attempts. Cache hits use only the general
+API rate limit, and invalid parameters do not consume the generation allowance. Exhausting the
+allowance returns `429` with `Retry-After: 60` and `Cache-Control: no-store`. This Cloudflare rate limit
+is approximate and local to each data center; it does not enforce a monthly Mapbox spending cap.
+
 Station statistics reuse the completed global top-station aggregate for 150 seconds within a
 Cloudflare data center. This shortens the full station-statistics response cache from five minutes
 to 150 seconds, keeping composed aggregate freshness within the previous five-minute budget. The

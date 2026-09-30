@@ -43,12 +43,24 @@ function parseDelay(text: string): DelayResult {
 
 function parseCategory(text: string | null): string | null {
   if (!text) return null;
-  return (
-    text
-      .replace(/^Categoria\s+/i, "")
-      .replace(/&#?\w+;/g, "") // Remove HTML entities like &#39; &nbsp; etc.
-      .trim() || null
-  );
+  const category = text
+    .replace(/^Categoria\s+/i, "")
+    .replace(/&#?\w+;/g, "") // Remove HTML entities like &#39; &nbsp; etc.
+    .trim();
+  if (/^ALTA\s+VELOCIT[AÀ]['’]?$/i.test(category)) return "AV";
+
+  switch (category.toUpperCase().replace(/\s+/g, " ")) {
+    case "INTERCITY":
+      return "IC";
+    case "INTERCITY NOTTE":
+      return "ICN";
+    case "REGIONALE":
+      return "REG";
+    case "REGIONALE VELOCE":
+      return "RV";
+    default:
+      return category || null;
+  }
 }
 
 function decodeHtmlEntities(text: string): string {
@@ -62,9 +74,25 @@ function decodeHtmlEntities(text: string): string {
     .replace(/&quot;/gi, '"')
     .replace(/&apos;/gi, "'");
 }
+/** RFI escapes apostrophes more than once, so "PONTE D'ADDA" arrives as "PONTE D''''ADDA". */
+function cleanText(text: string): string {
+  return decodeHtmlEntities(text).replace(/'{2,}/g, "'").trim();
+}
+
+function parseStationInfo(text: string): string | null {
+  const decoded = cleanText(text);
+  if (!decoded) return null;
+
+  // RFI appends an English translation after a slash in station notices.
+  const italian = decoded.split(
+    /\s*\/\s*(?=(?:FROM|DUE TO|THE|TRAINS?|SERVICES?|PLEASE|FOR|UNTIL|BETWEEN|ON|IN THE|IN CASE)\b)/i,
+    1,
+  )[0];
+  return italian?.trim() || null;
+}
 
 function parseInfo(text: string): string | null {
-  const trimmed = text.trim();
+  const trimmed = cleanText(text);
   if (!trimmed) return null;
   const match = trimmed.match(/STOPS AT:\s*(.+)/i);
   if (match?.[1]) {
@@ -93,7 +121,7 @@ class ParserState {
   }
 
   processCellData(): void {
-    const text = this.cellText.trim();
+    const text = cleanText(this.cellText);
     const imgAlts = this.cellImgAlts;
     const imgSrc = this.cellImgSrc;
     const train = this.currentTrain;
@@ -261,10 +289,9 @@ export async function scrapeTrains(
     state.finalizeRow();
   }
 
-  const stationInfo = decodeHtmlEntities(state.stationInfo).trim();
   return {
     trains: state.trains,
-    info: stationInfo || null,
+    info: parseStationInfo(state.stationInfo),
     timing: {
       fetchMs,
     },

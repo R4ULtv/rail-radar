@@ -81,3 +81,7 @@ Changes are persisted to `localStorage`, so closing the tab won't lose work.
 ## Data
 
 Station data lives in `packages/data/src/stations.geojson` and is shared with the rest of the monorepo via `@repo/data`.
+
+Studio rounds new and edited coordinates, including JSON and CSV imports, to at most five decimal
+places. Coordinate inputs use a `0.00001` step, and the Wikipedia panel and status bar display five
+decimal places. Saved and exported numeric coordinates omit trailing zeros.

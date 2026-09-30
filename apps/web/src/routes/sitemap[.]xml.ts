@@ -32,6 +32,7 @@ const sitemapXml = createServerOnlyFn(() => {
     { path: "/", changeFrequency: "daily", priority: 1 },
     { path: "/operators", changeFrequency: "monthly", priority: 0.6 },
     { path: "/stations", changeFrequency: "monthly", priority: 0.7 },
+    { path: "/app", changeFrequency: "monthly", priority: 0.5 },
     { path: "/donate", changeFrequency: "monthly", priority: 0.5 },
     {
       path: "/report/2026-04-28",

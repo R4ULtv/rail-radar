@@ -71,7 +71,7 @@ function parseRecord(block: string, type: "arrivals" | "departures"): Train | nu
 
   // Map train type to category
   const traintype = getTag(block, "Traintype");
-  const category = traintype === "Train" ? "Intercity" : traintype;
+  const category = /^(Train|Intercity)$/i.test(traintype) ? "IC" : traintype;
 
   return {
     brand: "IR",

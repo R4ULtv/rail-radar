@@ -40,7 +40,7 @@ export function buildApiUrl(path: string): string {
  */
 export async function apiFetcher<T>(
   url: string,
-  options?: Pick<RequestInit, "signal">,
+  options?: Pick<RequestInit, "signal" | "cache">,
 ): Promise<T> {
   const response = await fetch(url, options);
 

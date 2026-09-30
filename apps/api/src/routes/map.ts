@@ -142,18 +142,30 @@ export const mapRoutes = factory
       const supportsWebp = /image\/webp/.test(c.req.header("accept") ?? "");
       const cfOptions = { image: supportsWebp ? { format: "webp" as const } : {}, quality: 100 };
 
-      const response = await fetch(mapboxUrl, { cf: cfOptions });
-      if (!response.ok) {
-        const fallback = await fetch(mapboxUrl);
-        if (!fallback.ok) {
-          return jsonError(c, "Failed to fetch map image.", 502);
-        }
-        return mapImageResponse(fallback);
-      }
+      const fetchMapbox = async (options?: RequestInit) => {
+        // Cache hits skip this handler. Every upstream attempt shares one allowance per IP.
+        const { success } = await c.env.MAP_GENERATION_RATE_LIMITER.limit({
+          key: `static-map:${c.get("clientIp")}`,
+        });
+        return success ? fetch(mapboxUrl, options) : null;
+      };
+      const mapLimitResponse = () =>
+        c.json(
+          { error: "Too many map images requested. Please wait a minute and try again." },
+          429,
+          {
+            "Retry-After": "60",
+            "Cache-Control": "no-store",
+          },
+        );
+
+      const response = await fetchMapbox({ cf: cfOptions });
+      if (!response) return mapLimitResponse();
 
       const resized = response.headers.get("cf-resized") ?? "";
-      if (resized.includes("err=")) {
-        const fallback = await fetch(mapboxUrl);
+      if (!response.ok || resized.includes("err=")) {
+        const fallback = await fetchMapbox();
+        if (!fallback) return mapLimitResponse();
         if (!fallback.ok) {
           return jsonError(c, "Failed to fetch map image.", 502);
         }
