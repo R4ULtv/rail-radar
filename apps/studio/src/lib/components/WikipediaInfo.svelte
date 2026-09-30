@@ -2,6 +2,7 @@
   import { ExternalLinkIcon, MapPinIcon } from "@lucide/svelte";
   import { Badge } from "$lib/components/ui/badge";
   import { Button } from "$lib/components/ui/button";
+  import { COORDINATE_DECIMAL_PLACES, roundCoordinate } from "$lib/stations";
   import type { StationInfobox, StationStatus } from "$lib/types/wikipedia";
   import { fetchWikipediaStation } from "$lib/wikipedia";
   import { calculateDistance, formatDistance, getStationStatus } from "$lib/wikipedia-parser";
@@ -112,13 +113,19 @@
           <div class="flex items-center gap-2">
             <MapPinIcon class="size-4 text-muted-foreground" />
             <span class="font-mono text-xs">
-              {data.coordinates.lat.toFixed(6)}, {data.coordinates.lng.toFixed(6)}
+              {data.coordinates.lat.toFixed(COORDINATE_DECIMAL_PLACES)}, {data.coordinates.lng.toFixed(
+                COORDINATE_DECIMAL_PLACES,
+              )}
             </span>
           </div>
           <Button
             variant="outline"
             size="sm"
-            onclick={() => onUseCoordinates(data!.coordinates!.lat, data!.coordinates!.lng)}
+            onclick={() =>
+              onUseCoordinates(
+                roundCoordinate(data!.coordinates!.lat),
+                roundCoordinate(data!.coordinates!.lng),
+              )}
           >
             Use
           </Button>

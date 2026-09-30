@@ -2,6 +2,7 @@
   import type { Station } from "@repo/data";
   import { ActivityIcon, DatabaseIcon, GitBranchIcon, MapPinIcon } from "@lucide/svelte";
   import { STATION_TYPE_COLOR } from "$lib/station-colors";
+  import { COORDINATE_DECIMAL_PLACES } from "$lib/stations";
 
   let {
     stations,
@@ -71,7 +72,9 @@
       <div class="hidden min-w-0 items-center gap-1.5 md:flex">
         <MapPinIcon class="size-3 shrink-0" />
         <span class="truncate"
-          >{selectedStation.geo.lat.toFixed(5)}, {selectedStation.geo.lng.toFixed(5)}</span
+          >{selectedStation.geo.lat.toFixed(COORDINATE_DECIMAL_PLACES)}, {selectedStation.geo.lng.toFixed(
+            COORDINATE_DECIMAL_PLACES,
+          )}</span
         >
       </div>
     {/if}
