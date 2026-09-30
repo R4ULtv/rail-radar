@@ -92,13 +92,14 @@ export async function scrapeSwissTrains(
     const scheduledTime =
       type === "departures" ? formatTime(stop.departure, "Europe/Zurich") : getArrivalTime(stop);
 
-    // Combine category + line number, trimming leading zeros (e.g., "EC000021" → "EC21")
+    // Keep line identifiers (IC8, S11), but don't repeat the train number in the category.
     const lineNumber = entry.number?.replace(/^0+/, "") || entry.number || "";
     const trainNumber = entry.name?.replace(/^0+/, "") || entry.name || "";
+    const categoryLineNumber = lineNumber === trainNumber ? "" : lineNumber;
 
     const train: Train = {
       brand: entry.operator?.split("-")[0] || null,
-      category: entry.category ? `${entry.category}${lineNumber}` : null,
+      category: entry.category ? `${entry.category}${categoryLineNumber}` : null,
       trainNumber: trainNumber,
       scheduledTime,
       delay: stop.delay != null && stop.delay > 0 ? stop.delay : null,
