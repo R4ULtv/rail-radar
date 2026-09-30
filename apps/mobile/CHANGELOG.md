@@ -6,6 +6,18 @@ the commit they were built from.
 
 ## [Unreleased]
 
+## [0.2.1] (5) – 2026-09-30
+
+### Added
+
+- The app's error screen includes the exception, JavaScript and React component stacks, app
+  version/build, and device details when reporting a problem. The full report can also be shared.
+
+### Fixed
+
+- The app no longer opens on "Something went wrong" when Location Services are off or location
+  permission was denied ([#58](https://github.com/R4ULtv/rail-radar/issues/58)).
+
 ## [0.2.0] (4) – 2026-09-29
 
 ### Added
