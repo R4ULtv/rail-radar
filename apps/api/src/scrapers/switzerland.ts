@@ -95,7 +95,13 @@ export async function scrapeSwissTrains(
     // Keep line identifiers (IC8, S11), but don't repeat the train number in the category.
     const lineNumber = entry.number?.replace(/^0+/, "") || entry.number || "";
     const trainNumber = entry.name?.replace(/^0+/, "") || entry.name || "";
-    const categoryLineNumber = lineNumber === trainNumber ? "" : lineNumber;
+    const compactName = trainNumber.replace(/\s+/g, "");
+    const nameNumber =
+      entry.category && compactName.startsWith(entry.category)
+        ? compactName.slice(entry.category.length)
+        : compactName;
+    const normalizedNameNumber = nameNumber.replace(/^0+/, "") || nameNumber;
+    const categoryLineNumber = lineNumber === normalizedNameNumber ? "" : lineNumber;
 
     const train: Train = {
       brand: entry.operator?.split("-")[0] || null,
