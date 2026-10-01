@@ -25,6 +25,7 @@ interface BoardState {
 }
 
 const refreshIntervalMs = 30_000;
+const minRefetchIntervalMs = 1_000;
 
 const fallbackMessage = "Live trains could not be loaded. Please try again in a moment.";
 
@@ -51,6 +52,7 @@ export function useStationBoard(stationId: string, type: BoardType, enabled: boo
     let timeout: ReturnType<typeof setTimeout> | null = null;
 
     async function load() {
+      let nextRefreshIntervalMs = refreshIntervalMs;
       controller = new AbortController();
       setState((current) => {
         const next = current.key === key ? current : initialState(key, current.saved);
@@ -65,6 +67,8 @@ export function useStationBoard(stationId: string, type: BoardType, enabled: boo
       try {
         const response = await fetchApi(`/stations/${encodeURIComponent(stationId)}?type=${type}`, {
           signal: controller.signal,
+          // React Native's `cache: "no-store"` adds a query parameter, bypassing the shared API cache.
+          headers: { "Cache-Control": "no-cache, no-store" },
         });
 
         if (!response.ok) {
@@ -74,6 +78,13 @@ export function useStationBoard(stationId: string, type: BoardType, enabled: boo
 
         const data = (await response.json()) as BoardResponse;
         if (!Array.isArray(data.trains)) throw new ApiError(fallbackMessage);
+
+        const timestamp = Date.parse(data.timestamp ?? "");
+        if (Number.isFinite(timestamp)) {
+          // A shared API snapshot may already be old when the app receives it.
+          const age = Math.max(0, Date.now() - timestamp);
+          nextRefreshIntervalMs = Math.max(minRefetchIntervalMs, refreshIntervalMs - age);
+        }
 
         if (!cancelled) {
           setState((current) => ({
@@ -96,7 +107,7 @@ export function useStationBoard(stationId: string, type: BoardType, enabled: boo
           }));
         }
       } finally {
-        if (!cancelled) timeout = setTimeout(() => void load(), refreshIntervalMs);
+        if (!cancelled) timeout = setTimeout(() => void load(), nextRefreshIntervalMs);
       }
     }
 
