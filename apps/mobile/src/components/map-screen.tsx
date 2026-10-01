@@ -22,6 +22,7 @@ import {
   useSheetPosition,
   type LocationStatus,
 } from "@/components/map-controls";
+import { IntroSheet, useIntro } from "@/components/intro-sheet";
 import { MapStyleSheet } from "@/components/map-style-sheet";
 import { SearchSheet } from "@/components/search-sheet";
 import { Settings } from "@/components/settings-sheet";
@@ -29,7 +30,6 @@ import { RailwayLines, StationImages, StationLayers } from "@/components/station
 import { middleStep, StationSheet } from "@/components/station-sheet";
 import { StatusBarBlur } from "@/components/status-bar-blur";
 import { UserLocationMarker } from "@/components/user-location-marker";
-import { WelcomeSheet } from "@/components/welcome-sheet";
 import { useIsOnline } from "@/hooks/use-is-online";
 import { useMapTheme } from "@/hooks/use-map-theme";
 import { useStationLinks } from "@/hooks/use-station-links";
@@ -39,7 +39,6 @@ import { haptics } from "@/lib/haptics";
 import { mapFeedbackUrl, type MapPosition } from "@/lib/links";
 import { loadStationSearch } from "@/lib/stations";
 import { loadLastUserLocation, saveLastUserLocation, type UserLocation } from "@/lib/user-location";
-import { hasSeenWelcome, markWelcomeSeen } from "@/lib/welcome";
 
 const accessToken = process.env.EXPO_PUBLIC_MAPBOX_TOKEN ?? "";
 const defaultCamera = { centerCoordinate: [12, 50] as [number, number], zoomLevel: 4 };
@@ -143,11 +142,8 @@ export function MapScreen() {
   const [locationStatus, setLocationStatus] = useState<LocationStatus>("idle");
   const [userLocation, setUserLocation] = useState<UserLocation | null>(null);
   const [message, setMessage] = useState<string | null>(null);
-  const [isWelcomeOpen, setIsWelcomeOpen] = useState(() => !hasSeenWelcome());
-  const closeWelcome = useCallback(() => {
-    markWelcomeSeen();
-    setIsWelcomeOpen(false);
-  }, []);
+  const intro = useIntro();
+  const isIntroOpen = intro.page !== null;
   const isOnline = useIsOnline();
   const [mapFailed, setMapFailed] = useState(false);
   const [mapKey, setMapKey] = useState(0);
@@ -336,9 +332,9 @@ export function MapScreen() {
   }, []);
 
   // Like the web, look for the user on launch and ask for permission if it hasn't been decided.
-  // On the first launch that waits for the welcome, so the permission prompt doesn't cover it.
+  // That waits for the welcome and what's new, so the permission prompt doesn't cover them.
   useEffect(() => {
-    if (isWelcomeOpen) return;
+    if (isIntroOpen) return;
     let cancelled = false;
 
     (async () => {
@@ -370,7 +366,7 @@ export function MapScreen() {
     return () => {
       cancelled = true;
     };
-  }, [isWelcomeOpen]);
+  }, [isIntroOpen]);
 
   const locateUser = useCallback(async () => {
     haptics.tap();
@@ -568,7 +564,7 @@ export function MapScreen() {
         />
       ) : null}
 
-      <WelcomeSheet isOpen={isWelcomeOpen} onClose={closeWelcome} />
+      <IntroSheet intro={intro} />
     </View>
   );
 }
