@@ -88,13 +88,16 @@ function nearestStations(
 /** How many nearby stations a station shows. */
 export const nearbyStationCount = 4;
 
-/** Like the web's station page: the closest train stations, plus the closest metro stop. */
+/**
+ * Like the web's station page: the closest train stations, plus the closest metro stop. A metro or
+ * light rail stop gets the closest stop of its own kind instead.
+ */
 export function findNearbyStations(stations: Station[], station: Station): NearbyStation[] {
   if (!station.geo) return [];
   const from = { ...station, geo: station.geo };
   return [
     ...nearestStations(stations, from, "rail", nearbyStationCount),
-    ...nearestStations(stations, from, "metro", 1),
+    ...nearestStations(stations, from, station.type === "rail" ? "metro" : station.type, 1),
   ]
     .sort((a, b) => a.distance - b.distance)
     .slice(0, nearbyStationCount);

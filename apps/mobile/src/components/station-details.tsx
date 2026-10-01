@@ -313,8 +313,10 @@ export const StationDetails = memo(function StationDetails({
   onSelectStation,
 }: StationDetailsProps) {
   const [mutedColor, successColor] = useThemeColor(["muted", "success"]);
+  // Visits are counted when a live board loads, so only train stations have any.
+  const hasStats = station.type === "rail";
   const photos = useStationPhotos(station, isOpen);
-  const stats = useStationStats(station.id, isOpen);
+  const stats = useStationStats(station.id, isOpen && hasStats);
   const nearby = useNearbyStations(station, stationsUrl);
 
   // Each section keeps its place with a skeleton while it loads, so the sheet doesn't jump.
@@ -341,7 +343,7 @@ export const StationDetails = memo(function StationDetails({
           onSelect={onSelectStation}
         />
       )}
-      {stats.isLoading ? (
+      {!hasStats ? null : stats.isLoading ? (
         <StationPopularitySkeleton mutedColor={mutedColor} />
       ) : (
         <StationPopularity

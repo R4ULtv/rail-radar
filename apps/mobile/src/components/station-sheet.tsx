@@ -161,6 +161,10 @@ const QuickActions = memo(function QuickActions({ station }: { station: Station 
   const { isSaved, toggleSaved } = useSavedStations();
   const saved = isSaved(station.id);
   const ShareIcon = Platform.OS === "ios" ? Share : Share2;
+  const isRail = station.type === "rail";
+  // Saving is for live boards, which only train stations have. A stop saved before still shows
+  // the button, so it can be removed.
+  const canSave = isRail || saved;
 
   function toggleSavedStation() {
     if (saved) haptics.toggleOff();
@@ -179,24 +183,27 @@ const QuickActions = memo(function QuickActions({ station }: { station: Station 
     ).catch(() => {});
   }
 
+  if (!canSave && !station.geo) return null;
   return (
     <View className="mt-3 flex-row gap-2">
-      <Button
-        accessibilityLabel={saved ? "Remove from saved stations" : "Save station"}
-        accessibilityState={{ selected: saved }}
-        className="flex-1"
-        isDisabled={!station.geo}
-        size="sm"
-        variant={saved ? "secondary" : "tertiary"}
-        onPress={toggleSavedStation}
-      >
-        <Bookmark
-          size={16}
-          color={saved ? accentColor : foregroundColor}
-          fill={saved ? accentColor : "none"}
-        />
-        <Button.Label>{saved ? "Saved" : "Save"}</Button.Label>
-      </Button>
+      {canSave ? (
+        <Button
+          accessibilityLabel={saved ? "Remove from saved stations" : "Save station"}
+          accessibilityState={{ selected: saved }}
+          className="flex-1"
+          isDisabled={!station.geo}
+          size="sm"
+          variant={saved ? "secondary" : "tertiary"}
+          onPress={toggleSavedStation}
+        >
+          <Bookmark
+            size={16}
+            color={saved ? accentColor : foregroundColor}
+            fill={saved ? accentColor : "none"}
+          />
+          <Button.Label>{saved ? "Saved" : "Save"}</Button.Label>
+        </Button>
+      ) : null}
       {station.geo ? (
         <Button
           className="flex-1"
@@ -211,10 +218,13 @@ const QuickActions = memo(function QuickActions({ station }: { station: Station 
           <Button.Label>Directions</Button.Label>
         </Button>
       ) : null}
-      <Button className="flex-1" size="sm" variant="tertiary" onPress={share}>
-        <ShareIcon size={16} color={foregroundColor} />
-        <Button.Label>Share</Button.Label>
-      </Button>
+      {/* The website only has pages for train stations. */}
+      {isRail ? (
+        <Button className="flex-1" size="sm" variant="tertiary" onPress={share}>
+          <ShareIcon size={16} color={foregroundColor} />
+          <Button.Label>Share</Button.Label>
+        </Button>
+      ) : null}
     </View>
   );
 });
@@ -493,16 +503,18 @@ function StationSheetContent({
 
   // The sheet peeks down to the end of the first train, below the header. The train is measured
   // once the board has loaded, and then kept, so refreshes and tab switches don't move the sheet.
+  // Other stations have no board, so they peek down to the header.
   const [headerHeight, setHeaderHeight] = useState(0);
   const [firstItemBottom, setFirstItemBottom] = useState(0);
   const isPeekFinal = useRef(false);
   const [scrollRef, scrollOffset] = useSheetScrollOffset();
-  const hasBoard = !isRail || board.data !== null || board.error !== null;
+  const hasBoard = board.data !== null || board.error !== null;
 
   useEffect(() => {
-    if (!headerHeight || !firstItemBottom) return;
-    onPeekHeightChange(handleHeight + headerHeight + firstItemBottom + Math.max(insets.bottom, 12));
-  }, [headerHeight, firstItemBottom, insets.bottom, onPeekHeightChange]);
+    if (!headerHeight || (isRail && !firstItemBottom)) return;
+    const boardHeight = isRail ? firstItemBottom : 0;
+    onPeekHeightChange(handleHeight + headerHeight + boardHeight + Math.max(insets.bottom, 12));
+  }, [isRail, headerHeight, firstItemBottom, insets.bottom, onPeekHeightChange]);
 
   // A stable callback, so the memoized board skips the sheet's other re-renders.
   const onFirstItemLayout = useCallback(
@@ -560,8 +572,8 @@ function StationSheetContent({
         scrollIndicatorInsets={{ top: headerHeight }}
         onContentSizeChange={(_, height) => onContentHeightChange(height)}
       >
-        <View style={{ paddingTop: boardTopSpacing }}>
-          {isRail ? (
+        {isRail ? (
+          <View style={{ paddingTop: boardTopSpacing }}>
             <LiveBoard
               key={type}
               board={board}
@@ -569,12 +581,8 @@ function StationSheetContent({
               warning={getStationWarning(station.id)}
               onFirstItemLayout={onFirstItemLayout}
             />
-          ) : (
-            <Text className="px-4 pb-2 text-sm text-muted" onLayout={onFirstItemLayout}>
-              Live trains are shown for train stations only.
-            </Text>
-          )}
-        </View>
+          </View>
+        ) : null}
         {showDetails ? (
           <StationDetails
             station={station}
