@@ -46,6 +46,8 @@ const defaultCamera = { centerCoordinate: [12, 50] as [number, number], zoomLeve
 // Same zoom levels as the web: 13 when opening on the user, 14 after tapping locate.
 const userZoomLevel = 13;
 const locateZoomLevel = 14;
+// Like the web, selecting a station zooms in on it, a little closer for metro and light rail.
+const stationZoomLevels: Record<Station["type"], number> = { rail: 13, metro: 14, light: 14 };
 const stationCameraAnimationMs = 700;
 const stationDetailsFallbackMs = stationCameraAnimationMs + 100;
 const stationCenterTolerance = 0.0001;
@@ -122,7 +124,7 @@ type StationPressEvent = Parameters<
 type PendingStationCamera = {
   id: string;
   center: [number, number];
-  zoomLevel?: number;
+  zoomLevel: number;
   token: number;
   timeout: ReturnType<typeof setTimeout>;
 };
@@ -216,8 +218,9 @@ export function MapScreen() {
   }, []);
 
   const selectStation = useCallback(
-    (station: Station, zoomLevel?: number) => {
+    (station: Station) => {
       haptics.tap();
+      const zoomLevel = stationZoomLevels[station.type];
       hasMovedMap.current = true;
       setIsCentered(false);
       const hadPendingCamera = pendingStationCamera.current !== null;
@@ -235,8 +238,7 @@ export function MapScreen() {
         station.geo &&
         Math.abs(mapPosition.current.center[0] - station.geo.lng) <= stationCenterTolerance &&
         Math.abs(mapPosition.current.center[1] - station.geo.lat) <= stationCenterTolerance &&
-        (zoomLevel === undefined ||
-          Math.abs(mapPosition.current.zoom - zoomLevel) <= stationZoomTolerance);
+        Math.abs(mapPosition.current.zoom - zoomLevel) <= stationZoomTolerance;
       const deferDetails = isSwitchingStation && !!station.geo && !!mapCamera && !mapIsAtStation;
       selectedStationId.current = station.id;
       stationSheetIsOpen.current = true;
@@ -296,12 +298,8 @@ export function MapScreen() {
     [isMapLocked, selectStation],
   );
 
-  const handleSearchSelect = useCallback(
-    (station: Station) => selectStation(station, station.type === "rail" ? 13 : 14),
-    [selectStation],
-  );
   // A shared station link opens the station like a search result.
-  useStationLinks(stationsUrl, handleSearchSelect);
+  useStationLinks(stationsUrl, selectStation);
 
   // Prepare the search index while the app is idle, so the first search can show results at once.
   // This also reads the stations needed by the first station sheet and shared links.
@@ -461,8 +459,7 @@ export function MapScreen() {
             typeof latitude === "number" &&
             Math.abs(longitude - pending.center[0]) <= stationCenterTolerance &&
             Math.abs(latitude - pending.center[1]) <= stationCenterTolerance &&
-            (pending.zoomLevel === undefined ||
-              Math.abs(state.properties.zoom - pending.zoomLevel) <= stationZoomTolerance)
+            Math.abs(state.properties.zoom - pending.zoomLevel) <= stationZoomTolerance
           ) {
             finishStationCamera(pending.token);
           }
@@ -545,7 +542,7 @@ export function MapScreen() {
         isHidden={sheetOpen}
         stationsUrl={stationsUrl}
         userLocation={userLocation}
-        onSelectStation={handleSearchSelect}
+        onSelectStation={selectStation}
         position={searchSheetPosition}
         getMapFeedbackUrl={getMapFeedbackUrl}
       />
