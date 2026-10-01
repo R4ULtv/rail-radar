@@ -54,6 +54,31 @@ export function SheetHeader({
   );
 }
 
+/**
+ * A header pinned over the top of a sheet's list, in place of a sticky header. React Native's
+ * sticky headers catch up with the scroll a moment late, so while the sheet is dragged and resets
+ * its list's scroll, they jumped away from the top of the sheet. Pad the list's top by the
+ * header's height: it stays part of the list's content, so the sheet still opens only as tall as
+ * it needs.
+ */
+export function PinnedSheetHeader({
+  onHeightChange,
+  children,
+}: {
+  onHeightChange: (height: number) => void;
+  children: ReactNode;
+}) {
+  const color = useThemeColor("surface");
+  return (
+    <View
+      style={[styles.pinned, { backgroundColor: color }]}
+      onLayout={(event) => onHeightChange(event.nativeEvent.layout.height)}
+    >
+      {children}
+    </View>
+  );
+}
+
 // The same fade as the web's lists: it grows in over the first stretch of scrolling, so it's not
 // there at the top.
 const fadeSize = 40;
@@ -71,7 +96,7 @@ export function useSheetScrollOffset() {
 
 /**
  * The bottom edge of a sticky header: lists fade out under it instead of being cut off. It hangs
- * below the header, so give it a parent without side padding, and leave the gap above the list.
+ * below the header, so give it a parent without padding, and leave the gap above the list.
  */
 export function SheetHeaderFade({ scrollOffset }: { scrollOffset: SharedValue<number> }) {
   const color = useThemeColor("surface");
@@ -99,6 +124,8 @@ export function SheetHeaderFade({ scrollOffset }: { scrollOffset: SharedValue<nu
 }
 
 const styles = StyleSheet.create({
+  // Drawn over the list, which comes after it so screen readers still start at the header.
+  pinned: { position: "absolute", top: 0, left: 0, right: 0, zIndex: 1 },
   fade: { position: "absolute", top: "100%", left: 0, right: 0 },
   fadeGap: { height: fadeGap },
   // Scaled from the top, which moves where it turns transparent like the web's mask does.

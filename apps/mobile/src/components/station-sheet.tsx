@@ -48,6 +48,7 @@ import {
 } from "@/components/map-controls";
 import { ErrorBoundary } from "@/components/error-boundary";
 import {
+  PinnedSheetHeader,
   sheetBackgroundStyle,
   SheetHeader,
   SheetHeaderFade,
@@ -73,8 +74,9 @@ export const middleStep = 0.6;
 const minStepGap = 80;
 // Long boards are cut short so the station details below them stay in reach.
 const collapsedTrainCount = 10;
-// Between the tabs and the first train, with room for the header fade's gap.
-const boardTopSpacing = 20;
+// Between the tabs and the board, the same as between the actions and the tabs. It's still more
+// than the header fade's gap.
+const boardTopSpacing = 12;
 const stationTypeLabels = {
   rail: "Train station",
   metro: "Metro station",
@@ -489,35 +491,30 @@ function StationSheetContent({
   const arrivalsSupported = getCountry(station.id) !== "lu";
   const board = useStationBoard(station.id, type, isOpen && isRail);
 
-  // The sheet peeks down to the end of the first train. It's measured once the board has
-  // loaded, and then kept, so refreshes and tab switches don't move the sheet.
-  const [layout, setLayout] = useState({ boardTop: 0, firstItemBottom: 0 });
+  // The sheet peeks down to the end of the first train, below the header. The train is measured
+  // once the board has loaded, and then kept, so refreshes and tab switches don't move the sheet.
+  const [headerHeight, setHeaderHeight] = useState(0);
+  const [firstItemBottom, setFirstItemBottom] = useState(0);
   const isPeekFinal = useRef(false);
   const [scrollRef, scrollOffset] = useSheetScrollOffset();
   const hasBoard = !isRail || board.data !== null || board.error !== null;
 
   useEffect(() => {
-    if (!layout.boardTop || !layout.firstItemBottom) return;
-    onPeekHeightChange(
-      handleHeight + layout.boardTop + layout.firstItemBottom + Math.max(insets.bottom, 12),
-    );
-  }, [layout, insets.bottom, onPeekHeightChange]);
+    if (!headerHeight || !firstItemBottom) return;
+    onPeekHeightChange(handleHeight + headerHeight + firstItemBottom + Math.max(insets.bottom, 12));
+  }, [headerHeight, firstItemBottom, insets.bottom, onPeekHeightChange]);
 
-  // Stable callbacks, so the memoized board and details skip the sheet's other re-renders.
-  const measure = useCallback((key: keyof typeof layout, value: number) => {
-    if (isPeekFinal.current) return;
-    setLayout((current) =>
-      Math.abs(current[key] - value) < 1 ? current : { ...current, [key]: value },
-    );
-  }, []);
-
+  // A stable callback, so the memoized board skips the sheet's other re-renders.
   const onFirstItemLayout = useCallback(
     (event: LayoutChangeEvent) => {
+      if (isPeekFinal.current) return;
       const { y, height } = event.nativeEvent.layout;
-      measure("firstItemBottom", y + height);
+      setFirstItemBottom((current) =>
+        Math.abs(current - (y + height)) < 1 ? current : y + height,
+      );
       if (hasBoard) isPeekFinal.current = true;
     },
-    [measure, hasBoard],
+    [hasBoard],
   );
 
   const selectType = useCallback(
@@ -530,15 +527,8 @@ function StationSheetContent({
   );
 
   return (
-    // The header is the board's sticky header, so the sheet can measure all of its content and
-    // open only as tall as it needs.
-    <BottomSheetScrollView
-      ref={scrollRef}
-      stickyHeaderIndices={[0]}
-      contentContainerStyle={{ paddingBottom: bottomInset }}
-      onContentSizeChange={(_, height) => onContentHeightChange(height)}
-    >
-      <View className="bg-surface">
+    <View style={styles.fill}>
+      <PinnedSheetHeader onHeightChange={setHeaderHeight}>
         <View className="px-4">
           <SheetHeader
             title={station.name}
@@ -563,34 +553,38 @@ function StationSheetContent({
           ) : null}
         </View>
         <SheetHeaderFade scrollOffset={scrollOffset} />
-      </View>
-      <View
-        style={{ paddingTop: boardTopSpacing }}
-        onLayout={(event) => measure("boardTop", event.nativeEvent.layout.y)}
+      </PinnedSheetHeader>
+      <BottomSheetScrollView
+        ref={scrollRef}
+        contentContainerStyle={{ paddingTop: headerHeight, paddingBottom: bottomInset }}
+        scrollIndicatorInsets={{ top: headerHeight }}
+        onContentSizeChange={(_, height) => onContentHeightChange(height)}
       >
-        {isRail ? (
-          <LiveBoard
-            key={type}
-            board={board}
-            type={type}
-            warning={getStationWarning(station.id)}
-            onFirstItemLayout={onFirstItemLayout}
+        <View style={{ paddingTop: boardTopSpacing }}>
+          {isRail ? (
+            <LiveBoard
+              key={type}
+              board={board}
+              type={type}
+              warning={getStationWarning(station.id)}
+              onFirstItemLayout={onFirstItemLayout}
+            />
+          ) : (
+            <Text className="px-4 pb-2 text-sm text-muted" onLayout={onFirstItemLayout}>
+              Live trains are shown for train stations only.
+            </Text>
+          )}
+        </View>
+        {showDetails ? (
+          <StationDetails
+            station={station}
+            isOpen={isOpen}
+            stationsUrl={stationsUrl}
+            onSelectStation={onSelectStation}
           />
-        ) : (
-          <Text className="px-4 pb-2 text-sm text-muted" onLayout={onFirstItemLayout}>
-            Live trains are shown for train stations only.
-          </Text>
-        )}
-      </View>
-      {showDetails ? (
-        <StationDetails
-          station={station}
-          isOpen={isOpen}
-          stationsUrl={stationsUrl}
-          onSelectStation={onSelectStation}
-        />
-      ) : null}
-    </BottomSheetScrollView>
+        ) : null}
+      </BottomSheetScrollView>
+    </View>
   );
 }
 
@@ -728,6 +722,7 @@ export function StationSheet({
 }
 
 const styles = StyleSheet.create({
+  fill: { flex: 1 },
   noticeIcon: { marginTop: 2 },
   chevronUp: { transform: [{ rotate: "180deg" }] },
   tabularNums: { fontVariant: ["tabular-nums"] },

@@ -30,6 +30,7 @@ import {
   type SheetPosition,
 } from "@/components/map-controls";
 import {
+  PinnedSheetHeader,
   sheetBackgroundStyle,
   SheetHeaderFade,
   useSheetScrollOffset,
@@ -137,6 +138,7 @@ const SearchSheetContent = memo(function SearchSheetContent({
   const { onFocus, onBlur } = useBottomSheetAwareHandlers();
   const inputRef = useRef<ComponentRef<typeof SearchField.Input>>(null);
   const [scrollRef, scrollOffset] = useSheetScrollOffset();
+  const [headerHeight, setHeaderHeight] = useState(0);
   const [isFocused, setIsFocused] = useState(false);
 
   // Android's back button hides the keyboard but leaves the field focused.
@@ -154,7 +156,7 @@ const SearchSheetContent = memo(function SearchSheetContent({
     savedStations,
     recentStations,
   });
-  const [mutedColor, surfaceColor] = useThemeColor(["muted", "surface"]);
+  const mutedColor = useThemeColor("muted");
 
   // The lists are memoized, so they only render again when these change.
   const unsavedRecentStations = useMemo(() => {
@@ -185,20 +187,10 @@ const SearchSheetContent = memo(function SearchSheetContent({
   );
 
   return (
-    // The search bar is the list's sticky header, so the sheet can measure all of its content
-    // and open only as tall as it needs.
-    <BottomSheetScrollView
-      ref={scrollRef}
-      stickyHeaderIndices={[0]}
-      keyboardDismissMode="on-drag"
-      keyboardShouldPersistTaps="handled"
-      // With the keyboard up, the same space above it instead.
-      contentContainerStyle={{ paddingBottom: Math.max(keyboardHeight + 16, bottomInset) }}
-    >
-      {/* A sticky header's style moves to a wrapper, so the background goes with the padding;
-          as a class it stays inside, and the list shows above the search bar. */}
-      <View style={{ paddingTop: searchFieldTopSpacing, backgroundColor: surfaceColor }}>
-        <View className="px-4">
+    <View style={styles.fill}>
+      <PinnedSheetHeader onHeightChange={setHeaderHeight}>
+        {/* The padding is in here, since the fade below hangs from where it ends. */}
+        <View className="px-4" style={styles.searchHeader}>
           <SearchField value={query} onChange={setQuery}>
             <SearchField.Group>
               <SearchField.SearchIcon />
@@ -250,74 +242,86 @@ const SearchSheetContent = memo(function SearchSheetContent({
         </View>
         {/* Its gap is part of the lists' top margin. */}
         <SheetHeaderFade scrollOffset={scrollOffset} />
-      </View>
+      </PinnedSheetHeader>
 
-      <Animated.View className="px-4" style={listStyle}>
-        {!search.isActive ? null : search.error ? (
-          <StatusMessage
-            className="mt-5"
-            icon={CircleAlert}
-            title="Unable to search stations"
-            description={search.error}
-            onRetry={search.retry}
-          />
-        ) : search.stations.length > 0 ? (
-          <StationSection
-            title={searchResultsTitle}
-            icon={List}
-            stations={search.stations}
-            renderSuffix={renderDistance}
-            onSelect={selectStation}
-          />
-        ) : noResults ? (
-          <StatusMessage
-            className="mt-5"
-            icon={SearchX}
-            title="No stations found"
-            description="Try a different search term."
-          />
-        ) : (
-          <StationSectionSkeleton title={searchResultsTitle} icon={List} />
-        )}
-        {showDefaultLists ? (
-          <>
-            <StationSection
-              title="Recent stations"
-              icon={History}
-              stations={unsavedRecentStations}
-              onSelect={selectStation}
-              collapsedCount={3}
+      <BottomSheetScrollView
+        ref={scrollRef}
+        keyboardDismissMode="on-drag"
+        keyboardShouldPersistTaps="handled"
+        contentContainerStyle={{
+          paddingTop: headerHeight,
+          // With the keyboard up, the same space above it instead.
+          paddingBottom: Math.max(keyboardHeight + 16, bottomInset),
+        }}
+        scrollIndicatorInsets={{ top: headerHeight }}
+      >
+        <Animated.View className="px-4" style={listStyle}>
+          {!search.isActive ? null : search.error ? (
+            <StatusMessage
+              className="mt-5"
+              icon={CircleAlert}
+              title="Unable to search stations"
+              description={search.error}
+              onRetry={search.retry}
             />
+          ) : search.stations.length > 0 ? (
             <StationSection
-              title="Saved stations"
-              icon={Bookmark}
-              stations={savedStations}
+              title={searchResultsTitle}
+              icon={List}
+              stations={search.stations}
+              renderSuffix={renderDistance}
               onSelect={selectStation}
-              collapsedCount={5}
             />
-            {isTrendingLoading ? (
-              <StationSectionSkeleton title={trendingTitle} icon={TrendingUp} hasSuffix />
-            ) : (
+          ) : noResults ? (
+            <StatusMessage
+              className="mt-5"
+              icon={SearchX}
+              title="No stations found"
+              description="Try a different search term."
+            />
+          ) : (
+            <StationSectionSkeleton title={searchResultsTitle} icon={List} />
+          )}
+          {showDefaultLists ? (
+            <>
               <StationSection
-                title={trendingTitle}
-                icon={TrendingUp}
-                stations={trendingStations}
-                renderSuffix={renderVisitorCounts}
+                title="Recent stations"
+                icon={History}
+                stations={unsavedRecentStations}
                 onSelect={selectStation}
+                collapsedCount={3}
               />
-            )}
-            {!search.isActive && !hasDefaultLists ? (
-              <EmptyState>
-                <Text className="text-center text-sm text-muted">
-                  Search for a station by name, or save one from its live board to find it here.
-                </Text>
-              </EmptyState>
-            ) : null}
-          </>
-        ) : null}
-        <MapAttribution className="mt-8" getMapFeedbackUrl={getMapFeedbackUrl} />
-      </Animated.View>
-    </BottomSheetScrollView>
+              <StationSection
+                title="Saved stations"
+                icon={Bookmark}
+                stations={savedStations}
+                onSelect={selectStation}
+                collapsedCount={5}
+              />
+              {isTrendingLoading ? (
+                <StationSectionSkeleton title={trendingTitle} icon={TrendingUp} hasSuffix />
+              ) : (
+                <StationSection
+                  title={trendingTitle}
+                  icon={TrendingUp}
+                  stations={trendingStations}
+                  renderSuffix={renderVisitorCounts}
+                  onSelect={selectStation}
+                />
+              )}
+              {!search.isActive && !hasDefaultLists ? (
+                <EmptyState>
+                  <Text className="text-center text-sm text-muted">
+                    Search for a station by name, or save one from its live board to find it here.
+                  </Text>
+                </EmptyState>
+              ) : null}
+            </>
+          ) : null}
+          <MapAttribution className="mt-8" getMapFeedbackUrl={getMapFeedbackUrl} />
+        </Animated.View>
+      </BottomSheetScrollView>
+    </View>
   );
 });
 
@@ -401,6 +405,8 @@ export function SearchSheet({
 }
 
 const styles = StyleSheet.create({
+  fill: { flex: 1 },
+  searchHeader: { paddingTop: searchFieldTopSpacing },
   tabularNums: { fontVariant: ["tabular-nums"] },
   emptyState: { alignItems: "center", justifyContent: "center", paddingVertical: 40 },
 });
