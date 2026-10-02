@@ -6,6 +6,35 @@ the commit they were built from.
 
 ## [Unreleased]
 
+## [0.3.0] (6) – 2026-10-02
+
+### Added
+
+- A What's new sheet shows the release highlights once after updating, following the welcome
+  sheet on a new install.
+- Live foreground position updates: fresh fixes every 5 seconds while moving or uncertain, and
+  every 30 seconds after a minute of reliable stillness. The location dot animates between fixes.
+- Locate enables camera following. Panning or opening a station stops it, and opening a station
+  leaves the camera in place. The selected station stays open as the user moves.
+
+### Changed
+
+- Opening a station from the map, search, nearby stations or a shared link keeps the current
+  map position and zoom.
+- Metro and tram sheets hide train-only actions, live-board placeholders and visit stats.
+  Metro and tram stops now appear in recent stations too.
+- Departures and arrivals refresh according to the age of the API snapshot, avoiding an extra
+  30-second wait for data that was already old when received. Requests bypass the phone's cache.
+- Search refreshes distance and ranking at most every 30 seconds after meaningful movement,
+  only while visible. Opening search or changing the query uses the latest position immediately.
+- Location acquisition stops between fixes and when the app leaves the foreground. Locate and
+  periodic updates share pending acquisition, and old GPS fixes are not used as live positions.
+
+### Fixed
+
+- Search and station sheet headers stay pinned while scrolling or dragging the sheet.
+- Locate keeps its requested zoom when a location fix and camera update arrive together.
+
 ## [0.2.1] (5) – 2026-09-30
 
 ### Added

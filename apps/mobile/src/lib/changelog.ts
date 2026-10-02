@@ -1,7 +1,8 @@
 import { File, Paths } from "expo-file-system";
+import LocateFixed from "lucide-react-native/icons/locate-fixed";
+import Map from "lucide-react-native/icons/map";
 import RefreshCw from "lucide-react-native/icons/refresh-cw";
 import TramFront from "lucide-react-native/icons/tram-front";
-import ZoomIn from "lucide-react-native/icons/zoom-in";
 import type { ComponentType } from "react";
 
 import { expo } from "../../app.json";
@@ -23,19 +24,25 @@ export const releases: Release[] = [
     version: "0.3.0",
     features: [
       {
-        icon: TramFront,
-        title: "Clearer metro and tram stops",
-        description: "They show what they have: directions and the stops nearby.",
+        icon: LocateFixed,
+        title: "Your position stays up to date",
+        description: "The location dot moves with you. Tap Locate to have the map follow you too.",
       },
       {
-        icon: ZoomIn,
-        title: "The right zoom for every station",
-        description: "Opening a station zooms in just enough to see what's around it.",
+        icon: Map,
+        title: "Keep your place on the map",
+        description: "Opening a station keeps your view and zoom. Pan the map to stop following.",
+      },
+      {
+        icon: TramFront,
+        title: "Clearer metro and tram stops",
+        description: "Find directions and nearby stops, with train-only controls cleared away.",
       },
       {
         icon: RefreshCw,
         title: "Fresher boards",
-        description: "Departures and arrivals update as soon as new times are in.",
+        description:
+          "Departures and arrivals refresh sooner when the times received are already old.",
       },
     ],
   },
