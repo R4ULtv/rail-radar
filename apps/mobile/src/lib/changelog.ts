@@ -1,6 +1,5 @@
 import { File, Paths } from "expo-file-system";
 import LocateFixed from "lucide-react-native/icons/locate-fixed";
-import Map from "lucide-react-native/icons/map";
 import RefreshCw from "lucide-react-native/icons/refresh-cw";
 import TramFront from "lucide-react-native/icons/tram-front";
 import type { ComponentType } from "react";
@@ -26,12 +25,8 @@ export const releases: Release[] = [
       {
         icon: LocateFixed,
         title: "Your position stays up to date",
-        description: "The location dot moves with you. Tap Locate to have the map follow you too.",
-      },
-      {
-        icon: Map,
-        title: "Keep your place on the map",
-        description: "Opening a station keeps your view and zoom. Pan the map to stop following.",
+        description:
+          "The location dot moves with you. Tap Locate to have the map follow you, and pan to stop.",
       },
       {
         icon: TramFront,
