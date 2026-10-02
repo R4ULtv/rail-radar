@@ -6,6 +6,11 @@ the commit they were built from.
 
 ## [Unreleased]
 
+### Fixed
+
+- On Android, the search sheet sometimes scrolled only a little until Show all was tapped, leaving
+  the end of the lists below the screen. The lists now take the open sheet's height.
+
 ## [0.3.0] (6) – 2026-10-02
 
 ### Added

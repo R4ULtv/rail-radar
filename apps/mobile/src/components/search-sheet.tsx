@@ -19,7 +19,15 @@ import {
   type ComponentRef,
   type ReactNode,
 } from "react";
-import { BackHandler, Keyboard, Pressable, StyleSheet, Text, View } from "react-native";
+import {
+  BackHandler,
+  Keyboard,
+  Pressable,
+  StyleSheet,
+  Text,
+  useWindowDimensions,
+  View,
+} from "react-native";
 import Animated, { Extrapolation, interpolate, useAnimatedStyle } from "react-native-reanimated";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
@@ -132,6 +140,12 @@ const SearchSheetContent = memo(function SearchSheetContent({
 }) {
   const bottomInset = useSheetBottomInset();
   const keyboardHeight = useKeyboardHeight();
+  // As tall as the open sheet instead of filling it. The sheet sets its height in an animation,
+  // and on Android the list didn't always shrink to it, so it ran below the screen and barely
+  // scrolled. The sheet clips it, and still opens only as tall as the lists.
+  const { height: windowHeight } = useWindowDimensions();
+  const topInset = useSheetTopInset();
+  const contentHeight = windowHeight - topInset - handleHeight;
   const { animatedIndex, snapToIndex } = useBottomSheet();
   // Only the search bar is visible while collapsed; fade the lists in as the sheet opens.
   const listStyle = useAnimatedStyle(() => ({
@@ -189,7 +203,7 @@ const SearchSheetContent = memo(function SearchSheetContent({
   );
 
   return (
-    <View style={styles.fill}>
+    <View style={{ height: contentHeight }}>
       <PinnedSheetHeader onHeightChange={setHeaderHeight}>
         {/* The padding is in here, since the fade below hangs from where it ends. */}
         <View className="px-4" style={styles.searchHeader}>
@@ -408,7 +422,6 @@ export function SearchSheet({
 }
 
 const styles = StyleSheet.create({
-  fill: { flex: 1 },
   searchHeader: { paddingTop: searchFieldTopSpacing },
   tabularNums: { fontVariant: ["tabular-nums"] },
   emptyState: { alignItems: "center", justifyContent: "center", paddingVertical: 40 },
