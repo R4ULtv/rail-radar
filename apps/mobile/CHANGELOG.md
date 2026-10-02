@@ -6,10 +6,14 @@ the commit they were built from.
 
 ## [Unreleased]
 
+## [0.3.2] (8) – 2026-10-02
+
 ### Changed
 
 - Opening a station from the map, search, nearby stations or a shared link centers the map on it
   again, zoomed in as before 0.3.0, just above the station sheet.
+- Android builds include only ARM32 (`armeabi-v7a`) and ARM64 (`arm64-v8a`), leaving out the Intel
+  architectures to make the uploaded bundle smaller. Google Play serves each phone only its own.
 
 ### Fixed
 
