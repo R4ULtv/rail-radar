@@ -6,6 +6,11 @@ the commit they were built from.
 
 ## [Unreleased]
 
+### Fixed
+
+- On Android phones whose window height leaves out the navigation bar, the open search sheet's
+  lists ended above the bottom of the screen. They now take the sheet's measured height.
+
 ## [0.3.1] (7) – 2026-10-02
 
 ### Fixed

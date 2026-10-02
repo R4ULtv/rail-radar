@@ -1,5 +1,9 @@
 import type { Station } from "@repo/data/types";
-import BottomSheet, { BottomSheetScrollView, useBottomSheet } from "@gorhom/bottom-sheet";
+import BottomSheet, {
+  BottomSheetScrollView,
+  useBottomSheet,
+  useBottomSheetInternal,
+} from "@gorhom/bottom-sheet";
 import { useBottomSheetAwareHandlers, useThemeColor } from "heroui-native/hooks";
 import { SearchField } from "heroui-native/search-field";
 import Bookmark from "lucide-react-native/icons/bookmark";
@@ -28,8 +32,14 @@ import {
   useWindowDimensions,
   View,
 } from "react-native";
-import Animated, { Extrapolation, interpolate, useAnimatedStyle } from "react-native-reanimated";
+import Animated, {
+  Extrapolation,
+  interpolate,
+  useAnimatedReaction,
+  useAnimatedStyle,
+} from "react-native-reanimated";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { scheduleOnRN } from "react-native-worklets";
 
 import { MapAttribution } from "@/components/map-attribution";
 import {
@@ -142,10 +152,20 @@ const SearchSheetContent = memo(function SearchSheetContent({
   const keyboardHeight = useKeyboardHeight();
   // As tall as the open sheet instead of filling it. The sheet sets its height in an animation,
   // and on Android the list didn't always shrink to it, so it ran below the screen and barely
-  // scrolled. The sheet clips it, and still opens only as tall as the lists.
-  const { height: windowHeight } = useWindowDimensions();
+  // scrolled. The sheet clips it, and still opens only as tall as the lists. Measured from the
+  // sheet's container, which starts at the top inset, since Android's window height can leave out
+  // the navigation bar.
   const topInset = useSheetTopInset();
-  const contentHeight = windowHeight - topInset - handleHeight;
+  const { height: windowHeight } = useWindowDimensions();
+  const [containerHeight, setContainerHeight] = useState(windowHeight - topInset);
+  const { animatedLayoutState } = useBottomSheetInternal();
+  useAnimatedReaction(
+    () => animatedLayoutState.get().containerHeight,
+    (height, previous) => {
+      if (height > 0 && height !== previous) scheduleOnRN(setContainerHeight, height);
+    },
+  );
+  const contentHeight = containerHeight - handleHeight;
   const { animatedIndex, snapToIndex } = useBottomSheet();
   // Only the search bar is visible while collapsed; fade the lists in as the sheet opens.
   const listStyle = useAnimatedStyle(() => ({
