@@ -6,6 +6,11 @@ the commit they were built from.
 
 ## [Unreleased]
 
+### Changed
+
+- Opening a station from the map, search, nearby stations or a shared link centers the map on it
+  again, zoomed in as before 0.3.0, just above the station sheet.
+
 ### Fixed
 
 - On Android phones whose window height leaves out the navigation bar, the open search sheet's

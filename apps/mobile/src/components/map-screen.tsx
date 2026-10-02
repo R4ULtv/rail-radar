@@ -20,13 +20,14 @@ import {
   useIsSheetFullyOpen,
   useMapHeading,
   useSheetPosition,
+  useSheetTopInset,
 } from "@/components/map-controls";
 import { IntroSheet, useIntro } from "@/components/intro-sheet";
 import { MapStyleSheet } from "@/components/map-style-sheet";
 import { SearchSheet } from "@/components/search-sheet";
 import { Settings } from "@/components/settings-sheet";
 import { RailwayLines, StationImages, StationLayers } from "@/components/station-markers";
-import { StationSheet } from "@/components/station-sheet";
+import { middleStep, StationSheet } from "@/components/station-sheet";
 import { StatusBarBlur } from "@/components/status-bar-blur";
 import { UserLocationMarker } from "@/components/user-location-marker";
 import { useIsOnline } from "@/hooks/use-is-online";
@@ -46,6 +47,10 @@ const defaultCamera = { centerCoordinate: [12, 50] as [number, number], zoomLeve
 // Same zoom levels as the web: 13 when opening on the user, 14 after tapping locate.
 const userZoomLevel = 13;
 const locateZoomLevel = 14;
+// Like the web, selecting a station zooms in on it, a little closer for metro and light rail.
+const stationZoomLevels: Record<Station["type"], number> = { rail: 13, metro: 14, light: 14 };
+// How far a selected station sits above the station sheet's middle step, leaving room for its label.
+const stationSheetClearance = 48;
 // Mapbox keeps the last camera padding, so moves that should be centered have to clear it.
 const noPadding = { paddingTop: 0, paddingBottom: 0, paddingLeft: 0, paddingRight: 0 };
 
@@ -62,6 +67,9 @@ type StationPressEvent = Parameters<
 
 export function MapScreen() {
   const insets = useSafeAreaInsets();
+  const sheetTopInset = useSheetTopInset();
+  // The map's own height, since Android's window height can leave out the navigation bar.
+  const mapHeight = useRef(0);
   const reduceMotion = useReducedMotion();
   const camera = useRef<Mapbox.Camera>(null);
   const stationsUrl = useStationsUrl();
@@ -146,21 +154,28 @@ export function MapScreen() {
     (station: Station) => {
       haptics.tap();
       hasMovedMap.current = true;
-      if (following.current) {
-        // Stop an in-progress follow animation at the map's current reported position.
-        camera.current?.setCamera({
-          centerCoordinate: mapPosition.current.center,
-          zoomLevel: mapPosition.current.zoom,
-          animationDuration: 0,
-        });
-      }
       stopFollowing();
       setSelectedStation(station);
       // Opened in the same update, so the first station sheet mounts already open.
       setSheetOpen(true);
+      // Let the camera move start before updating the search sheet's recent list.
       setTimeout(() => addRecentStation(station), 0);
+      if (!station.geo) return;
+
+      // Above the station sheet's middle step, and so above its peek too. The padding stays the
+      // same as the sheet changes size, so the map doesn't move with it.
+      const height = mapHeight.current;
+      const sheetTop = sheetTopInset + (height - sheetTopInset) * (1 - middleStep);
+      const stationY = sheetTop - stationSheetClearance;
+      camera.current?.setCamera({
+        centerCoordinate: [station.geo.lng, station.geo.lat],
+        zoomLevel: stationZoomLevels[station.type],
+        padding: { ...noPadding, paddingBottom: Math.max(height - 2 * stationY, 0) },
+        animationMode: "easeTo",
+        animationDuration: reduceMotion ? 0 : 700,
+      });
     },
-    [stopFollowing],
+    [stopFollowing, sheetTopInset, reduceMotion],
   );
 
   const handleStationPress = useCallback(
@@ -280,7 +295,12 @@ export function MapScreen() {
       : null);
 
   return (
-    <View style={[styles.screen, { backgroundColor }]}>
+    <View
+      style={[styles.screen, { backgroundColor }]}
+      onLayout={(event) => {
+        mapHeight.current = event.nativeEvent.layout.height;
+      }}
+    >
       <StatusBar style={mapTheme.statusBarStyle} />
       <Mapbox.MapView
         key={mapKey}
