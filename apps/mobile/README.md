@@ -119,7 +119,14 @@ Release builds are shrunk with R8, which removes unused code and resources. The 
 R8's mapping file, so the Play Console's crash reports are readable without uploading
 `android/app/build/outputs/mapping/release/mapping.txt` separately. An early R8 build broke the
 map's camera, the stations and the search sheet's width, so after changing native dependencies,
-check those on a release build. To test the bundle on a device or emulator, build an APK from it:
+check those on a release build.
+
+Android builds include only ARM32 (`armeabi-v7a`) and ARM64 (`arm64-v8a`). The
+`expo-build-properties` configuration in `app.json` keeps this setting across prebuilds. This
+reduces the uploaded bundle by excluding Intel architectures; Google Play already serves only
+the architecture needed by each phone.
+
+To test the bundle on a device or emulator, build an APK from it:
 
 ```sh
 cd android && ./gradlew app:packageReleaseUniversalApk
