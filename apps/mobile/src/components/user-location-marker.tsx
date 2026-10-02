@@ -1,28 +1,69 @@
 import Mapbox from "@rnmapbox/maps";
+import { memo, useEffect, useState } from "react";
+import { Easing } from "react-native";
+import { useReducedMotion } from "react-native-reanimated";
+
+import type { UserLocation } from "@/lib/user-location";
 
 // The web map's location marker as images, rendered by
 // `pnpm --filter=mobile generate:location-puck`.
 const puckImages = {
   "location-dot": require("../../assets/location-puck/location-dot.png"),
   "location-halo": require("../../assets/location-puck/location-halo.png"),
-  "location-empty": require("../../assets/location-puck/location-empty.png"),
 };
 
 /**
- * The web map's location marker: an accent dot with a white ring, a soft halo and a ping.
- * It's the map's own puck, so it moves with the map instead of trailing behind it.
+ * Native map layers use only our scheduled fixes, without starting Mapbox's own GPS tracker.
+ * Animation is local to this source: search and the map screen do not re-render on each frame.
  */
-export function UserLocationMarker() {
+export const UserLocationMarker = memo(function UserLocationMarker({
+  location,
+}: {
+  location: UserLocation;
+}) {
+  const reduceMotion = useReducedMotion();
+  const [point] = useState(
+    () =>
+      new Mapbox.AnimatedPoint({
+        type: "Point",
+        coordinates: [location.longitude, location.latitude],
+      }),
+  );
+
+  useEffect(() => {
+    point.stopAnimation(undefined);
+    const timing = {
+      coordinates: [location.longitude, location.latitude],
+      duration: reduceMotion ? 0 : 700,
+      easing: Easing.linear,
+    };
+    point.timing(timing).start();
+    return () => point.stopAnimation(undefined);
+  }, [point, location, reduceMotion]);
+
   return (
     <>
       <Mapbox.Images images={puckImages} />
-      <Mapbox.LocationPuck
-        topImage="location-dot"
-        bearingImage="location-empty"
-        shadowImage="location-halo"
-        // Like the web's animate-ping: a 20pt accent ring growing to twice its size.
-        pulsing={{ isEnabled: true, color: "rgba(99, 99, 255, 0.4)", radius: 20 }}
-      />
+      <Mapbox.Animated.ShapeSource id="user-location" shape={point}>
+        <Mapbox.SymbolLayer
+          id="user-location-halo"
+          style={{
+            iconImage: "location-halo",
+            iconAllowOverlap: true,
+            iconIgnorePlacement: true,
+            iconEmissiveStrength: 1,
+          }}
+        />
+        <Mapbox.SymbolLayer
+          id="user-location-dot"
+          style={{
+            iconImage: "location-dot",
+            iconAllowOverlap: true,
+            iconIgnorePlacement: true,
+            iconEmissiveStrength: 1,
+          }}
+        />
+      </Mapbox.Animated.ShapeSource>
     </>
   );
-}
+});

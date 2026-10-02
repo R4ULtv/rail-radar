@@ -629,8 +629,6 @@ function StationError({
 interface StationSheetProps {
   station: Station;
   isOpen: boolean;
-  /** Lower details wait until the camera move to this station has settled. */
-  detailsReady: boolean;
   /** The station GeoJSON the map shows, where nearby stations are found. */
   stationsUrl: string | null;
   userLocation: UserLocation | null;
@@ -643,7 +641,6 @@ interface StationSheetProps {
 export function StationSheet({
   station,
   isOpen,
-  detailsReady,
   stationsUrl,
   userLocation,
   onOpenChange,
@@ -716,9 +713,7 @@ export function StationSheet({
           isOpen={isOpen}
           stationsUrl={stationsUrl}
           userLocation={userLocation}
-          // Keep the board immediate; on a station switch, prepare lower details once the camera
-          // finishes moving. The first station still shows them when the sheet opens.
-          showDetails={index >= 0 && detailsReady}
+          showDetails={index >= 0}
           onClose={() => onOpenChange(false)}
           onSelectStation={onSelectStation}
           onPeekHeightChange={setPeekHeight}

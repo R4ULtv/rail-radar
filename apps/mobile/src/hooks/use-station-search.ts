@@ -1,6 +1,7 @@
 import type { Station } from "@repo/data/types";
 import { useDeferredValue, useEffect, useMemo, useState } from "react";
 
+import { useSearchLocation } from "@/hooks/use-search-location";
 import { loadStationSearch, type StationSearch } from "@/lib/stations";
 import type { UserLocation } from "@/lib/user-location";
 
@@ -14,6 +15,8 @@ interface UseStationSearchOptions {
   stationsUrl: string | null;
   /** Closer stations come first among ones that match the query equally well. */
   userLocation: UserLocation | null;
+  /** Movement only refreshes ranking while the results can be seen. */
+  visible: boolean;
   /** Builds the search index before the first character, e.g. once the field is focused. */
   preload?: boolean;
   /** Come first when they match, then the recent stations. */
@@ -26,6 +29,7 @@ export function useStationSearch(
   {
     stationsUrl,
     userLocation,
+    visible,
     preload = false,
     savedStations = noStations,
     recentStations = noStations,
@@ -36,6 +40,7 @@ export function useStationSearch(
   // Typing stays smooth: the results for a new query render in the background, and a render
   // that's still going when the next key is typed is dropped for the newer query.
   const deferredQuery = useDeferredValue(query);
+  const searchLocation = useSearchLocation(userLocation, deferredQuery, visible);
   const [retryCount, setRetryCount] = useState(0);
   const [search, setSearch] = useState<StationSearch | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -64,16 +69,17 @@ export function useStationSearch(
     if (!search || deferredQuery.length < minQueryLength) return null;
     return search(deferredQuery, {
       limit: resultLimit,
-      near: userLocation,
+      near: searchLocation,
       saved: savedStations,
       recent: recentStations,
     });
-  }, [search, deferredQuery, userLocation, savedStations, recentStations]);
+  }, [search, deferredQuery, searchLocation, savedStations, recentStations]);
 
   return {
     stations: (isActive && results) || noStations,
     error: isActive ? error : null,
     isActive,
+    location: searchLocation,
     /** Whether `stations` holds results, possibly for the previous query while this one renders. */
     hasResult: isActive && results !== null,
     retry: () => setRetryCount((count) => count + 1),

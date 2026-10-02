@@ -1,13 +1,13 @@
 import type { Station } from "@repo/data/types";
 import Mapbox from "@rnmapbox/maps";
-import * as Location from "expo-location";
 import { StatusBar } from "expo-status-bar";
 import { Alert } from "heroui-native/alert";
 import { Card } from "heroui-native/card";
 import { useThemeColor } from "heroui-native/hooks";
 import CircleAlert from "lucide-react-native/icons/circle-alert";
 import { useCallback, useEffect, useRef, useState, type ComponentProps } from "react";
-import { AppState, Dimensions, StyleSheet, View } from "react-native";
+import { StyleSheet, View } from "react-native";
+import { useReducedMotion } from "react-native-reanimated";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import {
@@ -20,14 +20,13 @@ import {
   useIsSheetFullyOpen,
   useMapHeading,
   useSheetPosition,
-  type LocationStatus,
 } from "@/components/map-controls";
 import { IntroSheet, useIntro } from "@/components/intro-sheet";
 import { MapStyleSheet } from "@/components/map-style-sheet";
 import { SearchSheet } from "@/components/search-sheet";
 import { Settings } from "@/components/settings-sheet";
 import { RailwayLines, StationImages, StationLayers } from "@/components/station-markers";
-import { middleStep, StationSheet } from "@/components/station-sheet";
+import { StationSheet } from "@/components/station-sheet";
 import { StatusBarBlur } from "@/components/status-bar-blur";
 import { UserLocationMarker } from "@/components/user-location-marker";
 import { useIsOnline } from "@/hooks/use-is-online";
@@ -35,34 +34,20 @@ import { useMapTheme } from "@/hooks/use-map-theme";
 import { useStationLinks } from "@/hooks/use-station-links";
 import { useStationsUrl } from "@/hooks/use-stations-url";
 import { addRecentStation } from "@/hooks/use-stored-stations";
+import { useUserLocation } from "@/hooks/use-user-location";
 import { haptics } from "@/lib/haptics";
 import { mapFeedbackUrl, type MapPosition } from "@/lib/links";
+import type { LocationFix } from "@/lib/location-tracking";
 import { loadStationSearch } from "@/lib/stations";
-import { loadLastUserLocation, saveLastUserLocation, type UserLocation } from "@/lib/user-location";
+import { loadLastUserLocation } from "@/lib/user-location";
 
 const accessToken = process.env.EXPO_PUBLIC_MAPBOX_TOKEN ?? "";
 const defaultCamera = { centerCoordinate: [12, 50] as [number, number], zoomLevel: 4 };
 // Same zoom levels as the web: 13 when opening on the user, 14 after tapping locate.
 const userZoomLevel = 13;
 const locateZoomLevel = 14;
-// Like the web, selecting a station zooms in on it, a little closer for metro and light rail.
-const stationZoomLevels: Record<Station["type"], number> = { rail: 13, metro: 14, light: 14 };
-const stationCameraAnimationMs = 700;
-const stationDetailsFallbackMs = stationCameraAnimationMs + 100;
-const stationCenterTolerance = 0.0001;
-const stationZoomTolerance = 0.05;
-const locationMaxAge = 5 * 60 * 1000;
 // Mapbox keeps the last camera padding, so moves that should be centered have to clear it.
 const noPadding = { paddingTop: 0, paddingBottom: 0, paddingLeft: 0, paddingRight: 0 };
-// How far a selected station sits above the station sheet's middle step, leaving room for its label.
-const stationSheetClearance = 48;
-
-/** Keeps a selected station clear of the station sheet at its middle step, and so at its peek too. */
-function stationPadding() {
-  const { height } = Dimensions.get("window");
-  const stationY = height * (1 - middleStep) - stationSheetClearance;
-  return { ...noPadding, paddingBottom: Math.max(height - 2 * stationY, 0) };
-}
 
 if (accessToken) {
   Mapbox.setAccessToken(accessToken);
@@ -71,79 +56,25 @@ if (accessToken) {
 // This is also the opt-out Mapbox requires, which its hidden attribution button would offer.
 Mapbox.setTelemetryEnabled(false);
 
-/** Location is "off" when services are disabled or permission can no longer be asked for. */
-async function readLocationStatus(): Promise<LocationStatus> {
-  const [permission, servicesEnabled] = await Promise.all([
-    Location.getForegroundPermissionsAsync(),
-    Location.hasServicesEnabledAsync(),
-  ]);
-  if (!servicesEnabled || (!permission.granted && !permission.canAskAgain)) return "off";
-  return permission.granted ? "located" : "idle";
-}
-
-/** A recent fix if there is one (like the web's maximumAge), otherwise a fresh one. */
-async function findUserLocation() {
-  const lastKnown = await Location.getLastKnownPositionAsync({ maxAge: locationMaxAge });
-  const { coords } =
-    lastKnown ?? (await Location.getCurrentPositionAsync({ accuracy: Location.Accuracy.Balanced }));
-  const location = { latitude: coords.latitude, longitude: coords.longitude };
-  saveLastUserLocation(location);
-  return location;
-}
-
-type LocateResult =
-  | { location: UserLocation }
-  | { location?: never; status: LocationStatus; message: string };
-
-/** Asks for permission if needed, then finds the user. Kept out of the component so it compiles. */
-async function requestUserLocation(): Promise<LocateResult> {
-  try {
-    if (!(await Location.hasServicesEnabledAsync())) {
-      return { status: "off", message: "Location Services are turned off." };
-    }
-
-    const permission = await Location.requestForegroundPermissionsAsync();
-    if (!permission.granted) {
-      return {
-        status: permission.canAskAgain ? "idle" : "off",
-        message: "Location permission was not granted.",
-      };
-    }
-
-    return { location: await findUserLocation() };
-  } catch {
-    return { status: "idle", message: "Your location is unavailable right now." };
-  }
-}
-
 type StationPressEvent = Parameters<
   NonNullable<ComponentProps<typeof Mapbox.ShapeSource>["onPress"]>
 >[0];
 
-type PendingStationCamera = {
-  id: string;
-  center: [number, number];
-  zoomLevel: number;
-  token: number;
-  timeout: ReturnType<typeof setTimeout>;
-};
-
 export function MapScreen() {
   const insets = useSafeAreaInsets();
+  const reduceMotion = useReducedMotion();
   const camera = useRef<Mapbox.Camera>(null);
   const stationsUrl = useStationsUrl();
   const [selectedStation, setSelectedStation] = useState<Station | null>(null);
   const [sheetOpen, setSheetOpen] = useState(false);
-  const selectedStationId = useRef<string | null>(null);
-  const stationSheetIsOpen = useRef(false);
-  const [settledStationId, setSettledStationId] = useState<string | null>(null);
-  const pendingStationCamera = useRef<PendingStationCamera | null>(null);
-  const stationCameraToken = useRef(0);
-  const [locationStatus, setLocationStatus] = useState<LocationStatus>("idle");
-  const [userLocation, setUserLocation] = useState<UserLocation | null>(null);
-  const [message, setMessage] = useState<string | null>(null);
   const intro = useIntro();
   const isIntroOpen = intro.page !== null;
+  const {
+    location: userLocation,
+    status: locationStatus,
+    message,
+    locate,
+  } = useUserLocation(!isIntroOpen);
   const isOnline = useIsOnline();
   const [mapFailed, setMapFailed] = useState(false);
   const [mapKey, setMapKey] = useState(0);
@@ -155,7 +86,7 @@ export function MapScreen() {
   // loads makes Mapbox update layers that aren't in the style yet, which logs errors.
   const [labelColors, setLabelColors] = useState(mapTheme);
   const { heading, onHeadingChange } = useMapHeading();
-  // Open on the last known position, then follow the user once they're found.
+  // The saved position only seeds the camera. Following starts explicitly with Locate.
   const [initialCamera] = useState(() => {
     const lastLocation = loadLastUserLocation();
     return lastLocation
@@ -165,16 +96,19 @@ export function MapScreen() {
         }
       : defaultCamera;
   });
-  // Once the user moves the map, finding their location shouldn't move it back.
+  // Once the user interacts, even a pending launch/Locate fix must not move the camera back.
   const hasMovedMap = useRef(false);
+  const hasCenteredOnLaunch = useRef(false);
+  const cameraAction = useRef(0);
+  const lastCameraLocation = useRef<LocationFix | null>(null);
   // Kept without re-rendering, for the "Improve this map" links.
   const mapPosition = useRef<MapPosition>({
     center: initialCamera.centerCoordinate,
     zoom: initialCamera.zoomLevel,
   });
   const getMapFeedbackUrl = useCallback(() => mapFeedbackUrl(mapPosition.current), []);
-  // Whether the map is on the user's location, which fills the locate button.
-  const [isCentered, setIsCentered] = useState(false);
+  const [isFollowing, setIsFollowing] = useState(false);
+  const following = useRef(false);
   // Where the sheets are, for the controls that sit above them.
   const searchSheetPosition = useSheetPosition();
   const stationSheetPosition = useSheetPosition();
@@ -194,79 +128,39 @@ export function MapScreen() {
     }
   }, [isOnline, mapFailed]);
 
-  const finishStationCamera = useCallback((token: number) => {
-    const pending = pendingStationCamera.current;
-    if (!pending || pending.token !== token) return;
-    clearTimeout(pending.timeout);
-    pendingStationCamera.current = null;
-    setSettledStationId(pending.id);
+  const stopFollowing = useCallback(() => {
+    cameraAction.current++;
+    following.current = false;
+    setIsFollowing(false);
   }, []);
 
-  const onStationSheetOpenChange = useCallback((isOpen: boolean) => {
-    stationSheetIsOpen.current = isOpen;
-    setSheetOpen(isOpen);
-  }, []);
-
-  useEffect(() => {
-    return () => {
-      if (pendingStationCamera.current) clearTimeout(pendingStationCamera.current.timeout);
-    };
-  }, []);
+  const onStationSheetOpenChange = useCallback(
+    (isOpen: boolean) => {
+      if (isOpen) stopFollowing();
+      setSheetOpen(isOpen);
+    },
+    [stopFollowing],
+  );
 
   const selectStation = useCallback(
     (station: Station) => {
       haptics.tap();
-      const zoomLevel = stationZoomLevels[station.type];
       hasMovedMap.current = true;
-      setIsCentered(false);
-      const hadPendingCamera = pendingStationCamera.current !== null;
-      if (pendingStationCamera.current) clearTimeout(pendingStationCamera.current.timeout);
-      pendingStationCamera.current = null;
-      // The first station still shows its details as soon as the sheet opens. Only switching
-      // between stations can start detail work during the existing camera and sheet animations.
-      const isSwitchingStation =
-        stationSheetIsOpen.current &&
-        selectedStationId.current !== null &&
-        selectedStationId.current !== station.id;
-      const mapCamera = camera.current;
-      const mapIsAtStation =
-        !hadPendingCamera &&
-        station.geo &&
-        Math.abs(mapPosition.current.center[0] - station.geo.lng) <= stationCenterTolerance &&
-        Math.abs(mapPosition.current.center[1] - station.geo.lat) <= stationCenterTolerance &&
-        Math.abs(mapPosition.current.zoom - zoomLevel) <= stationZoomTolerance;
-      const deferDetails = isSwitchingStation && !!station.geo && !!mapCamera && !mapIsAtStation;
-      selectedStationId.current = station.id;
-      stationSheetIsOpen.current = true;
-      setSettledStationId(deferDetails ? null : station.id);
+      if (following.current) {
+        // Stop an in-progress follow animation at the map's current reported position.
+        camera.current?.setCamera({
+          centerCoordinate: mapPosition.current.center,
+          zoomLevel: mapPosition.current.zoom,
+          animationDuration: 0,
+        });
+      }
+      stopFollowing();
       setSelectedStation(station);
       // Opened in the same update, so the first station sheet mounts already open.
       setSheetOpen(true);
-      // Let the camera move start before updating the search sheet's recent list.
       setTimeout(() => addRecentStation(station), 0);
-
-      if (!station.geo || !mapCamera) return;
-
-      if (deferDetails) {
-        const token = ++stationCameraToken.current;
-        pendingStationCamera.current = {
-          id: station.id,
-          center: [station.geo.lng, station.geo.lat],
-          zoomLevel,
-          token,
-          // Mapbox may not report idle after an unchanged camera or a style reload.
-          timeout: setTimeout(() => finishStationCamera(token), stationDetailsFallbackMs),
-        };
-      }
-      // Keep the station slightly above center without moving the map as the sheet changes size.
-      mapCamera.setCamera({
-        centerCoordinate: [station.geo.lng, station.geo.lat],
-        zoomLevel,
-        padding: stationPadding(),
-        animationDuration: stationCameraAnimationMs,
-      });
     },
-    [finishStationCamera],
+    [stopFollowing],
   );
 
   const handleStationPress = useCallback(
@@ -307,96 +201,60 @@ export function MapScreen() {
     return () => cancelIdleCallback(idle);
   }, [stationsUrl]);
 
-  // Pick up permission and Location Services changes made in Settings.
+  // Updates move the camera only while following, apart from the first launch centering.
   useEffect(() => {
-    const refresh = () => {
-      readLocationStatus()
-        .then((status) =>
-          setLocationStatus((current) => (current === "locating" ? current : status)),
-        )
-        .catch(() => {});
-    };
-    refresh();
-    const subscription = AppState.addEventListener("change", (state) => {
-      if (state !== "active") return;
-      refresh();
-      // The user may have moved while the app was in the background.
-      Location.getForegroundPermissionsAsync()
-        .then((permission) => (permission.granted ? findUserLocation() : null))
-        .then((location) => {
-          if (location) setUserLocation(location);
-        })
-        .catch(() => {});
+    if (!userLocation || isMapLocked) return;
+    const centerOnLaunch = !hasCenteredOnLaunch.current && !hasMovedMap.current;
+    hasCenteredOnLaunch.current = true;
+    if (!following.current && !centerOnLaunch) return;
+    // Locate already moves to its fix. Repeating that move in this effect would cancel
+    // its zoom animation before it has finished.
+    if (
+      lastCameraLocation.current &&
+      userLocation.timestamp <= lastCameraLocation.current.timestamp
+    )
+      return;
+    lastCameraLocation.current = userLocation;
+    camera.current?.setCamera({
+      centerCoordinate: [userLocation.longitude, userLocation.latitude],
+      zoomLevel: centerOnLaunch ? userZoomLevel : undefined,
+      padding: noPadding,
+      animationMode: "easeTo",
+      animationDuration: centerOnLaunch || reduceMotion ? 0 : 700,
     });
-    return () => subscription.remove();
-  }, []);
+  }, [userLocation, isMapLocked, reduceMotion]);
 
-  // Like the web, look for the user on launch and ask for permission if it hasn't been decided.
-  // That waits for the welcome and what's new, so the permission prompt doesn't cover them.
   useEffect(() => {
-    if (isIntroOpen) return;
-    let cancelled = false;
-
-    (async () => {
-      if (!(await Location.hasServicesEnabledAsync())) return;
-      let permission = await Location.getForegroundPermissionsAsync();
-      if (!permission.granted && permission.canAskAgain) {
-        permission = await Location.requestForegroundPermissionsAsync();
-      }
-      if (!permission.granted || cancelled) return;
-
-      setLocationStatus("locating");
-      const location = await findUserLocation();
-      if (cancelled) return;
-      setUserLocation(location);
-      setLocationStatus("located");
-      if (hasMovedMap.current) return;
-      setIsCentered(true);
-      camera.current?.setCamera({
-        centerCoordinate: [location.longitude, location.latitude],
-        zoomLevel: userZoomLevel,
-        padding: noPadding,
-        animationDuration: 0,
-      });
-    })().catch(() => {
-      // Location failures should not block the default map load.
-      if (!cancelled) setLocationStatus("idle");
-    });
-
-    return () => {
-      cancelled = true;
-    };
-  }, [isIntroOpen]);
+    if (locationStatus === "off") stopFollowing();
+  }, [locationStatus, stopFollowing]);
 
   const locateUser = useCallback(async () => {
     haptics.tap();
-    setLocationStatus("locating");
-    const result = await requestUserLocation();
-    if (!result.location) {
-      setLocationStatus(result.status);
-      setMessage(result.message);
+    hasMovedMap.current = true;
+    const action = ++cameraAction.current;
+    const location = await locate();
+    // A station selection or pan while Locate was pending takes precedence.
+    if (action !== cameraAction.current) return;
+    if (!location) {
       haptics.error();
       return;
     }
-
-    const { location } = result;
-    setUserLocation(location);
-    hasMovedMap.current = true;
-    setLocationStatus("located");
-    setIsCentered(true);
-    setMessage(null);
+    following.current = true;
+    setIsFollowing(true);
+    lastCameraLocation.current = location;
     camera.current?.setCamera({
       centerCoordinate: [location.longitude, location.latitude],
       zoomLevel: locateZoomLevel,
       padding: noPadding,
-      animationDuration: 700,
+      animationMode: "easeTo",
+      animationDuration: reduceMotion ? 0 : 700,
     });
-  }, []);
+  }, [locate, reduceMotion]);
 
   const resetHeading = useCallback(() => {
     haptics.tap();
-    camera.current?.setCamera({ heading: 0, animationDuration: 300 });
-  }, []);
+    camera.current?.setCamera({ heading: 0, animationDuration: reduceMotion ? 0 : 300 });
+  }, [reduceMotion]);
 
   if (!accessToken) {
     return (
@@ -440,25 +298,11 @@ export function MapScreen() {
         onCameraChanged={(state) => {
           if (state.gestures.isGestureActive) {
             hasMovedMap.current = true;
-            setIsCentered(false);
+            stopFollowing();
           }
           onHeadingChange(state.properties.heading);
           const [longitude = 0, latitude = 0] = state.properties.center;
           mapPosition.current = { center: [longitude, latitude], zoom: state.properties.zoom };
-        }}
-        onMapIdle={(state) => {
-          const pending = pendingStationCamera.current;
-          if (!pending || state.gestures.isGestureActive) return;
-          const [longitude, latitude] = state.properties.center;
-          if (
-            typeof longitude === "number" &&
-            typeof latitude === "number" &&
-            Math.abs(longitude - pending.center[0]) <= stationCenterTolerance &&
-            Math.abs(latitude - pending.center[1]) <= stationCenterTolerance &&
-            Math.abs(state.properties.zoom - pending.zoomLevel) <= stationZoomTolerance
-          ) {
-            finishStationCamera(pending.token);
-          }
         }}
         // Missing tiles once the map is up, e.g. panning offline, aren't a failed map.
         onMapLoadingError={() => {
@@ -500,7 +344,7 @@ export function MapScreen() {
             <RailwayLines isStreets={mapTheme.isStreets} />
           </>
         ) : null}
-        {locationStatus === "located" ? <UserLocationMarker /> : null}
+        {userLocation ? <UserLocationMarker location={userLocation} /> : null}
       </Mapbox.MapView>
 
       <StatusBarBlur />
@@ -519,7 +363,7 @@ export function MapScreen() {
         <Compass heading={heading} onPress={resetHeading} />
         <MapControlGroup>
           <MapStyleButton onPress={() => setIsMapStyleOpen(true)} />
-          <LocateButton status={locationStatus} isCentered={isCentered} onPress={locateUser} />
+          <LocateButton status={locationStatus} isCentered={isFollowing} onPress={locateUser} />
         </MapControlGroup>
       </SheetControls>
 
@@ -547,7 +391,6 @@ export function MapScreen() {
         <StationSheet
           station={selectedStation}
           isOpen={sheetOpen}
-          detailsReady={settledStationId === selectedStation.id}
           stationsUrl={stationsUrl}
           userLocation={userLocation}
           onOpenChange={onStationSheetOpenChange}

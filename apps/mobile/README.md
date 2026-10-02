@@ -19,6 +19,8 @@ paid app. Buying it supports the project and keeps the website free for everyone
 - **Your stations, one tap away.** Save any number of stations and find the last 10 you opened
   in the search.
 - **Trending stations** of the week, ranked by unique visitors.
+- **Live position.** The location dot animates between measured positions. Locate starts camera
+  following; panning or opening a station stops it. Opening a station leaves the camera in place.
 - **Station details** with photos and visit stats, and a Share button that sends a link to the
   station's page on the website.
 - **Two maps, light and dark.** A simple map that keeps the railway in front, or Mapbox's street
@@ -180,6 +182,18 @@ Imports from `src` use the `@/` alias, and files are kebab-case, as in `apps/web
 
 ### Notes
 
+- Location is foreground-only. A cancellable, short-lived Expo watch obtains one fresh fix every
+  5 seconds while moving or uncertain, or every 30 seconds after a minute of reliable stillness.
+  Acquisition may take longer when GPS is unavailable; requests never overlap. Mapbox draws an
+  animated map layer from these fixes, without running its own location tracker. The dot smooths
+  measured movement over 700 ms and does not predict future positions. Actual battery usage needs
+  checking on a device.
+- Visible search results refresh their distances and ranking at most every 30 seconds after at
+  least 50 metres of movement. Opening search, a new query, or the first location fix refreshes
+  them immediately. GPS jitter does not continually shuffle the results.
+- Run the movement, acquisition, cancellation and search policy tests with
+  `pnpm --filter=mobile test:location`, or directly with
+  `node --experimental-strip-types --test apps/mobile/tests/location-tracking.test.mjs` from the root.
 - Stations ship with the app from `packages/data/src/stations.geojson`. At most once a day, the
   app downloads the latest `stations.geojson` from the API in the background and uses it from the
   next launch.

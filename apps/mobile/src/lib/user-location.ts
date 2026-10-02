@@ -62,12 +62,12 @@ export function loadLastUserLocation(): UserLocation | null {
   }
 }
 
-export function saveLastUserLocation(location: UserLocation) {
+export function saveLastUserLocation(location: UserLocation, measuredAt = Date.now()) {
   try {
     const storedLocation: StoredUserLocation = {
       latitude: roundCoordinate(location.latitude),
       longitude: roundCoordinate(location.longitude),
-      savedAt: Date.now(),
+      savedAt: measuredAt,
       version: 1,
     };
 

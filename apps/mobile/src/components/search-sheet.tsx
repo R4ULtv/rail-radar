@@ -115,6 +115,7 @@ const trendingTitle = "Trending (last 7 days)";
 const SearchSheetContent = memo(function SearchSheetContent({
   stationsUrl,
   userLocation,
+  isVisible,
   trendingStations,
   isTrendingLoading,
   onSelectStation,
@@ -122,6 +123,7 @@ const SearchSheetContent = memo(function SearchSheetContent({
 }: {
   stationsUrl: string | null;
   userLocation: UserLocation | null;
+  isVisible: boolean;
   trendingStations: TrendingStation[];
   /** The first trending list is still loading. */
   isTrendingLoading: boolean;
@@ -152,6 +154,7 @@ const SearchSheetContent = memo(function SearchSheetContent({
   const search = useStationSearch(query, {
     stationsUrl,
     userLocation,
+    visible: isVisible,
     preload: isFocused,
     savedStations,
     recentStations,
@@ -163,13 +166,12 @@ const SearchSheetContent = memo(function SearchSheetContent({
     const savedIds = new Set(savedStations.map((station) => station.id));
     return recentStations.filter((station) => !savedIds.has(station.id));
   }, [recentStations, savedStations]);
-  const renderDistance = useMemo(
-    () =>
-      userLocation
-        ? (station: Station) => <StationDistance station={station} from={userLocation} />
-        : undefined,
-    [userLocation],
-  );
+  const renderDistance = useMemo(() => {
+    const from = search.location;
+    return from
+      ? (station: Station) => <StationDistance station={station} from={from} />
+      : undefined;
+  }, [search.location]);
   const noResults = search.hasResult && !search.error && search.stations.length === 0;
   const showDefaultLists = !search.isActive || noResults;
   const hasDefaultLists =
@@ -395,6 +397,7 @@ export function SearchSheet({
       <SearchSheetContent
         stationsUrl={stationsUrl}
         userLocation={userLocation}
+        isVisible={isExpanded && !isHidden}
         trendingStations={trending.stations}
         isTrendingLoading={trending.isLoading}
         onSelectStation={onSelectStation}

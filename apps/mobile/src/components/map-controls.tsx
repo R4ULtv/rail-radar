@@ -335,7 +335,7 @@ const locateLabels: Record<LocationStatus, string> = {
 
 /**
  * Apple Maps' location arrow: an outline once the user is found, filled while the map is
- * centered on them, and crossed out when location is unavailable. It goes in a
+ * following them, and crossed out when location is unavailable. It goes in a
  * `MapControlGroup`, under the map style button.
  */
 export function LocateButton({
@@ -344,7 +344,7 @@ export function LocateButton({
   onPress,
 }: {
   status: LocationStatus;
-  /** Whether the map is on the user's location, until they move it. */
+  /** Whether Locate enabled following, until a map gesture or station selection stops it. */
   isCentered: boolean;
   onPress: () => void;
 }) {
