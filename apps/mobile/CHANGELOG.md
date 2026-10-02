@@ -6,6 +6,8 @@ the commit they were built from.
 
 ## [Unreleased]
 
+## [0.3.1] (7) – 2026-10-02
+
 ### Fixed
 
 - On Android, the search sheet sometimes scrolled only a little until Show all was tapped, leaving
