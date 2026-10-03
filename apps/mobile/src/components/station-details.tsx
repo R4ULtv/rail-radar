@@ -4,7 +4,6 @@ import { Image } from "expo-image";
 import { useThemeColor } from "heroui-native/hooks";
 import { ListGroup } from "heroui-native/list-group";
 import { Separator } from "heroui-native/separator";
-import { Skeleton } from "heroui-native/skeleton";
 import { Surface } from "heroui-native/surface";
 import BarChart from "lucide-react-native/icons/chart-no-axes-column";
 import Bug from "lucide-react-native/icons/bug";
@@ -19,6 +18,7 @@ import { ScrollView } from "react-native-gesture-handler";
 import { withUniwind } from "uniwind";
 
 import { CountryFlag } from "@/components/country-flag";
+import { Skeleton } from "@/components/skeleton";
 import { SectionTitle, StationSection, StationSectionSkeleton } from "@/components/station-list";
 import {
   useNearbyStations,

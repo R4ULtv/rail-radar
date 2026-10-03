@@ -1,6 +1,5 @@
 import type { Train } from "@repo/data/types";
 import { useThemeColor } from "heroui-native/hooks";
-import { Skeleton } from "heroui-native/skeleton";
 import ArrowDown from "lucide-react-native/icons/arrow-down";
 import ArrowRight from "lucide-react-native/icons/arrow-right";
 import Ban from "lucide-react-native/icons/ban";
@@ -12,6 +11,7 @@ import type { LayoutChangeEvent } from "react-native";
 import { StyleSheet, Text, View } from "react-native";
 
 import { BrandLogo } from "@/components/brand-logo";
+import { Skeleton } from "@/components/skeleton";
 import type { BoardType } from "@/hooks/use-station-board";
 import { haptics } from "@/lib/haptics";
 

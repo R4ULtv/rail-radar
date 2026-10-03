@@ -3,12 +3,12 @@ import { Button } from "heroui-native/button";
 import { useThemeColor } from "heroui-native/hooks";
 import { ListGroup } from "heroui-native/list-group";
 import { Separator } from "heroui-native/separator";
-import { Skeleton } from "heroui-native/skeleton";
 import ChevronDown from "lucide-react-native/icons/chevron-down";
 import { Fragment, memo, useState, type ComponentType, type ReactNode } from "react";
 import { Image, StyleSheet, Text, View } from "react-native";
 
 import { CountryFlag } from "@/components/country-flag";
+import { Skeleton } from "@/components/skeleton";
 import { haptics } from "@/lib/haptics";
 import { stationIcons } from "@/lib/station-icons";
 
