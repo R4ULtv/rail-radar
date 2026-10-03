@@ -190,7 +190,11 @@ Imports from `src` use the `@/` alias, and files are kebab-case, as in `apps/web
 ### Notes
 
 - Location is foreground-only. A cancellable, short-lived Expo watch obtains one fresh fix every
-  5 seconds while moving or uncertain, or every 30 seconds after a minute of reliable stillness.
+  5 seconds while moving or uncertain, then every 30 seconds after two fresh, reliable fixes stay
+  within the same area (20 metres or the sum of their accuracy radii, whichever is larger).
+  Speed estimates do not override matching positions. Movement is measured from a fixed reference
+  position so slow walking eventually resumes five-second checks. Fixes with unknown accuracy or
+  an accuracy radius over 100 metres cannot confirm stillness. Locate still refreshes immediately.
   Acquisition may take longer when GPS is unavailable; requests never overlap. Mapbox draws an
   animated map layer from these fixes, without running its own location tracker. The dot smooths
   measured movement over 700 ms and does not predict future positions. Actual battery usage needs
@@ -198,7 +202,7 @@ Imports from `src` use the `@/` alias, and files are kebab-case, as in `apps/web
 - Visible search results refresh their distances and ranking at most every 30 seconds after at
   least 50 metres of movement. Opening search, a new query, or the first location fix refreshes
   them immediately. GPS jitter does not continually shuffle the results.
-- Run the movement, acquisition, cancellation and search policy tests with
+- Run the movement, scheduling, acquisition and cancellation tests with
   `pnpm --filter=mobile test:location`, or directly with
   `node --experimental-strip-types --test apps/mobile/tests/location-tracking.test.mjs` from the root.
 - Stations ship with the app from `packages/data/src/stations.geojson`. At most once a day, the

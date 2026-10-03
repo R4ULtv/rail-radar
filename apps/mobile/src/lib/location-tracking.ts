@@ -12,10 +12,9 @@ export const movingLocationIntervalMs = 5_000;
 export const stationaryLocationIntervalMs = 30_000;
 export const searchLocationIntervalMs = 30_000;
 export const locationFixMaxAgeMs = 30_000;
-const stationaryDurationMs = 60_000;
+const movementEvidenceMaxGapMs = 60_000;
 const movementAccuracyMeters = 100;
-const movingSpeedMetersPerSecond = 1.2;
-const stationarySpeedMetersPerSecond = 0.5;
+const minimumMovementMeters = 20;
 
 export interface SearchLocationSnapshot {
   location: UserLocation | null;
@@ -149,16 +148,16 @@ export interface MovementState {
   movement: Movement;
   anchor: LocationFix | null;
   lastTimestamp: number | null;
-  stillSince: number | null;
 }
 
 export function initialMovementState(): MovementState {
-  return { movement: "unknown", anchor: null, lastTimestamp: null, stillSince: null };
+  return { movement: "unknown", anchor: null, lastTimestamp: null };
 }
 
 /**
  * Compare with a fixed anchor, so slow walking eventually exceeds the uncertainty radius.
- * One reliable moving fix wakes tracking up; stillness needs a full minute of evidence.
+ * Two nearby reliable fixes confirm stillness; displacement outside that range resumes fast checks.
+ * Speed from a short-lived watch can be noisy, so it must not override matching positions.
  */
 export function updateMovement(
   previous: MovementState,
@@ -172,29 +171,23 @@ export function updateMovement(
   }
 
   const state =
-    previous.lastTimestamp !== null && fix.timestamp - previous.lastTimestamp > stationaryDurationMs
+    previous.lastTimestamp !== null &&
+    fix.timestamp - previous.lastTimestamp > movementEvidenceMaxGapMs
       ? initialMovementState()
       : previous;
-  const uncertainty = Math.max(20, (state.anchor?.accuracy ?? 0) + fix.accuracy);
-  const moved = !!state.anchor && distanceFromAnchorMeters > uncertainty;
-  const speed = fix.speed;
-  if ((speed !== null && speed >= movingSpeedMetersPerSecond) || moved) {
-    return { movement: "moving", anchor: fix, lastTimestamp: fix.timestamp, stillSince: null };
+  if (!state.anchor) {
+    return { movement: "unknown", anchor: fix, lastTimestamp: fix.timestamp };
   }
 
-  // Intermediate speeds are inconclusive, rather than evidence for being stationary.
-  const stillSince =
-    speed !== null && speed > stationarySpeedMetersPerSecond
-      ? null
-      : (state.stillSince ?? fix.timestamp);
+  const uncertainty = Math.max(minimumMovementMeters, (state.anchor.accuracy ?? 0) + fix.accuracy);
+  if (distanceFromAnchorMeters > uncertainty) {
+    return { movement: "moving", anchor: fix, lastTimestamp: fix.timestamp };
+  }
+
   return {
-    movement:
-      stillSince !== null && fix.timestamp - stillSince >= stationaryDurationMs
-        ? "stationary"
-        : state.movement,
-    anchor: state.anchor ?? fix,
+    movement: "stationary",
+    anchor: state.anchor,
     lastTimestamp: fix.timestamp,
-    stillSince,
   };
 }
 
