@@ -15,6 +15,7 @@ import {
   LocateButton,
   MapControlGroup,
   MapStyleButton,
+  NearbyButton,
   SheetControls,
   TopControls,
   useIsSheetFullyOpen,
@@ -39,7 +40,9 @@ import { useUserLocation } from "@/hooks/use-user-location";
 import { haptics } from "@/lib/haptics";
 import { mapFeedbackUrl, type MapPosition } from "@/lib/links";
 import type { LocationFix } from "@/lib/location-tracking";
-import { loadStationSearch } from "@/lib/stations";
+import { hasUsedNearbyButton, markNearbyButtonUsed } from "@/lib/nearby-button";
+import { findNearbyDepartures } from "@/lib/nearby-departures";
+import { loadStationSearch, loadStations, type NearbyStation } from "@/lib/stations";
 import { loadLastUserLocation } from "@/lib/user-location";
 
 const accessToken = process.env.EXPO_PUBLIC_MAPBOX_TOKEN ?? "";
@@ -53,6 +56,8 @@ const stationZoomLevels: Record<Station["type"], number> = { rail: 13, metro: 14
 const stationSheetClearance = 48;
 // Mapbox keeps the last camera padding, so moves that should be centered have to clear it.
 const noPadding = { paddingTop: 0, paddingBottom: 0, paddingLeft: 0, paddingRight: 0 };
+// The nearby button's errors are about one tap, so they go away on their own.
+const nearbyErrorDuration = 4000;
 
 if (accessToken) {
   Mapbox.setAccessToken(accessToken);
@@ -75,6 +80,12 @@ export function MapScreen() {
   const stationsUrl = useStationsUrl();
   const [selectedStation, setSelectedStation] = useState<Station | null>(null);
   const [sheetOpen, setSheetOpen] = useState(false);
+  // The closest train stations, while the station sheet was opened from the nearby button.
+  const [nearbyStations, setNearbyStations] = useState<NearbyStation[]>([]);
+  const [isFindingNearby, setIsFindingNearby] = useState(false);
+  const findingNearby = useRef(false);
+  const [nearbyError, setNearbyError] = useState<string | null>(null);
+  const [hasUsedNearby, setHasUsedNearby] = useState(hasUsedNearbyButton);
   const intro = useIntro();
   const isIntroOpen = intro.page !== null;
   const {
@@ -145,6 +156,7 @@ export function MapScreen() {
   const onStationSheetOpenChange = useCallback(
     (isOpen: boolean) => {
       if (isOpen) stopFollowing();
+      else setNearbyStations([]);
       setSheetOpen(isOpen);
     },
     [stopFollowing],
@@ -155,6 +167,8 @@ export function MapScreen() {
       haptics.tap();
       hasMovedMap.current = true;
       stopFollowing();
+      setNearbyStations([]);
+      setNearbyError(null);
       setSelectedStation(station);
       // Opened in the same update, so the first station sheet mounts already open.
       setSheetOpen(true);
@@ -176,6 +190,63 @@ export function MapScreen() {
       });
     },
     [stopFollowing, sheetTopInset, reduceMotion],
+  );
+
+  const openNearbyDepartures = useCallback(async () => {
+    if (!stationsUrl || findingNearby.current) return;
+    findingNearby.current = true;
+    setIsFindingNearby(true);
+    setNearbyError(null);
+    haptics.tap();
+    hasMovedMap.current = true;
+    stopFollowing();
+    const action = cameraAction.current;
+    try {
+      const [location, stations] = await Promise.all([locate(), loadStations(stationsUrl)]);
+      // Panning, locating, or choosing a station while GPS loads takes precedence.
+      if (action !== cameraAction.current) return;
+      // Locating already explains why there's no location, e.g. that it's turned off.
+      if (!location) {
+        haptics.error();
+        return;
+      }
+      const nearest = findNearbyDepartures(stations, location);
+      if (!nearest[0]) {
+        haptics.error();
+        setNearbyError("No train stations found nearby. Try searching for one instead.");
+        return;
+      }
+      selectStation(nearest[0]);
+      setNearbyStations(nearest);
+      if (!hasUsedNearby) {
+        // Shown without its label from now on, once the sheet over it closes.
+        markNearbyButtonUsed();
+        setHasUsedNearby(true);
+      }
+    } catch {
+      if (action === cameraAction.current) {
+        haptics.error();
+        setNearbyError("Nearby stations couldn't be loaded. Check your connection and try again.");
+      }
+    } finally {
+      findingNearby.current = false;
+      setIsFindingNearby(false);
+    }
+  }, [stationsUrl, locate, stopFollowing, selectStation, hasUsedNearby]);
+
+  useEffect(() => {
+    if (!nearbyError) return;
+    const timeout = setTimeout(() => setNearbyError(null), nearbyErrorDuration);
+    return () => clearTimeout(timeout);
+  }, [nearbyError]);
+
+  // Switching between the nearby stations keeps them, unlike choosing any other station.
+  const selectNearbyStation = useCallback(
+    (station: Station) => {
+      selectStation(station);
+      setNearbyStations(nearbyStations);
+    },
+    [selectStation, nearbyStations],
   );
 
   const handleStationPress = useCallback(
@@ -287,6 +358,7 @@ export function MapScreen() {
   }
 
   const alertMessage =
+    nearbyError ??
     message ??
     (mapFailed
       ? isOnline
@@ -387,6 +459,20 @@ export function MapScreen() {
         </MapControlGroup>
       </SheetControls>
 
+      {stationsUrl ? (
+        <SheetControls
+          side="left"
+          sheets={[searchSheetPosition, stationSheetPosition]}
+          overlays={[mapStyleSheetPosition]}
+        >
+          <NearbyButton
+            isLoading={isFindingNearby}
+            showLabel={!hasUsedNearby}
+            onPress={openNearbyDepartures}
+          />
+        </SheetControls>
+      ) : null}
+
       {alertMessage ? (
         <Alert status="danger" style={[styles.message, { top: insets.top + 12 }]}>
           <Alert.Indicator>
@@ -410,6 +496,8 @@ export function MapScreen() {
       {selectedStation ? (
         <StationSheet
           station={selectedStation}
+          nearbyStations={nearbyStations}
+          onSelectNearbyStation={selectNearbyStation}
           isOpen={sheetOpen}
           stationsUrl={stationsUrl}
           userLocation={userLocation}

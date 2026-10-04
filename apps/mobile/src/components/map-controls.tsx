@@ -5,6 +5,7 @@ import NavigationOff from "lucide-react-native/icons/navigation-off";
 import Settings from "lucide-react-native/icons/settings";
 import { Children, Fragment, useCallback, useRef, useState, type ReactNode } from "react";
 import {
+  ActivityIndicator,
   Pressable,
   StyleSheet,
   Text,
@@ -24,7 +25,7 @@ import Animated, {
   type SharedValue,
 } from "react-native-reanimated";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import Svg, { Line, Path } from "react-native-svg";
+import Svg, { Circle, G, Line, Path } from "react-native-svg";
 import { scheduleOnRN } from "react-native-worklets";
 
 import { haptics } from "@/lib/haptics";
@@ -42,6 +43,8 @@ const iconSize = 18;
 // Lucide's arrow is weighted to the top right: its shape centers on (13.67, 10.33) of 24.
 // Shifting it back by that much centers it in the button.
 const arrowOffset = ((13.67 - 12) / 24) * iconSize;
+// A little larger than the other icons, so the location dot on it stays legible.
+const nearbyIconSize = 22;
 
 type Direction = "N" | "E" | "S" | "W";
 const directions: Direction[] = ["N", "E", "S", "W"];
@@ -213,11 +216,14 @@ function overlayHiddenProgress(sheet: SheetPosition) {
 export function SheetControls({
   sheets,
   overlays = [],
+  side = "right",
   children,
 }: {
   sheets: SheetPosition[];
   /** Sheets with a single size, which hide the controls while they're open. */
   overlays?: SheetPosition[];
+  /** The screen edge the controls sit against. */
+  side?: "left" | "right";
   children: ReactNode;
 }) {
   const { height } = useWindowDimensions();
@@ -247,7 +253,7 @@ export function SheetControls({
       pointerEvents={isVisible ? "box-none" : "none"}
       accessibilityElementsHidden={!isVisible}
       importantForAccessibility={isVisible ? "auto" : "no-hide-descendants"}
-      style={[styles.sheetControls, style]}
+      style={[styles.sheetControls, side === "left" ? styles.left : styles.right, style]}
       onLayout={(event) => {
         controlsHeight.set(event.nativeEvent.layout.height);
       }}
@@ -321,6 +327,92 @@ export function MapStyleButton({ onPress }: { onPress: () => void }) {
     >
       <MapIcon size={iconSize} color={foreground} />
     </MapControlButton>
+  );
+}
+
+// Lucide's train-front, drawn here so the badge below can cut into it.
+const trainPaths = [
+  "M8 3.1V7a4 4 0 0 0 8 0V3.1",
+  "m9 15-1-1",
+  "m15 15 1-1",
+  "M9 19c-2.8 0-5-2.2-5-5v-4a8 8 0 0 1 16 0v4c0 2.8-2.2 5-5 5Z",
+  "m8 19-2 3",
+  "m16 19 2 3",
+];
+
+/**
+ * A train with the user's location dot on its corner, the same dot as on the map: trains near
+ * you. The dot sits in a gap cut out of the train with the surface color.
+ */
+export function NearbyIcon({ size }: { size: number }) {
+  const [foreground, accent, surface] = useThemeColor(["foreground", "accent", "surface"]);
+
+  return (
+    <Svg width={size} height={size} viewBox="0 0 24 24">
+      {/* Smaller and up to the left, leaving the corner to the dot. */}
+      <G transform="translate(0.5 0.5) scale(0.86)">
+        {trainPaths.map((d) => (
+          <Path
+            key={d}
+            d={d}
+            fill="none"
+            stroke={foreground}
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            // Kept at the other icons' weight once scaled.
+            strokeWidth={2 / 0.86}
+          />
+        ))}
+      </G>
+      <Circle cx={19.5} cy={19.5} r={4.75} fill={surface} />
+      <Circle cx={19.5} cy={19.5} r={3.5} fill="#fff" />
+      <Circle cx={19.5} cy={19.5} r={2.5} fill={accent} />
+    </Svg>
+  );
+}
+
+/**
+ * Opens the live board of the closest train station. Labelled until it has been used once, since
+ * the icon alone is new; after that it's a round control like the others.
+ */
+export function NearbyButton({
+  isLoading,
+  showLabel,
+  onPress,
+}: {
+  isLoading: boolean;
+  showLabel: boolean;
+  onPress: () => void;
+}) {
+  const [foreground, accent] = useThemeColor(["foreground", "accent"]);
+
+  return (
+    <MapControlSurface>
+      <Pressable
+        accessibilityRole="button"
+        accessibilityLabel="Departures near me"
+        accessibilityHint="Opens the live board of the closest train station"
+        accessibilityState={{ busy: isLoading }}
+        hitSlop={4}
+        style={({ pressed }) => [
+          showLabel ? styles.nearbyLabelled : styles.button,
+          { opacity: pressed ? 0.5 : 1 },
+        ]}
+        onPress={() => {
+          if (!isLoading) onPress();
+        }}
+      >
+        {/* As wide either way, so the button keeps its size while it loads. */}
+        <View style={styles.nearbyIcon}>
+          {isLoading ? (
+            <ActivityIndicator size="small" color={accent} />
+          ) : (
+            <NearbyIcon size={nearbyIconSize} />
+          )}
+        </View>
+        {showLabel ? <Text style={[styles.nearbyLabel, { color: foreground }]}>Nearby</Text> : null}
+      </Pressable>
+    </MapControlSurface>
   );
 }
 
@@ -482,6 +574,23 @@ const styles = StyleSheet.create({
   },
   groupSeparator: { height: StyleSheet.hairlineWidth, marginHorizontal: 8 },
   direction: { fontSize: 13, fontWeight: "600" },
-  sheetControls: { position: "absolute", top: 0, right: 16, gap: controlGap },
+  sheetControls: { position: "absolute", top: 0, gap: controlGap },
+  left: { left: 16, alignItems: "flex-start" },
+  right: { right: 16 },
+  nearbyLabelled: {
+    height: controlSize,
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 8,
+    paddingLeft: 10,
+    paddingRight: 16,
+  },
+  nearbyIcon: {
+    width: nearbyIconSize,
+    height: nearbyIconSize,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  nearbyLabel: { fontSize: 15, fontWeight: "600" },
   topControls: { position: "absolute", right: 16, gap: controlGap },
 });

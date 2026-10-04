@@ -25,6 +25,7 @@ import {
   useReducer,
   useRef,
   useState,
+  type ComponentRef,
   type ReactNode,
 } from "react";
 import {
@@ -38,10 +39,14 @@ import {
   useWindowDimensions,
   type LayoutChangeEvent,
 } from "react-native";
+// Gesture handler's, so it settles horizontal drags with the sheet's own pan gesture on Android.
+import { ScrollView } from "react-native-gesture-handler";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import Svg, { Defs, LinearGradient as SvgLinearGradient, Rect, Stop } from "react-native-svg";
 
 import { CountryFlag } from "@/components/country-flag";
 import {
+  NearbyIcon,
   useSheetBottomInset,
   useSheetTopInset,
   type SheetPosition,
@@ -62,6 +67,7 @@ import { useSavedStations } from "@/hooks/use-stored-stations";
 import { distanceKm, formatDistance } from "@/lib/distance";
 import { haptics } from "@/lib/haptics";
 import { stationUrl } from "@/lib/links";
+import type { NearbyStation } from "@/lib/stations";
 import { getStationWarning } from "@/lib/station-warnings";
 import type { UserLocation } from "@/lib/user-location";
 
@@ -470,6 +476,136 @@ const LiveBoard = memo(function LiveBoard({
   );
 });
 
+// Wide enough to cover most of a chip's padding, so a cut-off chip clearly goes on.
+const edgeFadeWidth = 28;
+
+/** Fades the nearby chips out at an edge they continue past. */
+function EdgeFade({ side, isVisible }: { side: "left" | "right"; isVisible: boolean }) {
+  const color = useThemeColor("surface");
+  return (
+    <View
+      pointerEvents="none"
+      style={[
+        styles.edgeFade,
+        side === "left" ? styles.edgeFadeLeft : styles.edgeFadeRight,
+        { opacity: isVisible ? 1 : 0 },
+      ]}
+    >
+      <Svg width="100%" height="100%">
+        <Defs>
+          <SvgLinearGradient
+            id={`fade-${side}`}
+            x1={side === "left" ? 1 : 0}
+            y1="0"
+            x2={side === "left" ? 0 : 1}
+            y2="0"
+          >
+            <Stop offset="0" stopColor={color} stopOpacity={0} />
+            <Stop offset="1" stopColor={color} />
+          </SvgLinearGradient>
+        </Defs>
+        <Rect width="100%" height="100%" fill={`url(#fade-${side})`} />
+      </Svg>
+    </View>
+  );
+}
+
+/**
+ * The closest train stations, from the nearby button, to switch between their boards. They stay in
+ * the same order while switching, and location updates don't reorder them. The button's icon leads
+ * the row, and its edges fade where there are more stations to scroll to.
+ */
+function NearbySwitcher({
+  stations,
+  selectedId,
+  onSelect,
+}: {
+  stations: NearbyStation[];
+  selectedId: string;
+  onSelect: (station: Station) => void;
+}) {
+  const scrollRef = useRef<ComponentRef<typeof ScrollView>>(null);
+  const [viewportWidth, setViewportWidth] = useState(0);
+  const [contentWidth, setContentWidth] = useState(0);
+  const [scrollX, setScrollX] = useState(0);
+  const canScrollLeft = scrollX > 1;
+  const canScrollRight = scrollX + viewportWidth < contentWidth - 1;
+
+  return (
+    <View className="mt-3 flex-row items-center">
+      <View className="me-2.5" importantForAccessibility="no" accessibilityElementsHidden>
+        <NearbyIcon size={22} />
+      </View>
+      {/* Out to the sheet's edge, so the chips scroll under it instead of stopping short. */}
+      <View className="-me-4 flex-1">
+        <ScrollView
+          ref={scrollRef}
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          accessibilityRole="tablist"
+          accessibilityLabel="Nearest train stations"
+          contentContainerStyle={styles.nearbyChips}
+          scrollEventThrottle={16}
+          onLayout={(event) => setViewportWidth(event.nativeEvent.layout.width)}
+          onContentSizeChange={(width) => setContentWidth(width)}
+          onScroll={(event) => {
+            const x = event.nativeEvent.contentOffset.x;
+            // Only the fades depend on it, so it's only kept when one of them changes.
+            setScrollX((current) =>
+              current > 1 === x > 1 &&
+              current + viewportWidth < contentWidth - 1 === x + viewportWidth < contentWidth - 1
+                ? current
+                : x,
+            );
+          }}
+        >
+          {stations.map((station) => {
+            const isSelected = station.id === selectedId;
+            return (
+              <PressableFeedback
+                key={station.id}
+                accessibilityRole="tab"
+                accessibilityState={{ selected: isSelected }}
+                accessibilityLabel={`${station.name}, ${formatDistance(station.distance)} away`}
+                className={`h-9 flex-row items-center gap-1.5 rounded-full px-3.5 ${isSelected ? "bg-accent-soft" : "bg-default"}`}
+                // The sheet opens again for each station, so a station further along is scrolled
+                // to, with some of the one before it still showing.
+                onLayout={
+                  isSelected
+                    ? (event: LayoutChangeEvent) => {
+                        const x = Math.max(0, event.nativeEvent.layout.x - edgeFadeWidth * 2);
+                        scrollRef.current?.scrollTo({ x, animated: false });
+                        setScrollX(x);
+                      }
+                    : undefined
+                }
+                onPress={() => {
+                  if (!isSelected) onSelect(station);
+                }}
+              >
+                <Text
+                  className={`text-sm font-medium ${isSelected ? "text-accent-soft-foreground" : "text-default-foreground"}`}
+                  numberOfLines={1}
+                >
+                  {station.name}
+                </Text>
+                <Text
+                  className={`text-sm ${isSelected ? "text-accent-soft-foreground opacity-70" : "text-muted"}`}
+                  style={styles.tabularNums}
+                >
+                  {formatDistance(station.distance)}
+                </Text>
+              </PressableFeedback>
+            );
+          })}
+        </ScrollView>
+        <EdgeFade side="left" isVisible={canScrollLeft} />
+        <EdgeFade side="right" isVisible={canScrollRight} />
+      </View>
+    </View>
+  );
+}
+
 interface StationSheetContentProps {
   station: Station;
   isOpen: boolean;
@@ -479,6 +615,9 @@ interface StationSheetContentProps {
   showDetails: boolean;
   onClose: () => void;
   onSelectStation: (station: Station) => void;
+  /** The closest train stations, when the sheet was opened from the nearby button. */
+  nearbyStations: NearbyStation[];
+  onSelectNearbyStation: (station: Station) => void;
   onPeekHeightChange: (height: number) => void;
   onContentHeightChange: (height: number) => void;
 }
@@ -491,6 +630,8 @@ function StationSheetContent({
   showDetails,
   onClose,
   onSelectStation,
+  nearbyStations,
+  onSelectNearbyStation,
   onPeekHeightChange,
   onContentHeightChange,
 }: StationSheetContentProps) {
@@ -557,6 +698,13 @@ function StationSheetContent({
               userLocation={userLocation}
             />
           </SheetHeader>
+          {nearbyStations.length > 1 ? (
+            <NearbySwitcher
+              stations={nearbyStations}
+              selectedId={station.id}
+              onSelect={onSelectNearbyStation}
+            />
+          ) : null}
           <QuickActions station={station} />
           {isRail ? (
             <View className="pt-3">
@@ -634,6 +782,8 @@ interface StationSheetProps {
   userLocation: UserLocation | null;
   onOpenChange: (isOpen: boolean) => void;
   onSelectStation: (station: Station) => void;
+  nearbyStations: NearbyStation[];
+  onSelectNearbyStation: (station: Station) => void;
   /** Where the sheet is, for the map controls that sit above it. */
   position: SheetPosition;
 }
@@ -645,6 +795,8 @@ export function StationSheet({
   userLocation,
   onOpenChange,
   onSelectStation,
+  nearbyStations,
+  onSelectNearbyStation,
   position,
 }: StationSheetProps) {
   const topInset = useSheetTopInset();
@@ -703,7 +855,8 @@ export function StationSheet({
       }}
     >
       <ErrorBoundary
-        key={station.id}
+        // Entering the nearby flow also resets a previously open arrivals tab to departures.
+        key={`${station.id}:${nearbyStations.length > 0 ? "nearby" : "station"}`}
         fallback={(reset) => (
           <StationError station={station} onRetry={reset} onClose={() => onOpenChange(false)} />
         )}
@@ -716,6 +869,8 @@ export function StationSheet({
           showDetails={index >= 0}
           onClose={() => onOpenChange(false)}
           onSelectStation={onSelectStation}
+          nearbyStations={nearbyStations}
+          onSelectNearbyStation={onSelectNearbyStation}
           onPeekHeightChange={setPeekHeight}
           onContentHeightChange={setContentHeight}
         />
@@ -725,6 +880,10 @@ export function StationSheet({
 }
 
 const styles = StyleSheet.create({
+  nearbyChips: { gap: 8, paddingRight: 16 },
+  edgeFade: { position: "absolute", top: 0, bottom: 0, width: edgeFadeWidth },
+  edgeFadeLeft: { left: 0 },
+  edgeFadeRight: { right: 0 },
   fill: { flex: 1 },
   noticeIcon: { marginTop: 2 },
   chevronUp: { transform: [{ rotate: "180deg" }] },
