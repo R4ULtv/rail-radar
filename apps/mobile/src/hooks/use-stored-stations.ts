@@ -22,7 +22,7 @@ function toStoredStation({ id, name, type, importance, geo }: Station): Station 
   return { id, name, type, importance, geo };
 }
 
-function createStationStore(fileName: string, writeMode: "sync" | "async" = "sync") {
+function createStationStore(fileName: string) {
   const file = new File(Paths.document, fileName);
   const listeners = new Set<() => void>();
   let stations: Station[] | null = null;
@@ -44,20 +44,11 @@ function createStationStore(fileName: string, writeMode: "sync" | "async" = "syn
   function write(next: Station[]) {
     stations = next;
     listeners.forEach((listener) => listener());
-    if (writeMode === "async") {
-      // Keep the search list current, but serialize disk writes off the tap path. The queue
-      // preserves selection order and prevents a pending add from undoing a later clear.
-      pendingWrite = pendingWrite
-        .then(() => writeAsStringAsync(file.uri, JSON.stringify(next)))
-        .catch(() => {});
-      return;
-    }
-    try {
-      if (!file.exists) file.create();
-      file.write(JSON.stringify(next));
-    } catch {
-      // Keep the in-memory list; it will be retried on the next change.
-    }
+    // Update the UI immediately and serialize disk writes off the tap path. A pending save
+    // cannot undo a later remove or clear; failures leave the queue ready for the next snapshot.
+    pendingWrite = pendingWrite
+      .then(() => writeAsStringAsync(file.uri, JSON.stringify(next)))
+      .catch(() => {});
   }
 
   function subscribe(listener: () => void) {
@@ -69,7 +60,7 @@ function createStationStore(fileName: string, writeMode: "sync" | "async" = "syn
 }
 
 const savedStore = createStationStore("saved-stations.json");
-const recentStore = createStationStore("recent-stations.json", "async");
+const recentStore = createStationStore("recent-stations.json");
 
 export function useSavedStations() {
   const savedStations = useSyncExternalStore(savedStore.subscribe, savedStore.read);

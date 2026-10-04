@@ -1,18 +1,12 @@
-import type { Train } from "@repo/data/types";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 import { useAppIsActive } from "@/hooks/use-app-is-active";
 import { useIsOnline } from "@/hooks/use-is-online";
 import { fetchApi } from "@/lib/api";
 import { boardRefreshDelay } from "@/lib/board-refresh";
+import { stationBoardCache, type BoardResponse, type BoardType } from "@/lib/station-board-cache";
 
-export type BoardType = "departures" | "arrivals";
-
-interface BoardResponse {
-  timestamp: string;
-  info: string | null;
-  trains: Train[];
-}
+export type { BoardType } from "@/lib/station-board-cache";
 
 interface BoardState {
   key: string;
@@ -21,8 +15,6 @@ interface BoardState {
   error: { message: string | null } | null;
   isLoading: boolean;
   isRefreshing: boolean;
-  /** The last board of each tab, so switching back to one shows it straight away, even offline. */
-  saved: Record<string, BoardResponse>;
 }
 
 const refreshIntervalMs = 30_000;
@@ -32,9 +24,9 @@ const fallbackMessage = "Live trains could not be loaded. Please try again in a 
 /** The API answered, but with an error or something that isn't a board. */
 class ApiError extends Error {}
 
-function initialState(key: string, saved: BoardState["saved"] = {}): BoardState {
-  const data = saved[key] ?? null;
-  return { key, data, error: null, isLoading: data === null, isRefreshing: false, saved };
+function initialState(key: string): BoardState {
+  const data = stationBoardCache.peek(key)?.data ?? null;
+  return { key, data, error: null, isLoading: data === null, isRefreshing: false };
 }
 
 export function useStationBoard(stationId: string, type: BoardType, enabled: boolean) {
@@ -43,8 +35,22 @@ export function useStationBoard(stationId: string, type: BoardType, enabled: boo
   const isOnline = useIsOnline();
   const [retryCount, setRetryCount] = useState(0);
   const [state, setState] = useState<BoardState>(() => initialState(key));
+  const lastRetryCount = useRef(retryCount);
+  const wasOnline = useRef(isOnline);
+  const wasActive = useRef(appIsActive);
 
   useEffect(() => {
+    // Resume also refetches: monotonic clocks can pause during device sleep.
+    const resumed = appIsActive && !wasActive.current;
+    const forceRefresh =
+      retryCount !== lastRetryCount.current ||
+      isOnline !== wasOnline.current ||
+      resumed ||
+      !isOnline;
+    lastRetryCount.current = retryCount;
+    wasOnline.current = isOnline;
+    wasActive.current = appIsActive;
+    if (resumed) stationBoardCache.expire();
     if (!enabled || !appIsActive) return;
 
     let cancelled = false;
@@ -55,7 +61,7 @@ export function useStationBoard(stationId: string, type: BoardType, enabled: boo
       let nextRefreshIntervalMs = refreshIntervalMs;
       controller = new AbortController();
       setState((current) => {
-        const next = current.key === key ? current : initialState(key, current.saved);
+        const next = current.key === key ? current : initialState(key);
         return {
           ...next,
           error: null,
@@ -82,19 +88,19 @@ export function useStationBoard(stationId: string, type: BoardType, enabled: boo
         nextRefreshIntervalMs = boardRefreshDelay(data.timestamp ?? "", response.headers);
 
         if (!cancelled) {
-          setState((current) => ({
+          stationBoardCache.set(key, data, nextRefreshIntervalMs);
+          setState({
             key,
             data,
             error: null,
             isLoading: false,
             isRefreshing: false,
-            saved: { ...current.saved, [key]: data },
-          }));
+          });
         }
       } catch (error) {
         if (!cancelled) {
           setState((current) => ({
-            ...(current.key === key ? current : initialState(key, current.saved)),
+            ...(current.key === key ? current : initialState(key)),
             // Anything else is a network failure or a timeout.
             error: { message: error instanceof ApiError ? error.message : null },
             isLoading: false,
@@ -106,7 +112,23 @@ export function useStationBoard(stationId: string, type: BoardType, enabled: boo
       }
     }
 
-    void load();
+    const cached = stationBoardCache.get(key);
+    const remainingMs = cached && !forceRefresh ? cached.refreshAt - performance.now() : 0;
+    if (cached && remainingMs > 0) {
+      // Returning to a fresh board shows it immediately and keeps its original refresh deadline.
+      setState((current) =>
+        current.key === key &&
+        current.data === cached.data &&
+        current.error === null &&
+        !current.isLoading &&
+        !current.isRefreshing
+          ? current
+          : initialState(key),
+      );
+      timeout = setTimeout(() => void load(), remainingMs);
+    } else {
+      void load();
+    }
     return () => {
       cancelled = true;
       controller?.abort();
@@ -119,7 +141,7 @@ export function useStationBoard(stationId: string, type: BoardType, enabled: boo
 
   // Stable between refreshes, so the memoized board only re-renders when its data changes.
   return useMemo(() => {
-    const { saved: _saved, ...board } = state.key === key ? state : initialState(key, state.saved);
+    const board = state.key === key ? state : initialState(key);
     return { ...board, isOnline, retry };
   }, [state, key, isOnline, retry]);
 }

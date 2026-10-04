@@ -71,6 +71,75 @@ type StationPressEvent = Parameters<
   NonNullable<ComponentProps<typeof Mapbox.ShapeSource>["onPress"]>
 >[0];
 
+interface NearbyDeparturesAction {
+  stationsUrl: string | null;
+  findingNearby: { current: boolean };
+  hasMovedMap: { current: boolean };
+  cameraAction: { current: number };
+  hasUsedNearby: boolean;
+  locate: () => Promise<LocationFix | null>;
+  stopFollowing: () => void;
+  selectStation: (station: Station) => void;
+  setIsFindingNearby: (isFinding: boolean) => void;
+  setNearbyError: (message: string | null) => void;
+  setNearbyStations: (stations: NearbyStation[]) => void;
+}
+
+// Keep try/finally outside the component: the installed React Compiler otherwise skips all
+// of MapScreen. Cleanup still runs on early returns, failed requests, and superseded actions.
+async function findAndOpenNearbyDepartures({
+  stationsUrl,
+  findingNearby,
+  hasMovedMap,
+  cameraAction,
+  hasUsedNearby,
+  locate,
+  stopFollowing,
+  selectStation,
+  setIsFindingNearby,
+  setNearbyError,
+  setNearbyStations,
+}: NearbyDeparturesAction) {
+  if (!stationsUrl || findingNearby.current) return;
+  findingNearby.current = true;
+  setIsFindingNearby(true);
+  setNearbyError(null);
+  haptics.tap();
+  hasMovedMap.current = true;
+  stopFollowing();
+  const action = cameraAction.current;
+  try {
+    const [location, stations] = await Promise.all([locate(), loadStations(stationsUrl)]);
+    // Panning, locating, or choosing a station while GPS loads takes precedence.
+    if (action !== cameraAction.current) return;
+    // Locating already explains why there's no location, e.g. that it's turned off.
+    if (!location) {
+      haptics.error();
+      return;
+    }
+    const nearest = findNearbyDepartures(stations, location);
+    if (!nearest[0]) {
+      haptics.error();
+      setNearbyError("No train stations found nearby. Try searching for one instead.");
+      return;
+    }
+    selectStation(nearest[0]);
+    setNearbyStations(nearest);
+    if (!hasUsedNearby) {
+      // Shown without its label from now on, once the sheet over it closes.
+      setPreference("nearbyButtonUsed", true);
+    }
+  } catch {
+    if (action === cameraAction.current) {
+      haptics.error();
+      setNearbyError("Nearby stations couldn't be loaded. Check your connection and try again.");
+    }
+  } finally {
+    findingNearby.current = false;
+    setIsFindingNearby(false);
+  }
+}
+
 export function MapScreen() {
   const insets = useSafeAreaInsets();
   const sheetTopInset = useSheetTopInset();
@@ -188,46 +257,23 @@ export function MapScreen() {
     [stopFollowing, sheetTopInset, reduceMotion],
   );
 
-  const openNearbyDepartures = useCallback(async () => {
-    if (!stationsUrl || findingNearby.current) return;
-    findingNearby.current = true;
-    setIsFindingNearby(true);
-    setNearbyError(null);
-    haptics.tap();
-    hasMovedMap.current = true;
-    stopFollowing();
-    const action = cameraAction.current;
-    try {
-      const [location, stations] = await Promise.all([locate(), loadStations(stationsUrl)]);
-      // Panning, locating, or choosing a station while GPS loads takes precedence.
-      if (action !== cameraAction.current) return;
-      // Locating already explains why there's no location, e.g. that it's turned off.
-      if (!location) {
-        haptics.error();
-        return;
-      }
-      const nearest = findNearbyDepartures(stations, location);
-      if (!nearest[0]) {
-        haptics.error();
-        setNearbyError("No train stations found nearby. Try searching for one instead.");
-        return;
-      }
-      selectStation(nearest[0]);
-      setNearbyStations(nearest);
-      if (!hasUsedNearby) {
-        // Shown without its label from now on, once the sheet over it closes.
-        setPreference("nearbyButtonUsed", true);
-      }
-    } catch {
-      if (action === cameraAction.current) {
-        haptics.error();
-        setNearbyError("Nearby stations couldn't be loaded. Check your connection and try again.");
-      }
-    } finally {
-      findingNearby.current = false;
-      setIsFindingNearby(false);
-    }
-  }, [stationsUrl, locate, stopFollowing, selectStation, hasUsedNearby]);
+  const openNearbyDepartures = useCallback(
+    () =>
+      findAndOpenNearbyDepartures({
+        stationsUrl,
+        findingNearby,
+        hasMovedMap,
+        cameraAction,
+        hasUsedNearby,
+        locate,
+        stopFollowing,
+        selectStation,
+        setIsFindingNearby,
+        setNearbyError,
+        setNearbyStations,
+      }),
+    [stationsUrl, locate, stopFollowing, selectStation, hasUsedNearby],
+  );
 
   useEffect(() => {
     if (!nearbyError) return;
