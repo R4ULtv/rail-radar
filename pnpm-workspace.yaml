@@ -6,3 +6,5 @@ allowBuilds:
   esbuild: true
   sharp: true
   workerd: true
+patchedDependencies:
+  "@rnmapbox/maps@10.3.5": apps/mobile/patches/@rnmapbox__maps@10.3.5.patch

@@ -212,6 +212,14 @@ Imports from `src` use the `@/` alias, and files are kebab-case, as in `apps/web
   `app.json`. Filter on `RailRadar/` in Cloudflare Workers Logs to see the app's requests.
 - Mapbox's attribution button is hidden, since telemetry is off. The credits are at the bottom of
   the search and map style sheets and in the settings.
+- Map tiles use Mapbox's native disk cache with a seven-day minimum update interval, configured
+  by `patches/@rnmapbox__maps@10.3.5.patch` in this app. It covers the Simple map in
+  light and dark mode and the railway source added for Streets. Mapbox Standard's imported
+  base-map sources are hidden from this API and retain their default caching. Styles, fonts,
+  station data and live boards also retain their own refresh policies. This changes tile
+  freshness, not the disk budget or a guarantee that tiles remain stored for seven days.
+  Existing expired tiles may revalidate once before adopting the longer interval. Changing
+  the patch requires rebuilding the native app; Metro reloads and OTA updates cannot apply it.
 - The railway lines are pinned below the station layers and mounted after them: on iOS, rnmapbox
   10.3.5 never adds a layer that waits for one that isn't on the map yet
   ([rnmapbox/maps#4288](https://github.com/rnmapbox/maps/pull/4288)).

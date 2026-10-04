@@ -1,0 +1,72 @@
+diff --git a/android/src/main/java/com/rnmapbox/rnmbx/components/mapview/RNMBXMapView.kt b/android/src/main/java/com/rnmapbox/rnmbx/components/mapview/RNMBXMapView.kt
+index ce02ddb4e8005cd78865341cf71e862b3f9859da..c6c0395e330592d5c8094801b4ab38cdd346b383 100644
+--- a/android/src/main/java/com/rnmapbox/rnmbx/components/mapview/RNMBXMapView.kt
++++ b/android/src/main/java/com/rnmapbox/rnmbx/components/mapview/RNMBXMapView.kt
+@@ -226,6 +226,16 @@ open class RNMBXMapView(private val mContext: Context, var mManager: RNMBXMapVie
+     private fun styleLoaded(style: Style) {
+         savedStyle = style
+         styleLoaded = true
++        // Rail Radar: use the native cache with a seven-day tile update interval.
++        // Imported sources (Mapbox Standard) are not exposed by this API.
++        for (source in style.styleSources) {
++            if (source.type in listOf("vector", "raster", "raster-dem")) {
++                val result = style.setStyleSourceProperty(source.id, "minimum-tile-update-interval", Value(604800.0))
++                if (result.isError) {
++                    Logger.w(LOG_TAG, "Could not set tile update interval for ${source.id}: ${result.error}")
++                }
++            }
++        }
+         setUpImage(style)
+         addFeaturesToMap(true)
+         applyLocalizeLabels()
+diff --git a/android/src/main/java/com/rnmapbox/rnmbx/components/styles/sources/RNMBXVectorSource.kt b/android/src/main/java/com/rnmapbox/rnmbx/components/styles/sources/RNMBXVectorSource.kt
+index 66280ed35cca372a12c6633f180fc7a372269347..910110eb6c79afac827bc953ac04f3223549c0ed 100644
+--- a/android/src/main/java/com/rnmapbox/rnmbx/components/styles/sources/RNMBXVectorSource.kt
++++ b/android/src/main/java/com/rnmapbox/rnmbx/components/styles/sources/RNMBXVectorSource.kt
+@@ -39,10 +39,13 @@ class RNMBXVectorSource(context: Context?, private val mManager: RNMBXVectorSour
+             VectorSource(
+                 VectorSource.Builder(id)
+                     .url(configurationUrl)
++                    // Rail Radar: also cover railway sources added after style load.
++                    .minimumTileUpdateInterval(604800.0)
+             )
+         } else VectorSource(
+             VectorSource.Builder(id)
+                 .tileSet(buildTileset())
++                .minimumTileUpdateInterval(604800.0)
+         )
+     }
+ 
+diff --git a/ios/RNMBX/RNMBXMapView.swift b/ios/RNMBX/RNMBXMapView.swift
+index 4ffb4266e9fe1c2f5e111094ca5b758051c8b333..f7fb231f41a544214fcfe53ef73ae6fa821144a4 100644
+--- a/ios/RNMBX/RNMBXMapView.swift
++++ b/ios/RNMBX/RNMBXMapView.swift
+@@ -1227,6 +1227,15 @@ extension RNMBXMapView {
+     })
+ 
+     self.onEvery(event: .styleLoaded, handler: { (self, event) in
++      // Rail Radar: use the native cache with a seven-day tile update interval.
++      // Imported sources (Mapbox Standard) are not exposed by this API.
++      for source in self.mapboxMap.allSourceIdentifiers where ["vector", "raster", "raster-dem"].contains(source.type.rawValue) {
++        do {
++          try self.mapboxMap.setSourceProperty(for: source.id, property: "minimum-tile-update-interval", value: 604800)
++        } catch {
++          Logger.log(level: .warn, message: "Could not set tile update interval for \(source.id): \(error)")
++        }
++      }
+       self.addFeaturesToMap(style: self.mapboxMap.style)
+ 
+       if !self.styleLoadWaiters.hasInited(), let mapboxMap = self.mapboxMap {
+diff --git a/ios/RNMBX/RNMBXVectorSource.swift b/ios/RNMBX/RNMBXVectorSource.swift
+index ad07b5bec4f121e6783d10adc55a0f1125d6952f..a37ea0a22d688a8003abe89b7243a14299f0bd4e 100644
+--- a/ios/RNMBX/RNMBXVectorSource.swift
++++ b/ios/RNMBX/RNMBXVectorSource.swift
+@@ -16,6 +16,8 @@ public class RNMBXVectorSource : RNMBXTileSource {
+   override func makeSource() -> Source
+   {
+     var result = VectorSource(id: self.id)
++    // Rail Radar: also cover railway sources added after the style has loaded.
++    result.minimumTileUpdateInterval = 604800
+     if let url = url {
+       result.url = url
+     } else {
