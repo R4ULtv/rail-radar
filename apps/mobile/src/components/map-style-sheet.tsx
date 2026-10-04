@@ -64,7 +64,14 @@ function MapStyleOption({
       }}
     >
       <View style={[styles.previewRing, { borderColor: isSelected ? accentColor : "transparent" }]}>
-        <Image source={previews[value][theme]} style={styles.preview} contentFit="cover" />
+        <Image
+          source={previews[value][theme]}
+          style={styles.preview}
+          contentFit="cover"
+          // Android resource IDs can change after an update; old disk entries may show another
+          // preview. These images already ship with the app, so only cache them in memory.
+          cachePolicy="memory"
+        />
       </View>
       <Text
         className={
