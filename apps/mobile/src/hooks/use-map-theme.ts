@@ -1,6 +1,6 @@
 import { useUniwind } from "uniwind";
 
-import { useMapStyle } from "@/lib/map-style";
+import { usePreference } from "@/lib/preferences";
 
 // Muted Mapbox styles in both modes, so the railway lines and station icons stay prominent.
 const simpleStyleURLs = {
@@ -32,7 +32,7 @@ const appearances = {
  */
 export function useMapTheme() {
   const theme = useUniwind().theme === "light" ? "light" : "dark";
-  const isStreets = useMapStyle() === "streets";
+  const isStreets = usePreference("mapStyle") === "streets";
   return {
     ...appearances[theme],
     isStreets,

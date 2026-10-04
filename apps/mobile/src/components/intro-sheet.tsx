@@ -14,7 +14,7 @@ import { useSheetBottomInset } from "@/components/map-controls";
 import { PageSheetHandle } from "@/components/page-sheet-handle";
 import { markReleasesSeen, unseenReleases, type Feature, type Release } from "@/lib/changelog";
 import { haptics } from "@/lib/haptics";
-import { hasSeenWelcome, markWelcomeSeen } from "@/lib/welcome";
+import { getPreference, setPreference } from "@/lib/preferences";
 
 const appIcon = require("../../assets/icon.png");
 
@@ -45,7 +45,7 @@ const welcomeFeatures: Feature[] = [
 type IntroPage = "welcome" | "changelog";
 
 const markPageSeen = (page: IntroPage) =>
-  page === "welcome" ? markWelcomeSeen() : markReleasesSeen();
+  page === "welcome" ? setPreference("welcomeSeen", true) : markReleasesSeen();
 
 /**
  * The welcome on the first launch, then what's new in this version. Each page is shown once,
@@ -54,7 +54,7 @@ const markPageSeen = (page: IntroPage) =>
 export function useIntro() {
   const [releases] = useState(unseenReleases);
   const [pages, setPages] = useState<IntroPage[]>(() => [
-    ...(hasSeenWelcome() ? [] : ["welcome" as const]),
+    ...(getPreference("welcomeSeen") ? [] : ["welcome" as const]),
     ...(releases.length > 0 ? ["changelog" as const] : []),
   ]);
 

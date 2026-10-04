@@ -1,10 +1,10 @@
-import { File, Paths } from "expo-file-system";
 import LocateFixed from "lucide-react-native/icons/locate-fixed";
 import RefreshCw from "lucide-react-native/icons/refresh-cw";
 import TramFront from "lucide-react-native/icons/tram-front";
 import type { ComponentType } from "react";
 
 import { expo } from "../../app.json";
+import { getPreference, setPreference } from "@/lib/preferences";
 
 export type Feature = {
   icon: ComponentType<{ size?: number; color?: string }>;
@@ -43,9 +43,6 @@ export const releases: Release[] = [
   },
 ];
 
-// The last version whose notes were shown.
-const file = new File(Paths.document, "changelog.json");
-
 function compareVersions(a: string, b: string) {
   const [partsA, partsB] = [a.split(".").map(Number), b.split(".").map(Number)];
   for (let index = 0; index < Math.max(partsA.length, partsB.length); index++) {
@@ -58,24 +55,14 @@ function compareVersions(a: string, b: string) {
 /** The releases since the notes last shown, newest first. Read before the first render. */
 export function unseenReleases(): Release[] {
   const current = expo.version;
-  try {
-    const seen: unknown = file.exists ? JSON.parse(file.textSync()).version : null;
-    // A new install, or an update from before the changelog: only this version's notes.
-    if (typeof seen !== "string") return releases.filter(({ version }) => version === current);
-    return releases.filter(
-      ({ version }) => compareVersions(version, seen) > 0 && compareVersions(version, current) <= 0,
-    );
-  } catch {
-    // Better to skip the notes than to show them on every launch.
-    return [];
-  }
+  const seen = getPreference("lastSeenRelease");
+  // A new install, or an update from before the changelog: only this version's notes.
+  if (seen === null) return releases.filter(({ version }) => version === current);
+  return releases.filter(
+    ({ version }) => compareVersions(version, seen) > 0 && compareVersions(version, current) <= 0,
+  );
 }
 
 export function markReleasesSeen() {
-  try {
-    if (!file.exists) file.create();
-    file.write(JSON.stringify({ version: expo.version }));
-  } catch {
-    // The notes are shown once more on the next launch.
-  }
+  setPreference("lastSeenRelease", expo.version);
 }

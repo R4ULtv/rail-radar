@@ -40,8 +40,8 @@ import { useUserLocation } from "@/hooks/use-user-location";
 import { haptics } from "@/lib/haptics";
 import { mapFeedbackUrl, type MapPosition } from "@/lib/links";
 import type { LocationFix } from "@/lib/location-tracking";
-import { hasUsedNearbyButton, markNearbyButtonUsed } from "@/lib/nearby-button";
 import { findNearbyDepartures } from "@/lib/nearby-departures";
+import { setPreference, usePreference } from "@/lib/preferences";
 import { loadStationSearch, loadStations, type NearbyStation } from "@/lib/stations";
 import { loadLastUserLocation } from "@/lib/user-location";
 
@@ -85,7 +85,7 @@ export function MapScreen() {
   const [isFindingNearby, setIsFindingNearby] = useState(false);
   const findingNearby = useRef(false);
   const [nearbyError, setNearbyError] = useState<string | null>(null);
-  const [hasUsedNearby, setHasUsedNearby] = useState(hasUsedNearbyButton);
+  const hasUsedNearby = usePreference("nearbyButtonUsed");
   const intro = useIntro();
   const isIntroOpen = intro.page !== null;
   const {
@@ -220,8 +220,7 @@ export function MapScreen() {
       setNearbyStations(nearest);
       if (!hasUsedNearby) {
         // Shown without its label from now on, once the sheet over it closes.
-        markNearbyButtonUsed();
-        setHasUsedNearby(true);
+        setPreference("nearbyButtonUsed", true);
       }
     } catch {
       if (action === cameraAction.current) {

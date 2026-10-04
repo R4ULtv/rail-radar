@@ -61,7 +61,8 @@ import {
   termsOfServiceUrl,
   websiteUrl,
 } from "@/lib/links";
-import { setThemePreference, useThemePreference, type ThemePreference } from "@/lib/theme";
+import { usePreference, type ThemePreference } from "@/lib/preferences";
+import { setThemePreference } from "@/lib/theme";
 import { forgetLastUserLocation, hasLastUserLocation } from "@/lib/user-location";
 
 const appIcon = require("../../assets/icon.png");
@@ -194,7 +195,7 @@ function LinkRows({
 
 function ThemeTabs() {
   const [foregroundColor, mutedColor] = useThemeColor(["foreground", "muted"]);
-  const theme = useThemePreference();
+  const theme = usePreference("theme");
 
   return (
     <Tabs

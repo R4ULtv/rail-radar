@@ -174,6 +174,19 @@ scripts/               Asset generators
 
 Imports from `src` use the `@/` alias, and files are kebab-case, as in `apps/web`.
 
+### Preferences
+
+Settings and one-time UI choices live in `preferences.json` in the app's document directory:
+theme, map style, welcome dismissal, nearby-button usage, and the last release notes seen.
+`src/lib/preferences.ts` owns validation, defaults, migration, and persistence. Use
+`getPreference(key)` outside React, `usePreference(key)` to subscribe to a single value, and
+`setPreference(key, value)` to update it. Theme changes go through `setThemePreference` so
+Uniwind and the native appearance change too.
+
+The store reads once before rendering and keeps changes in memory even if a disk write fails.
+Existing per-preference files migrate automatically and are removed only after a successful
+write. Saved/recent stations, location, and station downloads keep their own data files.
+
 ### Keeping it in sync with the web
 
 - `station-markers.tsx` mirrors `apps/web/src/components/station-markers.tsx`; keep the zoom

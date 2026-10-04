@@ -13,7 +13,7 @@ import { MapAttribution } from "@/components/map-attribution";
 import { useSheetBottomInset, type SheetPosition } from "@/components/map-controls";
 import { sheetBackgroundStyle, SheetHeader } from "@/components/sheet-header";
 import { haptics } from "@/lib/haptics";
-import { setMapStyle, useMapStyle, type MapStyle } from "@/lib/map-style";
+import { setPreference, usePreference, type MapStyle } from "@/lib/preferences";
 
 // Milano Centrale at zoom 14 in each style, captured from the app on the iPhone simulator.
 const previews = {
@@ -60,7 +60,7 @@ function MapStyleOption({
       onPress={() => {
         if (isSelected) return;
         haptics.selection();
-        setMapStyle(value);
+        setPreference("mapStyle", value);
       }}
     >
       <View style={[styles.previewRing, { borderColor: isSelected ? accentColor : "transparent" }]}>
@@ -95,7 +95,7 @@ export function MapStyleSheet({
   const bottomInset = useSheetBottomInset();
   const sheetRef = useRef<BottomSheet>(null);
   const [surfaceColor, mutedColor] = useThemeColor(["surface", "muted"]);
-  const mapStyle = useMapStyle();
+  const mapStyle = usePreference("mapStyle");
 
   // Android back closes the sheet instead of leaving the app.
   useEffect(() => {
