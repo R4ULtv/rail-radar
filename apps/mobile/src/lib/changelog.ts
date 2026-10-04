@@ -1,5 +1,8 @@
 import LocateFixed from "lucide-react-native/icons/locate-fixed";
+import Map from "lucide-react-native/icons/map";
+import MapPin from "lucide-react-native/icons/map-pin";
 import RefreshCw from "lucide-react-native/icons/refresh-cw";
+import TrainFront from "lucide-react-native/icons/train-front";
 import TramFront from "lucide-react-native/icons/tram-front";
 import type { ComponentType } from "react";
 
@@ -19,6 +22,29 @@ export type Release = { version: string; features: Feature[] };
  * notice; a version without an entry shows nothing.
  */
 export const releases: Release[] = [
+  {
+    version: "0.4.0",
+    features: [
+      {
+        icon: TrainFront,
+        title: "Departures near me",
+        description:
+          "Tap Nearby at the bottom left to open live departures at the closest train station.",
+      },
+      {
+        icon: MapPin,
+        title: "Compare nearby stations",
+        description:
+          "Switch between the three nearest train stations in the station sheet, with distances shown.",
+      },
+      {
+        icon: Map,
+        title: "More reliable maps",
+        description:
+          "Maps reuse cached tiles for longer and retry loading when your connection returns.",
+      },
+    ],
+  },
   {
     version: "0.3.0",
     features: [

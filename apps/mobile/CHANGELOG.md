@@ -6,6 +6,28 @@ the commit they were built from.
 
 ## [Unreleased]
 
+## [0.4.0] (9) – 2026-10-04
+
+### Added
+
+- Departures near me: tap Nearby at the bottom left of the map to open the closest train
+  station's live departures.
+- Switch between the three nearest train stations from the station sheet, with distances shown.
+
+### Changed
+
+- Cached map tiles stay fresh for longer, reducing repeat downloads.
+- App preferences are stored together, with existing settings carried over automatically.
+- Location tracking confirms stillness from consecutive nearby fixes instead of GPS speed.
+
+### Fixed
+
+- The map retries a failed initial load when the connection returns.
+- Entering Nearby opens departures without discarding previously loaded board tabs.
+- Live boards refresh using the server's time, so an incorrect phone clock does not delay updates.
+- Background station updates no longer replace the file the map is currently using.
+- Android loading skeletons stop their animations when removed from the screen.
+
 ## [0.3.2] (8) – 2026-10-02
 
 ### Changed
