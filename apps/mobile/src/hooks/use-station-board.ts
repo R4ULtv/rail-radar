@@ -4,6 +4,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { useAppIsActive } from "@/hooks/use-app-is-active";
 import { useIsOnline } from "@/hooks/use-is-online";
 import { fetchApi } from "@/lib/api";
+import { boardRefreshDelay } from "@/lib/board-refresh";
 
 export type BoardType = "departures" | "arrivals";
 
@@ -25,7 +26,6 @@ interface BoardState {
 }
 
 const refreshIntervalMs = 30_000;
-const minRefetchIntervalMs = 1_000;
 
 const fallbackMessage = "Live trains could not be loaded. Please try again in a moment.";
 
@@ -79,12 +79,7 @@ export function useStationBoard(stationId: string, type: BoardType, enabled: boo
         const data = (await response.json()) as BoardResponse;
         if (!Array.isArray(data.trains)) throw new ApiError(fallbackMessage);
 
-        const timestamp = Date.parse(data.timestamp ?? "");
-        if (Number.isFinite(timestamp)) {
-          // A shared API snapshot may already be old when the app receives it.
-          const age = Math.max(0, Date.now() - timestamp);
-          nextRefreshIntervalMs = Math.max(minRefetchIntervalMs, refreshIntervalMs - age);
-        }
+        nextRefreshIntervalMs = boardRefreshDelay(data.timestamp ?? "", response.headers);
 
         if (!cancelled) {
           setState((current) => ({

@@ -63,6 +63,7 @@ import { StationDetails } from "@/components/station-details";
 import { StatusMessage } from "@/components/status-message";
 import { TrainRow, TrainRowSeparator, TrainRowSkeleton, trainKey } from "@/components/train-row";
 import { useStationBoard, type BoardType } from "@/hooks/use-station-board";
+import { useBoardType } from "@/hooks/use-board-type";
 import { useSavedStations } from "@/hooks/use-stored-stations";
 import { distanceKm, formatDistance } from "@/lib/distance";
 import { haptics } from "@/lib/haptics";
@@ -637,7 +638,7 @@ function StationSheetContent({
 }: StationSheetContentProps) {
   const insets = useSafeAreaInsets();
   const bottomInset = useSheetBottomInset();
-  const [type, setType] = useState<BoardType>("departures");
+  const [type, setType] = useBoardType(nearbyStations.length > 0);
   const isRail = station.type === "rail";
   const arrivalsSupported = getCountry(station.id) !== "lu";
   const board = useStationBoard(station.id, type, isOpen && isRail);
@@ -676,7 +677,7 @@ function StationSheetContent({
       haptics.selection();
       setType(next);
     },
-    [type],
+    [type, setType],
   );
 
   return (
@@ -855,8 +856,7 @@ export function StationSheet({
       }}
     >
       <ErrorBoundary
-        // Entering the nearby flow also resets a previously open arrivals tab to departures.
-        key={`${station.id}:${nearbyStations.length > 0 ? "nearby" : "station"}`}
+        key={station.id}
         fallback={(reset) => (
           <StationError station={station} onRetry={reset} onClose={() => onOpenChange(false)} />
         )}

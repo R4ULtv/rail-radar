@@ -5,7 +5,7 @@ import { Alert } from "heroui-native/alert";
 import { Card } from "heroui-native/card";
 import { useThemeColor } from "heroui-native/hooks";
 import CircleAlert from "lucide-react-native/icons/circle-alert";
-import { useCallback, useEffect, useRef, useState, type ComponentProps } from "react";
+import { useCallback, useEffect, useReducer, useRef, useState, type ComponentProps } from "react";
 import { StyleSheet, View } from "react-native";
 import { useReducedMotion } from "react-native-reanimated";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -40,6 +40,7 @@ import { useUserLocation } from "@/hooks/use-user-location";
 import { haptics } from "@/lib/haptics";
 import { mapFeedbackUrl, type MapPosition } from "@/lib/links";
 import type { LocationFix } from "@/lib/location-tracking";
+import { initialMapRecovery, reduceMapRecovery } from "@/lib/map-recovery";
 import { findNearbyDepartures } from "@/lib/nearby-departures";
 import { setPreference, usePreference } from "@/lib/preferences";
 import { loadStationSearch, loadStations, type NearbyStation } from "@/lib/stations";
@@ -95,10 +96,11 @@ export function MapScreen() {
     locate,
   } = useUserLocation(!isIntroOpen);
   const isOnline = useIsOnline();
-  const [mapFailed, setMapFailed] = useState(false);
-  const [mapKey, setMapKey] = useState(0);
-  const wasOnline = useRef(isOnline);
-  const hasLoadedMap = useRef(false);
+  const [{ failed: mapFailed, key: mapKey }, dispatchMapRecovery] = useReducer(
+    reduceMapRecovery,
+    isOnline,
+    initialMapRecovery,
+  );
   const [alertColor, backgroundColor] = useThemeColor(["danger", "background"]);
   const mapTheme = useMapTheme();
   // Station labels change color once the new map style has loaded. Changing them while it
@@ -136,16 +138,10 @@ export function MapScreen() {
   const mapStyleSheetPosition = useSheetPosition();
   const [isMapStyleOpen, setIsMapStyleOpen] = useState(false);
 
-  // A map that failed to load, e.g. on a first launch without a connection, is loaded again
-  // once the connection comes back. Mapbox keeps what it loaded, so later launches work offline.
+  // Recovery handles either ordering of the network update and native loading error.
   useEffect(() => {
-    const isBackOnline = isOnline && !wasOnline.current;
-    wasOnline.current = isOnline;
-    if (isBackOnline && mapFailed) {
-      setMapFailed(false);
-      setMapKey((key) => key + 1);
-    }
-  }, [isOnline, mapFailed]);
+    dispatchMapRecovery({ type: "connection", isOnline });
+  }, [isOnline]);
 
   const stopFollowing = useCallback(() => {
     cameraAction.current++;
@@ -397,12 +393,11 @@ export function MapScreen() {
         }}
         // Missing tiles once the map is up, e.g. panning offline, aren't a failed map.
         onMapLoadingError={() => {
-          if (!hasLoadedMap.current) setMapFailed(true);
+          dispatchMapRecovery({ type: "failed", key: mapKey });
         }}
         onDidFinishLoadingStyle={() => setLabelColors(mapTheme)}
         onDidFinishLoadingMap={() => {
-          hasLoadedMap.current = true;
-          setMapFailed(false);
+          dispatchMapRecovery({ type: "loaded", key: mapKey });
         }}
       >
         <Mapbox.Camera

@@ -8,7 +8,12 @@ import { API_BASE_URL, USER_AGENT } from "@/lib/api";
 // from the next launch; bigger changes (new countries) come with an app update.
 // A minified copy of @repo/data's stations, written by metro.config.js.
 const bundledStations = Asset.fromModule(require("../../assets/generated/stations.geojson"));
-const downloadedStations = new File(Paths.document, "stations.geojson");
+// Rotate files so the URI used by this launch is never overwritten by a background update.
+const downloadedFiles = {
+  "stations.geojson": new File(Paths.document, "stations.geojson"),
+  "stations-next.geojson": new File(Paths.document, "stations-next.geojson"),
+};
+type StationFileName = keyof typeof downloadedFiles;
 const downloadInfo = new File(Paths.document, "stations-download.json");
 const refreshDelayMs = 30_000;
 const refreshIntervalMs = 24 * 60 * 60 * 1000;
@@ -17,14 +22,20 @@ interface DownloadInfo {
   /** Hash of the bundled file the download replaces; a new app build resets it. */
   bundledHash: string;
   downloadedAt: number;
+  fileName: StationFileName;
 }
 
 function readDownloadInfo(): DownloadInfo | null {
   try {
     if (!downloadInfo.exists) return null;
     const info = JSON.parse(downloadInfo.textSync()) as Partial<DownloadInfo>;
-    return typeof info.bundledHash === "string" && typeof info.downloadedAt === "number"
-      ? { bundledHash: info.bundledHash, downloadedAt: info.downloadedAt }
+    // Metadata from older builds points to stations.geojson implicitly.
+    const fileName = info.fileName ?? "stations.geojson";
+    return typeof info.bundledHash === "string" &&
+      typeof info.downloadedAt === "number" &&
+      Number.isFinite(info.downloadedAt) &&
+      (fileName === "stations.geojson" || fileName === "stations-next.geojson")
+      ? { bundledHash: info.bundledHash, downloadedAt: info.downloadedAt, fileName }
       : null;
   } catch {
     return null;
@@ -32,29 +43,41 @@ function readDownloadInfo(): DownloadInfo | null {
 }
 
 async function downloadStations() {
+  const generation = downloadGeneration;
+  const fileName: StationFileName =
+    currentDownload?.fileName === "stations.geojson" ? "stations-next.geojson" : "stations.geojson";
+  const destination = downloadedFiles[fileName];
   const temporary = new File(Paths.cache, "stations.download.geojson");
   await File.downloadFileAsync(`${API_BASE_URL}/stations.geojson`, temporary, {
     headers: { "User-Agent": USER_AGENT },
     idempotent: true,
   });
   if (temporary.size === 0) throw new Error("Downloaded stations are empty.");
+  // A reset during the request must not install the download after the user cleared it.
+  if (generation !== downloadGeneration) {
+    temporary.delete();
+    return;
+  }
 
-  if (downloadedStations.exists) downloadedStations.delete();
-  temporary.move(downloadedStations);
+  if (destination.exists) destination.delete();
+  temporary.move(destination);
 
   if (!downloadInfo.exists) downloadInfo.create();
   downloadInfo.write(
-    JSON.stringify({ bundledHash: bundledStations.hash, downloadedAt: Date.now() }),
+    JSON.stringify({ bundledHash: bundledStations.hash, downloadedAt: Date.now(), fileName }),
   );
 }
 
 function readCurrentDownload() {
   const info = readDownloadInfo();
-  return info?.bundledHash === bundledStations.hash && downloadedStations.exists ? info : null;
+  return info?.bundledHash === bundledStations.hash && downloadedFiles[info.fileName].exists
+    ? info
+    : null;
 }
 
 // The download in use for this launch, or null while the bundled stations are.
 let currentDownload = readCurrentDownload();
+let downloadGeneration = 0;
 const listeners = new Set<() => void>();
 
 function subscribe(listener: () => void) {
@@ -72,8 +95,11 @@ export function useStationsDownloadedAt() {
  * and a fresh copy is downloaded on the next launch.
  */
 export function resetStations() {
+  downloadGeneration++;
   try {
-    if (downloadedStations.exists) downloadedStations.delete();
+    for (const file of Object.values(downloadedFiles)) {
+      if (file.exists) file.delete();
+    }
     if (downloadInfo.exists) downloadInfo.delete();
   } finally {
     currentDownload = null;
@@ -114,5 +140,7 @@ export function useStationsUrl() {
     return () => clearTimeout(timeout);
   }, []);
 
-  return hasDownload ? downloadedStations.uri : bundledUrl;
+  return hasDownload && currentDownload
+    ? downloadedFiles[currentDownload.fileName].uri
+    : bundledUrl;
 }
