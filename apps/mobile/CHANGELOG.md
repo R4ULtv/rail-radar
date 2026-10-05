@@ -6,6 +6,20 @@ the commit they were built from.
 
 ## [Unreleased]
 
+## [0.4.1] (10) – 2026-10-05
+
+### Changed
+
+- Station data loads in batches to keep the app responsive while preparing the map and search.
+- Search and station sheets render long lists more efficiently for smoother scrolling.
+- The map re-renders less when opening stations and using Nearby.
+- Recently viewed departures and arrivals stay available when switching between stations, with
+  fresh boards reused until their next scheduled refresh.
+
+### Fixed
+
+- Map style previews no longer show an old or incorrect image after an Android app update.
+
 ## [0.4.0] (9) – 2026-10-04
 
 ### Added

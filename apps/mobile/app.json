@@ -2,7 +2,7 @@
   "expo": {
     "name": "Rail Radar",
     "slug": "rail-radar",
-    "version": "0.4.0",
+    "version": "0.4.1",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "automatic",
@@ -40,11 +40,11 @@
     "ios": {
       "supportsTablet": false,
       "bundleIdentifier": "com.railradar24.app",
-      "buildNumber": "9"
+      "buildNumber": "10"
     },
     "android": {
       "package": "com.railradar24.app",
-      "versionCode": 9,
+      "versionCode": 10,
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#6363ff"
