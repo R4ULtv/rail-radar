@@ -1,7 +1,7 @@
 import { useEffect, useId, useRef, useState, type FormEvent, type ReactNode } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { AnimatePresence, LazyMotion, domAnimation, m, useReducedMotion } from "motion/react";
-import { joinBeta } from "@/lib/beta-signup.functions";
+import { joinBeta, joinIphoneWaitlist } from "@/lib/beta-signup.functions";
 import { metadataToHead, type Metadata } from "@/lib/metadata";
 import { MIN_ANDROID_VERSION, useDeviceCheck, type DeviceCheck } from "@/hooks/use-device-check";
 import { Button } from "@repo/ui/components/button";
@@ -12,14 +12,19 @@ import { ToggleGroup, ToggleGroupItem } from "@repo/ui/components/toggle-group";
 import { cn } from "@repo/ui/lib/utils";
 import {
   ArrowLeftIcon,
+  BellIcon,
+  BookmarkIcon,
   CheckIcon,
   CircleDashedIcon,
   GiftIcon,
   MegaphoneIcon,
+  LocateFixedIcon,
+  MapPinIcon,
   MoonIcon,
   SunIcon,
   TicketIcon,
   TrainFrontIcon,
+  WifiOffIcon,
   XIcon,
 } from "lucide-react";
 
@@ -29,9 +34,9 @@ export const Route = createFileRoute("/app")({
 });
 
 const metadata: Metadata = {
-  title: "Android Beta",
+  title: "Mobile App",
   description:
-    "Join the Rail Radar closed beta on Google Play and get the Android app before it launches.",
+    "Join the Rail Radar Android beta on Google Play or get notified when the iPhone app is available.",
   alternates: {
     canonical: "/app",
   },
@@ -39,14 +44,9 @@ const metadata: Metadata = {
 
 const TEST_DAYS = 14;
 const APP_PRICE = "€3";
-const MIN_PROMO_CODES = 20;
+const FREE_BETA_PLACES = 20;
 const GOOGLE_MAIL_DOMAINS = new Set(["gmail.com", "googlemail.com"]);
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-const SIGNUP_ERRORS: Partial<Record<SignupStatus, string>> = {
-  "rate-limited": "Too many signups from this network. Wait a minute and try again.",
-  failed: "Couldn't join the beta. Try again in a few minutes.",
-  offline: "Couldn't join the beta. Check your connection and try again.",
-};
 
 const steps = [
   {
@@ -55,8 +55,7 @@ const steps = [
   },
   {
     title: "Get the invite",
-    description:
-      "Once we add you to the test, you'll get an email with a link to join it on Google Play, and a promo code if you're getting one.",
+    description: `Once we add you to the test, you'll get an email with a link to join it on Google Play. If you receive one of the ${FREE_BETA_PLACES} free places, your invite will include a promo code.`,
   },
   {
     title: "Install from Google Play",
@@ -71,6 +70,7 @@ const steps = [
 ];
 
 type Appearance = "dark" | "light";
+type AppPlatform = "android" | "ios";
 
 // Android emulator screenshots, taken in the same scene in dark and light mode.
 const screens = [
@@ -88,8 +88,42 @@ const screens = [
   },
 ];
 
+const mobileFeatures = [
+  {
+    icon: MapPinIcon,
+    title: "Nearby departures, one tap away",
+    description:
+      "Tap Nearby to open your closest station's live departures. Switch between the three nearest train stations, with distances shown.",
+  },
+  {
+    icon: WifiOffIcon,
+    title: "Search without a connection",
+    description:
+      "Every station is stored on your phone, so you can search even offline. Live departures need an internet connection.",
+  },
+  {
+    icon: BookmarkIcon,
+    title: "Search that puts your stations first",
+    description:
+      "Matching saved and recent stations come first. Nearby matches rank higher, with distances shown when location is enabled.",
+  },
+  {
+    icon: LocateFixedIcon,
+    title: "Follow your position on the map",
+    description:
+      "Tap Locate to follow your live position as you move. Pan the map whenever you want to explore somewhere else.",
+  },
+];
+
 function AppPage() {
   const [appearance, setAppearance] = useState<Appearance>("dark");
+  const device = useDeviceCheck();
+  const [selectedPlatform, setSelectedPlatform] = useState<AppPlatform | null>(null);
+  // Phones preselect their own platform. Desktops have to pick, since the signup can't tell.
+  const platform =
+    selectedPlatform ??
+    (device.platform === "android" || device.platform === "ios" ? device.platform : null);
+  const isIos = platform === "ios";
 
   return (
     <div className="mx-auto max-w-2xl px-4 pt-6 pb-16 md:px-6 md:py-16">
@@ -101,6 +135,8 @@ function AppPage() {
         Back to Rail Radar
       </Link>
 
+      {/* Everything above the signup is the same on every device, so the prerendered page
+          doesn't shift once the platform is detected. */}
       <BetaBoard />
 
       <div className="mt-8 mb-5">
@@ -108,15 +144,40 @@ function AppPage() {
           Get Rail Radar on your phone before launch.
         </h1>
         <p className="mt-3 text-muted-foreground text-pretty">
-          The closed beta is open now. Google Play needs at least {TEST_DAYS} days of testing before
-          the app can launch, so sign up to be a tester.
+          Find nearby departures, search stations offline and follow your position on the map. Join
+          the Android beta now, or get on the iPhone waitlist.
         </p>
       </div>
 
-      <SignupCard />
+      <SignupCard platform={platform} onPlatformChange={setSelectedPlatform} />
 
       <section className="mt-12">
-        <SectionHeading>What you&apos;ll be testing</SectionHeading>
+        <SectionHeading>What the app adds</SectionHeading>
+        <p className="mb-6 text-sm leading-6 text-muted-foreground text-pretty">
+          The same European railway coverage as the website, with more ways to find your next
+          station on the go.
+        </p>
+        <ul className="divide-y divide-border">
+          {mobileFeatures.map(({ icon: Icon, title, description }) => (
+            <li key={title} className="flex gap-4 py-5 first:pt-0 last:pb-0">
+              <span className="flex size-10 shrink-0 items-center justify-center rounded-2xl bg-muted text-blue-600 dark:text-blue-400">
+                <Icon aria-hidden="true" className="size-5" />
+              </span>
+              <div className="min-w-0">
+                <h3 className="text-sm font-medium tracking-tight">{title}</h3>
+                <p className="mt-1 text-sm leading-6 text-muted-foreground text-pretty">
+                  {description}
+                </p>
+              </div>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      <section className="mt-12">
+        <SectionHeading>
+          {isIos ? "A look at the Android app" : "What you'll be testing"}
+        </SectionHeading>
         <ToggleGroup
           value={[appearance]}
           onValueChange={(value) => {
@@ -149,42 +210,43 @@ function AppPage() {
             </li>
           ))}
         </ul>
-        <p className="mt-4 text-sm text-muted-foreground text-pretty">
-          Plus offline search, and your saved and recent stations one tap away.
-        </p>
       </section>
 
-      <section className="mt-12">
-        <SectionHeading>What you need</SectionHeading>
-        <Requirements />
-      </section>
+      {!isIos && (
+        <section className="mt-12">
+          <SectionHeading>What you need</SectionHeading>
+          <Requirements />
+        </section>
+      )}
 
-      <section className="mt-12">
-        <SectionHeading>How the beta works</SectionHeading>
-        <ol>
-          {steps.map((step, index) => (
-            <li key={step.title} className="relative flex gap-4 pb-6 last:pb-0">
-              {index < steps.length - 1 && (
+      {!isIos && (
+        <section className="mt-12">
+          <SectionHeading>How the beta works</SectionHeading>
+          <ol>
+            {steps.map((step, index) => (
+              <li key={step.title} className="relative flex gap-4 pb-6 last:pb-0">
+                {index < steps.length - 1 && (
+                  <span
+                    aria-hidden="true"
+                    className="absolute top-5 bottom-0 left-[9px] w-0.5 rounded-full bg-muted"
+                  />
+                )}
                 <span
                   aria-hidden="true"
-                  className="absolute top-5 bottom-0 left-[9px] w-0.5 rounded-full bg-muted"
+                  className={cn(
+                    "relative mt-0.5 size-5 shrink-0 rounded-full border-[5px]",
+                    index === 0 ? "border-blue-500 bg-background" : "border-muted bg-background",
+                  )}
                 />
-              )}
-              <span
-                aria-hidden="true"
-                className={cn(
-                  "relative mt-0.5 size-5 shrink-0 rounded-full border-[5px]",
-                  index === 0 ? "border-blue-500 bg-background" : "border-muted bg-background",
-                )}
-              />
-              <div className="min-w-0">
-                <h3 className="text-sm font-medium tracking-tight">{step.title}</h3>
-                <p className="mt-1 text-sm leading-6 text-muted-foreground">{step.description}</p>
-              </div>
-            </li>
-          ))}
-        </ol>
-      </section>
+                <div className="min-w-0">
+                  <h3 className="text-sm font-medium tracking-tight">{step.title}</h3>
+                  <p className="mt-1 text-sm leading-6 text-muted-foreground">{step.description}</p>
+                </div>
+              </li>
+            ))}
+          </ol>
+        </section>
+      )}
     </div>
   );
 }
@@ -198,21 +260,28 @@ function SectionHeading({ children }: { children: ReactNode }) {
   );
 }
 
-/** The beta, its price and the promo codes as rows on a departure board, like the station pages. */
+/** Both apps, the price and the free places as rows on a departure board, like the station pages. */
 function BetaBoard() {
   return (
     <div className="overflow-hidden rounded-4xl bg-card shadow-md ring-1 ring-foreground/10">
       <div className="flex items-center justify-between gap-2 px-4 pt-3.5 pb-2.5 text-[11px] font-medium uppercase tracking-[0.2em] text-muted-foreground md:px-5">
         <span>Departures</span>
-        <span>Android</span>
+        <span>Mobile app</span>
       </div>
       <ul className="divide-y divide-border border-y border-border">
         <BoardRow
           accent="blue"
           badge={<img src="/icon.svg" alt="" width={48} height={48} className="size-12" />}
-          title="Closed beta"
+          title="Android beta"
           subtitle="To Google Play"
           time="Now"
+        />
+        <BoardRow
+          badge={<BellIcon className="size-5 text-muted-foreground" />}
+          title="iPhone app"
+          subtitle="To the App Store"
+          time={<span className="text-muted-foreground">Soon</span>}
+          status={<span className="text-muted-foreground">Waitlist</span>}
         />
         <BoardRow
           badge={<TicketIcon className="size-5 text-muted-foreground" />}
@@ -224,15 +293,15 @@ function BetaBoard() {
         <BoardRow
           accent="green"
           badge={<GiftIcon className="size-5 text-muted-foreground" />}
-          title="Promo codes"
-          subtitle={`For ${MIN_PROMO_CODES}+ testers`}
+          title="Free beta access"
+          subtitle={`Limited to ${FREE_BETA_PLACES} Android testers`}
           time={
             <>
               <s className="font-normal text-muted-foreground decoration-1">{APP_PRICE}</s>{" "}
               <span className="text-green-600 dark:text-green-400">Free</span>
             </>
           }
-          status={<span className="text-muted-foreground">By email</span>}
+          status={<span className="text-muted-foreground">Code with invite</span>}
         />
       </ul>
       <p className="m-3 flex items-center gap-2.5 rounded-3xl bg-muted/50 px-3.5 py-2.5 text-xs font-medium uppercase tracking-wide text-muted-foreground md:mx-4">
@@ -318,21 +387,48 @@ function Screenshot({
 
 type SignupStatus = "idle" | "joining" | "joined" | "rate-limited" | "failed" | "offline";
 
-function SignupCard() {
+function getSignupError(status: SignupStatus, platform: AppPlatform | null) {
+  const list = platform === "ios" ? "the waitlist" : "the beta";
+  switch (status) {
+    case "rate-limited":
+      return "Too many signups from this network. Wait a minute and try again.";
+    case "failed":
+      return `Couldn't join ${list}. Try again in a few minutes.`;
+    case "offline":
+      return `Couldn't join ${list}. Check your connection and try again.`;
+    default:
+      return undefined;
+  }
+}
+
+function SignupCard({
+  platform,
+  onPlatformChange,
+}: {
+  platform: AppPlatform | null;
+  onPlatformChange: (platform: AppPlatform) => void;
+}) {
+  const isIos = platform === "ios";
+  const isAndroid = platform === "android";
+  const actionLabel = isIos ? "Notify me" : isAndroid ? "Join the beta" : "Sign up";
+  const placeholder = isAndroid ? "name@gmail.com" : "name@example.com";
+  const platformLabelId = useId();
   const inputId = useId();
   const hintId = useId();
   const containerRef = useRef<HTMLDivElement>(null);
+  const platformRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const reduceMotion = useReducedMotion();
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState<SignupStatus>("idle");
   const [invalid, setInvalid] = useState(false);
+  const [platformMissing, setPlatformMissing] = useState(false);
   const [scrolledPast, setScrolledPast] = useState(false);
 
   const trimmed = email.trim();
   const domain = trimmed.split("@")[1]?.toLowerCase() ?? "";
   const isOtherDomain = domain.includes(".") && !GOOGLE_MAIL_DOMAINS.has(domain);
-  const signupError = SIGNUP_ERRORS[status];
+  const signupError = getSignupError(status, platform);
 
   // Offer a shortcut back to the form once it scrolls off the top of the screen.
   useEffect(() => {
@@ -347,13 +443,19 @@ function SignupCard() {
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    if (!platform) {
+      setPlatformMissing(true);
+      platformRef.current?.querySelector("button")?.focus();
+      return;
+    }
     if (!EMAIL_PATTERN.test(trimmed)) {
       setInvalid(true);
       return;
     }
     setStatus("joining");
     try {
-      const { status } = await joinBeta({ data: { email: trimmed } });
+      const signup = platform === "ios" ? joinIphoneWaitlist : joinBeta;
+      const { status } = await signup({ data: { email: trimmed } });
       if (status === "invalid") {
         setInvalid(true);
         setStatus("idle");
@@ -374,16 +476,25 @@ function SignupCard() {
     });
   };
 
-  const hint = invalid
-    ? { tone: "error", text: "Enter an email address, like name@gmail.com." }
-    : signupError
-      ? { tone: "error", text: signupError }
-      : isOtherDomain
-        ? { tone: "muted", text: "Not Gmail? That's fine if it's the account on your Play Store." }
-        : {
-            tone: "muted",
-            text: "Use your Play Store account. We only email you about the beta and the launch.",
-          };
+  const hint = platformMissing
+    ? { tone: "error", text: "Choose Android or iPhone, so we know what to send you." }
+    : invalid
+      ? { tone: "error", text: `Enter an email address, like ${placeholder}.` }
+      : signupError
+        ? { tone: "error", text: signupError }
+        : isIos
+          ? { tone: "muted", text: "We only email you about the iPhone app and its launch." }
+          : !isAndroid
+            ? { tone: "muted", text: "Pick the phone you'll install Rail Radar on." }
+            : isOtherDomain
+              ? {
+                  tone: "muted",
+                  text: "Not Gmail? That's fine if it's the account on your Play Store.",
+                }
+              : {
+                  tone: "muted",
+                  text: "Use your Play Store account. We only email you about the beta and the launch.",
+                };
 
   return (
     <LazyMotion features={domAnimation}>
@@ -393,6 +504,7 @@ function SignupCard() {
             <BoardingPass
               key="pass"
               email={trimmed}
+              platform={isIos ? "ios" : "android"}
               onReset={() => {
                 setEmail("");
                 setStatus("idle");
@@ -407,8 +519,38 @@ function SignupCard() {
               <Card>
                 <CardContent>
                   <form noValidate onSubmit={handleSubmit}>
+                    <p id={platformLabelId} className="text-sm font-medium">
+                      Which phone do you use?
+                    </p>
+                    <ToggleGroup
+                      ref={platformRef}
+                      value={platform ? [platform] : []}
+                      onValueChange={(value) => {
+                        const selected = value[0];
+                        if (selected !== "android" && selected !== "ios") return;
+                        onPlatformChange(selected);
+                        setPlatformMissing(false);
+                        if (signupError) setStatus("idle");
+                      }}
+                      variant="outline"
+                      disabled={status === "joining"}
+                      aria-labelledby={platformLabelId}
+                      aria-describedby={platformMissing ? hintId : undefined}
+                      className="mt-2 mb-5 w-full"
+                    >
+                      {(["android", "ios"] as const).map((value) => (
+                        <ToggleGroupItem
+                          key={value}
+                          value={value}
+                          aria-invalid={platformMissing || undefined}
+                          className="h-11 flex-1 shrink text-base aria-pressed:border-blue-500 aria-pressed:bg-blue-500/10 sm:text-sm"
+                        >
+                          {value === "ios" ? "iPhone" : "Android"}
+                        </ToggleGroupItem>
+                      ))}
+                    </ToggleGroup>
                     <label htmlFor={inputId} className="text-sm font-medium">
-                      Google account email
+                      {isAndroid ? "Google account email" : "Email address"}
                     </label>
                     <div className="mt-2 flex flex-col gap-2 sm:flex-row">
                       <Input
@@ -422,7 +564,7 @@ function SignupCard() {
                         autoCorrect="off"
                         spellCheck={false}
                         enterKeyHint="send"
-                        placeholder="name@gmail.com"
+                        placeholder={placeholder}
                         value={email}
                         disabled={status === "joining"}
                         aria-invalid={invalid || undefined}
@@ -446,7 +588,7 @@ function SignupCard() {
                             Joining…
                           </>
                         ) : (
-                          "Join the beta"
+                          actionLabel
                         )}
                       </Button>
                     </div>
@@ -463,8 +605,20 @@ function SignupCard() {
                     <p className="mt-3 flex gap-2.5 border-t border-border pt-3 text-sm leading-6 text-pretty">
                       <CheckIcon className="mt-1 size-4 shrink-0 text-green-600 dark:text-green-400" />
                       <span>
-                        Signing up is free. You don&apos;t have to buy the beta, and you can wait
-                        for the public release instead.
+                        {isIos ? (
+                          "Joining the waitlist is free."
+                        ) : !isAndroid ? (
+                          "Signing up is free. The website stays free for everyone."
+                        ) : (
+                          <>
+                            <strong className="font-medium">
+                              The app is free for {FREE_BETA_PLACES} beta testers.
+                            </strong>{" "}
+                            If you receive a free place, your invite will include a Google Play
+                            promo code. Otherwise, the app costs {APP_PRICE} plus VAT. Signing up is
+                            free.
+                          </>
+                        )}
                       </span>
                     </p>
                   </form>
@@ -490,7 +644,7 @@ function SignupCard() {
               onClick={returnToForm}
               className="h-12 w-full text-base shadow-lg shadow-black/40"
             >
-              Join the beta
+              {actionLabel}
             </Button>
           </m.div>
         )}
@@ -500,8 +654,17 @@ function SignupCard() {
 }
 
 /** The joined state: a ticket that prints in from the top, with the email as the passenger. */
-function BoardingPass({ email, onReset }: { email: string; onReset: () => void }) {
+function BoardingPass({
+  email,
+  platform,
+  onReset,
+}: {
+  email: string;
+  platform: AppPlatform;
+  onReset: () => void;
+}) {
   const reduceMotion = useReducedMotion();
+  const isIos = platform === "ios";
 
   return (
     <m.div
@@ -546,7 +709,9 @@ function BoardingPass({ email, onReset }: { email: string; onReset: () => void }
             <p className="text-[11px] font-medium uppercase tracking-[0.2em] text-muted-foreground">
               To
             </p>
-            <p className="mt-1 text-2xl font-semibold tracking-tight">Google Play</p>
+            <p className="mt-1 text-2xl font-semibold tracking-tight">
+              {isIos ? "iPhone" : "Google Play"}
+            </p>
           </div>
         </div>
 
@@ -557,11 +722,11 @@ function BoardingPass({ email, onReset }: { email: string; onReset: () => void }
           </div>
           <div>
             <dt className="text-xs text-muted-foreground">Class</dt>
-            <dd className="mt-0.5 font-medium">Beta tester</dd>
+            <dd className="mt-0.5 font-medium">{isIos ? "iPhone waitlist" : "Beta tester"}</dd>
           </div>
           <div>
             <dt className="text-xs text-muted-foreground">Boarding</dt>
-            <dd className="mt-0.5 font-medium">By email invite</dd>
+            <dd className="mt-0.5 font-medium">{isIos ? "When it's ready" : "By email invite"}</dd>
           </div>
         </dl>
       </div>
@@ -573,10 +738,13 @@ function BoardingPass({ email, onReset }: { email: string; onReset: () => void }
       </div>
 
       <div className="px-5 pt-6 pb-5">
-        <h2 className="text-lg font-semibold tracking-tight">You joined the beta.</h2>
+        <h2 className="text-lg font-semibold tracking-tight">
+          {isIos ? "You're on the iPhone waitlist." : "You joined the beta."}
+        </h2>
         <p className="mt-1 text-sm leading-6 text-muted-foreground text-pretty">
-          We&apos;ll email your invite once we add you to the test. Installing the beta is up to
-          you, and you can wait for the public release instead.
+          {isIos
+            ? "We'll email you as soon as the iPhone app is ready to try."
+            : "We'll email your invite once we add you to the test. Installing the beta is up to you, and you can wait for the public release instead."}
         </p>
         <Button variant="outline" className="mt-4 w-full sm:w-auto" onClick={onReset}>
           Use a different email
