@@ -6,7 +6,6 @@ import { LazyMotion, domAnimation, m, AnimatePresence } from "motion/react";
 import { Link } from "@tanstack/react-router";
 import { Button, buttonVariants } from "@repo/ui/components/button";
 import { cn } from "@repo/ui/lib/utils";
-import { MIN_ANDROID_VERSION, useDeviceCheck } from "@/hooks/use-device-check";
 import { prerenderedPageLinkProps } from "@/lib/station-prerender";
 
 const STORAGE_KEY = "banner-dismissed-v16";
@@ -17,14 +16,10 @@ const getServerSnapshot = () => false;
 
 export function AnnouncementBanner() {
   const shouldShow = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
-  // The beta is on Google Play only, so the banner is for Android phones that can install it.
-  const { platform, androidVersion } = useDeviceCheck();
-  const canInstall =
-    platform === "android" && (androidVersion === null || androidVersion >= MIN_ANDROID_VERSION);
   const dismissedRef = useRef(false);
   const [, rerender] = useReducer((value: number) => value + 1, 0);
 
-  const visible = shouldShow && canInstall && !dismissedRef.current;
+  const visible = shouldShow && !dismissedRef.current;
 
   const dismiss = () => {
     dismissedRef.current = true;
@@ -57,11 +52,11 @@ export function AnnouncementBanner() {
               <div className="min-w-0 flex-1">
                 <div className="mb-0.5 flex items-center gap-1.5">
                   <p className="truncate text-sm font-semibold tracking-tight">
-                    Rail Radar for Android
+                    Rail Radar on your phone
                   </p>
                 </div>
                 <p className="truncate text-xs text-muted-foreground">
-                  Join the closed beta on Google Play.
+                  Android beta open · iPhone waitlist
                 </p>
               </div>
 
@@ -74,7 +69,7 @@ export function AnnouncementBanner() {
                   "hidden transition-transform duration-150 active:scale-[0.97] md:inline-flex",
                 )}
               >
-                Join the beta
+                Get the app
                 <ArrowRightIcon data-icon="inline-end" />
               </Link>
 
@@ -92,10 +87,10 @@ export function AnnouncementBanner() {
                 to="/app"
                 {...prerenderedPageLinkProps}
                 onClick={dismiss}
-                aria-label="Join the Rail Radar Android beta"
+                aria-label="Explore the Rail Radar mobile app"
                 className="absolute inset-0 rounded-3xl focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/30 focus-visible:ring-inset md:hidden"
               >
-                <span className="sr-only">Join the Rail Radar Android beta</span>
+                <span className="sr-only">Explore the Rail Radar mobile app</span>
               </Link>
             </div>
           </m.div>
