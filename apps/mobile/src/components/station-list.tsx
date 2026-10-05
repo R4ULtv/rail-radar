@@ -69,9 +69,9 @@ function StationRowContent<T extends Station>({
 }
 
 // Memoized, so a station that stays in the search results as you type isn't rendered again.
-const StationRow = memo(StationRowContent) as typeof StationRowContent;
+export const StationRow = memo(StationRowContent) as typeof StationRowContent;
 
-function StationSectionTitle({ icon: Icon, title }: { icon: SectionIcon; title: string }) {
+export function StationSectionTitle({ icon: Icon, title }: { icon: SectionIcon; title: string }) {
   const mutedColor = useThemeColor("muted");
   return <SectionTitle icon={<Icon size={14} color={mutedColor} />}>{title}</SectionTitle>;
 }
@@ -123,7 +123,7 @@ function StationSectionContent<T extends Station>({
 }
 
 /** Like the live board's button for more trains. */
-function ShowAllButton({
+export function ShowAllButton({
   count,
   isExpanded,
   onPress,

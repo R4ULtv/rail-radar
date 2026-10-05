@@ -1,6 +1,10 @@
 import { getCountry } from "@repo/data/countries";
-import type { Station } from "@repo/data/types";
-import BottomSheet, { BottomSheetScrollView, BottomSheetView } from "@gorhom/bottom-sheet";
+import type { Station, Train } from "@repo/data/types";
+import BottomSheet, {
+  BottomSheetFlatList,
+  BottomSheetView,
+  type BottomSheetFlatListMethods,
+} from "@gorhom/bottom-sheet";
 import { Button } from "heroui-native/button";
 import { useThemeColor } from "heroui-native/hooks";
 import { PressableFeedback } from "heroui-native/pressable-feedback";
@@ -18,15 +22,16 @@ import Share from "lucide-react-native/icons/share";
 import Share2 from "lucide-react-native/icons/share-2";
 import TriangleAlert from "lucide-react-native/icons/triangle-alert";
 import {
-  Fragment,
   memo,
   useCallback,
   useEffect,
+  useMemo,
   useReducer,
   useRef,
   useState,
   type ComponentRef,
   type ReactNode,
+  type Ref,
 } from "react";
 import {
   BackHandler,
@@ -38,9 +43,12 @@ import {
   View,
   useWindowDimensions,
   type LayoutChangeEvent,
+  type FlatList,
+  type ListRenderItemInfo,
 } from "react-native";
 // Gesture handler's, so it settles horizontal drags with the sheet's own pan gesture on Android.
 import { ScrollView } from "react-native-gesture-handler";
+import type { AnimatedRef } from "react-native-reanimated";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Svg, { Defs, LinearGradient as SvgLinearGradient, Rect, Stop } from "react-native-svg";
 
@@ -366,30 +374,140 @@ interface LiveBoardProps {
   type: BoardType;
   warning: string | null;
   /** Where the first train (or what's shown in its place) ends: the sheet peeks down to it. */
-  onFirstItemLayout: (event: LayoutChangeEvent) => void;
+  onFirstItemBottomChange: (bottom: number) => void;
+  isRail: boolean;
+  scrollRef: AnimatedRef<FlatList<BoardTrain>>;
+  headerHeight: number;
+  bottomInset: number;
+  onContentHeightChange: (height: number) => void;
+  children: ReactNode;
+}
+
+interface BoardTrain {
+  key: string;
+  train: Train;
+}
+
+const noBoardTrains: BoardTrain[] = [];
+
+function boardTrainKey(item: BoardTrain) {
+  return item.key;
 }
 
 const LiveBoard = memo(function LiveBoard({
   board,
   type,
   warning,
-  onFirstItemLayout,
+  onFirstItemBottomChange,
+  isRail,
+  scrollRef,
+  headerHeight,
+  bottomInset,
+  onContentHeightChange,
+  children,
 }: LiveBoardProps) {
   const [foregroundColor, warningColor] = useThemeColor(["default-foreground", "warning"]);
-  const [showAll, setShowAll] = useState(false);
-  const [expandedTrain, setExpandedTrain] = useState<string | null>(null);
-  const { data, error, isOnline, retry } = board;
+  const [display, setDisplay] = useState({
+    type,
+    showAll: false,
+    expandedTrain: null as string | null,
+  });
+  // A new tab starts compact, while the scrollable and station details stay mounted.
+  if (display.type !== type) {
+    setDisplay({ type, showAll: false, expandedTrain: null });
+  }
+  const showAll = display.type === type && display.showAll;
+  const expandedTrain = display.type === type ? display.expandedTrain : null;
+  const { error, isOnline, retry } = board;
+  const data = isRail ? board.data : null;
 
   // One train's info at a time, so the board stays compact.
   const toggleTrain = useCallback(
-    (key: string) => setExpandedTrain((current) => (current === key ? null : key)),
+    (key: string) =>
+      setDisplay((current) => ({
+        ...current,
+        expandedTrain: current.expandedTrain === key ? null : key,
+      })),
     [],
   );
 
-  if (!data) {
+  const trains = useMemo(() => {
+    if (!data) return noBoardTrains;
+    const visible = showAll ? data.trains : data.trains.slice(0, collapsedTrainCount);
+    const keyCounts = new Map<string, number>();
+    return visible.map((train) => {
+      const key = trainKey(train);
+      const occurrence = keyCounts.get(key) ?? 0;
+      keyCounts.set(key, occurrence + 1);
+      return { key: occurrence ? `${key}-${occurrence}` : key, train };
+    });
+  }, [data, showAll]);
+
+  const measurementKey = `${type}:${data ? (trains.length > 0 ? "trains" : "empty") : error ? "error" : "loading"}`;
+  const [introLayout, setIntroLayout] = useState<{ key: string; height: number } | null>(null);
+  const [firstLayout, setFirstLayout] = useState<{ key: string; bottom: number } | null>(null);
+  const onIntroLayout = useCallback(
+    (event: LayoutChangeEvent) => {
+      const { y, height: markerHeight } = event.nativeEvent.layout;
+      const height = y + markerHeight;
+      setIntroLayout((current) =>
+        current?.key === measurementKey && Math.abs(current.height - height) < 1
+          ? current
+          : { key: measurementKey, height },
+      );
+    },
+    [measurementKey],
+  );
+  const onFirstItemLayout = useCallback(
+    (event: LayoutChangeEvent) => {
+      const { y, height } = event.nativeEvent.layout;
+      const bottom = y + height;
+      setFirstLayout((current) =>
+        current?.key === measurementKey && Math.abs(current.bottom - bottom) < 1
+          ? current
+          : { key: measurementKey, bottom },
+      );
+    },
+    [measurementKey],
+  );
+
+  useEffect(() => {
+    // Both measurements must belong to the same tab and loading/loaded state. Waiting for
+    // them avoids freezing the peek at a skeleton's height while the board is arriving.
+    if (!isRail || introLayout?.key !== measurementKey || firstLayout?.key !== measurementKey) {
+      return;
+    }
+    onFirstItemBottomChange(introLayout.height + firstLayout.bottom);
+  }, [isRail, introLayout, firstLayout, measurementKey, onFirstItemBottomChange]);
+
+  const notices = data ? (
+    <>
+      {data.info ? <StationInfo key={type} info={data.info} /> : null}
+      {error ? <StaleBoardNotice isOnline={isOnline} onRetry={retry} /> : null}
+    </>
+  ) : null;
+
+  const renderTrain = useCallback(
+    ({ item, index }: ListRenderItemInfo<BoardTrain>) => (
+      <View key={index === 0 ? measurementKey : undefined}>
+        {index > 0 ? <TrainRowSeparator /> : null}
+        <TrainRow
+          train={item.train}
+          type={type}
+          isExpanded={expandedTrain === trainKey(item.train)}
+          onToggle={toggleTrain}
+          onLayout={index === 0 ? onFirstItemLayout : undefined}
+        />
+      </View>
+    ),
+    [type, expandedTrain, toggleTrain, onFirstItemLayout, measurementKey],
+  );
+
+  let emptyContent: ReactNode = null;
+  if (isRail && !data) {
     if (error) {
       // Offline, the board reloads by itself once the connection is back.
-      return isOnline ? (
+      emptyContent = isOnline ? (
         <StatusMessage
           icon={CircleAlert}
           title="Unable to load live trains"
@@ -405,75 +523,88 @@ const LiveBoard = memo(function LiveBoard({
           onLayout={onFirstItemLayout}
         />
       );
+    } else {
+      emptyContent = (
+        <View>
+          <TrainRowSkeleton onLayout={onFirstItemLayout} />
+          <TrainRowSeparator />
+          <TrainRowSkeleton />
+          <TrainRowSeparator />
+          <TrainRowSkeleton />
+        </View>
+      );
     }
-    return (
+  } else if (data && trains.length === 0) {
+    emptyContent = (
       <View>
-        <TrainRowSkeleton onLayout={onFirstItemLayout} />
-        <TrainRowSeparator />
-        <TrainRowSkeleton />
-        <TrainRowSeparator />
-        <TrainRowSkeleton />
-      </View>
-    );
-  }
-
-  const trains = showAll ? data.trains : data.trains.slice(0, collapsedTrainCount);
-  const hiddenCount = data.trains.length - collapsedTrainCount;
-  const keyCounts = new Map<string, number>();
-
-  return (
-    <View>
-      {data.info ? <StationInfo info={data.info} /> : null}
-      {error ? <StaleBoardNotice isOnline={isOnline} onRetry={retry} /> : null}
-      {trains.length === 0 ? (
         <Text className="px-4 py-8 text-center text-sm text-muted" onLayout={onFirstItemLayout}>
           {error ? `No ${type} were listed in the last received update.` : `No ${type} scheduled`}
         </Text>
-      ) : (
-        trains.map((train, index) => {
-          // Keyed by the train, not its position, so a refresh where trains have left keeps
-          // the other rows mounted instead of re-creating the whole board.
-          const key = trainKey(train);
-          const occurrence = keyCounts.get(key) ?? 0;
-          keyCounts.set(key, occurrence + 1);
-          return (
-            <Fragment key={occurrence ? `${key}-${occurrence}` : key}>
-              {index > 0 ? <TrainRowSeparator /> : null}
-              <TrainRow
-                train={train}
-                type={type}
-                isExpanded={expandedTrain === key}
-                onToggle={toggleTrain}
-                onLayout={index === 0 ? onFirstItemLayout : undefined}
-              />
-            </Fragment>
-          );
-        })
-      )}
-      {hiddenCount > 0 ? (
-        <Button
-          className="mx-4 mt-3"
-          size="sm"
-          variant="tertiary"
-          onPress={() => {
-            haptics.tap();
-            setShowAll((current) => !current);
-          }}
-        >
-          <Button.Label>
-            {showAll ? "Show fewer" : `Show all ${data.trains.length} ${type}`}
-          </Button.Label>
-          <View style={showAll ? styles.chevronUp : undefined}>
-            <ChevronDown size={16} color={foregroundColor} />
-          </View>
-        </Button>
-      ) : null}
-      {warning ? (
-        <Notice className="mt-3" isWarning icon={<TriangleAlert size={16} color={warningColor} />}>
-          {warning}
-        </Notice>
-      ) : null}
-    </View>
+      </View>
+    );
+  }
+  const hiddenCount = (data?.trains.length ?? 0) - collapsedTrainCount;
+
+  return (
+    <BottomSheetFlatList
+      // Gorhom forwards the RN FlatList instance; its declared ref exposes only list methods.
+      ref={scrollRef as Ref<BottomSheetFlatListMethods>}
+      data={trains}
+      keyExtractor={boardTrainKey}
+      renderItem={renderTrain}
+      initialNumToRender={8}
+      maxToRenderPerBatch={4}
+      windowSize={3}
+      removeClippedSubviews={false}
+      contentContainerStyle={{
+        paddingTop: headerHeight + (isRail ? boardTopSpacing : 0),
+        paddingBottom: bottomInset,
+      }}
+      scrollIndicatorInsets={{ top: headerHeight }}
+      onContentSizeChange={(_, height) => onContentHeightChange(height)}
+      ListHeaderComponent={
+        <View>
+          {/* A refresh removing the first train must not remount or collapse its notice. */}
+          {notices}
+          {/* A zero-height marker measures where the notices end, even if a new board has
+              the same header height. Only this marker remounts as loading/loaded changes. */}
+          <View key={measurementKey} collapsable={false} onLayout={onIntroLayout} />
+          {emptyContent}
+        </View>
+      }
+      ListFooterComponent={
+        <View>
+          {hiddenCount > 0 && data ? (
+            <Button
+              className="mx-4 mt-3"
+              size="sm"
+              variant="tertiary"
+              onPress={() => {
+                haptics.tap();
+                setDisplay((current) => ({ ...current, showAll: !current.showAll }));
+              }}
+            >
+              <Button.Label>
+                {showAll ? "Show fewer" : `Show all ${data.trains.length} ${type}`}
+              </Button.Label>
+              <View style={showAll ? styles.chevronUp : undefined}>
+                <ChevronDown size={16} color={foregroundColor} />
+              </View>
+            </Button>
+          ) : null}
+          {isRail && warning && data ? (
+            <Notice
+              className="mt-3"
+              isWarning
+              icon={<TriangleAlert size={16} color={warningColor} />}
+            >
+              {warning}
+            </Notice>
+          ) : null}
+          {children}
+        </View>
+      }
+    />
   );
 });
 
@@ -649,7 +780,7 @@ function StationSheetContent({
   const [headerHeight, setHeaderHeight] = useState(0);
   const [firstItemBottom, setFirstItemBottom] = useState(0);
   const isPeekFinal = useRef(false);
-  const [scrollRef, scrollOffset] = useSheetScrollOffset();
+  const [scrollRef, scrollOffset] = useSheetScrollOffset<FlatList<BoardTrain>>();
   const hasBoard = board.data !== null || board.error !== null;
 
   useEffect(() => {
@@ -659,13 +790,10 @@ function StationSheetContent({
   }, [isRail, headerHeight, firstItemBottom, insets.bottom, onPeekHeightChange]);
 
   // A stable callback, so the memoized board skips the sheet's other re-renders.
-  const onFirstItemLayout = useCallback(
-    (event: LayoutChangeEvent) => {
+  const onFirstItemBottomChange = useCallback(
+    (bottom: number) => {
       if (isPeekFinal.current) return;
-      const { y, height } = event.nativeEvent.layout;
-      setFirstItemBottom((current) =>
-        Math.abs(current - (y + height)) < 1 ? current : y + height,
-      );
+      setFirstItemBottom((current) => (Math.abs(current - bottom) < 1 ? current : bottom));
       if (hasBoard) isPeekFinal.current = true;
     },
     [hasBoard],
@@ -715,23 +843,17 @@ function StationSheetContent({
         </View>
         <SheetHeaderFade scrollOffset={scrollOffset} />
       </PinnedSheetHeader>
-      <BottomSheetScrollView
-        ref={scrollRef}
-        contentContainerStyle={{ paddingTop: headerHeight, paddingBottom: bottomInset }}
-        scrollIndicatorInsets={{ top: headerHeight }}
-        onContentSizeChange={(_, height) => onContentHeightChange(height)}
+      <LiveBoard
+        board={board}
+        type={type}
+        warning={getStationWarning(station.id)}
+        onFirstItemBottomChange={onFirstItemBottomChange}
+        isRail={isRail}
+        scrollRef={scrollRef}
+        headerHeight={headerHeight}
+        bottomInset={bottomInset}
+        onContentHeightChange={onContentHeightChange}
       >
-        {isRail ? (
-          <View style={{ paddingTop: boardTopSpacing }}>
-            <LiveBoard
-              key={type}
-              board={board}
-              type={type}
-              warning={getStationWarning(station.id)}
-              onFirstItemLayout={onFirstItemLayout}
-            />
-          </View>
-        ) : null}
         {showDetails ? (
           <StationDetails
             station={station}
@@ -740,7 +862,7 @@ function StationSheetContent({
             onSelectStation={onSelectStation}
           />
         ) : null}
-      </BottomSheetScrollView>
+      </LiveBoard>
     </View>
   );
 }

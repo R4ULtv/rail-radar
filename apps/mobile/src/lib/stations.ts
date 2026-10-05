@@ -1,7 +1,8 @@
-import type { Station, StationFeatureCollection } from "@repo/data/types";
+import type { Station } from "@repo/data/types";
 import { File } from "expo-file-system";
 
 import { distanceKm } from "@/lib/distance";
+import { parseStations } from "@/lib/parse-stations";
 import { createStationSearch } from "@/lib/station-search-index";
 
 export type StationSearch = Awaited<ReturnType<typeof createStationSearch>>;
@@ -16,16 +17,7 @@ interface LoadedStations {
 let loaded: LoadedStations | null = null;
 
 async function readStations(url: string): Promise<Station[]> {
-  const collection = JSON.parse(await new File(url).text()) as StationFeatureCollection;
-  if (!Array.isArray(collection?.features)) throw new Error("Stations are invalid.");
-
-  return collection.features.map(({ properties, geometry }) => ({
-    id: properties.id,
-    name: properties.name,
-    type: properties.type,
-    importance: properties.importance,
-    geo: { lat: geometry.coordinates[1]!, lng: geometry.coordinates[0]! },
-  }));
+  return parseStations(await new File(url).text());
 }
 
 function load(url: string): LoadedStations {
@@ -56,7 +48,11 @@ export function loadStations(url: string): Promise<Station[]> {
 export function loadStationSearch(url: string): Promise<StationSearch> {
   const current = load(url);
   if (!current.search) {
-    const search = current.stations.then(createStationSearch);
+    const search = current.stations.then(async (stations) => {
+      // Parsing and the index's first batch must not share one uninterrupted JS turn.
+      await new Promise<void>((resolve) => setTimeout(resolve, 0));
+      return createStationSearch(stations);
+    });
     search.catch(() => {
       if (current.search === search) current.search = undefined;
     });

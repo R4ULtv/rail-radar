@@ -42,7 +42,10 @@ export function useStationSearch(
   const deferredQuery = useDeferredValue(query);
   const searchLocation = useSearchLocation(userLocation, deferredQuery, visible);
   const [retryCount, setRetryCount] = useState(0);
-  const [search, setSearch] = useState<StationSearch | null>(null);
+  const [loadedSearch, setSearch] = useState<{ url: string; search: StationSearch } | null>(null);
+  // A reset can switch the map's file while parsing/indexing is still in progress. Never
+  // search the previous catalogue while the replacement prepares.
+  const search = loadedSearch?.url === stationsUrl ? loadedSearch.search : null;
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -52,7 +55,7 @@ export function useStationSearch(
     setError(null);
     loadStationSearch(stationsUrl)
       .then((loaded) => {
-        if (!cancelled) setSearch(() => loaded);
+        if (!cancelled) setSearch({ url: stationsUrl, search: loaded });
       })
       .catch(() => {
         if (!cancelled) setError("Stations could not be loaded.");

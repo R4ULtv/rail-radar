@@ -1,11 +1,12 @@
 import type { Station } from "@repo/data/types";
 import BottomSheet, {
-  BottomSheetScrollView,
+  BottomSheetSectionList,
   useBottomSheet,
   useBottomSheetInternal,
 } from "@gorhom/bottom-sheet";
 import { useBottomSheetAwareHandlers, useThemeColor } from "heroui-native/hooks";
 import { SearchField } from "heroui-native/search-field";
+import { ListGroup } from "heroui-native/list-group";
 import Bookmark from "lucide-react-native/icons/bookmark";
 import CircleAlert from "lucide-react-native/icons/circle-alert";
 import History from "lucide-react-native/icons/rotate-ccw-clock";
@@ -31,8 +32,10 @@ import {
   Text,
   useWindowDimensions,
   View,
+  type SectionList,
+  type SectionListRenderItemInfo,
 } from "react-native";
-import Animated, {
+import {
   Extrapolation,
   interpolate,
   useAnimatedReaction,
@@ -53,7 +56,14 @@ import {
   SheetHeaderFade,
   useSheetScrollOffset,
 } from "@/components/sheet-header";
-import { StationSection, StationSectionSkeleton } from "@/components/station-list";
+import {
+  RowSeparator,
+  ShowAllButton,
+  StationRow,
+  StationSectionTitle,
+  StationSectionSkeleton,
+  type SectionIcon,
+} from "@/components/station-list";
 import { StatusMessage } from "@/components/status-message";
 import { useStationSearch } from "@/hooks/use-station-search";
 import { useRecentStations, useSavedStations } from "@/hooks/use-stored-stations";
@@ -113,6 +123,11 @@ function renderVisitorCounts(station: TrendingStation) {
   return <VisitorCounts station={station} />;
 }
 
+// Only used by the trending section, whose rows include these counts.
+function renderTrendingSuffix(station: Station) {
+  return renderVisitorCounts(station as TrendingStation);
+}
+
 function StationDistance({ station, from }: { station: Station; from: UserLocation }) {
   if (!station.geo) return null;
   return (
@@ -128,6 +143,20 @@ function EmptyState({ children }: { children: ReactNode }) {
 
 const searchResultsTitle = "Search results";
 const trendingTitle = "Trending (last 7 days)";
+
+interface SearchSection {
+  key: "results" | "recent" | "saved" | "trending";
+  title: string;
+  icon: SectionIcon;
+  data: Station[];
+  renderSuffix?: (station: Station) => ReactNode;
+  fullCount?: number;
+  isExpanded?: boolean;
+}
+
+function stationKey(station: Station) {
+  return station.id;
+}
 
 // Memoized, so hiding and showing the sheet around a station sheet doesn't re-render its lists.
 const SearchSheetContent = memo(function SearchSheetContent({
@@ -173,7 +202,7 @@ const SearchSheetContent = memo(function SearchSheetContent({
   }));
   const { onFocus, onBlur } = useBottomSheetAwareHandlers();
   const inputRef = useRef<ComponentRef<typeof SearchField.Input>>(null);
-  const [scrollRef, scrollOffset] = useSheetScrollOffset();
+  const [scrollRef, scrollOffset] = useSheetScrollOffset<SectionList<Station, SearchSection>>();
   const [headerHeight, setHeaderHeight] = useState(0);
   const [isFocused, setIsFocused] = useState(false);
 
@@ -213,6 +242,24 @@ const SearchSheetContent = memo(function SearchSheetContent({
     savedStations.length > 0 ||
     trendingStations.length > 0 ||
     isTrendingLoading;
+  const [sectionDisplay, setSectionDisplay] = useState({
+    defaultsVisible: showDefaultLists,
+    recentExpanded: false,
+    savedExpanded: false,
+  });
+  // Previously these sections unmounted during a search. Keep that collapse behavior,
+  // while the outer scrollable itself stays mounted.
+  if (sectionDisplay.defaultsVisible !== showDefaultLists) {
+    setSectionDisplay({
+      defaultsVisible: showDefaultLists,
+      recentExpanded: false,
+      savedExpanded: false,
+    });
+  }
+  const recentExpanded =
+    sectionDisplay.defaultsVisible === showDefaultLists && sectionDisplay.recentExpanded;
+  const savedExpanded =
+    sectionDisplay.defaultsVisible === showDefaultLists && sectionDisplay.savedExpanded;
 
   const selectStation = useCallback(
     (station: Station) => {
@@ -221,6 +268,105 @@ const SearchSheetContent = memo(function SearchSheetContent({
     },
     [onSelectStation],
   );
+
+  const sections = useMemo<SearchSection[]>(() => {
+    const result: SearchSection[] = [];
+    if (search.isActive && !search.error && search.stations.length > 0) {
+      result.push({
+        key: "results",
+        title: searchResultsTitle,
+        icon: List,
+        data: search.stations,
+        renderSuffix: renderDistance,
+      });
+    }
+    if (showDefaultLists) {
+      if (unsavedRecentStations.length > 0) {
+        result.push({
+          key: "recent",
+          title: "Recent stations",
+          icon: History,
+          data: recentExpanded ? unsavedRecentStations : unsavedRecentStations.slice(0, 3),
+          fullCount: unsavedRecentStations.length,
+          isExpanded: recentExpanded,
+        });
+      }
+      if (savedStations.length > 0) {
+        result.push({
+          key: "saved",
+          title: "Saved stations",
+          icon: Bookmark,
+          data: savedExpanded ? savedStations : savedStations.slice(0, 5),
+          fullCount: savedStations.length,
+          isExpanded: savedExpanded,
+        });
+      }
+      if (!isTrendingLoading && trendingStations.length > 0) {
+        result.push({
+          key: "trending",
+          title: trendingTitle,
+          icon: TrendingUp,
+          data: trendingStations,
+          renderSuffix: renderTrendingSuffix,
+        });
+      }
+    }
+    return result;
+  }, [
+    search.isActive,
+    search.error,
+    search.stations,
+    renderDistance,
+    showDefaultLists,
+    unsavedRecentStations,
+    savedStations,
+    recentExpanded,
+    savedExpanded,
+    isTrendingLoading,
+    trendingStations,
+  ]);
+
+  const renderStation = useCallback(
+    ({ item, index, section }: SectionListRenderItemInfo<Station, SearchSection>) => (
+      // Each cell supplies its own surface, with corners only at the section's ends. The
+      // section itself never wraps all of its rows in a single, eagerly mounted view.
+      <ListGroup
+        variant="secondary"
+        className={`overflow-hidden rounded-none shadow-none ${index === 0 ? "rounded-t-3xl" : ""} ${index === section.data.length - 1 ? "rounded-b-3xl" : ""}`}
+      >
+        {index > 0 ? <RowSeparator /> : null}
+        <StationRow station={item} renderSuffix={section.renderSuffix} onSelect={selectStation} />
+      </ListGroup>
+    ),
+    [selectStation],
+  );
+
+  const renderSectionHeader = useCallback(
+    ({ section }: { section: SearchSection }) => (
+      <View className="mt-5">
+        <StationSectionTitle icon={section.icon} title={section.title} />
+      </View>
+    ),
+    [],
+  );
+
+  const renderSectionFooter = useCallback(({ section }: { section: SearchSection }) => {
+    const collapsedCount = section.key === "recent" ? 3 : 5;
+    if (section.fullCount === undefined || section.fullCount <= collapsedCount) return null;
+    return (
+      <ShowAllButton
+        count={section.fullCount}
+        isExpanded={section.isExpanded ?? false}
+        onPress={() => {
+          setSectionDisplay((current) =>
+            section.key === "recent"
+              ? { ...current, recentExpanded: !current.recentExpanded }
+              : { ...current, savedExpanded: !current.savedExpanded },
+          );
+        }}
+      />
+    );
+  }, []);
 
   return (
     <View style={{ height: contentHeight }}>
@@ -280,83 +426,66 @@ const SearchSheetContent = memo(function SearchSheetContent({
         <SheetHeaderFade scrollOffset={scrollOffset} />
       </PinnedSheetHeader>
 
-      <BottomSheetScrollView
+      <BottomSheetSectionList
         ref={scrollRef}
+        sections={sections}
+        keyExtractor={stationKey}
+        renderItem={renderStation}
+        renderSectionHeader={renderSectionHeader}
+        renderSectionFooter={renderSectionFooter}
+        stickySectionHeadersEnabled={false}
+        initialNumToRender={12}
+        maxToRenderPerBatch={6}
+        windowSize={5}
+        removeClippedSubviews={false}
+        style={listStyle}
         keyboardDismissMode="on-drag"
         keyboardShouldPersistTaps="handled"
         contentContainerStyle={{
           paddingTop: headerHeight,
+          paddingHorizontal: 16,
           // With the keyboard up, the same space above it instead.
           paddingBottom: Math.max(keyboardHeight + 16, bottomInset),
         }}
         scrollIndicatorInsets={{ top: headerHeight }}
-      >
-        <Animated.View className="px-4" style={listStyle}>
-          {!search.isActive ? null : search.error ? (
-            <StatusMessage
-              className="mt-5"
-              icon={CircleAlert}
-              title="Unable to search stations"
-              description={search.error}
-              onRetry={search.retry}
-            />
-          ) : search.stations.length > 0 ? (
-            <StationSection
-              title={searchResultsTitle}
-              icon={List}
-              stations={search.stations}
-              renderSuffix={renderDistance}
-              onSelect={selectStation}
-            />
-          ) : noResults ? (
-            <StatusMessage
-              className="mt-5"
-              icon={SearchX}
-              title="No stations found"
-              description="Try a different search term."
-            />
-          ) : (
-            <StationSectionSkeleton title={searchResultsTitle} icon={List} />
-          )}
-          {showDefaultLists ? (
-            <>
-              <StationSection
-                title="Recent stations"
-                icon={History}
-                stations={unsavedRecentStations}
-                onSelect={selectStation}
-                collapsedCount={3}
+        ListHeaderComponent={
+          <View>
+            {!search.isActive ? null : search.error ? (
+              <StatusMessage
+                className="mt-5"
+                icon={CircleAlert}
+                title="Unable to search stations"
+                description={search.error}
+                onRetry={search.retry}
               />
-              <StationSection
-                title="Saved stations"
-                icon={Bookmark}
-                stations={savedStations}
-                onSelect={selectStation}
-                collapsedCount={5}
+            ) : search.stations.length > 0 ? null : noResults ? (
+              <StatusMessage
+                className="mt-5"
+                icon={SearchX}
+                title="No stations found"
+                description="Try a different search term."
               />
-              {isTrendingLoading ? (
-                <StationSectionSkeleton title={trendingTitle} icon={TrendingUp} hasSuffix />
-              ) : (
-                <StationSection
-                  title={trendingTitle}
-                  icon={TrendingUp}
-                  stations={trendingStations}
-                  renderSuffix={renderVisitorCounts}
-                  onSelect={selectStation}
-                />
-              )}
-              {!search.isActive && !hasDefaultLists ? (
-                <EmptyState>
-                  <Text className="text-center text-sm text-muted">
-                    Search for a station by name, or save one from its live board to find it here.
-                  </Text>
-                </EmptyState>
-              ) : null}
-            </>
-          ) : null}
-          <MapAttribution className="mt-8" getMapFeedbackUrl={getMapFeedbackUrl} />
-        </Animated.View>
-      </BottomSheetScrollView>
+            ) : (
+              <StationSectionSkeleton title={searchResultsTitle} icon={List} />
+            )}
+          </View>
+        }
+        ListFooterComponent={
+          <View>
+            {showDefaultLists && isTrendingLoading ? (
+              <StationSectionSkeleton title={trendingTitle} icon={TrendingUp} hasSuffix />
+            ) : null}
+            {showDefaultLists && !search.isActive && !hasDefaultLists ? (
+              <EmptyState>
+                <Text className="text-center text-sm text-muted">
+                  Search for a station by name, or save one from its live board to find it here.
+                </Text>
+              </EmptyState>
+            ) : null}
+            <MapAttribution className="mt-8" getMapFeedbackUrl={getMapFeedbackUrl} />
+          </View>
+        }
+      />
     </View>
   );
 });

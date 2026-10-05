@@ -1,6 +1,6 @@
 import { CloseButton } from "heroui-native/close-button";
 import { useThemeColor } from "heroui-native/hooks";
-import type { ReactNode } from "react";
+import type { Component, ReactNode } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import Animated, {
   Easing,
@@ -87,9 +87,9 @@ const cssEaseInOut = Easing.bezierFn(0.42, 0, 0.58, 1);
 // Always solid under the header, so lists never scroll right up against it.
 const fadeGap = 8;
 
-/** A sheet list's scroll position, for its header fade. Pass the ref to the scroll view. */
-export function useSheetScrollOffset() {
-  const scrollRef = useAnimatedRef<Animated.ScrollView>();
+/** A sheet list's scroll position, for its header fade. Pass the ref to the scrollable. */
+export function useSheetScrollOffset<T extends Component = Animated.ScrollView>() {
+  const scrollRef = useAnimatedRef<T>();
   const scrollOffset = useScrollOffset(scrollRef);
   return [scrollRef, scrollOffset] as const;
 }
