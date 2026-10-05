@@ -77,12 +77,18 @@ function PrivacyPolicyPage() {
             our servers.
           </p>
 
-          <h3 className="mb-2 mt-4 text-lg font-medium text-foreground">2.4 Android Beta Signup</h3>
+          <h3 className="mb-2 mt-4 text-lg font-medium text-foreground">2.4 Mobile App Signup</h3>
           <p>
             If you sign up for the Android beta, we store the email address you enter. We use it to
             add your Google account to the closed test on Google Play and to email you about the
             beta, your invite, any promo code, and the app&apos;s launch. To have your email
             removed, reply to any beta email or contact us.
+          </p>
+          <p className="mt-2">
+            If you join the iPhone waitlist, we add your email to a separate list from the Android
+            beta and use it to notify you about iPhone availability, the beta, and the launch. The
+            iPhone app is not currently available. To have your email removed, reply to any waitlist
+            email or contact us.
           </p>
         </section>
 
@@ -96,7 +102,9 @@ function PrivacyPolicyPage() {
             <li>Analyze usage patterns to improve the Service (e.g., trending stations)</li>
             <li>Monitor and prevent technical issues</li>
             <li>Enforce rate limits to protect the Service from abuse</li>
-            <li>Send emails about the Android beta to people who sign up for it</li>
+            <li>
+              Send mobile app beta, availability, and launch emails to people who sign up for them
+            </li>
           </ul>
         </section>
 
@@ -124,7 +132,7 @@ function PrivacyPolicyPage() {
               information such as IP addresses in accordance with its privacy policy
             </li>
             <li>
-              <strong className="text-foreground">Resend</strong> &mdash; for storing Android beta
+              <strong className="text-foreground">Resend</strong> &mdash; for storing mobile app
               signups and sending beta emails. Resend processes your email address and email
               delivery data, such as opens and bounces, in accordance with its privacy policy
             </li>
