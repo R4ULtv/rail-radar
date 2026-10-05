@@ -1,6 +1,11 @@
 import * as Location from "expo-location";
 
-import { acquireLocationFix, type LocationFix } from "@/lib/location-tracking";
+import {
+  acquireLocationFix,
+  locationRequestMaxAgeMs,
+  type LocationFix,
+  type LocationRequestMode,
+} from "@/lib/location-tracking";
 
 export class LocationAccessError extends Error {
   status: "idle" | "off";
@@ -30,17 +35,25 @@ export async function checkLocationAccess(askPermission: boolean) {
 }
 
 /**
- * A short-lived watch gives us a fresh fix and can be cancelled on backgrounding or timeout.
+ * Fast requests race recent OS positions against balanced-accuracy acquisition.
+ * Stationary checks request high accuracy, accepting the first recent fix without an accuracy gate.
+ * Acquisition can be cancelled on backgrounding or timeout.
  * It is removed after the fix, leaving no continuous GPS watch between scheduled requests.
  */
-export async function requestLocationFix(signal: AbortSignal): Promise<LocationFix> {
+export async function requestLocationFix(
+  signal: AbortSignal,
+  mode: LocationRequestMode = "fast",
+): Promise<LocationFix> {
   await checkLocationAccess(false);
+  const precise = mode === "precise";
   return acquireLocationFix(
     (onPosition, onError) =>
       Location.watchPositionAsync(
         {
-          accuracy: Location.Accuracy.High,
+          accuracy: precise ? Location.Accuracy.High : Location.Accuracy.Balanced,
           distanceInterval: 0,
+          // Keep Android's native cadence short while waiting for the first usable fix.
+          timeInterval: 1_000,
           // A watch is only alive while acquiring one fix, on both iOS and Android.
           mayShowUserSettingsDialog: false,
         },
@@ -48,5 +61,6 @@ export async function requestLocationFix(signal: AbortSignal): Promise<LocationF
         onError,
       ),
     signal,
+    () => Location.getLastKnownPositionAsync({ maxAge: locationRequestMaxAgeMs }),
   );
 }
