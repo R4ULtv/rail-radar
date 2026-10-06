@@ -6,6 +6,23 @@ the commit they were built from.
 
 ## [Unreleased]
 
+### Added
+
+- Phone direction on the map: tap Locate to show a compass cone around your location dot.
+  It stays visible when browsing the map and pauses when the app is in the background.
+  Compass readings are averaged to reduce wobble when holding the phone still.
+
+### Fixed
+
+- Compass averaging stays smooth after a period of stillness and when crossing north.
+- Low-quality compass readings hide the cone until calibration recovers.
+
+### Changed
+
+- Faster location acquisition on launch and five-second refreshes uses balanced accuracy and
+  recent phone positions. Thirty-second stationary checks use high accuracy without an accuracy
+  threshold. Locate interrupts a pending high-accuracy check to get a quick position.
+
 ## [0.4.1] (10) – 2026-10-05
 
 ### Changed

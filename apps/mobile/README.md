@@ -20,13 +20,14 @@ paid app. Buying it supports the project and keeps the website free for everyone
   in the search.
 - **Trending stations** of the week, ranked by unique visitors.
 - **Live position.** The location dot animates between measured positions. Locate starts camera
-  following; panning or opening a station stops it. Opening a station leaves the camera in place.
+  following and shows the direction your phone is pointing. Panning or opening a station stops
+  following while keeping the direction cone visible.
 - **Station details** with photos and visit stats, and a Share button that sends a link to the
   station's page on the website.
 - **Two maps, light and dark.** A simple map that keeps the railway in front, or Mapbox's street
   map, following the system appearance or set in the settings.
-- **Works offline.** The map, search and nearby stations keep working from the stations bundled
-  with the app and Mapbox's cache, and live data comes back as soon as the connection does.
+- **Offline search and cached maps.** Station search and nearby station lookup use bundled data.
+  Previously cached map tiles can display offline; live boards need a connection.
 - **Private by design.** No account. The location is only used on the device to show you on the
   map and sort stations by distance, and Mapbox's telemetry is turned off.
 
@@ -202,37 +203,18 @@ write. Saved/recent stations, location, and station downloads keep their own dat
 
 ### Notes
 
-- Location is foreground-only. A cancellable, short-lived Expo watch obtains one fresh fix every
-  5 seconds while moving or uncertain, then every 30 seconds after two fresh, reliable fixes stay
-  within the same area (20 metres or the sum of their accuracy radii, whichever is larger).
-  Speed estimates do not override matching positions. Movement is measured from a fixed reference
-  position so slow walking eventually resumes five-second checks. Fixes with unknown accuracy or
-  an accuracy radius over 100 metres cannot confirm stillness. Locate still refreshes immediately.
-  Acquisition may take longer when GPS is unavailable; requests never overlap. Mapbox draws an
-  animated map layer from these fixes, without running its own location tracker. The dot smooths
-  measured movement over 700 ms and does not predict future positions. Actual battery usage needs
-  checking on a device.
-- Visible search results refresh their distances and ranking at most every 30 seconds after at
-  least 50 metres of movement. Opening search, a new query, or the first location fix refreshes
-  them immediately. GPS jitter does not continually shuffle the results.
-- Run the movement, scheduling, acquisition and cancellation tests with
-  `pnpm --filter=mobile test:location`, or directly with
-  `node --experimental-strip-types --test apps/mobile/tests/location-tracking.test.mjs` from the root.
-- Stations ship with the app from `packages/data/src/stations.geojson`. At most once a day, the
-  app downloads the latest `stations.geojson` from the API in the background and uses it from the
-  next launch.
-- Requests send a `User-Agent` such as `RailRadar/<version> (iOS 18.2)`, with the version from
-  `app.json`. Filter on `RailRadar/` in Cloudflare Workers Logs to see the app's requests.
-- Mapbox's attribution button is hidden, since telemetry is off. The credits are at the bottom of
-  the search and map style sheets and in the settings.
-- Map tiles use Mapbox's native disk cache with a seven-day minimum update interval, configured
-  by `patches/@rnmapbox__maps@10.3.5.patch` in this app. It covers the Simple map in
-  light and dark mode and the railway source added for Streets. Mapbox Standard's imported
-  base-map sources are hidden from this API and retain their default caching. Styles, fonts,
-  station data and live boards also retain their own refresh policies. This changes tile
-  freshness, not the disk budget or a guarantee that tiles remain stored for seven days.
-  Existing expired tiles may revalidate once before adopting the longer interval. Changing
-  the patch requires rebuilding the native app; Metro reloads and OTA updates cannot apply it.
-- The railway lines are pinned below the station layers and mounted after them: on iOS, rnmapbox
-  10.3.5 never adds a layer that waits for one that isn't on the map yet
-  ([rnmapbox/maps#4288](https://github.com/rnmapbox/maps/pull/4288)).
+- Location and compass tracking pause in the background. Position checks run every 5 seconds
+  while moving or uncertain, and every 30 seconds when stationary. Locate enables the compass
+  cone for the session; unreliable compass readings hide it.
+- Visible search results update distances and ranking at most every 30 seconds after 50 metres
+  of movement. Opening search, changing the query, or receiving the first fix refreshes immediately.
+- Stations are bundled from `packages/data/src/stations.geojson`. Background API updates are
+  downloaded at most once a day and applied on the next launch.
+- API and photo requests use a `RailRadar/<version>` User-Agent. Filter on `RailRadar/` in
+  Cloudflare Workers Logs to find them.
+- Mapbox telemetry is disabled. Map credits appear in the search and map style sheets and settings.
+- The [Mapbox patch](./patches/@rnmapbox__maps@10.3.5.patch) sets a seven-day minimum tile update
+  interval for Simple maps and the Streets railway source. Mapbox Standard's base map keeps its
+  defaults. This controls freshness, not cache retention; patch changes require a native rebuild.
+- Railway layers mount after station layers, with lines drawn below stations, to satisfy iOS
+  layer ordering.
