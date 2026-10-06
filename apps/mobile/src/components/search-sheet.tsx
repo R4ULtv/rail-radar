@@ -304,6 +304,7 @@ const SearchSheetContent = memo(function SearchSheetContent({
           data: recentExpanded ? unsavedRecentStations : unsavedRecentStations.slice(0, 3),
           fullCount: unsavedRecentStations.length,
           isExpanded: recentExpanded,
+          renderSuffix: renderDistance,
         });
       }
       if (savedStations.length > 0) {
@@ -347,6 +348,7 @@ const SearchSheetContent = memo(function SearchSheetContent({
       "savedStations" in item ? (
         <ReorderableStationList
           stations={item.savedStations}
+          renderSuffix={renderDistance}
           onSelect={selectStation}
           onMove={moveSavedStation}
           onDragActiveChange={setIsReordering}
@@ -362,7 +364,7 @@ const SearchSheetContent = memo(function SearchSheetContent({
           <StationRow station={item} renderSuffix={section.renderSuffix} onSelect={selectStation} />
         </ListGroup>
       ),
-    [selectStation],
+    [selectStation, renderDistance],
   );
 
   const renderSectionHeader = useCallback(

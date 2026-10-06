@@ -1,7 +1,7 @@
 import type { Station } from "@repo/data/types";
 import { useThemeColor } from "heroui-native/hooks";
 import { ListGroup } from "heroui-native/list-group";
-import { Fragment, memo, useCallback, useEffect, useMemo, useState } from "react";
+import { Fragment, memo, useCallback, useEffect, useMemo, useState, type ReactNode } from "react";
 import {
   StyleSheet,
   View,
@@ -79,6 +79,7 @@ interface RowProps {
   activeId: SharedValue<string | null>;
   liftColor: string;
   pressedColor: string;
+  renderSuffix?: (station: Station) => ReactNode;
   onSelect: (station: Station) => void;
   onMove: (id: string, to: number) => void;
   onLift: () => void;
@@ -95,6 +96,7 @@ const ReorderableRow = memo(function ReorderableRow({
   activeId,
   liftColor,
   pressedColor,
+  renderSuffix,
   onSelect,
   onMove,
   onLift,
@@ -246,6 +248,7 @@ const ReorderableRow = memo(function ReorderableRow({
         <Animated.View style={[styles.clip, shapeStyle]}>
           <StationRow
             station={station}
+            renderSuffix={renderSuffix}
             onSelect={onSelect}
             accessibilityActions={accessibilityActions}
             onAccessibilityAction={onAccessibilityAction}
@@ -262,11 +265,14 @@ const ReorderableRow = memo(function ReorderableRow({
  */
 export const ReorderableStationList = memo(function ReorderableStationList({
   stations,
+  renderSuffix,
   onSelect,
   onMove,
   onDragActiveChange,
 }: {
   stations: Station[];
+  /** Shown on the right of each row, e.g. the distance. */
+  renderSuffix?: (station: Station) => ReactNode;
   onSelect: (station: Station) => void;
   /** Moves a station to another slot, by its index in `stations`. */
   onMove: (id: string, to: number) => void;
@@ -320,7 +326,7 @@ export const ReorderableStationList = memo(function ReorderableStationList({
           <Fragment key={station.id}>
             {index > 0 ? <RowSeparator /> : null}
             <View onLayout={index === 0 ? onRowLayout : undefined}>
-              <StationRow station={station} onSelect={onSelect} />
+              <StationRow station={station} renderSuffix={renderSuffix} onSelect={onSelect} />
             </View>
           </Fragment>
         ))}
@@ -344,6 +350,7 @@ export const ReorderableStationList = memo(function ReorderableStationList({
           activeId={activeId}
           liftColor={liftColor}
           pressedColor={pressedColor}
+          renderSuffix={renderSuffix}
           onSelect={onSelect}
           onMove={onMove}
           onLift={onLift}
