@@ -23,7 +23,10 @@ export const haptics = {
   /** A tap that does something: picking a station, locating, turning north up. */
   tap: () =>
     play(() => Haptics.impactAsync(ImpactFeedbackStyle.Light), AndroidHaptics.Context_Click),
-  /** Switching between options, like departures and arrivals. */
+  /** A long press that picks something up, like a saved station to reorder. */
+  lift: () =>
+    play(() => Haptics.impactAsync(ImpactFeedbackStyle.Medium), AndroidHaptics.Long_Press),
+  /** Switching between options, like departures and arrivals, or a dragged row changing place. */
   selection: () => play(Haptics.selectionAsync, AndroidHaptics.Segment_Tick),
   toggleOn: () =>
     play(

@@ -79,6 +79,16 @@ export function useSavedStations() {
   };
 }
 
+/** Moves a saved station to another place in the list, e.g. after dragging it there. */
+export function moveSavedStation(id: string, to: number) {
+  const current = savedStore.read();
+  const station = current.find((saved) => saved.id === id);
+  if (!station) return;
+  const next = current.filter((saved) => saved.id !== id);
+  next.splice(to, 0, station);
+  savedStore.write(next);
+}
+
 export function useRecentStations() {
   return useSyncExternalStore(recentStore.subscribe, recentStore.read);
 }

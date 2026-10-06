@@ -45,6 +45,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { scheduleOnRN } from "react-native-worklets";
 
 import { MapAttribution } from "@/components/map-attribution";
+import { ReorderableStationList } from "@/components/reorderable-station-list";
 import {
   useSheetBottomInset,
   useSheetTopInset,
@@ -66,7 +67,7 @@ import {
 } from "@/components/station-list";
 import { StatusMessage } from "@/components/status-message";
 import { useStationSearch } from "@/hooks/use-station-search";
-import { useRecentStations, useSavedStations } from "@/hooks/use-stored-stations";
+import { moveSavedStation, useRecentStations, useSavedStations } from "@/hooks/use-stored-stations";
 import { useTrendingStations, type TrendingStation } from "@/hooks/use-trending-stations";
 import { distanceKm, formatDistance } from "@/lib/distance";
 import { formatCount } from "@/lib/format";
@@ -144,18 +145,25 @@ function EmptyState({ children }: { children: ReactNode }) {
 const searchResultsTitle = "Search results";
 const trendingTitle = "Trending (last 7 days)";
 
+/** The saved stations are a single item, so a row can be dragged to another place among them. */
+interface SavedStationsItem {
+  savedStations: Station[];
+}
+
+type SearchItem = Station | SavedStationsItem;
+
 interface SearchSection {
   key: "results" | "recent" | "saved" | "trending";
   title: string;
   icon: SectionIcon;
-  data: Station[];
+  data: SearchItem[];
   renderSuffix?: (station: Station) => ReactNode;
   fullCount?: number;
   isExpanded?: boolean;
 }
 
-function stationKey(station: Station) {
-  return station.id;
+function itemKey(item: SearchItem) {
+  return "savedStations" in item ? "saved" : item.id;
 }
 
 // Memoized, so hiding and showing the sheet around a station sheet doesn't re-render its lists.
@@ -202,9 +210,11 @@ const SearchSheetContent = memo(function SearchSheetContent({
   }));
   const { onFocus, onBlur } = useBottomSheetAwareHandlers();
   const inputRef = useRef<ComponentRef<typeof SearchField.Input>>(null);
-  const [scrollRef, scrollOffset] = useSheetScrollOffset<SectionList<Station, SearchSection>>();
+  const [scrollRef, scrollOffset] = useSheetScrollOffset<SectionList<SearchItem, SearchSection>>();
   const [headerHeight, setHeaderHeight] = useState(0);
   const [isFocused, setIsFocused] = useState(false);
+  // The list doesn't scroll under a saved station that's being dragged.
+  const [isReordering, setIsReordering] = useState(false);
 
   // Android's back button hides the keyboard but leaves the field focused.
   useEffect(() => {
@@ -260,6 +270,11 @@ const SearchSheetContent = memo(function SearchSheetContent({
     sectionDisplay.defaultsVisible === showDefaultLists && sectionDisplay.recentExpanded;
   const savedExpanded =
     sectionDisplay.defaultsVisible === showDefaultLists && sectionDisplay.savedExpanded;
+  // Kept stable while the sections change around it, so a drag in progress isn't reset.
+  const savedItem = useMemo<SavedStationsItem>(
+    () => ({ savedStations: savedExpanded ? savedStations : savedStations.slice(0, 5) }),
+    [savedStations, savedExpanded],
+  );
 
   const selectStation = useCallback(
     (station: Station) => {
@@ -296,7 +311,7 @@ const SearchSheetContent = memo(function SearchSheetContent({
           key: "saved",
           title: "Saved stations",
           icon: Bookmark,
-          data: savedExpanded ? savedStations : savedStations.slice(0, 5),
+          data: [savedItem],
           fullCount: savedStations.length,
           isExpanded: savedExpanded,
         });
@@ -322,22 +337,31 @@ const SearchSheetContent = memo(function SearchSheetContent({
     savedStations,
     recentExpanded,
     savedExpanded,
+    savedItem,
     isTrendingLoading,
     trendingStations,
   ]);
 
   const renderStation = useCallback(
-    ({ item, index, section }: SectionListRenderItemInfo<Station, SearchSection>) => (
-      // Each cell supplies its own surface, with corners only at the section's ends. The
-      // section itself never wraps all of its rows in a single, eagerly mounted view.
-      <ListGroup
-        variant="secondary"
-        className={`overflow-hidden rounded-none shadow-none ${index === 0 ? "rounded-t-3xl" : ""} ${index === section.data.length - 1 ? "rounded-b-3xl" : ""}`}
-      >
-        {index > 0 ? <RowSeparator /> : null}
-        <StationRow station={item} renderSuffix={section.renderSuffix} onSelect={selectStation} />
-      </ListGroup>
-    ),
+    ({ item, index, section }: SectionListRenderItemInfo<SearchItem, SearchSection>) =>
+      "savedStations" in item ? (
+        <ReorderableStationList
+          stations={item.savedStations}
+          onSelect={selectStation}
+          onMove={moveSavedStation}
+          onDragActiveChange={setIsReordering}
+        />
+      ) : (
+        // Each cell supplies its own surface, with corners only at the section's ends. The
+        // section itself never wraps all of its rows in a single, eagerly mounted view.
+        <ListGroup
+          variant="secondary"
+          className={`overflow-hidden rounded-none shadow-none ${index === 0 ? "rounded-t-3xl" : ""} ${index === section.data.length - 1 ? "rounded-b-3xl" : ""}`}
+        >
+          {index > 0 ? <RowSeparator /> : null}
+          <StationRow station={item} renderSuffix={section.renderSuffix} onSelect={selectStation} />
+        </ListGroup>
+      ),
     [selectStation],
   );
 
@@ -429,7 +453,7 @@ const SearchSheetContent = memo(function SearchSheetContent({
       <BottomSheetSectionList
         ref={scrollRef}
         sections={sections}
-        keyExtractor={stationKey}
+        keyExtractor={itemKey}
         renderItem={renderStation}
         renderSectionHeader={renderSectionHeader}
         renderSectionFooter={renderSectionFooter}
@@ -438,6 +462,7 @@ const SearchSheetContent = memo(function SearchSheetContent({
         maxToRenderPerBatch={6}
         windowSize={5}
         removeClippedSubviews={false}
+        scrollEnabled={!isReordering}
         style={listStyle}
         keyboardDismissMode="on-drag"
         keyboardShouldPersistTaps="handled"

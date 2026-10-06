@@ -5,7 +5,7 @@ import { ListGroup } from "heroui-native/list-group";
 import { Separator } from "heroui-native/separator";
 import ChevronDown from "lucide-react-native/icons/chevron-down";
 import { Fragment, memo, useState, type ComponentType, type ReactNode } from "react";
-import { Image, StyleSheet, Text, View } from "react-native";
+import { Image, StyleSheet, Text, View, type AccessibilityProps } from "react-native";
 
 import { CountryFlag } from "@/components/country-flag";
 import { Skeleton } from "@/components/skeleton";
@@ -33,7 +33,10 @@ export function RowSeparator() {
   return <Separator className="mr-4 ml-13" />;
 }
 
-interface StationRowProps<T extends Station> {
+interface StationRowProps<T extends Station> extends Pick<
+  AccessibilityProps,
+  "accessibilityActions" | "onAccessibilityAction"
+> {
   station: T;
   renderSuffix?: (station: T) => ReactNode;
   onSelect: (station: Station) => void;
@@ -43,10 +46,14 @@ function StationRowContent<T extends Station>({
   station,
   renderSuffix,
   onSelect,
+  accessibilityActions,
+  onAccessibilityAction,
 }: StationRowProps<T>) {
   return (
     <ListGroup.Item
       accessibilityRole="button"
+      accessibilityActions={accessibilityActions}
+      onAccessibilityAction={onAccessibilityAction}
       // A plain highlight, like the settings rows. The animated press feedback is slow to mount,
       // and the search mounts new rows as you type.
       className="active:bg-surface-tertiary"
