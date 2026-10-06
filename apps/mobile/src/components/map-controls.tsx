@@ -448,6 +448,7 @@ export function LocateButton({
   return (
     <MapControlButton
       accessibilityLabel={locateLabels[status]}
+      accessibilityHint="Shows your location and the direction your phone is facing"
       accessibilityState={{ busy: status === "locating", selected: isFilled }}
       disabled={status === "locating"}
       onPress={onPress}

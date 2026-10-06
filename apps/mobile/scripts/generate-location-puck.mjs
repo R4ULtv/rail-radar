@@ -9,6 +9,22 @@ const outDir = new URL("../assets/location-puck/", import.meta.url);
 const accent = "#6363ff";
 
 const images = {
+  // A north-facing cone centered on the dot. The native layer rotates it with the compass.
+  "location-bearing": {
+    size: 104,
+    svg: `<svg xmlns="http://www.w3.org/2000/svg" width="104" height="104" viewBox="0 0 104 104">
+      <defs>
+        <radialGradient id="beam" cx="52" cy="52" r="48" gradientUnits="userSpaceOnUse">
+          <stop stop-color="${accent}" stop-opacity="0.648" />
+          <stop offset="0.6" stop-color="${accent}" stop-opacity="0.522" />
+          <stop offset="0.85" stop-color="${accent}" stop-opacity="0.234" />
+          <stop offset="1" stop-color="${accent}" stop-opacity="0" />
+        </radialGradient>
+      </defs>
+      <path d="M52 52 L24.47 12.68 A48 48 0 0 1 79.53 12.68 Z"
+        fill="url(#beam)" />
+    </svg>`,
+  },
   // size-4 dot with a 2px white border and a soft shadow; the canvas leaves room for the shadow.
   "location-dot": {
     size: 24,

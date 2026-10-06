@@ -198,6 +198,8 @@ export function MapScreen() {
   });
   const getMapFeedbackUrl = useCallback(() => mapFeedbackUrl(mapPosition.current), []);
   const [isFollowing, setIsFollowing] = useState(false);
+  // Direction is enabled by Locate for this session, independently of camera following.
+  const [showUserHeading, setShowUserHeading] = useState(false);
   const following = useRef(false);
   // Where the sheets are, for the controls that sit above them.
   const searchSheetPosition = useSheetPosition();
@@ -360,6 +362,7 @@ export function MapScreen() {
     hasMovedMap.current = true;
     const action = ++cameraAction.current;
     const location = await locate();
+    if (location) setShowUserHeading(true);
     // A station selection or pan while Locate was pending takes precedence.
     if (action !== cameraAction.current) return;
     if (!location) {
@@ -476,7 +479,9 @@ export function MapScreen() {
             <RailwayLines isStreets={mapTheme.isStreets} />
           </>
         ) : null}
-        {userLocation ? <UserLocationMarker location={userLocation} /> : null}
+        {userLocation ? (
+          <UserLocationMarker location={userLocation} showHeading={showUserHeading} />
+        ) : null}
       </Mapbox.MapView>
 
       <StatusBarBlur />
