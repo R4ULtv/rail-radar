@@ -77,7 +77,7 @@ interface NearbyDeparturesAction {
   hasMovedMap: { current: boolean };
   cameraAction: { current: number };
   hasUsedNearby: boolean;
-  locate: () => Promise<LocationFix | null>;
+  getLocation: () => Promise<LocationFix | null>;
   stopFollowing: () => void;
   selectStation: (station: Station) => void;
   setIsFindingNearby: (isFinding: boolean) => void;
@@ -93,7 +93,7 @@ async function findAndOpenNearbyDepartures({
   hasMovedMap,
   cameraAction,
   hasUsedNearby,
-  locate,
+  getLocation,
   stopFollowing,
   selectStation,
   setIsFindingNearby,
@@ -109,10 +109,10 @@ async function findAndOpenNearbyDepartures({
   stopFollowing();
   const action = cameraAction.current;
   try {
-    const [location, stations] = await Promise.all([locate(), loadStations(stationsUrl)]);
+    const [location, stations] = await Promise.all([getLocation(), loadStations(stationsUrl)]);
     // Panning, locating, or choosing a station while GPS loads takes precedence.
     if (action !== cameraAction.current) return;
-    // Locating already explains why there's no location, e.g. that it's turned off.
+    // The shared location hook explains why there's no location, e.g. that it's turned off.
     if (!location) {
       haptics.error();
       return;
@@ -162,6 +162,7 @@ export function MapScreen() {
     location: userLocation,
     status: locationStatus,
     message,
+    getLocation,
     locate,
   } = useUserLocation(!isIntroOpen);
   const isOnline = useIsOnline();
@@ -267,14 +268,14 @@ export function MapScreen() {
         hasMovedMap,
         cameraAction,
         hasUsedNearby,
-        locate,
+        getLocation,
         stopFollowing,
         selectStation,
         setIsFindingNearby,
         setNearbyError,
         setNearbyStations,
       }),
-    [stationsUrl, locate, stopFollowing, selectStation, hasUsedNearby],
+    [stationsUrl, getLocation, stopFollowing, selectStation, hasUsedNearby],
   );
 
   useEffect(() => {

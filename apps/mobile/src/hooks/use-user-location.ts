@@ -19,11 +19,13 @@ function distanceMeters(from: UserLocation, to: UserLocation) {
   return distanceKm(from, { lat: to.latitude, lng: to.longitude }) * 1_000;
 }
 
+type LocationAction = "getLocation" | "locate";
+
 export function useUserLocation(enabled: boolean) {
   const [location, setLocation] = useState<LocationFix | null>(null);
   const [status, setStatus] = useState<LocationStatus>("idle");
   const [message, setMessage] = useState<string | null>(null);
-  const requestLocate = useRef<(() => Promise<LocationFix>) | null>(null);
+  const requestLocation = useRef<((action: LocationAction) => Promise<LocationFix>) | null>(null);
 
   useEffect(() => {
     if (!enabled) return;
@@ -76,9 +78,9 @@ export function useUserLocation(enabled: boolean) {
       if (error instanceof LocationAccessError) setLocation(null);
     }
 
-    requestLocate.current = async () => {
+    requestLocation.current = async (action) => {
       await activate(true);
-      return tracker.refresh();
+      return tracker[action]();
     };
     void activate(true).catch(handleActivationError);
     const subscription = AppState.addEventListener("change", (state) => {
@@ -93,23 +95,28 @@ export function useUserLocation(enabled: boolean) {
 
     return () => {
       cancelled = true;
-      requestLocate.current = null;
+      requestLocation.current = null;
       tracker.stop();
       subscription.remove();
     };
   }, [enabled]);
 
-  const locate = useCallback(async () => {
-    setStatus("locating");
+  const requestPosition = useCallback(async (action: LocationAction) => {
+    if (action === "locate") setStatus("locating");
     setMessage(null);
-    const request = requestLocate.current;
+    const request = requestLocation.current;
     try {
       if (!request) throw new Error("Your location is unavailable right now.");
-      const fix = await request();
-      return requestLocate.current === request ? fix : null;
+      const fix = await request(action);
+      if (requestLocation.current !== request) return null;
+      // Reading a cached fix for Nearby must not finish a separate pending Locate request.
+      setStatus((current) =>
+        action === "getLocation" && current === "locating" ? current : "located",
+      );
+      return fix;
     } catch (error) {
       if (
-        requestLocate.current !== request ||
+        requestLocation.current !== request ||
         (error instanceof Error && error.message.includes("cancelled"))
       )
         return null;
@@ -124,5 +131,8 @@ export function useUserLocation(enabled: boolean) {
     }
   }, []);
 
-  return { location, status, message, locate };
+  const getLocation = useCallback(() => requestPosition("getLocation"), [requestPosition]);
+  const locate = useCallback(() => requestPosition("locate"), [requestPosition]);
+
+  return { location, status, message, getLocation, locate };
 }

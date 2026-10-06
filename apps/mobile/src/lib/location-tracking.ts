@@ -221,7 +221,7 @@ interface LocationTrackerOptions {
   onError: (error: unknown) => void;
 }
 
-/** A foreground sampler. Locate shares fast requests and interrupts slow precision acquisition. */
+/** A foreground sampler shared by the map, Nearby and Locate. */
 export function createLocationTracker(options: LocationTrackerOptions) {
   let running = false;
   let timer: ReturnType<typeof setTimeout> | null = null;
@@ -230,6 +230,10 @@ export function createLocationTracker(options: LocationTrackerOptions) {
   let pendingMode: LocationRequestMode | null = null;
   let latest: LocationFix | null = null;
   let movement = initialMovementState();
+
+  function getRecentFix(maxAgeMs: number) {
+    return running && latest && Date.now() - latest.timestamp <= maxAgeMs ? latest : null;
+  }
 
   function refresh(mode: LocationRequestMode = "fast"): Promise<LocationFix> {
     if (!running) return Promise.reject(new Error("Location tracking is paused."));
@@ -306,7 +310,18 @@ export function createLocationTracker(options: LocationTrackerOptions) {
       timer = null;
       movement = initialMovementState();
     },
-    refresh: () => refresh(),
+    // Nearby uses the latest measurement, even when the displayed dot suppresses GPS jitter.
+    // If it is stale, share any scheduled acquisition without interrupting precision checks.
+    getLocation() {
+      const fix = getRecentFix(locationFixMaxAgeMs);
+      return fix ? Promise.resolve(fix) : (pending ?? refresh());
+    },
+    // Recentring needs no extra acquisition during fast tracking. In the stationary window,
+    // Locate shares a pending fast request or replaces a slow precision check with a fast one.
+    locate() {
+      const fix = getRecentFix(locationRequestMaxAgeMs);
+      return fix ? Promise.resolve(fix) : refresh();
+    },
     getLatestFix: () => latest,
   };
 }
