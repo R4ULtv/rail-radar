@@ -12,7 +12,7 @@ export function useSearchLocation(location: UserLocation | null, query: string, 
     visible,
     updatedAt: Date.now(),
   }));
-  // Adjust before React commits the results, so opening/typing never searches with an old fix.
+  // Warm the distance labels on the first fix, then refresh before opening/typing commits.
   const current = refreshSearchLocation(snapshot, location, query, visible);
   if (current !== snapshot) setSnapshot(current);
 

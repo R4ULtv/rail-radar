@@ -41,12 +41,14 @@ export function refreshSearchLocation(
     query === snapshot.query &&
     visible === snapshot.visible &&
     !(location === null && snapshot.location !== null) &&
-    !(visible && location !== null && snapshot.location === null)
+    !(location !== null && snapshot.location === null)
   ) {
     return snapshot;
   }
   return {
-    location: visible || location === null ? location : snapshot.location,
+    // Prepare distance labels from the first fix while the sheet is still collapsed.
+    location:
+      visible || location === null || snapshot.location === null ? location : snapshot.location,
     query,
     visible,
     updatedAt: now,

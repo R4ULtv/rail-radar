@@ -579,6 +579,8 @@ export function SearchSheet({
       android_keyboardInputMode="adjustResize"
       backgroundStyle={[sheetBackgroundStyle, { backgroundColor: surfaceColor }]}
       handleIndicatorStyle={{ backgroundColor: mutedColor }}
+      // Refresh distances as opening starts, before the lists become visible.
+      onAnimate={(_fromIndex, toIndex) => setIsExpanded(toIndex === expandedIndex)}
       onChange={(index) => {
         setIsExpanded(index === expandedIndex);
         if (index === 0) Keyboard.dismiss();
