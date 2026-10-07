@@ -1,12 +1,23 @@
 import type { Station } from "@repo/data/types";
 import { useThemeColor } from "heroui-native/hooks";
-import { ListGroup } from "heroui-native/list-group";
-import { Fragment, memo, useCallback, useEffect, useMemo, useState, type ReactNode } from "react";
+import {
+  createContext,
+  memo,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  type ComponentProps,
+  type ReactNode,
+} from "react";
 import {
   StyleSheet,
   View,
   type AccessibilityActionEvent,
   type LayoutChangeEvent,
+  type SectionListProps,
 } from "react-native";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
 import Animated, {
@@ -67,7 +78,7 @@ function moveTo(positions: Positions, id: string, to: number): Positions {
   return next;
 }
 
-// All rows have the same height. Kept across mounts, so the list only lays out in flow once.
+// All rows have the same height. Kept across mounts to avoid another measurement pass.
 let measuredRowHeight = 0;
 
 interface RowProps {
@@ -77,6 +88,7 @@ interface RowProps {
   rowHeight: number;
   positions: SharedValue<Positions>;
   activeId: SharedValue<string | null>;
+  raisedId: SharedValue<string | null>;
   liftColor: string;
   pressedColor: string;
   renderSuffix?: (station: Station) => ReactNode;
@@ -94,6 +106,7 @@ const ReorderableRow = memo(function ReorderableRow({
   rowHeight,
   positions,
   activeId,
+  raisedId,
   liftColor,
   pressedColor,
   renderSuffix,
@@ -105,27 +118,25 @@ const ReorderableRow = memo(function ReorderableRow({
 }: RowProps) {
   const id = station.id;
   const top = useSharedValue(index * rowHeight);
+  const lastTarget = useSharedValue(index * rowHeight);
   const startTop = useSharedValue(0);
   const startPosition = useSharedValue(index);
-  // Above the rows it passes while it settles after a drop. The dragged row is always on top.
-  const isRaised = useSharedValue(false);
   const highlight = useSharedValue(0);
   const lifted = useDerivedValue(() =>
     activeId.get() === id ? withTiming(1, liftTiming) : withTiming(0, lowerTiming),
   );
 
   // Rows make way for the dragged one, and settle into a new order after saves and removals.
-  // Not rebuilt when the index changes after a drop: the index is only a fallback until the row
-  // has a position.
   useAnimatedReaction(
-    () => (positions.get()[id] ?? index) * rowHeight,
-    (target, previous) => {
+    () => (activeId.get() === id ? null : (positions.get()[id] ?? index) * rowHeight),
+    (target) => {
       // Every move updates all the positions. Rows whose slot didn't change keep their animation,
       // and so does a dropped row once its new order is saved.
-      if (target === previous || activeId.get() === id) return;
-      top.set(previous === null ? target : withSpring(target, settleSpring));
+      if (target === null || target === lastTarget.get()) return;
+      lastTarget.set(target);
+      top.set(withSpring(target, settleSpring));
     },
-    [id, rowHeight],
+    [id, index, rowHeight],
   );
 
   const gesture = useMemo(
@@ -140,7 +151,7 @@ const ReorderableRow = memo(function ReorderableRow({
           startTop.set(top.get());
           startPosition.set(positions.get()[id] ?? index);
           activeId.set(id);
-          isRaised.set(true);
+          raisedId.set(id);
           // Takes over from the row's pressed highlight, which the lift cancels.
           highlight.set(1);
           highlight.set(withTiming(0, highlightTiming));
@@ -162,6 +173,7 @@ const ReorderableRow = memo(function ReorderableRow({
         .onFinalize((event) => {
           if (activeId.get() !== id) return;
           const position = positions.get()[id] ?? index;
+          lastTarget.set(position * rowHeight);
           activeId.set(null);
           // The row carries on at the finger's speed, unless it was held at the list's ends.
           const y = top.get();
@@ -172,7 +184,7 @@ const ReorderableRow = memo(function ReorderableRow({
           top.set(
             // Also lowered when interrupted, by a new lift or the order changing elsewhere.
             withSpring(position * rowHeight, { ...settleSpring, velocity }, () => {
-              isRaised.set(false);
+              if (raisedId.get() === id && activeId.get() !== id) raisedId.set(null);
             }),
           );
           scheduleOnRN(onDrop, id, startPosition.get(), position);
@@ -185,9 +197,10 @@ const ReorderableRow = memo(function ReorderableRow({
       positions,
       activeId,
       top,
+      lastTarget,
       startTop,
       startPosition,
-      isRaised,
+      raisedId,
       highlight,
       onLift,
       onDrop,
@@ -195,8 +208,12 @@ const ReorderableRow = memo(function ReorderableRow({
   );
 
   const rowStyle = useAnimatedStyle(() => ({
-    zIndex: activeId.get() === id ? 2 : isRaised.get() ? 1 : 0,
-    transform: [{ translateY: top.get() }, { scale: 1 + lifted.get() * (liftedScale - 1) }],
+    // The virtualized cell supplies the row's baseline position. Only animate the difference
+    // from it, so saving the new order doesn't translate the row a second time.
+    transform: [
+      { translateY: top.get() - index * rowHeight },
+      { scale: 1 + lifted.get() * (liftedScale - 1) },
+    ],
   }));
   // Rounded at the list's ends, so the pressed highlight keeps its corners, and all round when
   // lifted.
@@ -237,7 +254,11 @@ const ReorderableRow = memo(function ReorderableRow({
 
   return (
     <GestureDetector gesture={gesture}>
-      <Animated.View style={[styles.row, rowStyle]} onLayout={onRowLayout}>
+      <Animated.View
+        className="bg-surface-secondary"
+        style={[styles.surface, shapeStyle, rowStyle]}
+        onLayout={onRowLayout}
+      >
         <Animated.View
           pointerEvents="none"
           style={[StyleSheet.absoluteFill, styles.lift, shapeStyle, liftStyle]}
@@ -259,42 +280,73 @@ const ReorderableRow = memo(function ReorderableRow({
   );
 });
 
-/**
- * A station list whose order can be changed: hold a row until it lifts, then drag it to its new
- * place. Screen readers get "Move up" and "Move down" actions instead.
- */
-export const ReorderableStationList = memo(function ReorderableStationList({
+/** Marks saved rows separately from stations in other sections (or section headers). */
+export interface SavedStationItem {
+  savedStation: Station;
+}
+
+export function isSavedStationItem(item: unknown): item is SavedStationItem {
+  return typeof item === "object" && item !== null && "savedStation" in item;
+}
+
+type ReorderState = Omit<RowProps, "station" | "index" | "renderSuffix" | "onSelect">;
+const ReorderContext = createContext<ReorderState | null>(null);
+
+function useReorderState() {
+  const state = useContext(ReorderContext);
+  if (!state) throw new Error("Saved station rows need a ReorderableStationsProvider");
+  return state;
+}
+
+/** Drag state outlives individual cells, which the SectionList can unmount offscreen. */
+export function ReorderableStationsProvider({
   stations,
-  renderSuffix,
-  onSelect,
   onMove,
   onDragActiveChange,
+  children,
 }: {
   stations: Station[];
-  /** Shown on the right of each row, e.g. the distance. */
-  renderSuffix?: (station: Station) => ReactNode;
-  onSelect: (station: Station) => void;
   /** Moves a station to another slot, by its index in `stations`. */
   onMove: (id: string, to: number) => void;
   /** While a row is lifted, so its container can stop scrolling. */
   onDragActiveChange?: (isActive: boolean) => void;
+  children: ReactNode;
 }) {
   const liftColor = useThemeColor("surface-secondary");
   // The rows' pressed highlight (active:bg-surface-tertiary).
   const pressedColor = useThemeColor("surface-tertiary");
   const [rowHeight, setRowHeight] = useState(measuredRowHeight);
-  const positions = useSharedValue(toPositions(stations));
+  const initialPositions = useMemo(() => toPositions(stations), [stations]);
+  const positions = useSharedValue(initialPositions);
   const activeId = useSharedValue<string | null>(null);
+  const raisedId = useSharedValue<string | null>(null);
 
   // Only when the order really changes: a new array with the same stations would otherwise
   // reset a drag in progress.
   const order = stations.map((station) => station.id).join("\n");
+  const previousOrder = useRef(order);
   useEffect(() => {
-    positions.set(toPositions(stations));
-  }, [order, positions]); // `order` stands in for `stations`.
+    if (previousOrder.current === order) return;
+    previousOrder.current = order;
+    positions.set(initialPositions);
+    // A removal or collapse during a drag must release the scroll lock. A normal drop has
+    // already cleared activeId, so its landing animation can continue.
+    if (activeId.get() !== null) {
+      activeId.set(null);
+      raisedId.set(null);
+      onDragActiveChange?.(false);
+    }
+  }, [order, initialPositions, positions, activeId, raisedId, onDragActiveChange]);
 
   // A list removed mid-drag can't drop its row, so it lets its container scroll again itself.
-  useEffect(() => () => onDragActiveChange?.(false), [onDragActiveChange]);
+  useEffect(
+    () => () => {
+      activeId.set(null);
+      raisedId.set(null);
+      onDragActiveChange?.(false);
+    },
+    [activeId, raisedId, onDragActiveChange],
+  );
 
   const onRowLayout = useCallback((event: LayoutChangeEvent) => {
     const height = event.nativeEvent.layout.height;
@@ -316,55 +368,110 @@ export const ReorderableStationList = memo(function ReorderableStationList({
     [onDragActiveChange, onMove],
   );
 
-  if (stations.length === 0) return null;
+  const state = useMemo<ReorderState>(
+    () => ({
+      count: stations.length,
+      rowHeight,
+      positions,
+      activeId,
+      raisedId,
+      liftColor,
+      pressedColor,
+      onMove,
+      onLift,
+      onDrop,
+      onRowLayout,
+    }),
+    [
+      stations.length,
+      rowHeight,
+      positions,
+      activeId,
+      raisedId,
+      liftColor,
+      pressedColor,
+      onMove,
+      onLift,
+      onDrop,
+      onRowLayout,
+    ],
+  );
+  return <ReorderContext value={state}>{children}</ReorderContext>;
+}
 
-  // The first time, the rows lay out like the other lists to measure their height.
-  if (rowHeight === 0) {
+/** One saved row per virtualized item; long press to reorder, or use screen reader actions. */
+export const ReorderableStationRow = memo(function ReorderableStationRow({
+  station,
+  index,
+  renderSuffix,
+  onSelect,
+}: Pick<RowProps, "station" | "index" | "renderSuffix" | "onSelect">) {
+  const state = useReorderState();
+  // Only the rendered cells participate in the initial height measurement.
+  if (state.rowHeight === 0) {
     return (
-      <ListGroup variant="secondary" className="overflow-hidden">
-        {stations.map((station, index) => (
-          <Fragment key={station.id}>
-            {index > 0 ? <RowSeparator /> : null}
-            <View onLayout={index === 0 ? onRowLayout : undefined}>
-              <StationRow station={station} renderSuffix={renderSuffix} onSelect={onSelect} />
-            </View>
-          </Fragment>
-        ))}
-      </ListGroup>
+      <View
+        onLayout={state.onRowLayout}
+        className={`bg-surface-secondary overflow-hidden ${index === 0 ? "rounded-t-3xl" : ""} ${index === state.count - 1 ? "rounded-b-3xl" : ""}`}
+      >
+        {index > 0 ? (
+          <View style={styles.separator}>
+            <RowSeparator />
+          </View>
+        ) : null}
+        <StationRow station={station} renderSuffix={renderSuffix} onSelect={onSelect} />
+      </View>
     );
   }
-
   return (
-    <View
-      className="rounded-3xl bg-surface-secondary"
-      style={[styles.list, { height: stations.length * rowHeight }]}
-    >
-      {stations.map((station, index) => (
-        <ReorderableRow
-          key={station.id}
-          station={station}
-          index={index}
-          count={stations.length}
-          rowHeight={rowHeight}
-          positions={positions}
-          activeId={activeId}
-          liftColor={liftColor}
-          pressedColor={pressedColor}
-          renderSuffix={renderSuffix}
-          onSelect={onSelect}
-          onMove={onMove}
-          onLift={onLift}
-          onDrop={onDrop}
-          onRowLayout={onRowLayout}
-        />
-      ))}
-    </View>
+    <ReorderableRow
+      {...state}
+      station={station}
+      index={index}
+      renderSuffix={renderSuffix}
+      onSelect={onSelect}
+    />
   );
 });
 
+type CellProps = ComponentProps<NonNullable<SectionListProps<unknown>["CellRendererComponent"]>>;
+
+function SavedStationCell({
+  item,
+  style,
+  onLayout,
+  onFocusCapture,
+  children,
+}: CellProps & {
+  item: SavedStationItem;
+}) {
+  const { activeId, raisedId } = useReorderState();
+  const id = item.savedStation.id;
+  const cellStyle = useAnimatedStyle(() => ({
+    zIndex: activeId.get() === id ? 2 : raisedId.get() === id ? 1 : 0,
+  }));
+  // VirtualizedList supplies the focus callback even though ViewProps doesn't declare it.
+  const callbacks = { onLayout, onFocusCapture };
+  return (
+    <Animated.View collapsable={false} style={[style, cellStyle]} {...callbacks}>
+      {children}
+    </Animated.View>
+  );
+}
+
+/** Raise the cell itself so a dragged row stays above neighbouring virtualized cells. */
+export function ReorderableStationCell(props: CellProps) {
+  if (isSavedStationItem(props.item)) return <SavedStationCell {...props} item={props.item} />;
+  const callbacks = { onLayout: props.onLayout, onFocusCapture: props.onFocusCapture };
+  return (
+    <View style={props.style} {...callbacks}>
+      {props.children}
+    </View>
+  );
+}
+
 const styles = StyleSheet.create({
-  list: { borderCurve: "continuous" },
-  row: { position: "absolute", top: 0, left: 0, right: 0 },
+  surface: { borderCurve: "continuous" },
   lift: { boxShadow: "0 6px 16px rgba(0, 0, 0, 0.18)" },
   separator: { position: "absolute", top: 0, left: 0, right: 0 },
   clip: { overflow: "hidden" },

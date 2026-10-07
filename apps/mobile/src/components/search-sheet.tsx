@@ -45,7 +45,13 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { scheduleOnRN } from "react-native-worklets";
 
 import { MapAttribution } from "@/components/map-attribution";
-import { ReorderableStationList } from "@/components/reorderable-station-list";
+import {
+  isSavedStationItem,
+  ReorderableStationCell,
+  ReorderableStationRow,
+  ReorderableStationsProvider,
+  type SavedStationItem,
+} from "@/components/reorderable-station-list";
 import {
   useSheetBottomInset,
   useSheetTopInset,
@@ -145,12 +151,7 @@ function EmptyState({ children }: { children: ReactNode }) {
 const searchResultsTitle = "Search results";
 const trendingTitle = "Trending (last 7 days)";
 
-/** The saved stations are a single item, so a row can be dragged to another place among them. */
-interface SavedStationsItem {
-  savedStations: Station[];
-}
-
-type SearchItem = Station | SavedStationsItem;
+type SearchItem = Station | SavedStationItem;
 
 interface SearchSection {
   key: "results" | "recent" | "saved" | "trending";
@@ -163,7 +164,7 @@ interface SearchSection {
 }
 
 function itemKey(item: SearchItem) {
-  return "savedStations" in item ? "saved" : item.id;
+  return isSavedStationItem(item) ? item.savedStation.id : item.id;
 }
 
 // Memoized, so hiding and showing the sheet around a station sheet doesn't re-render its lists.
@@ -271,9 +272,13 @@ const SearchSheetContent = memo(function SearchSheetContent({
   const savedExpanded =
     sectionDisplay.defaultsVisible === showDefaultLists && sectionDisplay.savedExpanded;
   // Kept stable while the sections change around it, so a drag in progress isn't reset.
-  const savedItem = useMemo<SavedStationsItem>(
-    () => ({ savedStations: savedExpanded ? savedStations : savedStations.slice(0, 5) }),
-    [savedStations, savedExpanded],
+  const visibleSavedStations = useMemo(
+    () => (showDefaultLists ? (savedExpanded ? savedStations : savedStations.slice(0, 5)) : []),
+    [savedStations, savedExpanded, showDefaultLists],
+  );
+  const savedItems = useMemo<SavedStationItem[]>(
+    () => visibleSavedStations.map((savedStation) => ({ savedStation })),
+    [visibleSavedStations],
   );
 
   const selectStation = useCallback(
@@ -312,7 +317,7 @@ const SearchSheetContent = memo(function SearchSheetContent({
           key: "saved",
           title: "Saved stations",
           icon: Bookmark,
-          data: [savedItem],
+          data: savedItems,
           fullCount: savedStations.length,
           isExpanded: savedExpanded,
         });
@@ -338,20 +343,19 @@ const SearchSheetContent = memo(function SearchSheetContent({
     savedStations,
     recentExpanded,
     savedExpanded,
-    savedItem,
+    savedItems,
     isTrendingLoading,
     trendingStations,
   ]);
 
   const renderStation = useCallback(
     ({ item, index, section }: SectionListRenderItemInfo<SearchItem, SearchSection>) =>
-      "savedStations" in item ? (
-        <ReorderableStationList
-          stations={item.savedStations}
+      isSavedStationItem(item) ? (
+        <ReorderableStationRow
+          station={item.savedStation}
+          index={index}
           renderSuffix={renderDistance}
           onSelect={selectStation}
-          onMove={moveSavedStation}
-          onDragActiveChange={setIsReordering}
         />
       ) : (
         // Each cell supplies its own surface, with corners only at the section's ends. The
@@ -452,67 +456,74 @@ const SearchSheetContent = memo(function SearchSheetContent({
         <SheetHeaderFade scrollOffset={scrollOffset} />
       </PinnedSheetHeader>
 
-      <BottomSheetSectionList
-        ref={scrollRef}
-        sections={sections}
-        keyExtractor={itemKey}
-        renderItem={renderStation}
-        renderSectionHeader={renderSectionHeader}
-        renderSectionFooter={renderSectionFooter}
-        stickySectionHeadersEnabled={false}
-        initialNumToRender={12}
-        maxToRenderPerBatch={6}
-        windowSize={5}
-        removeClippedSubviews={false}
-        scrollEnabled={!isReordering}
-        style={listStyle}
-        keyboardDismissMode="on-drag"
-        keyboardShouldPersistTaps="handled"
-        contentContainerStyle={{
-          paddingTop: headerHeight,
-          paddingHorizontal: 16,
-          // With the keyboard up, the same space above it instead.
-          paddingBottom: Math.max(keyboardHeight + 16, bottomInset),
-        }}
-        scrollIndicatorInsets={{ top: headerHeight }}
-        ListHeaderComponent={
-          <View>
-            {!search.isActive ? null : search.error ? (
-              <StatusMessage
-                className="mt-5"
-                icon={CircleAlert}
-                title="Unable to search stations"
-                description={search.error}
-                onRetry={search.retry}
-              />
-            ) : search.stations.length > 0 ? null : noResults ? (
-              <StatusMessage
-                className="mt-5"
-                icon={SearchX}
-                title="No stations found"
-                description="Try a different search term."
-              />
-            ) : (
-              <StationSectionSkeleton title={searchResultsTitle} icon={List} />
-            )}
-          </View>
-        }
-        ListFooterComponent={
-          <View>
-            {showDefaultLists && isTrendingLoading ? (
-              <StationSectionSkeleton title={trendingTitle} icon={TrendingUp} hasSuffix />
-            ) : null}
-            {showDefaultLists && !search.isActive && !hasDefaultLists ? (
-              <EmptyState>
-                <Text className="text-center text-sm text-muted">
-                  Search for a station by name, or save one from its live board to find it here.
-                </Text>
-              </EmptyState>
-            ) : null}
-            <MapAttribution className="mt-8" getMapFeedbackUrl={getMapFeedbackUrl} />
-          </View>
-        }
-      />
+      <ReorderableStationsProvider
+        stations={visibleSavedStations}
+        onMove={moveSavedStation}
+        onDragActiveChange={setIsReordering}
+      >
+        <BottomSheetSectionList
+          ref={scrollRef}
+          sections={sections}
+          keyExtractor={itemKey}
+          renderItem={renderStation}
+          renderSectionHeader={renderSectionHeader}
+          renderSectionFooter={renderSectionFooter}
+          CellRendererComponent={ReorderableStationCell}
+          stickySectionHeadersEnabled={false}
+          initialNumToRender={12}
+          maxToRenderPerBatch={6}
+          windowSize={5}
+          removeClippedSubviews={false}
+          scrollEnabled={!isReordering}
+          style={listStyle}
+          keyboardDismissMode="on-drag"
+          keyboardShouldPersistTaps="handled"
+          contentContainerStyle={{
+            paddingTop: headerHeight,
+            paddingHorizontal: 16,
+            // With the keyboard up, the same space above it instead.
+            paddingBottom: Math.max(keyboardHeight + 16, bottomInset),
+          }}
+          scrollIndicatorInsets={{ top: headerHeight }}
+          ListHeaderComponent={
+            <View>
+              {!search.isActive ? null : search.error ? (
+                <StatusMessage
+                  className="mt-5"
+                  icon={CircleAlert}
+                  title="Unable to search stations"
+                  description={search.error}
+                  onRetry={search.retry}
+                />
+              ) : search.stations.length > 0 ? null : noResults ? (
+                <StatusMessage
+                  className="mt-5"
+                  icon={SearchX}
+                  title="No stations found"
+                  description="Try a different search term."
+                />
+              ) : (
+                <StationSectionSkeleton title={searchResultsTitle} icon={List} />
+              )}
+            </View>
+          }
+          ListFooterComponent={
+            <View>
+              {showDefaultLists && isTrendingLoading ? (
+                <StationSectionSkeleton title={trendingTitle} icon={TrendingUp} hasSuffix />
+              ) : null}
+              {showDefaultLists && !search.isActive && !hasDefaultLists ? (
+                <EmptyState>
+                  <Text className="text-center text-sm text-muted">
+                    Search for a station by name, or save one from its live board to find it here.
+                  </Text>
+                </EmptyState>
+              ) : null}
+              <MapAttribution className="mt-8" getMapFeedbackUrl={getMapFeedbackUrl} />
+            </View>
+          }
+        />
+      </ReorderableStationsProvider>
     </View>
   );
 });
