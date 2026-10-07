@@ -4,10 +4,11 @@ import { HeroUINativeProvider } from "heroui-native/provider";
 import Bug from "lucide-react-native/icons/bug";
 import RefreshCw from "lucide-react-native/icons/refresh-cw";
 import Share2 from "lucide-react-native/icons/share-2";
-import { Alert, Linking, ScrollView, Share, StyleSheet, Text, View } from "react-native";
+import { Linking, ScrollView, Share, StyleSheet, Text, View } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 
+import { AppDialog, useAppDialog } from "@/components/app-dialog";
 import { ErrorBoundary } from "@/components/error-boundary";
 import { MapScreen } from "@/components/map-screen";
 import { createErrorReport, type CapturedError } from "@/lib/error-report";
@@ -23,6 +24,7 @@ function AppError({ onRetry, failure }: { onRetry: () => void; failure: Captured
     "default-foreground",
   ]);
   const report = createErrorReport(failure);
+  const { show: showDialog, dialogProps } = useAppDialog();
 
   return (
     <ScrollView contentContainerStyle={styles.error}>
@@ -41,7 +43,10 @@ function AppError({ onRetry, failure }: { onRetry: () => void; failure: Captured
           variant="tertiary"
           onPress={() => {
             void Linking.openURL(report.url).catch(() =>
-              Alert.alert("Couldn't open the report", "Use Share error details to send the error."),
+              showDialog({
+                title: "Couldn't open the report",
+                message: "Use Share error details to send the error.",
+              }),
             );
           }}
         >
@@ -52,7 +57,11 @@ function AppError({ onRetry, failure }: { onRetry: () => void; failure: Captured
           variant="ghost"
           onPress={() => {
             void Share.share({ title: "Rail Radar error report", message: report.message }).catch(
-              () => Alert.alert("Couldn't share the error", "Try Report a problem instead."),
+              () =>
+                showDialog({
+                  title: "Couldn't share the error",
+                  message: "Try Report a problem instead.",
+                }),
             );
           }}
         >
@@ -60,6 +69,7 @@ function AppError({ onRetry, failure }: { onRetry: () => void; failure: Captured
           <Button.Label>Share error details</Button.Label>
         </Button>
       </View>
+      <AppDialog {...dialogProps} />
     </ScrollView>
   );
 }
