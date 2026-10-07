@@ -8,8 +8,17 @@ const outDir = new URL("../assets/location-puck/", import.meta.url);
 // The accent color, the same in both themes (see src/global.css).
 const accent = "#6363ff";
 
+const coneAngleDegrees = 140;
+const coneCenter = 52;
+const coneRadius = 48;
+const coneHalfAngle = (coneAngleDegrees * Math.PI) / 360;
+const coneHalfWidth = coneRadius * Math.sin(coneHalfAngle);
+const coneLeftX = (coneCenter - coneHalfWidth).toFixed(2);
+const coneRightX = (coneCenter + coneHalfWidth).toFixed(2);
+const coneEdgeY = (coneCenter - coneRadius * Math.cos(coneHalfAngle)).toFixed(2);
+
 const images = {
-  // A north-facing cone centered on the dot. The native layer rotates it with the compass.
+  // A 140° north-facing cone centered on the dot. The native layer rotates it with the compass.
   "location-bearing": {
     size: 104,
     svg: `<svg xmlns="http://www.w3.org/2000/svg" width="104" height="104" viewBox="0 0 104 104">
@@ -21,7 +30,7 @@ const images = {
           <stop offset="1" stop-color="${accent}" stop-opacity="0" />
         </radialGradient>
       </defs>
-      <path d="M52 52 L24.47 12.68 A48 48 0 0 1 79.53 12.68 Z"
+      <path d="M${coneCenter} ${coneCenter} L${coneLeftX} ${coneEdgeY} A${coneRadius} ${coneRadius} 0 0 1 ${coneRightX} ${coneEdgeY} Z"
         fill="url(#beam)" />
     </svg>`,
   },
