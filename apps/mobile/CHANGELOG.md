@@ -11,9 +11,18 @@ the commit they were built from.
 - Phone direction on the map: tap Locate to show a compass cone around your location dot.
   It stays visible when browsing the map and pauses when the app is in the background.
   Compass readings are averaged to reduce wobble when holding the phone still.
+- Reorder saved stations: hold a saved station until it lifts, then drag it to a new place.
+
+### Changed
+
+- Confirmations, such as clearing saved stations, use the app's own dialog instead of the
+  system one, so they match the rest of the app on Android.
+- Sheet icons and country flags use bundled images, and loading placeholders use native gradients,
+  reducing vector rendering work on Android.
 
 ### Fixed
 
+- Loading placeholders no longer stay stuck on screen when a list closes while they fade out.
 - Compass averaging stays smooth after a period of stillness and when crossing north.
 - Low-quality compass readings hide the cone until calibration recovers.
 
