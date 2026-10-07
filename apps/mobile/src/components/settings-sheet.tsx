@@ -2,6 +2,7 @@ import Mapbox from "@rnmapbox/maps";
 import { Image } from "expo-image";
 import { useThemeColor } from "heroui-native/hooks";
 import { ListGroup } from "heroui-native/list-group";
+import { PortalHost } from "heroui-native/portal";
 import { Tabs } from "heroui-native/tabs";
 import ArrowUpRight from "lucide-react-native/icons/arrow-up-right";
 import Bookmark from "lucide-react-native/icons/bookmark";
@@ -28,11 +29,12 @@ import Sun from "lucide-react-native/icons/sun";
 import TrainFront from "lucide-react-native/icons/train-front";
 import Users from "lucide-react-native/icons/users";
 import { Fragment, memo, useCallback, useState, type ComponentType, type ReactNode } from "react";
-import { Alert, Linking, Modal, Platform, StyleSheet, Text, View } from "react-native";
+import { Linking, Modal, Platform, StyleSheet, Text, View } from "react-native";
 import Animated from "react-native-reanimated";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 
 import { expo } from "../../app.json";
+import { AppDialog, useAppDialog } from "@/components/app-dialog";
 import {
   SettingsButton,
   useSheetBottomInset,
@@ -66,6 +68,9 @@ import { setThemePreference } from "@/lib/theme";
 import { forgetLastUserLocation, hasLastUserLocation } from "@/lib/user-location";
 
 const appIcon = require("../../assets/icon.png");
+
+/** Inside the settings modal, so its dialogs show above it on Android. */
+const settingsPortalHost = "settings";
 
 type Icon = ComponentType<{ size?: number; color?: string }>;
 
@@ -231,13 +236,6 @@ function Status({ children }: { children: ReactNode }) {
   );
 }
 
-function confirm(title: string, message: string, action: string, onConfirm: () => void) {
-  Alert.alert(title, message, [
-    { text: "Cancel", style: "cancel" },
-    { text: action, style: "destructive", onPress: onConfirm },
-  ]);
-}
-
 /** Map tiles and station photos; both are downloaded again when they're next shown. */
 async function clearCache() {
   await Promise.all([Mapbox.clearData(), Image.clearDiskCache(), Image.clearMemoryCache()]);
@@ -247,6 +245,7 @@ function DataRows() {
   const recentStations = useRecentStations();
   const { savedStations } = useSavedStations();
   const stationsDownloadedAt = useStationsDownloadedAt();
+  const { show: confirm, dialogProps } = useAppDialog();
   // Read when the settings open, which mounts this; nothing else changes it meanwhile.
   const [hasLocation, setHasLocation] = useState(hasLastUserLocation);
   const [cacheStatus, setCacheStatus] = useState<"idle" | "clearing" | "cleared" | "failed">(
@@ -262,8 +261,10 @@ function DataRows() {
         isDisabled={recentStations.length === 0}
         isDestructive
         onPress={() =>
-          confirm("Clear recent stations?", "Saved stations are kept.", "Clear", () => {
-            clearRecentStations();
+          confirm({
+            title: "Clear recent stations?",
+            message: "Saved stations are kept.",
+            action: { label: "Clear", onConfirm: clearRecentStations },
           })
         }
       />
@@ -275,14 +276,14 @@ function DataRows() {
         isDisabled={savedStations.length === 0}
         isDestructive
         onPress={() =>
-          confirm(
-            "Clear saved stations?",
-            savedStations.length === 1
-              ? "Your saved station will be removed."
-              : `All ${savedStations.length} saved stations will be removed.`,
-            "Clear",
-            clearSavedStations,
-          )
+          confirm({
+            title: "Clear saved stations?",
+            message:
+              savedStations.length === 1
+                ? "Your saved station will be removed."
+                : `All ${savedStations.length} saved stations will be removed.`,
+            action: { label: "Clear", onConfirm: clearSavedStations },
+          })
         }
       />
       <RowSeparator />
@@ -309,12 +310,12 @@ function DataRows() {
         isDisabled={stationsDownloadedAt === null}
         isDestructive
         onPress={() =>
-          confirm(
-            "Reset station data?",
-            "The map goes back to the stations built into the app. The latest ones are downloaded again the next time you open it.",
-            "Reset",
-            resetStations,
-          )
+          confirm({
+            title: "Reset station data?",
+            message:
+              "The map goes back to the stations built into the app. The latest ones are downloaded again the next time you open it.",
+            action: { label: "Reset", onConfirm: resetStations },
+          })
         }
       />
       <RowSeparator />
@@ -338,6 +339,7 @@ function DataRows() {
           );
         }}
       />
+      <AppDialog {...dialogProps} hostName={settingsPortalHost} />
     </>
   );
 }
@@ -520,6 +522,7 @@ export const Settings = memo(function Settings({
             getMapFeedbackUrl={getMapFeedbackUrl}
             onClose={close}
           />
+          <PortalHost name={settingsPortalHost} />
         </SafeAreaProvider>
       </Modal>
     </>
