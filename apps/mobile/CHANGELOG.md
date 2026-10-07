@@ -6,31 +6,39 @@ the commit they were built from.
 
 ## [Unreleased]
 
+## [0.5.0] (11) – 2026-10-07
+
 ### Added
 
 - Phone direction on the map: tap Locate to show a compass cone around your location dot.
-  It stays visible when browsing the map and pauses when the app is in the background.
-  Compass readings are averaged to reduce wobble when holding the phone still.
+  It stays visible when panning or opening a station, and tracking pauses in the background.
+  Compass readings are smoothed to reduce wobble and turn naturally when crossing north.
 - Reorder saved stations: hold a saved station until it lifts, then drag it to a new place.
+  The order is saved on your phone. Screen readers also offer Move up and Move down actions.
+- Saved and recent stations show how far away they are in the search sheet.
 
 ### Changed
 
-- Confirmations, such as clearing saved stations, use the app's own dialog instead of the
-  system one, so they match the rest of the app on Android.
-- Sheet icons and country flags use bundled images, and loading placeholders use native gradients,
-  reducing vector rendering work on Android.
+- Confirmations in Settings and error-report messages use themed dialogs that match the app
+  on both platforms.
+- Loading placeholders share one shimmer animation and use native gradients, as do the edge
+  fades in the station sheet, reducing rendering work on Android.
+- Saved station lists render rows in batches for smoother scrolling with many saved stations.
+- Faster location acquisition on launch and when tapping Locate reuses recent phone positions.
+  If a quick request takes too long, it also tries high-accuracy GPS. Stationary checks use
+  high accuracy, and Locate can interrupt one to get a quick position.
+- Nearby reuses a recent position without starting camera following or enabling the compass cone.
+- Search prepares distances from the first location fix and refreshes them as the sheet starts
+  opening, before its lists become visible.
+- Reduced animation overhead on Android while opening and scrolling sheets.
 
 ### Fixed
 
-- Loading placeholders no longer stay stuck on screen when a list closes while they fade out.
-- Compass averaging stays smooth after a period of stillness and when crossing north.
+- Location acquisition waits through temporary iOS inactivity caused by permission dialogs,
+  so granting permission does not cancel the pending request.
+- Returning to the app clears an outdated location dot while a fresh position is acquired.
+- Compass smoothing stays consistent after a period of stillness.
 - Low-quality compass readings hide the cone until calibration recovers.
-
-### Changed
-
-- Faster location acquisition on launch and five-second refreshes uses balanced accuracy and
-  recent phone positions. Thirty-second stationary checks use high accuracy without an accuracy
-  threshold. Locate interrupts a pending high-accuracy check to get a quick position.
 
 ## [0.4.1] (10) – 2026-10-05
 
