@@ -5,6 +5,7 @@ import BottomSheet, {
   BottomSheetView,
   type BottomSheetFlatListMethods,
 } from "@gorhom/bottom-sheet";
+import { LinearGradient } from "expo-linear-gradient";
 import { Button } from "heroui-native/button";
 import { useThemeColor } from "heroui-native/hooks";
 import { PressableFeedback } from "heroui-native/pressable-feedback";
@@ -50,8 +51,6 @@ import {
 import { ScrollView } from "react-native-gesture-handler";
 import type { AnimatedRef } from "react-native-reanimated";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import Svg, { Defs, LinearGradient as SvgLinearGradient, Rect, Stop } from "react-native-svg";
-
 import { CountryFlag } from "@/components/country-flag";
 import {
   NearbyIcon,
@@ -65,6 +64,7 @@ import {
   sheetBackgroundStyle,
   SheetHeader,
   SheetHeaderFade,
+  transparent,
   useSheetScrollOffset,
 } from "@/components/sheet-header";
 import { StationDetails } from "@/components/station-details";
@@ -623,21 +623,12 @@ function EdgeFade({ side, isVisible }: { side: "left" | "right"; isVisible: bool
         { opacity: isVisible ? 1 : 0 },
       ]}
     >
-      <Svg width="100%" height="100%">
-        <Defs>
-          <SvgLinearGradient
-            id={`fade-${side}`}
-            x1={side === "left" ? 1 : 0}
-            y1="0"
-            x2={side === "left" ? 0 : 1}
-            y2="0"
-          >
-            <Stop offset="0" stopColor={color} stopOpacity={0} />
-            <Stop offset="1" stopColor={color} />
-          </SvgLinearGradient>
-        </Defs>
-        <Rect width="100%" height="100%" fill={`url(#fade-${side})`} />
-      </Svg>
+      <LinearGradient
+        colors={[transparent(color), color]}
+        start={{ x: side === "left" ? 1 : 0, y: 0 }}
+        end={{ x: side === "left" ? 0 : 1, y: 0 }}
+        style={StyleSheet.absoluteFill}
+      />
     </View>
   );
 }

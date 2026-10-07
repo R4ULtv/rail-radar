@@ -87,6 +87,14 @@ const cssEaseInOut = Easing.bezierFn(0.42, 0, 0.58, 1);
 // Always solid under the header, so lists never scroll right up against it.
 const fadeGap = 8;
 
+/**
+ * A theme color, which Uniwind resolves to hex, made fully transparent. Fading to it rather than
+ * to "transparent" keeps a gradient from going grey on the way.
+ */
+export function transparent(color: string) {
+  return `${color.slice(0, 7)}00`;
+}
+
 /** A sheet list's scroll position, for its header fade. Pass the ref to the scrollable. */
 export function useSheetScrollOffset<T extends Component = Animated.ScrollView>() {
   const scrollRef = useAnimatedRef<T>();
