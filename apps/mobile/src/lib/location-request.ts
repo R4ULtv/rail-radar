@@ -36,7 +36,8 @@ export async function checkLocationAccess(askPermission: boolean) {
 
 /**
  * Fast requests race recent OS positions against balanced-accuracy acquisition.
- * Stationary checks request high accuracy, accepting the first recent fix without an accuracy gate.
+ * Slow fast requests also start a high-accuracy watch, so GPS-only devices aren't left waiting
+ * on a balanced request. Stationary checks request high accuracy immediately.
  * Acquisition can be cancelled on backgrounding or timeout.
  * It is removed after the fix, leaving no continuous GPS watch between scheduled requests.
  */
@@ -45,12 +46,11 @@ export async function requestLocationFix(
   mode: LocationRequestMode = "fast",
 ): Promise<LocationFix> {
   await checkLocationAccess(false);
-  const precise = mode === "precise";
-  return acquireLocationFix(
-    (onPosition, onError) =>
+  const watch =
+    (accuracy: Location.Accuracy) => (onPosition: Location.LocationCallback, onError: () => void) =>
       Location.watchPositionAsync(
         {
-          accuracy: precise ? Location.Accuracy.High : Location.Accuracy.Balanced,
+          accuracy,
           distanceInterval: 0,
           // Keep Android's native cadence short while waiting for the first usable fix.
           timeInterval: 1_000,
@@ -59,8 +59,11 @@ export async function requestLocationFix(
         },
         onPosition,
         onError,
-      ),
+      );
+  return acquireLocationFix(
+    watch(mode === "precise" ? Location.Accuracy.High : Location.Accuracy.Balanced),
     signal,
     () => Location.getLastKnownPositionAsync({ maxAge: locationRequestMaxAgeMs }),
+    mode === "fast" ? watch(Location.Accuracy.High) : undefined,
   );
 }

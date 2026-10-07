@@ -18,6 +18,7 @@ export const locationRequestMaxAgeMs = movingLocationIntervalMs;
 export const stationaryLocationIntervalMs = 30_000;
 export const searchLocationIntervalMs = 30_000;
 export const locationFixMaxAgeMs = 30_000;
+export const locationFallbackDelayMs = 2_000;
 const movementEvidenceMaxGapMs = 60_000;
 const movementAccuracyMeters = 100;
 const minimumMovementMeters = 20;
@@ -114,16 +115,21 @@ type LocationWatch = (
   onError: () => void,
 ) => Promise<{ remove: () => void }>;
 
-/** Race recent cached and live positions; stop on the first usable fix or cancellation. */
+/** Race recent cached and live positions, escalating a slow network fix to GPS. */
 export function acquireLocationFix(
   watch: LocationWatch,
   signal: AbortSignal,
   getLastKnownPosition?: () => Promise<Position | null>,
+  fallbackWatch?: LocationWatch,
 ): Promise<LocationFix> {
   if (signal.aborted) return Promise.reject(new Error("Location request was cancelled."));
   return new Promise((resolve, reject) => {
-    let subscription: { remove: () => void } | null = null;
+    const subscriptions = new Set<{ remove: () => void }>();
     let settled = false;
+    let failedWatches = 0;
+    let fallbackStarted = false;
+    let cachePending = Boolean(getLastKnownPosition);
+    let fallbackTimer: ReturnType<typeof setTimeout> | null = null;
     const timeout = setTimeout(
       () => finish(null, new Error("Your location is unavailable right now.")),
       20_000,
@@ -134,8 +140,10 @@ export function acquireLocationFix(
       if (settled) return;
       settled = true;
       clearTimeout(timeout);
+      if (fallbackTimer !== null) clearTimeout(fallbackTimer);
       signal.removeEventListener("abort", abort);
-      subscription?.remove();
+      for (const subscription of subscriptions) subscription.remove();
+      subscriptions.clear();
       if (fix) resolve(fix);
       else reject(error);
     }
@@ -148,21 +156,65 @@ export function acquireLocationFix(
       if (fix && now - fix.timestamp <= locationRequestMaxAgeMs) finish(fix);
     }
 
+    function rejectIfUnavailable() {
+      if (!cachePending && failedWatches === (fallbackWatch ? 2 : 1)) {
+        finish(null, new Error("Your location is unavailable right now."));
+      }
+    }
+
+    function startFallback() {
+      if (settled || fallbackStarted || !fallbackWatch) return;
+      fallbackStarted = true;
+      if (fallbackTimer !== null) clearTimeout(fallbackTimer);
+      startWatch(fallbackWatch);
+    }
+
+    function startWatch(start: LocationWatch) {
+      let failed = false;
+      let subscription: { remove: () => void } | null = null;
+      function fail() {
+        if (settled || failed) return;
+        failed = true;
+        failedWatches++;
+        if (subscription) {
+          subscription.remove();
+          subscriptions.delete(subscription);
+        }
+        startFallback();
+        rejectIfUnavailable();
+      }
+      try {
+        void start((position) => {
+          if (!failed) acceptPosition(position);
+        }, fail)
+          .then((newSubscription) => {
+            // A fix or cancellation can arrive before the native watch promise resolves.
+            if (settled || failed) newSubscription.remove();
+            else {
+              subscription = newSubscription;
+              subscriptions.add(newSubscription);
+            }
+          })
+          .catch(fail);
+      } catch {
+        fail();
+      }
+    }
+
     signal.addEventListener("abort", abort, { once: true });
-    watch(acceptPosition, () => finish(null, new Error("Your location is unavailable right now.")))
-      .then((subscriptionToRemove) => {
-        // A fix or cancellation can arrive before the native watch promise resolves.
-        if (settled) subscriptionToRemove.remove();
-        else subscription = subscriptionToRemove;
-      })
-      .catch(() => finish(null, new Error("Your location is unavailable right now.")));
+    if (fallbackWatch) fallbackTimer = setTimeout(startFallback, locationFallbackDelayMs);
+    startWatch(watch);
     // A slow or unavailable cache must never delay the live watch.
     if (getLastKnownPosition) {
       void getLastKnownPosition()
         .then((position) => {
           if (position) acceptPosition(position);
         })
-        .catch(() => {});
+        .catch(() => {})
+        .finally(() => {
+          cachePending = false;
+          rejectIfUnavailable();
+        });
     }
   });
 }

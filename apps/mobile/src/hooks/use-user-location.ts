@@ -8,6 +8,7 @@ import {
   LocationAccessError,
   requestLocationFix,
 } from "@/lib/location-request";
+import { createLocationSession } from "@/lib/location-session";
 import {
   createLocationTracker,
   locationFixMaxAgeMs,
@@ -30,7 +31,7 @@ export function useUserLocation(enabled: boolean) {
   useEffect(() => {
     if (!enabled) return;
     let cancelled = false;
-    let active = AppState.currentState === "active";
+    let active = AppState.currentState !== "background" && AppState.currentState !== "inactive";
     let lastSavedAt: number | null = null;
     const tracker = createLocationTracker({
       requestFix: requestLocationFix,
@@ -62,41 +63,47 @@ export function useUserLocation(enabled: boolean) {
       },
     });
 
-    async function activate(askPermission: boolean) {
-      await checkLocationAccess(askPermission);
-      // Permission dialogs can temporarily make iOS inactive. Resuming also calls activate;
-      // tracker.start is idempotent, so it must not cancel the user's pending Locate request.
-      if (cancelled || !active) {
-        throw new Error("Location request was cancelled.");
-      }
-      tracker.start();
-    }
+    const session = createLocationSession({
+      initialState: AppState.currentState,
+      checkAccess: checkLocationAccess,
+      start() {
+        const latest = tracker.getLatestFix();
+        if (!latest || Date.now() - latest.timestamp > locationFixMaxAgeMs) {
+          setLocation(null);
+          setStatus("locating");
+        }
+        tracker.start();
+      },
+      stop() {
+        tracker.stop();
+      },
+    });
 
     function handleActivationError(error: unknown) {
-      if (cancelled || !active) return;
+      if (cancelled || !active || (error instanceof Error && error.message.includes("cancelled")))
+        return;
       setStatus(error instanceof LocationAccessError ? error.status : "idle");
-      if (error instanceof LocationAccessError) setLocation(null);
+      if (error instanceof LocationAccessError) {
+        setLocation(null);
+      }
     }
 
     requestLocation.current = async (action) => {
-      await activate(true);
+      await session.activate(true);
       return tracker[action]();
     };
-    void activate(true).catch(handleActivationError);
+    void session.activate(true).catch(handleActivationError);
     const subscription = AppState.addEventListener("change", (state) => {
-      if (state !== "active") {
-        active = false;
-        tracker.stop();
-      } else if (!active) {
-        active = true;
-        void activate(false).catch(handleActivationError);
-      }
+      const wasActive = active;
+      active = state === "active";
+      session.setAppState(state);
+      if (active && !wasActive) void session.activate(false).catch(handleActivationError);
     });
 
     return () => {
       cancelled = true;
       requestLocation.current = null;
-      tracker.stop();
+      session.dispose();
       subscription.remove();
     };
   }, [enabled]);
@@ -121,7 +128,9 @@ export function useUserLocation(enabled: boolean) {
       )
         return null;
       setStatus(error instanceof LocationAccessError ? error.status : "idle");
-      if (error instanceof LocationAccessError) setLocation(null);
+      if (error instanceof LocationAccessError) {
+        setLocation(null);
+      }
       setMessage(
         error instanceof LocationAccessError
           ? error.message
