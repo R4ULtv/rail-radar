@@ -15,7 +15,7 @@ import { factory } from "../lib/env";
 import { jsonError } from "../lib/http";
 import { STATION_STATS_CACHE_CONTROL } from "../lib/top-station-cache";
 import { countryParamValidator, periodValidator, trainTypeValidator } from "../lib/validators";
-import { rateLimit } from "../middleware/rate-limit";
+import { rateLimit, stationRateLimit } from "../middleware/rate-limit";
 import { createStationSearch } from "../search";
 import { getScraperForStation, ScraperError } from "../scrapers";
 
@@ -179,6 +179,7 @@ export const stationsRoutes = factory
   .get(
     "/:id",
     rateLimit,
+    stationRateLimit,
     trainTypeValidator,
     async (c, next) => {
       await next();

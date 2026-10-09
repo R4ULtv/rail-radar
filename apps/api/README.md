@@ -108,8 +108,21 @@ Luxembourg requests with `?type=arrivals` return `501` rather than presenting de
 ### Rate Limiting
 
 The static-map, station search, live-board, station statistics, trending-station, and analytics
-overview endpoints are rate-limited per IP (15 requests per 10 seconds) using Cloudflare Rate
-Limiting.
+overview endpoints share a burst limit per IP (15 requests per 10 seconds). Live boards also have a
+sustained limit of 20 requests per minute per IP, shared across all station IDs, arrivals,
+departures, and all other query strings. Switching stations does not reset this budget. Station
+search, statistics, and trending use the burst limit without consuming the live-board minute
+budget. Both live-board checks run before the station cache and upstream provider calls.
+
+Rejected requests return HTTP `429`, `Cache-Control: no-store`, and a CORS-exposed `Retry-After`
+header (10 seconds for the burst limit, 60 seconds for the station limit). The web app skips
+automatic retries on `429` and waits at least the indicated cooldown before polling again.
+
+Cloudflare's Workers rate-limit bindings are approximate and scoped to each Cloudflare location;
+they are not a global quota. A `429` is a normal Worker response, so it can appear as a successful
+execution in Workers metrics. Use HTTP response status in logs to distinguish allowed and rejected
+requests. To reject abusive traffic before it invokes the Worker, configure a Cloudflare WAF
+rate-limiting rule on the API hostname.
 
 ## Project Structure
 
