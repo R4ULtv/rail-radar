@@ -10289,7 +10289,7 @@
       "properties": {
         "id": "CH00207",
         "name": "Solothurn",
-        "type": "light",
+        "type": "rail",
         "importance": 3
       },
       "geometry": {
@@ -10581,149 +10581,6 @@
       "geometry": {
         "type": "Point",
         "coordinates": [7.42188, 47.28359]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH00272",
-        "name": "Solothurn Sternen",
-        "type": "light",
-        "importance": 3
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [7.54536, 47.2123]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH00273",
-        "name": "St. Katharinen",
-        "type": "rail",
-        "importance": 4
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [7.54979, 47.21611]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH00274",
-        "name": "Feldbrunnen",
-        "type": "rail",
-        "importance": 4
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [7.55586, 47.22066]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH00275",
-        "name": "Bei den Weihern",
-        "type": "light",
-        "importance": 3
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [7.56659, 47.22839]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH00280",
-        "name": "Solothurn Baseltor",
-        "type": "light",
-        "importance": 3
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [7.5419, 47.20999]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH00283",
-        "name": "Riedholz",
-        "type": "rail",
-        "importance": 4
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [7.57268, 47.23103]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH00285",
-        "name": "Flumenthal",
-        "type": "rail",
-        "importance": 4
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [7.59668, 47.23916]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH00286",
-        "name": "Attiswil",
-        "type": "rail",
-        "importance": 4
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [7.61388, 47.2464]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH00287",
-        "name": "Wiedlisbach",
-        "type": "rail",
-        "importance": 4
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [7.6461, 47.25288]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH00288",
-        "name": "Oberbipp",
-        "type": "rail",
-        "importance": 4
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [7.66101, 47.25974]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH00289",
-        "name": "Buchli",
-        "type": "light",
-        "importance": 3
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [7.67839, 47.26363]
       }
     },
     {
@@ -12146,227 +12003,6 @@
     {
       "type": "Feature",
       "properties": {
-        "id": "CH01160",
-        "name": "Lausanne-Chauderon",
-        "type": "light",
-        "importance": 3
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [6.62606, 46.52323]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH01162",
-        "name": "Union-Prilly",
-        "type": "light",
-        "importance": 3
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [6.60985, 46.53472]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH01163",
-        "name": "Prilly-Chasseur",
-        "type": "light",
-        "importance": 3
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [6.60743, 46.53965]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH01164",
-        "name": "Cery-Fleur-de-Lys",
-        "type": "light",
-        "importance": 3
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [6.60501, 46.54458]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH01165",
-        "name": "Jouxtens-Mézery",
-        "type": "light",
-        "importance": 3
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [6.60169, 46.54834]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH01166",
-        "name": "Romanel-sur-Lausanne",
-        "type": "light",
-        "importance": 3
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [6.60317, 46.56247]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH01168",
-        "name": "Vernand-Camarès",
-        "type": "light",
-        "importance": 3
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [6.6048, 46.57094]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH01169",
-        "name": "Cheseaux",
-        "type": "light",
-        "importance": 3
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [6.60596, 46.58435]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH01170",
-        "name": "Bel-Air LEB",
-        "type": "light",
-        "importance": 3
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [6.60553, 46.57868]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH01171",
-        "name": "Etagnières",
-        "type": "light",
-        "importance": 3
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [6.61463, 46.60267]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH01172",
-        "name": "Assens",
-        "type": "light",
-        "importance": 3
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [6.62053, 46.61315]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH01173",
-        "name": "Echallens",
-        "type": "light",
-        "importance": 3
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [6.63254, 46.63951]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH01174",
-        "name": "Sur Roche",
-        "type": "light",
-        "importance": 3
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [6.63892, 46.64045]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH01175",
-        "name": "Sugnens",
-        "type": "light",
-        "importance": 3
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [6.66576, 46.65485]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH01176",
-        "name": "Fey",
-        "type": "light",
-        "importance": 3
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [6.68508, 46.67432]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH01177",
-        "name": "Bercher",
-        "type": "light",
-        "importance": 3
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [6.70365, 46.69288]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH01178",
-        "name": "Grésaley",
-        "type": "light",
-        "importance": 3
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [6.64217, 46.64325]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
         "id": "CH01179",
         "name": "Pont-de-Drapel",
         "type": "rail",
@@ -12382,8 +12018,8 @@
       "properties": {
         "id": "CH01181",
         "name": "Lausanne-Flon",
-        "type": "light",
-        "importance": 3
+        "type": "rail",
+        "importance": 4
       },
       "geometry": {
         "type": "Point",
@@ -13238,32 +12874,6 @@
     {
       "type": "Feature",
       "properties": {
-        "id": "CH01446",
-        "name": "Villars-sur-Ollon Golf",
-        "type": "rail",
-        "importance": 4
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [7.07549, 46.30912]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH01447",
-        "name": "Roches Grises",
-        "type": "rail",
-        "importance": 4
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [7.0611, 46.29376]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
         "id": "CH01448",
         "name": "Champéry",
         "type": "rail",
@@ -13662,149 +13272,6 @@
       "geometry": {
         "type": "Point",
         "coordinates": [6.9823, 46.31832]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH01487",
-        "name": "Bex-Place-du-Marché",
-        "type": "rail",
-        "importance": 4
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [7.01443, 46.25091]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH01488",
-        "name": "Bévieux",
-        "type": "rail",
-        "importance": 4
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [7.03088, 46.25899]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH01490",
-        "name": "Fontannaz-Seulaz",
-        "type": "rail",
-        "importance": 4
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [7.05585, 46.2676]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH01491",
-        "name": "Les Posses",
-        "type": "rail",
-        "importance": 4
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [7.05089, 46.27117]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH01492",
-        "name": "Gryon",
-        "type": "rail",
-        "importance": 4
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [7.05971, 46.27358]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH01493",
-        "name": "Gryon Barboleuse",
-        "type": "rail",
-        "importance": 4
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [7.07049, 46.28275]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH01494",
-        "name": "Arveyes",
-        "type": "rail",
-        "importance": 4
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [7.06269, 46.29125]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH01495",
-        "name": "Villars-sur-Ollon",
-        "type": "rail",
-        "importance": 4
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [7.05623, 46.29626]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH01497",
-        "name": "Col-de-Soud",
-        "type": "rail",
-        "importance": 4
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [7.06954, 46.30494]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH01498",
-        "name": "Bouquetins",
-        "type": "rail",
-        "importance": 4
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [7.07234, 46.3164]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH01499",
-        "name": "Col-de-Bretaye",
-        "type": "rail",
-        "importance": 4
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [7.07361, 46.32193]
       }
     },
     {
@@ -14629,19 +14096,6 @@
     {
       "type": "Feature",
       "properties": {
-        "id": "CH01727",
-        "name": "La Clairière",
-        "type": "rail",
-        "importance": 4
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [7.068, 46.28834]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
         "id": "CH01729",
         "name": "Fiesch Feriendorf",
         "type": "rail",
@@ -15203,7 +14657,7 @@
       "properties": {
         "id": "CH02113",
         "name": "Aarau",
-        "type": "light",
+        "type": "rail",
         "importance": 3
       },
       "geometry": {
@@ -15305,19 +14759,6 @@
     {
       "type": "Feature",
       "properties": {
-        "id": "CH02123",
-        "name": "Buchs AG",
-        "type": "light",
-        "importance": 3
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [8.06959, 47.38974]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
         "id": "CH02128",
         "name": "Holderbank AG",
         "type": "rail",
@@ -15326,409 +14767,6 @@
       "geometry": {
         "type": "Point",
         "coordinates": [8.16662, 47.42864]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH02160",
-        "name": "Gränichen",
-        "type": "light",
-        "importance": 3
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [8.09879, 47.36167]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH02161",
-        "name": "Teufenthal AG",
-        "type": "light",
-        "importance": 3
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [8.11448, 47.32941]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH02162",
-        "name": "Unterkulm",
-        "type": "light",
-        "importance": 3
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [8.11513, 47.31013]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH02163",
-        "name": "Oberkulm",
-        "type": "light",
-        "importance": 3
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [8.1219, 47.30149]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH02164",
-        "name": "Gontenschwil",
-        "type": "light",
-        "importance": 3
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [8.14446, 47.28035]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH02165",
-        "name": "Zetzwil",
-        "type": "light",
-        "importance": 3
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [8.15325, 47.28222]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH02166",
-        "name": "Leimbach AG",
-        "type": "light",
-        "importance": 3
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [8.16787, 47.27271]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH02167",
-        "name": "Reinach AG Nord",
-        "type": "light",
-        "importance": 3
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [8.18165, 47.25707]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH02168",
-        "name": "Reinach AG",
-        "type": "light",
-        "importance": 3
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [8.18454, 47.25006]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH02169",
-        "name": "Menziken",
-        "type": "light",
-        "importance": 3
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [8.18932, 47.24092]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH02174",
-        "name": "Bleien Liebegg",
-        "type": "light",
-        "importance": 3
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [8.11355, 47.34353]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH02176",
-        "name": "Reinach AG Mitte",
-        "type": "light",
-        "importance": 3
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [8.18339, 47.25451]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH02177",
-        "name": "Schöftland Nordweg",
-        "type": "light",
-        "importance": 3
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [8.05123, 47.31111]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH02178",
-        "name": "Obermuhen",
-        "type": "light",
-        "importance": 3
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [8.05448, 47.3294]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH02179",
-        "name": "Mittelmuhen",
-        "type": "light",
-        "importance": 3
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [8.05432, 47.33453]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH02180",
-        "name": "Muhen Nord",
-        "type": "light",
-        "importance": 3
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [8.05268, 47.34349]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH02181",
-        "name": "Oberentfelden Uerkenbrücke",
-        "type": "light",
-        "importance": 3
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [8.04567, 47.36108]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH02182",
-        "name": "Unterentfelden Oberdorf",
-        "type": "light",
-        "importance": 3
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [8.04202, 47.36474]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH02184",
-        "name": "Gränichen Oberdorf",
-        "type": "light",
-        "importance": 3
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [8.10648, 47.35654]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH02185",
-        "name": "Bremgarten Isenlauf",
-        "type": "light",
-        "importance": 3
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [8.34153, 47.34607]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH02186",
-        "name": "Dietikon Stoffelbach",
-        "type": "light",
-        "importance": 3
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [8.39896, 47.39333]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH02187",
-        "name": "Rudolfstetten Hofacker",
-        "type": "light",
-        "importance": 3
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [8.37696, 47.36467]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH02188",
-        "name": "Zufikon Hammergut",
-        "type": "light",
-        "importance": 3
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [8.35459, 47.35596]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH02189",
-        "name": "Gränichen Töndler",
-        "type": "light",
-        "importance": 3
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [8.09204, 47.36399]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH02191",
-        "name": "Binzenhof",
-        "type": "light",
-        "importance": 3
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [8.05059, 47.38321]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH02192",
-        "name": "Distelberg",
-        "type": "light",
-        "importance": 3
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [8.04937, 47.376]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH02194",
-        "name": "Oberentfelden Engelplatz",
-        "type": "light",
-        "importance": 3
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [8.04662, 47.35617]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH02195",
-        "name": "Muhen",
-        "type": "light",
-        "importance": 3
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [8.05327, 47.33878]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH02196",
-        "name": "Unterentfelden Post",
-        "type": "light",
-        "importance": 3
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [8.04445, 47.36867]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH02197",
-        "name": "Hirschthal",
-        "type": "light",
-        "importance": 3
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [8.05282, 47.31989]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH02199",
-        "name": "Schöftland",
-        "type": "light",
-        "importance": 3
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [8.05002, 47.30588]
       }
     },
     {
@@ -16137,162 +15175,6 @@
     {
       "type": "Feature",
       "properties": {
-        "id": "CH02248",
-        "name": "Bremgarten Obertor",
-        "type": "light",
-        "importance": 3
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [8.34375, 47.35057]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH02268",
-        "name": "Zufikon Belvédère",
-        "type": "light",
-        "importance": 3
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [8.35928, 47.35768]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH02269",
-        "name": "Erdmannlistein",
-        "type": "light",
-        "importance": 3
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [8.31262, 47.34937]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH02270",
-        "name": "Bergfrieden",
-        "type": "light",
-        "importance": 3
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [8.39896, 47.39747]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH02271",
-        "name": "Wohlen Oberdorf",
-        "type": "light",
-        "importance": 3
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [8.28689, 47.34685]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH02272",
-        "name": "Bremgarten West",
-        "type": "light",
-        "importance": 3
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [8.33711, 47.34569]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH02273",
-        "name": "Bremgarten",
-        "type": "light",
-        "importance": 3
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [8.34649, 47.35152]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH02274",
-        "name": "Zufikon",
-        "type": "light",
-        "importance": 3
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [8.35468, 47.35258]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH02275",
-        "name": "Widen Heinrüti",
-        "type": "light",
-        "importance": 3
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [8.35487, 47.36193]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH02276",
-        "name": "Berikon-Widen",
-        "type": "light",
-        "importance": 3
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [8.36637, 47.36192]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH02277",
-        "name": "Rudolfstetten",
-        "type": "light",
-        "importance": 3
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [8.38154, 47.36976]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH02278",
-        "name": "Reppischhof",
-        "type": "light",
-        "importance": 3
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [8.39617, 47.384]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
         "id": "CH02300",
         "name": "Zug Postplatz",
         "type": "rail",
@@ -16587,214 +15469,6 @@
       "geometry": {
         "type": "Point",
         "coordinates": [8.48756, 47.35207]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH03060",
-        "name": "Esslingen",
-        "type": "light",
-        "importance": 3
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [8.70969, 47.28786]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH03061",
-        "name": "Langwies ZH",
-        "type": "light",
-        "importance": 3
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [8.69439, 47.29605]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH03062",
-        "name": "Egg",
-        "type": "light",
-        "importance": 3
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [8.68956, 47.30155]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH03063",
-        "name": "Hinteregg",
-        "type": "light",
-        "importance": 3
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [8.68434, 47.30573]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH03064",
-        "name": "Scheuren",
-        "type": "light",
-        "importance": 3
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [8.65955, 47.3226]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH03065",
-        "name": "Forch",
-        "type": "light",
-        "importance": 3
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [8.64797, 47.32534]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH03066",
-        "name": "Zumikon",
-        "type": "light",
-        "importance": 3
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [8.62373, 47.33194]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH03067",
-        "name": "Zollikerberg",
-        "type": "light",
-        "importance": 3
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [8.6034, 47.34605]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH03068",
-        "name": "Maiacher",
-        "type": "light",
-        "importance": 3
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [8.63107, 47.32817]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH03069",
-        "name": "Zürich Rehalp",
-        "type": "light",
-        "importance": 3
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [8.5832, 47.35104]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH03070",
-        "name": "Emmat",
-        "type": "light",
-        "importance": 3
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [8.70183, 47.29238]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH03072",
-        "name": "Neuhaus bei Hinteregg",
-        "type": "light",
-        "importance": 3
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [8.67403, 47.31278]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH03074",
-        "name": "Neue Forch",
-        "type": "light",
-        "importance": 3
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [8.63784, 47.32581]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH03075",
-        "name": "Waltikon",
-        "type": "light",
-        "importance": 3
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [8.61654, 47.33694]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH03077",
-        "name": "Spital Zollikerberg",
-        "type": "light",
-        "importance": 3
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [8.5968, 47.34731]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH03078",
-        "name": "Waldburg",
-        "type": "light",
-        "importance": 3
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [8.59302, 47.34547]
       }
     },
     {
@@ -20817,19 +19491,6 @@
     {
       "type": "Feature",
       "properties": {
-        "id": "CH04325",
-        "name": "Colombier NE Littorail",
-        "type": "rail",
-        "importance": 4
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [6.86542, 46.96587]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
         "id": "CH04381",
         "name": "La Chaux-de-Fonds-Grenier",
         "type": "rail",
@@ -20955,19 +19616,6 @@
       "geometry": {
         "type": "Point",
         "coordinates": [6.70739, 47.06721]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH04398",
-        "name": "Neuchâtel Place Pury Littorail",
-        "type": "rail",
-        "importance": 4
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [6.92819, 46.98941]
       }
     },
     {
@@ -21155,188 +19803,6 @@
     {
       "type": "Feature",
       "properties": {
-        "id": "CH04461",
-        "name": "Nidau",
-        "type": "rail",
-        "importance": 4
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [7.24219, 47.12385]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH04462",
-        "name": "Lattrigen",
-        "type": "rail",
-        "importance": 4
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [7.21443, 47.09695]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH04463",
-        "name": "Täuffelen",
-        "type": "rail",
-        "importance": 4
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [7.19855, 47.06651]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH04464",
-        "name": "Hagneck",
-        "type": "rail",
-        "importance": 4
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [7.18807, 47.05828]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH04465",
-        "name": "Lüscherz",
-        "type": "rail",
-        "importance": 4
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [7.17735, 47.04803]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH04466",
-        "name": "Siselen-Finsterhennen",
-        "type": "rail",
-        "importance": 4
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [7.18039, 47.03115]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH04467",
-        "name": "Brüttelen",
-        "type": "rail",
-        "importance": 4
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [7.1483, 47.0206]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH04468",
-        "name": "Ins Dorf",
-        "type": "rail",
-        "importance": 4
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [7.10681, 47.00558]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH04469",
-        "name": "Nidau Beunden",
-        "type": "rail",
-        "importance": 4
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [7.24032, 47.11982]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH04470",
-        "name": "Ipsach Herdi",
-        "type": "rail",
-        "importance": 4
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [7.22893, 47.11237]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH04471",
-        "name": "Ipsach",
-        "type": "rail",
-        "importance": 4
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [7.23548, 47.11737]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH04472",
-        "name": "Sutz",
-        "type": "rail",
-        "importance": 4
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [7.21942, 47.10187]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH04474",
-        "name": "Mörigen",
-        "type": "rail",
-        "importance": 4
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [7.21223, 47.08565]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH04475",
-        "name": "Gerolfingen",
-        "type": "rail",
-        "importance": 4
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [7.20125, 47.07498]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
         "id": "CH04480",
         "name": "St-Blaise-Lac",
         "type": "rail",
@@ -21475,45 +19941,6 @@
       "geometry": {
         "type": "Point",
         "coordinates": [7.03057, 47.00928]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH04509",
-        "name": "Neuchâtel Port-de-Serrières",
-        "type": "rail",
-        "importance": 4
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [6.90483, 46.98089]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH04510",
-        "name": "Auvernier Littorail",
-        "type": "rail",
-        "importance": 4
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [6.87889, 46.97424]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH04511",
-        "name": "Boudry Littorail",
-        "type": "rail",
-        "importance": 4
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [6.83915, 46.94949]
       }
     },
     {
@@ -22177,136 +20604,6 @@
       "geometry": {
         "type": "Point",
         "coordinates": [9.48465, 47.07469]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH05390",
-        "name": "Serocca",
-        "type": "rail",
-        "importance": 4
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [8.90457, 46.00852]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH05391",
-        "name": "Lugano FLP",
-        "type": "rail",
-        "importance": 4
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [8.9476, 46.00449]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH05392",
-        "name": "Magliaso Paese",
-        "type": "rail",
-        "importance": 4
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [8.89058, 45.98341]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH05393",
-        "name": "Cappella-Agnuzzo",
-        "type": "rail",
-        "importance": 4
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [8.92445, 45.99326]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH05394",
-        "name": "Bioggio",
-        "type": "rail",
-        "importance": 4
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [8.90889, 46.01211]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH05395",
-        "name": "Agno",
-        "type": "rail",
-        "importance": 4
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [8.90092, 45.99593]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH05396",
-        "name": "Magliaso",
-        "type": "rail",
-        "importance": 4
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [8.88412, 45.98164]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH05397",
-        "name": "Caslano",
-        "type": "rail",
-        "importance": 4
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [8.87629, 45.97774]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH05398",
-        "name": "Ponte Tresa",
-        "type": "rail",
-        "importance": 4
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [8.86048, 45.96999]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH05399",
-        "name": "Sorengo",
-        "type": "rail",
-        "importance": 4
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [8.93483, 46.00039]
       }
     },
     {
@@ -23573,136 +21870,6 @@
     {
       "type": "Feature",
       "properties": {
-        "id": "CH06169",
-        "name": "Wiesengrund",
-        "type": "rail",
-        "importance": 4
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [8.94875, 47.50219]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH06170",
-        "name": "Münchwilen Pflegeheim",
-        "type": "rail",
-        "importance": 4
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [8.99195, 47.48149]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH06171",
-        "name": "Frauenfeld Marktplatz",
-        "type": "rail",
-        "importance": 4
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [8.89873, 47.5542]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH06173",
-        "name": "Weberei Matzingen",
-        "type": "rail",
-        "importance": 4
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [8.92196, 47.52729]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH06174",
-        "name": "Matzingen",
-        "type": "rail",
-        "importance": 4
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [8.93276, 47.52047]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH06175",
-        "name": "Jakobstal",
-        "type": "rail",
-        "importance": 4
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [8.94409, 47.50829]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH06176",
-        "name": "Wängi",
-        "type": "rail",
-        "importance": 4
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [8.95329, 47.49631]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH06177",
-        "name": "Rosental",
-        "type": "rail",
-        "importance": 4
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [8.97515, 47.49234]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH06178",
-        "name": "Münchwilen TG",
-        "type": "rail",
-        "importance": 4
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [8.99922, 47.47691]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH06179",
-        "name": "Lüdem",
-        "type": "rail",
-        "importance": 4
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [8.90245, 47.54188]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
         "id": "CH06181",
         "name": "Bronschhofen",
         "type": "rail",
@@ -24088,19 +22255,6 @@
       "geometry": {
         "type": "Point",
         "coordinates": [9.18369, 47.5388]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH06270",
-        "name": "St. Gallen Marktplatz",
-        "type": "light",
-        "importance": 3
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [9.37673, 47.42636]
       }
     },
     {
@@ -24717,136 +22871,6 @@
     {
       "type": "Feature",
       "properties": {
-        "id": "CH06358",
-        "name": "St. Gallen Spisertor",
-        "type": "light",
-        "importance": 3
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [9.37963, 47.42473]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH06359",
-        "name": "St. Gallen Schülerhaus",
-        "type": "light",
-        "importance": 3
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [9.38742, 47.42501]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH06361",
-        "name": "St. Gallen Notkersegg",
-        "type": "light",
-        "importance": 3
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [9.40404, 47.42523]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH06362",
-        "name": "Schwarzer Bären",
-        "type": "light",
-        "importance": 3
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [9.41537, 47.42259]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH06364",
-        "name": "Vögelinsegg",
-        "type": "light",
-        "importance": 3
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [9.43639, 47.41609]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH06365",
-        "name": "Schützengarten",
-        "type": "light",
-        "importance": 3
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [9.43825, 47.41272]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH06366",
-        "name": "Speicher",
-        "type": "light",
-        "importance": 3
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [9.44272, 47.411]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH06367",
-        "name": "Bendlehn",
-        "type": "light",
-        "importance": 3
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [9.45051, 47.40696]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH06368",
-        "name": "Gfeld",
-        "type": "light",
-        "importance": 3
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [9.45576, 47.40503]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH06369",
-        "name": "Trogen",
-        "type": "light",
-        "importance": 3
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [9.46141, 47.40727]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
         "id": "CH06371",
         "name": "St. Gallen Riethüsli",
         "type": "rail",
@@ -25328,79 +23352,14 @@
     {
       "type": "Feature",
       "properties": {
-        "id": "CH07064",
-        "name": "Vechigen",
-        "type": "light",
-        "importance": 3
+        "id": "CH07063",
+        "name": "Worb Dorf",
+        "type": "rail",
+        "importance": 4
       },
       "geometry": {
         "type": "Point",
-        "coordinates": [7.5564, 46.94644]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH07065",
-        "name": "Boll-Utzigen",
-        "type": "light",
-        "importance": 3
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [7.54677, 46.95302]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH07066",
-        "name": "Stettlen",
-        "type": "light",
-        "importance": 3
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [7.5241, 46.95682]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH07067",
-        "name": "Deisswil",
-        "type": "light",
-        "importance": 3
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [7.51327, 46.95823]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH07068",
-        "name": "Bolligen",
-        "type": "light",
-        "importance": 3
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [7.49742, 46.96954]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH07069",
-        "name": "Ittigen bei Bern",
-        "type": "light",
-        "importance": 3
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [7.48413, 46.97331]
+        "coordinates": [7.56277, 46.92995]
       }
     },
     {
@@ -25687,19 +23646,6 @@
       "geometry": {
         "type": "Point",
         "coordinates": [7.36238, 46.86279]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH07096",
-        "name": "Papiermühle",
-        "type": "light",
-        "importance": 3
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [7.47659, 46.97426]
       }
     },
     {
@@ -26420,240 +24366,6 @@
     {
       "type": "Feature",
       "properties": {
-        "id": "CH08051",
-        "name": "Bern Felsenau",
-        "type": "light",
-        "importance": 3
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [7.44425, 46.9685]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH08052",
-        "name": "Bern Tiefenau",
-        "type": "light",
-        "importance": 3
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [7.4502, 46.97274]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH08053",
-        "name": "Steinibach",
-        "type": "light",
-        "importance": 3
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [7.4574, 46.98442]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH08054",
-        "name": "Worblaufen",
-        "type": "light",
-        "importance": 3
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [7.45763, 46.97884]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH08055",
-        "name": "Unterzollikofen",
-        "type": "light",
-        "importance": 3
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [7.45701, 46.99173]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH08056",
-        "name": "Moosseedorf",
-        "type": "light",
-        "importance": 3
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [7.48485, 47.01614]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH08057",
-        "name": "Schönbühl RBS",
-        "type": "light",
-        "importance": 3
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [7.49781, 47.02048]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH08058",
-        "name": "Urtenen",
-        "type": "light",
-        "importance": 3
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [7.50065, 47.02889]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH08059",
-        "name": "Jegenstorf",
-        "type": "light",
-        "importance": 3
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [7.50778, 47.04761]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH08060",
-        "name": "Grafenried",
-        "type": "light",
-        "importance": 3
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [7.51161, 47.08012]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH08061",
-        "name": "Fraubrunnen",
-        "type": "light",
-        "importance": 3
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [7.52222, 47.08658]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH08062",
-        "name": "Büren zum Hof",
-        "type": "light",
-        "importance": 3
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [7.51881, 47.09595]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH08063",
-        "name": "Schalunen",
-        "type": "light",
-        "importance": 3
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [7.52417, 47.11016]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH08064",
-        "name": "Bätterkinden",
-        "type": "light",
-        "importance": 3
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [7.5344, 47.13002]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH08066",
-        "name": "Lohn-Lüterkofen",
-        "type": "light",
-        "importance": 3
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [7.52696, 47.16299]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH08068",
-        "name": "Biberist RBS",
-        "type": "light",
-        "importance": 3
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [7.55583, 47.18386]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH08070",
-        "name": "Oberzollikofen",
-        "type": "light",
-        "importance": 3
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [7.46163, 46.99695]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH08071",
-        "name": "Schönbühl Shoppyland",
-        "type": "light",
-        "importance": 3
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [7.49363, 47.01862]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
         "id": "CH08080",
         "name": "Oberburg",
         "type": "rail",
@@ -26823,188 +24535,6 @@
     {
       "type": "Feature",
       "properties": {
-        "id": "CH08151",
-        "name": "Langenthal Gaswerk",
-        "type": "rail",
-        "importance": 4
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [7.78218, 47.2248]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH08152",
-        "name": "Hard-Mumenthal",
-        "type": "light",
-        "importance": 3
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [7.77488, 47.23381]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH08153",
-        "name": "Aarwangen",
-        "type": "rail",
-        "importance": 4
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [7.76962, 47.24088]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH08154",
-        "name": "Aarwangen Schloss",
-        "type": "rail",
-        "importance": 4
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [7.76362, 47.24518]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH08155",
-        "name": "Bannwil",
-        "type": "rail",
-        "importance": 4
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [7.74036, 47.24438]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH08157",
-        "name": "Holzhäusern",
-        "type": "rail",
-        "importance": 4
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [7.7104, 47.25816]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH08158",
-        "name": "Scharnageln",
-        "type": "rail",
-        "importance": 4
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [7.70079, 47.2631]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH08159",
-        "name": "Niederbipp Dorf",
-        "type": "rail",
-        "importance": 4
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [7.69514, 47.26582]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH08161",
-        "name": "Kaltenherberg",
-        "type": "light",
-        "importance": 3
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [7.79959, 47.23718]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH08162",
-        "name": "Roggwil Dorf",
-        "type": "light",
-        "importance": 3
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [7.82234, 47.23934]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH08163",
-        "name": "St. Urban",
-        "type": "light",
-        "importance": 3
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [7.83582, 47.23175]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH08164",
-        "name": "St. Urban Ziegelei",
-        "type": "light",
-        "importance": 3
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [7.83615, 47.2272]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH08168",
-        "name": "Roggwil Buchägerten",
-        "type": "light",
-        "importance": 3
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [7.83194, 47.23566]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH08173",
-        "name": "Roggwil Schmitten",
-        "type": "light",
-        "importance": 3
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [7.81592, 47.23762]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
         "id": "CH08174",
         "name": "Gutenburg",
         "type": "rail",
@@ -27104,19 +24634,6 @@
       "geometry": {
         "type": "Point",
         "coordinates": [7.84261, 47.11449]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH08193",
-        "name": "Aarwangen Vorstadt",
-        "type": "light",
-        "importance": 3
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [7.77131, 47.23749]
       }
     },
     {
@@ -30177,19 +27694,6 @@
     {
       "type": "Feature",
       "properties": {
-        "id": "CH16450",
-        "name": "Unterkulm Nord",
-        "type": "light",
-        "importance": 3
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [8.11305, 47.31477]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
         "id": "CH16764",
         "name": "Riehen",
         "type": "rail",
@@ -30268,32 +27772,6 @@
     {
       "type": "Feature",
       "properties": {
-        "id": "CH17376",
-        "name": "Dietikon Schöneggstrasse",
-        "type": "light",
-        "importance": 3
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [8.40099, 47.40196]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH17377",
-        "name": "Bibenlos-Sonnenhof",
-        "type": "light",
-        "importance": 3
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [8.35028, 47.35379]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
         "id": "CH17481",
         "name": "S-chanf Marathon",
         "type": "rail",
@@ -30359,19 +27837,6 @@
     {
       "type": "Feature",
       "properties": {
-        "id": "CH18100",
-        "name": "St. Gallen Birnbäumen",
-        "type": "light",
-        "importance": 3
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [9.39298, 47.42583]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
         "id": "CH18243",
         "name": "Beringerfeld",
         "type": "rail",
@@ -30432,32 +27897,6 @@
       "geometry": {
         "type": "Point",
         "coordinates": [8.98309, 45.87722]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH18690",
-        "name": "Niederbipp Industrie",
-        "type": "rail",
-        "importance": 4
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [7.70317, 47.27864]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH18701",
-        "name": "Wohlen Fulenbach",
-        "type": "light",
-        "importance": 3
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [8.30109, 47.34344]
       }
     },
     {
@@ -30619,19 +28058,6 @@
     {
       "type": "Feature",
       "properties": {
-        "id": "CH19685",
-        "name": "Aarau Torfeld",
-        "type": "light",
-        "importance": 3
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [8.06264, 47.39356]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
         "id": "CH30011",
         "name": "Les Coeudres-Est",
         "type": "rail",
@@ -30658,45 +28084,6 @@
     {
       "type": "Feature",
       "properties": {
-        "id": "CH30064",
-        "name": "Bex Pont-Neuf",
-        "type": "rail",
-        "importance": 4
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [7.02082, 46.25052]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH30066",
-        "name": "Grand-Moulin",
-        "type": "rail",
-        "importance": 4
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [7.02322, 46.25262]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH30067",
-        "name": "Les Salines",
-        "type": "rail",
-        "importance": 4
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [7.02764, 46.25484]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
         "id": "CH30225",
         "name": "Le Stand",
         "type": "rail",
@@ -30705,19 +28092,6 @@
       "geometry": {
         "type": "Point",
         "coordinates": [6.74525, 47.00501]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH30246",
-        "name": "Foyer Dents-du-Midi",
-        "type": "rail",
-        "importance": 4
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [7.02984, 46.25639]
       }
     },
     {
@@ -30866,19 +28240,6 @@
     {
       "type": "Feature",
       "properties": {
-        "id": "CH30523",
-        "name": "La Ruaz",
-        "type": "rail",
-        "importance": 4
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [7.00772, 46.25308]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
         "id": "CH30612",
         "name": "Realp DFB",
         "type": "rail",
@@ -30918,84 +28279,6 @@
     {
       "type": "Feature",
       "properties": {
-        "id": "CH30708",
-        "name": "Neuchâtel Evole",
-        "type": "rail",
-        "importance": 4
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [6.92337, 46.98965]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH30709",
-        "name": "Neuchâtel Champ-Bougin",
-        "type": "rail",
-        "importance": 4
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [6.91224, 46.98456]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH30710",
-        "name": "Neuchâtel Serrières Ruau",
-        "type": "rail",
-        "importance": 4
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [6.89504, 46.97974]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH30711",
-        "name": "Colombier NE Allées Littorail",
-        "type": "rail",
-        "importance": 4
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [6.86951, 46.96807]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH30712",
-        "name": "Colombier NE Les Chézards",
-        "type": "rail",
-        "importance": 4
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [6.8638, 46.96077]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH30713",
-        "name": "Boudry Tuilière",
-        "type": "rail",
-        "importance": 4
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [6.84283, 46.95147]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
         "id": "CH30760",
         "name": "Aareschlucht West",
         "type": "rail",
@@ -31017,32 +28300,6 @@
       "geometry": {
         "type": "Point",
         "coordinates": [6.22215, 46.59946]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH30789",
-        "name": "Bioggio Molinazzo",
-        "type": "rail",
-        "importance": 4
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [8.91401, 46.01236]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH30790",
-        "name": "Sorengo Laghetto",
-        "type": "rail",
-        "importance": 4
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [8.93334, 45.99681]
       }
     },
     {
@@ -31087,45 +28344,6 @@
     {
       "type": "Feature",
       "properties": {
-        "id": "CH79237",
-        "name": "Ours (Lausanne)",
-        "type": "metro",
-        "importance": 4
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [6.64067, 46.52124]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH79238",
-        "name": "Sallaz (Lausanne)",
-        "type": "metro",
-        "importance": 4
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [6.64619, 46.53284]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH79239",
-        "name": "Croisettes (Epalinges)",
-        "type": "metro",
-        "importance": 4
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [6.66151, 46.54289]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
         "id": "CH87595",
         "name": "Chaulin-Cornaux",
         "type": "rail",
@@ -31152,19 +28370,6 @@
     {
       "type": "Feature",
       "properties": {
-        "id": "CH87727",
-        "name": "Les Ripes",
-        "type": "light",
-        "importance": 3
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [6.60806, 46.59219]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
         "id": "CH88122",
         "name": "Landschlacht",
         "type": "rail",
@@ -31178,162 +28383,6 @@
     {
       "type": "Feature",
       "properties": {
-        "id": "CH88193",
-        "name": "Gryon Bois-Gentil",
-        "type": "rail",
-        "importance": 4
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [7.06755, 46.27773]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH89198",
-        "name": "Worbboden",
-        "type": "light",
-        "importance": 3
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [7.55953, 46.93393]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH89523",
-        "name": "Bessières (Lausanne)",
-        "type": "metro",
-        "importance": 4
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [6.63699, 46.52079]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH90442",
-        "name": "Riponne-M. Béjart (Lausanne)",
-        "type": "metro",
-        "importance": 4
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [6.63265, 46.52291]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH92017",
-        "name": "CHUV (Lausanne)",
-        "type": "metro",
-        "importance": 4
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [6.64154, 46.52647]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH92028",
-        "name": "Délices (Lausanne)",
-        "type": "metro",
-        "importance": 4
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [6.62807, 46.51222]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH92048",
-        "name": "Fourmi (Lausanne)",
-        "type": "metro",
-        "importance": 4
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [6.65116, 46.53886]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH92050",
-        "name": "Gare (Lausanne)",
-        "type": "metro",
-        "importance": 4
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [6.62963, 46.51753]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH92052",
-        "name": "Grancy (Lausanne)",
-        "type": "metro",
-        "importance": 4
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [6.62887, 46.51493]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH92061",
-        "name": "Jordils (Lausanne)",
-        "type": "metro",
-        "importance": 4
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [6.62736, 46.50991]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH92086",
-        "name": "Ouchy-Olympique (Lausanne)",
-        "type": "metro",
-        "importance": 4
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [6.62655, 46.50725]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH92128",
-        "name": "Vennes (Lausanne)",
-        "type": "metro",
-        "importance": 4
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [6.6576, 46.54123]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
         "id": "CH93467",
         "name": "Pont de Fayot",
         "type": "rail",
@@ -31342,19 +28391,6 @@
       "geometry": {
         "type": "Point",
         "coordinates": [6.90373, 46.21902]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "CH93772",
-        "name": "Gryon-Chalméry",
-        "type": "rail",
-        "importance": 4
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [7.05191, 46.27364]
       }
     },
     {
@@ -31425,19 +28461,6 @@
     {
       "type": "Feature",
       "properties": {
-        "id": "CH94258",
-        "name": "Langenthal Industrie Nord",
-        "type": "light",
-        "importance": 3
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [7.78647, 47.22856]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
         "id": "CH94466",
         "name": "Martigny-Expo",
         "type": "rail",
@@ -31451,14 +28474,3641 @@
     {
       "type": "Feature",
       "properties": {
-        "id": "CH95245",
+        "id": "CHL00272",
+        "name": "Solothurn Sternen",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [7.54536, 47.2123]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL00273",
+        "name": "St. Katharinen",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [7.54979, 47.21611]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL00274",
+        "name": "Feldbrunnen",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [7.55586, 47.22066]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL00275",
+        "name": "Bei den Weihern",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [7.56659, 47.22839]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL00280",
+        "name": "Solothurn Baseltor",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [7.5419, 47.20999]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL00283",
+        "name": "Riedholz",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [7.57268, 47.23103]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL00285",
+        "name": "Flumenthal",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [7.59668, 47.23916]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL00286",
+        "name": "Attiswil",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [7.61388, 47.2464]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL00287",
+        "name": "Wiedlisbach",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [7.6461, 47.25288]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL00288",
+        "name": "Oberbipp",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [7.66101, 47.25974]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL00289",
+        "name": "Buchli",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [7.67839, 47.26363]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL00855",
+        "name": "Bad Bubendorf",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [7.74206, 47.45965]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL01160",
+        "name": "Lausanne-Chauderon",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [6.62606, 46.52323]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL01162",
+        "name": "Union-Prilly",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [6.60985, 46.53472]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL01163",
+        "name": "Prilly-Chasseur",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [6.60743, 46.53965]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL01164",
+        "name": "Cery-Fleur-de-Lys",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [6.60501, 46.54458]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL01165",
+        "name": "Jouxtens-Mézery",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [6.60169, 46.54834]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL01166",
+        "name": "Romanel-sur-Lausanne",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [6.60317, 46.56247]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL01168",
+        "name": "Vernand-Camarès",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [6.6048, 46.57094]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL01169",
+        "name": "Cheseaux",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [6.60596, 46.58435]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL01170",
+        "name": "Bel-Air LEB",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [6.60553, 46.57868]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL01171",
+        "name": "Etagnières",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [6.61463, 46.60267]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL01172",
+        "name": "Assens",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [6.62053, 46.61315]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL01173",
+        "name": "Echallens",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [6.63254, 46.63951]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL01174",
+        "name": "Sur Roche",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [6.63892, 46.64045]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL01175",
+        "name": "Sugnens",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [6.66576, 46.65485]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL01176",
+        "name": "Fey",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [6.68508, 46.67432]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL01177",
+        "name": "Bercher",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [6.70365, 46.69288]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL01178",
+        "name": "Grésaley",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [6.64217, 46.64325]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL01446",
+        "name": "Villars-sur-Ollon Golf",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [7.07549, 46.30912]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL01447",
+        "name": "Roches Grises",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [7.0611, 46.29376]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL01487",
+        "name": "Bex-Place-du-Marché",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [7.01443, 46.25091]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL01488",
+        "name": "Bévieux",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [7.03088, 46.25899]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL01490",
+        "name": "Fontannaz-Seulaz",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [7.05585, 46.2676]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL01491",
+        "name": "Les Posses",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [7.05089, 46.27117]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL01492",
+        "name": "Gryon",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [7.05971, 46.27358]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL01493",
+        "name": "Gryon Barboleuse",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [7.07049, 46.28275]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL01494",
+        "name": "Arveyes",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [7.06269, 46.29125]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL01495",
+        "name": "Villars-sur-Ollon",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [7.05623, 46.29626]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL01497",
+        "name": "Col-de-Soud",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [7.06954, 46.30494]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL01498",
+        "name": "Bouquetins",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [7.07234, 46.3164]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL01499",
+        "name": "Col-de-Bretaye",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [7.07361, 46.32193]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL01727",
+        "name": "La Clairière",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [7.068, 46.28834]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL02123",
+        "name": "Buchs AG",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [8.06959, 47.38974]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL02160",
+        "name": "Gränichen",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [8.09879, 47.36167]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL02161",
+        "name": "Teufenthal AG",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [8.11448, 47.32941]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL02162",
+        "name": "Unterkulm",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [8.11513, 47.31013]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL02163",
+        "name": "Oberkulm",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [8.1219, 47.30149]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL02164",
+        "name": "Gontenschwil",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [8.14446, 47.28035]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL02165",
+        "name": "Zetzwil",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [8.15325, 47.28222]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL02166",
+        "name": "Leimbach AG",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [8.16787, 47.27271]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL02167",
+        "name": "Reinach AG Nord",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [8.18165, 47.25707]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL02168",
+        "name": "Reinach AG",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [8.18454, 47.25006]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL02169",
+        "name": "Menziken",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [8.18932, 47.24092]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL02174",
+        "name": "Bleien Liebegg",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [8.11355, 47.34353]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL02176",
+        "name": "Reinach AG Mitte",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [8.18339, 47.25451]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL02177",
+        "name": "Schöftland Nordweg",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [8.05123, 47.31111]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL02178",
+        "name": "Obermuhen",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [8.05448, 47.3294]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL02179",
+        "name": "Mittelmuhen",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [8.05432, 47.33453]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL02180",
+        "name": "Muhen Nord",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [8.05268, 47.34349]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL02181",
+        "name": "Oberentfelden Uerkenbrücke",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [8.04567, 47.36108]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL02182",
+        "name": "Unterentfelden Oberdorf",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [8.04202, 47.36474]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL02184",
+        "name": "Gränichen Oberdorf",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [8.10648, 47.35654]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL02185",
+        "name": "Bremgarten Isenlauf",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [8.34153, 47.34607]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL02186",
+        "name": "Dietikon Stoffelbach",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [8.39896, 47.39333]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL02187",
+        "name": "Rudolfstetten Hofacker",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [8.37696, 47.36467]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL02188",
+        "name": "Zufikon Hammergut",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [8.35459, 47.35596]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL02189",
+        "name": "Gränichen Töndler",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [8.09204, 47.36399]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL02191",
+        "name": "Binzenhof",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [8.05059, 47.38321]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL02192",
+        "name": "Distelberg",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [8.04937, 47.376]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL02194",
+        "name": "Oberentfelden Engelplatz",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [8.04662, 47.35617]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL02195",
+        "name": "Muhen",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [8.05327, 47.33878]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL02196",
+        "name": "Unterentfelden Post",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [8.04445, 47.36867]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL02197",
+        "name": "Hirschthal",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [8.05282, 47.31989]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL02199",
+        "name": "Schöftland",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [8.05002, 47.30588]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL02248",
+        "name": "Bremgarten Obertor",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [8.34375, 47.35057]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL02268",
+        "name": "Zufikon Belvédère",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [8.35928, 47.35768]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL02269",
+        "name": "Erdmannlistein",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [8.31262, 47.34937]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL02270",
+        "name": "Bergfrieden",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [8.39896, 47.39747]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL02271",
+        "name": "Wohlen Oberdorf",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [8.28689, 47.34685]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL02272",
+        "name": "Bremgarten West",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [8.33711, 47.34569]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL02273",
+        "name": "Bremgarten",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [8.34649, 47.35152]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL02274",
+        "name": "Zufikon",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [8.35468, 47.35258]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL02275",
+        "name": "Widen Heinrüti",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [8.35487, 47.36193]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL02276",
+        "name": "Berikon-Widen",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [8.36637, 47.36192]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL02277",
+        "name": "Rudolfstetten",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [8.38154, 47.36976]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL02278",
+        "name": "Reppischhof",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [8.39617, 47.384]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL03060",
+        "name": "Esslingen",
+        "type": "light",
+        "importance": 3
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [8.70969, 47.28786]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL03061",
+        "name": "Langwies ZH",
+        "type": "light",
+        "importance": 3
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [8.69439, 47.29605]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL03062",
+        "name": "Egg",
+        "type": "light",
+        "importance": 3
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [8.68956, 47.30155]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL03063",
+        "name": "Hinteregg",
+        "type": "light",
+        "importance": 3
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [8.68434, 47.30573]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL03064",
+        "name": "Scheuren",
+        "type": "light",
+        "importance": 3
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [8.65955, 47.3226]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL03065",
+        "name": "Forch",
+        "type": "light",
+        "importance": 3
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [8.64797, 47.32534]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL03066",
+        "name": "Zumikon",
+        "type": "light",
+        "importance": 3
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [8.62373, 47.33194]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL03067",
+        "name": "Zollikerberg",
+        "type": "light",
+        "importance": 3
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [8.6034, 47.34605]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL03068",
+        "name": "Maiacher",
+        "type": "light",
+        "importance": 3
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [8.63107, 47.32817]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL03069",
+        "name": "Zürich Rehalp",
+        "type": "light",
+        "importance": 3
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [8.5832, 47.35104]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL03070",
+        "name": "Emmat",
+        "type": "light",
+        "importance": 3
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [8.70183, 47.29238]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL03072",
+        "name": "Neuhaus bei Hinteregg",
+        "type": "light",
+        "importance": 3
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [8.67403, 47.31278]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL03074",
+        "name": "Neue Forch",
+        "type": "light",
+        "importance": 3
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [8.63784, 47.32581]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL03075",
+        "name": "Waltikon",
+        "type": "light",
+        "importance": 3
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [8.61654, 47.33694]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL03077",
+        "name": "Spital Zollikerberg",
+        "type": "light",
+        "importance": 3
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [8.5968, 47.34731]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL03078",
+        "name": "Waldburg",
+        "type": "light",
+        "importance": 3
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [8.59302, 47.34547]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL04325",
+        "name": "Colombier NE Littorail",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [6.86542, 46.96587]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL04398",
+        "name": "Neuchâtel Place Pury Littorail",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [6.92819, 46.98941]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL04461",
+        "name": "Nidau",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [7.24219, 47.12385]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL04462",
+        "name": "Lattrigen",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [7.21443, 47.09695]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL04463",
+        "name": "Täuffelen",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [7.19855, 47.06651]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL04464",
+        "name": "Hagneck",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [7.18807, 47.05828]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL04465",
+        "name": "Lüscherz",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [7.17735, 47.04803]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL04466",
+        "name": "Siselen-Finsterhennen",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [7.18039, 47.03115]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL04467",
+        "name": "Brüttelen",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [7.1483, 47.0206]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL04468",
+        "name": "Ins Dorf",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [7.10681, 47.00558]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL04469",
+        "name": "Nidau Beunden",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [7.24032, 47.11982]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL04470",
+        "name": "Ipsach Herdi",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [7.22893, 47.11237]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL04471",
+        "name": "Ipsach",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [7.23548, 47.11737]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL04472",
+        "name": "Sutz",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [7.21942, 47.10187]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL04474",
+        "name": "Mörigen",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [7.21223, 47.08565]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL04475",
+        "name": "Gerolfingen",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [7.20125, 47.07498]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL04509",
+        "name": "Neuchâtel Port-de-Serrières",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [6.90483, 46.98089]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL04510",
+        "name": "Auvernier Littorail",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [6.87889, 46.97424]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL04511",
+        "name": "Boudry Littorail",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [6.83915, 46.94949]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL05390",
+        "name": "Serocca",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [8.90457, 46.00852]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL05391",
+        "name": "Lugano FLP",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [8.9476, 46.00449]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL05392",
+        "name": "Magliaso Paese",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [8.89058, 45.98341]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL05393",
+        "name": "Cappella-Agnuzzo",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [8.92445, 45.99326]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL05394",
+        "name": "Bioggio",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [8.90889, 46.01211]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL05395",
+        "name": "Agno",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [8.90092, 45.99593]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL05396",
+        "name": "Magliaso",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [8.88412, 45.98164]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL05397",
+        "name": "Caslano",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [8.87629, 45.97774]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL05398",
+        "name": "Ponte Tresa",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [8.86048, 45.96999]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL05399",
+        "name": "Sorengo",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [8.93483, 46.00039]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL06169",
+        "name": "Wiesengrund",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [8.94875, 47.50219]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL06170",
+        "name": "Münchwilen Pflegeheim",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [8.99195, 47.48149]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL06171",
+        "name": "Frauenfeld Marktplatz",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [8.89873, 47.5542]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL06173",
+        "name": "Weberei Matzingen",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [8.92196, 47.52729]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL06174",
+        "name": "Matzingen",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [8.93276, 47.52047]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL06175",
+        "name": "Jakobstal",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [8.94409, 47.50829]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL06176",
+        "name": "Wängi",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [8.95329, 47.49631]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL06177",
+        "name": "Rosental",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [8.97515, 47.49234]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL06178",
+        "name": "Münchwilen TG",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [8.99922, 47.47691]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL06179",
+        "name": "Lüdem",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [8.90245, 47.54188]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL06270",
+        "name": "St. Gallen Marktplatz",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [9.37673, 47.42636]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL06358",
+        "name": "St. Gallen Spisertor",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [9.37963, 47.42473]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL06359",
+        "name": "St. Gallen Schülerhaus",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [9.38742, 47.42501]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL06361",
+        "name": "St. Gallen Notkersegg",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [9.40404, 47.42523]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL06362",
+        "name": "Schwarzer Bären",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [9.41537, 47.42259]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL06364",
+        "name": "Vögelinsegg",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [9.43639, 47.41609]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL06365",
+        "name": "Schützengarten",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [9.43825, 47.41272]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL06366",
+        "name": "Speicher",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [9.44272, 47.411]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL06367",
+        "name": "Bendlehn",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [9.45051, 47.40696]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL06368",
+        "name": "Gfeld",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [9.45576, 47.40503]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL06369",
+        "name": "Trogen",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [9.46141, 47.40727]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL07064",
+        "name": "Vechigen",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [7.5564, 46.94644]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL07065",
+        "name": "Boll-Utzigen",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [7.54677, 46.95302]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL07066",
+        "name": "Stettlen",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [7.5241, 46.95682]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL07067",
+        "name": "Deisswil",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [7.51327, 46.95823]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL07068",
+        "name": "Bolligen",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [7.49742, 46.96954]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL07069",
+        "name": "Ittigen bei Bern",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [7.48413, 46.97331]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL07096",
+        "name": "Papiermühle",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [7.47659, 46.97426]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL08051",
+        "name": "Bern Felsenau",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [7.44425, 46.9685]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL08052",
+        "name": "Bern Tiefenau",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [7.4502, 46.97274]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL08053",
+        "name": "Steinibach",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [7.4574, 46.98442]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL08054",
+        "name": "Worblaufen",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [7.45763, 46.97884]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL08055",
+        "name": "Unterzollikofen",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [7.45701, 46.99173]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL08056",
+        "name": "Moosseedorf",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [7.48485, 47.01614]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL08057",
+        "name": "Schönbühl RBS",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [7.49781, 47.02048]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL08058",
+        "name": "Urtenen",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [7.50065, 47.02889]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL08059",
+        "name": "Jegenstorf",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [7.50778, 47.04761]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL08060",
+        "name": "Grafenried",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [7.51161, 47.08012]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL08061",
+        "name": "Fraubrunnen",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [7.52222, 47.08658]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL08062",
+        "name": "Büren zum Hof",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [7.51881, 47.09595]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL08063",
+        "name": "Schalunen",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [7.52417, 47.11016]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL08064",
+        "name": "Bätterkinden",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [7.5344, 47.13002]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL08066",
+        "name": "Lohn-Lüterkofen",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [7.52696, 47.16299]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL08068",
+        "name": "Biberist RBS",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [7.55583, 47.18386]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL08070",
+        "name": "Oberzollikofen",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [7.46163, 46.99695]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL08071",
+        "name": "Schönbühl Shoppyland",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [7.49363, 47.01862]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL08151",
+        "name": "Langenthal Gaswerk",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [7.78218, 47.2248]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL08152",
+        "name": "Hard-Mumenthal",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [7.77488, 47.23381]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL08153",
+        "name": "Aarwangen",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [7.76962, 47.24088]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL08154",
+        "name": "Aarwangen Schloss",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [7.76362, 47.24518]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL08155",
+        "name": "Bannwil",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [7.74036, 47.24438]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL08157",
+        "name": "Holzhäusern",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [7.7104, 47.25816]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL08158",
+        "name": "Scharnageln",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [7.70079, 47.2631]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL08159",
+        "name": "Niederbipp Dorf",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [7.69514, 47.26582]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL08161",
+        "name": "Kaltenherberg",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [7.79959, 47.23718]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL08162",
+        "name": "Roggwil Dorf",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [7.82234, 47.23934]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL08163",
+        "name": "St. Urban",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [7.83582, 47.23175]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL08164",
+        "name": "St. Urban Ziegelei",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [7.83615, 47.2272]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL08168",
+        "name": "Roggwil Buchägerten",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [7.83194, 47.23566]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL08173",
+        "name": "Roggwil Schmitten",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [7.81592, 47.23762]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL08193",
+        "name": "Aarwangen Vorstadt",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [7.77131, 47.23749]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL09643",
+        "name": "Dietikon Maienweg",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [8.39112, 47.40941]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL09645",
+        "name": "Dietikon Zentrum",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [8.40217, 47.40473]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL10115",
+        "name": "Spreitenbach Kreuzäcker",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [8.37887, 47.4173]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL10203",
+        "name": "Spreitenbach West",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [8.36014, 47.42893]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL10616",
+        "name": "Liestal Gräubern",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [7.74512, 47.47666]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL16450",
+        "name": "Unterkulm Nord",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [8.11305, 47.31477]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL17376",
+        "name": "Dietikon Schöneggstrasse",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [8.40099, 47.40196]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL17377",
+        "name": "Bibenlos-Sonnenhof",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [8.35028, 47.35379]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL18100",
+        "name": "St. Gallen Birnbäumen",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [9.39298, 47.42583]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL18690",
+        "name": "Niederbipp Industrie",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [7.70317, 47.27864]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL18701",
+        "name": "Wohlen Fulenbach",
+        "type": "light",
+        "importance": 3
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [8.30109, 47.34344]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL19685",
+        "name": "Aarau Torfeld",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [8.06264, 47.39356]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL30064",
+        "name": "Bex Pont-Neuf",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [7.02082, 46.25052]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL30066",
+        "name": "Grand-Moulin",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [7.02322, 46.25262]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL30067",
+        "name": "Les Salines",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [7.02764, 46.25484]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL30246",
+        "name": "Foyer Dents-du-Midi",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [7.02984, 46.25639]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL30523",
+        "name": "La Ruaz",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [7.00772, 46.25308]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL30708",
+        "name": "Neuchâtel Evole",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [6.92337, 46.98965]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL30709",
+        "name": "Neuchâtel Champ-Bougin",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [6.91224, 46.98456]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL30710",
+        "name": "Neuchâtel Serrières Ruau",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [6.89504, 46.97974]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL30711",
+        "name": "Colombier NE Allées Littorail",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [6.86951, 46.96807]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL30712",
+        "name": "Colombier NE Les Chézards",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [6.8638, 46.96077]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL30713",
+        "name": "Boudry Tuilière",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [6.84283, 46.95147]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL30789",
+        "name": "Bioggio Molinazzo",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [8.91401, 46.01236]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL30790",
+        "name": "Sorengo Laghetto",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [8.93334, 45.99681]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL30811",
+        "name": "Zürich Balgrist",
+        "type": "light",
+        "importance": 3
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [8.57537, 47.35415]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL30812",
+        "name": "Zürich Hegibachplatz",
+        "type": "light",
+        "importance": 3
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [8.56128, 47.36156]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL30813",
+        "name": "Zürich Kreuzplatz",
+        "type": "light",
+        "importance": 3
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [8.55425, 47.36478]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL72351",
+        "name": "Waldenburg",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [7.74915, 47.38625]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL78240",
+        "name": "Oberdorf BL",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [7.74892, 47.39196]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL78241",
+        "name": "Oberdorf BL Winkelweg",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [7.74912, 47.397]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL78250",
+        "name": "Hölstein",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [7.77116, 47.42728]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL78256",
+        "name": "Lampenberg-Ramlinsburg",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [7.76096, 47.4426]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL78258",
+        "name": "Bubendorf Talhaus",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [7.74967, 47.45165]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL87727",
+        "name": "Les Ripes",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [6.60806, 46.59219]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL88193",
+        "name": "Gryon Bois-Gentil",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [7.06755, 46.27773]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL89198",
+        "name": "Worbboden",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [7.55953, 46.93393]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL90222",
+        "name": "Dietikon Oetwilerstrasse",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [8.39723, 47.40624]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL90273",
+        "name": "Spreitenbach Umwelt Arena",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [8.36466, 47.42546]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL90275",
+        "name": "Spreitenbach IKEA",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [8.37396, 47.42229]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL90318",
+        "name": "Zürich Farbhof",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [8.47917, 47.39112]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL90397",
+        "name": "Spreitenbach Shoppi Tivoli",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [8.37013, 47.42213]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL90512",
+        "name": "Dietikon Birmensdorferstrasse",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [8.41739, 47.39757]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL90525",
+        "name": "Dietikon Schäflibach",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [8.41108, 47.39999]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL90791",
+        "name": "Schlieren Gasometerbrücke",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [8.4606, 47.3976]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL90794",
+        "name": "Schlieren Kesslerplatz",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [8.43887, 47.39637]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL90795",
+        "name": "Schlieren Mülligen",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [8.46728, 47.39563]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL90797",
+        "name": "Schlieren Reitmen",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [8.43072, 47.39714]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL90800",
+        "name": "Schlieren Spital Limmattal",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [8.42866, 47.3943]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL90803",
+        "name": "Schlieren Wagonsfabrik",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [8.45418, 47.3985]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL90839",
+        "name": "Urdorf Nord",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [8.41782, 47.39369]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL90840",
+        "name": "Urdorf Kantiallee",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [8.42335, 47.39375]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL91274",
+        "name": "Zürich Micafil",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [8.47452, 47.39302]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL91361",
+        "name": "Zürich Seidelhof",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [8.48373, 47.39191]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL92304",
+        "name": "Hölstein Süd",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [7.76675, 47.42205]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL92306",
+        "name": "Niederdorf Hirschlang",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [7.75524, 47.41014]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL92307",
+        "name": "Niederdorf",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [7.75148, 47.4039]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL93772",
+        "name": "Gryon-Chalméry",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [7.05191, 46.27364]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL94258",
+        "name": "Langenthal Industrie Nord",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [7.78647, 47.22856]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL95245",
         "name": "Areuse Littorail",
-        "type": "rail",
+        "type": "light",
         "importance": 4
       },
       "geometry": {
         "type": "Point",
         "coordinates": [6.85306, 46.9545]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHL96007",
+        "name": "Schlieren Geissweid",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [8.44424, 47.3978]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHM01207",
+        "name": "Montelly (Lausanne)",
+        "type": "metro",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [6.61356, 46.52182]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHM01208",
+        "name": "Provence (Lausanne)",
+        "type": "metro",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [6.60865, 46.52327]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHM01209",
+        "name": "Malley (Lausanne)",
+        "type": "metro",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [6.60255, 46.52414]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHM01210",
+        "name": "Bourdonnette (Lausanne)",
+        "type": "metro",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [6.5898, 46.52327]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHM01211",
+        "name": "UNIL-Chamberonne (Chavannes-près-Renens)",
+        "type": "metro",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [6.5847, 46.52422]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHM01212",
+        "name": "UNIL-Mouline (Chavannes-près-Renens)",
+        "type": "metro",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [6.57889, 46.52499]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHM01213",
+        "name": "UNIL-Sorge (Ecublens)",
+        "type": "metro",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [6.57357, 46.52245]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHM01214",
+        "name": "EPFL (Ecublens)",
+        "type": "metro",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [6.56614, 46.5222]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHM01215",
+        "name": "Bassenges (Ecublens)",
+        "type": "metro",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [6.56459, 46.52459]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHM01216",
+        "name": "Cerisaie (Ecublens)",
+        "type": "metro",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [6.56654, 46.52776]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHM01217",
+        "name": "Crochy (Chavannes-près-Renens)",
+        "type": "metro",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [6.56997, 46.53271]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHM01218",
+        "name": "Epenex (Ecublens)",
+        "type": "metro",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [6.57358, 46.53772]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHM79237",
+        "name": "Ours (Lausanne)",
+        "type": "metro",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [6.64067, 46.52124]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHM79238",
+        "name": "Sallaz (Lausanne)",
+        "type": "metro",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [6.64619, 46.53284]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHM79239",
+        "name": "Croisettes (Epalinges)",
+        "type": "metro",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [6.66151, 46.54289]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHM89523",
+        "name": "Bessières (Lausanne)",
+        "type": "metro",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [6.63699, 46.52079]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHM90442",
+        "name": "Riponne-M. Béjart (Lausanne)",
+        "type": "metro",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [6.63265, 46.52291]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHM92017",
+        "name": "CHUV (Lausanne)",
+        "type": "metro",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [6.64154, 46.52647]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHM92028",
+        "name": "Délices (Lausanne)",
+        "type": "metro",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [6.62807, 46.51222]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHM92048",
+        "name": "Fourmi (Lausanne)",
+        "type": "metro",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [6.65116, 46.53886]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHM92050",
+        "name": "Gare (Lausanne)",
+        "type": "metro",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [6.62963, 46.51753]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHM92052",
+        "name": "Grancy (Lausanne)",
+        "type": "metro",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [6.62887, 46.51493]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHM92061",
+        "name": "Jordils (Lausanne)",
+        "type": "metro",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [6.62736, 46.50991]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHM92086",
+        "name": "Ouchy-Olympique (Lausanne)",
+        "type": "metro",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [6.62655, 46.50725]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHM92128",
+        "name": "Vennes (Lausanne)",
+        "type": "metro",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [6.6576, 46.54123]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHM92133",
+        "name": "Vigie (Lausanne)",
+        "type": "metro",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [6.62392, 46.52154]
       }
     },
     {
@@ -121997,7 +122647,7 @@
       "type": "Feature",
       "properties": {
         "id": "DKM040",
-        "name": "Vibenhus Runddel",
+        "name": "Vibenshus Runddel",
         "type": "metro",
         "importance": 4
       },
@@ -199164,162 +199814,6 @@
     {
       "type": "Feature",
       "properties": {
-        "id": "ITL058",
-        "name": "Centocelle",
-        "type": "light",
-        "importance": 3
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [12.56257, 41.87478]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "ITL059",
-        "name": "Balzani",
-        "type": "light",
-        "importance": 3
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [12.55376, 41.87653]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "ITL060",
-        "name": "Berardi",
-        "type": "light",
-        "importance": 3
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [12.54815, 41.878]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "ITL061",
-        "name": "Tor Pignattara",
-        "type": "light",
-        "importance": 3
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [12.54224, 41.88021]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "ITL062",
-        "name": "Filarete",
-        "type": "light",
-        "importance": 3
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [12.53863, 41.88143]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "ITL063",
-        "name": "Alessi",
-        "type": "light",
-        "importance": 3
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [12.53471, 41.88274]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "ITL064",
-        "name": "Villini",
-        "type": "light",
-        "importance": 3
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [12.53048, 41.88444]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "ITL065",
-        "name": "Sant'Elena",
-        "type": "light",
-        "importance": 3
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [12.52679, 41.88676]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "ITL066",
-        "name": "Ponte Casilino",
-        "type": "light",
-        "importance": 3
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [12.52208, 41.88927]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "ITL067",
-        "name": "Porta Maggiore",
-        "type": "light",
-        "importance": 3
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [12.51513, 41.89182]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "ITL068",
-        "name": "Santa Bibiana",
-        "type": "light",
-        "importance": 3
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [12.51039, 41.89464]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "ITL069",
-        "name": "Termini Laziali",
-        "type": "light",
-        "importance": 3
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [12.50662, 41.89686]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
         "id": "ITL070",
         "name": "Himmelfahrt - L'Assunta",
         "type": "light",
@@ -200368,6 +200862,266 @@
       "geometry": {
         "type": "Point",
         "coordinates": [12.63394, 41.77991]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "ITL151",
+        "name": "Centro Commerciale",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [9.13542, 39.24704]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "ITL152",
+        "name": "Dell'Argine",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [9.13462, 39.26412]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "ITL153",
+        "name": "Policlinico",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [9.12641, 39.26949]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "ITL154",
+        "name": "Stabia Scavi",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [14.49033, 40.70389]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "ITL155",
+        "name": "Castellammare di Stabia",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [14.48374, 40.6953]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "ITL156",
+        "name": "Sant'Agnello",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [14.39758, 40.63111]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "ITL157",
+        "name": "Bergamo Bronzetti Arena",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [9.68834, 45.70322]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "ITL158",
+        "name": "Bergamo Santa Caterina",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [9.68741, 45.70737]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "ITL159",
+        "name": "Bergamo Stadio",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [9.6816, 45.71192]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "ITL160",
+        "name": "Bergamo De Gasperi",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [9.67608, 45.71333]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "ITL161",
+        "name": "Bergamo Crocefisso",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [9.66948, 45.71509]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "ITL162",
+        "name": "Bergamo Sant'Antonio",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [9.6651, 45.71765]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "ITL163",
+        "name": "Pontesecco",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [9.66022, 45.72099]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "ITL164",
+        "name": "Ponteranica",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [9.65431, 45.72807]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "ITL165",
+        "name": "Ramera Parco dei Colli",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [9.64456, 45.72904]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "ITL166",
+        "name": "Petosino",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [9.63285, 45.73097]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "ITL167",
+        "name": "Almè Paladina",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [9.61016, 45.73459]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "ITL168",
+        "name": "Almè Volta",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [9.60828, 45.73904]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "ITL169",
+        "name": "Villa d'Almè Mazzi",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [9.6092, 45.74415]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "ITL170",
+        "name": "Villa d'Almè Capolinea",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [9.60933, 45.75148]
       }
     },
     {
@@ -204450,6 +205204,84 @@
       "geometry": {
         "type": "Point",
         "coordinates": [12.50312, 41.88287]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "ITM330",
+        "name": "Basilica San Paolo (Roma)",
+        "type": "metro",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [12.4783, 41.85591]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "ITM331",
+        "name": "Marconi (Roma)",
+        "type": "metro",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [12.47566, 41.84937]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "ITM332",
+        "name": "Casal Bernocchi-Centro Giano (Roma)",
+        "type": "metro",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [12.37746, 41.7894]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "ITM333",
+        "name": "Parco di Centocelle (Roma)",
+        "type": "metro",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [12.5682, 41.87475]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "ITM334",
+        "name": "Teano (Roma)",
+        "type": "metro",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [12.55147, 41.88907]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "ITM335",
+        "name": "Pigneto (Roma)",
+        "type": "metro",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [12.52818, 41.88848]
       }
     },
     {
@@ -218664,6 +219496,435 @@
     {
       "type": "Feature",
       "properties": {
+        "id": "NOL111",
+        "name": "Bergen busstasjon",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [5.33379, 60.38789]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "NOL112",
+        "name": "Bergen lufthavn Flesland",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [5.23226, 60.28775]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "NOL113",
+        "name": "Birkelandsskiftet",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [5.26199, 60.28838]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "NOL114",
+        "name": "Brann stadion",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [5.35149, 60.36619]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "NOL115",
+        "name": "Byparken",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [5.32553, 60.39199]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "NOL116",
+        "name": "Danmarks plass",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [5.33975, 60.37541]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "NOL117",
+        "name": "Fantoft",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [5.35277, 60.34595]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "NOL118",
+        "name": "Florida",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [5.33305, 60.38159]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "NOL119",
+        "name": "Fløen",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [5.35301, 60.38102]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "NOL120",
+        "name": "Fyllingsdalen terminal",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [5.28958, 60.34858]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "NOL121",
+        "name": "Haukeland sjukehus",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [5.3608, 60.3768]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "NOL122",
+        "name": "Hop",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [5.34668, 60.32612]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "NOL123",
+        "name": "Kaigaten",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [5.32648, 60.39186]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "NOL124",
+        "name": "Kokstad",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [5.26756, 60.29348]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "NOL125",
+        "name": "Kokstadflaten",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [5.24411, 60.29199]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "NOL126",
+        "name": "Kristianborg",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [5.34196, 60.35812]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "NOL127",
+        "name": "Kronstad",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [5.34833, 60.37049]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "NOL128",
+        "name": "Lagunen terminal",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [5.32858, 60.29823]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "NOL129",
+        "name": "Mindemyren",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [5.34523, 60.36563]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "NOL130",
+        "name": "Mårdalen",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [5.34441, 60.3089]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "NOL131",
+        "name": "Nesttun terminal",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [5.35275, 60.3195]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "NOL132",
+        "name": "Nesttun sentrum",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [5.35374, 60.3172]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "NOL133",
+        "name": "Nonneseter",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [5.33262, 60.39011]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "NOL134",
+        "name": "Nygård",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [5.33257, 60.38456]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "NOL135",
+        "name": "Paradis",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [5.34688, 60.33593]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "NOL136",
+        "name": "Råstølen",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [5.3098, 60.30053]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "NOL137",
+        "name": "Sandslimarka",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [5.27466, 60.29761]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "NOL138",
+        "name": "Sandslivegen",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [5.28671, 60.29624]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "NOL139",
+        "name": "Skjold",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [5.33316, 60.30402]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "NOL140",
+        "name": "Skjoldskiftet",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [5.35286, 60.31125]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "NOL141",
+        "name": "Slettebakken",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [5.35982, 60.3504]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "NOL142",
+        "name": "Sletten",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [5.3587, 60.35637]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "NOL143",
+        "name": "Wergeland",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [5.35114, 60.36098]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
         "id": "NOM000",
         "name": "Ammerud",
         "type": "metro",
@@ -219582,6 +220843,396 @@
       "geometry": {
         "type": "Point",
         "coordinates": [10.64832, 59.92886]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "NOM071",
+        "name": "Berg",
+        "type": "metro",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [10.74528, 59.95126]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "NOM072",
+        "name": "Besserud",
+        "type": "metro",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [10.67422, 59.95797]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "NOM073",
+        "name": "Ekraveien",
+        "type": "metro",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [10.63713, 59.9502]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "NOM074",
+        "name": "Frognerseteren",
+        "type": "metro",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [10.6757, 59.97908]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "NOM075",
+        "name": "Frøen",
+        "type": "metro",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [10.7094, 59.93441]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "NOM076",
+        "name": "Gaustad",
+        "type": "metro",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [10.70983, 59.94559]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "NOM077",
+        "name": "Gråkammen",
+        "type": "metro",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [10.70153, 59.95495]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "NOM078",
+        "name": "Gulleråsen",
+        "type": "metro",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [10.69702, 59.95574]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "NOM079",
+        "name": "Holmen",
+        "type": "metro",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [10.66774, 59.94592]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "NOM080",
+        "name": "Holmenkollen",
+        "type": "metro",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [10.66282, 59.96031]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "NOM081",
+        "name": "Holstein",
+        "type": "metro",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [10.74085, 59.96044]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "NOM082",
+        "name": "Hovseter",
+        "type": "metro",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [10.655, 59.94638]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "NOM083",
+        "name": "Kringsjå",
+        "type": "metro",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [10.73494, 59.96367]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "NOM084",
+        "name": "Lillevann",
+        "type": "metro",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [10.65331, 59.98033]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "NOM085",
+        "name": "Majorstuen",
+        "type": "metro",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [10.71483, 59.93013]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "NOM086",
+        "name": "Makrellbekken",
+        "type": "metro",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [10.67387, 59.94176]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "NOM087",
+        "name": "Midtstuen",
+        "type": "metro",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [10.68301, 59.96134]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "NOM088",
+        "name": "Ris",
+        "type": "metro",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [10.70493, 59.94794]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "NOM089",
+        "name": "Røa",
+        "type": "metro",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [10.64427, 59.94675]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "NOM090",
+        "name": "Skogen",
+        "type": "metro",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [10.64749, 59.97537]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "NOM091",
+        "name": "Skådalen",
+        "type": "metro",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [10.69085, 59.96178]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "NOM092",
+        "name": "Slemdal",
+        "type": "metro",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [10.69434, 59.951]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "NOM093",
+        "name": "Sognsvann",
+        "type": "metro",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [10.73411, 59.96649]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "NOM094",
+        "name": "Steinerud",
+        "type": "metro",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [10.70446, 59.93899]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "NOM095",
+        "name": "Tåsen",
+        "type": "metro",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [10.75225, 59.95387]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "NOM096",
+        "name": "Vettakollen",
+        "type": "metro",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [10.69583, 59.95966]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "NOM097",
+        "name": "Vinderen",
+        "type": "metro",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [10.70441, 59.94199]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "NOM098",
+        "name": "Voksenkollen",
+        "type": "metro",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [10.66534, 59.98004]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "NOM099",
+        "name": "Voksenlia",
+        "type": "metro",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [10.65486, 59.96693]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "NOM100",
+        "name": "Østhorn",
+        "type": "metro",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [10.74991, 59.95683]
       }
     },
     {
@@ -284751,6 +286402,97 @@
       "geometry": {
         "type": "Point",
         "coordinates": [-0.18552, 51.61794]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "SEL040000",
+        "name": "Ropsten",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [18.10384, 59.3581]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "SEL040001",
+        "name": "Alvik",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [17.98134, 59.33349]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "SEL040002",
+        "name": "Gullmarsplan",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [18.08014, 59.29956]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "SEL040003",
+        "name": "Globen",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [18.07657, 59.29424]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "SEL040004",
+        "name": "Årstaberg",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [18.02971, 59.29925]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "SEL040005",
+        "name": "Liljeholmen",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [18.02435, 59.31092]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "SEL040006",
+        "name": "Solna station",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [18.00851, 59.36386]
       }
     }
   ]
