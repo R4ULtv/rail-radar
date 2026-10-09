@@ -31,6 +31,7 @@ export function createApp() {
   app.use(
     "*",
     cors({
+      exposeHeaders: ["Retry-After"],
       origin: [
         "http://localhost:3000",
         "http://127.0.0.1:3000",
