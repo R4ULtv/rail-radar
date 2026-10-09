@@ -7,6 +7,9 @@
     ".": "./src/index.ts",
     "./countries": "./src/countries.ts",
     "./directory": "./src/directory.ts",
+    "./lines": "./src/lines.ts",
+    "./lines.json": "./src/lines.json",
+    "./lines/*": "./src/lines/*",
     "./operators": "./src/operators.ts",
     "./stations": "./src/stations.ts",
     "./types": "./src/types.ts"
