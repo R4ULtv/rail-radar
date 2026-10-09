@@ -3,6 +3,7 @@ import { secureHeaders } from "hono/secure-headers";
 import { factory } from "./lib/env";
 import { jsonError } from "./lib/http";
 import { analyticsRoutes } from "./routes/analytics";
+import { linesGeoJsonRoutes, linesRoutes, stationLinesRoutes } from "./routes/lines";
 import { mapRoutes } from "./routes/map";
 import { operatorsRoutes } from "./routes/operators";
 import { rootRoutes } from "./routes/root";
@@ -42,9 +43,12 @@ export function createApp() {
   return app
     .route("/", rootRoutes)
     .route("/operators", operatorsRoutes)
+    .route("/lines", linesRoutes)
+    .route("/lines.geojson", linesGeoJsonRoutes)
     .route("/map", mapRoutes)
     .route("/stations.geojson", stationsGeoJsonRoutes)
     .route("/stations", stationsRoutes)
+    .route("/stations", stationLinesRoutes)
     .route("/analytics", analyticsRoutes);
 }
 

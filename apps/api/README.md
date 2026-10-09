@@ -15,12 +15,16 @@ Cloudflare Workers API that provides real-time European train data from official
 | `GET`  | `/robots.txt`                 | Blocks crawlers from indexing the API                                                                                                               |
 | `GET`  | `/operators`                  | List train operators with optional filtering                                                                                                        |
 | `GET`  | `/operators/:slug`            | Get a single train operator by slug                                                                                                                 |
+| `GET`  | `/lines`                      | Metro and light rail lines with ordered routes, without track (see below)                                                                           |
+| `GET`  | `/lines.geojson`              | The same lines as GeoJSON with full track (see below)                                                                                               |
 | `GET`  | `/map/static`                 | Static map image via Mapbox                                                                                                                         |
 | `GET`  | `/stations/search`            | Station search endpoint returning JSON arrays                                                                                                       |
 | `GET`  | `/stations.geojson`           | GeoJSON FeatureCollection of all stations (see below)                                                                                               |
 | `GET`  | `/stations/trending`          | Get trending stations ranked by unique visitors (`?period=hour\|day\|week\|month`, default: `day`)                                                  |
 | `GET`  | `/stations/trending/:country` | Get country-filtered trending stations ranked by unique visitors (`it\|ch\|de\|fi\|be\|dk\|nl\|no\|se\|pl\|uk\|ie\|fr\|lu`, same `?period` options) |
 | `GET`  | `/stations/:id`               | Get station with trains (`?type=arrivals\|departures`)                                                                                              |
+| `GET`  | `/stations/:id/lines`         | Lines serving a station, without track                                                                                                              |
+| `GET`  | `/stations/:id/lines.geojson` | Lines serving a station as GeoJSON with full track                                                                                                  |
 | `GET`  | `/stations/:id/stats`         | Get station visit stats (`?period=hour\|day\|week\|month`, default: `day`)                                                                          |
 | `GET`  | `/analytics/overview`         | Get global analytics (total visits, unique visitors, country breakdown)                                                                             |
 
@@ -67,19 +71,63 @@ Returns `application/geo+json` FeatureCollection consumed directly by Mapbox GL 
 - `?country=it|ch|de|fi|be|dk|nl|no|se|pl|uk|ie|fr|lu`: filter by country
 - Filters can be combined: `?type=rail&country=it`
 
+### Lines
+
+`/lines` and `/stations/:id/lines` return `{ count, lines }`. Each line is the canonical
+`Line` from `@repo/data` (`id`, `code`, `name`, optional `description`, `type`, `color`,
+`operator`, and ordered `routes`), with no geometry. A route is one branch's ordered station IDs
+and an optional public `code`; the reverse direction shares the route, and a loop may repeat a
+station, so stop sequences are returned as stored. `color` and `operator` may be `null`.
+
+`/lines.geojson` and `/stations/:id/lines.geojson` return an `application/geo+json`
+FeatureCollection selecting the same lines in the same order. Each Feature has `id` set to the line
+ID, the same line object in `properties`, and the line's whole `MultiLineString` in `geometry`:
+every branch and its full track, never clipped to the station. A line with no mapped track has
+`geometry: null`. A track file that is missing or invalid is a deployment fault and returns a
+generic `500`, so a line is never silently dropped or reported as unmapped.
+
+Filters apply to all four endpoints, within the initial collection (every line, or the lines
+serving the station). Filters intersect, comma-separated values within one filter match any of
+them, and empty values mean no filter:
+
+- `?q=m3`: case- and diacritic-insensitive text match on line ID, code, name and route codes
+- `?country=it|ch|de|fi|be|dk|nl|no|se|pl|uk|ie|fr|lu`: country, taken from the line ID prefix
+- `?type=metro|light`: line type
+- `?operator=atm-milano`: operator slug, as listed by `/operators`
+
+Invalid `country`, `type` or `operator` values return `400`. Results keep catalog order.
+
+`/stations/:id/lines*` accepts any station in the registry, including rail hubs served by metro or
+light lines. A known station with no linked lines returns an empty collection (`200`); an unknown
+station returns `404` (checked before the filters). These routes read only local data and never
+call a live-board provider.
+
+Track files are served to the Worker from `packages/data/src/lines` through the `ASSETS` binding
+(`run_worker_first`, so raw `/<line-id>.json` paths are not public and return the usual `404`).
+Metadata requests never read them.
+
+The data is a reviewed snapshot that ships with each deployment, not a live feed; it changes only
+when the repository's line data is updated and the API is redeployed. Line track is derived from
+OpenStreetMap, © OpenStreetMap contributors, available under the
+[Open Database License](https://opendatacommons.org/licenses/odbl/). Consumers who reuse or
+redistribute the geometry must credit OpenStreetMap and comply with ODbL terms, including
+share-alike for derived databases.
+
 ### Caching
 
-| Endpoint              | Cache                                   |
-| --------------------- | --------------------------------------- |
-| `/operators`          | 24h cache, 1h stale-while-revalidate    |
-| `/operators/:slug`    | 24h cache, 1h stale-while-revalidate    |
-| `/map/static`         | 30-day cache                            |
-| `/stations/search`    | 5min cache, 1min stale-while-revalidate |
-| `/stations.geojson`   | 24h cache, 1h stale-while-revalidate    |
-| `/stations/:id`       | 25s cache, 5s stale-while-revalidate    |
-| `/stations/:id/stats` | 150s cache                              |
-| `/stations/trending`  | 5min cache, 1min stale-while-revalidate |
-| `/analytics/overview` | 5min cache, 1min stale-while-revalidate |
+| Endpoint               | Cache                                   |
+| ---------------------- | --------------------------------------- |
+| `/operators`           | 24h cache, 1h stale-while-revalidate    |
+| `/operators/:slug`     | 24h cache, 1h stale-while-revalidate    |
+| `/lines*`              | 24h cache                               |
+| `/stations/:id/lines*` | 24h cache                               |
+| `/map/static`          | 30-day cache                            |
+| `/stations/search`     | 5min cache, 1min stale-while-revalidate |
+| `/stations.geojson`    | 24h cache, 1h stale-while-revalidate    |
+| `/stations/:id`        | 25s cache, 5s stale-while-revalidate    |
+| `/stations/:id/stats`  | 150s cache                              |
+| `/stations/trending`   | 5min cache, 1min stale-while-revalidate |
+| `/analytics/overview`  | 5min cache, 1min stale-while-revalidate |
 
 Static map generation has a separate allowance of five Mapbox requests per minute per client IP.
 All map parameters share that allowance, including fallback attempts. Cache hits use only the general
@@ -119,6 +167,7 @@ src/
 ├── routes/
 │   ├── analytics.ts        # Global analytics endpoint
 │   ├── map.ts              # Static Mapbox image endpoint
+│   ├── lines.ts            # Line collections and station membership (JSON and GeoJSON)
 │   ├── operators.ts        # Operator list and detail endpoints
 │   ├── root.ts             # API index and robots.txt
 │   ├── stations.ts         # Search, live trains, stats, trending

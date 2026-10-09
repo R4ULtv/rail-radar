@@ -6,6 +6,7 @@ export const CACHE_TTL = {
   STATIC_MAP: "public, max-age=2592000",
   GEOJSON: "public, max-age=86400, stale-while-revalidate=3600",
   OPERATORS: "public, max-age=86400, stale-while-revalidate=3600",
+  LINES: "public, max-age=86400",
 } as const;
 
 export const FETCH_TIMEOUT_MS = 12_000;

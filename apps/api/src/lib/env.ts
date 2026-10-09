@@ -1,6 +1,7 @@
 import { createFactory } from "hono/factory";
 
 export type Bindings = {
+  ASSETS: Fetcher;
   RATE_LIMITER: RateLimit;
   MAP_GENERATION_RATE_LIMITER: CloudflareBindings["MAP_GENERATION_RATE_LIMITER"];
   STATION_ANALYTICS: AnalyticsEngineDataset;
