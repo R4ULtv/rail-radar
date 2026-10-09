@@ -1,0 +1,3103 @@
+[
+  {
+    "id": "be-brussels-1",
+    "code": "1",
+    "name": "Métro 1",
+    "description": "Brussels metro line 1 crosses the city from Gare de l’Ouest to Stockel, sharing its central corridor with line 5. It links the city centre and Gare Centrale with the European quarter around Schuman before continuing through the eastern suburbs of Woluwe.",
+    "type": "metro",
+    "color": "#B5378C",
+    "operator": "stib-mivb",
+    "routes": [
+      {
+        "stations": [
+          "BEM022",
+          "BEM021",
+          "BEM027",
+          "BEM026",
+          "BEM010",
+          "BEM009",
+          "BEM008",
+          "BEM056",
+          "BEM007",
+          "BEM043",
+          "BEM006",
+          "BEM005",
+          "BEM057",
+          "BEM045",
+          "BEM046",
+          "BEM047",
+          "BEM048",
+          "BEM049",
+          "BEM055",
+          "BEM050",
+          "BEM051"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "be-brussels-2",
+    "code": "2",
+    "name": "Métro 2",
+    "description": "Line 2 follows a loop around central Brussels between Simonis and Elisabeth, two parts of the same interchange. Sharing its route with line 6, it connects Gare du Midi with Louise, Arts-Loi and Rogier, providing links to the city’s other metro lines and mainline trains.",
+    "type": "metro",
+    "color": "#ED6C23",
+    "operator": "stib-mivb",
+    "routes": [
+      {
+        "stations": [
+          "BEM054",
+          "BEM020",
+          "BEM021",
+          "BEM022",
+          "BEM024",
+          "BEM023",
+          "BEM059",
+          "BEM060",
+          "BEM011",
+          "BEM012",
+          "BEM013",
+          "BEM016",
+          "BEM007",
+          "BEM015",
+          "BEM014",
+          "BEM058",
+          "BEM019",
+          "BEM025",
+          "BEM053"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "be-brussels-5",
+    "code": "5",
+    "name": "Métro 5",
+    "description": "Brussels metro line 5 runs from Erasme in Anderlecht through the city centre to Herrmann-Debroux in Auderghem. Its central section is shared with line 1, serving Gare Centrale and the European quarter before the route turns southeast through Delta and the city’s outer neighbourhoods.",
+    "type": "metro",
+    "color": "#F6A90B",
+    "operator": "stib-mivb",
+    "routes": [
+      {
+        "stations": [
+          "BEM036",
+          "BEM035",
+          "BEM034",
+          "BEM033",
+          "BEM032",
+          "BEM031",
+          "BEM030",
+          "BEM029",
+          "BEM028",
+          "BEM022",
+          "BEM021",
+          "BEM027",
+          "BEM026",
+          "BEM010",
+          "BEM009",
+          "BEM008",
+          "BEM056",
+          "BEM007",
+          "BEM043",
+          "BEM006",
+          "BEM005",
+          "BEM001",
+          "BEM004",
+          "BEM003",
+          "BEM002",
+          "BEM017",
+          "BEM018",
+          "BEM044"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "be-brussels-6",
+    "code": "6",
+    "name": "Métro 6",
+    "description": "Line 6 links Roi Baudouin and the Heysel area in northern Brussels with the loop around the city centre. From Simonis it shares the route of line 2 to Elisabeth, serving Gare du Midi, Louise and Arts-Loi along the way.",
+    "type": "metro",
+    "color": "#0066A3",
+    "operator": "stib-mivb",
+    "routes": [
+      {
+        "stations": [
+          "BEM041",
+          "BEM040",
+          "BEM039",
+          "BEM038",
+          "BEM052",
+          "BEM061",
+          "BEM037",
+          "BEM054",
+          "BEM020",
+          "BEM021",
+          "BEM022",
+          "BEM024",
+          "BEM023",
+          "BEM059",
+          "BEM060",
+          "BEM011",
+          "BEM012",
+          "BEM013",
+          "BEM016",
+          "BEM007",
+          "BEM015",
+          "BEM014",
+          "BEM058",
+          "BEM019",
+          "BEM025",
+          "BEM053"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "be-charleroi-m2",
+    "code": "M2",
+    "name": "Métro M2",
+    "description": "Charleroi’s M2 connects Monument in Anderlues with the city centre and Gare Centrale, passing through Fontaine-l’Évêque and the western suburbs. During the city-loop works it also replaces M1, keeping the western branch connected to the main railway station.",
+    "type": "light",
+    "color": "#489224",
+    "operator": "letec",
+    "routes": [
+      {
+        "stations": [
+          "BEM116",
+          "BEM115",
+          "BEM111",
+          "BEM112",
+          "BEM114",
+          "BEM113",
+          "BEM109",
+          "BEM106",
+          "BEM103",
+          "BEM107",
+          "BEM104",
+          "BEM105",
+          "BEM095",
+          "BEM102",
+          "BEM101",
+          "BEM100",
+          "BEM087",
+          "BEM088",
+          "BEM085",
+          "BEM089",
+          "BEM098",
+          "BEM108",
+          "BEM099"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "be-charleroi-m3",
+    "code": "M3",
+    "name": "Métro M3",
+    "description": "M3 links Faubourg de Bruxelles in Gosselies with central Charleroi, serving neighbourhoods along the northern approach to the city. Its two directions use different stops in Gosselies before joining the shared metro corridor through Palais and Waterloo to Gare Centrale.",
+    "type": "light",
+    "color": "#FFCF06",
+    "operator": "letec",
+    "routes": [
+      {
+        "stations": [
+          "BEM121",
+          "BEM120",
+          "BEM118",
+          "BEM123",
+          "BEM119",
+          "BEM129",
+          "BEM125",
+          "BEM131",
+          "BEM130",
+          "BEM127",
+          "BEM126",
+          "BEM128",
+          "BEM132",
+          "BEM117",
+          "BEM110",
+          "BEM100",
+          "BEM087",
+          "BEM088",
+          "BEM085",
+          "BEM089",
+          "BEM098",
+          "BEM108",
+          "BEM099"
+        ]
+      },
+      {
+        "stations": [
+          "BEM099",
+          "BEM108",
+          "BEM098",
+          "BEM089",
+          "BEM085",
+          "BEM088",
+          "BEM087",
+          "BEM100",
+          "BEM110",
+          "BEM117",
+          "BEM132",
+          "BEM128",
+          "BEM126",
+          "BEM127",
+          "BEM130",
+          "BEM131",
+          "BEM125",
+          "BEM129",
+          "BEM133",
+          "BEM122",
+          "BEM124",
+          "BEM121"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "be-charleroi-m4",
+    "code": "M4",
+    "name": "Métro M4",
+    "description": "Charleroi’s M4 runs from Soleilmont through Gilly to the city centre, joining the other metro branches at Waterloo and Palais. During the city-loop works it terminates at Ouest, providing an eastern light rail connection into central Charleroi.",
+    "type": "light",
+    "color": "#84C8EB",
+    "operator": "letec",
+    "routes": [
+      {
+        "stations": [
+          "BEM096",
+          "BEM097",
+          "BEM092",
+          "BEM091",
+          "BEM093",
+          "BEM094",
+          "BEM088",
+          "BEM087",
+          "BEM090"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "ch-ab-s20",
+    "code": "S20",
+    "name": "Appenzeller Bahnen Trogen–Appenzell",
+    "description": "S20 is one of the services across the Appenzell–St Gallen mountain railway corridor, linking the Trogen branch with Appenzell via the city streets of St Gallen. The route brings together an urban tramway section and a rural railway through the rolling Appenzell landscape.",
+    "type": "light",
+    "color": "#B4532F",
+    "operator": "ab",
+    "routes": [
+      {
+        "stations": [
+          "CHL06369",
+          "CHL06368",
+          "CHL06367",
+          "CHL06366",
+          "CHL06365",
+          "CHL06364",
+          "CHL06362",
+          "CHL06361",
+          "CHL18100",
+          "CHL06359",
+          "CHL06358",
+          "CHL06270",
+          "CH06302",
+          "CH06373",
+          "CH06375",
+          "CH06377",
+          "CH06378",
+          "CH06381",
+          "CH06380",
+          "CH06286"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "ch-ab-s21",
+    "code": "S21",
+    "name": "Appenzeller Bahnen Trogen–Appenzell",
+    "description": "S21 follows the Appenzell–St Gallen–Trogen through route, using the shared city section to connect two regional branches. Its longer stopping pattern serves villages and neighbourhoods along the way, making it an important everyday link as well as a gateway to Appenzell’s hills.",
+    "type": "light",
+    "color": "#089690",
+    "operator": "ab",
+    "routes": [
+      {
+        "stations": [
+          "CHL06369",
+          "CHL06368",
+          "CHL06367",
+          "CHL06366",
+          "CHL06365",
+          "CHL06364",
+          "CHL06362",
+          "CHL06361",
+          "CHL18100",
+          "CHL06359",
+          "CHL06358",
+          "CHL06270",
+          "CH06302",
+          "CH19306",
+          "CH06371",
+          "CH06372",
+          "CH06373",
+          "CH06374",
+          "CH06470",
+          "CH06375",
+          "CH06376",
+          "CH06377",
+          "CH06276",
+          "CH06382",
+          "CH06378",
+          "CH06381",
+          "CH06380",
+          "CH06286"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "ch-ab-s22",
+    "code": "S22",
+    "name": "Appenzeller Bahnen Trogen–Teufen",
+    "description": "This service uses the Trogen railway’s steep approach from St Gallen and continues across the connected network toward Teufen. It combines close-set urban stops with a climb into the Appenzell region, where the line serves small communities beyond the city.",
+    "type": "light",
+    "color": "#B41D8E",
+    "operator": "ab",
+    "routes": [
+      {
+        "stations": [
+          "CH06375",
+          "CH06470",
+          "CH06374",
+          "CH06373",
+          "CH06372",
+          "CH06371",
+          "CH19306",
+          "CH06302",
+          "CHL06270",
+          "CHL06358",
+          "CHL06359",
+          "CHL18100",
+          "CHL06361",
+          "CHL06362",
+          "CHL06364",
+          "CHL06365",
+          "CHL06366",
+          "CHL06367",
+          "CHL06368",
+          "CHL06369"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "ch-asm-s11",
+    "code": "S11",
+    "name": "Aare Seeland mobil Solothurn–Langenthal",
+    "description": "Known locally as the Bipperlisi, S11 links the Solothurn region with the Oberaargau around Langenthal, via Oensingen. Its branches serve communities between the Jura foothills and the Aare valley, with convenient connections to the mainline network at Solothurn, Oensingen and Langenthal.",
+    "type": "light",
+    "color": "#E72E36",
+    "operator": "asm",
+    "routes": [
+      {
+        "stations": [
+          "CH00212",
+          "CHL18690",
+          "CH00211",
+          "CHL00289",
+          "CHL00288",
+          "CHL00287",
+          "CHL00286",
+          "CHL00285",
+          "CHL00283",
+          "CHL00275",
+          "CHL00274",
+          "CHL00273",
+          "CHL00272",
+          "CHL00280",
+          "CH00207"
+        ]
+      },
+      {
+        "stations": [
+          "CH00212",
+          "CHL18690",
+          "CH00211",
+          "CHL08159",
+          "CHL08158",
+          "CHL08157",
+          "CHL08155",
+          "CHL08154",
+          "CHL08153",
+          "CHL08193",
+          "CHL08152",
+          "CHL08151",
+          "CH08100"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "ch-asm-s12",
+    "code": "S12",
+    "name": "Aare Seeland mobil Langenthal–St. Urban",
+    "description": "S12 is the short regional branch from Langenthal to St Urban Ziegelei, serving the rural edge of the Oberaargau. It continues beyond the main Solothurn–Langenthal corridor into the Luthern valley area, connecting smaller communities with trains and services at Langenthal.",
+    "type": "light",
+    "color": "#E72E36",
+    "operator": "asm",
+    "routes": [
+      {
+        "stations": [
+          "CHL08164",
+          "CHL08163",
+          "CHL08168",
+          "CHL08162",
+          "CHL08173",
+          "CHL08161",
+          "CHL94258",
+          "CHL08151",
+          "CH08100"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "ch-bdwm-s17",
+    "code": "S17",
+    "name": "Bremgarten-Dietikon-Bahn",
+    "description": "The Bremgarten–Dietikon railway connects the Reuss valley with Zürich’s western rail network, running from Wohlen through Bremgarten to Dietikon. Its route combines a regional railway across the countryside with frequent commuter connections at both ends.",
+    "type": "light",
+    "color": "#198EA3",
+    "operator": "ava",
+    "routes": [
+      {
+        "stations": [
+          "CH02213",
+          "CHL02271",
+          "CHL02269",
+          "CHL02272",
+          "CHL02185",
+          "CHL02248",
+          "CHL02273",
+          "CHL17377",
+          "CHL02274",
+          "CHL02188",
+          "CHL02275",
+          "CHL02268",
+          "CHL02276",
+          "CHL02187",
+          "CHL02277",
+          "CHL02278",
+          "CHL02186",
+          "CHL02270",
+          "CHL17376",
+          "CH03508"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "ch-bti-s37",
+    "code": "S37",
+    "name": "Biel–Täuffelen–Ins-Bahn",
+    "description": "S37 follows the southern shore of Lake Biel between Biel/Bienne and Ins, passing through the Seeland’s lakeside villages and agricultural lowlands. The line provides local access to communities that sit away from the mainline railway and connects onward at both termini.",
+    "type": "light",
+    "color": "#E72E36",
+    "operator": "asm",
+    "routes": [
+      {
+        "stations": [
+          "CH04483",
+          "CHL04468",
+          "CHL04467",
+          "CHL04466",
+          "CHL04465",
+          "CHL04464",
+          "CHL04463",
+          "CHL04475",
+          "CHL04474",
+          "CHL04462",
+          "CHL04472",
+          "CHL04470",
+          "CHL04471",
+          "CHL04469",
+          "CHL04461",
+          "CH04300"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "ch-bvb-r74",
+    "code": "R74",
+    "name": "Bex–Villars–Bretaye",
+    "description": "The Bex–Villars–Bretaye railway climbs from the Rhône valley through Gryon to the resort of Villars, then continues up to Col-de-Bretaye in the Alpine foothills. The route is especially valued for access to mountain walks and ski terrain, with wide views over the Chablais.",
+    "type": "light",
+    "color": "#92C023",
+    "operator": "tpc",
+    "routes": [
+      {
+        "stations": [
+          "CHL01495",
+          "CHL01494",
+          "CHL01727",
+          "CHL01493",
+          "CHL88193",
+          "CHL01492",
+          "CHL93772",
+          "CHL01491",
+          "CHL01490",
+          "CHL01488",
+          "CHL30246",
+          "CHL30067",
+          "CHL30066",
+          "CHL30064",
+          "CHL01487",
+          "CHL30523",
+          "CH01402"
+        ]
+      },
+      {
+        "stations": [
+          "CHL01499",
+          "CHL01498",
+          "CHL01446",
+          "CHL01497",
+          "CHL01447",
+          "CHL01495"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "ch-flp-s60",
+    "code": "S60",
+    "name": "Ferrovia Lugano–Ponte Tresa",
+    "description": "The Lugano–Ponte Tresa railway heads west from Lugano through the Malcantone region to the Italian border area. Its suburban stops serve communities around Lake Lugano, while the line also offers a relaxed rail approach to lakeside villages and the hills above the shore.",
+    "type": "light",
+    "color": "#E35A13",
+    "operator": "flp",
+    "routes": [
+      {
+        "stations": [
+          "CHL05391",
+          "CHL05399",
+          "CHL30790",
+          "CHL05393",
+          "CHL30789",
+          "CHL05394",
+          "CHL05390",
+          "CHL05395",
+          "CHL05392",
+          "CHL05396",
+          "CHL05397",
+          "CHL05398"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "ch-forchbahn-t18",
+    "code": "T18",
+    "name": "Forchbahn",
+    "description": "The Forchbahn starts at Zürich Stadelhofen and runs through the city’s eastern suburbs before crossing open countryside to Esslingen. Opened in 1912, it has evolved from a rural railway into a commuter route while retaining its distinctive tram-like street section in Zürich.",
+    "type": "light",
+    "color": "#EB3C2E",
+    "operator": "fb",
+    "routes": [
+      {
+        "stations": [
+          "CH03003",
+          "CHL30813",
+          "CHL30812",
+          "CHL30811",
+          "CHL03069",
+          "CHL03078",
+          "CHL03077",
+          "CHL03067",
+          "CHL03075",
+          "CHL03066",
+          "CHL03068",
+          "CHL03074",
+          "CHL03065",
+          "CHL03064",
+          "CHL03072",
+          "CHL03063",
+          "CHL03062",
+          "CHL03061",
+          "CHL03070",
+          "CHL03060"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "ch-fw-s15",
+    "code": "S15",
+    "name": "Frauenfeld–Wil-Bahn",
+    "description": "This narrow-gauge regional railway links Frauenfeld in the Thurgau with Wil in St Gallen, serving smaller towns and villages between the two centres. The line gives the region a direct cross-cantonal connection and meets the wider Swiss rail network at each end.",
+    "type": "light",
+    "color": "#7D4D31",
+    "operator": "ab",
+    "routes": [
+      {
+        "stations": [
+          "CH06100",
+          "CHL06171",
+          "CHL06179",
+          "CHL06173",
+          "CHL06174",
+          "CHL06175",
+          "CHL06169",
+          "CHL06176",
+          "CHL06177",
+          "CHL06170",
+          "CHL06178",
+          "CH06206"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "ch-lausanne-m1",
+    "code": "m1",
+    "name": "Métro m1",
+    "description": "Lausanne’s m1 connects the Flon transport hub with Renens, passing through the university district and the campuses of UNIL and EPFL. The line serves students and local residents across western Lausanne, with interchanges to regional trains and the city’s other metro line.",
+    "type": "metro",
+    "color": "#EC008C",
+    "operator": "tl",
+    "routes": [
+      {
+        "stations": [
+          "CH01181",
+          "CHM92133",
+          "CHM01207",
+          "CHM01208",
+          "CHM01209",
+          "CHM01210",
+          "CHM01211",
+          "CHM01212",
+          "CHM01213",
+          "CHM01214",
+          "CHM01215",
+          "CHM01216",
+          "CHM01217",
+          "CHM01218",
+          "CH01118"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "ch-lausanne-m2",
+    "code": "m2",
+    "name": "Métro m2",
+    "description": "The fully automated m2 descends from Croisettes on Lausanne’s northern hillside through the city centre to Ouchy on Lake Geneva. Its steep, north–south route ties residential districts to Lausanne-Flon, the main railway station and the waterfront in a single urban corridor.",
+    "type": "metro",
+    "color": "#EC008C",
+    "operator": "tl",
+    "routes": [
+      {
+        "stations": [
+          "CHM92086",
+          "CHM92061",
+          "CHM92028",
+          "CHM92052",
+          "CHM92050",
+          "CH01181",
+          "CHM90442",
+          "CHM89523",
+          "CHM79237",
+          "CHM92017",
+          "CHM79238",
+          "CHM92048",
+          "CHM92128",
+          "CHM79239"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "ch-leb-r20",
+    "code": "R20",
+    "name": "Lausanne–Echallens–Bercher",
+    "description": "The Lausanne–Echallens–Bercher railway runs from the underground Flon hub into the agricultural Gros-de-Vaud region. After crossing Lausanne’s northern suburbs, it serves Echallens and continues to Bercher, linking rural communities with the city’s metro and rail connections.",
+    "type": "light",
+    "color": "#5AB034",
+    "operator": "leb",
+    "routes": [
+      {
+        "stations": [
+          "CH01181",
+          "CHL01160",
+          "CHL01162",
+          "CHL01163",
+          "CHL01164",
+          "CHL01165",
+          "CHL01166",
+          "CHL01168",
+          "CHL01170",
+          "CHL01169",
+          "CHL87727",
+          "CHL01171",
+          "CHL01172",
+          "CHL01173",
+          "CHL01174",
+          "CHL01178",
+          "CHL01175",
+          "CHL01176",
+          "CHL01177"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "ch-limmattalbahn-t20",
+    "code": "T20",
+    "name": "Limmattalbahn",
+    "description": "Line 20 crosses the growing Limmat Valley from Zürich Altstetten through Schlieren and Dietikon to Killwangen-Spreitenbach. Opened in 2022, the 13.4-kilometre light rail line connects residential and employment areas with four S-Bahn stations along its route.",
+    "type": "light",
+    "color": "#A0216E",
+    "operator": "ava",
+    "routes": [
+      {
+        "stations": [
+          "CH03506",
+          "CHL10203",
+          "CHL90273",
+          "CHL90397",
+          "CHL90275",
+          "CHL10115",
+          "CHL09643",
+          "CHL90222",
+          "CHL09645",
+          "CH03508",
+          "CHL90525",
+          "CHL90512",
+          "CHL90839",
+          "CHL90840",
+          "CHL90800",
+          "CHL90797",
+          "CHL90794",
+          "CHL96007",
+          "CH03509",
+          "CHL90803",
+          "CHL90791",
+          "CHL90795",
+          "CHL91274",
+          "CHL90318",
+          "CHL91361",
+          "CH03001"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "ch-littorail-r15",
+    "code": "R15",
+    "name": "Littorail",
+    "description": "Littorail runs from Place Pury in central Neuchâtel west along the shore of Lake Neuchâtel to Boudry. The line serves the lakeside suburbs and villages of the region, offering a scenic alternative to road travel between the city and the vineyards beyond.",
+    "type": "light",
+    "color": null,
+    "operator": "transn",
+    "routes": [
+      {
+        "stations": [
+          "CHL04398",
+          "CHL30708",
+          "CHL30709",
+          "CHL04509",
+          "CHL30710",
+          "CHL04510",
+          "CHL30711",
+          "CHL04325",
+          "CHL30712",
+          "CHL95245",
+          "CHL30713",
+          "CHL04511"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "ch-rbs-re5",
+    "code": "RE5",
+    "name": "RBS Bern–Solothurn",
+    "description": "RE5 is the RegioExpress service between Bern and Solothurn, crossing the rural landscapes of the Bernese Mittelland. It links the two cantonal centres with a faster stopping pattern than local services and provides connections to regional and national trains at both ends.",
+    "type": "light",
+    "color": "#850343",
+    "operator": "rbs",
+    "routes": [
+      {
+        "stations": [
+          "CH07000",
+          "CHL08059",
+          "CHL08064",
+          "CHL08066",
+          "CHL08068",
+          "CH00207"
+        ]
+      },
+      {
+        "stations": [
+          "CH07000",
+          "CHL08059",
+          "CHL08061",
+          "CHL08064",
+          "CHL08066",
+          "CHL08068",
+          "CH00207"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "ch-rbs-s7",
+    "code": "S7",
+    "name": "RBS Bern–Worb Dorf",
+    "description": "S7 runs from Bern’s central station to Worb Dorf, combining a city-centre tram-style segment with a suburban railway into the Worblen valley. It is a practical link for commuters and local trips, and shares parts of its route with Bern’s urban transport network.",
+    "type": "light",
+    "color": "#F07F3A",
+    "operator": "rbs",
+    "routes": [
+      {
+        "stations": [
+          "CH07000",
+          "CHL08054",
+          "CHL07096",
+          "CHL07069",
+          "CHL07068",
+          "CHL07067",
+          "CHL07066",
+          "CHL07065",
+          "CHL07064",
+          "CHL89198",
+          "CH07063"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "ch-rbs-s8",
+    "code": "S8",
+    "name": "RBS Bern–Bätterkinden",
+    "description": "S8 links Bern with Bätterkinden, passing through the northern suburbs and the communities of the Limpach valley. The route provides a direct rail connection to the capital for towns that sit beyond the Bern S-Bahn’s busiest inner ring.",
+    "type": "light",
+    "color": "#201F20",
+    "operator": "rbs",
+    "routes": [
+      {
+        "stations": [
+          "CHL08064",
+          "CHL08063",
+          "CHL08062",
+          "CHL08061",
+          "CHL08060",
+          "CHL08059",
+          "CHL08058",
+          "CHL08057",
+          "CHL08071",
+          "CHL08056",
+          "CH04410",
+          "CHL08070",
+          "CHL08054",
+          "CH07000"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "ch-rbs-s9",
+    "code": "S9",
+    "name": "RBS Bern–Unterzollikofen",
+    "description": "This short regional line connects Bern with Unterzollikofen, serving northern neighbourhoods and the communities along the Aare. Its compact route feeds into the city’s main rail hub, where passengers can transfer to national trains and the wider Bern S-Bahn network.",
+    "type": "light",
+    "color": "#EA1A2A",
+    "operator": "rbs",
+    "routes": [
+      {
+        "stations": [
+          "CHL08055",
+          "CHL08053",
+          "CHL08054",
+          "CHL08052",
+          "CHL08051",
+          "CH07000"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "ch-waldenburgerbahn-t19",
+    "code": "T19",
+    "name": "Waldenburgerbahn",
+    "description": "The Waldenburg railway follows a narrow valley from Liestal to Waldenburg, serving villages at the foot of the Jura. Rebuilt and reopened in 2022 with modern metre-gauge trains, it preserves the valley’s local rail link while bringing the line up to contemporary standards.",
+    "type": "light",
+    "color": null,
+    "operator": "blt",
+    "routes": [
+      {
+        "stations": [
+          "CH00023",
+          "CHL10616",
+          "CHL00855",
+          "CHL78258",
+          "CHL78256",
+          "CHL78250",
+          "CHL92304",
+          "CHL92306",
+          "CHL92307",
+          "CHL78241",
+          "CHL78240",
+          "CHL72351"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "ch-wsb-s14",
+    "code": "S14",
+    "name": "Wynental- und Suhrentalbahn",
+    "description": "Aarau is the junction for this Aargau light railway’s two branches: north through the Suhrental to Schöftland and south through the Wynental to Menziken. S14 connects towns in both valleys with the cantonal capital and onward mainline trains.",
+    "type": "light",
+    "color": "#13AE99",
+    "operator": "ava",
+    "routes": [
+      {
+        "stations": [
+          "CH02113",
+          "CHL02191",
+          "CHL02192",
+          "CHL02196",
+          "CHL02182",
+          "CHL02181",
+          "CHL02194",
+          "CHL02180",
+          "CHL02195",
+          "CHL02179",
+          "CHL02178",
+          "CHL02197",
+          "CHL02177",
+          "CHL02199"
+        ]
+      },
+      {
+        "stations": [
+          "CHL02169",
+          "CHL02168",
+          "CHL02176",
+          "CHL02167",
+          "CHL02166",
+          "CHL02165",
+          "CHL02164",
+          "CHL02163",
+          "CHL02162",
+          "CHL16450",
+          "CHL02161",
+          "CHL02174",
+          "CHL02184",
+          "CHL02160",
+          "CHL02189",
+          "CH02103",
+          "CHL02123",
+          "CHL19685",
+          "CH02113"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "dk-copenhagen-m1",
+    "code": "M1",
+    "name": "Metro M1",
+    "description": "M1 connects Vanløse with Vestamager, crossing central Copenhagen before continuing south through Amager and the modern Ørestad district. Along the way it serves university, residential and business areas, with transfers to S-trains and the rest of the metro network.",
+    "type": "metro",
+    "color": "#007D55",
+    "operator": "metro-service",
+    "routes": [
+      {
+        "stations": [
+          "DKM038",
+          "DKM011",
+          "DKM023",
+          "DKM009",
+          "DKM013",
+          "DKM012",
+          "DK00646",
+          "DKM019",
+          "DKM005",
+          "DKM017",
+          "DKM006",
+          "DKM036",
+          "DKM004",
+          "DKM041",
+          "DKM039"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "dk-copenhagen-m2",
+    "code": "M2",
+    "name": "Metro M2",
+    "description": "M2 shares the central route from Vanløse before turning across Amager to Copenhagen Airport. It is the metro’s direct airport link, also serving residential districts and connecting the city centre with Kastrup and the eastern side of the island.",
+    "type": "metro",
+    "color": "#FFC82D",
+    "operator": "metro-service",
+    "routes": [
+      {
+        "stations": [
+          "DKM038",
+          "DKM011",
+          "DKM023",
+          "DKM009",
+          "DKM013",
+          "DKM012",
+          "DK00646",
+          "DKM019",
+          "DKM005",
+          "DKM003",
+          "DKM022",
+          "DKM042",
+          "DKM002",
+          "DKM010",
+          "DKM018",
+          "DKM024"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "dk-copenhagen-m3",
+    "code": "M3",
+    "name": "Cityringen",
+    "description": "Cityringen is Copenhagen’s underground loop, circling the inner city and linking districts such as Frederiksberg, Nørrebro, Østerbro and Vesterbro. It opened in 2019 and brings metro access close to many neighbourhoods without requiring every trip to pass through one central interchange.",
+    "type": "metro",
+    "color": "#E6140F",
+    "operator": "metro-service",
+    "routes": [
+      {
+        "stations": [
+          "DKM001",
+          "DKM028",
+          "DKM030",
+          "DKM029",
+          "DKM034",
+          "DKM040",
+          "DKM032",
+          "DKM037",
+          "DKM043",
+          "DKM025",
+          "DKM019",
+          "DKM015",
+          "DKM033",
+          "DKM021",
+          "DKM008",
+          "DKM014",
+          "DKM013",
+          "DKM001"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "dk-copenhagen-m4",
+    "code": "M4",
+    "name": "Metro M4",
+    "description": "M4 connects the redeveloped harbour districts of Nordhavn and Sydhavn with central Copenhagen, sharing its central section with the Cityringen. The line serves major rail interchanges at Østerport and København H, helping connect new waterfront neighbourhoods to the wider city.",
+    "type": "metro",
+    "color": "#00A0BE",
+    "operator": "metro-service",
+    "routes": [
+      {
+        "stations": [
+          "DKM031",
+          "DKM027",
+          "DKM043",
+          "DKM025",
+          "DKM019",
+          "DKM015",
+          "DKM033",
+          "DKM021",
+          "DKM016",
+          "DKM007",
+          "DKM035",
+          "DKM026",
+          "DKM020"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "fi-helsinki-m1",
+    "code": "M1",
+    "name": "Metrolinja M1",
+    "description": "M1 stretches from Kivenlahti in Espoo through central Helsinki to Vuosaari on the eastern coast. It combines the western metro extension with the city’s long-running east–west corridor, linking suburban centres, downtown and residential districts on both sides of the capital.",
+    "type": "metro",
+    "color": "#FF6319",
+    "operator": "kaupunkiliikenne",
+    "routes": [
+      {
+        "stations": [
+          "FIM012",
+          "FIM002",
+          "FIM027",
+          "FIM008",
+          "FIM003",
+          "FIM017",
+          "FIM020",
+          "FIM029",
+          "FIM028",
+          "FIM001",
+          "FIM011",
+          "FIM013",
+          "FIM016",
+          "FIM024",
+          "FIM010",
+          "FIM023",
+          "FIM005",
+          "FIM004",
+          "FIM026",
+          "FIM009",
+          "FIM015",
+          "FIM006",
+          "FIM025",
+          "FIM007",
+          "FIM021",
+          "FIM022",
+          "FIM030"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "fi-helsinki-m2",
+    "code": "M2",
+    "name": "Metrolinja M2",
+    "description": "M2 runs from Tapiola in Espoo through Helsinki’s centre to Mellunmäki in the east. Sharing much of its central alignment with M1, it provides a more direct connection for northeastern suburbs and links Tapiola’s commercial and cultural district with the metro network.",
+    "type": "metro",
+    "color": "#FF6319",
+    "operator": "kaupunkiliikenne",
+    "routes": [
+      {
+        "stations": [
+          "FIM028",
+          "FIM001",
+          "FIM011",
+          "FIM013",
+          "FIM016",
+          "FIM024",
+          "FIM010",
+          "FIM023",
+          "FIM005",
+          "FIM004",
+          "FIM026",
+          "FIM009",
+          "FIM015",
+          "FIM006",
+          "FIM025",
+          "FIM007",
+          "FIM019",
+          "FIM014",
+          "FIM018"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "it-bergamo-t1",
+    "code": "T1",
+    "name": "Linea T1",
+    "description": "Running from Bergamo station into the Seriana Valley, T1 links the city with a string of suburban communities including Torre Boldone, Ranica and Albino. Opened in 2009, it reuses part of the historic valley railway corridor and connects with regional trains at Bergamo FS.",
+    "type": "light",
+    "color": "#FDEC4A",
+    "operator": "teb",
+    "routes": [
+      {
+        "stations": [
+          "ITL088",
+          "ITL087",
+          "ITL086",
+          "ITL085",
+          "ITL084",
+          "ITL083",
+          "ITL082",
+          "ITL081",
+          "ITL080",
+          "ITL079",
+          "ITL078",
+          "ITL077",
+          "ITL076",
+          "ITL075",
+          "ITL074",
+          "ITL073"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "it-bergamo-t2",
+    "code": "T2",
+    "name": "Linea T2",
+    "description": "Planned as an extension of Bergamo’s tram network, T2 will run west toward Villa d’Almè along the former Valle Brembana railway corridor. The 9.8-kilometre route through Ponteranica and Sorisole is designed to connect hillside neighbourhoods and valley towns with Bergamo’s rail hub.",
+    "type": "light",
+    "color": "#FDEC4A",
+    "operator": "teb",
+    "routes": [
+      {
+        "stations": [
+          "ITL088",
+          "ITL087",
+          "ITL157",
+          "ITL158",
+          "ITL159",
+          "ITL160",
+          "ITL161",
+          "ITL162",
+          "ITL163",
+          "ITL164",
+          "ITL166",
+          "ITL167",
+          "ITL168",
+          "ITL169",
+          "ITL170"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "it-brescia-metro",
+    "code": null,
+    "name": "Metropolitana di Brescia",
+    "description": "This fully automated line crosses Brescia from the northern districts to Sant’Eufemia-Buffalora in the southeast, passing beneath the historic centre. Since opening in 2013, it has offered a high-capacity alternative to buses, with park-and-ride links at several outer stations.",
+    "type": "metro",
+    "color": "#ED1C24",
+    "operator": "brescia-mobilita",
+    "routes": [
+      {
+        "stations": [
+          "ITM078",
+          "ITM077",
+          "ITM076",
+          "ITM075",
+          "ITM074",
+          "ITM109",
+          "ITM101",
+          "ITM098",
+          "ITM107",
+          "ITM108",
+          "ITM106",
+          "ITM102",
+          "ITM104",
+          "ITM100",
+          "ITM103",
+          "ITM099",
+          "ITM105"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "it-cagliari-1",
+    "code": "1",
+    "name": "Tram 1",
+    "description": "The red route links central Cagliari’s Piazza Repubblica with the university and hospital campus at Policlinico, via Monserrato. It combines an urban tramway with a suburban rail corridor, giving passengers a direct connection between the city centre and a major regional destination.",
+    "type": "light",
+    "color": "#C41B04",
+    "operator": "arst",
+    "routes": [
+      {
+        "stations": [
+          "ITL145",
+          "ITL144",
+          "ITL143",
+          "ITL142",
+          "ITL141",
+          "ITL151",
+          "ITL140",
+          "ITL139",
+          "ITL048",
+          "ITL152",
+          "ITL153"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "it-cagliari-2",
+    "code": "2",
+    "name": "Tram 2",
+    "description": "From Monserrato, Line 2 runs northeast to Settimo San Pietro, extending the metro-tram network into the metropolitan hinterland. Its short, five-stop route shares the San Gottardo interchange with Line 1, where passengers can continue toward central Cagliari or the Policlinico campus.",
+    "type": "light",
+    "color": "#C41B04",
+    "operator": "arst",
+    "routes": [
+      {
+        "stations": [
+          "ITL147",
+          "ITL146",
+          "ITL048",
+          "ITL152",
+          "ITL153"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "it-catania-metro",
+    "code": null,
+    "name": "Metropolitana di Catania",
+    "description": "Catania’s metro grew from the urban section of the historic Ferrovia Circumetnea, whose first underground service began in 1999. Today the line crosses the city centre between Stesicoro and Monte Po, with the volcanic slopes of Mount Etna rising beyond its western terminus.",
+    "type": "metro",
+    "color": "#DD1E1F",
+    "operator": "fce",
+    "routes": [
+      {
+        "stations": [
+          "ITM146",
+          "ITM145",
+          "ITM144",
+          "ITM143",
+          "ITM142",
+          "ITM141",
+          "ITM140",
+          "ITM139",
+          "ITM138",
+          "ITM137",
+          "ITM292",
+          "ITM291"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "it-catanzaro-metro",
+    "code": null,
+    "name": "Metropolitana di Catanzaro",
+    "description": "This unusual regional metro service links hilltop Catanzaro Città with Catanzaro Lido on the Ionian coast. The route includes the steep rack-railway section between the upper city and Catanzaro Sala, then continues through the isthmus toward the mainline railway interchange at the coast.",
+    "type": "metro",
+    "color": null,
+    "operator": "fdc",
+    "routes": [
+      {
+        "stations": [
+          "ITM049",
+          "ITM080",
+          "ITM083",
+          "ITM050",
+          "ITM081",
+          "ITM297",
+          "ITM082",
+          "ITM051",
+          "ITM079",
+          "ITM296",
+          "ITM133"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "it-circumvesuviana-baiano",
+    "code": null,
+    "name": "Circumvesuviana Napoli–Baiano",
+    "description": "The inland Circumvesuviana corridor runs from Naples through Nola to Baiano, serving towns on the eastern side of Mount Vesuvius and continuing into Avellino province. A separate branch in the catalog reaches Acerra, reflecting the network’s role in connecting the wider metropolitan area.",
+    "type": "light",
+    "color": "#771E1B",
+    "operator": "eav",
+    "routes": [
+      {
+        "stations": [
+          "ITL072",
+          "ITL032",
+          "ITL013",
+          "ITL025",
+          "ITL109",
+          "ITL027",
+          "ITL108",
+          "ITL107",
+          "ITL106",
+          "ITL105",
+          "ITL103",
+          "ITL019",
+          "ITL104",
+          "ITL018",
+          "ITL056",
+          "ITL053",
+          "ITL052",
+          "ITL055",
+          "ITL054",
+          "ITL051",
+          "ITL057",
+          "ITL097",
+          "ITL096",
+          "ITL017",
+          "ITL098",
+          "ITL099",
+          "ITL016",
+          "ITL015"
+        ]
+      },
+      {
+        "stations": [
+          "ITL072",
+          "ITL032",
+          "ITL013",
+          "ITL025",
+          "ITL109",
+          "ITL027",
+          "ITL108",
+          "ITL107",
+          "ITL106",
+          "ITL105",
+          "ITL103",
+          "ITL019",
+          "ITL104",
+          "ITL102",
+          "ITL101",
+          "ITL100"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "it-circumvesuviana-poggiomarino",
+    "code": null,
+    "name": "Circumvesuviana Napoli–Poggiomarino",
+    "description": "This route leaves Naples for the southern Vesuvian plain, passing through the Pompeii and Torre Annunziata area before reaching Poggiomarino. It is part of the historic Circumvesuviana network, built to link the growing towns around Vesuvius with the regional capital.",
+    "type": "light",
+    "color": "#8480D7",
+    "operator": "eav",
+    "routes": [
+      {
+        "stations": [
+          "ITL072",
+          "ITL032",
+          "ITL001",
+          "ITL031",
+          "ITL118",
+          "ITL127",
+          "ITL095",
+          "ITL121",
+          "ITL122",
+          "ITL123",
+          "ITL124",
+          "ITL125",
+          "ITL026",
+          "ITL126",
+          "ITL047",
+          "ITL042",
+          "ITL128",
+          "ITL020",
+          "ITL129",
+          "ITL130",
+          "ITL133",
+          "ITL024",
+          "ITL045",
+          "ITL132",
+          "ITL131",
+          "ITL007",
+          "ITL006",
+          "ITL120"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "it-circumvesuviana-san-giorgio",
+    "code": null,
+    "name": "Circumvesuviana Napoli–San Giorgio",
+    "description": "A short but distinctly urban branch, this service connects Naples with San Giorgio a Cremano through the eastern suburbs. Its alignment also serves the Centro Direzionale business district, bringing the Circumvesuviana into one of the city’s main employment and rail-interchange areas.",
+    "type": "light",
+    "color": "#EB262B",
+    "operator": "eav",
+    "routes": [
+      {
+        "stations": [
+          "ITL072",
+          "ITL032",
+          "ITL013",
+          "ITL025",
+          "ITL109",
+          "ITL090",
+          "ITL091",
+          "ITL092",
+          "ITL093",
+          "ITL094",
+          "ITL095"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "it-circumvesuviana-sarno",
+    "code": null,
+    "name": "Circumvesuviana Napoli–Sarno",
+    "description": "Heading southeast from Naples, the Sarno route crosses the Vesuvian towns and continues into the Agro Nocerino-Sarnese, serving communities in both the Naples and Salerno areas. It follows the inland side of the Circumvesuviana network rather than the better-known coastal route to Sorrento.",
+    "type": "light",
+    "color": "#F799B5",
+    "operator": "eav",
+    "routes": [
+      {
+        "stations": [
+          "ITL072",
+          "ITL032",
+          "ITL001",
+          "ITL031",
+          "ITL118",
+          "ITL117",
+          "ITL044",
+          "ITL093",
+          "ITL110",
+          "ITL111",
+          "ITL014",
+          "ITL010",
+          "ITL112",
+          "ITL008",
+          "ITL113",
+          "ITL009",
+          "ITL114",
+          "ITL011",
+          "ITL115",
+          "ITL028",
+          "ITL116",
+          "ITL029",
+          "ITL120",
+          "ITL030",
+          "ITL119",
+          "ITL012"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "it-circumvesuviana-sorrento",
+    "code": null,
+    "name": "Circumvesuviana Napoli–Sorrento",
+    "description": "The best-known Circumvesuviana journey follows the Bay of Naples toward Sorrento, stopping near major archaeological sites including Herculaneum and Pompeii. Beyond the urban fringe, the railway hugs the Sorrentine Peninsula and provides a frequent link for residents and visitors alike.",
+    "type": "light",
+    "color": "#751056",
+    "operator": "eav",
+    "routes": [
+      {
+        "stations": [
+          "ITL072",
+          "ITL032",
+          "ITL001",
+          "ITL031",
+          "ITL118",
+          "ITL127",
+          "ITL095",
+          "ITL121",
+          "ITL122",
+          "ITL123",
+          "ITL124",
+          "ITL125",
+          "ITL026",
+          "ITL126",
+          "ITL047",
+          "ITL042",
+          "ITL128",
+          "ITL020",
+          "ITL129",
+          "ITL130",
+          "ITL133",
+          "ITL046",
+          "ITL135",
+          "ITL021",
+          "ITL136",
+          "ITL154",
+          "ITL155",
+          "ITL137",
+          "ITL023",
+          "ITL138",
+          "ITL134",
+          "ITL156",
+          "ITL089"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "it-genova-granarolo",
+    "code": null,
+    "name": "Ferrovia a cremagliera di Granarolo",
+    "description": "Built in 1901, this compact rack railway climbs from beside Genova Principe station to the hillside neighbourhood of Granarolo. Its 1.1-kilometre track rises nearly 200 metres, making it both a practical link for residents and a distinctive piece of Genoa’s historic vertical transport network.",
+    "type": "light",
+    "color": null,
+    "operator": "amt-genova",
+    "routes": [
+      {
+        "stations": [
+          "ITL039",
+          "ITL041",
+          "ITL049",
+          "ITL050",
+          "ITL005",
+          "ITL002",
+          "ITL003",
+          "ITL040",
+          "ITL004"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "it-genova-metro",
+    "code": null,
+    "name": "Metropolitana di Genova",
+    "description": "Genoa’s single metro line runs from Brin in the Polcevera valley to Brignole, linking the port, historic centre and two major railway stations. The first section opened in 1990; the line’s compact route makes its interchanges with trains and buses especially important in the city’s steep terrain.",
+    "type": "metro",
+    "color": "#E30613",
+    "operator": "amt-genova",
+    "routes": [
+      {
+        "stations": [
+          "ITM094",
+          "ITM008",
+          "ITM155",
+          "ITM039",
+          "ITM007",
+          "ITM001",
+          "ITM006",
+          "ITM154"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "it-milano-m1",
+    "code": "M1",
+    "name": "Metropolitana M1",
+    "description": "Opened in 1964, Milan’s red line was the city’s first metro and helped shape its modern network. Its two western branches reach Rho Fiera and Bisceglie, while the shared central section serves major interchanges including Cadorna, Duomo and Loreto before continuing north to Sesto.",
+    "type": "metro",
+    "color": "#EE333E",
+    "operator": "atm-milano",
+    "routes": [
+      {
+        "stations": [
+          "ITM021",
+          "ITM218",
+          "ITM223",
+          "ITM224",
+          "ITM225",
+          "ITM226",
+          "ITM227",
+          "ITM228",
+          "ITM229",
+          "ITM231",
+          "ITM232",
+          "ITM235",
+          "ITM236",
+          "ITM200",
+          "ITM215",
+          "ITM216",
+          "ITM125",
+          "ITM212",
+          "ITM213",
+          "ITM123",
+          "ITM214",
+          "ITM184",
+          "ITM211",
+          "ITM210",
+          "ITM209",
+          "ITM208",
+          "ITM207",
+          "ITM206",
+          "ITM205",
+          "ITM204",
+          "ITM217"
+        ]
+      },
+      {
+        "stations": [
+          "ITM134",
+          "ITM219",
+          "ITM220",
+          "ITM221",
+          "ITM222",
+          "ITM233",
+          "ITM234",
+          "ITM235",
+          "ITM236",
+          "ITM200",
+          "ITM215",
+          "ITM216",
+          "ITM125",
+          "ITM212",
+          "ITM213",
+          "ITM123",
+          "ITM214",
+          "ITM184",
+          "ITM211",
+          "ITM210",
+          "ITM209",
+          "ITM208",
+          "ITM207",
+          "ITM206",
+          "ITM205",
+          "ITM204",
+          "ITM217"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "it-milano-m2",
+    "code": "M2",
+    "name": "Metropolitana M2",
+    "description": "The green line ties Milan’s central rail hubs to distant suburbs on three branches: Gessate and Cologno Nord to the northeast, and Assago to the southwest. It passes through Cadorna and Centrale, making it a key cross-city route for commuters and visitors.",
+    "type": "metro",
+    "color": "#5D9842",
+    "operator": "atm-milano",
+    "routes": [
+      {
+        "stations": [
+          "ITM048",
+          "ITM047",
+          "ITM151",
+          "ITM196",
+          "ITM197",
+          "ITM198",
+          "ITM199",
+          "ITM200",
+          "ITM202",
+          "ITM203",
+          "ITM181",
+          "ITM180",
+          "ITM164",
+          "ITM186",
+          "ITM184",
+          "ITM183",
+          "ITM182",
+          "ITM189",
+          "ITM188",
+          "ITM187",
+          "ITM110",
+          "ITM126",
+          "ITM020",
+          "ITM019"
+        ]
+      },
+      {
+        "stations": [
+          "ITM152",
+          "ITM151",
+          "ITM196",
+          "ITM197",
+          "ITM198",
+          "ITM199",
+          "ITM200",
+          "ITM202",
+          "ITM203",
+          "ITM181",
+          "ITM180",
+          "ITM164",
+          "ITM186",
+          "ITM184",
+          "ITM183",
+          "ITM182",
+          "ITM189",
+          "ITM188",
+          "ITM187",
+          "ITM110",
+          "ITM126",
+          "ITM020",
+          "ITM019"
+        ]
+      },
+      {
+        "stations": [
+          "ITM152",
+          "ITM151",
+          "ITM196",
+          "ITM197",
+          "ITM198",
+          "ITM199",
+          "ITM200",
+          "ITM202",
+          "ITM203",
+          "ITM181",
+          "ITM180",
+          "ITM164",
+          "ITM186",
+          "ITM184",
+          "ITM183",
+          "ITM182",
+          "ITM189",
+          "ITM188",
+          "ITM187",
+          "ITM110",
+          "ITM191",
+          "ITM190",
+          "ITM192",
+          "ITM193",
+          "ITM124",
+          "ITM119",
+          "ITM194",
+          "ITM005",
+          "ITM120",
+          "ITM195"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "it-milano-m3",
+    "code": "M3",
+    "name": "Metropolitana M3",
+    "description": "Milan’s yellow line cuts diagonally through the centre from San Donato in the southeast to Comasina in the north. It serves Duomo and Centrale, creating useful connections with the city’s other metro lines and with long-distance and regional trains.",
+    "type": "metro",
+    "color": "#FEBF2E",
+    "operator": "atm-milano",
+    "routes": [
+      {
+        "stations": [
+          "ITM171",
+          "ITM153",
+          "ITM172",
+          "ITM174",
+          "ITM173",
+          "ITM175",
+          "ITM176",
+          "ITM177",
+          "ITM178",
+          "ITM125",
+          "ITM158",
+          "ITM157",
+          "ITM159",
+          "ITM164",
+          "ITM163",
+          "ITM161",
+          "ITM160",
+          "ITM033",
+          "ITM166",
+          "ITM052",
+          "ITM167"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "it-milano-m4",
+    "code": "M4",
+    "name": "Metropolitana M4",
+    "description": "The blue line connects Linate Airport with San Cristoforo, crossing central Milan and meeting the wider rail network along the way. The airport-to-city-centre journey takes about 12 minutes, giving air travellers a direct rapid-transit link into the city.",
+    "type": "metro",
+    "color": "#224981",
+    "operator": "atm-milano",
+    "routes": [
+      {
+        "stations": [
+          "ITM168",
+          "ITM170",
+          "ITM169",
+          "ITM254",
+          "ITM255",
+          "ITM253",
+          "ITM258",
+          "ITM212",
+          "ITM279",
+          "ITM278",
+          "ITM276",
+          "ITM275",
+          "ITM199",
+          "ITM287",
+          "ITM286",
+          "ITM285",
+          "ITM284",
+          "ITM283",
+          "ITM282",
+          "ITM281",
+          "ITM280"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "it-milano-m5",
+    "code": "M5",
+    "name": "Metropolitana M5",
+    "description": "Milan’s lilac line is a fully automated metro linking the San Siro stadium district with the northern suburbs around Bicocca and Bignami. It connects with M1 at Lotto, M3 at Zara and M2 at Garibaldi, helping distribute event crowds as well as everyday journeys.",
+    "type": "metro",
+    "color": "#9D91C5",
+    "operator": "atm-milano",
+    "routes": [
+      {
+        "stations": [
+          "ITM237",
+          "ITM238",
+          "ITM239",
+          "ITM229",
+          "ITM240",
+          "ITM241",
+          "ITM242",
+          "ITM243",
+          "ITM244",
+          "ITM245",
+          "ITM181",
+          "ITM252",
+          "ITM161",
+          "ITM251",
+          "ITM250",
+          "ITM249",
+          "ITM248",
+          "ITM247",
+          "ITM246"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "it-napoli-1",
+    "code": "1",
+    "name": "Linea 1",
+    "description": "Naples’ Line 1 links the northern districts of Piscinola and Scampia with the historic centre and Centro Direzionale, crossing the hills of Vomero on the way. Its celebrated ‘Stations of the Art’ pair major interchanges with architecture, public artworks and archaeological discoveries.",
+    "type": "metro",
+    "color": "#FECA1B",
+    "operator": "anm",
+    "routes": [
+      {
+        "stations": [
+          "ITM040",
+          "ITM012",
+          "ITM084",
+          "ITM113",
+          "ITM112",
+          "ITM114",
+          "ITM032",
+          "ITM115",
+          "ITM027",
+          "ITM028",
+          "ITM260",
+          "ITM029",
+          "ITM030",
+          "ITM031",
+          "ITM085",
+          "ITM289",
+          "ITM057",
+          "ITM095",
+          "ITM135",
+          "ITM257"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "it-napoli-6",
+    "code": "6",
+    "name": "Linea 6",
+    "description": "Line 6 connects the western district of Fuorigrotta with central Piazza Municipio, bringing the exhibition area, stadium quarter and waterfront into the metro network. Its contemporary stations include substantial architectural and art installations, and it interchanges with Line 1 at Municipio.",
+    "type": "metro",
+    "color": "#0099CC",
+    "operator": "anm",
+    "routes": [
+      {
+        "stations": [
+          "ITM136",
+          "ITM044",
+          "ITM042",
+          "ITM043",
+          "ITM288",
+          "ITM059",
+          "ITM058",
+          "ITM289"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "it-napoli-11",
+    "code": "11",
+    "name": "Linea 11",
+    "description": "This suburban metro runs from Piscinola through Mugnano and Giugliano to Aversa, crossing the northern Naples metropolitan area and reaching into Caserta province. At Piscinola it connects with Naples Metro Line 1, giving outlying communities a rail link to the city centre.",
+    "type": "metro",
+    "color": "#EB6A2D",
+    "operator": "eav",
+    "routes": [
+      {
+        "stations": [
+          "ITM040",
+          "ITM147",
+          "ITM148",
+          "ITM149",
+          "ITM150"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "it-pisa-mover",
+    "code": null,
+    "name": "Pisa Mover",
+    "description": "Pisa’s automated people mover provides a direct airport-to-railway-station connection, with an intermediate stop at San Giusto/Aurelia. The full ride takes about five minutes, making it a quick link between Galileo Galilei Airport, Pisa Centrale and the city’s regional and national train services.",
+    "type": "metro",
+    "color": "#ED1C24",
+    "operator": "pisamover",
+    "routes": [
+      {
+        "stations": [
+          "ITM111",
+          "ITM122",
+          "IT2156"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "it-renon-160",
+    "code": "160",
+    "name": "Ferrovia del Renon",
+    "description": "The Renon narrow-gauge railway has served the South Tyrolean plateau since 1907, when it formed part of a longer mountain journey from Bolzano. The surviving line runs between Maria Himmelfahrt and Collalbo through meadows and woodland, with views toward the Dolomites and historic railcars on selected trips.",
+    "type": "light",
+    "color": null,
+    "operator": "sad",
+    "routes": [
+      {
+        "stations": [
+          "ITL070",
+          "ITL043",
+          "ITL033",
+          "ITL022",
+          "ITL038",
+          "ITL034",
+          "ITL037",
+          "ITL035",
+          "ITL036",
+          "ITL071"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "it-roma-a",
+    "code": "A",
+    "name": "Linea A",
+    "description": "Rome’s orange line runs from Battistini in the northwest to Anagnina in the southeast, passing the Vatican area, Piazza di Spagna and Termini. Since opening in 1980, it has become a major cross-city route, connecting residential districts with central landmarks and the city’s main railway hub.",
+    "type": "metro",
+    "color": "#F68B1F",
+    "operator": "atac",
+    "routes": [
+      {
+        "stations": [
+          "ITM326",
+          "ITM302",
+          "ITM317",
+          "ITM314",
+          "ITM315",
+          "ITM299",
+          "ITM309",
+          "ITM310",
+          "ITM303",
+          "ITM308",
+          "ITM311",
+          "ITM127",
+          "ITM307",
+          "ITM304",
+          "ITM117",
+          "ITM305",
+          "ITM306",
+          "ITM312",
+          "ITM313",
+          "ITM316",
+          "ITM319",
+          "ITM318",
+          "ITM321",
+          "ITM320",
+          "ITM322",
+          "ITM323",
+          "ITM324"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "it-roma-b",
+    "code": "B",
+    "name": "Linea B",
+    "description": "Opened in 1955 as Rome’s first metro, Line B links Laurentina and the EUR district with Termini, the Colosseum area and the northeast suburbs. Beyond Bologna, trains serve either Rebibbia or Jonio, while interchanges at Piramide and Tiburtina connect the line to regional and national rail.",
+    "type": "metro",
+    "color": "#3783C6",
+    "operator": "atac",
+    "routes": [
+      {
+        "stations": [
+          "ITM096",
+          "ITM022",
+          "ITM041",
+          "ITM056",
+          "ITM010",
+          "ITM266",
+          "ITM265",
+          "ITM127",
+          "ITM267",
+          "ITM264",
+          "ITM268",
+          "ITM002",
+          "ITM295",
+          "ITM330",
+          "ITM331",
+          "ITM156",
+          "ITM263",
+          "ITM261",
+          "ITM262"
+        ]
+      },
+      {
+        "stations": [
+          "ITM271",
+          "ITM269",
+          "ITM274",
+          "ITM272",
+          "ITM270",
+          "ITM009",
+          "ITM273",
+          "ITM010",
+          "ITM266",
+          "ITM265",
+          "ITM127",
+          "ITM267",
+          "ITM264",
+          "ITM268",
+          "ITM002",
+          "ITM295",
+          "ITM330",
+          "ITM331",
+          "ITM156",
+          "ITM263",
+          "ITM261",
+          "ITM262"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "it-roma-c",
+    "code": "C",
+    "name": "Linea C",
+    "description": "Rome’s driverless Line C carries passengers from Monte Compatri-Pantano through the eastern suburbs to the Colosseum, joining the historic centre with neighbourhoods far beyond the ring road. Archaeological finds shaped the design of several stations, turning key stops into showcase ‘archaeo-stations’.",
+    "type": "metro",
+    "color": "#008751",
+    "operator": "atac",
+    "routes": [
+      {
+        "stations": [
+          "ITM070",
+          "ITM069",
+          "ITM068",
+          "ITM065",
+          "ITM066",
+          "ITM067",
+          "ITM053",
+          "ITM072",
+          "ITM071",
+          "ITM073",
+          "ITM086",
+          "ITM087",
+          "ITM088",
+          "ITM093",
+          "ITM333",
+          "ITM092",
+          "ITM089",
+          "ITM334",
+          "ITM091",
+          "ITM335",
+          "ITM090",
+          "ITM117",
+          "ITM329",
+          "ITM264"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "it-roma-metromare",
+    "code": null,
+    "name": "Metromare",
+    "description": "The former Roma–Lido railway opened in 1924 to connect the capital with its seaside district; today Metromare runs from Piramide to Cristoforo Colombo in Ostia. Along the way it serves Ostia Antica’s archaeological site and provides an everyday commuter link between the coast and central Rome.",
+    "type": "metro",
+    "color": "#7EB9E6",
+    "operator": "cotral",
+    "routes": [
+      {
+        "stations": [
+          "ITM002",
+          "ITM330",
+          "ITM156",
+          "ITM055",
+          "ITM054",
+          "ITM332",
+          "ITM011",
+          "ITM293",
+          "ITM013",
+          "ITM023",
+          "ITM015",
+          "ITM294",
+          "ITM014",
+          "ITM024",
+          "ITM002",
+          "ITM330",
+          "ITM156",
+          "ITM055",
+          "ITM054",
+          "ITM332",
+          "ITM011",
+          "ITM293",
+          "ITM013",
+          "ITM023",
+          "ITM015",
+          "ITM294",
+          "ITM014",
+          "ITM024"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "it-torino-m1",
+    "code": "M1",
+    "name": "Metropolitana M1",
+    "description": "Turin’s driverless metro runs west to southeast from Fermi to Bengasi, connecting Collegno and the city with the Lingotto district. The first section opened for the 2006 Winter Olympics, and the line’s VAL technology made it Italy’s first fully automated metro system.",
+    "type": "metro",
+    "color": "#FF0000",
+    "operator": "gtt",
+    "routes": [
+      {
+        "stations": [
+          "ITM060",
+          "ITM018",
+          "ITM037",
+          "ITM036",
+          "ITM035",
+          "ITM034",
+          "ITM017",
+          "ITM046",
+          "ITM016",
+          "ITM097",
+          "ITM025",
+          "ITM026",
+          "ITM038",
+          "ITM004",
+          "ITM003",
+          "ITM064",
+          "ITM063",
+          "ITM045",
+          "ITM116",
+          "ITM062",
+          "ITM121",
+          "ITM129",
+          "ITM128"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "no-bergen-1",
+    "code": "1",
+    "name": "Bybanen linje 1",
+    "description": "Bergen’s first light rail line runs from the city centre south through Nesttun and Rådal to Bergen Airport Flesland. Opened in stages from 2010 to 2017, it serves residential districts, shopping centres and the airport on a dedicated urban corridor.",
+    "type": "light",
+    "color": "#C83F20",
+    "operator": "tide-buss-og-bane",
+    "routes": [
+      {
+        "stations": [
+          "NOL115",
+          "NOL133",
+          "NOL111",
+          "NOL134",
+          "NOL118",
+          "NOL116",
+          "NOL127",
+          "NOL114",
+          "NOL143",
+          "NOL142",
+          "NOL141",
+          "NOL117",
+          "NOL135",
+          "NOL122",
+          "NOL131",
+          "NOL132",
+          "NOL140",
+          "NOL130",
+          "NOL139",
+          "NOL128",
+          "NOL136",
+          "NOL138",
+          "NOL137",
+          "NOL124",
+          "NOL113",
+          "NOL125",
+          "NOL112"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "no-bergen-2",
+    "code": "2",
+    "name": "Bybanen linje 2",
+    "description": "Line 2 links Bergen’s centre with Fyllingsdalen via Haukeland University Hospital and Kronstad. Opened in 2022, it creates a useful cross-city connection for hospital staff and visitors, and includes a long tunnel beneath the hills south of the city centre.",
+    "type": "light",
+    "color": "#C83F20",
+    "operator": "tide-buss-og-bane",
+    "routes": [
+      {
+        "stations": [
+          "NOL120",
+          "NOL126",
+          "NOL129",
+          "NOL127",
+          "NOL121",
+          "NOL119",
+          "NOL111",
+          "NOL133",
+          "NOL123"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "no-grakallbanen-9",
+    "code": "9",
+    "name": "Gråkallbanen",
+    "description": "Trondheim’s Gråkallbanen tram climbs from Ila through the western suburbs to Lian, at the edge of Bymarka forest. The line offers an everyday connection for local neighbourhoods and a direct ride to walking trails, lakes and outdoor recreation in the hills above the city.",
+    "type": "light",
+    "color": "#231F20",
+    "operator": "boreal-bane",
+    "routes": [
+      {
+        "stations": [
+          "NOL043",
+          "NOL004",
+          "NOL071",
+          "NOL013",
+          "NOL003",
+          "NOL010",
+          "NOL069",
+          "NOL097",
+          "NOL075",
+          "NOL063",
+          "NOL023",
+          "NOL103",
+          "NOL055",
+          "NOL107",
+          "NOL036",
+          "NOL057"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "no-oslo-1",
+    "code": "1",
+    "name": "T-bane 1",
+    "description": "Line 1 is Oslo’s scenic Holmenkollen route, running from the southeastern suburbs through the city and up into the hills to Frognerseteren. It passes the ski-jump area at Holmenkollen and continues to forest trails and viewpoints, making it both a commuter line and an outdoor gateway.",
+    "type": "metro",
+    "color": "#009CDC",
+    "operator": "sporveien-t-banen",
+    "routes": [
+      {
+        "stations": [
+          "NOM003",
+          "NOM042",
+          "NOM034",
+          "NOM032",
+          "NOM008",
+          "NOM050",
+          "NOM039",
+          "NOM028",
+          "NOM009",
+          "NOM027",
+          "NOM014",
+          "NOM061",
+          "NOM021",
+          "NOM030",
+          "NOM057",
+          "NOM043",
+          "NOM085",
+          "NOM075",
+          "NOM094",
+          "NOM097",
+          "NOM076",
+          "NOM088",
+          "NOM092",
+          "NOM077",
+          "NOM078",
+          "NOM096",
+          "NOM091",
+          "NOM087",
+          "NOM072",
+          "NOM080",
+          "NOM099",
+          "NOM090",
+          "NOM084",
+          "NOM098",
+          "NOM074"
+        ]
+      },
+      {
+        "stations": [
+          "NOM074",
+          "NOM098",
+          "NOM084",
+          "NOM090",
+          "NOM099",
+          "NOM080",
+          "NOM072",
+          "NOM087",
+          "NOM091",
+          "NOM096",
+          "NOM077",
+          "NOM092",
+          "NOM088",
+          "NOM076",
+          "NOM097",
+          "NOM094",
+          "NOM075",
+          "NOM085",
+          "NOM043",
+          "NOM057",
+          "NOM030",
+          "NOM021",
+          "NOM061",
+          "NOM014",
+          "NOM027",
+          "NOM009",
+          "NOM028",
+          "NOM039",
+          "NOM050",
+          "NOM008",
+          "NOM032",
+          "NOM034",
+          "NOM042",
+          "NOM003"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "no-oslo-2",
+    "code": "2",
+    "name": "T-bane 2",
+    "description": "Line 2 crosses Oslo from Ellingsrudåsen in the east to Østerås in the west, passing through the city-centre tunnel. It connects outer residential districts with central stations and links to rail, tram and other metro lines along the way.",
+    "type": "metro",
+    "color": "#EA5B0C",
+    "operator": "sporveien-t-banen",
+    "routes": [
+      {
+        "stations": [
+          "NOM013",
+          "NOM016",
+          "NOM036",
+          "NOM059",
+          "NOM025",
+          "NOM060",
+          "NOM026",
+          "NOM009",
+          "NOM027",
+          "NOM014",
+          "NOM061",
+          "NOM021",
+          "NOM030",
+          "NOM057",
+          "NOM043",
+          "NOM085",
+          "NOM007",
+          "NOM055",
+          "NOM086",
+          "NOM079",
+          "NOM082",
+          "NOM089",
+          "NOM073",
+          "NOM012",
+          "NOM035",
+          "NOM069"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "no-oslo-3",
+    "code": "3",
+    "name": "T-bane 3",
+    "description": "Line 3 spans Oslo’s west and southeast, joining Kolsås with Mortensrud through the central metro network. It serves established suburban corridors at both ends and provides a direct ride across the city for commuters travelling between Bærum, downtown and the southern districts.",
+    "type": "metro",
+    "color": "#A863A5",
+    "operator": "sporveien-t-banen",
+    "routes": [
+      {
+        "stations": [
+          "NOM041",
+          "NOM053",
+          "NOM006",
+          "NOM010",
+          "NOM064",
+          "NOM045",
+          "NOM054",
+          "NOM019",
+          "NOM026",
+          "NOM009",
+          "NOM027",
+          "NOM014",
+          "NOM061",
+          "NOM021",
+          "NOM030",
+          "NOM057",
+          "NOM043",
+          "NOM085",
+          "NOM007",
+          "NOM055",
+          "NOM040",
+          "NOM062",
+          "NOM070",
+          "NOM004",
+          "NOM029",
+          "NOM046",
+          "NOM002",
+          "NOM018",
+          "NOM023",
+          "NOM001",
+          "NOM017",
+          "NOM024",
+          "NOM033"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "no-oslo-4",
+    "code": "4",
+    "name": "T-bane 4",
+    "description": "Line 4 links Bergkrystallen in Oslo’s southeast with Vestli in the northeast, crossing the centre and serving many of the city’s eastern residential areas. Its route connects major interchange stations with neighbourhoods that rely on the metro for everyday trips into town.",
+    "type": "metro",
+    "color": "#00489A",
+    "operator": "sporveien-t-banen",
+    "routes": [
+      {
+        "stations": [
+          "NOM003",
+          "NOM042",
+          "NOM034",
+          "NOM032",
+          "NOM008",
+          "NOM050",
+          "NOM039",
+          "NOM028",
+          "NOM009",
+          "NOM027",
+          "NOM014",
+          "NOM061",
+          "NOM021",
+          "NOM030",
+          "NOM057",
+          "NOM043",
+          "NOM085",
+          "NOM005",
+          "NOM015",
+          "NOM063",
+          "NOM044",
+          "NOM056",
+          "NOM052",
+          "NOM038",
+          "NOM068",
+          "NOM047",
+          "NOM067",
+          "NOM037",
+          "NOM065",
+          "NOM051",
+          "NOM031",
+          "NOM000",
+          "NOM020",
+          "NOM049",
+          "NOM048",
+          "NOM058",
+          "NOM066"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "no-oslo-5",
+    "code": "5",
+    "name": "T-bane 5",
+    "description": "Line 5 serves Oslo’s northern suburbs, with branches toward Sognsvann and Vestli connected through the central tunnel. It links university and recreation areas around Sognsvann with Groruddalen neighbourhoods, while its shared central section makes transfers across the metro network straightforward.",
+    "type": "metro",
+    "color": "#3AAA35",
+    "operator": "sporveien-t-banen",
+    "routes": [
+      {
+        "stations": [
+          "NOM066",
+          "NOM058",
+          "NOM048",
+          "NOM049",
+          "NOM020",
+          "NOM000",
+          "NOM031",
+          "NOM051",
+          "NOM065",
+          "NOM037",
+          "NOM067",
+          "NOM047",
+          "NOM068",
+          "NOM022",
+          "NOM011",
+          "NOM061",
+          "NOM021",
+          "NOM030",
+          "NOM057",
+          "NOM043",
+          "NOM085",
+          "NOM005",
+          "NOM015",
+          "NOM063",
+          "NOM044",
+          "NOM056",
+          "NOM052",
+          "NOM011",
+          "NOM061",
+          "NOM021",
+          "NOM030",
+          "NOM057",
+          "NOM043",
+          "NOM085",
+          "NOM005",
+          "NOM015",
+          "NOM063",
+          "NOM071",
+          "NOM095",
+          "NOM100",
+          "NOM081",
+          "NOM083",
+          "NOM093"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "pl-warszawa-m1",
+    "code": "M1",
+    "name": "Linia metra M1",
+    "description": "Warsaw’s first metro line runs north–south between Młociny and Kabaty, crossing the Vistula and passing through the city centre. Opened in stages between 1995 and 2008, it connects residential districts with central business areas and key rail interchanges.",
+    "type": "metro",
+    "color": "#0057B8",
+    "operator": "metro-warszawskie",
+    "routes": [
+      {
+        "stations": [
+          "PLM005",
+          "PLM004",
+          "PLM003",
+          "PLM006",
+          "PLM002",
+          "PLM026",
+          "PLM025",
+          "PLM001",
+          "PLM029",
+          "PLM024",
+          "PLM023",
+          "PLM022",
+          "PLM019",
+          "PLM020",
+          "PLM021",
+          "PLM018",
+          "PLM017",
+          "PLM014",
+          "PLM016",
+          "PLM015",
+          "PLM013"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "pl-warszawa-m2",
+    "code": "M2",
+    "name": "Linia metra M2",
+    "description": "M2 crosses Warsaw east–west from Bródno through the city centre to Bemowo, including a central crossing beneath the Vistula. Its stations connect major residential districts on both sides of the river and provide transfers to M1 and the city’s rail network.",
+    "type": "metro",
+    "color": "#C8102E",
+    "operator": "metro-warszawskie",
+    "routes": [
+      {
+        "stations": [
+          "PLM036",
+          "PLM037",
+          "PLM038",
+          "PLM028",
+          "PLM033",
+          "PLM032",
+          "PLM007",
+          "PLM008",
+          "PLM009",
+          "PLM010",
+          "PLM029",
+          "PLM011",
+          "PLM012",
+          "PLM027",
+          "PLM031",
+          "PLM030",
+          "PLM035",
+          "PLM034"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "se-stockholm-12",
+    "code": "12",
+    "name": "Nockebybanan",
+    "description": "Nockebybanan, numbered 12, is a short light rail line from Alvik to Nockeby through the residential neighbourhoods of western Stockholm. It serves areas such as Smedslätten and Ålsten, with connections to the Green metro line and Tvärbanan at Alvik.",
+    "type": "light",
+    "color": "#6F8BA5",
+    "operator": "stockholms-sparvagar",
+    "routes": [
+      {
+        "stations": [
+          "SEL040001",
+          "SEL024814",
+          "SEL024815",
+          "SEL024816",
+          "SEL024817",
+          "SEL001167",
+          "SEL024818",
+          "SEL024819",
+          "SEL024820",
+          "SEL001181"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "se-stockholm-21",
+    "code": "21",
+    "name": "Lidingöbanan",
+    "description": "Lidingöbanan connects Ropsten with Gåshaga brygga across the southern part of Lidingö island. Numbered 21, the line serves the island’s residential neighbourhoods and waterfront areas, linking them with Stockholm’s Red metro line at Ropsten.",
+    "type": "light",
+    "color": "#B66732",
+    "operator": "stockholms-sparvagar",
+    "routes": [
+      {
+        "stations": [
+          "SEL040000",
+          "SEL024788",
+          "SEL023963",
+          "SEL024789",
+          "SEL024790",
+          "SEL023962",
+          "SEL023965",
+          "SEL024791",
+          "SEL024792",
+          "SEL023964",
+          "SEL024793",
+          "SEL020756",
+          "SEL023966"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "se-stockholm-30",
+    "code": "30",
+    "name": "Tvärbanan 30",
+    "description": "Tvärbanan line 30 arcs around Stockholm’s inner suburbs from Sickla to Solna station, passing through Gullmarsplan, Årstaberg, Liljeholmen, Alvik and Sundbyberg. It connects several metro and commuter rail corridors, allowing journeys between neighbourhoods without passing through the city centre.",
+    "type": "light",
+    "color": "#D88435",
+    "operator": "stockholms-sparvagar",
+    "routes": [
+      {
+        "stations": [
+          "SEL024807",
+          "SEL024927",
+          "SEL024926",
+          "SEL024929",
+          "SEL024928",
+          "SEL040002",
+          "SEL040003",
+          "SEL024918",
+          "SEL024684",
+          "SEL024919",
+          "SEL040004",
+          "SEL024921",
+          "SEL040005",
+          "SEL024922",
+          "SEL024923",
+          "SEL024924",
+          "SEL024925",
+          "SEL040001",
+          "SEL071178",
+          "SEL064041",
+          "SEL064044",
+          "SEL064051",
+          "SEL064286",
+          "SEL064052",
+          "SEL064053",
+          "SEL040006"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "se-stockholm-31",
+    "code": "31",
+    "name": "Tvärbanan 31",
+    "description": "Tvärbanan line 31 links Alviks strand with Bromma flygplats, sharing the main Tvärbanan route as far as Norra Ulvsunda before branching toward Bromma Blocks. At Alvik it connects with the Green metro line and Nockebybanan, bringing the Bromma branch into Stockholm’s wider rail network.",
+    "type": "light",
+    "color": "#D88435",
+    "operator": "stockholms-sparvagar",
+    "routes": [
+      {
+        "stations": [
+          "SEL001105",
+          "SEL075863",
+          "SEL064041",
+          "SEL071178",
+          "SEL040001",
+          "SEL024925"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "se-stockholm-bla",
+    "code": null,
+    "name": "Blå linjen",
+    "description": "Stockholm’s Blue metro line brings routes 10 and 11 from Hjulsta and Akalla together at Västra skogen, continuing through Fridhemsplan and T-Centralen to Kungsträdgården. Its two branches connect the northwestern suburbs, including Sundbyberg, Solna and Kista, with the city centre.",
+    "type": "metro",
+    "color": "#008DCF",
+    "operator": "connecting-stockholm",
+    "routes": [
+      {
+        "code": "10",
+        "stations": [
+          "SEM021678",
+          "SEM012885",
+          "SEM021679",
+          "SEM021674",
+          "SEM021673",
+          "SEM021672",
+          "SEM021671",
+          "SEM021670",
+          "SEM021669",
+          "SEM021662",
+          "SEM021661",
+          "SEM021660",
+          "SEM020749",
+          "SEM021659"
+        ]
+      },
+      {
+        "code": "11",
+        "stations": [
+          "SEM021677",
+          "SEM021676",
+          "SEM012883",
+          "SEM021675",
+          "SEM021668",
+          "SEM021642",
+          "SEM021669",
+          "SEM021662",
+          "SEM021661",
+          "SEM021660",
+          "SEM020749",
+          "SEM021659"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "se-stockholm-grona",
+    "code": null,
+    "name": "Gröna linjen",
+    "description": "Stockholm’s Green metro line links the western suburbs around Hässelby strand with three southern branches to Skarpnäck, Farsta strand and Hagsätra, numbered 17, 18 and 19. The shared corridor passes through Alvik, Odenplan, T-Centralen, Gamla stan and Södermalm before the branches separate south of Gullmarsplan.",
+    "type": "metro",
+    "color": "#15A64B",
+    "operator": "connecting-stockholm",
+    "routes": [
+      {
+        "code": "17",
+        "stations": [
+          "SEM021691",
+          "SEM021692",
+          "SEM021693",
+          "SEM021694",
+          "SEM021695",
+          "SEM021704",
+          "SEM021705",
+          "SEM021655",
+          "SEM021654",
+          "SEM020101",
+          "SEM021653",
+          "SEM020749",
+          "SEM021667",
+          "SEM021666",
+          "SEM021013",
+          "SEM021665",
+          "SEM021661",
+          "SEM021664",
+          "SEM021663",
+          "SEM020755",
+          "SEM021690",
+          "SEM021689",
+          "SEM020581",
+          "SEM021688",
+          "SEM021687",
+          "SEM021686",
+          "SEM021685",
+          "SEM021684",
+          "SEM021683",
+          "SEM021682",
+          "SEM021681",
+          "SEM021680"
+        ]
+      },
+      {
+        "code": "18",
+        "stations": [
+          "SEM021680",
+          "SEM021681",
+          "SEM021682",
+          "SEM021683",
+          "SEM021684",
+          "SEM021685",
+          "SEM021686",
+          "SEM021687",
+          "SEM021688",
+          "SEM020581",
+          "SEM021689",
+          "SEM021690",
+          "SEM020755",
+          "SEM021663",
+          "SEM021664",
+          "SEM021661",
+          "SEM021665",
+          "SEM021013",
+          "SEM021666",
+          "SEM021667",
+          "SEM020749",
+          "SEM021653",
+          "SEM020101",
+          "SEM021654",
+          "SEM021655",
+          "SEM021705",
+          "SEM021704",
+          "SEM021703",
+          "SEM021702",
+          "SEM021701",
+          "SEM021700",
+          "SEM021699",
+          "SEM021698",
+          "SEM021697",
+          "SEM021696"
+        ]
+      },
+      {
+        "code": "19",
+        "stations": [
+          "SEM021714",
+          "SEM021713",
+          "SEM021712",
+          "SEM021711",
+          "SEM021710",
+          "SEM021709",
+          "SEM021708",
+          "SEM021707",
+          "SEM021706",
+          "SEM021705",
+          "SEM021655",
+          "SEM021654",
+          "SEM020101",
+          "SEM021653",
+          "SEM020749",
+          "SEM021667",
+          "SEM021666",
+          "SEM021013",
+          "SEM021665",
+          "SEM021661",
+          "SEM021664",
+          "SEM021663",
+          "SEM020755",
+          "SEM021690",
+          "SEM021689",
+          "SEM020581",
+          "SEM021688",
+          "SEM021687",
+          "SEM021686",
+          "SEM021685",
+          "SEM021684",
+          "SEM021683",
+          "SEM021682",
+          "SEM021681",
+          "SEM021680"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "se-stockholm-roda",
+    "code": null,
+    "name": "Röda linjen",
+    "description": "Stockholm’s Red metro line combines route 13 between Norsborg and Ropsten with route 14 between Fruängen and Mörby centrum. The routes share the central corridor through Liljeholmen, Södermalm, Gamla stan and T-Centralen, connecting southwestern suburbs with the northeastern side of the city.",
+    "type": "metro",
+    "color": "#DC1F26",
+    "operator": "connecting-stockholm",
+    "routes": [
+      {
+        "code": "13",
+        "stations": [
+          "SEM021733",
+          "SEM021732",
+          "SEM021731",
+          "SEM021730",
+          "SEM021729",
+          "SEM021728",
+          "SEM021727",
+          "SEM021726",
+          "SEM021725",
+          "SEM021724",
+          "SEM021723",
+          "SEM021722",
+          "SEM021721",
+          "SEM021720",
+          "SEM004046",
+          "SEM021658",
+          "SEM021657",
+          "SEM021656",
+          "SEM020101",
+          "SEM021653",
+          "SEM020749",
+          "SEM021651",
+          "SEM021650",
+          "SEM021649",
+          "SEM020757"
+        ]
+      },
+      {
+        "code": "14",
+        "stations": [
+          "SEM021719",
+          "SEM021718",
+          "SEM021717",
+          "SEM021716",
+          "SEM021715",
+          "SEM004046",
+          "SEM021658",
+          "SEM021657",
+          "SEM021656",
+          "SEM020101",
+          "SEM021653",
+          "SEM020749",
+          "SEM021651",
+          "SEM021647",
+          "SEM011606",
+          "SEM021645",
+          "SEM021644",
+          "SEM010232",
+          "SEM000716"
+        ]
+      }
+    ]
+  }
+]
