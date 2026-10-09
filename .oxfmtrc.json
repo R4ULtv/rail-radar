@@ -1,5 +1,11 @@
 {
   "$schema": "./node_modules/oxfmt/configuration_schema.json",
-  "ignorePatterns": ["**/codes/*.json", "**/routeTree.gen.ts", "**/worker-configuration.d.ts"],
+  "ignorePatterns": [
+    "**/codes/*.json",
+    "**/routeTree.gen.ts",
+    "**/worker-configuration.d.ts",
+    "**/data/src/lines.json",
+    "**/data/src/lines/*.json"
+  ],
   "svelte": true
 }
