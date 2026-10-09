@@ -16,6 +16,8 @@ import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as TermsOfServiceRouteImport } from './routes/terms-of-service'
 import { Route as DonateIndexRouteImport } from './routes/donate/index'
 import { Route as DonateSuccessRouteImport } from './routes/donate/success'
+import { Route as LinesIndexRouteImport } from './routes/lines/index'
+import { Route as LinesIdRouteImport } from './routes/lines/$id'
 import { Route as MediaOgRouteImport } from './routes/media/og'
 import { Route as OperatorsIndexRouteImport } from './routes/operators/index'
 import { Route as OperatorsSlugRouteImport } from './routes/operators/$slug'
@@ -60,6 +62,16 @@ const DonateIndexRoute = DonateIndexRouteImport.update({
 const DonateSuccessRoute = DonateSuccessRouteImport.update({
   id: '/donate/success',
   path: '/donate/success',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LinesIndexRoute = LinesIndexRouteImport.update({
+  id: '/lines/',
+  path: '/lines/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LinesIdRoute = LinesIdRouteImport.update({
+  id: '/lines/$id',
+  path: '/lines/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
 const MediaOgRoute = MediaOgRouteImport.update({
@@ -122,6 +134,7 @@ export interface FileRoutesByFullPath {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/terms-of-service': typeof TermsOfServiceRoute
   '/donate/success': typeof DonateSuccessRoute
+  '/lines/$id': typeof LinesIdRoute
   '/media/og': typeof MediaOgRoute
   '/operators/$slug': typeof OperatorsSlugRoute
   '/report/2026-04-28': typeof Report20260428Route
@@ -129,6 +142,7 @@ export interface FileRoutesByFullPath {
   '/station/$id': typeof StationIdRoute
   '/stations/$country': typeof StationsCountryRoute
   '/donate/': typeof DonateIndexRoute
+  '/lines/': typeof LinesIndexRoute
   '/operators/': typeof OperatorsIndexRoute
   '/stations/': typeof StationsIndexRoute
   '/media/stations/$stationId/photos': typeof MediaStationsStationIdPhotosRoute
@@ -141,6 +155,7 @@ export interface FileRoutesByTo {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/terms-of-service': typeof TermsOfServiceRoute
   '/donate/success': typeof DonateSuccessRoute
+  '/lines/$id': typeof LinesIdRoute
   '/media/og': typeof MediaOgRoute
   '/operators/$slug': typeof OperatorsSlugRoute
   '/report/2026-04-28': typeof Report20260428Route
@@ -148,6 +163,7 @@ export interface FileRoutesByTo {
   '/station/$id': typeof StationIdRoute
   '/stations/$country': typeof StationsCountryRoute
   '/donate': typeof DonateIndexRoute
+  '/lines': typeof LinesIndexRoute
   '/operators': typeof OperatorsIndexRoute
   '/stations': typeof StationsIndexRoute
   '/media/stations/$stationId/photos': typeof MediaStationsStationIdPhotosRoute
@@ -161,6 +177,7 @@ export interface FileRoutesById {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/terms-of-service': typeof TermsOfServiceRoute
   '/donate/success': typeof DonateSuccessRoute
+  '/lines/$id': typeof LinesIdRoute
   '/media/og': typeof MediaOgRoute
   '/operators/$slug': typeof OperatorsSlugRoute
   '/report/2026-04-28': typeof Report20260428Route
@@ -168,6 +185,7 @@ export interface FileRoutesById {
   '/station/$id': typeof StationIdRoute
   '/stations/$country': typeof StationsCountryRoute
   '/donate/': typeof DonateIndexRoute
+  '/lines/': typeof LinesIndexRoute
   '/operators/': typeof OperatorsIndexRoute
   '/stations/': typeof StationsIndexRoute
   '/media/stations/$stationId/photos': typeof MediaStationsStationIdPhotosRoute
@@ -182,6 +200,7 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/terms-of-service'
     | '/donate/success'
+    | '/lines/$id'
     | '/media/og'
     | '/operators/$slug'
     | '/report/2026-04-28'
@@ -189,6 +208,7 @@ export interface FileRouteTypes {
     | '/station/$id'
     | '/stations/$country'
     | '/donate/'
+    | '/lines/'
     | '/operators/'
     | '/stations/'
     | '/media/stations/$stationId/photos'
@@ -201,6 +221,7 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/terms-of-service'
     | '/donate/success'
+    | '/lines/$id'
     | '/media/og'
     | '/operators/$slug'
     | '/report/2026-04-28'
@@ -208,6 +229,7 @@ export interface FileRouteTypes {
     | '/station/$id'
     | '/stations/$country'
     | '/donate'
+    | '/lines'
     | '/operators'
     | '/stations'
     | '/media/stations/$stationId/photos'
@@ -220,6 +242,7 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/terms-of-service'
     | '/donate/success'
+    | '/lines/$id'
     | '/media/og'
     | '/operators/$slug'
     | '/report/2026-04-28'
@@ -227,6 +250,7 @@ export interface FileRouteTypes {
     | '/station/$id'
     | '/stations/$country'
     | '/donate/'
+    | '/lines/'
     | '/operators/'
     | '/stations/'
     | '/media/stations/$stationId/photos'
@@ -240,6 +264,7 @@ export interface RootRouteChildren {
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   TermsOfServiceRoute: typeof TermsOfServiceRoute
   DonateSuccessRoute: typeof DonateSuccessRoute
+  LinesIdRoute: typeof LinesIdRoute
   MediaOgRoute: typeof MediaOgRoute
   OperatorsSlugRoute: typeof OperatorsSlugRoute
   Report20260428Route: typeof Report20260428Route
@@ -247,6 +272,7 @@ export interface RootRouteChildren {
   StationIdRoute: typeof StationIdRoute
   StationsCountryRoute: typeof StationsCountryRoute
   DonateIndexRoute: typeof DonateIndexRoute
+  LinesIndexRoute: typeof LinesIndexRoute
   OperatorsIndexRoute: typeof OperatorsIndexRoute
   StationsIndexRoute: typeof StationsIndexRoute
   MediaStationsStationIdPhotosRoute: typeof MediaStationsStationIdPhotosRoute
@@ -302,6 +328,20 @@ declare module '@tanstack/react-router' {
       path: '/donate/success'
       fullPath: '/donate/success'
       preLoaderRoute: typeof DonateSuccessRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/lines/': {
+      id: '/lines/'
+      path: '/lines'
+      fullPath: '/lines/'
+      preLoaderRoute: typeof LinesIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/lines/$id': {
+      id: '/lines/$id'
+      path: '/lines/$id'
+      fullPath: '/lines/$id'
+      preLoaderRoute: typeof LinesIdRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/media/og': {
@@ -384,6 +424,7 @@ const rootRouteChildren: RootRouteChildren = {
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   TermsOfServiceRoute: TermsOfServiceRoute,
   DonateSuccessRoute: DonateSuccessRoute,
+  LinesIdRoute: LinesIdRoute,
   MediaOgRoute: MediaOgRoute,
   OperatorsSlugRoute: OperatorsSlugRoute,
   Report20260428Route: Report20260428Route,
@@ -391,6 +432,7 @@ const rootRouteChildren: RootRouteChildren = {
   StationIdRoute: StationIdRoute,
   StationsCountryRoute: StationsCountryRoute,
   DonateIndexRoute: DonateIndexRoute,
+  LinesIndexRoute: LinesIndexRoute,
   OperatorsIndexRoute: OperatorsIndexRoute,
   StationsIndexRoute: StationsIndexRoute,
   MediaStationsStationIdPhotosRoute: MediaStationsStationIdPhotosRoute,

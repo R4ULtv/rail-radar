@@ -9,6 +9,7 @@ import viteReact from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
 
 type OperatorRecord = { slug: string };
+type LineRecord = { id: string };
 type StationFeatureRecord = {
   properties: { id: string; importance: 1 | 2 | 3 | 4; type: "rail" | "metro" | "light" };
 };
@@ -16,6 +17,10 @@ type StationFeatureRecord = {
 const operatorRecords = JSON.parse(
   readFileSync(new URL("../../packages/data/src/operators.json", import.meta.url), "utf8"),
 ) as OperatorRecord[];
+
+const lineRecords = JSON.parse(
+  readFileSync(new URL("../../packages/data/src/lines.json", import.meta.url), "utf8"),
+) as LineRecord[];
 
 const stationRecords = JSON.parse(
   readFileSync(new URL("../../packages/data/src/stations.geojson", import.meta.url), "utf8"),
@@ -25,6 +30,7 @@ const prerenderPages = [
   "/",
   "/app",
   "/donate",
+  "/lines",
   "/operators",
   "/privacy-policy",
   "/sitemap.xml",
@@ -32,6 +38,7 @@ const prerenderPages = [
   "/terms-of-service",
   "/report/2026-04-28",
   "/report/2026-07-24",
+  ...lineRecords.map(({ id }) => `/lines/${id}`),
   ...operatorRecords.map(({ slug }) => `/operators/${slug}`),
   ...COUNTRY_SLUGS.map((slug) => `/stations/${slug}`),
   ...stationRecords.features

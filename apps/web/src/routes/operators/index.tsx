@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { createFileRoute, Link, useHydrated, useNavigate } from "@tanstack/react-router";
 import { metadataToHead, type Metadata } from "@/lib/metadata";
+import { getLineStationIds, lines } from "@repo/data/lines";
 import { operators, type Operator, type OperatorType } from "@repo/data/operators";
 import { COUNTRY_MAP, COUNTRY_CODES } from "@repo/data/countries";
 import { Badge } from "@repo/ui/components/badge";
@@ -96,6 +97,16 @@ function countByType(list: Operator[]): { type: OperatorType; count: number }[] 
 }
 
 const typeCounts = countByType(operators);
+
+/** Metro and light rail lines per operator, with the distinct stations they serve. */
+const lineStats = new Map<string, { lines: number; stations: Set<string> }>();
+for (const line of lines) {
+  if (!line.operator) continue;
+  const stats = lineStats.get(line.operator) ?? { lines: 0, stations: new Set() };
+  stats.lines += 1;
+  for (const id of getLineStationIds(line)) stats.stations.add(id);
+  lineStats.set(line.operator, stats);
+}
 
 /** Lowercase without accents, so "mobilita" finds "Brescia Mobilità". */
 function normalize(text: string): string {
@@ -442,6 +453,7 @@ function ModeFilter({
 
 function OperatorCard({ operator }: { operator: Operator }) {
   const types = sortOperatorTypes(operator.operatorTypes);
+  const stats = lineStats.get(operator.slug);
 
   return (
     <Link to="/operators/$slug" params={{ slug: operator.slug }} className="group">
@@ -478,13 +490,22 @@ function OperatorCard({ operator }: { operator: Operator }) {
               </div>
             </div>
             <div className="mt-1 flex flex-wrap gap-1">
-              {operator.serviceTypes.slice(0, 2).map((type) => (
-                <CardBadge key={type}>{serviceTypeLabels[type] ?? type}</CardBadge>
-              ))}
-              {operator.serviceTypes.length > 2 && (
-                <span className="text-[10px] text-muted-foreground self-center">
-                  +{operator.serviceTypes.length - 2}
-                </span>
+              {stats ? (
+                <>
+                  <CardBadge>{`${stats.lines} line${stats.lines === 1 ? "" : "s"}`}</CardBadge>
+                  <CardBadge>{`${stats.stations.size} stations`}</CardBadge>
+                </>
+              ) : (
+                <>
+                  {operator.serviceTypes.slice(0, 2).map((type) => (
+                    <CardBadge key={type}>{serviceTypeLabels[type] ?? type}</CardBadge>
+                  ))}
+                  {operator.serviceTypes.length > 2 && (
+                    <span className="text-[10px] text-muted-foreground self-center">
+                      +{operator.serviceTypes.length - 2}
+                    </span>
+                  )}
+                </>
               )}
             </div>
           </div>

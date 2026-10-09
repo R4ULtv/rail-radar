@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { createServerOnlyFn } from "@tanstack/react-start";
 import { stations } from "@repo/data/stations";
 import { getStationsByCountry } from "@repo/data/directory";
+import { lines } from "@repo/data/lines";
 import { operators } from "@repo/data/operators";
 import { COUNTRY_CODES, COUNTRY_SLUG } from "@repo/data/countries";
 import { env } from "@/lib/env";
@@ -31,6 +32,7 @@ const sitemapXml = createServerOnlyFn(() => {
   const entries: SitemapEntry[] = [
     { path: "/", changeFrequency: "daily", priority: 1 },
     { path: "/operators", changeFrequency: "monthly", priority: 0.6 },
+    { path: "/lines", changeFrequency: "monthly", priority: 0.6 },
     { path: "/stations", changeFrequency: "monthly", priority: 0.7 },
     { path: "/app", changeFrequency: "monthly", priority: 0.5 },
     { path: "/donate", changeFrequency: "monthly", priority: 0.5 },
@@ -60,6 +62,11 @@ const sitemapXml = createServerOnlyFn(() => {
         changeFrequency: "daily",
         priority: 0.7,
       })),
+    ...lines.map((line): SitemapEntry => ({
+      path: `/lines/${line.id}`,
+      changeFrequency: "monthly",
+      priority: 0.6,
+    })),
     ...operators.map((operator): SitemapEntry => ({
       path: `/operators/${operator.slug}`,
       changeFrequency: "monthly",
