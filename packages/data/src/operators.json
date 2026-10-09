@@ -3837,5 +3837,97 @@
         "type": "timetables"
       }
     ]
+  },
+  {
+    "slug": "stib-mivb",
+    "name": "STIB-MIVB",
+    "logoPath": "be/stib-mivb",
+    "countries": ["be"],
+    "operatorTypes": ["metro"],
+    "bounds": [4.257, 50.802, 4.474, 50.907],
+    "description": "STIB-MIVB operates Brussels metro lines 1, 2, 5 and 6, as well as the city’s tram and bus networks. The metro connects the city centre with Stockel, Erasme, Herrmann-Debroux and Roi Baudouin.",
+    "website": "https://www.stib-mivb.be",
+    "founded": null,
+    "headquarters": "Brussels, Belgium",
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["commuter"],
+    "parentCompany": null,
+    "links": [
+      {
+        "label": "Official Site",
+        "url": "https://www.stib-mivb.be",
+        "type": "website"
+      }
+    ]
+  },
+  {
+    "slug": "letec",
+    "name": "LETEC",
+    "logoPath": "be/letec",
+    "countries": ["be"],
+    "operatorTypes": ["light-rail"],
+    "bounds": [4.261, 50.39, 4.513, 50.487],
+    "description": "LETEC operates Wallonia’s public transport network, including the Charleroi light metro. During the Villette works, M2 connects Anderlues with Gare Centrale, M3 connects Gosselies with Gare Centrale, and M4 connects Soleilmont with Ouest. M1 is temporarily replaced by M2; the future M5 is not yet in passenger service.",
+    "website": "https://www.letec.be",
+    "founded": null,
+    "headquarters": "Namur, Belgium",
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["commuter"],
+    "parentCompany": null,
+    "links": [
+      {
+        "label": "Official Site",
+        "url": "https://www.letec.be",
+        "type": "website"
+      }
+    ]
+  },
+  {
+    "slug": "connecting-stockholm",
+    "name": "Connecting Stockholm",
+    "logoPath": "se/connecting-stockholm",
+    "countries": ["se"],
+    "operatorTypes": ["metro"],
+    "bounds": [17.804, 59.226, 18.144, 59.425],
+    "description": "Connecting Stockholm operates Stockholm’s metro for SL, running the seven numbered lines of the blue, red and green networks. It took over metro operations on 2 November 2025.",
+    "website": "https://connectingstockholm.se",
+    "founded": null,
+    "headquarters": "Stockholm, Sweden",
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["commuter"],
+    "parentCompany": "Go-Ahead Group / ComfortDelGro",
+    "links": [
+      {
+        "label": "Official Site",
+        "url": "https://connectingstockholm.se",
+        "type": "website"
+      }
+    ]
+  },
+  {
+    "slug": "stockholms-sparvagar",
+    "name": "Stockholms Spårvägar",
+    "logoPath": "se/stockholms-sparvagar",
+    "countries": ["se"],
+    "operatorTypes": ["light-rail"],
+    "bounds": [17.909, 59.283, 18.244, 59.374],
+    "description": "AB Stockholms Spårvägar operates Stockholm’s suburban light rail for SL, including Nockebybanan line 12, Lidingöbanan line 21 and Tvärbanan lines 30 and 31. It also operates Spårväg City and Saltsjöbanan, which are outside this line import.",
+    "website": "https://stockholmssparvagar.se",
+    "founded": null,
+    "headquarters": "Stockholm, Sweden",
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["commuter"],
+    "parentCompany": "Bergkvara Group",
+    "links": [
+      {
+        "label": "Official Site",
+        "url": "https://stockholmssparvagar.se",
+        "type": "website"
+      }
+    ]
   }
 ]
