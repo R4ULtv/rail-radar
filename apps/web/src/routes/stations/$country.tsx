@@ -139,7 +139,7 @@ function CountryStationsPage({
               >
                 <Card
                   size="sm"
-                  className="h-full transition-[background-color,box-shadow,transform] ease-[cubic-bezier(0.23,1,0.32,1)] duration-200 lg:group-hover:bg-muted/40 lg:group-hover:ring-foreground/20 group-active:scale-[0.98]"
+                  className="h-full transition-[background-color,box-shadow,transform] ease-[cubic-bezier(0.23,1,0.32,1)] duration-200 lg:group-hover:bg-[color-mix(in_oklab,var(--muted)_50%,var(--card))] lg:group-hover:ring-foreground/20 dark:lg:group-hover:ring-foreground/20 group-active:scale-[0.98]"
                 >
                   <CardContent className="flex items-center gap-3">
                     <TrainFrontIcon className="size-5 shrink-0 text-muted-foreground lg:group-hover:text-foreground" />
