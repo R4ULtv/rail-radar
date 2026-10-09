@@ -4,6 +4,13 @@ import { operators, operatorBySlug, type Operator } from "@repo/data/operators";
 import { COUNTRY_MAP, type CountryCode } from "@repo/data/countries";
 import { Badge } from "@repo/ui/components/badge";
 import { Card, CardContent } from "@repo/ui/components/card";
+import {
+  operatorTypeColors,
+  operatorTypeLabels,
+  OperatorTypeMarker,
+  operatorRole,
+  sortOperatorTypes,
+} from "@/lib/operator-types";
 import { staticAssetUrl } from "@/lib/static-assets";
 import { env } from "@/lib/env";
 import {
@@ -45,35 +52,36 @@ function getOperatorMetadata(slug: string): Metadata {
 
   const countries = formatCountryList(getTrackedCountries(operator));
   const description = `${operator.name} is tracked on Rail Radar in ${countries}. ${operator.description}`;
+  const title = `${operator.name} - ${operatorRole(operator.operatorTypes)}`;
 
   return {
-    title: `${operator.name} - Train Operator`,
+    title,
     description,
     alternates: {
       canonical: `/operators/${slug}`,
     },
     openGraph: {
-      title: `${operator.name} - Train Operator | Rail Radar`,
+      title: `${title} | Rail Radar`,
       description,
       images: [
         {
           url: "/assets/social/operators.webp",
           width: 1200,
           height: 630,
-          alt: "Rail Radar - Train operator directory across Europe",
+          alt: "Rail Radar - Rail operator directory across Europe",
         },
       ],
     },
     twitter: {
       card: "summary",
-      title: `${operator.name} - Train Operator | Rail Radar`,
+      title: `${title} | Rail Radar`,
       description,
       images: [
         {
           url: "/assets/social/operators.webp",
           width: 1200,
           height: 630,
-          alt: "Rail Radar - Train operator directory across Europe",
+          alt: "Rail Radar - Rail operator directory across Europe",
         },
       ],
     },
@@ -267,6 +275,22 @@ function OperatorPage({ slug }: { slug: string }) {
                 </>
               )}
             </div>
+            <div className="mt-3 flex flex-wrap gap-1.5">
+              {sortOperatorTypes(operator.operatorTypes).map((type) => (
+                <Link
+                  key={type}
+                  to="/operators"
+                  search={{ type }}
+                  className="inline-flex h-6 items-center gap-1.5 rounded-3xl py-0.5 pr-2.5 pl-1 text-xs font-medium transition-[filter] duration-150 ease-out hover:brightness-125"
+                  style={{
+                    backgroundColor: `color-mix(in oklab, ${operatorTypeColors[type]} 18%, transparent)`,
+                  }}
+                >
+                  <OperatorTypeMarker type={type} className="size-4.5" />
+                  {operatorTypeLabels[type]}
+                </Link>
+              ))}
+            </div>
           </div>
         </div>
 
@@ -449,9 +473,10 @@ function OperatorPage({ slug }: { slug: string }) {
       <div className="sr-only">
         <h2>About {operator.name}</h2>
         <p>
-          {operator.name} is a train operator serving {formatCountryList(trackedCountries)}. View
-          trains operated by {operator.name} on Rail Radar, including real-time departures,
-          arrivals, delays, and platform information.{" "}
+          {operator.name} is a {operatorRole(operator.operatorTypes).toLowerCase()} serving{" "}
+          {formatCountryList(trackedCountries)}.{" "}
+          {operator.operatorTypes.includes("passenger") &&
+            `View trains operated by ${operator.name} on Rail Radar, including real-time departures, arrivals, delays, and platform information. `}
           {operator.serviceTypes.map((t) => serviceTypeLabels[t] ?? t).join(", ")} services
           available.
         </p>
