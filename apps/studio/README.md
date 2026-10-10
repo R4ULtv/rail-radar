@@ -1,6 +1,6 @@
 # Rail Radar Studio
 
-Admin tool for managing railway station data across Europe. Add missing coordinates, fix station names, create stations, and identify duplicates — then ship the changes back as a pull request.
+Admin tool for managing railway stations and transit lines across Europe. Use the Stations and Lines workspaces to curate the shared datasets.
 
 ## Tech Stack
 
@@ -48,7 +48,7 @@ pnpm --filter=studio preview
 - Interactive map with all stations, filterable by type (rail / metro / light) and country
 - Sidebar search and filtering
 - Drag markers to fine-tune coordinates
-- Edit station name, type, and importance
+- Edit station name, type and importance
 - Create new stations by clicking the map, with ID validation:
   - 2-3 letter country prefix + 3+ digits (typically 6-8)
   - duplicate-ID detection with the conflicting station's name
@@ -78,10 +78,54 @@ pnpm --filter=studio preview
 
 Changes are persisted to `localStorage`, so closing the tab won't lose work.
 
-## Data
+## Transit lines
+
+Open **Lines** in the workspace navigation, or visit `/lines`.
+
+- Browse all lines on the map; search by line, operator or station, and filter metro/light rail.
+- Lines and unlinked stations use the Stations sidebar pattern, with virtualized rows, shared ScrollArea, and truncated names. Use arrow keys, Home/End to navigate, or `⌘K` / `Ctrl+K` to search.
+- Select a line to edit its ID, name, description, public code, operator slug, type and color (`#RRGGBB`, typed or picked). Press `Esc` to close the station card, then the editor.
+- Routes are numbered branches. Select one to see its start, finish and full ordered stop list. Add existing stations, reorder/remove stops, and add/remove branches. A stop can appear again for rings and loops, but not twice in a row. A route that runs within another (a short trip) is rejected on save. Stations may belong to multiple lines and routes.
+- Each line has one track for all its routes. In local mode, edit it as GeoJSON `MultiLineString` with **Edit geometry**, then **Apply geometry**. Stop edits do not automatically redraw the track.
+- **Unlinked** lists existing metro/light stations in covered countries that have no saved line assignment. Select one and add it to the selected route, or use the editor's station search.
+- Create or delete lines, import `lines.json`, and export the complete dataset.
+- Routes list only open stops. When a station under construction opens, add it to its
+  route from **Unlinked** or the editor's station search.
+
+In local development, **Save line** writes atomically to `packages/data/src/lines.json`
+and the line's track to `packages/data/src/lines/<line-id>.json` through the local-only
+`/api/lines` middleware. Renaming a line moves its track file; deleting a line removes it.
+Unknown station IDs, duplicate line IDs, short trips, malformed geometry, unsupported
+fields and conflicting on-disk edits are rejected. Reload to pick up external changes.
+Station names and positions are read from `stations.geojson`, never copied into lines.
+Review writes with `git diff`. Stations used by a line cannot be deleted from the Stations
+workspace until their references are removed from the line's routes. In browser mode the
+check uses the bundled lines.
+
+In browser mode, the workspace starts with the bundled datasets and loads each line's
+track file. Saves stay in memory and the header shows **Not exported** until you export `lines.json`;
+leaving, reloading or importing asks first. Track
+edits and line renames need local mode, since the export contains only `lines.json`, so
+the Line ID of a saved line is locked there.
+Importing a lines file also switches to browser editing, including during local
+development. Unsaved draft changes prompt before switching lines or leaving the workspace.
+
+Run the persistence and conflict tests with Node 22.18+:
+
+```sh
+node --test apps/studio/tests/lines-api.test.mjs packages/data/tests/lines.test.mjs
+```
+
+## Station data
 
 Station data lives in `packages/data/src/stations.geojson` and is shared with the rest of the monorepo via `@repo/data`.
 
 Studio rounds new and edited coordinates, including JSON and CSV imports, to at most five decimal
 places. Coordinate inputs use a `0.00001` step, and the Wikipedia panel and status bar display five
 decimal places. Saved and exported numeric coordinates omit trailing zeros.
+
+See the shared data package's README for the line schema and Genova source notes, and the
+[Italy station–line audit](../../packages/data/docs/italy-station-line-audit.md)
+for the reviewed Rome, Catanzaro and Naples data. Unlinked lists six stations under
+construction until they open, plus three FL4 railway duplicates pending canonical
+station cleanup.

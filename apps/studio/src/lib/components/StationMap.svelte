@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { Station } from "@repo/data";
-  import * as maplibregl from "maplibre-gl";
+  import * as maplibregl from "$lib/maplibre";
   import type { ExpressionSpecification, GeoJSONSource, Map, Marker } from "maplibre-gl";
   import { onDestroy, onMount } from "svelte";
   import { STATION_TYPE_COLOR } from "$lib/station-colors";
@@ -238,6 +238,8 @@
       maxZoom: 18,
       attributionControl: false,
     });
+    const observer = new ResizeObserver(() => map?.resize());
+    observer.observe(container!);
 
     map.setMissingStyleImageResolver((id) => {
       if (!map || map.hasImage(id)) return;
@@ -299,6 +301,7 @@
       if (isAddingStation) onMapClick(lat, lng);
       else if (isPlacingStation) onSetStationLocation(lat, lng);
     });
+    return () => observer.disconnect();
   });
 
   onDestroy(() => {

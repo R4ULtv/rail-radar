@@ -1,7 +1,7 @@
 import fs from "node:fs/promises";
 import path from "node:path";
 import type { Connect, Plugin } from "vite";
-import type { StationFeatureCollection } from "@repo/data";
+import type { Line, StationFeatureCollection } from "@repo/data";
 import {
   applyStationUpdates,
   featureToStation,
@@ -10,8 +10,10 @@ import {
   stationToFeature,
   validateGeojson,
 } from "../src/lib/stations.ts";
+import { getStationInUseError } from "../src/lib/line-usage.ts";
 
 const DATA_FILE_PATH = path.resolve(process.cwd(), "../../packages/data/src/stations.geojson");
+const LINES_FILE_PATH = path.resolve(process.cwd(), "../../packages/data/src/lines.json");
 
 async function readGeojsonFile(): Promise<StationFeatureCollection> {
   const content = await fs.readFile(DATA_FILE_PATH, "utf-8");
@@ -119,6 +121,9 @@ export function localStationApi(): Plugin {
             }
 
             if (req.method === "DELETE") {
+              const lines: Line[] = JSON.parse(await fs.readFile(LINES_FILE_PATH, "utf8"));
+              const inUseError = getStationInUseError(lines, id);
+              if (inUseError) return send(res, 409, { error: inUseError });
               const geojson = await readGeojsonFile();
               const index = geojson.features.findIndex((f) => f.properties.id === id);
               if (index === -1) return send(res, 404, { error: "Station not found" });

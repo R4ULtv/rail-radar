@@ -1,5 +1,6 @@
 import type { Station, StationFeatureCollection } from "@repo/data";
 import { get, writable } from "svelte/store";
+import { getStationInUseError } from "$lib/line-usage";
 import {
   applyStationUpdates,
   geojsonToStations,
@@ -317,6 +318,10 @@ function createStationStore() {
         return station;
       }
 
+      // Browser lines are edited separately, so guard against the bundled dataset.
+      const { lines } = await import("@repo/data/lines");
+      const inUseError = getStationInUseError(lines, id);
+      if (inUseError) throw new Error(inUseError);
       store.update((current) => ({
         ...current,
         stations: current.stations.filter((item) => item.id !== id),

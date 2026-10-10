@@ -6,9 +6,9 @@
   let { children } = $props();
 
   const siteName = "Rail Radar";
-  const title = "Rail Studio - Station Manager";
+  const title = "Rail Studio - Stations and Lines";
   const description =
-    "Contributor workspace for curating Rail Radar's train station dataset across Europe.";
+    "Contributor workspace for curating Rail Radar's stations and transit lines across Europe.";
   const url = "https://studio.railradar24.com";
   const image = `${url}/og-image.webp`;
   const posthogKey = import.meta.env.PUBLIC_POSTHOG_KEY;
