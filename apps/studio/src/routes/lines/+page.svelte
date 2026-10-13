@@ -7,13 +7,12 @@
     validateLines,
   } from "@repo/data/lines";
   import { beforeNavigate } from "$app/navigation";
-  import { CheckIcon, PlusIcon, XIcon } from "@lucide/svelte";
   import { onMount } from "svelte";
-  import LineBadge from "$lib/components/LineBadge.svelte";
   import LineEditPanel from "$lib/components/LineEditPanel.svelte";
   import LineHeaderBar from "$lib/components/LineHeaderBar.svelte";
   import LineMap from "$lib/components/LineMap.svelte";
   import LineSidebar from "$lib/components/LineSidebar.svelte";
+  import LineStationCard from "$lib/components/LineStationCard.svelte";
   import LineStatusBar from "$lib/components/LineStatusBar.svelte";
   import { Button } from "$lib/components/ui/button";
   import { emptyGeometry, loadBundledGeometries } from "$lib/line-geometry";
@@ -104,13 +103,6 @@
   );
   const focusedStation = $derived(focusedStationId ? stationById.get(focusedStationId) : null);
   const selectedRoute = $derived(draft ? (draft.routes[routeIndex] ?? null) : null);
-  // Rings and loops revisit stops, so only an immediate repeat is blocked.
-  const focusedOnRoute = $derived(
-    !!focusedStationId && !!selectedRoute?.stations.includes(focusedStationId),
-  );
-  const focusedIsLastStop = $derived(
-    !!focusedStationId && selectedRoute?.stations.at(-1) === focusedStationId,
-  );
   const stateLabel = $derived(!draft ? "Browse" : original ? "Editing" : "Adding");
 
   function showToast(text: string) {
@@ -463,73 +455,16 @@
         {/if}
 
         {#if focusedStation}
-          {@const stationLines = index.getStationLines(focusedStation.id)}
-          <div
-            class="absolute left-3 top-3 z-10 w-72 max-w-[calc(100%-1.5rem)] border border-border bg-card/95 text-card-foreground shadow-xl backdrop-blur"
-          >
-            <div class="flex items-start justify-between gap-3 border-b border-border px-3 py-2.5">
-              <div class="min-w-0">
-                <div class="font-mono text-[10px] uppercase tracking-wider text-muted-foreground">
-                  Station
-                </div>
-                <h3 class="mt-0.5 truncate text-sm font-semibold">{focusedStation.name}</h3>
-                <p class="mt-0.5 truncate font-mono text-[11px] text-muted-foreground">
-                  {focusedStation.id}
-                </p>
-              </div>
-              <Button
-                variant="ghost"
-                size="icon-xs"
-                aria-label="Close station details"
-                onclick={() => (focusedStationId = null)}
-              >
-                <XIcon class="size-3" />
-              </Button>
-            </div>
-
-            <div class="flex flex-col gap-1 px-1.5 py-1.5">
-              <div
-                class="px-1.5 pb-0.5 font-mono text-[10px] uppercase tracking-wider text-muted-foreground"
-              >
-                Lines · {stationLines.length}
-              </div>
-              {#each stationLines as line (line.id)}
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  class="h-8 w-full justify-start gap-2 px-1.5 text-left font-normal text-muted-foreground hover:text-foreground"
-                  title={`${line.name}\n${line.operator ?? line.id}`}
-                  onclick={() => selectLine(line.id)}
-                >
-                  <LineBadge {line} />
-                  <span class="min-w-0 flex-1 truncate text-xs">{line.name}</span>
-                </Button>
-              {:else}
-                <p class="px-1.5 pb-1 text-xs text-muted-foreground">No saved line assigned</p>
-              {/each}
-            </div>
-
-            {#if draft && selectedRoute}
-              <div class="border-t border-border p-2">
-                <Button
-                  class="w-full"
-                  size="sm"
-                  variant="outline"
-                  disabled={saving || focusedIsLastStop}
-                  onclick={() => selectedRoute.stations.push(focusedStation.id)}
-                >
-                  {#if focusedIsLastStop}
-                    <CheckIcon class="size-3.5" />
-                    Last stop of route {selectedRoute.code ?? routeIndex + 1}
-                  {:else}
-                    <PlusIcon class="size-3.5" />
-                    {focusedOnRoute ? "Add again to route" : "Add to route"}
-                    {selectedRoute.code ?? routeIndex + 1}
-                  {/if}
-                </Button>
-              </div>
-            {/if}
-          </div>
+          <LineStationCard
+            station={focusedStation}
+            stationLines={index.getStationLines(focusedStation.id)}
+            route={draft ? selectedRoute : null}
+            routeLabel={selectedRoute?.code ?? routeIndex + 1}
+            {saving}
+            onSelectLine={selectLine}
+            onAddToRoute={() => selectedRoute?.stations.push(focusedStation.id)}
+            onClose={() => (focusedStationId = null)}
+          />
         {/if}
 
         {#if toastMessage}
