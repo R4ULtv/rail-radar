@@ -536,7 +536,11 @@ export function LineInfo({ view, className }: { view: StationLineView; className
   const { line, route } = view;
   if (!line) return null;
   const stations = line.routes[route]?.stations ?? [];
-  const named = view.stops[stations[0]!] !== undefined;
+  const first = stations[0];
+  const last = stations.at(-1);
+  // The API can lack a stop of the bundled catalog (each deploys on its own), so the
+  // termini can stay unnamed after the line loads.
+  const named = !!first && !!last && !!view.stops[first] && !!view.stops[last];
 
   return (
     <div className={cn("flex min-w-0 items-center gap-2", className)}>
@@ -545,14 +549,14 @@ export function LineInfo({ view, className }: { view: StationLineView; className
         {named ? (
           <>
             <span className="truncate">
-              {stopName(view, stations[0])} – {stopName(view, stations.at(-1))}
+              {stopName(view, first)} – {stopName(view, last)}
             </span>
             <span className="shrink-0 whitespace-pre"> · {stations.length} stops</span>
           </>
-        ) : view.isError ? (
-          line.name
-        ) : (
+        ) : view.isLoading ? (
           <Skeleton className="h-3 w-44" />
+        ) : (
+          line.name
         )}
       </div>
       <LinePageLink view={view} />
@@ -601,7 +605,9 @@ export function BranchPicker({ view, className }: { view: StationLineView; class
   if (!view.line || view.routes.length < 2) return null;
   const all = view.line.routes;
   const routes = view.routes.map((index) => all[index]!);
-  const named = view.stops[routes[0]!.stations[0]!] !== undefined;
+  const named = routes.every((route) =>
+    [route.stations[0], route.stations.at(-1)].every((id) => !!id && !!view.stops[id]),
+  );
 
   return (
     <div
@@ -609,7 +615,7 @@ export function BranchPicker({ view, className }: { view: StationLineView; class
       aria-label="Branches"
       className={cn("flex flex-wrap gap-1 rounded-xl bg-muted/60 p-1", className)}
     >
-      {view.routes.map((index) => {
+      {view.routes.map((index, position) => {
         const route = all[index]!;
         const selected = index === view.route;
         return (
@@ -629,8 +635,10 @@ export function BranchPicker({ view, className }: { view: StationLineView; class
             {route.code && <span className="shrink-0 font-semibold">{route.code}</span>}
             {named ? (
               <span className="truncate">{branchLabel(view, routes, route)}</span>
-            ) : (
+            ) : view.isLoading ? (
               <Skeleton className="h-3 w-16" />
+            ) : (
+              !route.code && `Branch ${position + 1}`
             )}
           </button>
         );
@@ -659,9 +667,11 @@ export function StopStrip({
   className?: string;
 }) {
   const currentRef = useRef<HTMLLIElement>(null);
-  const { stops, lines, line, route, stationId, isError } = view;
-  const stations = line?.routes[route]?.stations ?? [];
-  const ready = stations.length > 0 && stations.every((id) => stops[id] !== undefined);
+  const { stops, lines, line, route, stationId, isLoading, isError } = view;
+  // Stops the API doesn't know (it deploys apart from the bundled catalog) are left out
+  // rather than waited for.
+  const stations = (line?.routes[route]?.stations ?? []).filter((id) => stops[id] !== undefined);
+  const ready = line !== null && !isLoading;
   const shownRef = useRef<string | null>(null);
 
   useEffect(() => {
@@ -708,6 +718,14 @@ export function StopStrip({
   }
 
   if (!line || !ready) return <StopStripSkeleton className={className} />;
+
+  if (stations.length === 0) {
+    return (
+      <p className={cn("px-4 py-8 text-center text-sm text-muted-foreground", className)}>
+        The stops of this line aren't available right now.
+      </p>
+    );
+  }
 
   const color = getLineColor(line);
   const served = new Set(lines.map((other) => other.id));

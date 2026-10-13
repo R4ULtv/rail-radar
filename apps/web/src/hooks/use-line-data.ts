@@ -1,7 +1,7 @@
 import { useQueries, type UseQueryResult } from "@tanstack/react-query";
 import { getLineStationIds } from "@repo/data/lines";
 
-import { apiFetcher, buildApiUrl, endpoints } from "@/lib/api";
+import { APIError, apiFetcher, buildApiUrl, endpoints } from "@/lib/api";
 import type { LineData, LinesGeoJsonResponse } from "@/lib/api";
 
 type Pending = { resolve: (data: LineData) => void; reject: (error: unknown) => void };
@@ -52,6 +52,12 @@ async function fetchBatch(pending: Map<string, Pending[]>) {
       }
     }
   } catch (error) {
+    // The API rejects a whole request over one ID it doesn't know, as when the web app is
+    // deployed with a line the API doesn't have yet. Asked for one by one, only that line fails.
+    if (error instanceof APIError && error.status === 400 && pending.size > 1) {
+      for (const entry of pending) void fetchBatch(new Map([entry]));
+      return;
+    }
     for (const waiting of pending.values()) for (const { reject } of waiting) reject(error);
   }
 }
