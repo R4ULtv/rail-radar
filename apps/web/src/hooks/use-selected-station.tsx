@@ -7,6 +7,7 @@ import { useIsMobile } from "@repo/ui/hooks/use-mobile";
 import { useSavedStations } from "./use-saved-stations";
 import { useRecentStations } from "./use-recent-stations";
 import { useHomeSearch } from "./use-home-search";
+import { STATIONS_SOURCE_ID, stationFromFeature } from "@/lib/station-features";
 
 interface SelectedStationContextValue {
   selectedStation: Station | null;
@@ -50,12 +51,15 @@ export function SelectedStationProvider({ children }: { children: React.ReactNod
     };
   }, [map, isMobile]);
 
-  // Clear stale ?station= param on page load (no data to resolve without a fetch)
+  // The ?station= the page was opened with, until the map's stations can resolve it.
+  const [linkedStationId, setLinkedStationId] = React.useState(stationId);
+
+  // Clear a stale ?station= param (one no longer backed by a selection)
   React.useEffect(() => {
-    if (stationId && !stationRef.current) {
+    if (stationId && !stationRef.current && stationId !== linkedStationId) {
       setStationId(null);
     }
-  }, [stationId, setStationId]);
+  }, [stationId, linkedStationId, setStationId]);
 
   const selectStation = React.useCallback(
     (station: Station) => {
@@ -71,6 +75,28 @@ export function SelectedStationProvider({ children }: { children: React.ReactNod
     },
     [setStationId, addRecentStation],
   );
+
+  // Links to a station on the map (line pages, a station page's "Back to map") open its
+  // view with `lat`/`lng`/`zoom`, so the station is among the features the map loads
+  // first. A station outside the opening view isn't loaded, and its param is dropped.
+  React.useEffect(() => {
+    if (!linkedStationId || !map) return;
+    const resolve = () => {
+      if (!map.getSource(STATIONS_SOURCE_ID) || !map.isSourceLoaded(STATIONS_SOURCE_ID)) return;
+      map.off("idle", resolve);
+      const [feature] = map.querySourceFeatures(STATIONS_SOURCE_ID, {
+        filter: ["==", ["get", "id"], linkedStationId],
+      });
+      const station = feature && stationFromFeature(feature);
+      if (station && !stationRef.current) selectStation(station);
+      setLinkedStationId(null);
+    };
+    map.on("idle", resolve);
+    resolve();
+    return () => {
+      map.off("idle", resolve);
+    };
+  }, [linkedStationId, map, selectStation]);
 
   const clearStation = React.useCallback(() => {
     stationRef.current = null;

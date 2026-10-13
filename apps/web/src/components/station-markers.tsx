@@ -6,6 +6,7 @@ import { Layer, Source, useMap } from "react-map-gl/mapbox";
 import type { LayerProps } from "react-map-gl/mapbox";
 import { useSelectedStation } from "@/hooks/use-selected-station";
 import { env } from "@/lib/env";
+import { STATIONS_SOURCE_ID, stationFromFeature } from "@/lib/station-features";
 import {
   LIGHT_ICON_SVG,
   METRO_ICON_SVG,
@@ -34,7 +35,7 @@ const LABEL_MINZOOM_FILTER = ["<=", ["+", MINZOOM_EXPR, 2], ["zoom"]];
 const metroLayerStyle = (): LayerProps => ({
   id: "metro-stations",
   type: "symbol",
-  source: "stations-source",
+  source: STATIONS_SOURCE_ID,
   filter: ["all", ["==", ["get", "type"], "metro"], MINZOOM_FILTER],
   layout: {
     "icon-image": METRO_ICON_ID,
@@ -47,7 +48,7 @@ const metroLayerStyle = (): LayerProps => ({
 const metroLabelStyle = (): LayerProps => ({
   id: "metro-labels",
   type: "symbol",
-  source: "stations-source",
+  source: STATIONS_SOURCE_ID,
   filter: ["all", ["==", ["get", "type"], "metro"], LABEL_MINZOOM_FILTER],
   layout: {
     "text-field": ["get", "name"],
@@ -67,7 +68,7 @@ const metroLabelStyle = (): LayerProps => ({
 const lightLayerStyle = (): LayerProps => ({
   id: "light-stations",
   type: "symbol",
-  source: "stations-source",
+  source: STATIONS_SOURCE_ID,
   filter: ["all", ["==", ["get", "type"], "light"], MINZOOM_FILTER],
   layout: {
     "icon-image": LIGHT_ICON_ID,
@@ -91,7 +92,7 @@ const lightLayerStyle = (): LayerProps => ({
 const lightLabelStyle = (): LayerProps => ({
   id: "light-labels",
   type: "symbol",
-  source: "stations-source",
+  source: STATIONS_SOURCE_ID,
   filter: ["all", ["==", ["get", "type"], "light"], LABEL_MINZOOM_FILTER],
   layout: {
     "text-field": ["get", "name"],
@@ -111,7 +112,7 @@ const lightLabelStyle = (): LayerProps => ({
 const railLayerStyle = (): LayerProps => ({
   id: RAIL_LAYER_ID,
   type: "symbol",
-  source: "stations-source",
+  source: STATIONS_SOURCE_ID,
   filter: ["all", ["==", ["get", "type"], "rail"], MINZOOM_FILTER],
   layout: {
     "icon-image": RAIL_ICON_ID,
@@ -135,7 +136,7 @@ const railLayerStyle = (): LayerProps => ({
 const railLabelStyle = (): LayerProps => ({
   id: "rail-labels",
   type: "symbol",
-  source: "stations-source",
+  source: STATIONS_SOURCE_ID,
   filter: ["all", ["==", ["get", "type"], "rail"], LABEL_MINZOOM_FILTER],
   layout: {
     "text-field": ["get", "name"],
@@ -219,18 +220,8 @@ export function StationMarkers() {
     loadIcon(LIGHT_ICON_ID, LIGHT_ICON_SVG);
 
     const handleClick = (e: MapMouseEvent & { features?: GeoJSON.Feature[] }) => {
-      const feature = e.features?.[0];
-      if (!feature?.properties || !feature.geometry) return;
-
-      const id = feature.properties.id as string | undefined;
-      const name = feature.properties.name as string | undefined;
-      const type = feature.properties.type as "rail" | "metro" | "light";
-
-      if (id === undefined || name === undefined) return;
-
-      const [lng, lat] = (feature.geometry as GeoJSON.Point).coordinates;
-      const importance = (feature.properties.importance ?? 4) as 1 | 2 | 3 | 4;
-      selectStation({ id, name, type, importance, geo: { lat: lat!, lng: lng! } });
+      const station = e.features?.[0] && stationFromFeature(e.features[0]);
+      if (station) selectStation(station);
     };
 
     const handleMouseEnter = () => {
@@ -274,7 +265,7 @@ export function StationMarkers() {
       <Layer {...railwayLineStyle()} />
       <Layer {...railwayBridgeStyle()} />
 
-      <Source id="stations-source" type="geojson" data={`${env.apiUrl}/stations.geojson`}>
+      <Source id={STATIONS_SOURCE_ID} type="geojson" data={`${env.apiUrl}/stations.geojson`}>
         <Layer {...metroLayerStyle()} />
         <Layer {...metroLabelStyle()} />
         <Layer {...lightLayerStyle()} />

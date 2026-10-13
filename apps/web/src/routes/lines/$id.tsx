@@ -237,9 +237,10 @@ function StopList({
               />
             </div>
             <Link
-              to="/station/$id"
-              params={{ id }}
-              {...stationPageLinkProps(station)}
+              // Only train stations have a page; the map opens on every other stop.
+              {...(station.rail
+                ? { to: "/station/$id", params: { id }, ...stationPageLinkProps(station) }
+                : { to: "/", search: { station: id, ...station.geo, zoom: 15 } })}
               onMouseEnter={() => onHover(id)}
               onFocus={() => onHover(id)}
               className="group ml-2 flex min-h-11 min-w-0 flex-1 items-center gap-2 rounded-xl px-2 py-1.5 transition-colors duration-150 lg:hover:bg-muted/60"

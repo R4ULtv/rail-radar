@@ -201,6 +201,7 @@ export async function getLinePageData(id: string) {
           name: displayName(stationId),
           rail: station.type === "rail",
           prerendered: isStationPagePrerendered(station) || undefined,
+          geo: station.geo && { lat: round(station.geo.lat, 5), lng: round(station.geo.lng, 5) },
           interchanges: getStationLines(stationId)
             .filter((other) => other.id !== line.id)
             .map((other) => ({
