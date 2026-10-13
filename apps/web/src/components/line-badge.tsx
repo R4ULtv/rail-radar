@@ -1,6 +1,6 @@
 import type { Line } from "@repo/data";
 import { cn } from "@repo/ui/lib/utils";
-import { getLineBadgeCode, getLineTextColor } from "@/lib/line-colors";
+import { getLineBadgeCode, getLineGlyphColor, getLineTextColor } from "@/lib/line-colors";
 
 type BadgeLine = Pick<Line, "code" | "name" | "type"> & { color: string };
 
@@ -33,14 +33,22 @@ export function LineBadge({
       )}
       style={{ backgroundColor: line.color, color: getLineTextColor(line.color) }}
     >
-      {code ?? <LineGlyph type={line.type} size={size} />}
+      {code ?? <LineGlyph type={line.type} size={size} color={line.color} />}
       <span className="sr-only">{code ? ` ${line.name}` : line.name}</span>
     </span>
   );
 }
 
 /** The glyphs of the map's metro and light rail markers. */
-function LineGlyph({ type, size }: { type: Line["type"]; size: keyof typeof sizes }) {
+function LineGlyph({
+  type,
+  size,
+  color,
+}: {
+  type: Line["type"];
+  size: keyof typeof sizes;
+  color: string;
+}) {
   return (
     <svg
       viewBox="0 0 24 24"
@@ -50,9 +58,9 @@ function LineGlyph({ type, size }: { type: Line["type"]; size: keyof typeof size
       strokeLinecap="round"
       strokeLinejoin="round"
       aria-hidden
-      // Always white, like the glyphs on the map's markers, whatever the line color.
+      // White like the glyphs on the map's markers, unless the line color is too light for it.
+      style={{ color: getLineGlyphColor(color) }}
       className={cn(
-        "text-white",
         type === "metro" ? "size-5" : "size-3.5",
         size === "xs" && (type === "metro" ? "size-4" : "size-3"),
         size === "md" && (type === "metro" ? "size-6" : "size-4.5"),
