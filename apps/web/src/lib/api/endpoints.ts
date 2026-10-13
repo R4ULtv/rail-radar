@@ -36,3 +36,11 @@ export function stationTrains(stationId: string, type: "arrivals" | "departures"
 export function stationStats(stationId: string, period: string = "week"): string {
   return `/stations/${stationId}/stats?period=${period}`;
 }
+
+/**
+ * Build URL for the track and stops of the given lines
+ * @param lineIds - Line IDs, sorted by the caller so equal sets share a URL
+ */
+export function lines(lineIds: readonly string[]): string {
+  return `/lines.geojson?id=${lineIds.map(encodeURIComponent).join(",")}&include=stops`;
+}

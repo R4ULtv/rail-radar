@@ -39,12 +39,12 @@ export function SelectedStationProvider({ children }: { children: React.ReactNod
 
   const stationRef = React.useRef<Station | null>(null);
 
-  const flyToRef = React.useRef((_geo: { lat: number; lng: number }, _type: string) => {});
+  const flyToRef = React.useRef((_geo: { lat: number; lng: number }) => {});
   React.useEffect(() => {
-    flyToRef.current = (geo, type) => {
+    flyToRef.current = (geo) => {
       map?.flyTo({
         center: [geo.lng, geo.lat],
-        zoom: type === "rail" ? 14 : 15,
+        zoom: 14,
         padding: isMobile ? { bottom: 250, top: 0, left: 0, right: 0 } : undefined,
       });
     };
@@ -59,15 +59,14 @@ export function SelectedStationProvider({ children }: { children: React.ReactNod
 
   const selectStation = React.useCallback(
     (station: Station) => {
-      if (station.type === "rail") {
-        stationRef.current = station;
-        setStationObject(station);
-        setStationId(station.id);
-        addRecentStation(station);
-      }
+      stationRef.current = station;
+      setStationObject(station);
+      setStationId(station.id);
+      addRecentStation(station);
 
-      if (station.geo) {
-        flyToRef.current(station.geo, station.type);
+      // Metro and light rail stations frame their lines instead (StationLinesMap).
+      if (station.geo && station.type === "rail") {
+        flyToRef.current(station.geo);
       }
     },
     [setStationId, addRecentStation],

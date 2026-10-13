@@ -5,6 +5,7 @@ import { getLineBadgeCode, getLineTextColor } from "@/lib/line-colors";
 type BadgeLine = Pick<Line, "code" | "name" | "type"> & { color: string };
 
 const sizes = {
+  xs: "h-4 min-w-5 rounded-[5px] px-1 text-[10px]",
   sm: "h-5 min-w-7 rounded-md px-1.5 text-[11px]",
   md: "h-7 min-w-9 rounded-lg px-2 text-[13px]",
   xl: "size-16 rounded-3xl text-2xl",
@@ -53,6 +54,7 @@ function LineGlyph({ type, size }: { type: Line["type"]; size: keyof typeof size
       className={cn(
         "text-white",
         type === "metro" ? "size-5" : "size-3.5",
+        size === "xs" && (type === "metro" ? "size-4" : "size-3"),
         size === "md" && (type === "metro" ? "size-6" : "size-4.5"),
         size === "xl" && (type === "metro" ? "size-14" : "size-9"),
       )}

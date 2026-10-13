@@ -9,6 +9,7 @@ import type { Metadata } from "@/lib/metadata";
 import { getLineColor } from "@/lib/line-colors";
 import { createBoundsProjection, simplify, type Bounds } from "@/lib/map-projection";
 import { isStationPagePrerendered } from "@/lib/station-prerender";
+import { shortStationName } from "@/lib/station-name";
 
 /** One track file per line, loaded only when that line's page is rendered. */
 const geometryFiles = import.meta.glob<LineGeometry>("../../../../packages/data/src/lines/*.json", {
@@ -40,10 +41,8 @@ export type DirectoryLine = {
   stations: number;
 };
 
-/** "Battistini (Roma)" reads as "Battistini" next to a line that already says where it runs. */
 function displayName(stationId: string | undefined): string {
-  const name = (stationId && stationById.get(stationId)?.name) || "";
-  return name.replace(/\s+\([^)]*\)$/, "");
+  return shortStationName((stationId && stationById.get(stationId)?.name) || "");
 }
 
 function lineCountry(line: Line): CountryCode {
