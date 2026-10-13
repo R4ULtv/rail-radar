@@ -90,12 +90,25 @@ Filters apply to all four endpoints, within the initial collection (every line, 
 serving the station). Filters intersect, comma-separated values within one filter match any of
 them, and empty values mean no filter:
 
+- `?id=it-milano-m1,it-milano-m2`: line IDs
 - `?q=m3`: case- and diacritic-insensitive text match on line ID, code, name and route codes
 - `?country=it|ch|de|fi|be|dk|nl|no|se|pl|uk|ie|fr|lu`: country, taken from the line ID prefix
 - `?type=metro|light`: line type
 - `?operator=atm-milano`: operator slug, as listed by `/operators`
 
-Invalid `country`, `type` or `operator` values return `400`. Results keep catalog order.
+Invalid `id`, `country`, `type` or `operator` values return `400`. Results keep catalog order.
+
+`?include=stops` adds the stops of the selected lines, so a client can draw them without the
+station registry; the station routes always include them. `stops` maps each station ID on any of
+their routes to its `name`, `type`, `importance`, `geo` and `lines` (every line serving it,
+selected or not), and `connections` lists the `id`, `code`, `name`, `type` and `color` of the lines
+in `stops` that aren't in the selection. In the GeoJSON response both are top-level foreign members
+of the FeatureCollection.
+
+A client that already has the line catalog (from `/lines` or `@repo/data`) knows which lines serve
+a station, so it can fetch only the lines it hasn't seen with `/lines.geojson?id=…&include=stops`
+and keep each one for the session: line data only changes on deploy. The web app does this, so
+stepping along a line it already has costs no request.
 
 `/stations/:id/lines*` accepts any station in the registry, including rail hubs served by metro or
 light lines. A known station with no linked lines returns an empty collection (`200`); an unknown

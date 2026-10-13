@@ -1,19 +1,29 @@
 import { COUNTRY_CODES } from "@repo/data/countries";
-import { validateLineGeometry } from "@repo/data/lines";
+import {
+  getLineStationIds,
+  getStationLines,
+  lineById,
+  validateLineGeometry,
+} from "@repo/data/lines";
 import { operators } from "@repo/data/operators";
-import type { Line, LineGeometry } from "@repo/data/types";
+import { stationById } from "@repo/data/stations";
+import type { Line, LineGeometry, Station } from "@repo/data/types";
 
 import { parseFilterList, validateFilter } from "./http";
 
 const LINE_TYPES = ["metro", "light"] as const satisfies readonly Line["type"][];
+const INCLUDES = ["stops"] as const;
 const OPERATOR_SLUGS = operators.map((operator) => operator.slug);
 const DIACRITICS_REGEX = /[\u0300-\u036f]/g;
 
 export type LineFilters = {
+  ids: string[];
   query: string;
   countries: string[];
   types: Line["type"][];
   operators: string[];
+  /** Add the stops of the selected lines to the response (`include=stops`). */
+  includeStops: boolean;
 };
 
 export type LineFeature = {
@@ -24,14 +34,30 @@ export type LineFeature = {
 };
 export type LineFeatureCollection = { type: "FeatureCollection"; features: LineFeature[] };
 
+export type LineStop = Pick<Station, "name" | "type" | "importance" | "geo"> & {
+  /** Every line serving the stop, selected or not. */
+  lines: string[];
+};
+export type LineSummary = Pick<Line, "id" | "code" | "name" | "type" | "color">;
+export type LineStops = {
+  stops: Record<string, LineStop>;
+  /** Lines serving a stop that aren't in the selection, so interchanges can be drawn. */
+  connections: LineSummary[];
+};
+
 function normalizeText(text: string): string {
   return text.normalize("NFD").replace(DIACRITICS_REGEX, "").toLowerCase().trim();
 }
 
-/** Validate the shared q/country/type/operator filters; empty values mean no filter. */
+/** Validate the shared id/q/country/type/operator filters and `include`; empty values mean none. */
 export function parseLineFilters(
   query: (name: string) => string | undefined,
 ): { filters: LineFilters; error: null } | { filters: null; error: string } {
+  const ids = parseFilterList(query("id"));
+  if (ids.some((id) => !lineById.has(id))) {
+    return { filters: null, error: "Invalid id. Must be known line IDs; see GET /lines." };
+  }
+
   const countries = validateFilter("country", parseFilterList(query("country")), COUNTRY_CODES);
   if (countries.error) return { filters: null, error: countries.error };
 
@@ -46,12 +72,17 @@ export function parseLineFilters(
     };
   }
 
+  const include = validateFilter("include", parseFilterList(query("include")), INCLUDES);
+  if (include.error) return { filters: null, error: include.error };
+
   return {
     filters: {
+      ids,
       query: normalizeText(query("q") ?? ""),
       countries: countries.values,
       types: types.values,
       operators: operatorSlugs,
+      includeStops: include.values.includes("stops"),
     },
     error: null,
   };
@@ -66,6 +97,7 @@ function matchesQuery(line: Line, query: string): boolean {
 /** Filters intersect and keep the order of the supplied collection; comma values use OR. */
 export function filterLines(source: readonly Line[], filters: LineFilters): Line[] {
   return source.filter((line) => {
+    if (filters.ids.length > 0 && !filters.ids.includes(line.id)) return false;
     if (filters.query && !matchesQuery(line, filters.query)) return false;
     if (filters.countries.length > 0 && !filters.countries.includes(line.id.slice(0, 2))) {
       return false;
@@ -106,4 +138,33 @@ export async function loadLineFeatureCollection(
   );
 
   return { type: "FeatureCollection", features };
+}
+
+/** The registry entry of every stop on the selected lines, so a client can draw them without it. */
+export function getLineStops(selected: readonly Line[]): LineStops {
+  const selectedIds = new Set(selected.map((line) => line.id));
+  const stops: Record<string, LineStop> = {};
+  const connections = new Map<string, LineSummary>();
+
+  for (const line of selected) {
+    for (const stationId of getLineStationIds(line)) {
+      if (stops[stationId]) continue;
+      const station = stationById.get(stationId);
+      if (!station) throw new Error(`Line ${line.id} stops at unknown station ${stationId}`);
+
+      const serving = getStationLines(stationId);
+      for (const { id, code, name, type, color } of serving) {
+        if (!selectedIds.has(id)) connections.set(id, { id, code, name, type, color });
+      }
+      stops[stationId] = {
+        name: station.name,
+        type: station.type,
+        importance: station.importance,
+        geo: station.geo,
+        lines: serving.map((other) => other.id),
+      };
+    }
+  }
+
+  return { stops, connections: [...connections.values()] };
 }

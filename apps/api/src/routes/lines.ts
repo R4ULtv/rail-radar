@@ -8,32 +8,49 @@ import type { Line } from "@repo/data/types";
 import { CACHE_TTL } from "../constants";
 import { factory, type Env } from "../lib/env";
 import { jsonError } from "../lib/http";
-import { filterLines, loadLineFeatureCollection, parseLineFilters } from "../lib/line-data";
+import {
+  filterLines,
+  getLineStops,
+  loadLineFeatureCollection,
+  parseLineFilters,
+  type LineStops,
+} from "../lib/line-data";
 
 const linesCache = () => cache({ cacheName: "lines-cache", cacheControl: CACHE_TTL.LINES });
 
-/** Apply the shared filters to a collection, or return the 400 response for an invalid filter. */
-function selectLines(c: Context<Env>, source: readonly Line[]): Line[] | Response {
+/**
+ * Apply the shared filters to a collection, or return the 400 response for an invalid filter.
+ * Stops come with `include=stops`, or always when `withStops` is set (the station routes).
+ */
+function selectLines(
+  c: Context<Env>,
+  source: readonly Line[],
+  withStops: boolean,
+): { selected: Line[]; stops: LineStops | null } | Response {
   const parsed = parseLineFilters((name) => c.req.query(name));
   if (parsed.error !== null) return jsonError(c, parsed.error, 400);
 
-  return filterLines(source, parsed.filters);
+  const selected = filterLines(source, parsed.filters);
+  const stops = withStops || parsed.filters.includeStops ? getLineStops(selected) : null;
+  return { selected, stops };
 }
 
-function linesJson(c: Context<Env>, source: readonly Line[]) {
-  const selected = selectLines(c, source);
-  if (selected instanceof Response) return selected;
+function linesJson(c: Context<Env>, source: readonly Line[], withStops = false) {
+  const result = selectLines(c, source, withStops);
+  if (result instanceof Response) return result;
 
-  return c.json({ count: selected.length, lines: selected });
+  return c.json({ count: result.selected.length, lines: result.selected, ...result.stops });
 }
 
-async function linesGeoJson(c: Context<Env>, source: readonly Line[]) {
-  const selected = selectLines(c, source);
-  if (selected instanceof Response) return selected;
+async function linesGeoJson(c: Context<Env>, source: readonly Line[], withStops = false) {
+  const result = selectLines(c, source, withStops);
+  if (result instanceof Response) return result;
 
-  const collection = await loadLineFeatureCollection(c.env.ASSETS, selected);
+  const collection = await loadLineFeatureCollection(c.env.ASSETS, result.selected);
+  // GeoJSON foreign members (RFC 7946 §6.1), ignored by clients that only read features.
+  const body = { ...collection, ...result.stops };
 
-  return c.body(JSON.stringify(collection), 200, { "Content-Type": "application/geo+json" });
+  return c.body(JSON.stringify(body), 200, { "Content-Type": "application/geo+json" });
 }
 
 function stationNotFound(c: Context<Env>) {
@@ -52,10 +69,10 @@ export const stationLinesRoutes = factory
   .get("/:id/lines", linesCache(), (c) => {
     if (!stationById.has(c.req.param("id"))) return stationNotFound(c);
 
-    return linesJson(c, getStationLines(c.req.param("id")));
+    return linesJson(c, getStationLines(c.req.param("id")), true);
   })
   .get("/:id/lines.geojson", linesCache(), (c) => {
     if (!stationById.has(c.req.param("id"))) return stationNotFound(c);
 
-    return linesGeoJson(c, getStationLines(c.req.param("id")));
+    return linesGeoJson(c, getStationLines(c.req.param("id")), true);
   });

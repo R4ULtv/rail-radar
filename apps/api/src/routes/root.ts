@@ -6,7 +6,7 @@ const API_ENDPOINTS = {
     "List train operators (optional: ?q=search&country=it|international&origin=international&type=passenger&serviceType=high-speed)",
   "GET /operators/:slug": "Get a train operator by slug",
   "GET /lines":
-    "List metro and light rail lines with ordered routes, without track (optional: ?q=search&country=it|ch|...&type=metro|light&operator=atm-milano)",
+    "List metro and light rail lines with ordered routes, without track (optional: ?id=it-milano-m1,it-milano-m2&q=search&country=it|ch|...&type=metro|light&operator=atm-milano&include=stops)",
   "GET /lines.geojson":
     "Get the same filtered lines as a GeoJSON FeatureCollection with full track, or null geometry when unmapped (same filters as /lines)",
   "GET /map/static":
