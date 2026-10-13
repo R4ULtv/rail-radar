@@ -26,14 +26,6 @@ export type LineFilters = {
   includeStops: boolean;
 };
 
-export type LineFeature = {
-  type: "Feature";
-  id: string;
-  properties: Line;
-  geometry: LineGeometry | null;
-};
-export type LineFeatureCollection = { type: "FeatureCollection"; features: LineFeature[] };
-
 export type LineStop = Pick<Station, "name" | "type" | "importance" | "geo"> & {
   /** Every line serving the stop, selected or not. */
   lines: string[];
@@ -45,7 +37,7 @@ export type LineStops = {
   connections: LineSummary[];
 };
 
-function normalizeText(text: string): string {
+export function normalizeText(text: string): string {
   return text.normalize("NFD").replace(DIACRITICS_REGEX, "").toLowerCase().trim();
 }
 
@@ -123,21 +115,37 @@ async function loadLineGeometry(assets: Fetcher, line: Line): Promise<LineGeomet
   return geometry.coordinates.length > 0 ? geometry : null;
 }
 
-/** One Feature per line, with its whole track; lines without mapped track get null geometry. */
-export async function loadLineFeatureCollection(
+/**
+ * Each line's Feature, serialized once per isolate: tracks only change with a deploy, so a
+ * cache miss joins strings instead of parsing and validating up to 1.8 MB of track again.
+ * Only finished strings are kept; a pending read can't be shared across requests.
+ */
+const featureJsonById = new Map<string, string>();
+
+async function lineFeatureJson(assets: Fetcher, line: Line): Promise<string> {
+  const cached = featureJsonById.get(line.id);
+  if (cached !== undefined) return cached;
+
+  const geometry = await loadLineGeometry(assets, line);
+  const json = JSON.stringify({ type: "Feature", id: line.id, properties: line, geometry });
+  featureJsonById.set(line.id, json);
+  return json;
+}
+
+/**
+ * A FeatureCollection with one Feature per line and its whole track (null for lines without
+ * mapped track), plus `members` as GeoJSON foreign members (RFC 7946 §6.1).
+ */
+export async function lineFeatureCollectionJson(
   assets: Fetcher,
   selected: readonly Line[],
-): Promise<LineFeatureCollection> {
-  const features = await Promise.all(
-    selected.map(async (line): Promise<LineFeature> => ({
-      type: "Feature",
-      id: line.id,
-      properties: line,
-      geometry: await loadLineGeometry(assets, line),
-    })),
-  );
+  members: object | null,
+): Promise<string> {
+  const features = await Promise.all(selected.map((line) => lineFeatureJson(assets, line)));
+  // The members object without its braces, appended after `features`.
+  const extra = members ? JSON.stringify(members).slice(1, -1) : "";
 
-  return { type: "FeatureCollection", features };
+  return `{"type":"FeatureCollection","features":[${features.join(",")}]${extra && `,${extra}`}}`;
 }
 
 /** The registry entry of every stop on the selected lines, so a client can draw them without it. */
