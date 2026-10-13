@@ -1,5 +1,5 @@
-import { useEffect, useRef, useState } from "react";
-import { createFileRoute, Link, useHydrated, useNavigate } from "@tanstack/react-router";
+import { memo, useMemo } from "react";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { metadataToHead, type Metadata } from "@/lib/metadata";
 import { getLineStationIds, lines } from "@repo/data/lines";
 import { operators, type Operator, type OperatorType } from "@repo/data/operators";
@@ -25,6 +25,7 @@ import {
   OperatorTypeMarker,
   sortOperatorTypes,
 } from "@/lib/operator-types";
+import { useDirectoryQuery } from "@/hooks/use-directory-query";
 import { svgDataUri } from "@/lib/station-marker-icons";
 import { staticAssetUrl } from "@/lib/static-assets";
 
@@ -140,45 +141,19 @@ const ALL_MARKER =
 function OperatorsPage() {
   const search = Route.useSearch();
   const navigate = useNavigate({ from: "/operators/" });
-  // The page is prerendered without a query string, so the filters apply after hydration.
-  const hydrated = useHydrated();
-  const selected = hydrated ? search.type : undefined;
-  // Typing stays local so the caret never waits on navigation; the URL follows along.
-  const [query, setQuery] = useState("");
-  const inputRef = useRef<HTMLInputElement>(null);
-
-  useEffect(() => {
-    if (hydrated) setQuery(search.q ?? "");
-    // Only seed from the URL once; afterwards the input is the source of truth.
-  }, [hydrated]);
-
-  useEffect(() => {
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if ((event.metaKey || event.ctrlKey) && event.key === "k") {
-        event.preventDefault();
-        inputRef.current?.focus();
-        inputRef.current?.select();
-      }
-    };
-    document.addEventListener("keydown", handleKeyDown);
-    return () => document.removeEventListener("keydown", handleKeyDown);
-  }, []);
-
-  const updateQuery = (value: string) => {
-    setQuery(value);
-    void navigate({
-      search: (prev) => ({ ...prev, q: value || undefined }),
-      replace: true,
-      resetScroll: false,
-    });
-  };
-
-  const normalizedQuery = normalize(query);
-  const matching = operators.filter((operator) => matchesQuery(operator, normalizedQuery));
-  const matchingCounts = new Map(countByType(matching).map(({ type, count }) => [type, count]));
-  const visible = matching.filter(
-    (operator) => !selected || operator.operatorTypes.includes(selected),
+  const { hydrated, query, deferredQuery, setQuery, inputRef } = useDirectoryQuery(
+    search.q,
+    (q) => void navigate({ search: (prev) => ({ ...prev, q }), replace: true, resetScroll: false }),
   );
+  // The page is prerendered without a query string, so the filters apply after hydration.
+  const selected = hydrated ? search.type : undefined;
+
+  const normalizedQuery = normalize(deferredQuery);
+  const matching = useMemo(
+    () => operators.filter((operator) => matchesQuery(operator, normalizedQuery)),
+    [normalizedQuery],
+  );
+  const matchingCounts = new Map(countByType(matching).map(({ type, count }) => [type, count]));
 
   return (
     <div className="mx-auto max-w-4xl px-4 py-12 md:px-6 md:py-16">
@@ -210,10 +185,10 @@ function OperatorsPage() {
             ref={inputRef}
             type="search"
             value={query}
-            onChange={(event) => updateQuery(event.target.value)}
+            onChange={(event) => setQuery(event.target.value)}
             onKeyDown={(event) => {
               if (event.key === "Escape") {
-                if (query) updateQuery("");
+                if (query) setQuery("");
                 else event.currentTarget.blur();
               }
             }}
@@ -230,7 +205,7 @@ function OperatorsPage() {
                 aria-label="Clear search"
                 title="Clear search"
                 onClick={() => {
-                  updateQuery("");
+                  setQuery("");
                   inputRef.current?.focus();
                 }}
               >
@@ -259,6 +234,37 @@ function OperatorsPage() {
         </nav>
       </div>
 
+      <OperatorResults
+        query={deferredQuery}
+        matching={matching}
+        selected={selected}
+        onClearQuery={setQuery}
+      />
+    </div>
+  );
+}
+
+/**
+ * Everything below the filters. Memoized on the deferred query, so neither a keystroke
+ * nor the URL catching up re-renders a few hundred cards.
+ */
+const OperatorResults = memo(function OperatorResults({
+  query,
+  matching,
+  selected,
+  onClearQuery,
+}: {
+  query: string;
+  matching: Operator[];
+  selected: OperatorType | undefined;
+  onClearQuery: (query: string) => void;
+}) {
+  const visible = matching.filter(
+    (operator) => !selected || operator.operatorTypes.includes(selected),
+  );
+
+  return (
+    <>
       {visible.length === 0 && (
         <div className="flex flex-col items-center gap-4 rounded-4xl border border-dashed border-foreground/10 px-6 py-12 text-center">
           <SearchIcon className="size-6 text-muted-foreground" />
@@ -277,20 +283,25 @@ function OperatorsPage() {
                 variant="secondary"
                 nativeButton={false}
                 render={
-                  <Link to="/operators" search={{ q: search.q }} replace resetScroll={false} />
+                  <Link
+                    to="/operators"
+                    search={(prev) => ({ ...prev, type: undefined })}
+                    replace
+                    resetScroll={false}
+                  />
                 }
               >
                 Show all modes ({matching.length})
               </Button>
             )}
-            <Button variant="outline" onClick={() => updateQuery("")}>
+            <Button variant="outline" onClick={() => onClearQuery("")}>
               Clear search
             </Button>
           </div>
         </div>
       )}
 
-      {normalizedQuery ? (
+      {normalize(query) ? (
         visible.length > 0 && (
           // Searching lists each operator once, even when it runs in several countries.
           <section aria-label="Search results">
@@ -341,9 +352,9 @@ function OperatorsPage() {
           })}
         </div>
       )}
-    </div>
+    </>
   );
-}
+});
 
 function SectionHeader({
   icon,

@@ -1,5 +1,5 @@
-import { useEffect, useRef, useState } from "react";
-import { createFileRoute, Link, useHydrated, useNavigate } from "@tanstack/react-router";
+import { memo, useMemo } from "react";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { COUNTRY_CODES, COUNTRY_MAP, type CountryCode } from "@repo/data/countries";
 import { Card } from "@repo/ui/components/card";
 import {
@@ -13,6 +13,7 @@ import { cn } from "@repo/ui/lib/utils";
 import { ArrowLeftIcon, ChevronRightIcon, SearchIcon, XIcon } from "lucide-react";
 
 import { LineBadge } from "@/components/line-badge";
+import { useDirectoryQuery } from "@/hooks/use-directory-query";
 import { metadataToHead } from "@/lib/metadata";
 import { loadLinesDirectoryPage } from "@/lib/line-data.functions";
 import type { DirectoryLine } from "@/lib/line-data.server";
@@ -103,46 +104,24 @@ function LinesPage() {
   const { lines, networkStations } = Route.useLoaderData();
   const search = Route.useSearch();
   const navigate = useNavigate({ from: "/lines/" });
+  const { hydrated, query, deferredQuery, setQuery, inputRef } = useDirectoryQuery(
+    search.q,
+    (q) => void navigate({ search: (prev) => ({ ...prev, q }), replace: true, resetScroll: false }),
+  );
   // The page is prerendered without a query string, so the filters apply after hydration.
-  const hydrated = useHydrated();
   const selected = hydrated ? search.type : undefined;
-  // Typing stays local so the caret never waits on navigation; the URL follows along.
-  const [query, setQuery] = useState("");
-  const inputRef = useRef<HTMLInputElement>(null);
 
-  useEffect(() => {
-    if (hydrated) setQuery(search.q ?? "");
-    // Only seed from the URL once; afterwards the input is the source of truth.
-  }, [hydrated]);
-
-  useEffect(() => {
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if ((event.metaKey || event.ctrlKey) && event.key === "k") {
-        event.preventDefault();
-        inputRef.current?.focus();
-        inputRef.current?.select();
-      }
-    };
-    document.addEventListener("keydown", handleKeyDown);
-    return () => document.removeEventListener("keydown", handleKeyDown);
-  }, []);
-
-  const updateQuery = (value: string) => {
-    setQuery(value);
-    void navigate({
-      search: (prev) => ({ ...prev, q: value || undefined }),
-      replace: true,
-      resetScroll: false,
-    });
-  };
-
-  const normalizedQuery = normalize(query);
-  const matching = lines.filter(
-    (line) => !normalizedQuery || searchText(line).includes(normalizedQuery),
+  const searchIndex = useMemo(
+    () => new Map(lines.map((line) => [line, searchText(line)])),
+    [lines],
+  );
+  const normalizedQuery = normalize(deferredQuery);
+  const matching = useMemo(
+    () =>
+      lines.filter((line) => !normalizedQuery || searchIndex.get(line)!.includes(normalizedQuery)),
+    [lines, searchIndex, normalizedQuery],
   );
   const matchingCounts = new Map(countByType(matching).map(({ type, count }) => [type, count]));
-  const visible = matching.filter((line) => !selected || line.type === selected);
-  const byCountry = groupBy(visible, (line) => line.country);
   const lineCountries = new Set(lines.map((line) => line.country)).size;
 
   return (
@@ -175,10 +154,10 @@ function LinesPage() {
             ref={inputRef}
             type="search"
             value={query}
-            onChange={(event) => updateQuery(event.target.value)}
+            onChange={(event) => setQuery(event.target.value)}
             onKeyDown={(event) => {
               if (event.key === "Escape") {
-                if (query) updateQuery("");
+                if (query) setQuery("");
                 else event.currentTarget.blur();
               }
             }}
@@ -195,7 +174,7 @@ function LinesPage() {
                 aria-label="Clear search"
                 title="Clear search"
                 onClick={() => {
-                  updateQuery("");
+                  setQuery("");
                   inputRef.current?.focus();
                 }}
               >
@@ -220,6 +199,36 @@ function LinesPage() {
         </nav>
       </div>
 
+      <LineResults
+        query={deferredQuery}
+        matching={matching}
+        selected={selected}
+        networkStations={networkStations}
+      />
+    </div>
+  );
+}
+
+/**
+ * Everything below the filters. Memoized on the deferred query, so neither a keystroke
+ * nor the URL catching up re-renders every line.
+ */
+const LineResults = memo(function LineResults({
+  query,
+  matching,
+  selected,
+  networkStations,
+}: {
+  query: string;
+  matching: DirectoryLine[];
+  selected: LineType | undefined;
+  networkStations: Record<string, Record<"all" | LineType, number>>;
+}) {
+  const visible = matching.filter((line) => !selected || line.type === selected);
+  const byCountry = groupBy(visible, (line) => line.country);
+
+  return (
+    <>
       {visible.length === 0 && (
         <div className="flex flex-col items-center gap-3 rounded-4xl border border-dashed border-foreground/10 px-6 py-12 text-center">
           <SearchIcon className="size-6 text-muted-foreground" />
@@ -260,9 +269,9 @@ function LinesPage() {
           );
         })}
       </div>
-    </div>
+    </>
   );
-}
+});
 
 function CountryHeader({
   country,
