@@ -51,11 +51,11 @@ import {
   LineInfo,
   LinePageLink,
   LinePicker,
-  StationLinesMap,
   StationLinesSummary,
-  StopStrip,
-  useStationLineView,
-} from "@/components/station-lines";
+} from "@/components/station-lines/line-pickers";
+import { StationLinesMap } from "@/components/station-lines/station-lines-map";
+import { StopStrip } from "@/components/station-lines/stop-strip";
+import { useStationLineView } from "@/components/station-lines/use-station-line-view";
 
 const REPORT_LINKS = (
   <div className="px-4 py-3 text-center ">
