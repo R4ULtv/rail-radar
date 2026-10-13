@@ -49,11 +49,14 @@
   const originalGeometry = $derived(
     original ? (geometries.get(original.id) ?? emptyGeometry()) : emptyGeometry(),
   );
+  // Tracks are compared on their own, so edits to the line's fields don't reserialize its track.
+  const geometryChanged = $derived(
+    draftGeometry !== originalGeometry &&
+      JSON.stringify(draftGeometry) !== JSON.stringify(originalGeometry),
+  );
   const dirty = $derived(
     geometryEditing ||
-      (draft !== null &&
-        (JSON.stringify(draft) !== JSON.stringify(original) ||
-          JSON.stringify(draftGeometry) !== JSON.stringify(originalGeometry))),
+      (draft !== null && (JSON.stringify(draft) !== JSON.stringify(original) || geometryChanged)),
   );
   const searchByLineId = $derived(
     new Map(
@@ -365,7 +368,8 @@
       return;
     }
     const url = URL.createObjectURL(
-      new Blob([JSON.stringify(lines) + "\n"], { type: "application/json" }),
+      // Same layout as local saves (vite-plugins/local-line-api.ts), so exports diff cleanly.
+      new Blob([JSON.stringify(lines, null, 2) + "\n"], { type: "application/json" }),
     );
     const link = document.createElement("a");
     link.href = url;

@@ -121,10 +121,18 @@
     if (!bounds.isEmpty()) map.fitBounds(bounds, { padding: 55, maxZoom: 14, duration: 350 });
   }
 
+  // Tracks and stops update separately: copying every track to MapLibre is the slow part, and
+  // editing a route or focusing a station only changes the stops.
   $effect(() => {
     if (!loaded || !map) return;
     (map.getSource("line-routes") as GeoJSONSource).setData(lineFeatures());
+  });
+  $effect(() => {
+    if (!loaded || !map) return;
     (map.getSource("line-stations") as GeoJSONSource).setData(stationFeatures());
+  });
+  $effect(() => {
+    if (!loaded || !map) return;
     map.setPaintProperty(
       "routes",
       "line-opacity",
