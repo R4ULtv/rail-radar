@@ -178,7 +178,7 @@ const stopsStyle: LayerProps = {
   paint: {
     "circle-radius": ["interpolate", ["linear"], ["zoom"], 10, 2.5, 14, 5, 17, 7],
     "circle-color": "#ffffff",
-    "circle-stroke-color": ["case", ["get", "interchange"], "#18181b", ["get", "color"]],
+    "circle-stroke-color": ["get", "color"],
     "circle-stroke-width": ["interpolate", ["linear"], ["zoom"], 10, 1.5, 14, 2.5],
     "circle-opacity": ["get", "opacity"],
     "circle-stroke-opacity": ["get", "opacity"],
@@ -265,7 +265,6 @@ export function StationLinesMap({
           rank,
           opacity: [0.35, 0.45, 1][rank],
           color: rank > 0 ? lineColor : colors.get(serving[0]!.id)!,
-          interchange: getStationLines(id).length > 1 || stop.type === "rail",
         }),
       ];
     });
