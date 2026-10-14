@@ -3975,5 +3975,74 @@
         "type": "website"
       }
     ]
+  },
+  {
+    "slug": "gvb",
+    "name": "GVB",
+    "logoPath": "nl/gvb",
+    "countries": ["nl"],
+    "operatorTypes": ["metro", "light-rail"],
+    "bounds": [4.824, 52.286, 4.999, 52.412],
+    "description": "GVB operates public transport in and around Amsterdam, including its five metro lines, trams, buses and ferries. The metro connects the city centre with the western ring, Amsterdam Noord, Diemen and the southeastern districts.",
+    "website": "https://www.gvb.nl",
+    "founded": null,
+    "headquarters": null,
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["commuter"],
+    "parentCompany": null,
+    "links": [
+      {
+        "label": "Official Site",
+        "url": "https://www.gvb.nl",
+        "type": "website"
+      }
+    ]
+  },
+  {
+    "slug": "ret",
+    "name": "RET",
+    "logoPath": "nl/ret",
+    "countries": ["nl"],
+    "operatorTypes": ["metro", "light-rail"],
+    "bounds": [4.095, 51.823, 4.61, 52.092],
+    "description": "RET operates metro, tram and bus services in the Rotterdam region. Metro lines A, B, C, D and E link Rotterdam with Schiedam, Vlaardingen, Hoek van Holland, Capelle aan den IJssel, Spijkenisse and The Hague.",
+    "website": "https://www.ret.nl",
+    "founded": null,
+    "headquarters": null,
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["commuter"],
+    "parentCompany": null,
+    "links": [
+      {
+        "label": "Official Site",
+        "url": "https://www.ret.nl",
+        "type": "website"
+      }
+    ]
+  },
+  {
+    "slug": "htm",
+    "name": "HTM",
+    "logoPath": "nl/htm",
+    "countries": ["nl"],
+    "operatorTypes": ["light-rail"],
+    "bounds": [4.218, 52.029, 4.553, 52.092],
+    "description": "HTM operates public transport in The Hague and its surrounding municipalities. Its RandstadRail lines 3, 4 and 34 connect The Hague with Zoetermeer over a regional light rail network integrated with the city tram system.",
+    "website": "https://www.htm.nl",
+    "founded": null,
+    "headquarters": null,
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["commuter"],
+    "parentCompany": null,
+    "links": [
+      {
+        "label": "Official Site",
+        "url": "https://www.htm.nl",
+        "type": "website"
+      }
+    ]
   }
 ]

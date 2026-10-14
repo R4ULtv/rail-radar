@@ -66,7 +66,7 @@ const brandPaths: Record<string, string> = {
   vias: "de/vias",
   westfalenbahn: "de/westfalenbahn",
   vogtlandbahn: "de/vogtlandbahn",
-  ns: "ns",
+  ns: "nl/ns",
   vy: "no/vy",
   "sj nord": "no/sj_nord",
   // Polish brands
