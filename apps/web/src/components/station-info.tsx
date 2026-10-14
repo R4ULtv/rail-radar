@@ -313,7 +313,7 @@ export default function StationInfo() {
                       )}
                     </CardDescription>
                     {selectedStation && (
-                      <StationWarning stationId={selectedStation.id} className="col-span-2" />
+                      <StationWarning station={selectedStation} className="col-span-2" />
                     )}
                     {isLines ? (
                       <div className="col-span-2 mt-3 flex flex-col gap-2.5">
@@ -343,9 +343,7 @@ export default function StationInfo() {
                         onRetry={retry}
                         type={activeType}
                         scrollable
-                        hasWarning={
-                          selectedStation != null && hasStationWarning(selectedStation.id)
-                        }
+                        hasWarning={selectedStation != null && hasStationWarning(selectedStation)}
                       />
                     )}
                   </CardContent>
@@ -415,9 +413,7 @@ export default function StationInfo() {
                 <span className="font-normal">{info}</span>
               </div>
             )}
-            {selectedStation && (
-              <StationWarning stationId={selectedStation.id} className="col-span-2" />
-            )}
+            {selectedStation && <StationWarning station={selectedStation} className="col-span-2" />}
             {isLines ? (
               <div className="mt-3 flex flex-col gap-2.5">
                 {/* With several lines the chips name them, so skip the termini row: the first snap point keeps the station in view. */}
