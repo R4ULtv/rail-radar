@@ -8597,19 +8597,6 @@
     {
       "type": "Feature",
       "properties": {
-        "id": "BEM086",
-        "name": "Villette",
-        "type": "metro",
-        "importance": 4
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [4.43495, 50.40645]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
         "id": "BEM087",
         "name": "Palais",
         "type": "metro",
@@ -9216,6 +9203,877 @@
       "geometry": {
         "type": "Point",
         "coordinates": [4.43161, 50.46499]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "BEL00000",
+        "name": "Knokke Station",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [3.28463, 51.34169]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "BEL00001",
+        "name": "Duinbergen Kerk",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [3.2619, 51.34078]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "BEL00002",
+        "name": "Heist Willemspark",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [3.25255, 51.33977]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "BEL00003",
+        "name": "Heist Heldenplein",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [3.24021, 51.34031]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "BEL00004",
+        "name": "Heist Dijk",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [3.23385, 51.33996]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "BEL00005",
+        "name": "Zeebrugge Zeesluis",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [3.2212, 51.3379]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "BEL00006",
+        "name": "Zeebrugge Kerk",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [3.20617, 51.33155]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "BEL00007",
+        "name": "Zeebrugge Stationswijk",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [3.19387, 51.32824]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "BEL00008",
+        "name": "Zeebrugge Strandwijk",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [3.17885, 51.32673]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "BEL00009",
+        "name": "Blankenberge Duinse Polders",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [3.15354, 51.32102]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "BEL00010",
+        "name": "Blankenberge Station",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [3.13291, 51.31324]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "BEL00011",
+        "name": "Blankenberge Pier",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [3.14189, 51.31876]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "BEL00012",
+        "name": "Blankenberge Markt",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [3.12288, 51.31287]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "BEL00013",
+        "name": "Blankenberge Maritieme Zone",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [3.11702, 51.30892]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "BEL00014",
+        "name": "Wenduine Harendijke",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [3.10749, 51.31011]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "BEL00015",
+        "name": "Wenduine Manitoba",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [3.08544, 51.30323]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "BEL00016",
+        "name": "Wenduine Centrum",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [3.0787, 51.30101]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "BEL00017",
+        "name": "Wenduine Molen",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [3.07604, 51.29663]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "BEL00018",
+        "name": "Wenduine Konijnenpad",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [3.06623, 51.29128]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "BEL00019",
+        "name": "De Haan Zwarte Kiezel",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [3.04975, 51.28598]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "BEL00020",
+        "name": "De Haan Waterkasteellaan",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [3.04238, 51.27636]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "BEL00021",
+        "name": "De Haan Aan Zee",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [3.03261, 51.27266]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "BEL00022",
+        "name": "De Haan Zeepreventorium",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [3.02233, 51.27094]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "BEL00023",
+        "name": "De Haan Vosseslag",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [3.00263, 51.26408]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "BEL00024",
+        "name": "Bredene Renbaan",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [2.98277, 51.25563]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "BEL00025",
+        "name": "Bredene Campings",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [2.96881, 51.25156]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "BEL00026",
+        "name": "Bredene Duinenplein",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [2.96202, 51.24863]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "BEL00027",
+        "name": "Oostende Oosteroever",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [2.93991, 51.23726]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "BEL00028",
+        "name": "Oostende Vismijn",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [2.94106, 51.22713]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "BEL00029",
+        "name": "Oostende Station",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [2.92588, 51.22784]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "BEL00030",
+        "name": "Oostende Marie-Joséplein",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [2.91435, 51.23076]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "BEL00031",
+        "name": "Oostende Koninginnelaan",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [2.90636, 51.22631]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "BEL00032",
+        "name": "Oostende Renbaan",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [2.89562, 51.22313]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "BEL00033",
+        "name": "Oostende Northlaan",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [2.88749, 51.21936]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "BEL00034",
+        "name": "Mariakerke Bad",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [2.88083, 51.21593]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "BEL00035",
+        "name": "Mariakerke Duinenkerkje",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [2.87294, 51.21344]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "BEL00036",
+        "name": "Raversijde Middenlaan",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [2.85906, 51.20725]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "BEL00037",
+        "name": "Raversijde Provinciedomein",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [2.84276, 51.2002]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "BEL00038",
+        "name": "Middelkerke De Greefplein",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [2.8197, 51.18982]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "BEL00039",
+        "name": "Middelkerke Casino",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [2.81402, 51.1871]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "BEL00040",
+        "name": "Middelkerke Verhaeghelaan",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [2.80344, 51.18257]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "BEL00041",
+        "name": "Middelkerke Krokodiel",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [2.79235, 51.17766]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "BEL00042",
+        "name": "Westende Bellevue",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [2.78645, 51.17483]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "BEL00043",
+        "name": "Westende Bad",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [2.77583, 51.16925]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "BEL00044",
+        "name": "Westende Sint-Laureins",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [2.7646, 51.16422]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "BEL00045",
+        "name": "Lombardsijde Zeelaan",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [2.74887, 51.15463]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "BEL00046",
+        "name": "Lombardsijde Schoolstraat",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [2.75057, 51.14899]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "BEL00047",
+        "name": "Nieuwpoort Stad",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [2.75276, 51.13371]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "BEL00048",
+        "name": "Nieuwpoort Cardijnlaan",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [2.74136, 51.13713]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "BEL00049",
+        "name": "Nieuwpoort Victorlaan",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [2.7334, 51.14256]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "BEL00050",
+        "name": "Nieuwpoort Bad",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [2.72066, 51.14862]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "BEL00051",
+        "name": "Nieuwpoort Sint-Bernardusplein",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [2.71178, 51.14482]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "BEL00052",
+        "name": "Oostduinkerke Groenendijk",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [2.70058, 51.14034]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "BEL00053",
+        "name": "Oostduinkerke Duinpark",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [2.6832, 51.13404]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "BEL00054",
+        "name": "Oostduinkerke Bad",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [2.67296, 51.13252]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "BEL00055",
+        "name": "Oostduinkerke Schipgat",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [2.65941, 51.12465]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "BEL00056",
+        "name": "Koksijde Lejeunelaan",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [2.64067, 51.12144]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "BEL00057",
+        "name": "Koksijde Bad",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [2.635, 51.12054]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "BEL00058",
+        "name": "Koksijde Ster der Zee",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [2.62334, 51.11238]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "BEL00059",
+        "name": "Koksijde Sint-Idesbald",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [2.61274, 51.11112]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "BEL00060",
+        "name": "De Panne Canadezenplein",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [2.59841, 51.10525]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "BEL00061",
+        "name": "De Panne Centrum",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [2.58925, 51.10231]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "BEL00062",
+        "name": "De Panne Esplanade",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [2.5826, 51.09728]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "BEL00063",
+        "name": "De Panne Kerk",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [2.58889, 51.09339]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "BEL00064",
+        "name": "De Panne Moeder Lambik",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [2.60025, 51.08685]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "BEL00065",
+        "name": "De Panne Plopsaland",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [2.60176, 51.08083]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "BEL00066",
+        "name": "De Panne Station",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [2.6012, 51.07733]
       }
     },
     {
@@ -244034,7 +244892,7 @@
       },
       "geometry": {
         "type": "Point",
-        "coordinates": [18.05722, 59.42679]
+        "coordinates": [18.05127, 59.42558]
       }
     },
     {
