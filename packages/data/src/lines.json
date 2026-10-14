@@ -197,7 +197,7 @@
     "name": "Métro M3",
     "description": "M3 links Faubourg de Bruxelles in Gosselies with central Charleroi, serving neighbourhoods along the northern approach to the city. Its two directions use different stops in Gosselies before joining the shared metro corridor through Palais and Waterloo to Gare Centrale.",
     "type": "light",
-    "color": "#FFCF06",
+    "color": "#F79353",
     "operator": "letec",
     "routes": [
       {
@@ -275,6 +275,87 @@
           "BEM088",
           "BEM087",
           "BEM090"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "be-kusttram-kt",
+    "code": "KT",
+    "name": "Kusttram",
+    "type": "light",
+    "color": "#E40521",
+    "operator": "de-lijn",
+    "routes": [
+      {
+        "stations": [
+          "BEL00066",
+          "BEL00065",
+          "BEL00064",
+          "BEL00063",
+          "BEL00062",
+          "BEL00061",
+          "BEL00060",
+          "BEL00059",
+          "BEL00058",
+          "BEL00057",
+          "BEL00056",
+          "BEL00055",
+          "BEL00054",
+          "BEL00053",
+          "BEL00052",
+          "BEL00051",
+          "BEL00050",
+          "BEL00049",
+          "BEL00048",
+          "BEL00047",
+          "BEL00046",
+          "BEL00045",
+          "BEL00044",
+          "BEL00043",
+          "BEL00042",
+          "BEL00041",
+          "BEL00040",
+          "BEL00039",
+          "BEL00038",
+          "BEL00037",
+          "BEL00036",
+          "BEL00035",
+          "BEL00034",
+          "BEL00033",
+          "BEL00032",
+          "BEL00031",
+          "BEL00030",
+          "BEL00029",
+          "BEL00028",
+          "BEL00027",
+          "BEL00026",
+          "BEL00025",
+          "BEL00024",
+          "BEL00023",
+          "BEL00022",
+          "BEL00021",
+          "BEL00020",
+          "BEL00019",
+          "BEL00018",
+          "BEL00017",
+          "BEL00016",
+          "BEL00015",
+          "BEL00014",
+          "BEL00013",
+          "BEL00012",
+          "BEL00010",
+          "BEL00011",
+          "BEL00009",
+          "BEL00008",
+          "BEL00007",
+          "BEL00006",
+          "BEL00005",
+          "BEL00004",
+          "BEL00003",
+          "BEL00002",
+          "BEL00001",
+          "BEL00000"
         ]
       }
     ]
@@ -2279,6 +2360,44 @@
     ]
   },
   {
+    "id": "lu-luxembourg-t1",
+    "code": "T1",
+    "name": "Tram T1",
+    "type": "light",
+    "color": "#64318F",
+    "operator": "luxtram",
+    "routes": [
+      {
+        "stations": [
+          "LUL200501006",
+          "LUL200508005",
+          "LUL200417052",
+          "LUL200417066",
+          "LUL200417045",
+          "LUL200417046",
+          "LUL200417014",
+          "LUL200417029",
+          "LUL200417031",
+          "LUL200417058",
+          "LUL200419041",
+          "LUL200419039",
+          "LUL200405061",
+          "LUL200405057",
+          "LUL200405051",
+          "LUL200405058",
+          "LUL200405059",
+          "LUL200404009",
+          "LUL200404031",
+          "LUL200304021",
+          "LUL200304019",
+          "LUL200423006",
+          "LUL200423008",
+          "LUL200423009"
+        ]
+      }
+    ]
+  },
+  {
     "id": "no-bergen-1",
     "code": "1",
     "name": "Bybanen linje 1",
@@ -2780,6 +2899,177 @@
           "SEL024793",
           "SEL020756",
           "SEL023966"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "se-stockholm-25",
+    "code": "25",
+    "name": "Saltsjöbanan 25",
+    "type": "light",
+    "color": "#009BA5",
+    "operator": "stockholms-sparvagar",
+    "routes": [
+      {
+        "stations": [
+          "SEL020874",
+          "SEL024808",
+          "SEL024809",
+          "SEL020875",
+          "SEL024810",
+          "SEL000693",
+          "SEL020876",
+          "SEL020877",
+          "SEL024811",
+          "SEL000751"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "se-stockholm-26",
+    "code": "26",
+    "name": "Saltsjöbanan 26",
+    "type": "light",
+    "color": "#009BA5",
+    "operator": "stockholms-sparvagar",
+    "routes": [
+      {
+        "stations": [
+          "SEL020876",
+          "SEL020878",
+          "SEL020879",
+          "SEL024812",
+          "SEL001150"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "se-stockholm-27",
+    "code": "27",
+    "name": "Roslagsbanan 27",
+    "type": "light",
+    "color": "#9A5E9E",
+    "operator": "transdev",
+    "routes": [
+      {
+        "code": "27",
+        "stations": [
+          "SEL020750",
+          "SEL024787",
+          "SEL020867",
+          "SEL001038",
+          "SEL000740",
+          "SEL020872",
+          "SEL024799",
+          "SEL024370",
+          "SEL001153",
+          "SEL020873",
+          "SEL024800",
+          "SEL000783",
+          "SEL020112",
+          "SEL024801",
+          "SEL001154",
+          "SEL024802",
+          "SEL024803",
+          "SEL000713"
+        ]
+      },
+      {
+        "code": "27S",
+        "stations": [
+          "SEL020750",
+          "SEL024787",
+          "SEL020867",
+          "SEL000740",
+          "SEL020872",
+          "SEL001153",
+          "SEL020873",
+          "SEL000783",
+          "SEL020112",
+          "SEL024801",
+          "SEL001154",
+          "SEL024802",
+          "SEL024803",
+          "SEL000713"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "se-stockholm-28",
+    "code": "28",
+    "name": "Roslagsbanan 28",
+    "type": "light",
+    "color": "#9A5E9E",
+    "operator": "transdev",
+    "routes": [
+      {
+        "code": "28",
+        "stations": [
+          "SEL020750",
+          "SEL024787",
+          "SEL020867",
+          "SEL001038",
+          "SEL024795",
+          "SEL020870",
+          "SEL024372",
+          "SEL000740",
+          "SEL000779",
+          "SEL024798",
+          "SEL020110",
+          "SEL020192",
+          "SEL020656",
+          "SEL020871",
+          "SEL024805",
+          "SEL023174",
+          "SEL000788",
+          "SEL024804",
+          "SEL001303"
+        ]
+      },
+      {
+        "code": "28S",
+        "stations": [
+          "SEL020750",
+          "SEL024787",
+          "SEL020867",
+          "SEL000740",
+          "SEL000779",
+          "SEL024798",
+          "SEL020110",
+          "SEL020192",
+          "SEL020656",
+          "SEL000788",
+          "SEL024804",
+          "SEL001303"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "se-stockholm-29",
+    "code": "29",
+    "name": "Roslagsbanan 29",
+    "type": "light",
+    "color": "#9A5E9E",
+    "operator": "transdev",
+    "routes": [
+      {
+        "stations": [
+          "SEL020750",
+          "SEL024787",
+          "SEL021643",
+          "SEL020867",
+          "SEL001038",
+          "SEL024796",
+          "SEL024797",
+          "SEL020868",
+          "SEL024371",
+          "SEL020869",
+          "SEL001052"
         ]
       }
     ]
