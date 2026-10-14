@@ -31,7 +31,7 @@ const brandPaths: Record<string, string> = {
   flp: "ch/flp",
   // Other
   obb: "obb",
-  cfl: "cfl",
+  cfl: "lu/cfl",
   // French brands (SNCF networks)
   sncf: "fr/sncf",
   "tgv inoui": "fr/inoui",
@@ -46,7 +46,7 @@ const brandPaths: Record<string, string> = {
   regionaura: "fr/regionaura",
   "ter na": "fr/ter-na",
   "zou !": "fr/zou",
-  vr: "vr",
+  vr: "fi/vr",
   sncb: "sncb",
   eurostar: "eurostar",
   arriva: "arriva",

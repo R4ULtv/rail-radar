@@ -1694,7 +1694,7 @@
   {
     "slug": "vr",
     "name": "VR Group",
-    "logoPath": "vr",
+    "logoPath": "fi/vr",
     "countries": ["fi", "se"],
     "operatorTypes": ["passenger"],
     "bounds": [11, 55.3, 31.6, 70.1],
@@ -3315,15 +3315,15 @@
     "name": "Transdev",
     "logoPath": "transdev",
     "countries": ["international", "fr", "se", "dk", "de", "nl", "ie"],
-    "operatorTypes": ["passenger"],
+    "operatorTypes": ["passenger", "light-rail"],
     "bounds": [11, 55.3, 24.2, 69.1],
-    "description": "Transdev is a global public transport operator headquartered in France, running rail, bus, tram, and ferry services across 17+ countries. In Sweden, Transdev operates regional rail services and the Snälltåget long-distance brand through its subsidiary Transdev Sverige AB.",
+    "description": "Transdev is a global public transport operator headquartered in France, running rail, bus, tram, and ferry services across 17+ countries. In Sweden, Transdev operates regional rail services and the Snälltåget long-distance brand through its subsidiary Transdev Sverige AB. It operates Roslagsbanan’s three suburban light railway lines, 27, 28 and 29, for SL in the Stockholm region.",
     "website": "https://www.transdev.com",
     "founded": 2011,
     "headquarters": "Issy-les-Moulineaux, France",
     "networkKm": 1500,
     "annualPassengers": 100000000,
-    "serviceTypes": ["regional"],
+    "serviceTypes": ["regional", "commuter"],
     "parentCompany": "Caisse des Dépôts / Rethmann Group",
     "links": [
       {
@@ -3626,7 +3626,7 @@
   {
     "slug": "cfl",
     "name": "CFL",
-    "logoPath": "cfl",
+    "logoPath": "lu/cfl",
     "countries": ["lu", "be", "fr", "de"],
     "operatorTypes": ["passenger"],
     "bounds": [5.5, 49, 7.7, 50.4],
@@ -3913,8 +3913,8 @@
     "logoPath": "se/stockholms-sparvagar",
     "countries": ["se"],
     "operatorTypes": ["light-rail"],
-    "bounds": [17.909, 59.283, 18.244, 59.374],
-    "description": "AB Stockholms Spårvägar operates Stockholm’s suburban light rail for SL, including Nockebybanan line 12, Lidingöbanan line 21 and Tvärbanan lines 30 and 31. It also operates Spårväg City and Saltsjöbanan, which are outside this line import.",
+    "bounds": [17.909, 59.26, 18.314, 59.374],
+    "description": "AB Stockholms Spårvägar operates Stockholm’s suburban light rail for SL, including Nockebybanan line 12, Lidingöbanan line 21, Tvärbanan lines 30 and 31, and Saltsjöbanan lines 25 and 26. It also operates the Spårväg City tram network.",
     "website": "https://stockholmssparvagar.se",
     "founded": null,
     "headquarters": "Stockholm, Sweden",
@@ -3926,6 +3926,52 @@
       {
         "label": "Official Site",
         "url": "https://stockholmssparvagar.se",
+        "type": "website"
+      }
+    ]
+  },
+  {
+    "slug": "de-lijn",
+    "name": "De Lijn",
+    "logoPath": "be/de-lijn",
+    "countries": ["be"],
+    "operatorTypes": ["light-rail"],
+    "bounds": [2.58, 51.07, 3.29, 51.35],
+    "description": "De Lijn operates public transport in Flanders, including the Kusttram interurban light railway along the Belgian coast. Line KT links De Panne, Oostende and Knokke and serves the coastal towns between them.",
+    "website": "https://www.delijn.be",
+    "founded": null,
+    "headquarters": null,
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["commuter"],
+    "parentCompany": null,
+    "links": [
+      {
+        "label": "Official Site",
+        "url": "https://www.delijn.be",
+        "type": "website"
+      }
+    ]
+  },
+  {
+    "slug": "luxtram",
+    "name": "Luxtram",
+    "logoPath": "lu/luxtram",
+    "countries": ["lu"],
+    "operatorTypes": ["light-rail"],
+    "bounds": [6.1, 49.56, 6.22, 49.65],
+    "description": "Luxtram designs, builds and operates Luxembourg’s tram network. Its T1 line connects Stadion with Findel–Luxembourg Airport through Howald, the central railway station, the city centre and Kirchberg.",
+    "website": "https://www.luxtram.lu",
+    "founded": null,
+    "headquarters": null,
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["commuter"],
+    "parentCompany": null,
+    "links": [
+      {
+        "label": "Official Site",
+        "url": "https://www.luxtram.lu",
         "type": "website"
       }
     ]
