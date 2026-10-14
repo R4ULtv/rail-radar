@@ -2299,7 +2299,7 @@
   {
     "slug": "ns",
     "name": "NS",
-    "logoPath": "ns",
+    "logoPath": "nl/ns",
     "countries": ["nl"],
     "operatorTypes": ["passenger"],
     "bounds": [3.3, 50.75, 7.2, 53.5],
