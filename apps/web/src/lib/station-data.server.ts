@@ -1,5 +1,6 @@
 import "@tanstack/react-start/server-only";
 
+import { redirect } from "@tanstack/react-router";
 import {
   COUNTRY_CODES,
   COUNTRY_MAP,
@@ -108,6 +109,22 @@ function getStationMetadata(station: StationWithGeo): Metadata {
 }
 
 export function getStationPageData(id: string) {
+  const mapStation = stationById.get(id);
+  if (mapStation?.geo && (mapStation.type === "metro" || mapStation.type === "light")) {
+    // Keep these URLs available for dedicated station pages in the future.
+    throw redirect({
+      to: "/",
+      search: {
+        station: mapStation.id,
+        lat: mapStation.geo.lat,
+        lng: mapStation.geo.lng,
+        zoom: 15,
+      },
+      statusCode: 302,
+      headers: { "Cache-Control": "no-store" },
+    });
+  }
+
   const station = getRailStation(id);
   if (!station) return null;
 
