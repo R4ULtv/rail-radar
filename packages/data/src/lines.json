@@ -2398,6 +2398,487 @@
     ]
   },
   {
+    "id": "nl-amsterdam-50",
+    "code": "50",
+    "name": "Metro 50",
+    "type": "metro",
+    "color": "#29AB4D",
+    "operator": "gvb",
+    "routes": [
+      {
+        "stations": [
+          "NLM040",
+          "NLM086",
+          "NLM006",
+          "NLM013",
+          "NLM005",
+          "NLM107",
+          "NLM034",
+          "NLM110",
+          "NLM077",
+          "NLM104",
+          "NLM129",
+          "NLM003",
+          "NLM046",
+          "NLM045",
+          "NLM007",
+          "NLM084",
+          "NLM052",
+          "NLM025",
+          "NLM105",
+          "NLM051"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "nl-amsterdam-51",
+    "code": "51",
+    "name": "Metro 51",
+    "type": "metro",
+    "color": "#F69931",
+    "operator": "gvb",
+    "routes": [
+      {
+        "stations": [
+          "NLM017",
+          "NLM070",
+          "NLM123",
+          "NLM124",
+          "NLM125",
+          "NLM004",
+          "NLM100",
+          "NLM077",
+          "NLM104",
+          "NLM129",
+          "NLM003",
+          "NLM046",
+          "NLM045",
+          "NLM007",
+          "NLM084",
+          "NLM052",
+          "NLM025",
+          "NLM105",
+          "NLM051"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "nl-amsterdam-52",
+    "code": "52",
+    "name": "Metro 52",
+    "type": "metro",
+    "color": "#00ADEF",
+    "operator": "gvb",
+    "routes": [
+      {
+        "stations": [
+          "NLM071",
+          "NLM072",
+          "NLM017",
+          "NLM090",
+          "NLM115",
+          "NLM022",
+          "NLM036",
+          "NLM129"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "nl-amsterdam-53",
+    "code": "53",
+    "name": "Metro 53",
+    "type": "metro",
+    "color": "#FF0000",
+    "operator": "gvb",
+    "routes": [
+      {
+        "stations": [
+          "NLM017",
+          "NLM070",
+          "NLM123",
+          "NLM124",
+          "NLM125",
+          "NLM004",
+          "NLM100",
+          "NLM110",
+          "NLM112",
+          "NLM030",
+          "NLM113",
+          "NLM039",
+          "NLM054",
+          "NLM038"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "nl-amsterdam-54",
+    "code": "54",
+    "name": "Metro 54",
+    "type": "metro",
+    "color": "#FCFB05",
+    "operator": "gvb",
+    "routes": [
+      {
+        "stations": [
+          "NLM017",
+          "NLM070",
+          "NLM123",
+          "NLM124",
+          "NLM125",
+          "NLM004",
+          "NLM100",
+          "NLM110",
+          "NLM034",
+          "NLM107",
+          "NLM005",
+          "NLM013",
+          "NLM006",
+          "NLM086",
+          "NLM040"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "nl-randstadrail-3",
+    "code": "3",
+    "name": "RandstadRail 3",
+    "type": "light",
+    "color": "#A9218E",
+    "operator": "htm",
+    "routes": [
+      {
+        "stations": [
+          "NLL00000",
+          "NLL00001",
+          "NLL00002",
+          "NLL00003",
+          "NLL00004",
+          "NLL00005",
+          "NLL00006",
+          "NLL00007",
+          "NLL00008",
+          "NLL00009",
+          "NLL00010",
+          "NLL00011",
+          "NLL00012",
+          "NLL00013",
+          "NLL00014",
+          "NLL00015",
+          "NLL00016",
+          "NLL00017",
+          "NLM043",
+          "NLM102",
+          "NLM028",
+          "NLM008",
+          "NLM029",
+          "NLM119",
+          "NLM057",
+          "NLM037",
+          "NLM058",
+          "NLM122",
+          "NLM018",
+          "NLL00018",
+          "NLM078",
+          "NLM097",
+          "NLM059",
+          "NLM021",
+          "NLM014",
+          "NLM121",
+          "NLM065",
+          "NLM033",
+          "NLM027",
+          "NLM032",
+          "NLM018"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "nl-randstadrail-4",
+    "code": "4",
+    "name": "RandstadRail 4",
+    "type": "light",
+    "color": "#F5911D",
+    "operator": "htm",
+    "routes": [
+      {
+        "stations": [
+          "NLM056",
+          "NLM111",
+          "NLM053",
+          "NLM075",
+          "NLM127",
+          "NLM097",
+          "NLM078",
+          "NLL00018",
+          "NLM018",
+          "NLM122",
+          "NLM058",
+          "NLM037",
+          "NLM057",
+          "NLM119",
+          "NLM029",
+          "NLM008",
+          "NLM028",
+          "NLM102",
+          "NLM043",
+          "NLL00017",
+          "NLL00016",
+          "NLL00030",
+          "NLL00029",
+          "NLL00028",
+          "NLL00027",
+          "NLL00026",
+          "NLL00025",
+          "NLL00024",
+          "NLL00023",
+          "NLL00022",
+          "NLL00021",
+          "NLL00020",
+          "NLL00019"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "nl-randstadrail-34",
+    "code": "34",
+    "name": "RandstadRail 34",
+    "type": "light",
+    "color": "#F1668D",
+    "operator": "htm",
+    "routes": [
+      {
+        "stations": [
+          "NLM056",
+          "NLM111",
+          "NLM053",
+          "NLM075",
+          "NLM127",
+          "NLM097",
+          "NLM078",
+          "NLL00018",
+          "NLM018",
+          "NLM122",
+          "NLM058",
+          "NLM037",
+          "NLM057",
+          "NLM119",
+          "NLM029",
+          "NLM008",
+          "NLM028",
+          "NLM102",
+          "NLM043",
+          "NLL00017",
+          "NLL00016",
+          "NLL00015",
+          "NLL00014",
+          "NLL00013",
+          "NLL00012",
+          "NLL00011",
+          "NLL00010",
+          "NLL00009",
+          "NLL00008",
+          "NLL00007",
+          "NLL00006"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "nl-rotterdam-a",
+    "code": "A",
+    "name": "Metro A",
+    "type": "metro",
+    "color": "#0BB14B",
+    "operator": "ret",
+    "routes": [
+      {
+        "stations": [
+          "NLM011",
+          "NLM091",
+          "NLM042",
+          "NLM001",
+          "NLM074",
+          "NLM085",
+          "NLM094",
+          "NLM016",
+          "NLM055",
+          "NLM120",
+          "NLM041",
+          "NLM076",
+          "NLM092",
+          "NLM010",
+          "NLM035",
+          "NLM031",
+          "NLM019",
+          "NLM026",
+          "NLM064",
+          "NLM095"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "nl-rotterdam-b",
+    "code": "B",
+    "name": "Metro B",
+    "type": "metro",
+    "color": "#FFDD00",
+    "operator": "ret",
+    "routes": [
+      {
+        "stations": [
+          "NLM068",
+          "NLM024",
+          "NLM002",
+          "NLM069",
+          "NLM047",
+          "NLM042",
+          "NLM001",
+          "NLM074",
+          "NLM085",
+          "NLM094",
+          "NLM016",
+          "NLM055",
+          "NLM120",
+          "NLM041",
+          "NLM076",
+          "NLM092",
+          "NLM010",
+          "NLM035",
+          "NLM031",
+          "NLM019",
+          "NLM026",
+          "NLM064",
+          "NLM095",
+          "NLM096",
+          "NLM117",
+          "NLM116",
+          "NLM118",
+          "NLM062",
+          "NLM063",
+          "NLM106",
+          "NLM048",
+          "NLM049"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "nl-rotterdam-c",
+    "code": "C",
+    "name": "Metro C",
+    "type": "metro",
+    "color": "#ED1A36",
+    "operator": "ret",
+    "routes": [
+      {
+        "stations": [
+          "NLM020",
+          "NLM044",
+          "NLM101",
+          "NLM128",
+          "NLM050",
+          "NLM109",
+          "NLM080",
+          "NLM114",
+          "NLM108",
+          "NLM079",
+          "NLM095",
+          "NLM064",
+          "NLM026",
+          "NLM019",
+          "NLM031",
+          "NLM035",
+          "NLM010",
+          "NLM092",
+          "NLM076",
+          "NLM041",
+          "NLM120",
+          "NLM055",
+          "NLM016",
+          "NLM099",
+          "NLM015",
+          "NLM023"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "nl-rotterdam-d",
+    "code": "D",
+    "name": "Metro D",
+    "type": "metro",
+    "color": "#009FE3",
+    "operator": "ret",
+    "routes": [
+      {
+        "stations": [
+          "NLM020",
+          "NLM044",
+          "NLM101",
+          "NLM128",
+          "NLM050",
+          "NLM109",
+          "NLM083",
+          "NLM087",
+          "NLM098",
+          "NLM130",
+          "NLM061",
+          "NLM088",
+          "NLM126",
+          "NLM060",
+          "NLM010",
+          "NLM103",
+          "NLM093"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "nl-rotterdam-e",
+    "code": "E",
+    "name": "Metro E",
+    "type": "metro",
+    "color": "#1D5EAC",
+    "operator": "ret",
+    "routes": [
+      {
+        "stations": [
+          "NLM028",
+          "NLM029",
+          "NLM119",
+          "NLM057",
+          "NLM037",
+          "NLM058",
+          "NLM073",
+          "NLM081",
+          "NLM082",
+          "NLM009",
+          "NLM089",
+          "NLM066",
+          "NLM067",
+          "NLM012",
+          "NLM093",
+          "NLM103",
+          "NLM010",
+          "NLM060",
+          "NLM126",
+          "NLM088",
+          "NLM061",
+          "NLM130",
+          "NLM098"
+        ]
+      }
+    ]
+  },
+  {
     "id": "no-bergen-1",
     "code": "1",
     "name": "Bybanen linje 1",

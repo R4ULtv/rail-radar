@@ -212476,19 +212476,6 @@
     {
       "type": "Feature",
       "properties": {
-        "id": "NLM000",
-        "name": "'s-Gravenweg",
-        "type": "metro",
-        "importance": 4
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [4.54767, 51.9195]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
         "id": "NLM001",
         "name": "Alexander",
         "type": "metro",
@@ -214174,6 +214161,409 @@
       "geometry": {
         "type": "Point",
         "coordinates": [4.48833, 51.8869]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "NLL00000",
+        "name": "Arnold Spoelplein",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [4.23291, 52.05464]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "NLL00001",
+        "name": "Pisuissestraat",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [4.2279, 52.05734]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "NLL00002",
+        "name": "Mozartlaan",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [4.23219, 52.05974]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "NLL00003",
+        "name": "Heliotrooplaan",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [4.23106, 52.06271]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "NLL00004",
+        "name": "Muurbloemweg",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [4.23467, 52.0639]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "NLL00005",
+        "name": "Hoefbladlaan",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [4.23962, 52.06534]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "NLL00006",
+        "name": "De Savornin Lohmanplein",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [4.24592, 52.06739]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "NLL00007",
+        "name": "Appelstraat",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [4.25153, 52.06937]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "NLL00008",
+        "name": "Zonnebloemstraat",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [4.25634, 52.07121]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "NLL00009",
+        "name": "Azaleaplein",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [4.26166, 52.0732]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "NLL00010",
+        "name": "Goudenregenstraat",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [4.26713, 52.0751]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "NLL00011",
+        "name": "Fahrenheitstraat",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [4.27082, 52.07644]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "NLL00012",
+        "name": "Valkenbosplein",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [4.27633, 52.07843]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "NLL00013",
+        "name": "Conradkade",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [4.2829, 52.08056]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "NLL00014",
+        "name": "Van Speijkstraat",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [4.28819, 52.08139]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "NLL00015",
+        "name": "Elandstraat (West)",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [4.29256, 52.07823]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "NLL00016",
+        "name": "HMC Westeinde",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [4.29943, 52.07293]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "NLL00017",
+        "name": "Brouwersgracht",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [4.30405, 52.0737]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "NLL00018",
+        "name": "Stadhuis (Zoetermeer)",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [4.49316, 52.0611]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "NLL00019",
+        "name": "De Uithof",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [4.24532, 52.03943]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "NLL00020",
+        "name": "Beresteinlaan",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [4.24966, 52.04246]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "NLL00021",
+        "name": "Bouwlustlaan",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [4.25519, 52.04597]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "NLL00022",
+        "name": "De Rade",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [4.25832, 52.04795]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "NLL00023",
+        "name": "Dedemsvaartweg",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [4.26243, 52.05015]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "NLL00024",
+        "name": "Zuidwoldepad",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [4.26609, 52.05283]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "NLL00025",
+        "name": "Leyenburg",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [4.26613, 52.05689]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "NLL00026",
+        "name": "Monnickendamplein",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [4.27054, 52.06212]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "NLL00027",
+        "name": "Tienhovenselaan",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [4.27706, 52.06465]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "NLL00028",
+        "name": "Dierenselaan",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [4.28195, 52.06684]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "NLL00029",
+        "name": "De la Reyweg",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [4.28575, 52.07104]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "NLL00030",
+        "name": "Monstersestraat",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [4.29287, 52.07306]
       }
     },
     {
