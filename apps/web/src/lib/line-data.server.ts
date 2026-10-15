@@ -131,12 +131,13 @@ function trackPaths(
   geometry: LineGeometry,
   project: (position: readonly number[]) => [number, number],
   clip: boolean,
+  { width = MAP_WIDTH, height = MAP_HEIGHT, tolerance = 0.6 } = {},
 ): string[] {
   const inFrame = ([x, y]: [number, number]) =>
     x >= -MAP_CLIP_MARGIN &&
-    x <= MAP_WIDTH + MAP_CLIP_MARGIN &&
+    x <= width + MAP_CLIP_MARGIN &&
     y >= -MAP_CLIP_MARGIN &&
-    y <= MAP_HEIGHT + MAP_CLIP_MARGIN;
+    y <= height + MAP_CLIP_MARGIN;
   const paths: string[] = [];
   for (const part of geometry.coordinates) {
     const points = part.map(project);
@@ -145,7 +146,7 @@ function trackPaths(
       if (run.length > 1) {
         paths.push(
           "M" +
-            simplify(run, 0.6)
+            simplify(run, tolerance)
               .map(([x, y]) => `${round(x, 1)} ${round(y, 1)}`)
               .join("L"),
         );
@@ -309,3 +310,48 @@ export async function getLinePageData(id: string) {
 }
 
 export type LinePageData = NonNullable<Awaited<ReturnType<typeof getLinePageData>>>;
+
+/** Size of the operator page's `/map/static?bbox=<operator bounds>&w=960&h=412` image. */
+const OPERATOR_MAP_WIDTH = 960;
+const OPERATOR_MAP_HEIGHT = 412;
+
+/**
+ * The operator's metro and light rail lines, with their track projected onto the
+ * operating-area map, which the API fits to the operator's bounds.
+ */
+export async function getOperatorLinesData(slug: string) {
+  const operator = operatorBySlug.get(slug);
+  if (!operator) return null;
+
+  const operatorLines = lines.filter((line) => line.operator === slug);
+  const stationIds = new Set(operatorLines.flatMap(getLineStationIds));
+  const { project } = createBoundsProjection(
+    operator.bounds,
+    OPERATOR_MAP_WIDTH,
+    OPERATOR_MAP_HEIGHT,
+    API_PADDING,
+  );
+  const tracks = await Promise.all(
+    operatorLines.map(async (line) => {
+      const geometry = await loadGeometry(line.id);
+      // A whole network at this scale needs less detail than one line, and one path per
+      // line: track files hold hundreds of short pieces (London's add up to 5,000 paths).
+      const paths = geometry
+        ? trackPaths(geometry, project, true, {
+            width: OPERATOR_MAP_WIDTH,
+            height: OPERATOR_MAP_HEIGHT,
+            tolerance: 1.5,
+          })
+        : [];
+      return { id: line.id, color: getLineColor(line), path: paths.join("") };
+    }),
+  );
+
+  return {
+    lines: operatorLines.map(toDirectoryLine),
+    stations: stationIds.size,
+    tracks: tracks.filter((track) => track.path.length > 0),
+  };
+}
+
+export type OperatorLinesData = NonNullable<Awaited<ReturnType<typeof getOperatorLinesData>>>;

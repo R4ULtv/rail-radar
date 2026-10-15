@@ -42,8 +42,3 @@ function pickForeground(color: string, minContrast: number): string {
 export function getLineTextColor(color: string): string {
   return pickForeground(color, 4.5);
 }
-
-/** A glyph on a line color, held to WCAG AA for graphics (3:1). */
-export function getLineGlyphColor(color: string): string {
-  return pickForeground(color, 3);
-}

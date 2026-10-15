@@ -28,6 +28,7 @@ import {
 import { useDirectoryQuery } from "@/hooks/use-directory-query";
 import { svgDataUri } from "@/lib/station-marker-icons";
 import { staticAssetUrl } from "@/lib/static-assets";
+import { prerenderedPageLinkProps } from "@/lib/station-prerender";
 
 type OperatorsSearch = {
   type?: OperatorType;
@@ -467,7 +468,12 @@ function OperatorCard({ operator }: { operator: Operator }) {
   const stats = lineStats.get(operator.slug);
 
   return (
-    <Link to="/operators/$slug" params={{ slug: operator.slug }} className="group">
+    <Link
+      to="/operators/$slug"
+      params={{ slug: operator.slug }}
+      {...prerenderedPageLinkProps}
+      className="group"
+    >
       <Card
         size="sm"
         className="h-full transition-[background-color,box-shadow,transform] ease-[cubic-bezier(0.23,1,0.32,1)] duration-200 lg:group-hover:bg-[color-mix(in_oklab,var(--muted)_50%,var(--card))] lg:group-hover:ring-foreground/20 dark:lg:group-hover:ring-foreground/20 group-active:scale-[0.98]"

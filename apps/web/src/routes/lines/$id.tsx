@@ -379,7 +379,12 @@ function OperatorCard({ data }: { data: LinePageData }) {
   const { operator } = data.line;
   if (!operator) return null;
   return (
-    <Link to="/operators/$slug" params={{ slug: operator.slug }} className="group block">
+    <Link
+      to="/operators/$slug"
+      params={{ slug: operator.slug }}
+      {...prerenderedPageLinkProps}
+      className="group block"
+    >
       <Card
         size="sm"
         className="transition-[background-color,box-shadow] duration-200 lg:group-hover:bg-[color-mix(in_oklab,var(--muted)_50%,var(--card))] lg:group-hover:ring-foreground/20 dark:lg:group-hover:ring-foreground/20"

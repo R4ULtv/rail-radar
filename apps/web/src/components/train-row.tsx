@@ -3,6 +3,7 @@ import { Link } from "@tanstack/react-router";
 import { cn } from "@repo/ui/lib/utils";
 import { Skeleton } from "@repo/ui/components/skeleton";
 import { BrandLogo, getBrandSlug } from "@/components/brands";
+import { prerenderedPageLinkProps } from "@/lib/station-prerender";
 import { ArrowRightIcon, ArrowDownIcon, BanIcon } from "lucide-react";
 
 interface TrainRowProps {
@@ -47,6 +48,7 @@ export function TrainRow({ train, type }: TrainRowProps) {
               <Link
                 to="/operators/$slug"
                 params={{ slug: brandSlug }}
+                {...prerenderedPageLinkProps}
                 aria-label={`${train.brand} brand page`}
               >
                 {brandLogo}

@@ -101,5 +101,5 @@ export function stopName(view: StationLineView, id: string | undefined): string 
 }
 
 export function badgeLine(line: Line) {
-  return { code: line.code, name: line.name, type: line.type, color: getLineColor(line) };
+  return { code: line.code, name: line.name, color: getLineColor(line) };
 }
