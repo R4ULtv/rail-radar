@@ -4044,5 +4044,212 @@
         "type": "website"
       }
     ]
+  },
+  {
+    "slug": "london-underground",
+    "name": "London Underground",
+    "logoPath": "uk/london-underground",
+    "countries": ["uk"],
+    "operatorTypes": ["metro"],
+    "bounds": [-0.621, 51.393, 0.262, 51.715],
+    "description": "London Underground operates the capital’s eleven named Tube lines. Its network links central London, suburban districts and destinations beyond Greater London, including Heathrow Airport and the Metropolitan line’s outer branches.",
+    "website": "https://tfl.gov.uk/modes/tube/",
+    "founded": null,
+    "headquarters": null,
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["commuter"],
+    "parentCompany": null,
+    "links": [
+      {
+        "label": "Official Site",
+        "url": "https://tfl.gov.uk/modes/tube/",
+        "type": "website"
+      }
+    ]
+  },
+  {
+    "slug": "docklands-light-railway",
+    "name": "Docklands Light Railway",
+    "logoPath": "uk/docklands-light-railway",
+    "countries": ["uk"],
+    "operatorTypes": ["light-rail"],
+    "bounds": [-0.099, 51.455, 0.082, 51.556],
+    "description": "The Docklands Light Railway is an automated light rail network serving east and southeast London. Its branches connect the City and Stratford with Canary Wharf, Greenwich, Lewisham, Beckton, Woolwich and London City Airport.",
+    "website": "https://tfl.gov.uk/modes/dlr/",
+    "founded": null,
+    "headquarters": null,
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["commuter"],
+    "parentCompany": null,
+    "links": [
+      {
+        "label": "Official Site",
+        "url": "https://tfl.gov.uk/modes/dlr/",
+        "type": "website"
+      }
+    ]
+  },
+  {
+    "slug": "spt",
+    "name": "Strathclyde Partnership for Transport",
+    "logoPath": "uk/spt",
+    "countries": ["uk"],
+    "operatorTypes": ["metro"],
+    "bounds": [-4.321, 55.84, -4.243, 55.885],
+    "description": "Strathclyde Partnership for Transport runs Glasgow’s Subway and supports public transport across the west of Scotland. The Subway’s Inner and Outer Circles connect fifteen stations around central Glasgow, the West End and the south side of the Clyde.",
+    "website": "https://www.spt.co.uk",
+    "founded": null,
+    "headquarters": null,
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["commuter"],
+    "parentCompany": null,
+    "links": [
+      {
+        "label": "Official Site",
+        "url": "https://www.spt.co.uk",
+        "type": "website"
+      }
+    ]
+  },
+  {
+    "slug": "nexus",
+    "name": "Nexus",
+    "logoPath": "uk/nexus",
+    "countries": ["uk"],
+    "operatorTypes": ["light-rail"],
+    "bounds": [-1.721, 54.892, -1.372, 55.052],
+    "description": "Nexus is the public transport body responsible for Tyne and Wear Metro. Its Green and Yellow lines connect Newcastle, Gateshead, Sunderland, South Shields and the North Tyneside coast, including Newcastle Airport and interchanges with national rail services.",
+    "website": "https://www.nexus.org.uk",
+    "founded": null,
+    "headquarters": null,
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["commuter"],
+    "parentCompany": null,
+    "links": [
+      {
+        "label": "Official Site",
+        "url": "https://www.nexus.org.uk",
+        "type": "website"
+      }
+    ]
+  },
+  {
+    "slug": "manchester-metrolink",
+    "name": "Manchester Metrolink",
+    "logoPath": "uk/manchester-metrolink",
+    "countries": ["uk"],
+    "operatorTypes": ["light-rail"],
+    "bounds": [-2.358, 53.355, -2.079, 53.627],
+    "description": "Metrolink is Greater Manchester’s light rail network within the Bee Network. Its routes connect the city centre with Altrincham, Bury, Ashton-under-Lyne, Eccles, MediaCityUK, East Didsbury, Rochdale, Manchester Airport and the Trafford Centre.",
+    "website": "https://tfgm.com/ways-to-travel/tram",
+    "founded": null,
+    "headquarters": null,
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["commuter"],
+    "parentCompany": null,
+    "links": [
+      {
+        "label": "Official Site",
+        "url": "https://tfgm.com/ways-to-travel/tram",
+        "type": "website"
+      }
+    ]
+  },
+  {
+    "slug": "west-midlands-metro",
+    "name": "West Midlands Metro",
+    "logoPath": "uk/west-midlands-metro",
+    "countries": ["uk"],
+    "operatorTypes": ["light-rail"],
+    "bounds": [-2.135, 52.462, -1.88, 52.597],
+    "description": "West Midlands Metro links Birmingham with Wolverhampton through West Bromwich, Wednesbury and Bilston. Its network includes Birmingham’s Westside route to Edgbaston Village, both Wolverhampton termini and the Eastside branch to Millennium Point.",
+    "website": "https://www.westmidlandsmetro.com",
+    "founded": null,
+    "headquarters": null,
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["commuter"],
+    "parentCompany": null,
+    "links": [
+      {
+        "label": "Official Site",
+        "url": "https://www.westmidlandsmetro.com",
+        "type": "website"
+      }
+    ]
+  },
+  {
+    "slug": "south-yorkshire-supertram",
+    "name": "South Yorkshire Supertram",
+    "logoPath": "uk/south-yorkshire-supertram",
+    "countries": ["uk"],
+    "operatorTypes": ["light-rail"],
+    "bounds": [-1.479, 53.373, -1.333, 53.453],
+    "description": "South Yorkshire Supertram provides tram and tram-train services in Sheffield and Rotherham. The Tram Train route links Sheffield Cathedral with Rotherham Parkgate, using both the urban tramway and the mainline railway through Magna and Rotherham Central.",
+    "website": "https://www.travelsouthyorkshire.com/en-gb/supertram/home",
+    "founded": null,
+    "headquarters": null,
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["commuter"],
+    "parentCompany": null,
+    "links": [
+      {
+        "label": "Official Site",
+        "url": "https://www.travelsouthyorkshire.com/en-gb/supertram/home",
+        "type": "website"
+      }
+    ]
+  },
+  {
+    "slug": "blackpool-transport",
+    "name": "Blackpool Transport",
+    "logoPath": "uk/blackpool-transport",
+    "countries": ["uk"],
+    "operatorTypes": ["light-rail"],
+    "bounds": [-3.068, 53.768, -2.998, 53.938],
+    "description": "Blackpool Transport runs the modern coastal tramway and local bus services along the Fylde coast. The tramway links Starr Gate, Blackpool’s seafront, Cleveleys and Fleetwood, with a branch serving Blackpool North railway station.",
+    "website": "https://www.blackpooltransport.com",
+    "founded": null,
+    "headquarters": null,
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["commuter"],
+    "parentCompany": null,
+    "links": [
+      {
+        "label": "Official Site",
+        "url": "https://www.blackpooltransport.com",
+        "type": "website"
+      }
+    ]
+  },
+  {
+    "slug": "luton-dart",
+    "name": "Luton DART",
+    "logoPath": "uk/luton-dart",
+    "countries": ["uk"],
+    "operatorTypes": ["light-rail"],
+    "bounds": [-0.405, 51.862, -0.363, 51.889],
+    "description": "Luton DART provides the public automated shuttle between Luton Airport Parkway railway station and London Luton Airport. Its two stations link the airport terminal with the Midland Main Line and onward trains to London and the wider region.",
+    "website": "https://www.lutondart.com",
+    "founded": null,
+    "headquarters": null,
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["commuter"],
+    "parentCompany": null,
+    "links": [
+      {
+        "label": "Official Site",
+        "url": "https://www.lutondart.com",
+        "type": "website"
+      }
+    ]
   }
 ]
