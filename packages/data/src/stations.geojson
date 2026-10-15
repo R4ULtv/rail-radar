@@ -287742,6 +287742,2476 @@
         "type": "Point",
         "coordinates": [18.00851, 59.36386]
       }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKL00000",
+        "name": "Ashton-under-Lyne",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-2.09808, 53.49037]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKL00001",
+        "name": "Ashton West",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-2.10971, 53.49023]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKL00002",
+        "name": "Ashton Moss",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-2.12186, 53.48365]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKL00003",
+        "name": "Audenshaw",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-2.13097, 53.47819]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKL00004",
+        "name": "Droylsden",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-2.14464, 53.47944]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKL00005",
+        "name": "Cemetery Road",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-2.15501, 53.47986]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKL00006",
+        "name": "Edge Lane",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-2.16528, 53.48086]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKL00007",
+        "name": "Clayton Hall",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-2.18232, 53.48279]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKL00008",
+        "name": "Velopark",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-2.19299, 53.48227]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKL00009",
+        "name": "Etihad Campus",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-2.20042, 53.48541]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKL00010",
+        "name": "Holt Town",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-2.21203, 53.48328]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKL00011",
+        "name": "New Islington",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-2.2198, 53.48104]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKL00012",
+        "name": "Piccadilly (Metrolink)",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-2.23044, 53.47699]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKL00013",
+        "name": "Piccadilly Gardens",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-2.23706, 53.48027]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKL00014",
+        "name": "St Peter's Square",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-2.24309, 53.47807]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKL00015",
+        "name": "Deansgate-Castlefield",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-2.25037, 53.47471]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKL00016",
+        "name": "Cornbrook",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-2.26736, 53.47008]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKL00017",
+        "name": "Pomona",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-2.27801, 53.46516]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKL00018",
+        "name": "Exchange Quay",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-2.28233, 53.46791]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKL00019",
+        "name": "Salford Quays",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-2.28396, 53.47055]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKL00020",
+        "name": "Anchorage",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-2.28605, 53.47432]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKL00021",
+        "name": "Harbour City",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-2.28963, 53.47434]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKL00022",
+        "name": "Broadway",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-2.29501, 53.4748]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKL00023",
+        "name": "Langworthy",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-2.29617, 53.48062]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKL00024",
+        "name": "Weaste",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-2.30739, 53.48239]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKL00025",
+        "name": "Ladywell",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-2.3266, 53.48397]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKL00026",
+        "name": "Eccles",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-2.33449, 53.48307]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKL00027",
+        "name": "MediaCityUK",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-2.29714, 53.47214]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKL00028",
+        "name": "Bury",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-2.29743, 53.59059]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKL00029",
+        "name": "Radcliffe",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-2.32105, 53.56251]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKL00030",
+        "name": "Whitefield",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-2.29506, 53.55116]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKL00031",
+        "name": "Besses o' th' Barn",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-2.28606, 53.54209]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKL00032",
+        "name": "Prestwich",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-2.28182, 53.53327]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKL00033",
+        "name": "Heaton Park",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-2.26729, 53.53053]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKL00034",
+        "name": "Bowker Vale",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-2.25001, 53.52495]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKL00035",
+        "name": "Crumpsall",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-2.24099, 53.51724]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKL00036",
+        "name": "Abraham Moss",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-2.23609, 53.51087]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKL00037",
+        "name": "Queens Road",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-2.22664, 53.50166]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKL00038",
+        "name": "Victoria (Metrolink)",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-2.24141, 53.48783]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKL00039",
+        "name": "Shudehill",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-2.2391, 53.48529]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKL00040",
+        "name": "Market Street",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-2.23862, 53.48192]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKL00041",
+        "name": "Trafford Bar",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-2.27733, 53.4617]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKL00042",
+        "name": "Old Trafford",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-2.28463, 53.45635]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKL00043",
+        "name": "Stretford",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-2.30377, 53.44604]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKL00044",
+        "name": "Dane Road",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-2.31162, 53.43002]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKL00045",
+        "name": "Sale",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-2.31914, 53.42415]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKL00046",
+        "name": "Brooklands",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-2.32605, 53.41706]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKL00047",
+        "name": "Timperley",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-2.33835, 53.40426]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKL00048",
+        "name": "Navigation Road",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-2.34333, 53.39577]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKL00049",
+        "name": "Altrincham",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-2.3475, 53.3873]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKL00050",
+        "name": "Firswood",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-2.27767, 53.45123]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKL00051",
+        "name": "Chorlton",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-2.27348, 53.44282]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKL00052",
+        "name": "St Werburgh's Road",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-2.26567, 53.43886]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKL00053",
+        "name": "Barlow Moor Road",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-2.26925, 53.43284]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKL00054",
+        "name": "Sale Water Park",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-2.29074, 53.42824]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKL00055",
+        "name": "Northern Moor",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-2.28813, 53.41455]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKL00056",
+        "name": "Wythenshawe Park",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-2.29567, 53.40772]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKL00057",
+        "name": "Moor Road",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-2.29513, 53.40332]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKL00058",
+        "name": "Baguley",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-2.29266, 53.39687]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKL00059",
+        "name": "Roundthorn",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-2.28916, 53.39265]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKL00060",
+        "name": "Martinscroft",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-2.27979, 53.3919]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKL00061",
+        "name": "Benchill",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-2.25618, 53.38724]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKL00062",
+        "name": "Crossacres",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-2.25624, 53.38334]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKL00063",
+        "name": "Wythenshawe Town Centre",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-2.26372, 53.38006]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKL00064",
+        "name": "Robinswood Road",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-2.25988, 53.37672]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKL00065",
+        "name": "Peel Hall",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-2.25038, 53.37372]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKL00066",
+        "name": "Shadowmoss",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-2.25243, 53.36796]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKL00067",
+        "name": "Manchester Airport",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-2.27233, 53.36537]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKL00068",
+        "name": "Shaw and Crompton",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-2.08939, 53.57617]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKL00069",
+        "name": "Derker",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-2.10159, 53.5498]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKL00070",
+        "name": "Oldham Mumps",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-2.10342, 53.5424]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKL00071",
+        "name": "Oldham Central",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-2.11213, 53.54029]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKL00072",
+        "name": "Oldham King Street",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-2.11746, 53.53956]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKL00073",
+        "name": "Westwood",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-2.12576, 53.54233]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKL00074",
+        "name": "Freehold",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-2.13743, 53.53797]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKL00075",
+        "name": "South Chadderton",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-2.14515, 53.52672]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKL00076",
+        "name": "Hollinwood",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-2.14735, 53.51995]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKL00077",
+        "name": "Failsworth",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-2.16286, 53.51063]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKL00078",
+        "name": "Newton Heath and Moston",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-2.18375, 53.50423]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKL00079",
+        "name": "Central Park",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-2.19908, 53.50158]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKL00080",
+        "name": "Monsall",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-2.21067, 53.50108]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKL00081",
+        "name": "Exchange Square",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-2.24263, 53.48444]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKL00082",
+        "name": "Withington",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-2.24931, 53.43278]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKL00083",
+        "name": "Burton Road",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-2.24061, 53.42919]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKL00084",
+        "name": "West Didsbury",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-2.23603, 53.42448]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKL00085",
+        "name": "Didsbury Village",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-2.22858, 53.41676]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKL00086",
+        "name": "East Didsbury",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-2.21722, 53.4121]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKL00087",
+        "name": "Fleetwood Ferry",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-3.00793, 53.9276]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKL00088",
+        "name": "Victoria Street",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-3.00861, 53.92471]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKL00089",
+        "name": "London Street",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-3.01166, 53.9225]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKL00090",
+        "name": "Fishermans Walk",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-3.01742, 53.9196]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKL00091",
+        "name": "Stanley Road",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-3.02056, 53.91655]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKL00092",
+        "name": "Lindel Road",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-3.02373, 53.91348]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKL00093",
+        "name": "Heathfield Road",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-3.02745, 53.90988]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKL00094",
+        "name": "Broadwater",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-3.0321, 53.90401]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKL00095",
+        "name": "Rossall Square",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-3.03683, 53.90052]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKL00096",
+        "name": "Rossall School",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-3.03944, 53.89671]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKL00097",
+        "name": "Rossall Beach",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-3.04034, 53.88744]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKL00098",
+        "name": "Thornton Gate",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-3.0395, 53.88337]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKL00099",
+        "name": "West Drive",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-3.03902, 53.88022]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKL00100",
+        "name": "Cleveleys",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-3.03975, 53.87756]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKL00101",
+        "name": "Anchorsholme Lane",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-3.04272, 53.87141]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKL00102",
+        "name": "Little Bispham",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-3.04756, 53.86588]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKL00103",
+        "name": "Norbreck North",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-3.04888, 53.86162]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKL00104",
+        "name": "Norbreck",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-3.05008, 53.8578]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKL00105",
+        "name": "Sandhurst Avenue",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-3.05172, 53.85359]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKL00106",
+        "name": "Bispham",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-3.0535, 53.84904]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKL00107",
+        "name": "Cavendish Road",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-3.05358, 53.84647]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKL00108",
+        "name": "Lowther Avenue",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-3.05431, 53.84189]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKL00109",
+        "name": "Cabin",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-3.05475, 53.83801]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKL00110",
+        "name": "Cliffs Hotel",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-3.05488, 53.83583]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKL00111",
+        "name": "Gynn Square",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-3.055, 53.83363]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKL00112",
+        "name": "Wilton Parade",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-3.0556, 53.82773]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKL00113",
+        "name": "Pleasant Street",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-3.05552, 53.82527]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKL00114",
+        "name": "Talbot Square",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-3.05449, 53.81912]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKL00115",
+        "name": "North Station",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-3.05006, 53.82104]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKL00116",
+        "name": "North Pier",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-3.05613, 53.81773]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKL00117",
+        "name": "Tower",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-3.05582, 53.8145]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKL00118",
+        "name": "Central Pier",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-3.05556, 53.81179]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKL00119",
+        "name": "Manchester Square",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-3.05552, 53.80793]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKL00120",
+        "name": "St Chad's Road",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-3.05556, 53.80246]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKL00121",
+        "name": "Waterloo Road",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-3.05588, 53.79886]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKL00122",
+        "name": "South Pier",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-3.05635, 53.79589]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKL00123",
+        "name": "Pleasure Beach",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-3.0567, 53.79348]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKL00124",
+        "name": "Burlington Road West",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-3.0583, 53.78713]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKL00125",
+        "name": "Harrow Place",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-3.05803, 53.78251]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKL00126",
+        "name": "Starr Gate",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-3.05605, 53.77795]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKL00127",
+        "name": "Rochdale Town Centre",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-2.15546, 53.61735]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKL00128",
+        "name": "Rochdale Railway Station",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-2.15439, 53.61102]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKL00129",
+        "name": "Newbold",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-2.1355, 53.61343]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKL00130",
+        "name": "Kingsway Business Park",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-2.12438, 53.61125]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKL00131",
+        "name": "Milnrow",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-2.11212, 53.60817]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKL00132",
+        "name": "Newhey",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-2.09472, 53.60085]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKL00133",
+        "name": "Rotherham Parkgate",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-1.3433, 53.44295]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKL00134",
+        "name": "Rotherham Central",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-1.36151, 53.43102]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKL00135",
+        "name": "Magna",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-1.38933, 53.4202]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKL00136",
+        "name": "Meadowhall South / Tinsley",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-1.40498, 53.41424]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKL00137",
+        "name": "Carbrook/IKEA",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-1.41088, 53.40551]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKL00138",
+        "name": "Valley Centertainment",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-1.41268, 53.40221]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKL00139",
+        "name": "Arena / Olympic Legacy Park",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-1.42053, 53.39819]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKL00140",
+        "name": "Attercliffe",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-1.42998, 53.3923]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKL00141",
+        "name": "Woodbourn Road",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-1.43456, 53.38885]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKL00142",
+        "name": "Nunnery Square",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-1.44176, 53.3855]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKL00143",
+        "name": "Cricket Inn Road",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-1.44661, 53.38401]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKL00144",
+        "name": "Hyde Park",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-1.45243, 53.38462]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKL00145",
+        "name": "Fitzalan Square / Ponds Forge",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-1.46389, 53.38317]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKL00146",
+        "name": "Castle Square",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-1.46605, 53.38308]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKL00147",
+        "name": "Cathedral (Sheffield)",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-1.46905, 53.38261]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKL00148",
+        "name": "Wharfside",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-2.28826, 53.46642]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKL00149",
+        "name": "Imperial War Museum",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-2.29687, 53.4686]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKL00150",
+        "name": "Village",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-2.30914, 53.46739]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKL00151",
+        "name": "Parkway",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-2.32396, 53.4682]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKL00152",
+        "name": "Trafford Palazzo",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-2.3421, 53.46574]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKL00153",
+        "name": "The Trafford Centre",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-2.34784, 53.46799]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKL00154",
+        "name": "Wolverhampton Station",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-2.11936, 52.58714]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKL00155",
+        "name": "Town Hall (Birmingham)",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-1.90336, 52.47926]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKL00156",
+        "name": "Library (Birmingham)",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-1.90834, 52.47867]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKL00157",
+        "name": "Millennium Point",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-1.88983, 52.48095]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKL00158",
+        "name": "Albert Street",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-1.8927, 52.48038]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKL00159",
+        "name": "Corporation Street",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-1.89722, 52.4797]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKL00160",
+        "name": "Grand Central (Metro)",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-1.89925, 52.47859]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKL00161",
+        "name": "Brindleyplace",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-1.91236, 52.47665]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKL00162",
+        "name": "Five Ways",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-1.91527, 52.4747]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKL00163",
+        "name": "Edgbaston Village",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-1.92356, 52.47197]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKL00164",
+        "name": "Bull Street",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-1.89649, 52.48201]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKL00165",
+        "name": "St Chads",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-1.90037, 52.48472]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKL00166",
+        "name": "St Paul's",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-1.90481, 52.48722]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKL00167",
+        "name": "Jewellery Quarter",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-1.91428, 52.4899]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKL00168",
+        "name": "Soho Benson Road",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-1.93102, 52.49698]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKL00169",
+        "name": "Winson Green Outer Circle",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-1.93915, 52.49889]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKL00170",
+        "name": "Handsworth Booth Street",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-1.95233, 52.50209]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKL00171",
+        "name": "The Hawthorns",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-1.96508, 52.5058]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKL00172",
+        "name": "Kenrick Park",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-1.98254, 52.50869]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKL00173",
+        "name": "Trinity Way",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-1.98829, 52.51191]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKL00174",
+        "name": "West Bromwich Central",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-1.99471, 52.51653]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKL00175",
+        "name": "Lodge Road",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-1.99991, 52.51866]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKL00176",
+        "name": "Dartmouth Street",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-2.00454, 52.52047]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKL00177",
+        "name": "Dudley Street Guns Village",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-2.00857, 52.52517]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKL00178",
+        "name": "Black Lake",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-2.01119, 52.53101]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKL00179",
+        "name": "Wednesbury Great Western Street",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-2.02564, 52.54892]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKL00180",
+        "name": "Wednesbury Parkway",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-2.03203, 52.54967]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKL00181",
+        "name": "Bradley Lane",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-2.05775, 52.55592]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKL00182",
+        "name": "Loxdale",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-2.06591, 52.56006]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKL00183",
+        "name": "Bilston Central",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-2.07468, 52.56538]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKL00184",
+        "name": "The Crescent",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-2.08091, 52.56796]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKL00185",
+        "name": "Priestfield",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-2.09802, 52.57194]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKL00186",
+        "name": "The Royal",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-2.11733, 52.58118]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKL00187",
+        "name": "Pipers Row",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-2.1228, 52.58502]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKL00188",
+        "name": "Wolverhampton St Georges",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-2.12452, 52.584]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKM287",
+        "name": "Edgware Road (Bakerloo line)",
+        "type": "metro",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-0.17015, 51.5203]
+      }
     }
   ]
 }
