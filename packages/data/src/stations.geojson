@@ -171630,19 +171630,6 @@
     {
       "type": "Feature",
       "properties": {
-        "id": "IEL068",
-        "name": "Fortunestown Tram Stop",
-        "type": "light",
-        "importance": 4
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [-6.42459, 53.28424]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
         "id": "IEL069",
         "name": "Broombridge",
         "type": "light",
