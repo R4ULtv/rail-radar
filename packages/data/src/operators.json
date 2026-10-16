@@ -2953,7 +2953,7 @@
   {
     "slug": "ir",
     "name": "Iarnród Éireann",
-    "logoPath": "ir",
+    "logoPath": "ie/ir",
     "countries": ["ie"],
     "operatorTypes": ["passenger"],
     "bounds": [-10.5, 51.4, -5.9, 55.4],
@@ -4248,6 +4248,34 @@
       {
         "label": "Official Site",
         "url": "https://www.lutondart.com",
+        "type": "website"
+      }
+    ]
+  },
+  {
+    "slug": "luas",
+    "name": "Luas",
+    "logoPath": "ie/luas",
+    "countries": ["ie"],
+    "operatorTypes": ["light-rail"],
+    "bounds": [-6.448, 53.232, -6.133, 53.382],
+    "description": "Luas is Dublin’s light rail network, with Red and Green lines linking the city centre, Docklands and surrounding suburbs. KeolisAmey Luas operates and maintains the network under contract to Transport Infrastructure Ireland and the National Transport Authority.",
+    "website": "https://www.luas.ie",
+    "founded": null,
+    "headquarters": null,
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["commuter"],
+    "parentCompany": null,
+    "links": [
+      {
+        "label": "Official website",
+        "url": "https://www.luas.ie",
+        "type": "website"
+      },
+      {
+        "label": "Network map",
+        "url": "https://www.luas.ie/luas-map",
         "type": "website"
       }
     ]

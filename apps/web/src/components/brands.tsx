@@ -124,7 +124,7 @@ const brandPaths: Record<string, string> = {
   gc: "uk/gc",
   ht: "uk/ht",
   // Irish brands
-  ir: "ir",
+  ir: "ie/ir",
 };
 
 // Aliases for brands that share icons
