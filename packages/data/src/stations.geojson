@@ -290199,6 +290199,487 @@
         "type": "Point",
         "coordinates": [-0.17015, 51.5203]
       }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "DEM00000",
+        "name": "Wuhletal",
+        "type": "metro",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [13.57508, 52.51261]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "DEL00457",
+        "name": "Bommersheim",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [8.59413, 50.19303]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "DEL00458",
+        "name": "Bonames Mitte",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [8.66452, 50.18524]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "DEL00459",
+        "name": "Enkheim",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [8.75375, 50.14253]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "DEL00460",
+        "name": "Fischstein",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [8.62513, 50.12936]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "DEL00461",
+        "name": "Friedhof Westhausen",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [8.61281, 50.13871]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "DEL00462",
+        "name": "Ginnheim/Niddapark",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [8.64216, 50.14382]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "DEL00464",
+        "name": "Große Nelkenstraße",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [8.62836, 50.13302]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "DEL00465",
+        "name": "Hauptfriedhof",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [8.68433, 50.13634]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "DEL00466",
+        "name": "Hausen",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [8.62454, 50.13772]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "DEL00467",
+        "name": "Hausener Weg",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [8.61979, 50.13145]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "DEL00468",
+        "name": "Heerstraße",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [8.60839, 50.14341]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "DEL00469",
+        "name": "Hessen-Center",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [8.74925, 50.14058]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "DEL00470",
+        "name": "Kalbach",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [8.65803, 50.18307]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "DEL00471",
+        "name": "Konstablerwache",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [8.68758, 50.11461]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "DEL00472",
+        "name": "Kruppstraße",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [8.74443, 50.13791]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "DEL00473",
+        "name": "Nordwestzentrum",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [8.63469, 50.1579]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "DEL00474",
+        "name": "Riedwiese/Mertonviertel",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [8.64315, 50.17097]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "DEL00475",
+        "name": "Seckbacher Landstraße",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [8.71166, 50.13358]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "DEL00476",
+        "name": "Stephan-Heise-Straße",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [8.61487, 50.13643]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "DEL00477",
+        "name": "Westend",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [8.66277, 50.11819]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "DEL00478",
+        "name": "Zeilweg",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [8.64309, 50.16435]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "DEM00001",
+        "name": "Emilienstraße",
+        "type": "metro",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [9.95262, 53.57165]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "DEM00002",
+        "name": "Hagendeel",
+        "type": "metro",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [9.94536, 53.60434]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "DEM00003",
+        "name": "Joachim-Mähl-Straße",
+        "type": "metro",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [9.95031, 53.6282]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "DEM00004",
+        "name": "Landungsbrücken",
+        "type": "metro",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [9.97133, 53.54586]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "DEM00005",
+        "name": "Lutterothstraße",
+        "type": "metro",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [9.94762, 53.58199]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "DEM00006",
+        "name": "Richtweg",
+        "type": "metro",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [9.9896, 53.6956]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "DEM00007",
+        "name": "Friedrich-Ebert-Platz",
+        "type": "metro",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [11.07123, 49.46248]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "DEM00008",
+        "name": "Gustav-Adolf-Straße",
+        "type": "metro",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [11.03632, 49.43914]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "DEM00009",
+        "name": "Herrnhütte",
+        "type": "metro",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [11.10997, 49.47854]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "DEM00010",
+        "name": "Kaulbachplatz",
+        "type": "metro",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [11.07854, 49.46332]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "DEM00011",
+        "name": "Klinikum Nord",
+        "type": "metro",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [11.06459, 49.46399]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "DEM00012",
+        "name": "Maffeiplatz",
+        "type": "metro",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [11.08391, 49.43573]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "DEM00013",
+        "name": "Maxfeld",
+        "type": "metro",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [11.08495, 49.46332]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "DEM00014",
+        "name": "St. Leonhard",
+        "type": "metro",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [11.04994, 49.43879]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "DEM00015",
+        "name": "Sündersbühl",
+        "type": "metro",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [11.04358, 49.44183]
+      }
     }
   ]
 }

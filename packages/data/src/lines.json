@@ -1091,6 +1091,1238 @@
     ]
   },
   {
+    "id": "de-berlin-u1",
+    "code": "U1",
+    "name": "U-Bahn U1",
+    "description": "Berlin’s U1 links Uhlandstraße with Warschauer Straße, passing the western shopping district before following the elevated railway through Kreuzberg. Wittenbergplatz, Gleisdreieck and Kottbusser Tor provide useful U-Bahn connections, while Warschauer Straße connects with the S-Bahn and tram network.",
+    "type": "metro",
+    "color": "#7DAD4C",
+    "operator": "bvg",
+    "routes": [
+      {
+        "stations": [
+          "DEM3957757603",
+          "DEM29046970",
+          "DEM3957757604",
+          "DEM3901824902",
+          "DEM3906622702",
+          "DEM2102139395",
+          "DEM5250030093",
+          "DEM3854590997",
+          "DEM3881590700",
+          "DEM3900136339",
+          "DEM3875882001",
+          "DEM3876481637",
+          "DEM3870914569"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "de-berlin-u2",
+    "code": "U2",
+    "name": "U-Bahn U2",
+    "description": "The U2 crosses Berlin from Pankow to Ruhleben through Alexanderplatz, Potsdamer Platz and Zoologischer Garten. It connects several major shopping and cultural districts, with S-Bahn transfers at Schönhauser Allee, Alexanderplatz and Potsdamer Platz and western connections towards the Olympic Stadium area.",
+    "type": "metro",
+    "color": "#DA421E",
+    "operator": "bvg",
+    "routes": [
+      {
+        "stations": [
+          "DEM5220107618",
+          "DEM3896661775",
+          "DEM5219721336",
+          "DEM5713678270",
+          "DEM3916325095",
+          "DEM5219756617",
+          "DEM4598414751",
+          "DEM3876077784",
+          "DEM4940731304",
+          "DEM3904674211",
+          "DEM3947836158",
+          "DEM3352091173",
+          "DEM3870475231",
+          "DEM3854591000",
+          "DEM3933855820",
+          "DEM2102139395",
+          "DEM3946122064",
+          "DEM3901824902",
+          "DEM3957757604",
+          "DEM29046450",
+          "DEM29123764",
+          "DEM29123763",
+          "DEM31207787",
+          "DEM3900580952",
+          "DEM316021790",
+          "DEM29123754",
+          "DEM29123761",
+          "DEM5713678268",
+          "DEM27586255"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "de-berlin-u3",
+    "code": "U3",
+    "name": "U-Bahn U3",
+    "description": "The U3 runs from Krumme Lanke through Dahlem and Wilmersdorf to the elevated Kreuzberg corridor and Warschauer Straße. Dahlem-Dorf and Freie Universität serve the university district, while Wittenbergplatz and Nollendorfplatz connect with other western U-Bahn routes.",
+    "type": "metro",
+    "color": "#16683D",
+    "operator": "bvg",
+    "routes": [
+      {
+        "stations": [
+          "DEM3872477458",
+          "DEM3955368088",
+          "DEM3955368093",
+          "DEM3955368095",
+          "DEM3846748389",
+          "DEM5160531362",
+          "DEM3959895235",
+          "DEM5149137347",
+          "DEM5162689184",
+          "DEM5162689572",
+          "DEM5162689220",
+          "DEM5162689571",
+          "DEM5162689183",
+          "DEM3957757604",
+          "DEM3901824902",
+          "DEM3906622702",
+          "DEM2102139395",
+          "DEM5250030093",
+          "DEM3854590997",
+          "DEM3881590700",
+          "DEM3900136339",
+          "DEM3875882001",
+          "DEM3876481637",
+          "DEM3870914569"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "de-berlin-u4",
+    "code": "U4",
+    "name": "U-Bahn U4",
+    "description": "Berlin’s short U4 stays within Schöneberg, linking Innsbrucker Platz with Nollendorfplatz through Rathaus Schöneberg and Bayerischer Platz. It provides local access to the district’s residential streets, with S-Bahn connections at Innsbrucker Platz and U7 transfers at Bayerischer Platz.",
+    "type": "metro",
+    "color": "#F0D722",
+    "operator": "bvg",
+    "routes": [
+      {
+        "stations": [
+          "DEM29497638",
+          "DEM5134482957",
+          "DEM29833469",
+          "DEM5134716875",
+          "DEM3901824902"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "de-berlin-u5",
+    "code": "U5",
+    "name": "U-Bahn U5",
+    "description": "The U5 connects Berlin Hauptbahnhof with Hönow through the government district, Museumsinsel, Alexanderplatz and the eastern residential boroughs. Brandenburger Tor, Lichtenberg and Wuhletal offer railway connections, making the line useful for both central sightseeing and journeys towards Hellersdorf.",
+    "type": "metro",
+    "color": "#7E5330",
+    "operator": "bvg",
+    "routes": [
+      {
+        "stations": [
+          "DEM3856100108",
+          "DEM4213705914",
+          "DEM3862767512",
+          "DEM8170768521",
+          "DEM9082329700",
+          "DEM8170768522",
+          "DEM4598414751",
+          "DEM3876218098",
+          "DEM3846589198",
+          "DEM3846755695",
+          "DEM3876349058",
+          "DEM3935369912",
+          "DEM3799307108",
+          "DEM3933477401",
+          "DEM3950105985",
+          "DEM193661797",
+          "DEM4598319045",
+          "DEM557840857",
+          "DEM557830030",
+          "DEM00000",
+          "DEM3933477399",
+          "DEM3933477404",
+          "DEM3933477396",
+          "DEM4788379937",
+          "DEM4788379933",
+          "DEM3935470812"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "de-berlin-u6",
+    "code": "U6",
+    "name": "U-Bahn U6",
+    "description": "The U6 runs north–south through central Berlin between Kurt-Schumacher-Platz and Alt-Mariendorf in the currently stored service pattern. Friedrichstraße offers S-Bahn and regional connections, Unter den Linden connects with the U5, and Mehringdamm links with the U7. The northern extension to Alt-Tegel is closed for works.",
+    "type": "metro",
+    "color": "#8C6DAB",
+    "operator": "bvg",
+    "routes": [
+      {
+        "stations": [
+          "DEM3884823930",
+          "DEM3898404805",
+          "DEM3948690916",
+          "DEM3898068655",
+          "DEM3948690912",
+          "DEM5679382211",
+          "DEM3949521963",
+          "DEM3887567777",
+          "DEM3949521962",
+          "DEM5250030092",
+          "DEM5116771809",
+          "DEM5250030091",
+          "DEM8170768521",
+          "DEM3869306768",
+          "DEM3928759793",
+          "DEM3820796396",
+          "DEM3906729688",
+          "DEM5198810677",
+          "DEM2924245392",
+          "DEM3772836700",
+          "DEM3772787174",
+          "DEM3854167532",
+          "DEM3858579923",
+          "DEM3858818979"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "de-berlin-u7",
+    "code": "U7",
+    "name": "U-Bahn U7",
+    "description": "The U7 forms a long arc from Rudow through Neukölln, Kreuzberg, Wilmersdorf and Charlottenburg to Rathaus Spandau. It serves numerous local centres rather than Alexanderplatz, with useful railway connections at Neukölln, Jungfernheide and Spandau and U-Bahn transfers across the western network.",
+    "type": "metro",
+    "color": "#528DBA",
+    "operator": "bvg",
+    "routes": [
+      {
+        "stations": [
+          "DEM3856551771",
+          "DEM3856551777",
+          "DEM6555763842",
+          "DEM3856551769",
+          "DEM3856551767",
+          "DEM3856551765",
+          "DEM5171026799",
+          "DEM3959389239",
+          "DEM3851450060",
+          "DEM3865616067",
+          "DEM3918711741",
+          "DEM5171026794",
+          "DEM5171026793",
+          "DEM129730678",
+          "DEM259845849",
+          "DEM3949521962",
+          "DEM3933855823",
+          "DEM174817813",
+          "DEM5099979652",
+          "DEM76474606",
+          "DEM29833469",
+          "DEM29046979",
+          "DEM3959653399",
+          "DEM5162689572",
+          "DEM3918542874",
+          "DEM3931919580",
+          "DEM5176114617",
+          "DEM31207787",
+          "DEM31207789",
+          "DEM5219756618",
+          "DEM4644994619",
+          "DEM5176114547",
+          "DEM5183375797",
+          "DEM4512633105",
+          "DEM5330823481",
+          "DEM5183375788",
+          "DEM5220114129",
+          "DEM5183374155",
+          "DEM5726082246",
+          "DEM4989868817"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "de-berlin-u8",
+    "code": "U8",
+    "name": "U-Bahn U8",
+    "description": "The U8 connects Hermannstraße with Wittenau through Neukölln, Alexanderplatz, Gesundbrunnen and Reinickendorf. Its north–south route provides direct access to the Rosenthaler Platz area, while Hermannstraße, Jannowitzbrücke, Alexanderplatz, Gesundbrunnen and Wittenau connect with the S-Bahn.",
+    "type": "metro",
+    "color": "#224F86",
+    "operator": "bvg",
+    "routes": [
+      {
+        "stations": [
+          "DEM31048718",
+          "DEM3846471665",
+          "DEM3846415853",
+          "DEM5171026793",
+          "DEM3844501316",
+          "DEM3900136339",
+          "DEM3844467019",
+          "DEM5713678269",
+          "DEM29494301",
+          "DEM4598414751",
+          "DEM3867910440",
+          "DEM1498939809",
+          "DEM5713944071",
+          "DEM3844356478",
+          "DEM2461322542",
+          "DEM3933855829",
+          "DEM3983548303",
+          "DEM3895235324",
+          "DEM3895051317",
+          "DEM3894910680",
+          "DEM29190897",
+          "DEM5219721338",
+          "DEM107606908",
+          "DEM5219721339"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "de-berlin-u9",
+    "code": "U9",
+    "name": "U-Bahn U9",
+    "description": "Berlin’s U9 links Rathaus Steglitz with Osloer Straße through Zoologischer Garten, Turmstraße and Leopoldplatz. It is a useful route between the southwest and northwest without crossing Alexanderplatz, with S-Bahn connections at Steglitz, Bundesplatz, Zoologischer Garten and Westhafen.",
+    "type": "metro",
+    "color": "#F3791D",
+    "operator": "bvg",
+    "routes": [
+      {
+        "stations": [
+          "DEM3983548303",
+          "DEM3933566460",
+          "DEM3772836700",
+          "DEM29045595",
+          "DEM3876909306",
+          "DEM3959201657",
+          "DEM4440948591",
+          "DEM3957897529",
+          "DEM29046450",
+          "DEM29046970",
+          "DEM5162689571",
+          "DEM29046976",
+          "DEM29046979",
+          "DEM5324318370",
+          "DEM29046999",
+          "DEM29047043",
+          "DEM29047045",
+          "DEM29047047"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "de-frankfurt-u1",
+    "code": "U1",
+    "name": "U-Bahn U1",
+    "description": "Frankfurt’s U1 connects Ginnheim Mitte with Südbahnhof through Nordwestzentrum, Heddernheim and the central tunnel. It serves the Zeil shopping area at Hauptwache and crosses beneath the Main to Sachsenhausen, with railway connections at Hauptwache and Südbahnhof.",
+    "type": "light",
+    "color": "#B8282E",
+    "operator": "vgf",
+    "routes": [
+      {
+        "stations": [
+          "DEM5560039803",
+          "DEL00462",
+          "DEM5902639722",
+          "DEL00473",
+          "DEM8100883741",
+          "DEL00478",
+          "DEM8091442473",
+          "DEM8110961213",
+          "DEM8117627651",
+          "DEM8110961211",
+          "DEM8091442475",
+          "DEM8100883742",
+          "DEM5902639720",
+          "DEM5902639719",
+          "DEM5902639718",
+          "DEM30049623",
+          "DEM30049622",
+          "DEM28783089",
+          "DEM613535266",
+          "DEM5902586327"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "de-frankfurt-u2",
+    "code": "U2",
+    "name": "U-Bahn U2",
+    "description": "The U2 links Ober-Eschbach with Frankfurt Südbahnhof through Nieder-Eschbach, Heddernheim and Hauptwache. It provides a direct route from northern suburbs into the city centre. During the Bad Homburg extension works, Ober-Eschbach is the rail terminus and Gonzenheim is reached by replacement bus.",
+    "type": "light",
+    "color": "#00A54F",
+    "operator": "vgf",
+    "routes": [
+      {
+        "stations": [
+          "DEM8443272206",
+          "DEM30751055",
+          "DEL00458",
+          "DEL00470",
+          "DEL00474",
+          "DEM8091442470",
+          "DEM8091442473",
+          "DEM8110961213",
+          "DEM8117627651",
+          "DEM8110961211",
+          "DEM8091442475",
+          "DEM8100883742",
+          "DEM5902639720",
+          "DEM5902639719",
+          "DEM5902639718",
+          "DEM30049623",
+          "DEM30049622",
+          "DEM28783089",
+          "DEM613535266",
+          "DEM5902586327"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "de-frankfurt-u3",
+    "code": "U3",
+    "name": "U-Bahn U3",
+    "description": "The U3 connects Oberursel Hohemark with Frankfurt Südbahnhof, combining a suburban surface route with the central U-Bahn tunnel. Oberursel Bahnhof provides an S-Bahn interchange, while Hohemark is a gateway to the Taunus. Central transfers include Hauptwache and Willy-Brandt-Platz.",
+    "type": "light",
+    "color": "#4A5EAA",
+    "operator": "vgf",
+    "routes": [
+      {
+        "stations": [
+          "DEM9181865198",
+          "DEM9181865199",
+          "DEM9181865200",
+          "DEM9181865201",
+          "DEM9181865202",
+          "DEM9181865203",
+          "DEM8100883743",
+          "DEM4477542460",
+          "DEM4477542459",
+          "DEL00457",
+          "DEM8443367574",
+          "DEM8091442471",
+          "DEM8443367572",
+          "DEL00478",
+          "DEM8091442473",
+          "DEM8110961213",
+          "DEM8117627651",
+          "DEM8110961211",
+          "DEM8091442475",
+          "DEM8100883742",
+          "DEM5902639720",
+          "DEM5902639719",
+          "DEM5902639718",
+          "DEM30049623",
+          "DEM30049622",
+          "DEM28783089",
+          "DEM613535266",
+          "DEM5902586327"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "de-frankfurt-u4",
+    "code": "U4",
+    "name": "U-Bahn U4",
+    "description": "Frankfurt’s U4 runs from Bockenheimer Warte through Hauptbahnhof and the city centre to Enkheim. It serves the exhibition district at Festhalle/Messe, crosses the central shopping area at Konstablerwache and continues through Bornheim, with mainline connections at Hauptbahnhof.",
+    "type": "light",
+    "color": "#F172AC",
+    "operator": "vgf",
+    "routes": [
+      {
+        "stations": [
+          "DEM614877751",
+          "DEM29271563",
+          "DEM767185754",
+          "DEM28783089",
+          "DEM11502587744",
+          "DEL00471",
+          "DEM5912341583",
+          "DEM5912341584",
+          "DEM5912341585",
+          "DEL00475",
+          "DEM4020412931",
+          "DEM31079818",
+          "DEL00472",
+          "DEL00469",
+          "DEL00459"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "de-frankfurt-u5",
+    "code": "U5",
+    "name": "U-Bahn U5",
+    "description": "The U5 connects Frankfurt Hauptbahnhof with Preungesheim through Willy-Brandt-Platz, Konstablerwache and the northern city districts. It gives the Hauptfriedhof area a direct route to the main railway station. The proposed Europaviertel extension is separate from the currently stored route.",
+    "type": "light",
+    "color": "#007942",
+    "operator": "vgf",
+    "routes": [
+      {
+        "stations": [
+          "DEM767185754",
+          "DEM28783089",
+          "DEM11502587744",
+          "DEL00471",
+          "DEM6940220957",
+          "DEM4483855346",
+          "DEM28121239",
+          "DEL00465",
+          "DEM27618747",
+          "DEM27612110",
+          "DEM8244639303",
+          "DEM8926333040",
+          "DEM8926333041",
+          "DEM8926333043"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "de-frankfurt-u6",
+    "code": "U6",
+    "name": "U-Bahn U6",
+    "description": "Frankfurt’s U6 links Hausen with Ostbahnhof through Bockenheimer Warte, Hauptwache, Konstablerwache and Zoo. It connects the northwest with the eastern railway station, offering central transfers to the S-Bahn and other U-Bahn routes without passing through Frankfurt Hauptbahnhof.",
+    "type": "light",
+    "color": "#007EC6",
+    "operator": "vgf",
+    "routes": [
+      {
+        "stations": [
+          "DEL00466",
+          "DEL00464",
+          "DEM30883062",
+          "DEM30096205",
+          "DEM30606376",
+          "DEM29271568",
+          "DEL00477",
+          "DEM30353880",
+          "DEM30049622",
+          "DEL00471",
+          "DEM5912274446",
+          "DEM31263709"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "de-frankfurt-u7",
+    "code": "U7",
+    "name": "U-Bahn U7",
+    "description": "The U7 connects Heerstraße in western Frankfurt with Enkheim through Bockenheimer Warte, Hauptwache, Konstablerwache and Zoo. It serves both western residential districts and the eastern suburbs, with S-Bahn transfers in the city centre and connections to the U4 on the Enkheim corridor.",
+    "type": "light",
+    "color": "#E4A024",
+    "operator": "vgf",
+    "routes": [
+      {
+        "stations": [
+          "DEL00459",
+          "DEL00469",
+          "DEL00472",
+          "DEM31079818",
+          "DEM4020412931",
+          "DEM31079801",
+          "DEM31263705",
+          "DEM31263704",
+          "DEM5912274445",
+          "DEM5912274446",
+          "DEL00471",
+          "DEM30049622",
+          "DEM30353880",
+          "DEL00477",
+          "DEM29271568",
+          "DEM30606376",
+          "DEM30096205",
+          "DEM30883062",
+          "DEL00460",
+          "DEL00467",
+          "DEL00476",
+          "DEL00461",
+          "DEL00468"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "de-frankfurt-u8",
+    "code": "U8",
+    "name": "U-Bahn U8",
+    "description": "Frankfurt’s U8 connects Riedberg with Südbahnhof through Heddernheim, Hauptwache and the central tunnel. It gives the Riedberg district a direct route to the city centre and Sachsenhausen, with connections to the U9 for journeys towards Ginnheim and Nieder-Eschbach.",
+    "type": "light",
+    "color": "#C77DB5",
+    "operator": "vgf",
+    "routes": [
+      {
+        "stations": [
+          "DEM8091442476",
+          "DEM8100883744",
+          "DEM8091442471",
+          "DEM8443367572",
+          "DEL00478",
+          "DEM8091442473",
+          "DEM8110961213",
+          "DEM8117627651",
+          "DEM8110961211",
+          "DEM8091442475",
+          "DEM8100883742",
+          "DEM5902639720",
+          "DEM5902639719",
+          "DEM5902639718",
+          "DEM30049623",
+          "DEM30049622",
+          "DEM28783089",
+          "DEM613535266",
+          "DEM5902586327"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "de-frankfurt-u9",
+    "code": "U9",
+    "name": "U-Bahn U9",
+    "description": "The U9 links Ginnheim Mitte with Nieder-Eschbach through Nordwestzentrum and Riedberg. It forms an outer connection across northern Frankfurt rather than entering the city-centre tunnel, providing transfers to the U1, U2, U3 and U8 for onward journeys towards central Frankfurt.",
+    "type": "light",
+    "color": "#EED700",
+    "operator": "vgf",
+    "routes": [
+      {
+        "stations": [
+          "DEM30751055",
+          "DEL00458",
+          "DEL00470",
+          "DEM8091442476",
+          "DEM8100883744",
+          "DEM8091442471",
+          "DEM8443367572",
+          "DEM8100883741",
+          "DEL00473",
+          "DEM5902639722",
+          "DEL00462",
+          "DEM5560039803"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "de-hamburg-u1",
+    "code": "U1",
+    "name": "U-Bahn U1",
+    "description": "Hamburg’s U1 connects Norderstedt Mitte with two northeastern branches ending at Ohlstedt and Großhansdorf. It passes through central Hamburg and serves important interchanges including Jungfernstieg, Hauptbahnhof Süd and Wandsbek Markt. Check the branch destination when travelling beyond Volksdorf.",
+    "type": "metro",
+    "color": "#006AB3",
+    "operator": "hochbahn",
+    "routes": [
+      {
+        "stations": [
+          "DEM505815723",
+          "DEM504966244",
+          "DEM504929032",
+          "DEM5196118052",
+          "DEM6233764950",
+          "DEM538032518",
+          "DEM3573110198",
+          "DEM6146300735",
+          "DEM3034089803",
+          "DEM7047553146",
+          "DEM5532829853",
+          "DEM1648288162",
+          "DEM617871270",
+          "DEM260720436",
+          "DEM5656833096",
+          "DEM617825071",
+          "DEM5527651211",
+          "DEM6907067953",
+          "DEM1197626211",
+          "DEM3366133260",
+          "DEM5257886400",
+          "DEM258576519",
+          "DEM5257886399",
+          "DEM301359593",
+          "DEM430203857",
+          "DEM5228160282",
+          "DEM3034089805",
+          "DEM4240997099",
+          "DEM34385651",
+          "DEM3081690840",
+          "DEM4042444590",
+          "DEM4042376366",
+          "DEM5527648759",
+          "DEM2630595165",
+          "DEM3034089807",
+          "DEM3034089804",
+          "DEM4063037581",
+          "DEM4063111596",
+          "DEM3681991826",
+          "DEM4064650103",
+          "DEM3034089808",
+          "DEM4229779983",
+          "DEM00006",
+          "DEM262406302"
+        ]
+      },
+      {
+        "stations": [
+          "DEM4269580494",
+          "DEM206226420",
+          "DEM4242323423",
+          "DEM3573110198",
+          "DEM6146300735",
+          "DEM3034089803",
+          "DEM7047553146",
+          "DEM5532829853",
+          "DEM1648288162",
+          "DEM617871270",
+          "DEM260720436",
+          "DEM5656833096",
+          "DEM617825071",
+          "DEM5527651211",
+          "DEM6907067953",
+          "DEM1197626211",
+          "DEM3366133260",
+          "DEM5257886400",
+          "DEM258576519",
+          "DEM5257886399",
+          "DEM301359593",
+          "DEM430203857",
+          "DEM5228160282",
+          "DEM3034089805",
+          "DEM4240997099",
+          "DEM34385651",
+          "DEM3081690840",
+          "DEM4042444590",
+          "DEM4042376366",
+          "DEM5527648759",
+          "DEM2630595165",
+          "DEM3034089807",
+          "DEM3034089804",
+          "DEM4063037581",
+          "DEM4063111596",
+          "DEM3681991826",
+          "DEM4064650103",
+          "DEM3034089808",
+          "DEM4229779983",
+          "DEM00006",
+          "DEM262406302"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "de-hamburg-u2",
+    "code": "U2",
+    "name": "U-Bahn U2",
+    "description": "The U2 runs from Niendorf Nord through central Hamburg to Mümmelmannsberg. It serves Hagenbecks Tierpark, Schlump, Jungfernstieg and Hauptbahnhof Nord before continuing through the eastern districts. Jungfernstieg and the Hauptbahnhof provide useful connections to the S-Bahn and regional railway network.",
+    "type": "metro",
+    "color": "#E2001A",
+    "operator": "hochbahn",
+    "routes": [
+      {
+        "stations": [
+          "DEM6225974661",
+          "DEM1944744060",
+          "DEM00003",
+          "DEM1944623930",
+          "DEM00002",
+          "DEM6079838037",
+          "DEM00005",
+          "DEM4053151599",
+          "DEM00001",
+          "DEM5257905676",
+          "DEM2682432552",
+          "DEM1586118346",
+          "DEM5257886401",
+          "DEM430203857",
+          "DEM3741659626",
+          "DEM4102358153",
+          "DEM3020817676",
+          "DEM3020817678",
+          "DEM3197892918",
+          "DEM3020817680",
+          "DEM3020817681",
+          "DEM3020817675",
+          "DEM3020817682",
+          "DEM3020822246",
+          "DEM3020817685"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "de-hamburg-u3",
+    "code": "U3",
+    "name": "U-Bahn U3",
+    "description": "Hamburg’s U3 follows the inner-city ring and continues to Wandsbek-Gartenstadt via Barmbek. Its elevated waterfront section serves Landungsbrücken and Baumwall, while other stops connect St. Pauli, the central station and residential districts. Barmbek is an important interchange with the S-Bahn.",
+    "type": "metro",
+    "color": "#FFDD00",
+    "operator": "hochbahn",
+    "routes": [
+      {
+        "stations": [
+          "DEM3236186817",
+          "DEM270862967",
+          "DEM4049755223",
+          "DEM3081702198",
+          "DEM34385651",
+          "DEM6985171368",
+          "DEM249675195",
+          "DEM2682432552",
+          "DEM6900614289",
+          "DEM5228160283",
+          "DEM6900614290",
+          "DEM00004",
+          "DEM5257886402",
+          "DEM34386184",
+          "DEM6284717662",
+          "DEM265088027",
+          "DEM258576519",
+          "DEM4102358153",
+          "DEM3366133260",
+          "DEM4247987506",
+          "DEM34129206",
+          "DEM6906144897",
+          "DEM34126794",
+          "DEM3236186817",
+          "DEM7475370734",
+          "DEM617871270"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "de-hamburg-u4",
+    "code": "U4",
+    "name": "U-Bahn U4",
+    "description": "The U4 connects Billstedt with Elbbrücken through central Hamburg and HafenCity. It shares the eastern corridor with the U2 before branching towards Überseequartier and HafenCity Universität. Elbbrücken provides an S-Bahn interchange; the planned Horner Geest extension is outside the current route.",
+    "type": "metro",
+    "color": "#256D7B",
+    "operator": "hochbahn",
+    "routes": [
+      {
+        "stations": [
+          "DEM3020817675",
+          "DEM3020817681",
+          "DEM3020817680",
+          "DEM3197892918",
+          "DEM3020817678",
+          "DEM3020817676",
+          "DEM4102358153",
+          "DEM3741659626",
+          "DEM430203857",
+          "DEM312586262",
+          "DEM3738942416",
+          "DEM3391154047"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "de-muenchen-u1",
+    "code": "U1",
+    "name": "U-Bahn U1",
+    "description": "Munich’s U1 connects Olympia-Einkaufszentrum with Mangfallplatz through Rotkreuzplatz, Hauptbahnhof and Sendlinger Tor. It links the northwestern and southeastern districts while serving the main railway station, with additional U-Bahn connections at Olympia-Einkaufszentrum, Hauptbahnhof, Sendlinger Tor and Kolumbusplatz.",
+    "type": "metro",
+    "color": "#46B450",
+    "operator": "mvg",
+    "routes": [
+      {
+        "stations": [
+          "DEM73800962",
+          "DEM73800960",
+          "DEM2554223954",
+          "DEM73793044",
+          "DEM2524117388",
+          "DEM73783822",
+          "DEM3372671694",
+          "DEM3278115861",
+          "DEM84322752",
+          "DEM84322751",
+          "DEM84322749",
+          "DEM84322745",
+          "DEM1189888870",
+          "DEM28238954",
+          "DEM3500554803"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "de-muenchen-u2",
+    "code": "U2",
+    "name": "U-Bahn U2",
+    "description": "The U2 crosses Munich from Feldmoching to Messestadt Ost through Hauptbahnhof and Sendlinger Tor. It serves the exhibition grounds at Messestadt West and East, with S-Bahn connections at Feldmoching, Hauptbahnhof, Giesing and Trudering and transfers across the central U-Bahn network.",
+    "type": "metro",
+    "color": "#B4283C",
+    "operator": "mvg",
+    "routes": [
+      {
+        "stations": [
+          "DEM3189921161",
+          "DEM28205626",
+          "DEM3095464861",
+          "DEM28205595",
+          "DEM28201702",
+          "DEM28201749",
+          "DEM28202314",
+          "DEM1927183970",
+          "DEM3142725229",
+          "DEM247674448",
+          "DEM211557411",
+          "DEM3114658668",
+          "DEM3278115861",
+          "DEM3372671694",
+          "DEM73783822",
+          "DEM2524117388",
+          "DEM99191054",
+          "DEM73778052",
+          "DEM3189921261",
+          "DEM68655296",
+          "DEM4711533262",
+          "DEM1692348402",
+          "DEM4726482189",
+          "DEM3189921562",
+          "DEM1692348456",
+          "DEM1692348451",
+          "DEM1692348440"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "de-muenchen-u3",
+    "code": "U3",
+    "name": "U-Bahn U3",
+    "description": "Munich’s U3 connects Moosach with Fürstenried West through Olympiazentrum, Münchner Freiheit, Marienplatz and Sendlinger Tor. It serves the Olympic Park area and central shopping district, while Moosach and Marienplatz offer S-Bahn connections for onward journeys across the region.",
+    "type": "metro",
+    "color": "#E66432",
+    "operator": "mvg",
+    "routes": [
+      {
+        "stations": [
+          "DEM2650093410",
+          "DEM2650093388",
+          "DEM2650093404",
+          "DEM2650093415",
+          "DEM2650093383",
+          "DEM2650093427",
+          "DEM2650093598",
+          "DEM2650093399",
+          "DEM2562202514",
+          "DEM2644689622",
+          "DEM2644689602",
+          "DEM2539850174",
+          "DEM3189921461",
+          "DEM1927202337",
+          "DEM2644689645",
+          "DEM2644689600",
+          "DEM2644689618",
+          "DEM2650093393",
+          "DEM1927183970",
+          "DEM2650093444",
+          "DEM2650093438",
+          "DEM2650093433",
+          "DEM2541407104",
+          "DEM2650093421",
+          "DEM3157666761"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "de-muenchen-u4",
+    "code": "U4",
+    "name": "U-Bahn U4",
+    "description": "The U4 links Arabellapark with Westendstraße through Max-Weber-Platz, Odeonsplatz and Munich Hauptbahnhof. It connects the northeastern districts with the city centre and the western shared corridor, providing transfers to the U5, other U-Bahn lines and mainline trains at the central station.",
+    "type": "metro",
+    "color": "#00A082",
+    "operator": "mvg",
+    "routes": [
+      {
+        "stations": [
+          "DEM2660339813",
+          "DEM2660339822",
+          "DEM2660339814",
+          "DEM2660339820",
+          "DEM5184176689",
+          "DEM2660339818",
+          "DEM3372671294",
+          "DEM2473297786",
+          "DEM3278115761",
+          "DEM2660347912",
+          "DEM2660339823",
+          "DEM3189921262",
+          "DEM2660347913"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "de-muenchen-u5",
+    "code": "U5",
+    "name": "U-Bahn U5",
+    "description": "Munich’s U5 connects Laimer Platz with Neuperlach Süd through Hauptbahnhof, Odeonsplatz and Ostbahnhof. It serves the eastern residential districts and provides several S-Bahn interchange options, including Heimeranplatz, Hauptbahnhof, Ostbahnhof and Neuperlach Süd. The future western extension is outside the stored route.",
+    "type": "metro",
+    "color": "#A06E1E",
+    "operator": "mvg",
+    "routes": [
+      {
+        "stations": [
+          "DEM2660339821",
+          "DEM2660339816",
+          "DEM2660347913",
+          "DEM3189921262",
+          "DEM2660339823",
+          "DEM2660347912",
+          "DEM3278115761",
+          "DEM2473297786",
+          "DEM3372671294",
+          "DEM2660339818",
+          "DEM5184176689",
+          "DEM3189921561",
+          "DEM4711533262",
+          "DEM27214338",
+          "DEM1544801370",
+          "DEM2568050650",
+          "DEM2660339824",
+          "DEM3419919093"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "de-muenchen-u6",
+    "code": "U6",
+    "name": "U-Bahn U6",
+    "description": "The U6 links Garching-Forschungszentrum with Klinikum Großhadern through Fröttmaning, Münchner Freiheit and Marienplatz. It serves the Garching research campus, Allianz Arena access at Fröttmaning and central university areas, with S-Bahn transfers at Marienplatz and Harras and U-Bahn connections across the city.",
+    "type": "metro",
+    "color": "#005A96",
+    "operator": "mvg",
+    "routes": [
+      {
+        "stations": [
+          "DEM2643681873",
+          "DEM2644689597",
+          "DEM2644689599",
+          "DEM2644689596",
+          "DEM2056183985",
+          "DEM1594808593",
+          "DEM1927202338",
+          "DEM1927202335",
+          "DEM3157044270",
+          "DEM2660339815",
+          "DEM2644689618",
+          "DEM2644689600",
+          "DEM2644689645",
+          "DEM1927202337",
+          "DEM3189921461",
+          "DEM2539850174",
+          "DEM2644689602",
+          "DEM2644689622",
+          "DEM2562202514",
+          "DEM2500604016",
+          "DEM2644689619",
+          "DEM2644689647",
+          "DEM2644689608",
+          "DEM2644689606",
+          "DEM2644689605",
+          "DEM2644689613"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "de-muenchen-u7",
+    "code": "U7",
+    "name": "U-Bahn U7",
+    "description": "Munich’s supplementary U7 connects Olympia-Einkaufszentrum with Neuperlach Zentrum through Hauptbahnhof, Sendlinger Tor and Innsbrucker Ring. It joins parts of the U1, U2 and U5 corridors into a direct route, so passengers should check its operating times rather than assume the main lines’ service pattern.",
+    "type": "metro",
+    "color": "#46B450",
+    "operator": "mvg",
+    "routes": [
+      {
+        "stations": [
+          "DEM2568050650",
+          "DEM1544801370",
+          "DEM27214338",
+          "DEM4711533262",
+          "DEM68655296",
+          "DEM3189921261",
+          "DEM73778052",
+          "DEM99191054",
+          "DEM2524117388",
+          "DEM73783822",
+          "DEM3372671694",
+          "DEM3278115861",
+          "DEM84322752",
+          "DEM84322751",
+          "DEM84322749",
+          "DEM84322745",
+          "DEM1189888870",
+          "DEM28238954",
+          "DEM3500554803"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "de-muenchen-u8",
+    "code": "U8",
+    "name": "U-Bahn U8",
+    "description": "The U8 is a supplementary Munich route between Olympiazentrum and Neuperlach Zentrum through Scheidplatz, Hauptbahnhof and Sendlinger Tor. It connects the Olympic Park corridor directly with the southeastern districts by combining sections of other U-Bahn routes. Check the timetable for the days it operates.",
+    "type": "metro",
+    "color": "#B4283C",
+    "operator": "mvg",
+    "routes": [
+      {
+        "stations": [
+          "DEM2650093438",
+          "DEM2650093444",
+          "DEM1927183970",
+          "DEM3142725229",
+          "DEM247674448",
+          "DEM211557411",
+          "DEM3114658668",
+          "DEM3278115861",
+          "DEM3372671694",
+          "DEM73783822",
+          "DEM2524117388",
+          "DEM99191054",
+          "DEM73778052",
+          "DEM3189921261",
+          "DEM68655296",
+          "DEM4711533262",
+          "DEM27214338",
+          "DEM1544801370",
+          "DEM2568050650"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "de-nuernberg-u1",
+    "code": "U1",
+    "name": "U-Bahn U1",
+    "description": "The U1 connects Fürth Hardhöhe with Nuremberg Langwasser Süd through both cities’ main railway stations. It serves Fürth Rathaus, Plärrer and central Nuremberg before reaching the exhibition grounds at Messe, making it useful for intercity connections, city-centre trips and trade-fair visits.",
+    "type": "metro",
+    "color": "#000066",
+    "operator": "vag-nuernberg",
+    "routes": [
+      {
+        "stations": [
+          "DEM904363731",
+          "DEM9663499371",
+          "DEM7204798211",
+          "DEM7204798212",
+          "DEM5407589294",
+          "DEM904158186",
+          "DEM4757608375",
+          "DEM4772500005",
+          "DEM2606135480",
+          "DEM4774135615",
+          "DEM2606135478",
+          "DEM2606135477",
+          "DEM4761338549",
+          "DEM4757400223",
+          "DEM5377012523",
+          "DEM2616227985",
+          "DEM1539236964",
+          "DEM00012",
+          "DEM1585044529",
+          "DEM1585044532",
+          "DEM12919643014",
+          "DEM4774103687",
+          "DEM4763985965",
+          "DEM4759187459",
+          "DEM4763971452",
+          "DEM9334116511",
+          "DEM9334116510"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "de-nuernberg-u2",
+    "code": "U2",
+    "name": "U-Bahn U2",
+    "description": "Nuremberg’s U2 connects Röthenbach with Flughafen through Plärrer and Hauptbahnhof. It provides a direct airport link from the main railway station and serves Nordostbahnhof along the northern section. Central interchange stations connect with the U1 and the shared U3 corridor.",
+    "type": "metro",
+    "color": "#FF0000",
+    "operator": "vag-nuernberg",
+    "routes": [
+      {
+        "stations": [
+          "DEM4759413821",
+          "DEM1113282688",
+          "DEM4757717237",
+          "DEM00014",
+          "DEM4344458580",
+          "DEM4761338549",
+          "DEM4772350540",
+          "DEM2616227985",
+          "DEM4757400222",
+          "DEM4333553202",
+          "DEM4759421223",
+          "DEM4759152761",
+          "DEM4772451721",
+          "DEM00009",
+          "DEM12919643011",
+          "DEM12919643013"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "de-nuernberg-u3",
+    "code": "U3",
+    "name": "U-Bahn U3",
+    "description": "The U3 connects Großreuth bei Schweinau with Nordwestring through Plärrer, Hauptbahnhof and Rathenauplatz. It shares the central tunnel with the U2 before branching towards the northern residential districts and Klinikum Nord. Planned extensions beyond Großreuth are outside the current route.",
+    "type": "metro",
+    "color": "#00868B",
+    "operator": "vag-nuernberg",
+    "routes": [
+      {
+        "stations": [
+          "DEM7656308810",
+          "DEM00008",
+          "DEM00015",
+          "DEM4344458580",
+          "DEM4761338549",
+          "DEM4772350540",
+          "DEM2616227985",
+          "DEM4757400222",
+          "DEM4333553202",
+          "DEM00013",
+          "DEM00010",
+          "DEM00007",
+          "DEM00011",
+          "DEM5781540166"
+        ]
+      }
+    ]
+  },
+  {
     "id": "dk-copenhagen-m1",
     "code": "M1",
     "name": "Metro M1",
@@ -1292,6 +2524,7 @@
     "id": "ie-dublin-green",
     "code": null,
     "name": "Luas Green Line",
+    "description": "Dublin’s Luas Green Line links Broombridge with Brides Glen through Phibsborough, the city centre, Dundrum and Sandyford. Central stops differ by direction: northbound trams use Westmoreland and O’Connell Street, while southbound trams serve Parnell, Marlborough and Trinity. Broombridge provides a railway interchange, and the route passes St Stephen’s Green and Harcourt.",
     "type": "light",
     "color": "#00985F",
     "operator": "luas",
@@ -1368,13 +2601,13 @@
           "IEL020"
         ]
       }
-    ],
-    "description": "Dublin’s Luas Green Line links Broombridge with Brides Glen through Phibsborough, the city centre, Dundrum and Sandyford. Central stops differ by direction: northbound trams use Westmoreland and O’Connell Street, while southbound trams serve Parnell, Marlborough and Trinity. Broombridge provides a railway interchange, and the route passes St Stephen’s Green and Harcourt."
+    ]
   },
   {
     "id": "ie-dublin-red",
     "code": null,
     "name": "Luas Red Line",
+    "description": "Dublin’s Luas Red Line connects Tallaght and Saggart with the city centre, Connolly station and The Point in the Docklands. It serves Heuston, the museum district and the Four Courts; branches at Belgard and near Busáras make the destination important, while Abbey Street offers a walking interchange with the Green Line.",
     "type": "light",
     "color": "#ED2839",
     "operator": "luas",
@@ -1438,8 +2671,7 @@
           "IEL049"
         ]
       }
-    ],
-    "description": "Dublin’s Luas Red Line connects Tallaght and Saggart with the city centre, Connolly station and The Point in the Docklands. It serves Heuston, the museum district and the Four Courts; branches at Belgard and near Busáras make the destination important, while Abbey Street offers a walking interchange with the Green Line."
+    ]
   },
   {
     "id": "it-bergamo-t1",

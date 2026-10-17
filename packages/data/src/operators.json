@@ -4279,5 +4279,120 @@
         "type": "website"
       }
     ]
+  },
+  {
+    "slug": "bvg",
+    "name": "Berliner Verkehrsbetriebe",
+    "logoPath": "de/bvg",
+    "countries": ["de"],
+    "operatorTypes": ["metro"],
+    "bounds": [13.1898, 52.4062, 13.6431, 52.6056],
+    "description": "Berlin’s municipal transport company operates the U-Bahn alongside the city’s tram and bus networks. Its U-Bahn lines connect the main railway terminals, central districts and outer boroughs, with connections to the separately operated S-Bahn.",
+    "website": "https://www.bvg.de",
+    "founded": null,
+    "headquarters": "Berlin, Germany",
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["commuter"],
+    "parentCompany": null,
+    "links": [
+      {
+        "label": "Official website",
+        "url": "https://www.bvg.de",
+        "type": "website"
+      }
+    ]
+  },
+  {
+    "slug": "vgf",
+    "name": "VGF Frankfurt",
+    "logoPath": "de/vgf",
+    "countries": ["de"],
+    "operatorTypes": ["light-rail"],
+    "bounds": [8.5278, 50.0892, 8.7637, 50.2253],
+    "description": "Verkehrsgesellschaft Frankfurt am Main operates Frankfurt’s U-Bahn and tram infrastructure and services. The U-Bahn combines central tunnels with suburban surface routes, reaching Oberursel, Bad Homburg and northern Frankfurt as well as the city’s railway interchanges.",
+    "website": "https://www.vgf-ffm.de",
+    "founded": null,
+    "headquarters": "Frankfurt am Main, Germany",
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["commuter"],
+    "parentCompany": null,
+    "links": [
+      {
+        "label": "Official website",
+        "url": "https://www.vgf-ffm.de",
+        "type": "website"
+      }
+    ]
+  },
+  {
+    "slug": "hochbahn",
+    "name": "Hamburger Hochbahn",
+    "logoPath": "de/hochbahn",
+    "countries": ["de"],
+    "operatorTypes": ["metro"],
+    "bounds": [9.934, 53.5181, 10.2968, 53.7182],
+    "description": "Hamburger Hochbahn operates Hamburg’s U-Bahn and a large part of the city’s bus network. Its four U-Bahn lines serve central Hamburg, HafenCity and outer districts, with the U1 continuing into Schleswig-Holstein towards Norderstedt, Ohlstedt and Großhansdorf.",
+    "website": "https://www.hochbahn.de",
+    "founded": null,
+    "headquarters": "Hamburg, Germany",
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["commuter"],
+    "parentCompany": null,
+    "links": [
+      {
+        "label": "Official website",
+        "url": "https://www.hochbahn.de",
+        "type": "website"
+      }
+    ]
+  },
+  {
+    "slug": "mvg",
+    "name": "Münchner Verkehrsgesellschaft",
+    "logoPath": "de/mvg",
+    "countries": ["de"],
+    "operatorTypes": ["metro"],
+    "bounds": [11.4636, 48.0784, 11.7134, 48.2747],
+    "description": "Münchner Verkehrsgesellschaft is Munich’s public transport operator for U-Bahn, tram and bus services. The U-Bahn connects the city centre with the exhibition grounds, universities and outer districts, extending beyond the city boundary to Garching.",
+    "website": "https://www.mvg.de",
+    "founded": null,
+    "headquarters": "Munich, Germany",
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["commuter"],
+    "parentCompany": null,
+    "links": [
+      {
+        "label": "Official website",
+        "url": "https://www.mvg.de",
+        "type": "website"
+      }
+    ]
+  },
+  {
+    "slug": "vag-nuernberg",
+    "name": "VAG Nürnberg",
+    "logoPath": "de/vag-nuernberg",
+    "countries": ["de"],
+    "operatorTypes": ["metro"],
+    "bounds": [10.9475, 49.3887, 11.1506, 49.504],
+    "description": "VAG operates Nuremberg’s U-Bahn, trams and buses. Its three U-Bahn lines connect Nuremberg and Fürth, including the airport, exhibition grounds and main railway stations; the U2 and U3 use automatic train operation.",
+    "website": "https://www.vag.de",
+    "founded": null,
+    "headquarters": "Nuremberg, Germany",
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["commuter"],
+    "parentCompany": null,
+    "links": [
+      {
+        "label": "Official website",
+        "url": "https://www.vag.de",
+        "type": "website"
+      }
+    ]
   }
 ]
