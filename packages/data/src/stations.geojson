@@ -290680,6 +290680,32 @@
         "type": "Point",
         "coordinates": [11.04358, 49.44183]
       }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "FRM531",
+        "name": "La Poterie",
+        "type": "metro",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-1.64457, 48.08748]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "FRM532",
+        "name": "Porte de Champerret",
+        "type": "metro",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [2.29414, 48.88602]
+      }
     }
   ]
 }

@@ -2521,6 +2521,1124 @@
     ]
   },
   {
+    "id": "fr-lille-1",
+    "code": "1",
+    "name": "Métro 1",
+    "type": "metro",
+    "color": "#FFD400",
+    "operator": "ilevia",
+    "routes": [
+      {
+        "stations": [
+          "FRM409",
+          "FRM103",
+          "FRM503",
+          "FRM523",
+          "FRM367",
+          "FRM484",
+          "FRM274",
+          "FRM294",
+          "FRM162",
+          "FRM272",
+          "FRM186",
+          "FRM427",
+          "FRM421",
+          "FRM175",
+          "FRM530",
+          "FRM400",
+          "FRM099",
+          "FRM100"
+        ]
+      }
+    ],
+    "description": "Lille metro line 1 connects CHU–Eurasanté with Quatre Cantons–Stade Pierre Mauroy through the city centre and Villeneuve-d’Ascq. It serves the university campus, the Beaux-Arts area and Gare Lille Flandres. Both Gare Lille Flandres and Porte des Postes offer transfers to line 2; the southern end serves the hospital district."
+  },
+  {
+    "id": "fr-lille-2",
+    "code": "2",
+    "name": "Métro 2",
+    "type": "metro",
+    "color": "#ED1D24",
+    "operator": "ilevia",
+    "routes": [
+      {
+        "stations": [
+          "FRM467",
+          "FRM056",
+          "FRM286",
+          "FRM313",
+          "FRM374",
+          "FRM263",
+          "FRM069",
+          "FRM046",
+          "FRM376",
+          "FRM118",
+          "FRM317",
+          "FRM400",
+          "FRM377",
+          "FRM388",
+          "FRM395",
+          "FRM262",
+          "FRM279",
+          "FRM186",
+          "FRM185",
+          "FRM462",
+          "FRM316",
+          "FRM280",
+          "FRM167",
+          "FRM258",
+          "FRM218",
+          "FRM529",
+          "FRM528",
+          "FRM128",
+          "FRM278",
+          "FRM149",
+          "FRM435",
+          "FRM155",
+          "FRM436",
+          "FRM184",
+          "FRM007",
+          "FRM302",
+          "FRM073",
+          "FRM181",
+          "FRM500",
+          "FRM107",
+          "FRM352",
+          "FRM370",
+          "FRM057",
+          "FRM064"
+        ]
+      }
+    ],
+    "description": "Lille metro line 2 runs from Saint-Philibert through Lille, Roubaix and Tourcoing to C.H. Dron. It serves both Lille Flandres and Lille Europe railway stations, as well as Lille Grand Palais and Eurotéléport. Connections with line 1 at Porte des Postes and Gare Lille Flandres link the long cross-metropolitan route with the university and hospital corridor."
+  },
+  {
+    "id": "fr-lyon-a",
+    "code": "A",
+    "name": "Métro A",
+    "type": "metro",
+    "color": "#E03F89",
+    "operator": "tcl",
+    "routes": [
+      {
+        "stations": [
+          "FRM351",
+          "FRM008",
+          "FRM035",
+          "FRM115",
+          "FRM207",
+          "FRM164",
+          "FRM299",
+          "FRM086",
+          "FRM422",
+          "FRM197",
+          "FRM163",
+          "FRM133",
+          "FRM248",
+          "FRM512"
+        ]
+      }
+    ],
+    "description": "Lyon metro A runs from Perrache through the Presqu’île to Vaulx-en-Velin–La Soie. Bellecour connects with line D, Hôtel de Ville with line C and Charpennes with line B. East of the Rhône it serves Villeurbanne, while La Soie offers tram connections, including the Rhônexpress service toward Lyon–Saint Exupéry airport."
+  },
+  {
+    "id": "fr-lyon-b",
+    "code": "B",
+    "name": "Métro B",
+    "type": "metro",
+    "color": "#2575BC",
+    "operator": "tcl",
+    "routes": [
+      {
+        "stations": [
+          "FRM087",
+          "FRM061",
+          "FRM187",
+          "FRM360",
+          "FRM476",
+          "FRM219",
+          "FRM361",
+          "FRM136",
+          "FRM485",
+          "FRM178",
+          "FRM335",
+          "FRM452"
+        ]
+      }
+    ],
+    "description": "Lyon metro B links Charpennes with Saint-Genis-Laval Hôpital Lyon Sud through Part-Dieu, Saxe–Gambetta and Jean Macé. The automated line serves Lyon’s main railway station and continues beneath the Rhône to Oullins. Its southern stations at Oullins Centre and Hôpital Lyon Sud extend metro access to the hospital and surrounding communities."
+  },
+  {
+    "id": "fr-lyon-c",
+    "code": "C",
+    "name": "Métro C",
+    "type": "metro",
+    "color": "#EB6736",
+    "operator": "tcl",
+    "routes": [
+      {
+        "stations": [
+          "FRM207",
+          "FRM130",
+          "FRM131",
+          "FRM202",
+          "FRM132"
+        ]
+      }
+    ],
+    "description": "Lyon metro C climbs from Hôtel de Ville–Louis Pradel to Croix-Rousse before continuing through Hénon to Cuire. This short five-station line uses rack assistance on its steep lower section, distinguishing it from the city’s other metro routes. Hôtel de Ville provides the connection with line A and the Presqu’île."
+  },
+  {
+    "id": "fr-lyon-d",
+    "code": "D",
+    "name": "Métro D",
+    "type": "metro",
+    "color": "#489E43",
+    "operator": "tcl",
+    "routes": [
+      {
+        "stations": [
+          "FRM182",
+          "FRM508",
+          "FRM194",
+          "FRM516",
+          "FRM035",
+          "FRM199",
+          "FRM476",
+          "FRM190",
+          "FRM474",
+          "FRM315",
+          "FRM196",
+          "FRM245",
+          "FRM304",
+          "FRM340",
+          "FRM514"
+        ]
+      }
+    ],
+    "description": "Automated metro D crosses Lyon from Gare de Vaise to Gare de Vénissieux through Gorge de Loup, Vieux Lyon and Bellecour. It connects with line A at Bellecour and line B at Saxe–Gambetta. Vieux Lyon gives access to the old town and funiculars, while Grange Blanche serves a major hospital district."
+  },
+  {
+    "id": "fr-marseille-m1",
+    "code": "M1",
+    "name": "Métro M1",
+    "type": "metro",
+    "color": "#0075BE",
+    "operator": "rtm",
+    "routes": [
+      {
+        "stations": [
+          "FRM238",
+          "FRM444",
+          "FRM264",
+          "FRM231",
+          "FRM242",
+          "FRM024",
+          "FRM076",
+          "FRM152",
+          "FRM517",
+          "FRM108",
+          "FRM445",
+          "FRM417",
+          "FRM101",
+          "FRM088",
+          "FRM458",
+          "FRM292",
+          "FRM168",
+          "FRM241"
+        ]
+      }
+    ],
+    "description": "Marseille metro M1 links La Rose with La Fourragère through Saint-Charles, the Vieux-Port and Castellane. It connects with mainline trains at Saint-Charles and La Blancarde, and with M2 at Saint-Charles and Castellane. Cinq Avenues–Longchamp serves the Palais Longchamp area, while La Timone provides access to the hospital and university district."
+  },
+  {
+    "id": "fr-marseille-m2",
+    "code": "M2",
+    "name": "Métro M2",
+    "type": "metro",
+    "color": "#E30513",
+    "operator": "rtm",
+    "routes": [
+      {
+        "stations": [
+          "FRM070",
+          "FRM053",
+          "FRM323",
+          "FRM138",
+          "FRM221",
+          "FRM226",
+          "FRM445",
+          "FRM325",
+          "FRM328",
+          "FRM076",
+          "FRM349",
+          "FRM432",
+          "FRM473"
+        ]
+      }
+    ],
+    "description": "Marseille metro M2 runs from Gèze in the north to Sainte-Marguerite Dromel in the south. It serves the Joliette waterfront district, Saint-Charles railway station, Noailles and Castellane. Rond-Point du Prado and Sainte-Marguerite Dromel provide access to the Vélodrome stadium area, with M1 connections at Saint-Charles and Castellane."
+  },
+  {
+    "id": "fr-paris-1",
+    "code": "1",
+    "name": "Métro 1",
+    "type": "metro",
+    "color": "#FFBE00",
+    "operator": "ratp",
+    "routes": [
+      {
+        "stations": [
+          "FRM090",
+          "FRM038",
+          "FRM460",
+          "FRM398",
+          "FRM322",
+          "FRM423",
+          "FRM180",
+          "FRM032",
+          "FRM466",
+          "FRM206",
+          "FRM093",
+          "FRM268",
+          "FRM338",
+          "FRM506",
+          "FRM113",
+          "FRM079",
+          "FRM170",
+          "FRM191",
+          "FRM083",
+          "FRM014",
+          "FRM402",
+          "FRM259",
+          "FRM369",
+          "FRM150",
+          "FRM235"
+        ]
+      }
+    ],
+    "description": "Paris metro line 1 crosses the city from La Défense to Château de Vincennes, linking the business district with the Champs-Élysées, Louvre and Bastille. Its fully automated trains serve major rail connections at Gare de Lyon, Nation and Charles de Gaulle–Étoile, making it a useful east–west route through central Paris."
+  },
+  {
+    "id": "fr-paris-2",
+    "code": "2",
+    "name": "Métro 2",
+    "type": "metro",
+    "color": "#0055C8",
+    "operator": "ratp",
+    "routes": [
+      {
+        "stations": [
+          "FRM322",
+          "FRM021",
+          "FRM005",
+          "FRM353",
+          "FRM347",
+          "FRM301",
+          "FRM123",
+          "FRM037",
+          "FRM110",
+          "FRM215",
+          "FRM486",
+          "FRM232",
+          "FRM028",
+          "FRM012",
+          "FRM356",
+          "FRM043",
+          "FRM358",
+          "FRM431",
+          "FRM524",
+          "FRM314",
+          "FRM122",
+          "FRM497",
+          "FRM083",
+          "FRM515",
+          "FRM382"
+        ]
+      }
+    ],
+    "description": "Line 2 follows a northern arc between Porte Dauphine and Nation, serving the Arc de Triomphe, Pigalle, Anvers and Belleville. Elevated sections around Barbès, La Chapelle and Stalingrad give views of northern Paris. Connections with other metro lines are spread along the route, including line 1 at Charles de Gaulle–Étoile and Nation."
+  },
+  {
+    "id": "fr-paris-3",
+    "code": "3",
+    "name": "Métro 3",
+    "type": "metro",
+    "color": "#6E6E00",
+    "operator": "ratp",
+    "routes": [
+      {
+        "stations": [
+          "FRM368",
+          "FRM009",
+          "FRM266",
+          "FRM532",
+          "FRM348",
+          "FRM527",
+          "FRM291",
+          "FRM524",
+          "FRM154",
+          "FRM459",
+          "FRM201",
+          "FRM332",
+          "FRM410",
+          "FRM058",
+          "FRM478",
+          "FRM416",
+          "FRM016",
+          "FRM490",
+          "FRM419",
+          "FRM342",
+          "FRM440",
+          "FRM347",
+          "FRM176",
+          "FRM383",
+          "FRM174"
+        ]
+      }
+    ],
+    "description": "Line 3 links Pont de Levallois–Bécon with Gallieni through Saint-Lazare, Opéra and République. It serves the business and shopping areas around the Grands Boulevards before continuing through Père Lachaise and Gambetta. Gambetta is the interchange for the short line 3 bis shuttle toward Porte des Lilas."
+  },
+  {
+    "id": "fr-paris-3bis",
+    "code": "3bis",
+    "name": "Métro 3 bis",
+    "type": "metro",
+    "color": "#82C8E6",
+    "operator": "ratp",
+    "routes": [
+      {
+        "stations": [
+          "FRM399",
+          "FRM450",
+          "FRM346",
+          "FRM176"
+        ]
+      }
+    ],
+    "description": "Line 3 bis is a four-station shuttle between Gambetta and Porte des Lilas in eastern Paris, with intermediate stops at Pelleport and Saint-Fargeau. It provides local access to the hilly twentieth arrondissement and connects line 3 at Gambetta with line 11 at Porte des Lilas."
+  },
+  {
+    "id": "fr-paris-4",
+    "code": "4",
+    "name": "Métro 4",
+    "type": "metro",
+    "color": "#A0006E",
+    "operator": "ratp",
+    "routes": [
+      {
+        "stations": [
+          "FRM387",
+          "FRM482",
+          "FRM295",
+          "FRM092",
+          "FRM028",
+          "FRM183",
+          "FRM179",
+          "FRM089",
+          "FRM487",
+          "FRM416",
+          "FRM153",
+          "FRM257",
+          "FRM093",
+          "FRM102",
+          "FRM463",
+          "FRM330",
+          "FRM455",
+          "FRM471",
+          "FRM469",
+          "FRM319",
+          "FRM513",
+          "FRM415",
+          "FRM137",
+          "FRM321",
+          "FRM004",
+          "FRM381",
+          "FRM282",
+          "FRM027",
+          "FRM023"
+        ]
+      }
+    ],
+    "description": "Fully automated line 4 runs north–south from Porte de Clignancourt to Bagneux–Lucie Aubrac. It serves Gare du Nord, Gare de l’Est and Montparnasse, with central stops at Les Halles, Cité and Saint-Germain-des-Prés. The southern section continues beyond Porte d’Orléans through Montrouge and Barbara to Bagneux."
+  },
+  {
+    "id": "fr-paris-5",
+    "code": "5",
+    "name": "Métro 5",
+    "type": "metro",
+    "color": "#FF7F32",
+    "operator": "ratp",
+    "routes": [
+      {
+        "stations": [
+          "FRM044",
+          "FRM045",
+          "FRM147",
+          "FRM204",
+          "FRM392",
+          "FRM336",
+          "FRM247",
+          "FRM215",
+          "FRM486",
+          "FRM183",
+          "FRM179",
+          "FRM212",
+          "FRM419",
+          "FRM329",
+          "FRM425",
+          "FRM059",
+          "FRM032",
+          "FRM408",
+          "FRM177",
+          "FRM461",
+          "FRM067",
+          "FRM357"
+        ]
+      }
+    ],
+    "description": "Line 5 connects Bobigny–Pablo Picasso with Place d’Italie through Pantin, République and Bastille. Gare du Nord, Gare de l’Est and Gare d’Austerlitz provide railway connections along the route. Between Bastille and Austerlitz, the line emerges beside the Seine and crosses the river on the elevated Viaduc d’Austerlitz."
+  },
+  {
+    "id": "fr-paris-6",
+    "code": "6",
+    "name": "Métro 6",
+    "type": "metro",
+    "color": "#82DC73",
+    "operator": "ratp",
+    "routes": [
+      {
+        "stations": [
+          "FRM083",
+          "FRM229",
+          "FRM047",
+          "FRM504",
+          "FRM343",
+          "FRM042",
+          "FRM141",
+          "FRM239",
+          "FRM066",
+          "FRM481",
+          "FRM344",
+          "FRM319",
+          "FRM145",
+          "FRM415",
+          "FRM137",
+          "FRM456",
+          "FRM192",
+          "FRM119",
+          "FRM357",
+          "FRM324",
+          "FRM097",
+          "FRM407",
+          "FRM039",
+          "FRM140",
+          "FRM135",
+          "FRM034",
+          "FRM354",
+          "FRM322"
+        ]
+      }
+    ],
+    "description": "Line 6 forms a southern arc from Charles de Gaulle–Étoile to Nation via Trocadéro, Montparnasse and Place d’Italie. Much of the route is elevated, including the Seine crossing near Bir-Hakeim with views toward the Eiffel Tower. Denfert-Rochereau connects with the RER B, while Bercy serves the arena and nearby railway station."
+  },
+  {
+    "id": "fr-paris-7",
+    "code": "7",
+    "name": "Métro 7",
+    "type": "metro",
+    "color": "#FF82B4",
+    "operator": "ratp",
+    "routes": [
+      {
+        "stations": [
+          "FRM521",
+          "FRM522",
+          "FRM520",
+          "FRM250",
+          "FRM285",
+          "FRM499",
+          "FRM357",
+          "FRM256",
+          "FRM077",
+          "FRM362",
+          "FRM228",
+          "FRM488",
+          "FRM372",
+          "FRM093",
+          "FRM373",
+          "FRM338",
+          "FRM405",
+          "FRM332",
+          "FRM095",
+          "FRM251",
+          "FRM065",
+          "FRM365",
+          "FRM179",
+          "FRM091",
+          "FRM265",
+          "FRM486",
+          "FRM428",
+          "FRM127",
+          "FRM116",
+          "FRM390",
+          "FRM019",
+          "FRM166",
+          "FRM233"
+        ]
+      },
+      {
+        "stations": [
+          "FRM233",
+          "FRM166",
+          "FRM019",
+          "FRM390",
+          "FRM116",
+          "FRM127",
+          "FRM428",
+          "FRM486",
+          "FRM265",
+          "FRM091",
+          "FRM179",
+          "FRM365",
+          "FRM065",
+          "FRM251",
+          "FRM095",
+          "FRM332",
+          "FRM405",
+          "FRM338",
+          "FRM373",
+          "FRM093",
+          "FRM372",
+          "FRM488",
+          "FRM228",
+          "FRM362",
+          "FRM077",
+          "FRM256",
+          "FRM357",
+          "FRM499",
+          "FRM285",
+          "FRM379",
+          "FRM385",
+          "FRM380",
+          "FRM355",
+          "FRM276"
+        ]
+      }
+    ],
+    "description": "Line 7 runs from La Courneuve–8 Mai 1945 through Gare de l’Est, Opéra, Palais Royal and Place d’Italie. South of Maison Blanche it divides into branches for Villejuif–Louis Aragon and Mairie d’Ivry, so the train’s destination matters. Porte de la Villette provides access to the Cité des sciences area."
+  },
+  {
+    "id": "fr-paris-7bis",
+    "code": "7bis",
+    "name": "Métro 7 bis",
+    "type": "metro",
+    "color": "#82DC73",
+    "operator": "ratp",
+    "routes": [
+      {
+        "stations": [
+          "FRM404",
+          "FRM134",
+          "FRM051",
+          "FRM062",
+          "FRM048",
+          "FRM215",
+          "FRM265"
+        ]
+      },
+      {
+        "stations": [
+          "FRM265",
+          "FRM215",
+          "FRM048",
+          "FRM062",
+          "FRM051",
+          "FRM359",
+          "FRM404"
+        ]
+      }
+    ],
+    "description": "Line 7 bis links Louis Blanc with Pré Saint-Gervais through Jaurès, Bolivar and Buttes Chaumont. Its eastern end uses a one-way loop: trains toward Pré Saint-Gervais call at Place des Fêtes, while returning trains serve Danube. Louis Blanc connects with line 7 and Jaurès with lines 2 and 5."
+  },
+  {
+    "id": "fr-paris-8",
+    "code": "8",
+    "name": "Métro 8",
+    "type": "metro",
+    "color": "#D282BE",
+    "operator": "ratp",
+    "routes": [
+      {
+        "stations": [
+          "FRM364",
+          "FRM126",
+          "FRM124",
+          "FRM125",
+          "FRM287",
+          "FRM288",
+          "FRM144",
+          "FRM081",
+          "FRM260",
+          "FRM384",
+          "FRM401",
+          "FRM306",
+          "FRM135",
+          "FRM318",
+          "FRM423",
+          "FRM158",
+          "FRM252",
+          "FRM032",
+          "FRM096",
+          "FRM470",
+          "FRM161",
+          "FRM419",
+          "FRM487",
+          "FRM049",
+          "FRM195",
+          "FRM426",
+          "FRM332",
+          "FRM271",
+          "FRM113",
+          "FRM209",
+          "FRM243",
+          "FRM143",
+          "FRM239",
+          "FRM111",
+          "FRM160",
+          "FRM052",
+          "FRM267",
+          "FRM025"
+        ]
+      }
+    ],
+    "description": "Line 8 links Balard in southwestern Paris with Pointe du Lac in Créteil. It passes Invalides, Opéra, République and Bastille before continuing through Charenton and Maisons-Alfort. Porte Dorée gives access to the western edge of the Bois de Vincennes, while Créteil–Préfecture serves the departmental centre and shopping area."
+  },
+  {
+    "id": "fr-paris-9",
+    "code": "9",
+    "name": "Métro 9",
+    "type": "metro",
+    "color": "#B6BD00",
+    "operator": "ratp",
+    "routes": [
+      {
+        "stations": [
+          "FRM371",
+          "FRM041",
+          "FRM296",
+          "FRM393",
+          "FRM156",
+          "FRM308",
+          "FRM307",
+          "FRM214",
+          "FRM413",
+          "FRM240",
+          "FRM437",
+          "FRM504",
+          "FRM208",
+          "FRM006",
+          "FRM170",
+          "FRM468",
+          "FRM312",
+          "FRM443",
+          "FRM201",
+          "FRM095",
+          "FRM426",
+          "FRM195",
+          "FRM049",
+          "FRM487",
+          "FRM419",
+          "FRM329",
+          "FRM442",
+          "FRM526",
+          "FRM085",
+          "FRM438",
+          "FRM322",
+          "FRM063",
+          "FRM293",
+          "FRM391",
+          "FRM429",
+          "FRM129",
+          "FRM281"
+        ]
+      }
+    ],
+    "description": "Line 9 crosses Paris from Pont de Sèvres to Mairie de Montreuil, serving Trocadéro, the Champs-Élysées area, the Grands Boulevards and Nation. Porte de Saint-Cloud provides access to the Parc des Princes district. The line also connects Boulogne-Billancourt with central Paris and the eastern neighbourhoods around République and Voltaire."
+  },
+  {
+    "id": "fr-paris-10",
+    "code": "10",
+    "name": "Métro 10",
+    "type": "metro",
+    "color": "#DC9600",
+    "operator": "ratp",
+    "routes": [
+      {
+        "stations": [
+          "FRM055",
+          "FRM054",
+          "FRM308",
+          "FRM080",
+          "FRM310",
+          "FRM216",
+          "FRM084",
+          "FRM020",
+          "FRM239",
+          "FRM477",
+          "FRM142",
+          "FRM509",
+          "FRM480",
+          "FRM270",
+          "FRM330",
+          "FRM106",
+          "FRM300",
+          "FRM072",
+          "FRM228",
+          "FRM177"
+        ]
+      },
+      {
+        "stations": [
+          "FRM177",
+          "FRM228",
+          "FRM072",
+          "FRM300",
+          "FRM106",
+          "FRM330",
+          "FRM270",
+          "FRM480",
+          "FRM509",
+          "FRM142",
+          "FRM477",
+          "FRM239",
+          "FRM020",
+          "FRM084",
+          "FRM216",
+          "FRM146",
+          "FRM307",
+          "FRM378",
+          "FRM054",
+          "FRM055"
+        ]
+      }
+    ],
+    "description": "Line 10 connects Boulogne–Pont de Saint-Cloud with Gare d’Austerlitz along the Left Bank, serving Javel, Sèvres–Babylone, Odéon and the Latin Quarter. Its Auteuil section has different stops by direction: eastbound trains use Chardon-Lagache and Mirabeau, while westbound trains use Église d’Auteuil and Porte d’Auteuil. Check the direction when choosing a station."
+  },
+  {
+    "id": "fr-paris-11",
+    "code": "11",
+    "name": "Métro 11",
+    "type": "metro",
+    "color": "#6E491E",
+    "operator": "ratp",
+    "routes": [
+      {
+        "stations": [
+          "FRM093",
+          "FRM206",
+          "FRM411",
+          "FRM016",
+          "FRM419",
+          "FRM193",
+          "FRM037",
+          "FRM406",
+          "FRM224",
+          "FRM359",
+          "FRM489",
+          "FRM399",
+          "FRM284",
+          "FRM479",
+          "FRM430",
+          "FRM320",
+          "FRM236",
+          "FRM120",
+          "FRM434"
+        ]
+      }
+    ],
+    "description": "Line 11 runs from Châtelet through République and Belleville to Rosny–Bois-Perrier. Beyond Mairie des Lilas, its eastern extension serves Romainville, the Montreuil hospital area and Rosny, where passengers can change to the RER E. Arts et Métiers and Place des Fêtes provide additional metro connections along the route."
+  },
+  {
+    "id": "fr-paris-12",
+    "code": "12",
+    "name": "Métro 12",
+    "type": "metro",
+    "color": "#00643C",
+    "operator": "ratp",
+    "routes": [
+      {
+        "stations": [
+          "FRM273",
+          "FRM003",
+          "FRM171",
+          "FRM389",
+          "FRM298",
+          "FRM295",
+          "FRM227",
+          "FRM246",
+          "FRM001",
+          "FRM356",
+          "FRM453",
+          "FRM326",
+          "FRM502",
+          "FRM459",
+          "FRM271",
+          "FRM113",
+          "FRM017",
+          "FRM483",
+          "FRM439",
+          "FRM480",
+          "FRM418",
+          "FRM327",
+          "FRM319",
+          "FRM159",
+          "FRM344",
+          "FRM525",
+          "FRM511",
+          "FRM114",
+          "FRM397",
+          "FRM117",
+          "FRM275"
+        ]
+      }
+    ],
+    "description": "Line 12 links Mairie d’Aubervilliers with Mairie d’Issy through Montmartre, Saint-Lazare and Montparnasse. Abbesses and Lamarck–Caulaincourt serve the Montmartre hillside, while Solférino is near the Musée d’Orsay. The southern section passes the Porte de Versailles exhibition grounds before continuing into Issy-les-Moulineaux."
+  },
+  {
+    "id": "fr-paris-13",
+    "code": "13",
+    "name": "Métro 13",
+    "type": "metro",
+    "color": "#82C8E6",
+    "operator": "ratp",
+    "routes": [
+      {
+        "stations": [
+          "FRM094",
+          "FRM290",
+          "FRM289",
+          "FRM396",
+          "FRM363",
+          "FRM350",
+          "FRM173",
+          "FRM319",
+          "FRM142",
+          "FRM451",
+          "FRM510",
+          "FRM209",
+          "FRM079",
+          "FRM312",
+          "FRM459",
+          "FRM261",
+          "FRM358",
+          "FRM237",
+          "FRM060",
+          "FRM386",
+          "FRM277",
+          "FRM172",
+          "FRM253",
+          "FRM254"
+        ]
+      },
+      {
+        "stations": [
+          "FRM449",
+          "FRM030",
+          "FRM447",
+          "FRM075",
+          "FRM283",
+          "FRM189",
+          "FRM394",
+          "FRM200",
+          "FRM237",
+          "FRM358",
+          "FRM261",
+          "FRM459",
+          "FRM312",
+          "FRM079",
+          "FRM209",
+          "FRM510",
+          "FRM451",
+          "FRM142",
+          "FRM319",
+          "FRM173",
+          "FRM350",
+          "FRM363",
+          "FRM396",
+          "FRM289",
+          "FRM290",
+          "FRM094"
+        ]
+      }
+    ],
+    "description": "Line 13 runs north from Châtillon–Montrouge through Montparnasse, Invalides and Saint-Lazare before dividing at La Fourche. One branch reaches Les Courtilles via Clichy and Asnières; the other serves Saint-Ouen and Saint-Denis–Université. Check the northern destination before boarding, since trains on the shared central section serve different branches."
+  },
+  {
+    "id": "fr-paris-14",
+    "code": "14",
+    "name": "Métro 14",
+    "type": "metro",
+    "color": "#640082",
+    "operator": "ratp",
+    "routes": [
+      {
+        "stations": [
+          "FRM448",
+          "FRM283",
+          "FRM465",
+          "FRM386",
+          "FRM366",
+          "FRM459",
+          "FRM271",
+          "FRM405",
+          "FRM093",
+          "FRM180",
+          "FRM039",
+          "FRM121",
+          "FRM040",
+          "FRM331",
+          "FRM285",
+          "FRM205",
+          "FRM519",
+          "FRM230",
+          "FRM098",
+          "FRM498",
+          "FRM002"
+        ]
+      }
+    ],
+    "description": "Fully automated line 14 connects Saint-Denis Pleyel with Aéroport d’Orly through Saint-Lazare, Châtelet, Gare de Lyon and Bibliothèque François Mitterrand. It serves the northern business districts and southern suburbs, including the Gustave Roussy hospital station in Villejuif. Its widely spaced stops make it a direct link across the metropolitan area."
+  },
+  {
+    "id": "fr-rennes-a",
+    "code": "a",
+    "name": "Métro a",
+    "type": "metro",
+    "color": "#ED1C24",
+    "operator": "star-rennes",
+    "routes": [
+      {
+        "stations": [
+          "FRM211",
+          "FRM518",
+          "FRM375",
+          "FRM010",
+          "FRM472",
+          "FRM420",
+          "FRM082",
+          "FRM188",
+          "FRM213",
+          "FRM104",
+          "FRM203",
+          "FRM210",
+          "FRM501",
+          "FRM249",
+          "FRM531"
+        ]
+      }
+    ],
+    "description": "Rennes metro a links J.F. Kennedy with La Poterie through Villejean–Université, Sainte-Anne, République and Gares. It serves the university and Pontchaillou hospital district in the northwest before crossing the centre toward Le Blosne. Sainte-Anne and Gares connect with line b; Gares also provides access to Rennes railway station."
+  },
+  {
+    "id": "fr-rennes-b",
+    "code": "b",
+    "name": "Métro b",
+    "type": "metro",
+    "color": "#00893E",
+    "operator": "star-rennes",
+    "routes": [
+      {
+        "stations": [
+          "FRM457",
+          "FRM234",
+          "FRM105",
+          "FRM269",
+          "FRM109",
+          "FRM188",
+          "FRM454",
+          "FRM472",
+          "FRM225",
+          "FRM198",
+          "FRM255",
+          "FRM223",
+          "FRM033",
+          "FRM018",
+          "FRM078"
+        ]
+      }
+    ],
+    "description": "Rennes metro b runs from Saint-Jacques–Gaîté to Cesson–Viasilva through La Courrouze, the city centre and the Beaulieu campus. It connects with line a at Gares and Sainte-Anne, with railway connections at Gares. The northeastern section serves Les Gayeulles, the university area and the Atalante technology district before reaching Cesson-Sévigné."
+  },
+  {
+    "id": "fr-toulouse-a",
+    "code": "A",
+    "name": "Métro A",
+    "type": "metro",
+    "color": "#DB001B",
+    "operator": "tisseo",
+    "routes": [
+      {
+        "stations": [
+          "FRM026",
+          "FRM015",
+          "FRM433",
+          "FRM222",
+          "FRM297",
+          "FRM217",
+          "FRM071",
+          "FRM151",
+          "FRM446",
+          "FRM345",
+          "FRM013",
+          "FRM165",
+          "FRM303",
+          "FRM022",
+          "FRM311",
+          "FRM424",
+          "FRM036",
+          "FRM031"
+        ]
+      }
+    ],
+    "description": "Toulouse metro A crosses the city from Basso Cambo to Balma-Gramont, serving the Mirail university area, Arènes and the historic centre around Esquirol and Capitole. Jean Jaurès is the interchange with line B. Marengo–SNCF provides access to Matabiau railway station, while Arènes connects with trams and local rail services."
+  },
+  {
+    "id": "fr-toulouse-b",
+    "code": "B",
+    "name": "Métro B",
+    "type": "metro",
+    "color": "#FFD900",
+    "operator": "tisseo",
+    "routes": [
+      {
+        "stations": [
+          "FRM050",
+          "FRM505",
+          "FRM244",
+          "FRM029",
+          "FRM309",
+          "FRM068",
+          "FRM112",
+          "FRM220",
+          "FRM217",
+          "FRM169",
+          "FRM074",
+          "FRM337",
+          "FRM464",
+          "FRM148",
+          "FRM441",
+          "FRM475",
+          "FRM414",
+          "FRM157",
+          "FRM507",
+          "FRM412"
+        ]
+      }
+    ],
+    "description": "Toulouse metro B links Borderouge with Ramonville through Compans-Caffarelli, Jean Jaurès, Carmes and Rangueil. It serves the university and medical campuses in the southeast, including Faculté de Pharmacie and Université Paul Sabatier. Jean Jaurès connects with line A, Palais de Justice with the tram, and Saint-Agne with regional trains."
+  },
+  {
     "id": "ie-dublin-green",
     "code": null,
     "name": "Luas Green Line",

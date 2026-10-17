@@ -4394,5 +4394,173 @@
         "type": "website"
       }
     ]
+  },
+  {
+    "slug": "ratp",
+    "name": "RATP",
+    "logoPath": "fr/ratp",
+    "countries": ["fr"],
+    "operatorTypes": ["metro"],
+    "bounds": [2.21833, 48.71844, 2.49034, 48.95597],
+    "description": "RATP operates the Paris Métro for Île-de-France Mobilités, connecting central Paris with surrounding municipalities across sixteen numbered lines, including 3 bis and 7 bis. The network serves major railway stations, business districts, universities and cultural destinations. Fully automated lines 1, 4 and 14 complement the other metro routes, with line 14 reaching Orly airport.",
+    "website": "https://www.ratp.fr",
+    "founded": null,
+    "headquarters": "Paris, France",
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["commuter"],
+    "parentCompany": null,
+    "links": [
+      {
+        "label": "Official website",
+        "url": "https://www.ratp.fr",
+        "type": "website"
+      },
+      {
+        "label": "Network and lines",
+        "url": "https://www.ratp.fr/plans-lignes/metro",
+        "type": "website"
+      }
+    ]
+  },
+  {
+    "slug": "tcl",
+    "name": "TCL",
+    "logoPath": "fr/tcl",
+    "countries": ["fr"],
+    "operatorTypes": ["metro"],
+    "bounds": [4.79433, 45.69176, 4.9319, 45.79528],
+    "description": "TCL is the public transport network serving Lyon and its surrounding area under SYTRAL Mobilités. Its four metro lines connect the Presqu’île, Part-Dieu, Villeurbanne and the southern suburbs, with line C climbing to Croix-Rousse using rack assistance. RATP Dev operates the metro and funicular network under the contract that began in January 2025.",
+    "website": "https://www.tcl.fr",
+    "founded": null,
+    "headquarters": "Lyon, France",
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["commuter"],
+    "parentCompany": null,
+    "links": [
+      {
+        "label": "Official website",
+        "url": "https://www.tcl.fr",
+        "type": "website"
+      },
+      {
+        "label": "Network and lines",
+        "url": "https://www.tcl.fr/lignes",
+        "type": "website"
+      }
+    ]
+  },
+  {
+    "slug": "rtm",
+    "name": "RTM",
+    "logoPath": "fr/rtm",
+    "countries": ["fr"],
+    "operatorTypes": ["metro"],
+    "bounds": [5.35726, 43.26089, 5.43969, 43.34315],
+    "description": "Régie des Transports Métropolitains operates Marseille’s public transport network, including the M1 and M2 metro lines. The two routes connect residential districts with Saint-Charles railway station, the city centre, hospitals and the stadium area. Saint-Charles and Castellane are the metro interchanges, with connections to the wider bus and tram network.",
+    "website": "https://www.rtm.fr",
+    "founded": null,
+    "headquarters": "Marseille, France",
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["commuter"],
+    "parentCompany": null,
+    "links": [
+      {
+        "label": "Official website",
+        "url": "https://www.rtm.fr",
+        "type": "website"
+      },
+      {
+        "label": "Network and lines",
+        "url": "https://www.rtm.fr/plans",
+        "type": "website"
+      }
+    ]
+  },
+  {
+    "slug": "ilevia",
+    "name": "Ilévia",
+    "logoPath": "fr/ilevia",
+    "countries": ["fr"],
+    "operatorTypes": ["metro"],
+    "bounds": [2.9643, 50.59536, 3.191, 50.75348],
+    "description": "Ilévia is the public transport network of the Métropole Européenne de Lille, operated by Keolis Lille Ilévia. Its two automated metro lines serve sixty stations across Lille and neighbouring municipalities, including Villeneuve-d’Ascq, Roubaix and Tourcoing. The network connects the Lille Flandres and Lille Europe railway stations with university campuses, hospitals and local centres.",
+    "website": "https://www.ilevia.fr",
+    "founded": null,
+    "headquarters": "Lille, France",
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["commuter"],
+    "parentCompany": null,
+    "links": [
+      {
+        "label": "Official website",
+        "url": "https://www.ilevia.fr",
+        "type": "website"
+      },
+      {
+        "label": "Network and lines",
+        "url": "https://www.ilevia.fr/cms/institutionnel/metro-et-tramway",
+        "type": "website"
+      }
+    ]
+  },
+  {
+    "slug": "tisseo",
+    "name": "Tisséo",
+    "logoPath": "fr/tisseo",
+    "countries": ["fr"],
+    "operatorTypes": ["metro"],
+    "bounds": [1.38227, 43.54577, 1.49278, 43.65038],
+    "description": "Tisséo is the public transport network serving the Toulouse metropolitan area, with metro services operated by Tisséo Voyageurs. Automated lines A and B cross at Jean Jaurès, linking the historic centre with residential districts, university campuses and hospital areas. Metro connections with trams, regional trains and Matabiau station support journeys across the wider urban area.",
+    "website": "https://www.tisseo.fr",
+    "founded": null,
+    "headquarters": "Toulouse, France",
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["commuter"],
+    "parentCompany": null,
+    "links": [
+      {
+        "label": "Official website",
+        "url": "https://www.tisseo.fr",
+        "type": "website"
+      },
+      {
+        "label": "Network and lines",
+        "url": "https://www.tisseo.fr/se-deplacer/plans",
+        "type": "website"
+      }
+    ]
+  },
+  {
+    "slug": "star-rennes",
+    "name": "STAR",
+    "logoPath": "fr/star-rennes",
+    "countries": ["fr"],
+    "operatorTypes": ["metro"],
+    "bounds": [-1.72125, 48.07644, -1.61004, 48.1415],
+    "description": "STAR is the public transport network of Rennes Métropole, operated by Keolis Rennes Métropole. Its two automated metro lines connect the city centre and railway station with university campuses, hospital districts and surrounding communities. Lines a and b intersect at Sainte-Anne and Gares, providing connections across the network and to regional and high-speed trains.",
+    "website": "https://www.star.fr",
+    "founded": null,
+    "headquarters": "Rennes, France",
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["commuter"],
+    "parentCompany": null,
+    "links": [
+      {
+        "label": "Official website",
+        "url": "https://www.star.fr",
+        "type": "website"
+      },
+      {
+        "label": "Network and lines",
+        "url": "https://www.star.fr/reseau-star/bus-metro",
+        "type": "website"
+      }
+    ]
   }
 ]
