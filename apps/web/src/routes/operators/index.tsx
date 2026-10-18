@@ -371,7 +371,7 @@ function SectionHeader({
   const modeCounts = countByType(operators);
 
   return (
-    <div className="flex items-center gap-3 mb-6">
+    <div className="mb-6 flex flex-wrap items-center gap-x-3 gap-y-2">
       <div className="flex size-7 shrink-0 items-center justify-center">{icon}</div>
       <div className="shrink-0">
         <h2 className="text-lg font-semibold tracking-tight">{title}</h2>
@@ -381,7 +381,7 @@ function SectionHeader({
       </div>
       <div className="h-px flex-1 ml-4 bg-muted" />
       {showModes && modeCounts.length > 1 && (
-        <ul className="flex shrink-0 items-center gap-3 text-xs tabular-nums text-muted-foreground">
+        <ul className="flex w-full flex-wrap items-center gap-x-3 gap-y-1 pl-10 text-xs tabular-nums text-muted-foreground sm:w-auto sm:shrink-0 sm:pl-0">
           {modeCounts.map(({ type, count }) => (
             <li key={type} className="flex items-center gap-1.5">
               <OperatorTypeMarker type={type} className="size-4" />
