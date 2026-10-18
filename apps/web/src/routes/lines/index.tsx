@@ -2,6 +2,7 @@ import { memo, useMemo } from "react";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { COUNTRY_CODES, COUNTRY_MAP, type CountryCode } from "@repo/data/countries";
 import { Card } from "@repo/ui/components/card";
+import { Alert, AlertDescription, AlertTitle } from "@repo/ui/components/alert";
 import {
   InputGroup,
   InputGroupAddon,
@@ -10,7 +11,7 @@ import {
 } from "@repo/ui/components/input-group";
 import { Kbd } from "@repo/ui/components/kbd";
 import { cn } from "@repo/ui/lib/utils";
-import { ArrowLeftIcon, ChevronRightIcon, SearchIcon, XIcon } from "lucide-react";
+import { ArrowLeftIcon, ChevronRightIcon, InfoIcon, SearchIcon, XIcon } from "lucide-react";
 
 import { LineBadge } from "@/components/line-badge";
 import { useDirectoryQuery } from "@/hooks/use-directory-query";
@@ -143,6 +144,24 @@ function LinesPage() {
           {lines.length} metro and light rail lines across {lineCountries} countries, with their
           stations, termini and operators.
         </p>
+        <Alert role="note" aria-labelledby="lines-data-note-title" className="mt-6">
+          <InfoIcon aria-hidden="true" />
+          <AlertTitle id="lines-data-note-title">Still mapping things out</AlertTitle>
+          <AlertDescription>
+            <p>
+              Lines is still in early development. With so many networks across Europe, some routes,
+              stops, and line details may be incomplete or inaccurate. We’re closely reviewing the
+              data to improve accuracy and correct mistakes. Spot a mistake?{" "}
+              <a
+                href="mailto:contact@railradar24.com?subject=Line%20data%20correction"
+                className="rounded-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+              >
+                Let us know
+              </a>
+              .
+            </p>
+          </AlertDescription>
+        </Alert>
       </div>
 
       <div className="mb-16 space-y-3">
@@ -161,7 +180,7 @@ function LinesPage() {
                 else event.currentTarget.blur();
               }
             }}
-            placeholder="Search lines, stations or operators"
+            placeholder="Search lines or operators"
             aria-label="Search lines"
             autoComplete="off"
             spellCheck={false}
