@@ -124,8 +124,5 @@ Studio rounds new and edited coordinates, including JSON and CSV imports, to at 
 places. Coordinate inputs use a `0.00001` step, and the Wikipedia panel and status bar display five
 decimal places. Saved and exported numeric coordinates omit trailing zeros.
 
-See the shared data package's README for the line schema and Genova source notes, and the
-[Italy station–line audit](../../packages/data/docs/italy-station-line-audit.md)
-for the reviewed Rome, Catanzaro and Naples data. Unlinked lists six stations under
-construction until they open, plus three FL4 railway duplicates pending canonical
-station cleanup.
+See the [shared data package](../../packages/data/README.md#transit-lines) for the
+line format and lookup APIs.
