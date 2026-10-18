@@ -122,27 +122,30 @@ function Home() {
             </a>
             <span className="hidden md:inline">{" ·"}</span>
           </span>
-          <span>
-            <Link to="/privacy-policy" className="hover:underline">
-              Privacy
+          <nav aria-label="Rail directories" className="flex items-center gap-1">
+            <Link
+              to="/operators"
+              className="rounded-sm hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+            >
+              Operators
             </Link>
-            {" · "}
-            <Link to="/terms-of-service" className="hover:underline">
-              Terms
-            </Link>
-            {" · "}
-            <Link to="/donate" className="hover:underline">
-              Donate
-            </Link>
-            {" · "}
-            <Link to="/stations" {...prerenderedPageLinkProps} className="hover:underline">
+            <span aria-hidden="true">·</span>
+            <Link
+              to="/stations"
+              {...prerenderedPageLinkProps}
+              className="rounded-sm hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+            >
               Stations
             </Link>
-            {" · "}
-            <a href="mailto:contact@railradar24.com" className="hover:underline">
-              Contact
-            </a>
-          </span>
+            <span aria-hidden="true">·</span>
+            <Link
+              to="/lines"
+              {...prerenderedPageLinkProps}
+              className="rounded-sm hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+            >
+              Lines
+            </Link>
+          </nav>
         </div>
       </Suspense>
     </main>
