@@ -1266,7 +1266,7 @@
     "id": "de-berlin-u6",
     "code": "U6",
     "name": "U-Bahn U6",
-    "description": "The U6 runs north–south through central Berlin between Kurt-Schumacher-Platz and Alt-Mariendorf in the currently stored service pattern. Friedrichstraße offers S-Bahn and regional connections, Unter den Linden connects with the U5, and Mehringdamm links with the U7. The northern extension to Alt-Tegel is closed for works.",
+    "description": "The U6 runs north–south through central Berlin. Until service returns on the northern section, trains run only between Alt-Mariendorf and Kurt-Schumacher-Platz; replacement buses cover the closed section to Alt-Tegel. Friedrichstraße offers S-Bahn and regional connections, Unter den Linden connects with the U5, and Mehringdamm links with the U7.",
     "type": "metro",
     "color": "#8C6DAB",
     "operator": "bvg",
@@ -1467,7 +1467,7 @@
     "id": "de-frankfurt-u2",
     "code": "U2",
     "name": "U-Bahn U2",
-    "description": "The U2 links Ober-Eschbach with Frankfurt Südbahnhof through Nieder-Eschbach, Heddernheim and Hauptwache. It provides a direct route from northern suburbs into the city centre. During the Bad Homburg extension works, Ober-Eschbach is the rail terminus and Gonzenheim is reached by replacement bus.",
+    "description": "The U2 links Ober-Eschbach with Frankfurt Südbahnhof through Nieder-Eschbach, Heddernheim and Hauptwache. It provides a direct route from northern suburbs into the city centre. During the Bad Homburg extension works, Ober-Eschbach is the rail terminus; replacement buses connect from there toward Bad Homburg.",
     "type": "light",
     "color": "#00A54F",
     "operator": "vgf",
@@ -3323,7 +3323,7 @@
         ]
       }
     ],
-    "description": "Line 10 connects Boulogne–Pont de Saint-Cloud with Gare d’Austerlitz along the Left Bank, serving Javel, Sèvres–Babylone, Odéon and the Latin Quarter. Its Auteuil section has different stops by direction: eastbound trains use Chardon-Lagache and Mirabeau, while westbound trains use Église d’Auteuil and Porte d’Auteuil. Check the direction when choosing a station."
+    "description": "Line 10 connects Boulogne–Pont de Saint-Cloud with Gare d’Austerlitz along the Left Bank, serving Javel, Sèvres–Babylone, Odéon and the Latin Quarter. Its Auteuil section has different stops by direction: towards Gare d’Austerlitz, trains serve Michel-Ange–Molitor, Chardon-Lagache and Mirabeau; towards Boulogne, they serve Église d’Auteuil, Michel-Ange–Auteuil and Porte d’Auteuil. Check the direction when choosing a station."
   },
   {
     "id": "fr-paris-11",
