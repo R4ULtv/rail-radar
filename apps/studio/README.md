@@ -110,12 +110,6 @@ the Line ID of a saved line is locked there.
 Importing a lines file also switches to browser editing, including during local
 development. Unsaved draft changes prompt before switching lines or leaving the workspace.
 
-Run the persistence and conflict tests with Node 22.18+:
-
-```sh
-node --test apps/studio/tests/lines-api.test.mjs packages/data/tests/lines.test.mjs
-```
-
 ## Station data
 
 Station data lives in `packages/data/src/stations.geojson` and is shared with the rest of the monorepo via `@repo/data`.
