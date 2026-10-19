@@ -161,7 +161,7 @@ function getCountryMetadata(slug: string, countryName: string, count: number): M
       description,
       images: [
         {
-          url: "/assets/social/operators.webp",
+          url: "/assets/social/stations.webp",
           width: 1200,
           height: 630,
           alt: `Rail Radar - Train stations in ${countryName}`,
@@ -169,10 +169,10 @@ function getCountryMetadata(slug: string, countryName: string, count: number): M
       ],
     },
     twitter: {
-      card: "summary",
+      card: "summary_large_image",
       title: `${title} | Rail Radar`,
       description,
-      images: ["/assets/social/operators.webp"],
+      images: ["/assets/social/stations.webp"],
     },
   };
 }
@@ -268,12 +268,15 @@ export function getStationsDirectoryPageData() {
       openGraph: {
         images: [
           {
-            url: "/assets/social/operators.webp",
+            url: "/assets/social/stations.webp",
             width: 1200,
             height: 630,
             alt: "Rail Radar - Train stations across Europe",
           },
         ],
+      },
+      twitter: {
+        card: "summary_large_image",
       },
     } satisfies Metadata,
   };
