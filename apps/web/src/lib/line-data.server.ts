@@ -11,6 +11,13 @@ import { createBoundsProjection, simplify, type Bounds } from "@/lib/map-project
 import { isStationPagePrerendered } from "@/lib/station-prerender";
 import { shortStationName } from "@/lib/station-name";
 
+const LINE_SOCIAL_IMAGE = {
+  url: "/assets/social/lines.webp",
+  width: 1200,
+  height: 630,
+  alt: "Rail Radar - Metro and light rail lines across Europe",
+};
+
 /** One track file per line, loaded only when that line's page is rendered. */
 const geometryFiles = import.meta.glob<LineGeometry>("../../../../packages/data/src/lines/*.json", {
   import: "default",
@@ -105,6 +112,12 @@ export function getLinesDirectoryPageData() {
       description: `Browse ${directory.length} metro and light rail lines across ${countries} countries on Rail Radar, with their stations, termini, and operators.`,
       alternates: {
         canonical: "/lines",
+      },
+      openGraph: {
+        images: [LINE_SOCIAL_IMAGE],
+      },
+      twitter: {
+        card: "summary_large_image",
       },
     } satisfies Metadata,
   };
@@ -304,6 +317,12 @@ export async function getLinePageData(id: string) {
         `${line.name} is a ${modeLabel.toLowerCase()} line${summary.operator ? ` run by ${summary.operator.name}` : ""} ${between}, with ${stationIds.length} stations. See every stop and interchange on Rail Radar.`,
       alternates: {
         canonical: `/lines/${line.id}`,
+      },
+      openGraph: {
+        images: [LINE_SOCIAL_IMAGE],
+      },
+      twitter: {
+        card: "summary_large_image",
       },
     } satisfies Metadata,
   };
