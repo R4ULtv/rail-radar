@@ -84,29 +84,24 @@ export function getLinesDirectoryPageData() {
   const directory = lines.map(toDirectoryLine);
   const countries = new Set(directory.map((line) => line.country)).size;
 
-  // Lines of one network share stations (five Circumvesuviana lines start at Napoli
-  // Porta Nolana), so a network's total counts each station once, per mode filter.
-  const networkStations: Record<string, Record<"all" | Line["type"], number>> = {};
-  const networkStationIds = new Map<string, Record<"all" | Line["type"], Set<string>>>();
+  // Compact memberships let the client count shared stations once after any filter,
+  // without sending the station registry or repeating full station IDs per line.
+  const stationIndexes = new Map<string, number>();
+  const lineStationIds: Record<string, number[]> = {};
   for (const line of lines) {
-    const key = line.operator ?? line.id;
-    let sets = networkStationIds.get(key);
-    if (!sets) {
-      sets = { all: new Set(), metro: new Set(), light: new Set() };
-      networkStationIds.set(key, sets);
-    }
-    for (const id of getLineStationIds(line)) {
-      sets.all.add(id);
-      sets[line.type].add(id);
-    }
-  }
-  for (const [key, sets] of networkStationIds) {
-    networkStations[key] = { all: sets.all.size, metro: sets.metro.size, light: sets.light.size };
+    lineStationIds[line.id] = getLineStationIds(line).map((id) => {
+      let index = stationIndexes.get(id);
+      if (index === undefined) {
+        index = stationIndexes.size;
+        stationIndexes.set(id, index);
+      }
+      return index;
+    });
   }
 
   return {
     lines: directory,
-    networkStations,
+    lineStationIds,
     metadata: {
       title: "Metro & Light Rail Lines",
       description: `Browse ${directory.length} metro and light rail lines across ${countries} countries on Rail Radar, with their stations, termini, and operators.`,

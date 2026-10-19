@@ -55,15 +55,7 @@ function normalize(text: string): string {
 
 function searchText(line: DirectoryLine): string {
   return normalize(
-    [
-      line.code,
-      ...line.routeCodes,
-      line.name,
-      line.operator?.name,
-      line.from,
-      line.to,
-      COUNTRY_MAP[line.country],
-    ]
+    [line.code, ...line.routeCodes, line.name, line.operator?.name, COUNTRY_MAP[line.country]]
       .filter(Boolean)
       .join(" "),
   );
@@ -102,7 +94,7 @@ const ALL_MARKER =
 </svg>`);
 
 function LinesPage() {
-  const { lines, networkStations } = Route.useLoaderData();
+  const { lines, lineStationIds } = Route.useLoaderData();
   const search = Route.useSearch();
   const navigate = useNavigate({ from: "/lines/" });
   const { hydrated, query, deferredQuery, setQuery, inputRef } = useDirectoryQuery(
@@ -222,7 +214,7 @@ function LinesPage() {
         query={deferredQuery}
         matching={matching}
         selected={selected}
-        networkStations={networkStations}
+        lineStationIds={lineStationIds}
       />
     </div>
   );
@@ -236,12 +228,12 @@ const LineResults = memo(function LineResults({
   query,
   matching,
   selected,
-  networkStations,
+  lineStationIds,
 }: {
   query: string;
   matching: DirectoryLine[];
   selected: LineType | undefined;
-  networkStations: Record<string, Record<"all" | LineType, number>>;
+  lineStationIds: Record<string, number[]>;
 }) {
   const visible = matching.filter((line) => !selected || line.type === selected);
   const byCountry = groupBy(visible, (line) => line.country);
@@ -254,7 +246,7 @@ const LineResults = memo(function LineResults({
           <div>
             <p className="font-medium tracking-tight">No lines match “{query.trim()}”</p>
             <p className="mt-1 text-sm text-muted-foreground">
-              Try a line code, a station, or an operator such as ATM.
+              Try a line name, a line code, or an operator such as ATM.
             </p>
           </div>
         </div>
@@ -274,12 +266,13 @@ const LineResults = memo(function LineResults({
               <CountryHeader country={country} lines={countryLines} showModes={!selected} />
               <div className="columns-1 gap-3 md:columns-2">
                 {networks.map((networkLines) => {
-                  const counts = networkStations[networkKey(networkLines[0]!)]!;
+                  const stations = new Set(networkLines.flatMap((line) => lineStationIds[line.id]!))
+                    .size;
                   return (
                     <NetworkCard
                       key={networkKey(networkLines[0]!)}
                       lines={networkLines}
-                      stations={counts[selected ?? "all"]}
+                      stations={stations}
                     />
                   );
                 })}
