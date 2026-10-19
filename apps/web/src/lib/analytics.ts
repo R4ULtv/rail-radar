@@ -17,3 +17,11 @@ export function trackEvent<E extends keyof AnalyticsEvents>(
 ) {
   posthog.capture(event, properties);
 }
+
+export function captureException(error: unknown, properties?: Record<string, unknown>) {
+  if (typeof window === "undefined") return;
+  // Error boundaries can run before the Analytics component mounts.
+  void import("./posthog").then(({ initPostHog }) => {
+    initPostHog()?.captureException(error, properties);
+  });
+}

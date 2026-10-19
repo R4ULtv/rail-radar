@@ -273,13 +273,17 @@ async function readXml(
       status: error.statusCode,
     });
     if (error.statusCode === 401 || error.statusCode === 403) {
-      throw new ScraperError("DB Timetables credentials were rejected.", 503, error.timing);
+      throw new ScraperError("DB Timetables credentials were rejected.", 503, error.timing, {
+        cause: error,
+        upstream: error.upstream,
+      });
     }
     if (error.statusCode === 429) {
       throw new ScraperError(
         "The German train data source has reached its request limit. Please try again shortly.",
         503,
         error.timing,
+        { cause: error, upstream: error.upstream },
       );
     }
     if (error.statusCode === 404 && path.startsWith("plan/")) {
@@ -288,20 +292,26 @@ async function readXml(
       return "<timetable/>";
     }
     if (error.statusCode === 404) {
-      throw new ScraperError("This station is not supported by DB Timetables.", 404, error.timing);
+      throw new ScraperError("This station is not supported by DB Timetables.", 404, error.timing, {
+        cause: error,
+        upstream: error.upstream,
+      });
     }
     if (error.statusCode === 504) throw error;
     throw new ScraperError(
       "Unable to load German train data. Please try again.",
       502,
       error.timing,
+      { cause: error, upstream: error.upstream },
     );
   }
 
   try {
     parseTimetable(xml);
-  } catch {
-    throw new ScraperError("Invalid response from DB Timetables.", 502);
+  } catch (error) {
+    throw new ScraperError("Invalid response from DB Timetables.", 502, undefined, {
+      cause: error,
+    });
   }
 
   const ttl = path.startsWith("fchg/") ? 30 : 86_400;

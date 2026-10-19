@@ -24,6 +24,8 @@ export type Bindings = {
 
 export type Variables = {
   clientIp: string;
+  requestId: string;
+  requestStartedAt: number;
 };
 
 export type Env = {
