@@ -39,6 +39,19 @@ const metadata: Metadata = {
   alternates: {
     canonical: "/app",
   },
+  openGraph: {
+    images: [
+      {
+        url: "/assets/social/mobile-app.webp",
+        width: 1200,
+        height: 630,
+        alt: "Rail Radar mobile app showing a station map and live departures on Android.",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+  },
 };
 
 const TEST_DAYS = 14;
