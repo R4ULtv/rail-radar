@@ -5,6 +5,11 @@
   "limits": {
     "cpu_ms": 100,
   },
+  "observability": {
+    "issues": {
+      "enabled": true,
+    },
+  },
   "assets": {
     "directory": "build",
   },
