@@ -7,6 +7,7 @@ import { cn } from "@repo/ui/lib/utils";
 
 /** Per-country rail data-quality warnings shown in the sidebar and on the station page. */
 const STATION_WARNINGS: Partial<Record<CountryCode, string>> = {
+  de: "After an extended outage, we switched the German data source. Coverage may be limited while we work to improve reliability.",
   pl: "Live data for stations in Poland may be unstable or incomplete right now. We are working to improve it.",
   ie: "Platform information is currently unavailable for stations in Ireland. We are working to improve it.",
   fr: "Platform and origin information may be missing for stations in France. We are working to improve it.",
