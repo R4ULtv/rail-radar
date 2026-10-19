@@ -10,6 +10,8 @@ export type Bindings = {
   CLOUDFLARE_ACCOUNT_ID: string;
   CLOUDFLARE_API_TOKEN: string;
   IP_HASH_PEPPER: string;
+  DB_CLIENT_ID: string;
+  DB_API_KEY: string;
   NS_API_KEY: string;
   LDBWS_API_KEY: string;
   TRAFIKLAB_KEY: string;

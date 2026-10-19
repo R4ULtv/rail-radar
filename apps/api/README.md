@@ -245,6 +245,8 @@ Provider-backed scrapers require these Worker secrets:
 - `CLOUDFLARE_API_TOKEN`
 - `IP_HASH_PEPPER`
 - `MAPBOX_TOKEN`
+- `DB_CLIENT_ID`
+- `DB_API_KEY`
 - `NS_API_KEY`
 - `LDBWS_API_KEY`
 - `TRAFIKLAB_KEY`
