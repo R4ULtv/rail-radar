@@ -2,6 +2,7 @@ const fs = require("node:fs");
 const path = require("node:path");
 const { getDefaultConfig } = require("expo/metro-config");
 const { withUniwindConfig } = require("uniwind/metro");
+const { writeLineAssets } = require("./scripts/line-assets.cjs");
 
 // The app bundles the stations minified, 40% smaller. The shared file stays readable for
 // Studio and reviews, so the copy is made here, whenever Metro starts, and isn't committed.
@@ -12,9 +13,11 @@ if (!fs.existsSync(stationsAsset) || fs.readFileSync(stationsAsset, "utf8") !== 
   fs.mkdirSync(path.dirname(stationsAsset), { recursive: true });
   fs.writeFileSync(stationsAsset, minifiedStations);
 }
+// The metro and light rail tracks, and the names of their operators.
+writeLineAssets(path.join(__dirname, "assets/generated"));
 
 const config = getDefaultConfig(__dirname);
-// The station GeoJSON ships as a file for the native map, not as a JS module.
+// The station and line GeoJSON ship as files for the native map, not as a JS module.
 config.resolver.assetExts.push("geojson");
 // SVGs compile to react-native-svg components at build time.
 config.transformer.babelTransformerPath = require.resolve("react-native-svg-transformer/expo");

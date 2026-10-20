@@ -11,6 +11,7 @@ export type NearbyStation = Station & { distance: number };
 interface LoadedStations {
   url: string;
   stations: Promise<Station[]>;
+  byId?: Promise<Map<string, Station>>;
   search?: Promise<StationSearch>;
 }
 
@@ -39,6 +40,15 @@ function load(url: string): LoadedStations {
  */
 export function loadStations(url: string): Promise<Station[]> {
   return load(url).stations;
+}
+
+/** The same stations by ID, e.g. to name a line's stops. */
+export function loadStationsById(url: string): Promise<Map<string, Station>> {
+  const current = load(url);
+  current.byId ??= current.stations.then(
+    (stations) => new Map(stations.map((station) => [station.id, station])),
+  );
+  return current.byId;
 }
 
 /**
