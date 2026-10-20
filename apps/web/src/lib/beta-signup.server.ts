@@ -19,10 +19,10 @@ const ANDROID_BETA: SignupList = {
   welcome: { template: "android-beta-welcome", category: "android_beta_welcome" },
 };
 
-// A waitlist only, so there's no welcome email promising an invite.
 const IOS_WAITLIST: SignupList = {
   name: "iOS waitlist",
   segmentId: "69610b76-6412-46a3-83b2-74fd0adff287",
+  welcome: { template: "ios-waitlist-welcome", category: "ios_waitlist_welcome" },
 };
 
 export type JoinBetaResult = { status: "joined" | "invalid" | "rate-limited" | "failed" };

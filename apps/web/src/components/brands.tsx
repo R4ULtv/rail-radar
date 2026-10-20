@@ -31,7 +31,7 @@ const brandPaths: Record<string, string> = {
   flp: "ch/flp",
   // Other
   obb: "obb",
-  cfl: "cfl",
+  cfl: "lu/cfl",
   // French brands (SNCF networks)
   sncf: "fr/sncf",
   "tgv inoui": "fr/inoui",
@@ -46,7 +46,7 @@ const brandPaths: Record<string, string> = {
   regionaura: "fr/regionaura",
   "ter na": "fr/ter-na",
   "zou !": "fr/zou",
-  vr: "vr",
+  vr: "fi/vr",
   sncb: "sncb",
   eurostar: "eurostar",
   arriva: "arriva",
@@ -66,7 +66,7 @@ const brandPaths: Record<string, string> = {
   vias: "de/vias",
   westfalenbahn: "de/westfalenbahn",
   vogtlandbahn: "de/vogtlandbahn",
-  ns: "ns",
+  ns: "nl/ns",
   vy: "no/vy",
   "sj nord": "no/sj_nord",
   // Polish brands
@@ -124,7 +124,7 @@ const brandPaths: Record<string, string> = {
   gc: "uk/gc",
   ht: "uk/ht",
   // Irish brands
-  ir: "ir",
+  ir: "ie/ir",
 };
 
 // Aliases for brands that share icons

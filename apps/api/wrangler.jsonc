@@ -8,11 +8,19 @@
   },
   "observability": {
     "enabled": true,
+    "issues": {
+      "enabled": true,
+    },
     "head_sampling_rate": 1,
     "traces": {
       "enabled": true,
       "head_sampling_rate": 0.2,
     },
+  },
+  "assets": {
+    "directory": "../../packages/data/src/lines",
+    "binding": "ASSETS",
+    "run_worker_first": true,
   },
   "routes": [
     {

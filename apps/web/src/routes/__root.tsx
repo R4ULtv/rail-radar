@@ -4,10 +4,12 @@ import {
   Outlet,
   Scripts,
   createRootRouteWithContext,
+  useRouterState,
 } from "@tanstack/react-router";
 import type { QueryClient } from "@tanstack/react-query";
 import { Button } from "@repo/ui/components/button";
 import { Analytics } from "@/components/analytics";
+import { SiteFooter } from "@/components/site-footer";
 import { env } from "@/lib/env";
 import appCss from "../styles.css?url";
 import geistFont from "../assets/fonts/Geist/Geist.woff2?url";
@@ -110,6 +112,21 @@ function RootNotFound() {
   );
 }
 
+function PageLayout() {
+  const isHome = useRouterState({ select: (state) => state.location.pathname === "/" });
+
+  if (isHome) return <Outlet />;
+
+  return (
+    <div className="flex min-h-svh flex-col">
+      <div className="flex-1">
+        <Outlet />
+      </div>
+      <SiteFooter />
+    </div>
+  );
+}
+
 function RootDocument() {
   return (
     <html
@@ -122,7 +139,7 @@ function RootDocument() {
         <HeadContent />
       </head>
       <body className="antialiased">
-        <Outlet />
+        <PageLayout />
         <Analytics />
         <Scripts />
       </body>

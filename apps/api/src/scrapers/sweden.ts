@@ -97,6 +97,7 @@ function getBrand(entry: TrafiklabDeparture): string | null {
 
   const lower = operator.toLowerCase();
 
+  if (lower === "pågatågen") return "Skånetrafiken";
   if (lower.startsWith("sj ") || lower === "sj ab") return "SJ";
   if (lower === "vr sverige ab" || lower === "vr sverige") return "VR";
   if (lower === "vygruppen as") return "Vy";

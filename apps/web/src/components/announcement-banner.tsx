@@ -1,14 +1,14 @@
 "use client";
 
 import { useReducer, useRef, useSyncExternalStore } from "react";
-import { ArrowRightIcon, XIcon } from "lucide-react";
+import { ArrowRightIcon, RouteIcon, XIcon } from "lucide-react";
 import { LazyMotion, domAnimation, m, AnimatePresence } from "motion/react";
 import { Link } from "@tanstack/react-router";
 import { Button, buttonVariants } from "@repo/ui/components/button";
 import { cn } from "@repo/ui/lib/utils";
 import { prerenderedPageLinkProps } from "@/lib/station-prerender";
 
-const STORAGE_KEY = "banner-dismissed-v16";
+const STORAGE_KEY = "banner-dismissed-v17";
 
 const subscribe = () => () => {};
 const getSnapshot = () => !localStorage.getItem(STORAGE_KEY);
@@ -42,26 +42,26 @@ export function AnnouncementBanner() {
               role="status"
               className="relative flex items-center gap-3 overflow-hidden rounded-3xl bg-card p-2.5 pr-10 text-card-foreground shadow-md ring-1 ring-foreground/5 md:gap-3.5 md:p-3 md:pr-12 dark:ring-foreground/10"
             >
-              <img
+              <div
                 aria-hidden="true"
-                src="/icon.svg"
-                alt=""
-                className="size-10 shrink-0 rounded-2xl md:size-11"
-              />
+                className="flex size-10 shrink-0 items-center justify-center rounded-2xl bg-brand/15 text-brand md:size-11"
+              >
+                <RouteIcon className="size-5 md:size-6" />
+              </div>
 
               <div className="min-w-0 flex-1">
                 <div className="mb-0.5 flex items-center gap-1.5">
                   <p className="truncate text-sm font-semibold tracking-tight">
-                    Rail Radar on your phone
+                    New: metro &amp; light rail
                   </p>
                 </div>
                 <p className="truncate text-xs text-muted-foreground">
-                  Android beta open · iPhone waitlist
+                  Explore lines, routes, and stops
                 </p>
               </div>
 
               <Link
-                to="/app"
+                to="/lines"
                 {...prerenderedPageLinkProps}
                 onClick={dismiss}
                 className={cn(
@@ -69,7 +69,7 @@ export function AnnouncementBanner() {
                   "hidden transition-transform duration-150 active:scale-[0.97] md:inline-flex",
                 )}
               >
-                Get the app
+                Explore lines
                 <ArrowRightIcon data-icon="inline-end" />
               </Link>
 
@@ -84,13 +84,13 @@ export function AnnouncementBanner() {
               </Button>
 
               <Link
-                to="/app"
+                to="/lines"
                 {...prerenderedPageLinkProps}
                 onClick={dismiss}
-                aria-label="Explore the Rail Radar mobile app"
+                aria-label="Explore metro and light rail lines"
                 className="absolute inset-0 rounded-3xl focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/30 focus-visible:ring-inset md:hidden"
               >
-                <span className="sr-only">Explore the Rail Radar mobile app</span>
+                <span className="sr-only">Explore metro and light rail lines</span>
               </Link>
             </div>
           </m.div>

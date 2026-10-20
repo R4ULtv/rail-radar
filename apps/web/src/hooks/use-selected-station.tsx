@@ -7,6 +7,7 @@ import { useIsMobile } from "@repo/ui/hooks/use-mobile";
 import { useSavedStations } from "./use-saved-stations";
 import { useRecentStations } from "./use-recent-stations";
 import { useHomeSearch } from "./use-home-search";
+import { STATIONS_SOURCE_ID, stationFromFeature } from "@/lib/station-features";
 
 interface SelectedStationContextValue {
   selectedStation: Station | null;
@@ -39,39 +40,63 @@ export function SelectedStationProvider({ children }: { children: React.ReactNod
 
   const stationRef = React.useRef<Station | null>(null);
 
-  const flyToRef = React.useRef((_geo: { lat: number; lng: number }, _type: string) => {});
+  const flyToRef = React.useRef((_geo: { lat: number; lng: number }) => {});
   React.useEffect(() => {
-    flyToRef.current = (geo, type) => {
+    flyToRef.current = (geo) => {
       map?.flyTo({
         center: [geo.lng, geo.lat],
-        zoom: type === "rail" ? 14 : 15,
+        zoom: 14,
         padding: isMobile ? { bottom: 250, top: 0, left: 0, right: 0 } : undefined,
       });
     };
   }, [map, isMobile]);
 
-  // Clear stale ?station= param on page load (no data to resolve without a fetch)
+  // The ?station= the page was opened with, until the map's stations can resolve it.
+  const [linkedStationId, setLinkedStationId] = React.useState(stationId);
+
+  // Clear a stale ?station= param (one no longer backed by a selection)
   React.useEffect(() => {
-    if (stationId && !stationRef.current) {
+    if (stationId && !stationRef.current && stationId !== linkedStationId) {
       setStationId(null);
     }
-  }, [stationId, setStationId]);
+  }, [stationId, linkedStationId, setStationId]);
 
   const selectStation = React.useCallback(
     (station: Station) => {
-      if (station.type === "rail") {
-        stationRef.current = station;
-        setStationObject(station);
-        setStationId(station.id);
-        addRecentStation(station);
-      }
+      stationRef.current = station;
+      setStationObject(station);
+      setStationId(station.id);
+      addRecentStation(station);
 
-      if (station.geo) {
-        flyToRef.current(station.geo, station.type);
+      // Metro and light rail stations frame their lines instead (StationLinesMap).
+      if (station.geo && station.type === "rail") {
+        flyToRef.current(station.geo);
       }
     },
     [setStationId, addRecentStation],
   );
+
+  // Links to a station on the map (line pages, a station page's "Back to map") open its
+  // view with `lat`/`lng`/`zoom`, so the station is among the features the map loads
+  // first. A station outside the opening view isn't loaded, and its param is dropped.
+  React.useEffect(() => {
+    if (!linkedStationId || !map) return;
+    const resolve = () => {
+      if (!map.getSource(STATIONS_SOURCE_ID) || !map.isSourceLoaded(STATIONS_SOURCE_ID)) return;
+      map.off("idle", resolve);
+      const [feature] = map.querySourceFeatures(STATIONS_SOURCE_ID, {
+        filter: ["==", ["get", "id"], linkedStationId],
+      });
+      const station = feature && stationFromFeature(feature);
+      if (station && !stationRef.current) selectStation(station);
+      setLinkedStationId(null);
+    };
+    map.on("idle", resolve);
+    resolve();
+    return () => {
+      map.off("idle", resolve);
+    };
+  }, [linkedStationId, map, selectStation]);
 
   const clearStation = React.useCallback(() => {
     stationRef.current = null;

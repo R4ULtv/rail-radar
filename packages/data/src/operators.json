@@ -243,7 +243,7 @@
     "name": "SAD",
     "logoPath": "it/sad",
     "countries": ["it"],
-    "operatorTypes": ["passenger"],
+    "operatorTypes": ["passenger", "light-rail"],
     "bounds": [10.4, 46.2, 12.5, 47.1],
     "description": "SAD operates integrated regional transport in the autonomous bilingual province of South Tyrol. Working alongside Trenitalia and ÖBB, it manages vital Alpine services on the scenic Vinschgau (Val Venosta) and Puster Valley railways, utilizing modern rolling stock tailored for steep gradients and winter conditions.",
     "website": "https://www.sad.it",
@@ -290,6 +290,370 @@
       {
         "label": "Wikipedia",
         "url": "https://it.wikipedia.org/wiki/Societ%C3%A0_Unica_Abruzzese_di_Trasporto",
+        "type": "wikipedia"
+      }
+    ]
+  },
+  {
+    "slug": "arst",
+    "name": "ARST",
+    "logoPath": "it/arst",
+    "countries": ["it"],
+    "operatorTypes": ["passenger", "light-rail"],
+    "bounds": [8.2, 39.1, 9.8, 41.3],
+    "description": "ARST (Azienda Regionale Sarda Trasporti) is Sardinia's regional public transport company, running most of the island's interurban bus network alongside its narrow-gauge railways. It operates the Metrocagliari light rail lines in the Cagliari area and the Sassari tramway, as well as regional lines such as Monserrato–Isili, Macomer–Nuoro and Sassari–Alghero and the tourist Trenino Verde services.",
+    "website": "https://www.arst.sardegna.it",
+    "founded": 1970,
+    "headquarters": "Cagliari, Italy",
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["regional", "commuter", "scenic"],
+    "parentCompany": "Regione Autonoma della Sardegna",
+    "links": [
+      {
+        "label": "Official Site",
+        "url": "https://www.arst.sardegna.it",
+        "type": "website"
+      },
+      {
+        "label": "Wikipedia",
+        "url": "https://it.wikipedia.org/wiki/ARST",
+        "type": "wikipedia"
+      }
+    ]
+  },
+  {
+    "slug": "amt-genova",
+    "name": "AMT Genova",
+    "logoPath": "it/amt-genova",
+    "countries": ["it"],
+    "operatorTypes": ["passenger", "metro", "light-rail"],
+    "bounds": [8.8, 44.3, 9.1, 44.6],
+    "description": "AMT (Azienda Mobilità e Trasporti) is the public transport company of Genoa and its metropolitan area. Besides buses, it runs the single-line Genoa Metro, the Principe–Granarolo rack railway, funiculars and public lifts, and operates the narrow-gauge Genova–Casella railway. Since absorbing ATP Esercizio in 2021 it holds the public transport concession for the wider metropolitan area.",
+    "website": "https://www.amt.genova.it",
+    "founded": 1965,
+    "headquarters": "Genoa, Italy",
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["commuter", "regional"],
+    "parentCompany": "Comune di Genova",
+    "links": [
+      {
+        "label": "Official Site",
+        "url": "https://www.amt.genova.it",
+        "type": "website"
+      },
+      {
+        "label": "Wikipedia",
+        "url": "https://en.wikipedia.org/wiki/AMT_Genova",
+        "type": "wikipedia"
+      }
+    ]
+  },
+  {
+    "slug": "anm",
+    "name": "ANM",
+    "logoPath": "it/anm",
+    "countries": ["it"],
+    "operatorTypes": ["metro", "light-rail"],
+    "bounds": [14.1, 40.8, 14.4, 41],
+    "description": "ANM (Azienda Napoletana Mobilità) is the municipal public transport company of Naples. It operates Naples Metro lines 1 and 6, the city's four funiculars and public lifts, as well as bus, trolleybus and tram services. Line 1 is the backbone of the city network, recently extended to Centro Direzionale.",
+    "website": "https://www.anm.it",
+    "founded": 1995,
+    "headquarters": "Naples, Italy",
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["commuter"],
+    "parentCompany": "Napoli Holding (Comune di Napoli)",
+    "links": [
+      {
+        "label": "Official Site",
+        "url": "https://www.anm.it",
+        "type": "website"
+      },
+      {
+        "label": "Wikipedia",
+        "url": "https://en.wikipedia.org/wiki/ANM_(Naples)",
+        "type": "wikipedia"
+      }
+    ]
+  },
+  {
+    "slug": "atac",
+    "name": "ATAC",
+    "logoPath": "it/atac",
+    "countries": ["it"],
+    "operatorTypes": ["metro", "light-rail"],
+    "bounds": [12.3, 41.8, 12.8, 42],
+    "description": "ATAC is the municipal public transport company of Rome, wholly owned by Roma Capitale. It operates Rome Metro lines A, B/B1 and C together with the city's bus, tram and trolleybus network. The metro reached the Colosseo interchange between lines B and C in December 2025.",
+    "website": "https://www.atac.roma.it",
+    "founded": 1909,
+    "headquarters": "Rome, Italy",
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["commuter"],
+    "parentCompany": "Roma Capitale",
+    "links": [
+      {
+        "label": "Official Site",
+        "url": "https://www.atac.roma.it",
+        "type": "website"
+      },
+      {
+        "label": "Wikipedia",
+        "url": "https://en.wikipedia.org/wiki/ATAC_SpA",
+        "type": "wikipedia"
+      }
+    ]
+  },
+  {
+    "slug": "atm-milano",
+    "name": "ATM",
+    "logoPath": "it/atm-milano",
+    "countries": ["it"],
+    "operatorTypes": ["metro", "light-rail"],
+    "bounds": [9, 45.3, 9.5, 45.6],
+    "description": "ATM (Azienda Trasporti Milanesi) is the public transport company of Milan, wholly owned by the Municipality of Milan. It runs all five lines of the Milan Metro, M1 to M5, the largest metro network in Italy, as well as the city's tram, trolleybus and bus services. Through subsidiaries it also operates the Copenhagen Metro and the Como–Brunate funicular.",
+    "website": "https://www.atm.it",
+    "founded": 1931,
+    "headquarters": "Milan, Italy",
+    "networkKm": 111.3,
+    "annualPassengers": null,
+    "serviceTypes": ["commuter"],
+    "parentCompany": "Comune di Milano",
+    "links": [
+      {
+        "label": "Official Site",
+        "url": "https://www.atm.it",
+        "type": "website"
+      },
+      {
+        "label": "Wikipedia",
+        "url": "https://en.wikipedia.org/wiki/Azienda_Trasporti_Milanesi",
+        "type": "wikipedia"
+      }
+    ]
+  },
+  {
+    "slug": "brescia-mobilita",
+    "name": "Brescia Mobilità",
+    "logoPath": "it/brescia-mobilita",
+    "countries": ["it"],
+    "operatorTypes": ["metro"],
+    "bounds": [10.1, 45.4, 10.4, 45.6],
+    "description": "Brescia Mobilità is the mobility company of the Municipality of Brescia. Through its wholly owned subsidiary Metro Brescia it operates the city's driverless light metro, opened in 2013 between Prealpino and Sant'Eufemia-Buffalora. The group also runs the urban bus network through Brescia Trasporti.",
+    "website": "https://www.bresciamobilita.it",
+    "founded": 2001,
+    "headquarters": "Brescia, Italy",
+    "networkKm": 13.7,
+    "annualPassengers": null,
+    "serviceTypes": ["commuter"],
+    "parentCompany": "Comune di Brescia",
+    "links": [
+      {
+        "label": "Official Site",
+        "url": "https://www.bresciamobilita.it",
+        "type": "website"
+      },
+      {
+        "label": "Wikipedia",
+        "url": "https://it.wikipedia.org/wiki/Brescia_Mobilit%C3%A0",
+        "type": "wikipedia"
+      }
+    ]
+  },
+  {
+    "slug": "cotral",
+    "name": "Cotral",
+    "logoPath": "it/cotral",
+    "countries": ["it"],
+    "operatorTypes": ["passenger", "metro"],
+    "bounds": [12, 41.6, 12.7, 42.5],
+    "description": "Cotral is the regional public transport company of Lazio, wholly owned by the Lazio Region and best known for its extensive interurban bus network. Since July 2022 it has operated the Roma–Lido railway, branded Metromare, and the Roma–Civita Castellana–Viterbo railway, whose infrastructure is managed by ASTRAL.",
+    "website": "https://www.cotralspa.it",
+    "founded": 1976,
+    "headquarters": "Rome, Italy",
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["commuter", "regional"],
+    "parentCompany": "Regione Lazio",
+    "links": [
+      {
+        "label": "Official Site",
+        "url": "https://www.cotralspa.it",
+        "type": "website"
+      },
+      {
+        "label": "Wikipedia",
+        "url": "https://en.wikipedia.org/wiki/Cotral",
+        "type": "wikipedia"
+      }
+    ]
+  },
+  {
+    "slug": "eav",
+    "name": "EAV",
+    "logoPath": "it/eav",
+    "countries": ["it"],
+    "operatorTypes": ["passenger", "metro", "light-rail"],
+    "bounds": [14, 40.6, 14.9, 41.4],
+    "description": "Ente Autonomo Volturno (EAV) is the Campania Region's public transport company, operating the narrow-gauge Circumvesuviana network around Mount Vesuvius and the Cumana and Circumflegrea lines in the Phlegraean Fields. It also runs Naples Metro line 11 (Arcobaleno) between Piscinola-Scampia and Aversa, the Alifana and Benevento–Cancello railways and regional buses.",
+    "website": "https://www.eavsrl.it",
+    "founded": 1904,
+    "headquarters": "Naples, Italy",
+    "networkKm": 300,
+    "annualPassengers": null,
+    "serviceTypes": ["regional", "commuter"],
+    "parentCompany": "Regione Campania",
+    "links": [
+      {
+        "label": "Official Site",
+        "url": "https://www.eavsrl.it",
+        "type": "website"
+      },
+      {
+        "label": "Wikipedia",
+        "url": "https://en.wikipedia.org/wiki/Ente_Autonomo_Volturno",
+        "type": "wikipedia"
+      }
+    ]
+  },
+  {
+    "slug": "fce",
+    "name": "FCE",
+    "logoPath": "it/fce",
+    "countries": ["it"],
+    "operatorTypes": ["passenger", "metro"],
+    "bounds": [14.7, 37.4, 15.3, 38],
+    "description": "Ferrovia Circumetnea (FCE) operates the narrow-gauge railway around Mount Etna, whose first section opened in 1895, and the Catania Metro. It is run as a government-managed enterprise under the Italian Ministry of Infrastructure and Transport. Since June 2024 the urban section from Catania Borgo to Paternò has been closed for the metro extension.",
+    "website": "https://www.circumetnea.it",
+    "founded": null,
+    "headquarters": "Catania, Italy",
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["regional", "commuter"],
+    "parentCompany": "Ministero delle Infrastrutture e dei Trasporti",
+    "links": [
+      {
+        "label": "Official Site",
+        "url": "https://www.circumetnea.it",
+        "type": "website"
+      },
+      {
+        "label": "Wikipedia",
+        "url": "https://en.wikipedia.org/wiki/Ferrovia_Circumetnea",
+        "type": "wikipedia"
+      }
+    ]
+  },
+  {
+    "slug": "fdc",
+    "name": "Ferrovie della Calabria",
+    "logoPath": "it/fdc",
+    "countries": ["it"],
+    "operatorTypes": ["passenger", "metro"],
+    "bounds": [16.1, 38.8, 16.8, 39.4],
+    "description": "Ferrovie della Calabria is the regional rail and bus company of Calabria. Its predecessor was established by the split of Ferrovie Calabro Lucane in 1990 and began operating in 1991; the current company was formed in 2001. It runs narrow-gauge railways in the Cosenza and Catanzaro areas, the Catanzaro metropolitan rail service between Catanzaro Città and Catanzaro Lido, an extensive interurban bus network and the Treno della Sila heritage service.",
+    "website": "https://www.ferroviedellacalabria.it",
+    "founded": 2001,
+    "headquarters": "Catanzaro, Italy",
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["regional", "commuter", "scenic"],
+    "parentCompany": "Regione Calabria",
+    "links": [
+      {
+        "label": "Official Site",
+        "url": "https://www.ferroviedellacalabria.it",
+        "type": "website"
+      },
+      {
+        "label": "Wikipedia",
+        "url": "https://it.wikipedia.org/wiki/Ferrovie_della_Calabria",
+        "type": "wikipedia"
+      }
+    ]
+  },
+  {
+    "slug": "gtt",
+    "name": "GTT",
+    "logoPath": "it/gtt",
+    "countries": ["it"],
+    "operatorTypes": ["metro", "light-rail"],
+    "bounds": [7.5, 44.9, 7.7, 45.1],
+    "description": "GTT (Gruppo Torinese Trasporti) is the public transport company of Turin, controlled by the city through FCT Holding. It operates the driverless VAL line M1 of the Turin Metro between Fermi (Collegno) and Bengasi, alongside the city's tram and bus networks. Management of the Canavesana and Torino–Ceres railway infrastructure was transferred to RFI at the end of 2023.",
+    "website": "https://www.gtt.to.it",
+    "founded": 2003,
+    "headquarters": "Turin, Italy",
+    "networkKm": 15.1,
+    "annualPassengers": 40600000,
+    "serviceTypes": ["commuter"],
+    "parentCompany": "FCT Holding (Città di Torino)",
+    "links": [
+      {
+        "label": "Official Site",
+        "url": "https://www.gtt.to.it",
+        "type": "website"
+      },
+      {
+        "label": "Wikipedia",
+        "url": "https://en.wikipedia.org/wiki/Gruppo_Torinese_Trasporti",
+        "type": "wikipedia"
+      }
+    ]
+  },
+  {
+    "slug": "pisamover",
+    "name": "PisaMover",
+    "logoPath": "it/pisamover",
+    "countries": ["it"],
+    "operatorTypes": ["metro"],
+    "bounds": [10.3, 43.6, 10.5, 43.8],
+    "description": "PisaMover S.p.A. is the concessionaire responsible for the Pisa Mover, a 1.78 km driverless cable-hauled people mover linking Pisa Centrale railway station with Pisa International Airport. Opened in March 2017, the line has one intermediate station, San Giusto–Aurelia, serving the Aurelia and Goletta park-and-ride facilities; the concession agreement is with the Municipality of Pisa and PisaMo. Operation and maintenance are contracted to Peoplemover Service S.r.l.; Meridiam is the controlling shareholder and Leitner holds a minority stake.",
+    "website": "https://pisa-mover.com",
+    "founded": null,
+    "headquarters": "Pisa, Italy",
+    "networkKm": 1.78,
+    "annualPassengers": null,
+    "serviceTypes": ["commuter"],
+    "parentCompany": "Meridiam",
+    "links": [
+      {
+        "label": "Official Site",
+        "url": "https://pisa-mover.com",
+        "type": "website"
+      },
+      {
+        "label": "Wikipedia",
+        "url": "https://it.wikipedia.org/wiki/Pisa_Mover",
+        "type": "wikipedia"
+      }
+    ]
+  },
+  {
+    "slug": "teb",
+    "name": "TEB",
+    "logoPath": "it/teb",
+    "countries": ["it"],
+    "operatorTypes": ["light-rail"],
+    "bounds": [9.6, 45.6, 9.9, 45.8],
+    "description": "TEB (Tramvie Elettriche Bergamasche) operates the light rail network of Bergamo. Its line T1 runs 12.5 km from Bergamo station to Albino in the Val Seriana on the alignment of a former railway, and opened in 2009. A second line, T2 to Villa d'Almè along the former Valle Brembana railway, is undergoing testing and authorization ahead of its planned opening.",
+    "website": "https://www.teb.bergamo.it",
+    "founded": 2000,
+    "headquarters": "Ranica, Italy",
+    "networkKm": 12.5,
+    "annualPassengers": 3200000,
+    "serviceTypes": ["commuter"],
+    "parentCompany": "ATB Mobilità",
+    "links": [
+      {
+        "label": "Official Site",
+        "url": "https://www.teb.bergamo.it",
+        "type": "website"
+      },
+      {
+        "label": "Wikipedia",
+        "url": "https://it.wikipedia.org/wiki/Tramvie_Elettriche_Bergamasche",
         "type": "wikipedia"
       }
     ]
@@ -426,7 +790,7 @@
     "name": "RBS",
     "logoPath": "ch/rbs",
     "countries": ["ch"],
-    "operatorTypes": ["passenger"],
+    "operatorTypes": ["passenger", "light-rail"],
     "bounds": [7.3, 46.9, 7.7, 47.2],
     "description": "Regionalverkehr Bern-Solothurn (RBS) operates a high-frequency, metre-gauge commuter network radiating from Bern. Operating closely to S-Bahn standards, RBS manages some of the busiest narrow-gauge passenger services in Switzerland, deeply integrated into the capital's urban transit system.",
     "website": "https://www.rbs.ch",
@@ -510,7 +874,7 @@
     "name": "Appenzeller Bahnen",
     "logoPath": "ch/ab",
     "countries": ["ch"],
-    "operatorTypes": ["passenger"],
+    "operatorTypes": ["passenger", "light-rail"],
     "bounds": [9.2, 47.25, 9.6, 47.45],
     "description": "Appenzeller Bahnen operates a network of narrow-gauge railways in the rolling hills of northeastern Switzerland. Serving the Appenzell cantons and St. Gallen, its operations include steep adhesion lines and historic rack railways, deeply embedded in the local Alpine landscape.",
     "website": "https://www.appenzellerbahnen.ch",
@@ -566,7 +930,7 @@
     "name": "TPC",
     "logoPath": "ch/tpc",
     "countries": ["ch"],
-    "operatorTypes": ["passenger"],
+    "operatorTypes": ["passenger", "light-rail"],
     "bounds": [6.85, 46.15, 7.15, 46.45],
     "description": "Transports Publics du Chablais (TPC) operates four distinct metre-gauge mountain railways originating from Aigle and Bex in the canton of Vaud. Using extensive rack-and-pinion sections, it connects the Rhône Valley to major Alpine resorts like Leysin, Les Diablerets, and Champéry.",
     "website": "https://www.tpc.ch",
@@ -734,7 +1098,7 @@
     "name": "FLP",
     "logoPath": "ch/flp",
     "countries": ["ch"],
-    "operatorTypes": ["passenger"],
+    "operatorTypes": ["passenger", "light-rail"],
     "bounds": [8.9, 45.95, 9.05, 46.05],
     "description": "Ferrovie Luganesi (FLP) operates a high-frequency, metre-gauge commuter railway connecting Lugano with Ponte Tresa on the Italian border. Integrated as line S60 of the Ticino S-Bahn, it serves as a critical rapid transit artery for the densely populated Malcantone region.",
     "website": "https://www.flp.ch",
@@ -753,6 +1117,202 @@
       {
         "label": "Wikipedia",
         "url": "https://en.wikipedia.org/wiki/Lugano%E2%80%93Ponte_Tresa_railway",
+        "type": "wikipedia"
+      }
+    ]
+  },
+  {
+    "slug": "ava",
+    "name": "AVA",
+    "logoPath": "ch/ava",
+    "countries": ["ch"],
+    "operatorTypes": ["light-rail"],
+    "bounds": [8, 47.2, 8.6, 47.5],
+    "description": "Aargau Verkehr (AVA) was formed in 2018 by the merger of BDWM Transport and the Wynental- und Suhrentalbahn, and runs metre-gauge rail and bus services in the cantons of Aargau, Zurich and Lucerne. Its network includes the Wynental and Suhrental line (S14), the Wohlen–Bremgarten–Dietikon line (S17) and the Limmattalbahn light rail (line 20) between Zürich Altstetten and Killwangen-Spreitenbach, which it operates under contract.",
+    "website": "https://www.aargauverkehr.ch",
+    "founded": 2018,
+    "headquarters": "Aarau, Switzerland",
+    "networkKm": 65,
+    "annualPassengers": null,
+    "serviceTypes": ["regional", "commuter"],
+    "parentCompany": null,
+    "links": [
+      {
+        "label": "Official Site",
+        "url": "https://www.aargauverkehr.ch",
+        "type": "website"
+      },
+      {
+        "label": "Wikipedia",
+        "url": "https://en.wikipedia.org/wiki/Aargau_Verkehr",
+        "type": "wikipedia"
+      }
+    ]
+  },
+  {
+    "slug": "asm",
+    "name": "asm",
+    "logoPath": "ch/asm",
+    "countries": ["ch"],
+    "operatorTypes": ["light-rail"],
+    "bounds": [7, 46.9, 7.9, 47.4],
+    "description": "Aare Seeland mobil (asm) was created in 1999 from the merger of several regional transport companies in the Oberaargau, Solothurn and Seeland regions. It operates three metre-gauge railways (Solothurn–Langenthal, Langenthal–St. Urban and Biel–Täuffelen–Ins), along with regional and town bus services and the Vinifuni funicular at Ligerz.",
+    "website": "https://www.asmobil.ch",
+    "founded": 1999,
+    "headquarters": "Langenthal, Switzerland",
+    "networkKm": 54,
+    "annualPassengers": 3881000,
+    "serviceTypes": ["regional", "commuter"],
+    "parentCompany": null,
+    "links": [
+      {
+        "label": "Official Site",
+        "url": "https://www.asmobil.ch",
+        "type": "website"
+      },
+      {
+        "label": "Wikipedia",
+        "url": "https://en.wikipedia.org/wiki/Aare_Seeland_mobil",
+        "type": "wikipedia"
+      }
+    ]
+  },
+  {
+    "slug": "leb",
+    "name": "LEB",
+    "logoPath": "ch/leb",
+    "countries": ["ch"],
+    "operatorTypes": ["light-rail"],
+    "bounds": [6.5, 46.5, 6.8, 46.8],
+    "description": "The Compagnie du chemin de fer Lausanne-Echallens-Bercher (LEB) owns the metre-gauge line from Lausanne-Flon through Echallens to Bercher, a high-frequency commuter link between Lausanne and the Gros-de-Vaud region. Operational management has been handled by tl since 2013. In 2026 LEB became part of the movodis holding with MBC and TRAVYS.",
+    "website": "https://www.leb.ch",
+    "founded": 1913,
+    "headquarters": "Echallens, Switzerland",
+    "networkKm": 23.6,
+    "annualPassengers": 4137000,
+    "serviceTypes": ["regional", "commuter"],
+    "parentCompany": "movodis SA",
+    "links": [
+      {
+        "label": "Official Site",
+        "url": "https://www.leb.ch",
+        "type": "website"
+      },
+      {
+        "label": "Wikipedia",
+        "url": "https://en.wikipedia.org/wiki/Lausanne%E2%80%93%C3%89challens%E2%80%93Bercher_line",
+        "type": "wikipedia"
+      }
+    ]
+  },
+  {
+    "slug": "transn",
+    "name": "transN",
+    "logoPath": "ch/transn",
+    "countries": ["ch"],
+    "operatorTypes": ["passenger", "light-rail"],
+    "bounds": [6.5, 46.8, 7, 47.2],
+    "description": "Transports publics neuchâtelois (transN) was formed in 2012 by the merger of TN and TRN and is the main public transport operator in the canton of Neuchâtel. Besides buses, trolleybuses and funiculars, it runs the Littorail tram-train between Neuchâtel and Boudry, as well as regional railways in the Val-de-Travers and the Neuchâtel mountains.",
+    "website": "https://www.transn.ch",
+    "founded": 2012,
+    "headquarters": "La Chaux-de-Fonds, Switzerland",
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["regional", "commuter"],
+    "parentCompany": null,
+    "links": [
+      {
+        "label": "Official Site",
+        "url": "https://www.transn.ch",
+        "type": "website"
+      },
+      {
+        "label": "Wikipedia",
+        "url": "https://en.wikipedia.org/wiki/Transports_publics_Neuch%C3%A2telois",
+        "type": "wikipedia"
+      }
+    ]
+  },
+  {
+    "slug": "fb",
+    "name": "Forchbahn",
+    "logoPath": "ch/fb",
+    "countries": ["ch"],
+    "operatorTypes": ["light-rail"],
+    "bounds": [8.5, 47.2, 8.8, 47.4],
+    "description": "Forchbahn AG owns the metre-gauge light rail line from Zürich Stadelhofen through Forch to Esslingen, sharing the city tram tracks as far as Rehalp before continuing on its own right-of-way. The line is operated jointly with Verkehrsbetriebe Zürich (VBZ) and forms part of the Zürcher Verkehrsverbund (ZVV) network.",
+    "website": "https://forchbahn.ch",
+    "founded": 1910,
+    "headquarters": "Zurich, Switzerland",
+    "networkKm": 16,
+    "annualPassengers": 6047457,
+    "serviceTypes": ["commuter"],
+    "parentCompany": null,
+    "links": [
+      {
+        "label": "Official Site",
+        "url": "https://forchbahn.ch",
+        "type": "website"
+      },
+      {
+        "label": "Wikipedia",
+        "url": "https://en.wikipedia.org/wiki/Forch_railway",
+        "type": "wikipedia"
+      }
+    ]
+  },
+  {
+    "slug": "tl",
+    "name": "tl",
+    "logoPath": "ch/tl",
+    "countries": ["ch"],
+    "operatorTypes": ["metro", "light-rail"],
+    "bounds": [6.5, 46.4, 6.7, 46.6],
+    "description": "Transports publics de la région lausannoise (tl) runs the urban public transport network of Lausanne and its surrounding area, made up of two metro lines plus trolleybus and bus routes. The m1 light metro links Lausanne-Flon with the university campuses and Renens, while the rubber-tyred m2 climbs steeply from Ouchy on the lake through the city centre to Croisettes.",
+    "website": "https://www.t-l.ch",
+    "founded": 1895,
+    "headquarters": "Renens, Switzerland",
+    "networkKm": 14,
+    "annualPassengers": 52900000,
+    "serviceTypes": ["commuter"],
+    "parentCompany": null,
+    "links": [
+      {
+        "label": "Official Site",
+        "url": "https://www.t-l.ch",
+        "type": "website"
+      },
+      {
+        "label": "Wikipedia",
+        "url": "https://en.wikipedia.org/wiki/Transports_publics_de_la_r%C3%A9gion_lausannoise",
+        "type": "wikipedia"
+      }
+    ]
+  },
+  {
+    "slug": "blt",
+    "name": "BLT",
+    "logoPath": "ch/blt",
+    "countries": ["ch", "fr"],
+    "operatorTypes": ["light-rail"],
+    "bounds": [7.4, 47.3, 7.8, 47.7],
+    "description": "BLT Baselland Transport was formed in 1974 by the merger of four regional transport companies and runs suburban tram and bus services in the Basel region, including cross-border service into France. In 2016 it absorbed the Waldenburgerbahn, which was rebuilt from 750 mm to metre gauge and reopened in 2022 as tram line 19 between Liestal and Waldenburg.",
+    "website": "https://www.blt.ch",
+    "founded": 1974,
+    "headquarters": "Oberwil, Switzerland",
+    "networkKm": 65,
+    "annualPassengers": 39400000,
+    "serviceTypes": ["commuter"],
+    "parentCompany": null,
+    "links": [
+      {
+        "label": "Official Site",
+        "url": "https://www.blt.ch",
+        "type": "website"
+      },
+      {
+        "label": "Wikipedia",
+        "url": "https://en.wikipedia.org/wiki/Baselland_Transport",
         "type": "wikipedia"
       }
     ]
@@ -1134,16 +1694,16 @@
   {
     "slug": "vr",
     "name": "VR Group",
-    "logoPath": "vr",
+    "logoPath": "fi/vr",
     "countries": ["fi", "se"],
     "operatorTypes": ["passenger"],
     "bounds": [11, 55.3, 31.6, 70.1],
-    "description": "VR Group is Finland's state-owned railway company, operating high-speed Pendolino, InterCity, commuter, and freight services on Finland's 1,524 mm broad-gauge network. Since 2022, VR has expanded heavily into Sweden through VR Sverige (operating regional systems) and the acquisition of the Stockholm–Göteborg high-speed corridor (VR Snabbtåg).",
+    "description": "VR Group is Finland’s state-owned railway group, with roots in the country’s first regular rail services in 1862. It operates long-distance, commuter and freight trains in Finland and passenger services in Sweden. VR Sverige runs contracted regional services, while VR Snabbtåg operates long-distance trains between Stockholm and Göteborg.",
     "website": "https://www.vr.fi",
-    "founded": 1862,
+    "founded": 1995,
     "headquarters": "Helsinki, Finland",
-    "networkKm": 5918,
-    "annualPassengers": 93000000,
+    "networkKm": null,
+    "annualPassengers": null,
     "serviceTypes": ["high-speed", "intercity", "regional", "commuter", "night-train"],
     "parentCompany": "State of Finland",
     "links": [
@@ -1739,16 +2299,16 @@
   {
     "slug": "ns",
     "name": "NS",
-    "logoPath": "ns",
+    "logoPath": "nl/ns",
     "countries": ["nl"],
     "operatorTypes": ["passenger"],
     "bounds": [3.3, 50.75, 7.2, 53.5],
-    "description": "Nederlandse Spoorwegen (NS) operates the principal passenger railway network in the Netherlands. Known for its extremely high-frequency, timetable-less ('Spoorboekloos') operations on major corridors, NS runs a modern, 100% wind-powered electric fleet providing crucial intercity and sprinter services.",
+    "description": "Nederlandse Spoorwegen (NS) is the Netherlands' principal passenger railway operator and a state-owned company. It operates domestic Intercity and Sprinter services and selected international trains. Trains run to a published timetable, with regular-interval services on some busy corridors.",
     "website": "https://www.ns.nl",
     "founded": 1938,
     "headquarters": "Utrecht, Netherlands",
-    "networkKm": 3223,
-    "annualPassengers": 475000000,
+    "networkKm": null,
+    "annualPassengers": null,
     "serviceTypes": ["intercity", "regional", "commuter", "international"],
     "parentCompany": "Dutch State",
     "links": [
@@ -2063,12 +2623,12 @@
     "bounds": [-3.4, 53, -0.3, 55.5],
     "description": "Northern Trains is the largest train operator in the North of England, running regional and commuter services across Lancashire, Yorkshire, Cumbria, and the North East. It operates over 2,500 services daily and has been under public ownership since 2020.",
     "website": "https://www.northernrailway.co.uk",
-    "founded": 2016,
+    "founded": null,
     "headquarters": "York, United Kingdom",
-    "networkKm": 2800,
-    "annualPassengers": 91800000,
+    "networkKm": 3000,
+    "annualPassengers": 98600000,
     "serviceTypes": ["regional", "commuter"],
-    "parentCompany": "Department for Transport)",
+    "parentCompany": "DfT Operator Limited",
     "links": [
       {
         "label": "Official Site",
@@ -2393,16 +2953,16 @@
   {
     "slug": "ir",
     "name": "Iarnród Éireann",
-    "logoPath": "ir",
+    "logoPath": "ie/ir",
     "countries": ["ie"],
     "operatorTypes": ["passenger"],
     "bounds": [-10.5, 51.4, -5.9, 55.4],
-    "description": "Iarnród Éireann (Irish Rail) is Ireland's national railway operator, running intercity, commuter, and DART (Dublin Area Rapid Transit) services across the island. It connects all major Irish cities and operates the electrified DART coastal line serving the greater Dublin area.",
+    "description": "Iarnród Éireann (Irish Rail) is the Republic of Ireland's national rail operator, providing intercity, commuter, DART and regional passenger services, as well as rail freight. It operates the Dublin–Belfast Enterprise service jointly with Northern Ireland Railways; its DART coastal service serves the greater Dublin area.",
     "website": "https://www.irishrail.ie",
     "founded": 1987,
     "headquarters": "Dublin, Ireland",
     "networkKm": 2400,
-    "annualPassengers": 50000000,
+    "annualPassengers": 55000000,
     "serviceTypes": ["intercity", "commuter", "regional"],
     "parentCompany": "Córas Iompair Éireann",
     "links": [
@@ -2668,10 +3228,10 @@
     "countries": ["se"],
     "operatorTypes": ["passenger"],
     "bounds": [10.9, 57, 13.7, 59.2],
-    "description": "Västtrafik is the public transport brand for Västra Götaland in western Sweden. Its rail services connect Göteborg with regional cities and commuter corridors across the county, including routes toward Alingsås, Borås, Uddevalla, Skövde, Vänersborg, and Strömstad.",
+    "description": "Västtrafik organises and commissions public transport in Västra Götaland on behalf of its owner, Västra Götalandsregionen. Contracted operators run its trains, trams, buses and boats. Its rail services link Göteborg with regional centres including Alingsås, Borås, Skövde, Uddevalla and Strömstad.",
     "website": "https://www.vasttrafik.se",
     "founded": 1998,
-    "headquarters": "Göteborg, Sweden",
+    "headquarters": "Skövde, Sweden",
     "networkKm": null,
     "annualPassengers": null,
     "serviceTypes": ["regional", "commuter"],
@@ -2755,16 +3315,16 @@
     "name": "Transdev",
     "logoPath": "transdev",
     "countries": ["international", "fr", "se", "dk", "de", "nl", "ie"],
-    "operatorTypes": ["passenger"],
+    "operatorTypes": ["passenger", "light-rail"],
     "bounds": [11, 55.3, 24.2, 69.1],
-    "description": "Transdev is a global public transport operator headquartered in France, running rail, bus, tram, and ferry services across 17+ countries. In Sweden, Transdev operates regional rail services and the Snälltåget long-distance brand through its subsidiary Transdev Sverige AB.",
+    "description": "Transdev is an international public transport group headquartered in France, operating rail, metro, tram, bus and ferry services. In Sweden, Transdev Sverige operates regional rail services, the Snälltåget long-distance brand and Roslagsbanan’s three suburban railway lines, 27, 28 and 29, for SL in the Stockholm region.",
     "website": "https://www.transdev.com",
     "founded": 2011,
     "headquarters": "Issy-les-Moulineaux, France",
-    "networkKm": 1500,
-    "annualPassengers": 100000000,
-    "serviceTypes": ["regional"],
-    "parentCompany": "Caisse des Dépôts / Rethmann Group",
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["regional", "commuter", "intercity", "international"],
+    "parentCompany": "Rethmann Group",
     "links": [
       {
         "label": "Official Site",
@@ -2841,19 +3401,19 @@
   },
   {
     "slug": "skm",
-    "name": "SKM",
+    "name": "SKM Trójmiasto",
     "logoPath": "pl/skm",
     "countries": ["pl"],
     "operatorTypes": ["passenger"],
-    "bounds": [14.1, 49, 24.2, 54.9],
-    "description": "SKM, short for Szybka Kolej Miejska, is a Polish fast urban rail brand used for metropolitan commuter services. SKM trains connect city centers with suburbs on mainline railway infrastructure, with well-known networks in areas such as Warsaw and the Tricity.",
+    "bounds": [17.6, 54.2, 18.8, 54.7],
+    "description": "PKP Szybka Kolej Miejska w Trójmieście operates Tricity commuter rail from Gdańsk through Sopot and Gdynia to Wejherowo and Lębork. It manages the passenger-only railway line 250 between Gdańsk Główny and Rumia; services beyond Rumia use the wider railway network.",
     "website": "https://www.skm.pkp.pl",
-    "founded": null,
-    "headquarters": null,
+    "founded": 2000,
+    "headquarters": "Gdynia, Poland",
     "networkKm": null,
     "annualPassengers": null,
     "serviceTypes": ["commuter", "regional"],
-    "parentCompany": null,
+    "parentCompany": "PKP S.A.",
     "links": [
       {
         "label": "Official Site",
@@ -2862,7 +3422,7 @@
       },
       {
         "label": "Wikipedia",
-        "url": "https://en.wikipedia.org/wiki/Szybka_Kolej_Miejska",
+        "url": "https://en.wikipedia.org/wiki/Szybka_Kolej_Miejska_(Tricity)",
         "type": "wikipedia"
       }
     ]
@@ -3066,7 +3626,7 @@
   {
     "slug": "cfl",
     "name": "CFL",
-    "logoPath": "cfl",
+    "logoPath": "lu/cfl",
     "countries": ["lu", "be", "fr", "de"],
     "operatorTypes": ["passenger"],
     "bounds": [5.5, 49, 7.7, 50.4],
@@ -3097,6 +3657,909 @@
         "label": "Wikipedia",
         "url": "https://en.wikipedia.org/wiki/Soci%C3%A9t%C3%A9_Nationale_des_Chemins_de_Fer_Luxembourgeois",
         "type": "wikipedia"
+      }
+    ]
+  },
+  {
+    "slug": "kaupunkiliikenne",
+    "name": "Kaupunkiliikenne",
+    "logoPath": "fi/kaupunkiliikenne",
+    "countries": ["fi"],
+    "operatorTypes": ["metro", "light-rail"],
+    "bounds": [24.62, 60.13, 25.16, 60.3],
+    "description": "Pääkaupunkiseudun Kaupunkiliikenne Oy (Metropolitan Area Transport Ltd) operates trams and provides metro operating services in the Helsinki region for Helsinki Regional Transport Authority (HSL). Established in 2022 to continue most of Helsinki City Transport’s activities, it is owned by the cities of Helsinki and Vantaa; HKL retains legal responsibility for metro operations.",
+    "website": "https://kaupunkiliikenne.fi",
+    "founded": 2022,
+    "headquarters": "Helsinki, Finland",
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["commuter"],
+    "parentCompany": null,
+    "links": [
+      {
+        "label": "Official Site",
+        "url": "https://kaupunkiliikenne.fi/en/",
+        "type": "website"
+      },
+      {
+        "label": "Metro Information and Map",
+        "url": "https://kaupunkiliikenne.fi/en/transport/by-metro/",
+        "type": "website"
+      },
+      {
+        "label": "HSL Timetables",
+        "url": "https://www.hsl.fi/en",
+        "type": "timetables"
+      }
+    ]
+  },
+  {
+    "slug": "metro-service",
+    "name": "Metro Service",
+    "logoPath": "dk/metro-service",
+    "countries": ["dk"],
+    "operatorTypes": ["metro", "light-rail"],
+    "bounds": [12.3, 55.6, 12.66, 55.83],
+    "description": "Metro Service A/S operates and maintains Copenhagen Metro lines M1, M2, M3 Cityringen and M4 for Metroselskabet. Part of the ATM group, the company also operates the Greater Copenhagen Light Rail.",
+    "website": "https://www.metroservice.dk",
+    "founded": 1999,
+    "headquarters": "Copenhagen, Denmark",
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["commuter"],
+    "parentCompany": "International Metro Service S.r.l.",
+    "links": [
+      {
+        "label": "Official Site",
+        "url": "https://www.metroservice.dk/om-os/",
+        "type": "website"
+      },
+      {
+        "label": "Metro Routes and Timetables",
+        "url": "https://m.dk/en/",
+        "type": "timetables"
+      }
+    ]
+  },
+  {
+    "slug": "metro-warszawskie",
+    "name": "Metro Warszawskie",
+    "logoPath": "pl/metro-warszawskie",
+    "countries": ["pl"],
+    "operatorTypes": ["metro"],
+    "bounds": [20.9, 52.12, 21.08, 52.31],
+    "description": "Metro Warszawskie Sp. z o.o. operates Warsaw metro lines M1 between Młociny and Kabaty and M2 between Bródno and Bemowo. The company maintains the metro infrastructure and is owned by the City of Warsaw.",
+    "website": "https://metro.waw.pl",
+    "founded": 2003,
+    "headquarters": "Warsaw, Poland",
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["commuter"],
+    "parentCompany": "City of Warsaw",
+    "links": [
+      {
+        "label": "Official Site",
+        "url": "https://metro.waw.pl/",
+        "type": "website"
+      },
+      {
+        "label": "M1 Route",
+        "url": "https://metro.waw.pl/metro-warszawskie/linia-m1/przebieg/",
+        "type": "website"
+      },
+      {
+        "label": "M2 Route",
+        "url": "https://metro.waw.pl/metro-warszawskie/linia-m2/przebieg/",
+        "type": "website"
+      }
+    ]
+  },
+  {
+    "slug": "sporveien-t-banen",
+    "name": "Sporveien T-banen",
+    "logoPath": "no/sporveien-t-banen",
+    "countries": ["no"],
+    "operatorTypes": ["metro"],
+    "bounds": [10.49, 59.84, 10.94, 59.99],
+    "description": "Sporveien T-banen AS operates Oslo metro lines 1–5 under contract to the public transport authority Ruter. The lines connect Oslo and Bærum, including the Holmenkollen branch, Ringen and the Kolsås, Østerås, Sognsvann, Vestli, Ellingsrudåsen, Mortensrud and Bergkrystallen termini.",
+    "website": "https://www.sporveien.no",
+    "founded": null,
+    "headquarters": "Oslo, Norway",
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["commuter"],
+    "parentCompany": "Sporveien AS",
+    "links": [
+      {
+        "label": "Official Site",
+        "url": "https://www.sporveien.no/vare-tjenester/t-banen/",
+        "type": "website"
+      },
+      {
+        "label": "Ruter Metro Routes and Timetables",
+        "url": "https://ruter.no/planlegg-reise/rutetabeller-og-linjekart/t-bane",
+        "type": "timetables"
+      }
+    ]
+  },
+  {
+    "slug": "tide-buss-og-bane",
+    "name": "Tide Bane",
+    "logoPath": "no/tide-buss-og-bane",
+    "countries": ["no"],
+    "operatorTypes": ["light-rail"],
+    "bounds": [5.22, 60.28, 5.37, 60.4],
+    "description": "Tide Bane AS, a subsidiary of Tide AS, operates Bergen’s Bybanen light rail under contract to Bybanen AS. Skyss organises routes, fares and passenger information. Line 1 connects Byparken with Bergen Airport Flesland; line 2 connects Kaigaten with Fyllingsdalen terminal.",
+    "website": "https://www.tide.no",
+    "founded": null,
+    "headquarters": "Bergen, Norway",
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["commuter"],
+    "parentCompany": "Tide AS",
+    "links": [
+      {
+        "label": "Official Site",
+        "url": "https://www.tide.no/",
+        "type": "website"
+      },
+      {
+        "label": "Skyss Bybanen Timetables",
+        "url": "https://www.skyss.no/reise/rutetider/rutetabell-bybanen/",
+        "type": "timetables"
+      }
+    ]
+  },
+  {
+    "slug": "boreal-bane",
+    "name": "Boreal Bane",
+    "logoPath": "no/boreal-bane",
+    "countries": ["no"],
+    "operatorTypes": ["light-rail"],
+    "bounds": [10.3, 63.39, 10.4, 63.44],
+    "description": "Boreal Bane AS operates Gråkallbanen, Trondheim’s suburban tramway, as line 9 for AtB. During the Kongens gate reconstruction, services run between Ila and Lian; consult AtB for the current timetable.",
+    "website": "https://www.boreal.no",
+    "founded": 1989,
+    "headquarters": "Trondheim, Norway",
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["commuter"],
+    "parentCompany": "Boreal Norge AS",
+    "links": [
+      {
+        "label": "Gråkallbanen",
+        "url": "https://www.boreal.no/rutetilbud/bane/grakallbanen/",
+        "type": "website"
+      },
+      {
+        "label": "AtB Timetables",
+        "url": "https://www.atb.no/rutetabeller/",
+        "type": "timetables"
+      }
+    ]
+  },
+  {
+    "slug": "stib-mivb",
+    "name": "STIB-MIVB",
+    "logoPath": "be/stib-mivb",
+    "countries": ["be"],
+    "operatorTypes": ["metro"],
+    "bounds": [4.257, 50.802, 4.474, 50.907],
+    "description": "STIB-MIVB operates Brussels metro lines 1, 2, 5 and 6, as well as the city’s tram and bus networks. The metro connects the city centre with Stockel, Erasme, Herrmann-Debroux and Roi Baudouin.",
+    "website": "https://www.stib-mivb.be",
+    "founded": null,
+    "headquarters": "Brussels, Belgium",
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["commuter"],
+    "parentCompany": null,
+    "links": [
+      {
+        "label": "Official Site",
+        "url": "https://www.stib-mivb.be",
+        "type": "website"
+      }
+    ]
+  },
+  {
+    "slug": "letec",
+    "name": "LETEC",
+    "logoPath": "be/letec",
+    "countries": ["be"],
+    "operatorTypes": ["light-rail"],
+    "bounds": [4.261, 50.39, 4.513, 50.487],
+    "description": "LETEC operates Wallonia’s public transport network, including the Charleroi light metro. During the Villette works, M2 connects Anderlues with Gare Centrale, M3 connects Gosselies with Gare Centrale, and M4 connects Soleilmont with Ouest. M1 is temporarily replaced by M2; the future M5 is not yet in passenger service.",
+    "website": "https://www.letec.be",
+    "founded": null,
+    "headquarters": "Namur, Belgium",
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["commuter"],
+    "parentCompany": null,
+    "links": [
+      {
+        "label": "Official Site",
+        "url": "https://www.letec.be",
+        "type": "website"
+      }
+    ]
+  },
+  {
+    "slug": "connecting-stockholm",
+    "name": "Connecting Stockholm",
+    "logoPath": "se/connecting-stockholm",
+    "countries": ["se"],
+    "operatorTypes": ["metro"],
+    "bounds": [17.804, 59.226, 18.144, 59.425],
+    "description": "Connecting Stockholm operates Stockholm’s metro for SL, running the seven numbered lines of the blue, red and green networks. It took over metro operations on 2 November 2025.",
+    "website": "https://connectingstockholm.se",
+    "founded": null,
+    "headquarters": "Stockholm, Sweden",
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["commuter"],
+    "parentCompany": "Go-Ahead Group / ComfortDelGro",
+    "links": [
+      {
+        "label": "Official Site",
+        "url": "https://connectingstockholm.se",
+        "type": "website"
+      }
+    ]
+  },
+  {
+    "slug": "stockholms-sparvagar",
+    "name": "Stockholms Spårvägar",
+    "logoPath": "se/stockholms-sparvagar",
+    "countries": ["se"],
+    "operatorTypes": ["light-rail"],
+    "bounds": [17.909, 59.26, 18.314, 59.374],
+    "description": "AB Stockholms Spårvägar operates Stockholm’s suburban light rail for SL, including Nockebybanan line 12, Lidingöbanan line 21, Tvärbanan lines 30 and 31, and Saltsjöbanan lines 25 and 26. It also operates the Spårväg City tram network.",
+    "website": "https://stockholmssparvagar.se",
+    "founded": null,
+    "headquarters": "Stockholm, Sweden",
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["commuter"],
+    "parentCompany": "Bergkvara Group",
+    "links": [
+      {
+        "label": "Official Site",
+        "url": "https://stockholmssparvagar.se",
+        "type": "website"
+      }
+    ]
+  },
+  {
+    "slug": "de-lijn",
+    "name": "De Lijn",
+    "logoPath": "be/de-lijn",
+    "countries": ["be"],
+    "operatorTypes": ["light-rail"],
+    "bounds": [2.58, 51.07, 3.29, 51.35],
+    "description": "De Lijn operates public transport in Flanders, including the Kusttram interurban light railway along the Belgian coast. Line KT links De Panne, Oostende and Knokke and serves the coastal towns between them.",
+    "website": "https://www.delijn.be",
+    "founded": null,
+    "headquarters": null,
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["commuter"],
+    "parentCompany": null,
+    "links": [
+      {
+        "label": "Official Site",
+        "url": "https://www.delijn.be",
+        "type": "website"
+      }
+    ]
+  },
+  {
+    "slug": "luxtram",
+    "name": "Luxtram",
+    "logoPath": "lu/luxtram",
+    "countries": ["lu"],
+    "operatorTypes": ["light-rail"],
+    "bounds": [6.1, 49.56, 6.22, 49.65],
+    "description": "Luxtram designs, builds and operates Luxembourg’s tram network. Its T1 line connects Stadion with Findel–Luxembourg Airport through Howald, the central railway station, the city centre and Kirchberg.",
+    "website": "https://www.luxtram.lu",
+    "founded": null,
+    "headquarters": null,
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["commuter"],
+    "parentCompany": null,
+    "links": [
+      {
+        "label": "Official Site",
+        "url": "https://www.luxtram.lu",
+        "type": "website"
+      }
+    ]
+  },
+  {
+    "slug": "gvb",
+    "name": "GVB",
+    "logoPath": "nl/gvb",
+    "countries": ["nl"],
+    "operatorTypes": ["metro", "light-rail"],
+    "bounds": [4.824, 52.286, 4.999, 52.412],
+    "description": "GVB operates public transport in and around Amsterdam, including its five metro lines, trams, buses and ferries. The metro connects the city centre with the western ring, Amsterdam Noord, Diemen and the southeastern districts.",
+    "website": "https://www.gvb.nl",
+    "founded": null,
+    "headquarters": null,
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["commuter"],
+    "parentCompany": null,
+    "links": [
+      {
+        "label": "Official Site",
+        "url": "https://www.gvb.nl",
+        "type": "website"
+      }
+    ]
+  },
+  {
+    "slug": "ret",
+    "name": "RET",
+    "logoPath": "nl/ret",
+    "countries": ["nl"],
+    "operatorTypes": ["metro", "light-rail"],
+    "bounds": [4.095, 51.823, 4.61, 52.092],
+    "description": "RET operates metro, tram and bus services in the Rotterdam region. Metro lines A, B, C, D and E link Rotterdam with Schiedam, Vlaardingen, Hoek van Holland, Capelle aan den IJssel, Spijkenisse and The Hague.",
+    "website": "https://www.ret.nl",
+    "founded": null,
+    "headquarters": null,
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["commuter"],
+    "parentCompany": null,
+    "links": [
+      {
+        "label": "Official Site",
+        "url": "https://www.ret.nl",
+        "type": "website"
+      }
+    ]
+  },
+  {
+    "slug": "htm",
+    "name": "HTM",
+    "logoPath": "nl/htm",
+    "countries": ["nl"],
+    "operatorTypes": ["light-rail"],
+    "bounds": [4.218, 52.029, 4.553, 52.092],
+    "description": "HTM operates public transport in The Hague and its surrounding municipalities. Its RandstadRail lines 3, 4 and 34 connect The Hague with Zoetermeer over a regional light rail network integrated with the city tram system.",
+    "website": "https://www.htm.nl",
+    "founded": null,
+    "headquarters": null,
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["commuter"],
+    "parentCompany": null,
+    "links": [
+      {
+        "label": "Official Site",
+        "url": "https://www.htm.nl",
+        "type": "website"
+      }
+    ]
+  },
+  {
+    "slug": "london-underground",
+    "name": "London Underground",
+    "logoPath": "uk/london-underground",
+    "countries": ["uk"],
+    "operatorTypes": ["metro"],
+    "bounds": [-0.621, 51.393, 0.262, 51.715],
+    "description": "London Underground operates the capital’s eleven named Tube lines. Its network links central London, suburban districts and destinations beyond Greater London, including Heathrow Airport and the Metropolitan line’s outer branches.",
+    "website": "https://tfl.gov.uk/modes/tube/",
+    "founded": null,
+    "headquarters": null,
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["commuter"],
+    "parentCompany": null,
+    "links": [
+      {
+        "label": "Official Site",
+        "url": "https://tfl.gov.uk/modes/tube/",
+        "type": "website"
+      }
+    ]
+  },
+  {
+    "slug": "docklands-light-railway",
+    "name": "Docklands Light Railway",
+    "logoPath": "uk/docklands-light-railway",
+    "countries": ["uk"],
+    "operatorTypes": ["light-rail"],
+    "bounds": [-0.099, 51.455, 0.082, 51.556],
+    "description": "The Docklands Light Railway is an automated light rail network serving east and southeast London. Its branches connect the City and Stratford with Canary Wharf, Greenwich, Lewisham, Beckton, Woolwich and London City Airport.",
+    "website": "https://tfl.gov.uk/modes/dlr/",
+    "founded": null,
+    "headquarters": null,
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["commuter"],
+    "parentCompany": null,
+    "links": [
+      {
+        "label": "Official Site",
+        "url": "https://tfl.gov.uk/modes/dlr/",
+        "type": "website"
+      }
+    ]
+  },
+  {
+    "slug": "spt",
+    "name": "Strathclyde Partnership for Transport",
+    "logoPath": "uk/spt",
+    "countries": ["uk"],
+    "operatorTypes": ["metro"],
+    "bounds": [-4.321, 55.84, -4.243, 55.885],
+    "description": "Strathclyde Partnership for Transport runs Glasgow’s Subway and supports public transport across the west of Scotland. The Subway’s Inner and Outer Circles connect fifteen stations around central Glasgow, the West End and the south side of the Clyde.",
+    "website": "https://www.spt.co.uk",
+    "founded": null,
+    "headquarters": null,
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["commuter"],
+    "parentCompany": null,
+    "links": [
+      {
+        "label": "Official Site",
+        "url": "https://www.spt.co.uk",
+        "type": "website"
+      }
+    ]
+  },
+  {
+    "slug": "nexus",
+    "name": "Nexus",
+    "logoPath": "uk/nexus",
+    "countries": ["uk"],
+    "operatorTypes": ["light-rail"],
+    "bounds": [-1.721, 54.892, -1.372, 55.052],
+    "description": "Nexus is the public transport body responsible for Tyne and Wear Metro. Its Green and Yellow lines connect Newcastle, Gateshead, Sunderland, South Shields and the North Tyneside coast, including Newcastle Airport and interchanges with national rail services.",
+    "website": "https://www.nexus.org.uk",
+    "founded": null,
+    "headquarters": null,
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["commuter"],
+    "parentCompany": null,
+    "links": [
+      {
+        "label": "Official Site",
+        "url": "https://www.nexus.org.uk",
+        "type": "website"
+      }
+    ]
+  },
+  {
+    "slug": "manchester-metrolink",
+    "name": "Manchester Metrolink",
+    "logoPath": "uk/manchester-metrolink",
+    "countries": ["uk"],
+    "operatorTypes": ["light-rail"],
+    "bounds": [-2.358, 53.355, -2.079, 53.627],
+    "description": "Metrolink is Greater Manchester’s light rail network within the Bee Network. Its routes connect the city centre with Altrincham, Bury, Ashton-under-Lyne, Eccles, MediaCityUK, East Didsbury, Rochdale, Manchester Airport and the Trafford Centre.",
+    "website": "https://tfgm.com/ways-to-travel/tram",
+    "founded": null,
+    "headquarters": null,
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["commuter"],
+    "parentCompany": null,
+    "links": [
+      {
+        "label": "Official Site",
+        "url": "https://tfgm.com/ways-to-travel/tram",
+        "type": "website"
+      }
+    ]
+  },
+  {
+    "slug": "west-midlands-metro",
+    "name": "West Midlands Metro",
+    "logoPath": "uk/west-midlands-metro",
+    "countries": ["uk"],
+    "operatorTypes": ["light-rail"],
+    "bounds": [-2.135, 52.462, -1.88, 52.597],
+    "description": "West Midlands Metro links Birmingham with Wolverhampton through West Bromwich, Wednesbury and Bilston. Its network includes Birmingham’s Westside route to Edgbaston Village, both Wolverhampton termini and the Eastside branch to Millennium Point.",
+    "website": "https://www.westmidlandsmetro.com",
+    "founded": null,
+    "headquarters": null,
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["commuter"],
+    "parentCompany": null,
+    "links": [
+      {
+        "label": "Official Site",
+        "url": "https://www.westmidlandsmetro.com",
+        "type": "website"
+      }
+    ]
+  },
+  {
+    "slug": "south-yorkshire-supertram",
+    "name": "South Yorkshire Supertram",
+    "logoPath": "uk/south-yorkshire-supertram",
+    "countries": ["uk"],
+    "operatorTypes": ["light-rail"],
+    "bounds": [-1.479, 53.373, -1.333, 53.453],
+    "description": "South Yorkshire Supertram provides tram and tram-train services in Sheffield and Rotherham. The Tram Train route links Sheffield Cathedral with Rotherham Parkgate, using both the urban tramway and the mainline railway through Magna and Rotherham Central.",
+    "website": "https://www.travelsouthyorkshire.com/en-gb/supertram/home",
+    "founded": null,
+    "headquarters": null,
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["commuter"],
+    "parentCompany": null,
+    "links": [
+      {
+        "label": "Official Site",
+        "url": "https://www.travelsouthyorkshire.com/en-gb/supertram/home",
+        "type": "website"
+      }
+    ]
+  },
+  {
+    "slug": "blackpool-transport",
+    "name": "Blackpool Transport",
+    "logoPath": "uk/blackpool-transport",
+    "countries": ["uk"],
+    "operatorTypes": ["light-rail"],
+    "bounds": [-3.068, 53.768, -2.998, 53.938],
+    "description": "Blackpool Transport runs the modern coastal tramway and local bus services along the Fylde coast. The tramway links Starr Gate, Blackpool’s seafront, Cleveleys and Fleetwood, with a branch serving Blackpool North railway station.",
+    "website": "https://www.blackpooltransport.com",
+    "founded": null,
+    "headquarters": null,
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["commuter"],
+    "parentCompany": null,
+    "links": [
+      {
+        "label": "Official Site",
+        "url": "https://www.blackpooltransport.com",
+        "type": "website"
+      }
+    ]
+  },
+  {
+    "slug": "luton-dart",
+    "name": "Luton DART",
+    "logoPath": "uk/luton-dart",
+    "countries": ["uk"],
+    "operatorTypes": ["light-rail"],
+    "bounds": [-0.405, 51.862, -0.363, 51.889],
+    "description": "Luton DART provides the public automated shuttle between Luton Airport Parkway railway station and London Luton Airport. Its two stations link the airport terminal with the Midland Main Line and onward trains to London and the wider region.",
+    "website": "https://www.lutondart.com",
+    "founded": null,
+    "headquarters": null,
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["commuter"],
+    "parentCompany": null,
+    "links": [
+      {
+        "label": "Official Site",
+        "url": "https://www.lutondart.com",
+        "type": "website"
+      }
+    ]
+  },
+  {
+    "slug": "luas",
+    "name": "Luas",
+    "logoPath": "ie/luas",
+    "countries": ["ie"],
+    "operatorTypes": ["light-rail"],
+    "bounds": [-6.448, 53.232, -6.133, 53.382],
+    "description": "Luas is Dublin’s light rail network, with Red and Green lines linking the city centre, Docklands and surrounding suburbs. KeolisAmey Luas operates and maintains the network under contract to Transport Infrastructure Ireland and the National Transport Authority.",
+    "website": "https://www.luas.ie",
+    "founded": null,
+    "headquarters": null,
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["commuter"],
+    "parentCompany": null,
+    "links": [
+      {
+        "label": "Official website",
+        "url": "https://www.luas.ie",
+        "type": "website"
+      },
+      {
+        "label": "Network map",
+        "url": "https://www.luas.ie/luas-map",
+        "type": "website"
+      }
+    ]
+  },
+  {
+    "slug": "bvg",
+    "name": "Berliner Verkehrsbetriebe",
+    "logoPath": "de/bvg",
+    "countries": ["de"],
+    "operatorTypes": ["metro"],
+    "bounds": [13.1898, 52.4062, 13.6431, 52.6056],
+    "description": "Berlin’s municipal transport company operates the U-Bahn alongside the city’s tram and bus networks. Its U-Bahn lines connect the main railway terminals, central districts and outer boroughs, with connections to the separately operated S-Bahn.",
+    "website": "https://www.bvg.de",
+    "founded": null,
+    "headquarters": "Berlin, Germany",
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["commuter"],
+    "parentCompany": null,
+    "links": [
+      {
+        "label": "Official website",
+        "url": "https://www.bvg.de",
+        "type": "website"
+      }
+    ]
+  },
+  {
+    "slug": "vgf",
+    "name": "VGF Frankfurt",
+    "logoPath": "de/vgf",
+    "countries": ["de"],
+    "operatorTypes": ["light-rail"],
+    "bounds": [8.5278, 50.0892, 8.7637, 50.2253],
+    "description": "Verkehrsgesellschaft Frankfurt am Main operates Frankfurt’s U-Bahn and tram infrastructure and services. The U-Bahn combines central tunnels with suburban surface routes, reaching Oberursel, Bad Homburg and northern Frankfurt as well as the city’s railway interchanges.",
+    "website": "https://www.vgf-ffm.de",
+    "founded": null,
+    "headquarters": "Frankfurt am Main, Germany",
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["commuter"],
+    "parentCompany": null,
+    "links": [
+      {
+        "label": "Official website",
+        "url": "https://www.vgf-ffm.de",
+        "type": "website"
+      }
+    ]
+  },
+  {
+    "slug": "hochbahn",
+    "name": "Hamburger Hochbahn",
+    "logoPath": "de/hochbahn",
+    "countries": ["de"],
+    "operatorTypes": ["metro"],
+    "bounds": [9.934, 53.5181, 10.2968, 53.7182],
+    "description": "Hamburger Hochbahn operates Hamburg’s U-Bahn and a large part of the city’s bus network. Its four U-Bahn lines serve central Hamburg, HafenCity and outer districts, with the U1 continuing into Schleswig-Holstein towards Norderstedt, Ohlstedt and Großhansdorf.",
+    "website": "https://www.hochbahn.de",
+    "founded": null,
+    "headquarters": "Hamburg, Germany",
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["commuter"],
+    "parentCompany": null,
+    "links": [
+      {
+        "label": "Official website",
+        "url": "https://www.hochbahn.de",
+        "type": "website"
+      }
+    ]
+  },
+  {
+    "slug": "mvg",
+    "name": "Münchner Verkehrsgesellschaft",
+    "logoPath": "de/mvg",
+    "countries": ["de"],
+    "operatorTypes": ["metro"],
+    "bounds": [11.4636, 48.0784, 11.7134, 48.2747],
+    "description": "Münchner Verkehrsgesellschaft is Munich’s public transport operator for U-Bahn, tram and bus services. The U-Bahn connects the city centre with the exhibition grounds, universities and outer districts, extending beyond the city boundary to Garching.",
+    "website": "https://www.mvg.de",
+    "founded": null,
+    "headquarters": "Munich, Germany",
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["commuter"],
+    "parentCompany": null,
+    "links": [
+      {
+        "label": "Official website",
+        "url": "https://www.mvg.de",
+        "type": "website"
+      }
+    ]
+  },
+  {
+    "slug": "vag-nuernberg",
+    "name": "VAG Nürnberg",
+    "logoPath": "de/vag-nuernberg",
+    "countries": ["de"],
+    "operatorTypes": ["metro"],
+    "bounds": [10.9475, 49.3887, 11.1506, 49.504],
+    "description": "VAG operates Nuremberg’s U-Bahn, trams and buses. Its three U-Bahn lines connect Nuremberg and Fürth, including the airport, exhibition grounds and main railway stations; the U2 and U3 use automatic train operation.",
+    "website": "https://www.vag.de",
+    "founded": null,
+    "headquarters": "Nuremberg, Germany",
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["commuter"],
+    "parentCompany": null,
+    "links": [
+      {
+        "label": "Official website",
+        "url": "https://www.vag.de",
+        "type": "website"
+      }
+    ]
+  },
+  {
+    "slug": "ratp",
+    "name": "RATP",
+    "logoPath": "fr/ratp",
+    "countries": ["fr"],
+    "operatorTypes": ["metro"],
+    "bounds": [2.21833, 48.71844, 2.49034, 48.95597],
+    "description": "RATP operates the Paris Métro for Île-de-France Mobilités, connecting central Paris with surrounding municipalities across sixteen numbered lines, including 3 bis and 7 bis. The network serves major railway stations, business districts, universities and cultural destinations. Fully automated lines 1, 4 and 14 complement the other metro routes, with line 14 reaching Orly airport.",
+    "website": "https://www.ratp.fr",
+    "founded": null,
+    "headquarters": "Paris, France",
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["commuter"],
+    "parentCompany": null,
+    "links": [
+      {
+        "label": "Official website",
+        "url": "https://www.ratp.fr",
+        "type": "website"
+      },
+      {
+        "label": "Network and lines",
+        "url": "https://www.ratp.fr/plans-lignes/metro",
+        "type": "website"
+      }
+    ]
+  },
+  {
+    "slug": "tcl",
+    "name": "TCL",
+    "logoPath": "fr/tcl",
+    "countries": ["fr"],
+    "operatorTypes": ["metro"],
+    "bounds": [4.79433, 45.69176, 4.9319, 45.79528],
+    "description": "TCL is the public transport network serving Lyon and its surrounding area under SYTRAL Mobilités. Its four metro lines connect the Presqu’île, Part-Dieu, Villeurbanne and the southern suburbs, with line C climbing to Croix-Rousse using rack assistance. RATP Dev operates the metro and funicular network under the contract that began in January 2025.",
+    "website": "https://www.tcl.fr",
+    "founded": null,
+    "headquarters": "Lyon, France",
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["commuter"],
+    "parentCompany": null,
+    "links": [
+      {
+        "label": "Official website",
+        "url": "https://www.tcl.fr",
+        "type": "website"
+      },
+      {
+        "label": "Network and lines",
+        "url": "https://www.tcl.fr/lignes",
+        "type": "website"
+      }
+    ]
+  },
+  {
+    "slug": "rtm",
+    "name": "RTM",
+    "logoPath": "fr/rtm",
+    "countries": ["fr"],
+    "operatorTypes": ["metro"],
+    "bounds": [5.35726, 43.26089, 5.43969, 43.34315],
+    "description": "Régie des Transports Métropolitains operates Marseille’s public transport network, including the M1 and M2 metro lines. The two routes connect residential districts with Saint-Charles railway station, the city centre, hospitals and the stadium area. Saint-Charles and Castellane are the metro interchanges, with connections to the wider bus and tram network.",
+    "website": "https://www.rtm.fr",
+    "founded": null,
+    "headquarters": "Marseille, France",
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["commuter"],
+    "parentCompany": null,
+    "links": [
+      {
+        "label": "Official website",
+        "url": "https://www.rtm.fr",
+        "type": "website"
+      },
+      {
+        "label": "Network and lines",
+        "url": "https://www.rtm.fr/plans",
+        "type": "website"
+      }
+    ]
+  },
+  {
+    "slug": "ilevia",
+    "name": "Ilévia",
+    "logoPath": "fr/ilevia",
+    "countries": ["fr"],
+    "operatorTypes": ["metro"],
+    "bounds": [2.9643, 50.59536, 3.191, 50.75348],
+    "description": "Ilévia is the public transport network of the Métropole Européenne de Lille, operated by Keolis Lille Ilévia. Its two automated metro lines serve sixty stations across Lille and neighbouring municipalities, including Villeneuve-d’Ascq, Roubaix and Tourcoing. The network connects the Lille Flandres and Lille Europe railway stations with university campuses, hospitals and local centres.",
+    "website": "https://www.ilevia.fr",
+    "founded": null,
+    "headquarters": "Marcq-en-Barœul, France",
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["commuter"],
+    "parentCompany": null,
+    "links": [
+      {
+        "label": "Official website",
+        "url": "https://www.ilevia.fr",
+        "type": "website"
+      },
+      {
+        "label": "Network and lines",
+        "url": "https://www.ilevia.fr/cms/institutionnel/metro-et-tramway",
+        "type": "website"
+      }
+    ]
+  },
+  {
+    "slug": "tisseo",
+    "name": "Tisséo",
+    "logoPath": "fr/tisseo",
+    "countries": ["fr"],
+    "operatorTypes": ["metro"],
+    "bounds": [1.38227, 43.54577, 1.49278, 43.65038],
+    "description": "Tisséo is the public transport network serving the Toulouse metropolitan area, with metro services operated by Tisséo Voyageurs. Automated lines A and B cross at Jean Jaurès, linking the historic centre with residential districts, university campuses and hospital areas. Metro connections with trams, regional trains and Matabiau station support journeys across the wider urban area.",
+    "website": "https://www.tisseo.fr",
+    "founded": null,
+    "headquarters": "Toulouse, France",
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["commuter"],
+    "parentCompany": null,
+    "links": [
+      {
+        "label": "Official website",
+        "url": "https://www.tisseo.fr",
+        "type": "website"
+      },
+      {
+        "label": "Network and lines",
+        "url": "https://www.tisseo.fr/se-deplacer/plans",
+        "type": "website"
+      }
+    ]
+  },
+  {
+    "slug": "star-rennes",
+    "name": "STAR",
+    "logoPath": "fr/star-rennes",
+    "countries": ["fr"],
+    "operatorTypes": ["metro"],
+    "bounds": [-1.72125, 48.07644, -1.61004, 48.1415],
+    "description": "STAR is the public transport network of Rennes Métropole, operated by Keolis Rennes Métropole. Its two automated metro lines connect the city centre and railway station with university campuses, hospital districts and surrounding communities. Lines a and b intersect at Sainte-Anne and Gares, providing connections across the network and to regional and high-speed trains.",
+    "website": "https://www.star.fr",
+    "founded": null,
+    "headquarters": "Rennes, France",
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["commuter"],
+    "parentCompany": null,
+    "links": [
+      {
+        "label": "Official website",
+        "url": "https://www.star.fr",
+        "type": "website"
+      },
+      {
+        "label": "Network and lines",
+        "url": "https://www.star.fr/reseau-star/bus-metro",
+        "type": "website"
       }
     ]
   }

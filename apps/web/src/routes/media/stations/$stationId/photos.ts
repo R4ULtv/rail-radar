@@ -23,7 +23,12 @@ function internalError(request: Request, error: unknown): Response {
     JSON.stringify({
       message: "Station photo manifest request failed",
       path: new URL(request.url).pathname,
+      method: request.method,
+      requestId: request.headers.get("cf-ray"),
+      status: 500,
       error: error instanceof Error ? error.message : String(error),
+      name: error instanceof Error ? error.name : undefined,
+      stack: error instanceof Error ? error.stack : undefined,
     }),
   );
   return new Response("Internal server error", { status: 500 });

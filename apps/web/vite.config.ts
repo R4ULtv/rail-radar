@@ -5,10 +5,12 @@ import { cloudflare } from "@cloudflare/vite-plugin";
 import { tanstackStart } from "@tanstack/react-start/plugin/vite";
 import { COUNTRY_SLUGS } from "../../packages/data/src/countries.ts";
 import { isStationPagePrerendered } from "./src/lib/station-prerender.ts";
+import { simplify } from "./src/lib/map-projection.ts";
 import viteReact from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
 
 type OperatorRecord = { slug: string };
+type LineRecord = { id: string };
 type StationFeatureRecord = {
   properties: { id: string; importance: 1 | 2 | 3 | 4; type: "rail" | "metro" | "light" };
 };
@@ -16,6 +18,10 @@ type StationFeatureRecord = {
 const operatorRecords = JSON.parse(
   readFileSync(new URL("../../packages/data/src/operators.json", import.meta.url), "utf8"),
 ) as OperatorRecord[];
+
+const lineRecords = JSON.parse(
+  readFileSync(new URL("../../packages/data/src/lines.json", import.meta.url), "utf8"),
+) as LineRecord[];
 
 const stationRecords = JSON.parse(
   readFileSync(new URL("../../packages/data/src/stations.geojson", import.meta.url), "utf8"),
@@ -25,6 +31,7 @@ const prerenderPages = [
   "/",
   "/app",
   "/donate",
+  "/lines",
   "/operators",
   "/privacy-policy",
   "/sitemap.xml",
@@ -32,6 +39,7 @@ const prerenderPages = [
   "/terms-of-service",
   "/report/2026-04-28",
   "/report/2026-07-24",
+  ...lineRecords.map(({ id }) => `/lines/${id}`),
   ...operatorRecords.map(({ slug }) => `/operators/${slug}`),
   ...COUNTRY_SLUGS.map((slug) => `/stations/${slug}`),
   ...stationRecords.features
@@ -51,6 +59,38 @@ const geojsonPlugin: Plugin = {
     // Minifying first also drops ~2 MB of the source file's indentation.
     const data = JSON.stringify(JSON.parse(readFileSync(filename, "utf8")));
     return `export default JSON.parse(${JSON.stringify(data)});`;
+  },
+};
+
+/** Meters a simplified track may stray from the surveyed one. */
+const LINE_TRACK_TOLERANCE = 1;
+const METERS_PER_DEGREE = 111_320;
+
+/**
+ * Line pages draw each track as an 800×600 picture, and the smallest line (Genova
+ * Granarolo, under 1 km) still spans ~1.8 m per pixel. Tracks are surveyed far denser
+ * than that, so the Worker gets them simplified to within 1 m — under the 0.6 px the
+ * page simplifies to anyway — at well under half their size. The data files keep full
+ * detail for the API and Studio.
+ */
+const lineTrackPlugin: Plugin = {
+  name: "rail-radar-line-tracks",
+  enforce: "pre",
+  load(id) {
+    const filename = id.split("?", 1)[0]!;
+    if (!/\/packages\/data\/src\/lines\/[^/]+\.json$/.test(filename)) return null;
+    const geometry = JSON.parse(readFileSync(filename, "utf8")) as {
+      coordinates: [number, number][][];
+    };
+    const latitude = geometry.coordinates[0]?.[0]?.[1] ?? 0;
+    const metersPerLng = Math.cos((latitude * Math.PI) / 180) * METERS_PER_DEGREE;
+    for (const [index, part] of geometry.coordinates.entries()) {
+      const meters = part.map(([lng, lat], i) => [lng * metersPerLng, lat * METERS_PER_DEGREE, i]);
+      geometry.coordinates[index] = simplify(meters, LINE_TRACK_TOLERANCE).map(
+        ([, , i]) => part[i!]!,
+      );
+    }
+    return JSON.stringify(geometry);
   },
 };
 
@@ -86,6 +126,7 @@ export default defineConfig(({ command, mode }) => {
         },
       }),
       geojsonPlugin,
+      lineTrackPlugin,
       tailwindcss(),
       tanstackStart({
         pages: prerenderPages,

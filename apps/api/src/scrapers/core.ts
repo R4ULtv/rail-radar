@@ -5,14 +5,25 @@ export interface ScraperTiming {
   fetchMs: number;
 }
 
+export interface ScraperUpstream {
+  host: string;
+  path: string;
+  status?: number;
+  timeoutMs?: number;
+}
+
 export class ScraperError extends Error {
+  readonly upstream?: ScraperUpstream;
+
   constructor(
     message: string,
     public statusCode: ContentfulStatusCode,
     public timing?: ScraperTiming,
+    options?: ErrorOptions & { upstream?: ScraperUpstream },
   ) {
-    super(message);
+    super(message, options);
     this.name = "ScraperError";
+    this.upstream = options?.upstream;
   }
 }
 

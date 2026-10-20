@@ -47,7 +47,7 @@ export function StationHeader({ station, info }: StationHeaderProps) {
         </div>
       )}
 
-      <StationWarning stationId={station.id} />
+      <StationWarning station={station} />
     </div>
   );
 }
