@@ -1,4 +1,5 @@
 import data from "./lines.json" with { type: "json" };
+import { COUNTRY_CODES, type CountryCode } from "./countries";
 import type { Line, LineGeometry, LineRoute } from "./types";
 
 /** Neutral gray for lines with no official color; readable on light and dark backgrounds. */
@@ -93,6 +94,9 @@ export function validateLines(value: unknown, stationIds: ReadonlySet<string>): 
       throw new Error(
         "Line ID must be a lowercase slug: country, network, then code or short name, e.g. it-milano-m1",
       );
+    }
+    if (!COUNTRY_CODES.includes(id.slice(0, 2) as CountryCode)) {
+      throw new Error(`${id}: country must be one of ${COUNTRY_CODES.join(", ")}`);
     }
     if (lineIds.has(id)) throw new Error(`Duplicate line ID: ${id}`);
     lineIds.add(id);
