@@ -1,9 +1,11 @@
 // Started from the API's search (apps/api/src/search.ts) but kept separate: on the
 // device, saved and recent stations come first, closer stations rank higher among ones that
-// match equally well, and a single character is enough to search.
-import type { Station } from "@repo/data/types";
+// match equally well, and a single character is enough to search. Metro and light rail lines
+// are searched along with the stations.
+import type { Line, Station } from "@repo/data/types";
 
 import { distanceKm } from "@/lib/distance";
+import { getLineNetwork, getLineOperatorName } from "@/lib/lines";
 import type { UserLocation } from "@/lib/user-location";
 
 type IndexedVariant = {
@@ -30,13 +32,29 @@ type SearchIndex = {
   nameStarts: Int32Array;
 };
 
+type IndexedLine = {
+  line: Line;
+  /** Its public code and its routes' codes, e.g. "m1". */
+  codes: string[];
+  variants: IndexedVariant[];
+  /** Its network and operator: "milano" finds the Milan metro, but after Milano's stations. */
+  weakVariants: IndexedVariant[];
+  /** Where its stops are, to rank it by the closest one. */
+  stops: NonNullable<Station["geo"]>[];
+};
+
+export type SearchItem = Station | Line;
+
 type SearchResult = {
-  station: Station;
+  item: SearchItem;
   /** The user's own stations come first: see the `*_GROUP` constants. */
   group: number;
   rank: number;
-  /** Orders stations that match equally well, before their type: see `DISTANCE_BANDS_KM`. */
+  /** Orders results that match equally well, before their type: see `DISTANCE_BANDS_KM`. */
   distanceBand: number;
+  /** Rail stations, then metro, light rail, and lines last: see `TYPE_ORDER`. */
+  typeOrder: number;
+  importance: number;
   /** Km from the user, 0 without their location. Orders the last ties before the names. */
   distance: number;
   variantLength: number;
@@ -52,6 +70,8 @@ export type StationSearchOptions = {
   saved?: readonly Station[];
   /** The user's recent stations, which come after the saved ones. */
   recent?: readonly Station[];
+  /** The IDs of the user's saved lines, which come first like saved stations. */
+  savedLines?: readonly string[];
 };
 
 // The same station ID shape as the API's STATION_ID_PATTERN.
@@ -178,7 +198,16 @@ function getDistanceBand(distance: number): number {
   return band;
 }
 
-type StationMatch = Omit<SearchResult, "group" | "distanceBand" | "distance">;
+type StationMatch = {
+  station: Station;
+  rank: number;
+  variantLength: number;
+  sortName: string;
+};
+
+/** Rail stations before metro stations, and those before light rail, then lines. */
+const TYPE_ORDER: Record<Station["type"], number> = { rail: 0, metro: 1, light: 2 };
+const LINE_TYPE_ORDER = 3;
 
 // Built field by field: it runs for every matching station, and spreading is slower on the
 // device's JS engine.
@@ -190,10 +219,12 @@ function toSearchResult(
   const { station } = match;
   const distance = !near ? 0 : station.geo ? distanceKm(near, station.geo) : Infinity;
   return {
-    station,
+    item: station,
     group,
     rank: match.rank,
     distanceBand: getDistanceBand(distance),
+    typeOrder: TYPE_ORDER[station.type],
+    importance: station.importance,
     distance,
     variantLength: match.variantLength,
     sortName: match.sortName,
@@ -206,21 +237,18 @@ function compareText(a: string, b: string): number {
   return a < b ? -1 : a > b ? 1 : 0;
 }
 
-/** Rail stations before metro stations, and those before light rail. */
-const TYPE_ORDER: Record<Station["type"], number> = { rail: 0, metro: 1, light: 2 };
-
 function compareSearchResults(a: SearchResult, b: SearchResult): number {
   return (
     a.group - b.group ||
     a.rank - b.rank ||
     a.distanceBand - b.distanceBand ||
-    TYPE_ORDER[a.station.type] - TYPE_ORDER[b.station.type] ||
-    a.station.importance - b.station.importance ||
+    a.typeOrder - b.typeOrder ||
+    a.importance - b.importance ||
     a.distance - b.distance ||
     a.variantLength - b.variantLength ||
     compareText(a.sortName, b.sortName) ||
-    compareText(a.station.name, b.station.name) ||
-    compareText(a.station.id, b.station.id)
+    compareText(a.item.name, b.item.name) ||
+    compareText(a.item.id, b.item.id)
   );
 }
 
@@ -333,6 +361,74 @@ function getStationMatch(
   return bestMatch;
 }
 
+function indexLines(lines: readonly Line[], exactIdMap: Map<string, IndexedStation>) {
+  return lines.map((line): IndexedLine => {
+    const codes = new Set<string>();
+    for (const code of [line.code, ...line.routes.map((route) => route.code)]) {
+      const normalized = code ? normalizeText(code) : "";
+      if (normalized) codes.add(normalized);
+    }
+    const stops: NonNullable<Station["geo"]>[] = [];
+    for (const id of new Set(line.routes.flatMap((route) => route.stations))) {
+      const geo = exactIdMap.get(normalizeStationId(id))?.station.geo;
+      if (geo) stops.push(geo);
+    }
+    return {
+      line,
+      codes: [...codes],
+      variants: getNameVariants(line.name),
+      weakVariants: [getLineNetwork(line), getLineOperatorName(line)]
+        .filter((name): name is string => !!name)
+        .flatMap(getNameVariants),
+      stops,
+    };
+  });
+}
+
+/** How well a line matches, or null. Ranks worse than `maxRank` aren't checked. */
+function getLineRank(
+  indexedLine: IndexedLine,
+  normalizedQuery: string,
+  queryWords: string[],
+  maxRank: number,
+): { rank: number; variantLength: number } | null {
+  // An object, so TypeScript sees the closure's assignments.
+  const found: { best: { rank: number; variantLength: number } | null } = { best: null };
+  const consider = (rank: number, variantLength: number) => {
+    const { best } = found;
+    if (rank > maxRank) return;
+    if (!best || (rank - best.rank || variantLength - best.variantLength) < 0) {
+      found.best = { rank, variantLength };
+    }
+  };
+
+  for (const code of indexedLine.codes) {
+    // "M1" is as good as a station's whole name. A single letter could be the start of any
+    // station's name, so a line called "A" doesn't jump ahead of them as you type.
+    if (code === normalizedQuery) {
+      consider(normalizedQuery.length > 1 ? EXACT_NAME_RANK : PREFIX_RANK, code.length);
+    } else if (code.startsWith(normalizedQuery)) consider(PREFIX_RANK, code.length);
+  }
+  for (const variant of indexedLine.variants) {
+    const rank = getVariantRank(variant, normalizedQuery, queryWords, found.best?.rank ?? maxRank);
+    if (rank !== null) consider(rank, variant.normalizedName.length);
+  }
+  if (maxRank >= WORD_START_RANK) {
+    for (const variant of indexedLine.weakVariants) {
+      const rank = getVariantRank(variant, normalizedQuery, queryWords, maxRank);
+      if (rank !== null) consider(Math.max(rank, WORD_START_RANK), variant.normalizedName.length);
+    }
+  }
+  return found.best;
+}
+
+function getLineDistance(indexedLine: IndexedLine, near: UserLocation | null | undefined) {
+  if (!near) return 0;
+  let closest = Infinity;
+  for (const stop of indexedLine.stops) closest = Math.min(closest, distanceKm(near, stop));
+  return closest;
+}
+
 function longestText(texts: string[]): string | undefined {
   let longest: string | undefined;
   for (const text of texts) {
@@ -341,14 +437,15 @@ function longestText(texts: string[]): string | undefined {
   return longest;
 }
 
-export async function createStationSearch(sourceStations: Station[]) {
+export async function createStationSearch(sourceStations: Station[], lines: readonly Line[] = []) {
   const searchIndex = await buildSearchIndex(sourceStations);
   const { indexedStations, names, nameStarts } = searchIndex;
+  const indexedLines = indexLines(lines, searchIndex.exactIdMap);
 
   return function searchStations(
     query: string,
-    { limit = 20, near, saved = [], recent = [] }: StationSearchOptions = {},
-  ): Station[] {
+    { limit = 20, near, saved = [], recent = [], savedLines = [] }: StationSearchOptions = {},
+  ): SearchItem[] {
     const trimmedQuery = query.trim();
     if (!trimmedQuery || limit <= 0) {
       return [];
@@ -371,10 +468,12 @@ export async function createStationSearch(sourceStations: Station[]) {
       insertTopResult(
         results,
         {
-          station: exactIdMatch.station,
+          item: exactIdMatch.station,
           group: EXACT_ID_GROUP,
           rank: 1,
           distanceBand: 0,
+          typeOrder: 0,
+          importance: 0,
           distance: 0,
           variantLength: exactIdMatch.station.id.length,
           sortName: "",
@@ -405,6 +504,29 @@ export async function createStationSearch(sourceStations: Station[]) {
           );
         }
       }
+    }
+
+    // There are few lines, so each is checked.
+    for (const indexedLine of indexedLines) {
+      const match = getLineRank(indexedLine, normalizedQuery, queryWords, WORST_RANK);
+      if (!match) continue;
+      const distance = getLineDistance(indexedLine, near);
+      const isSaved = match.rank <= WORD_START_RANK && savedLines.includes(indexedLine.line.id);
+      insertTopResult(
+        results,
+        {
+          item: indexedLine.line,
+          group: isSaved ? SAVED_GROUP : OTHER_GROUP,
+          rank: match.rank,
+          distanceBand: getDistanceBand(distance),
+          typeOrder: LINE_TYPE_ORDER,
+          importance: 0,
+          distance,
+          variantLength: match.variantLength,
+          sortName: indexedLine.variants[0]?.normalizedName ?? "",
+        },
+        limit,
+      );
     }
 
     // Every rank needs the name to contain the whole query, or each of its words.
@@ -448,6 +570,6 @@ export async function createStationSearch(sourceStations: Station[]) {
       position = findNextMatch(nameStarts[stationIndex + 1]!);
     }
 
-    return results.map(({ station }) => station);
+    return results.map(({ item }) => item);
   };
 }

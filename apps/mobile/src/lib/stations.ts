@@ -1,3 +1,4 @@
+import { lines } from "@repo/data/lines";
 import type { Station } from "@repo/data/types";
 import { File } from "expo-file-system";
 
@@ -52,7 +53,7 @@ export function loadStationsById(url: string): Promise<Map<string, Station>> {
 }
 
 /**
- * The search index over the same stations. Its preparation yields between batches so the map,
+ * The search index over the same stations, and the lines. Its preparation yields between batches so the map,
  * keyboard and sheets remain responsive while it is built.
  */
 export function loadStationSearch(url: string): Promise<StationSearch> {
@@ -61,7 +62,7 @@ export function loadStationSearch(url: string): Promise<StationSearch> {
     const search = current.stations.then(async (stations) => {
       // Parsing and the index's first batch must not share one uninterrupted JS turn.
       await new Promise<void>((resolve) => setTimeout(resolve, 0));
-      return createStationSearch(stations);
+      return createStationSearch(stations, lines);
     });
     search.catch(() => {
       if (current.search === search) current.search = undefined;

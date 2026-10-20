@@ -2,6 +2,8 @@ import type { Station } from "@repo/data/types";
 import { useDeferredValue, useEffect, useMemo, useState } from "react";
 
 import { useSearchLocation } from "@/hooks/use-search-location";
+import type { Line } from "@/lib/lines";
+import type { SearchItem } from "@/lib/station-search-index";
 import { loadStationSearch, type StationSearch } from "@/lib/stations";
 import type { UserLocation } from "@/lib/user-location";
 
@@ -9,6 +11,8 @@ import type { UserLocation } from "@/lib/user-location";
 const minQueryLength = 1;
 const resultLimit = 20;
 const noStations: Station[] = [];
+const noLines: Line[] = [];
+const noResults: SearchItem[] = [];
 
 interface UseStationSearchOptions {
   /** The station GeoJSON to search; null until it is ready. */
@@ -22,6 +26,8 @@ interface UseStationSearchOptions {
   /** Come first when they match, then the recent stations. */
   savedStations?: readonly Station[];
   recentStations?: readonly Station[];
+  /** Come first among the lines when they match. */
+  savedLines?: readonly Line[];
 }
 
 export function useStationSearch(
@@ -33,6 +39,7 @@ export function useStationSearch(
     preload = false,
     savedStations = noStations,
     recentStations = noStations,
+    savedLines = noLines,
   }: UseStationSearchOptions,
 ) {
   const query = input.trim();
@@ -47,6 +54,7 @@ export function useStationSearch(
   // search the previous catalogue while the replacement prepares.
   const search = loadedSearch?.url === stationsUrl ? loadedSearch.search : null;
   const [error, setError] = useState<string | null>(null);
+  const savedLineIds = useMemo(() => savedLines.map((line) => line.id), [savedLines]);
 
   useEffect(() => {
     if (!(isActive || preload) || !stationsUrl) return;
@@ -68,22 +76,24 @@ export function useStationSearch(
 
   // Null until a query has results. After that, the previous results stay on screen while the
   // next query renders.
-  const results = useMemo<Station[] | null>(() => {
+  const results = useMemo<SearchItem[] | null>(() => {
     if (!search || deferredQuery.length < minQueryLength) return null;
     return search(deferredQuery, {
       limit: resultLimit,
       near: searchLocation,
       saved: savedStations,
       recent: recentStations,
+      savedLines: savedLineIds,
     });
-  }, [search, deferredQuery, searchLocation, savedStations, recentStations]);
+  }, [search, deferredQuery, searchLocation, savedStations, recentStations, savedLineIds]);
 
   return {
-    stations: (isActive && results) || noStations,
+    /** Stations and lines, best match first. */
+    results: (isActive && results) || noResults,
     error: isActive ? error : null,
     isActive,
     location: searchLocation,
-    /** Whether `stations` holds results, possibly for the previous query while this one renders. */
+    /** Whether `results` holds results, possibly for the previous query while this one renders. */
     hasResult: isActive && results !== null,
     retry: () => setRetryCount((count) => count + 1),
   };

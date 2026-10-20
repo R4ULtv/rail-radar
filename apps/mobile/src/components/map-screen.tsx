@@ -401,6 +401,7 @@ export function MapScreen() {
     [stopFollowing, fitLine],
   );
 
+  const selectLineFromSearch = useCallback((line: Line) => selectLine(line, null), [selectLine]);
   const selectLineFromStation = useCallback(
     (line: Line) => selectLine(line, selectedStation),
     [selectLine, selectedStation],
@@ -758,6 +759,7 @@ export function MapScreen() {
         stationsUrl={stationsUrl}
         userLocation={userLocation}
         onSelectStation={selectStation}
+        onSelectLine={selectLineFromSearch}
         position={searchSheetPosition}
         getMapFeedbackUrl={getMapFeedbackUrl}
       />

@@ -8,6 +8,7 @@ import { useBottomSheetAwareHandlers, useThemeColor } from "heroui-native/hooks"
 import { SearchField } from "heroui-native/search-field";
 import { ListGroup } from "heroui-native/list-group";
 import Bookmark from "lucide-react-native/icons/bookmark";
+import Route from "lucide-react-native/icons/route";
 import CircleAlert from "lucide-react-native/icons/circle-alert";
 import History from "lucide-react-native/icons/rotate-ccw-clock";
 import List from "lucide-react-native/icons/list";
@@ -44,6 +45,7 @@ import {
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { scheduleOnRN } from "react-native-worklets";
 
+import { LineRow } from "@/components/line-list";
 import { MapAttribution } from "@/components/map-attribution";
 import {
   isSavedStationItem,
@@ -72,11 +74,14 @@ import {
   type SectionIcon,
 } from "@/components/station-list";
 import { StatusMessage } from "@/components/status-message";
+import { useSavedLines } from "@/hooks/use-saved-lines";
 import { useStationSearch } from "@/hooks/use-station-search";
+import { useStationsById } from "@/hooks/use-stations-by-id";
 import { moveSavedStation, useRecentStations, useSavedStations } from "@/hooks/use-stored-stations";
 import { useTrendingStations, type TrendingStation } from "@/hooks/use-trending-stations";
 import { distanceKm, formatDistance } from "@/lib/distance";
 import { formatCount } from "@/lib/format";
+import { getLineDistanceKm, isLine, type Line } from "@/lib/lines";
 import type { UserLocation } from "@/lib/user-location";
 
 const handleHeight = 24;
@@ -144,6 +149,25 @@ function StationDistance({ station, from }: { station: Station; from: UserLocati
   );
 }
 
+/** How far the line's closest stop is. */
+function LineDistance({
+  line,
+  stationsById,
+  from,
+}: {
+  line: Line;
+  stationsById: ReadonlyMap<string, Station>;
+  from: UserLocation;
+}) {
+  const distance = getLineDistanceKm(line, stationsById, from);
+  if (distance === null) return null;
+  return (
+    <Text className="text-sm text-muted" style={styles.tabularNums}>
+      {formatDistance(distance)}
+    </Text>
+  );
+}
+
 function EmptyState({ children }: { children: ReactNode }) {
   return <View style={styles.emptyState}>{children}</View>;
 }
@@ -151,10 +175,10 @@ function EmptyState({ children }: { children: ReactNode }) {
 const searchResultsTitle = "Search results";
 const trendingTitle = "Trending (last 7 days)";
 
-type SearchItem = Station | SavedStationItem;
+type SearchItem = Station | Line | SavedStationItem;
 
 interface SearchSection {
-  key: "results" | "recent" | "saved" | "trending";
+  key: "results" | "recent" | "saved" | "savedLines" | "trending";
   title: string;
   icon: SectionIcon;
   data: SearchItem[];
@@ -164,7 +188,9 @@ interface SearchSection {
 }
 
 function itemKey(item: SearchItem) {
-  return isSavedStationItem(item) ? item.savedStation.id : item.id;
+  if (isSavedStationItem(item)) return item.savedStation.id;
+  // Line and station IDs could look alike.
+  return isLine(item) ? `line:${item.id}` : item.id;
 }
 
 // Memoized, so hiding and showing the sheet around a station sheet doesn't re-render its lists.
@@ -175,6 +201,7 @@ const SearchSheetContent = memo(function SearchSheetContent({
   trendingStations,
   isTrendingLoading,
   onSelectStation,
+  onSelectLine,
   getMapFeedbackUrl,
 }: {
   stationsUrl: string | null;
@@ -184,6 +211,7 @@ const SearchSheetContent = memo(function SearchSheetContent({
   /** The first trending list is still loading. */
   isTrendingLoading: boolean;
   onSelectStation: (station: Station) => void;
+  onSelectLine: (line: Line) => void;
   getMapFeedbackUrl: () => string;
 }) {
   const bottomInset = useSheetBottomInset();
@@ -224,6 +252,7 @@ const SearchSheetContent = memo(function SearchSheetContent({
   const [query, setQuery] = useState("");
   // Focusing the field starts building the search index, before the first character is typed.
   const { savedStations } = useSavedStations();
+  const { savedLines } = useSavedLines();
   const recentStations = useRecentStations();
   const search = useStationSearch(query, {
     stationsUrl,
@@ -232,7 +261,9 @@ const SearchSheetContent = memo(function SearchSheetContent({
     preload: isFocused,
     savedStations,
     recentStations,
+    savedLines,
   });
+  const savedCount = savedStations.length + savedLines.length;
   const mutedColor = useThemeColor("muted");
 
   // The lists are memoized, so they only render again when these change.
@@ -246,17 +277,27 @@ const SearchSheetContent = memo(function SearchSheetContent({
       ? (station: Station) => <StationDistance station={station} from={from} />
       : undefined;
   }, [search.location]);
-  const noResults = search.hasResult && !search.error && search.stations.length === 0;
+  // Lines show the distance to their closest stop, once the stations have loaded.
+  const stationsById = useStationsById(stationsUrl);
+  const renderLineDistance = useMemo(() => {
+    const from = search.location;
+    return from && stationsById
+      ? (line: Line) => <LineDistance line={line} stationsById={stationsById} from={from} />
+      : undefined;
+  }, [search.location, stationsById]);
+  const noResults = search.hasResult && !search.error && search.results.length === 0;
   const showDefaultLists = !search.isActive || noResults;
   const hasDefaultLists =
     unsavedRecentStations.length > 0 ||
     savedStations.length > 0 ||
+    savedLines.length > 0 ||
     trendingStations.length > 0 ||
     isTrendingLoading;
   const [sectionDisplay, setSectionDisplay] = useState({
     defaultsVisible: showDefaultLists,
     recentExpanded: false,
     savedExpanded: false,
+    savedLinesExpanded: false,
   });
   // Previously these sections unmounted during a search. Keep that collapse behavior,
   // while the outer scrollable itself stays mounted.
@@ -265,12 +306,15 @@ const SearchSheetContent = memo(function SearchSheetContent({
       defaultsVisible: showDefaultLists,
       recentExpanded: false,
       savedExpanded: false,
+      savedLinesExpanded: false,
     });
   }
   const recentExpanded =
     sectionDisplay.defaultsVisible === showDefaultLists && sectionDisplay.recentExpanded;
   const savedExpanded =
     sectionDisplay.defaultsVisible === showDefaultLists && sectionDisplay.savedExpanded;
+  const savedLinesExpanded =
+    sectionDisplay.defaultsVisible === showDefaultLists && sectionDisplay.savedLinesExpanded;
   // Kept stable while the sections change around it, so a drag in progress isn't reset.
   const visibleSavedStations = useMemo(
     () => (showDefaultLists ? (savedExpanded ? savedStations : savedStations.slice(0, 5)) : []),
@@ -289,14 +333,22 @@ const SearchSheetContent = memo(function SearchSheetContent({
     [onSelectStation],
   );
 
+  const selectLine = useCallback(
+    (line: Line) => {
+      Keyboard.dismiss();
+      onSelectLine(line);
+    },
+    [onSelectLine],
+  );
+
   const sections = useMemo<SearchSection[]>(() => {
     const result: SearchSection[] = [];
-    if (search.isActive && !search.error && search.stations.length > 0) {
+    if (search.isActive && !search.error && search.results.length > 0) {
       result.push({
         key: "results",
         title: searchResultsTitle,
         icon: List,
-        data: search.stations,
+        data: search.results,
         renderSuffix: renderDistance,
       });
     }
@@ -322,6 +374,16 @@ const SearchSheetContent = memo(function SearchSheetContent({
           isExpanded: savedExpanded,
         });
       }
+      if (savedLines.length > 0) {
+        result.push({
+          key: "savedLines",
+          title: "Saved lines",
+          icon: Route,
+          data: savedLinesExpanded ? savedLines : savedLines.slice(0, 5),
+          fullCount: savedLines.length,
+          isExpanded: savedLinesExpanded,
+        });
+      }
       if (!isTrendingLoading && trendingStations.length > 0) {
         result.push({
           key: "trending",
@@ -336,7 +398,7 @@ const SearchSheetContent = memo(function SearchSheetContent({
   }, [
     search.isActive,
     search.error,
-    search.stations,
+    search.results,
     renderDistance,
     showDefaultLists,
     unsavedRecentStations,
@@ -344,6 +406,8 @@ const SearchSheetContent = memo(function SearchSheetContent({
     recentExpanded,
     savedExpanded,
     savedItems,
+    savedLines,
+    savedLinesExpanded,
     isTrendingLoading,
     trendingStations,
   ]);
@@ -365,10 +429,18 @@ const SearchSheetContent = memo(function SearchSheetContent({
           className={`overflow-hidden rounded-none shadow-none ${index === 0 ? "rounded-t-3xl" : ""} ${index === section.data.length - 1 ? "rounded-b-3xl" : ""}`}
         >
           {index > 0 ? <RowSeparator /> : null}
-          <StationRow station={item} renderSuffix={section.renderSuffix} onSelect={selectStation} />
+          {isLine(item) ? (
+            <LineRow line={item} suffix={renderLineDistance?.(item)} onSelect={selectLine} />
+          ) : (
+            <StationRow
+              station={item}
+              renderSuffix={section.renderSuffix}
+              onSelect={selectStation}
+            />
+          )}
         </ListGroup>
       ),
-    [selectStation, renderDistance],
+    [selectStation, selectLine, renderDistance, renderLineDistance],
   );
 
   const renderSectionHeader = useCallback(
@@ -391,7 +463,9 @@ const SearchSheetContent = memo(function SearchSheetContent({
           setSectionDisplay((current) =>
             section.key === "recent"
               ? { ...current, recentExpanded: !current.recentExpanded }
-              : { ...current, savedExpanded: !current.savedExpanded },
+              : section.key === "savedLines"
+                ? { ...current, savedLinesExpanded: !current.savedLinesExpanded }
+                : { ...current, savedExpanded: !current.savedExpanded },
           );
         }}
       />
@@ -411,7 +485,7 @@ const SearchSheetContent = memo(function SearchSheetContent({
                 variant="secondary"
                 // No focus outline: iOS draws it outside the field, where the sheet clips it.
                 className="ios:focus:outline-transparent android:focus:border-transparent"
-                placeholder="Search stations"
+                placeholder="Search stations and lines"
                 autoCorrect={false}
                 returnKeyType="search"
                 onSubmitEditing={() => Keyboard.dismiss()}
@@ -436,15 +510,15 @@ const SearchSheetContent = memo(function SearchSheetContent({
                 />
               )}
               <SearchField.ClearButton />
-              {query.length === 0 && savedStations.length > 0 ? (
+              {query.length === 0 && savedCount > 0 ? (
                 // Same spot as the clear button, which only shows once there's a query.
                 <View
                   pointerEvents="none"
-                  accessibilityLabel={`${savedStations.length} saved stations`}
+                  accessibilityLabel={`${savedCount} saved`}
                   className="absolute end-3 flex-row items-center gap-1"
                 >
                   <Text className="text-xs text-muted" style={styles.tabularNums}>
-                    {savedStations.length}
+                    {savedCount}
                   </Text>
                   <Bookmark size={14} color={mutedColor} />
                 </View>
@@ -495,11 +569,11 @@ const SearchSheetContent = memo(function SearchSheetContent({
                   description={search.error}
                   onRetry={search.retry}
                 />
-              ) : search.stations.length > 0 ? null : noResults ? (
+              ) : search.results.length > 0 ? null : noResults ? (
                 <StatusMessage
                   className="mt-5"
                   icon={SearchX}
-                  title="No stations found"
+                  title="No stations or lines found"
                   description="Try a different search term."
                 />
               ) : (
@@ -515,7 +589,7 @@ const SearchSheetContent = memo(function SearchSheetContent({
               {showDefaultLists && !search.isActive && !hasDefaultLists ? (
                 <EmptyState>
                   <Text className="text-center text-sm text-muted">
-                    Search for a station by name, or save one from its live board to find it here.
+                    Search for a station or line by name, or save one to find it here.
                   </Text>
                 </EmptyState>
               ) : null}
@@ -536,6 +610,7 @@ interface SearchSheetProps {
   /** Where the user is: nearby stations rank higher and results show their distance. */
   userLocation: UserLocation | null;
   onSelectStation: (station: Station) => void;
+  onSelectLine: (line: Line) => void;
   /** Where the sheet is, for the map controls that sit above it. */
   position: SheetPosition;
   /** "Improve this map" for where the map is now, for the map credits. */
@@ -547,6 +622,7 @@ export function SearchSheet({
   stationsUrl,
   userLocation,
   onSelectStation,
+  onSelectLine,
   position,
   getMapFeedbackUrl,
 }: SearchSheetProps) {
@@ -604,6 +680,7 @@ export function SearchSheet({
         trendingStations={trending.stations}
         isTrendingLoading={trending.isLoading}
         onSelectStation={onSelectStation}
+        onSelectLine={onSelectLine}
         getMapFeedbackUrl={getMapFeedbackUrl}
       />
     </BottomSheet>
