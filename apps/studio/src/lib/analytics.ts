@@ -1,4 +1,7 @@
 import posthog from "posthog-js";
+// Bundle the extensions we use so PostHog never fetches SDK code at runtime.
+import "posthog-js/dist/exception-autocapture";
+import "posthog-js/dist/web-vitals";
 
 export function initPostHog() {
   const posthogKey = import.meta.env.PUBLIC_POSTHOG_KEY;
@@ -12,7 +15,8 @@ export function initPostHog() {
     persistence: "memory",
     capture_pageview: "history_change",
     autocapture: false,
-    capture_performance: { web_vitals: true },
+    // Without attribution PostHog uses the plain "web-vitals" bundle imported above.
+    capture_performance: { web_vitals: true, web_vitals_attribution: false },
     capture_exceptions: true,
     capture_heatmaps: false,
     capture_dead_clicks: false,
@@ -21,8 +25,7 @@ export function initPostHog() {
     disable_web_experiments: true,
     disable_product_tours: true,
     disable_conversations: true,
-    // Web vitals and exception capture both load SDK extensions on demand.
-    disable_external_dependency_loading: false,
+    disable_external_dependency_loading: true,
     advanced_disable_flags: true,
     advanced_disable_toolbar_metrics: true,
   });
