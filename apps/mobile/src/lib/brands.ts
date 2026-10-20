@@ -9,7 +9,6 @@ type Logo = FC<SvgProps>;
 // only loaded the first time a board shows it.
 const logos: Record<string, () => Logo> = {
   arriva: () => require("../../../web/public/assets/operators/arriva.svg").default,
-  cfl: () => require("../../../web/public/assets/operators/cfl.svg").default,
   "ch/ab": () => require("../../../web/public/assets/operators/ch/ab.svg").default,
   "ch/bls": () => require("../../../web/public/assets/operators/ch/bls.svg").default,
   "ch/flp": () => require("../../../web/public/assets/operators/ch/flp.svg").default,
@@ -44,6 +43,7 @@ const logos: Record<string, () => Logo> = {
     require("../../../web/public/assets/operators/dk/oresundstag.svg").default,
   "dk/ska": () => require("../../../web/public/assets/operators/dk/ska.svg").default,
   eurostar: () => require("../../../web/public/assets/operators/eurostar.svg").default,
+  "fi/vr": () => require("../../../web/public/assets/operators/fi/vr.svg").default,
   "fr/fluo": () => require("../../../web/public/assets/operators/fr/fluo.svg").default,
   "fr/inoui": () => require("../../../web/public/assets/operators/fr/inoui.svg").default,
   "fr/leman": () => require("../../../web/public/assets/operators/fr/leman.svg").default,
@@ -56,7 +56,7 @@ const logos: Record<string, () => Logo> = {
   "fr/ter-na": () => require("../../../web/public/assets/operators/fr/ter-na.svg").default,
   "fr/transilien": () => require("../../../web/public/assets/operators/fr/transilien.svg").default,
   "fr/zou": () => require("../../../web/public/assets/operators/fr/zou.svg").default,
-  ir: () => require("../../../web/public/assets/operators/ir.svg").default,
+  "ie/ir": () => require("../../../web/public/assets/operators/ie/ir.svg").default,
   "it/frecciarossa": () =>
     require("../../../web/public/assets/operators/it/frecciarossa.svg").default,
   "it/intercity": () => require("../../../web/public/assets/operators/it/intercity.svg").default,
@@ -70,11 +70,12 @@ const logos: Record<string, () => Logo> = {
   "it/trenord": () => require("../../../web/public/assets/operators/it/trenord.svg").default,
   "it/tua": () => require("../../../web/public/assets/operators/it/tua.svg").default,
   "leo-express": () => require("../../../web/public/assets/operators/leo-express.svg").default,
+  "lu/cfl": () => require("../../../web/public/assets/operators/lu/cfl.svg").default,
+  "nl/ns": () => require("../../../web/public/assets/operators/nl/ns.svg").default,
   "no/flytoget": () => require("../../../web/public/assets/operators/no/flytoget.svg").default,
   "no/go_ahead": () => require("../../../web/public/assets/operators/no/go_ahead.svg").default,
   "no/sj_nord": () => require("../../../web/public/assets/operators/no/sj_nord.svg").default,
   "no/vy": () => require("../../../web/public/assets/operators/no/vy.svg").default,
-  ns: () => require("../../../web/public/assets/operators/ns.svg").default,
   obb: () => require("../../../web/public/assets/operators/obb.svg").default,
   "pl/kd": () => require("../../../web/public/assets/operators/pl/kd.svg").default,
   "pl/km": () => require("../../../web/public/assets/operators/pl/km.svg").default,
@@ -120,7 +121,6 @@ const logos: Record<string, () => Logo> = {
   "uk/vt": () => require("../../../web/public/assets/operators/uk/vt.svg").default,
   "uk/xc": () => require("../../../web/public/assets/operators/uk/xc.svg").default,
   "uk/xr": () => require("../../../web/public/assets/operators/uk/xr.svg").default,
-  vr: () => require("../../../web/public/assets/operators/vr.svg").default,
 };
 
 const brandPaths: Record<string, string> = {
@@ -151,7 +151,7 @@ const brandPaths: Record<string, string> = {
   mob: "ch/mob",
   flp: "ch/flp",
   obb: "obb",
-  cfl: "cfl",
+  cfl: "lu/cfl",
   sncf: "fr/sncf",
   "tgv inoui": "fr/inoui",
   ouigo: "fr/ouigo",
@@ -164,7 +164,7 @@ const brandPaths: Record<string, string> = {
   regionaura: "fr/regionaura",
   "ter na": "fr/ter-na",
   "zou !": "fr/zou",
-  vr: "vr",
+  vr: "fi/vr",
   sncb: "sncb",
   eurostar: "eurostar",
   arriva: "arriva",
@@ -184,7 +184,7 @@ const brandPaths: Record<string, string> = {
   vias: "de/vias",
   westfalenbahn: "de/westfalenbahn",
   vogtlandbahn: "de/vogtlandbahn",
-  ns: "ns",
+  ns: "nl/ns",
   vy: "no/vy",
   "sj nord": "no/sj_nord",
   "pkp intercity": "pl/pkp-intercity",
@@ -238,7 +238,7 @@ const brandPaths: Record<string, string> = {
   cs: "uk/cs",
   gc: "uk/gc",
   ht: "uk/ht",
-  ir: "ir",
+  ir: "ie/ir",
 };
 
 // Brands that share another brand's logo.
