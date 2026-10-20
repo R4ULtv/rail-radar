@@ -143,7 +143,7 @@ export function getStationPageData(id: string) {
 function pageCopy(countryName: string, count: number) {
   return {
     title: `Train Stations in ${countryName} - Live Departures & Arrivals`,
-    description: `Browse all ${count.toLocaleString()} train stations in ${countryName} on Rail Radar. Find live departures, arrivals, real-time delays, and platform information for every station.`,
+    description: `Browse all ${count.toLocaleString("en-US")} train stations in ${countryName} on Rail Radar. Find live departures, arrivals, real-time delays, and platform information for every station.`,
   };
 }
 
@@ -261,7 +261,7 @@ export function getStationsDirectoryPageData() {
     totalStations,
     metadata: {
       title: "Train Stations - Browse by Country",
-      description: `Browse ${totalStations.toLocaleString()} train stations across ${countries.length} European countries on Rail Radar. Find live departures, arrivals, and real-time schedules for every station.`,
+      description: `Browse ${totalStations.toLocaleString("en-US")} train stations across ${countries.length} European countries on Rail Radar. Find live departures, arrivals, and real-time schedules for every station.`,
       alternates: {
         canonical: "/stations",
       },

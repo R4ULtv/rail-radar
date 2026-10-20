@@ -93,8 +93,8 @@ function CountryStationsPage({
             Train Stations in {countryName}
           </h1>
           <p className="mt-2 text-muted-foreground text-pretty">
-            All {count.toLocaleString()} train stations in {countryName} with live departures and
-            arrivals on Rail Radar.
+            All {count.toLocaleString("en-US")} train stations in {countryName} with live departures
+            and arrivals on Rail Radar.
           </p>
         </div>
       </div>
@@ -207,9 +207,9 @@ function CountryStationsPage({
       <div className="sr-only">
         <h2>Train stations in {countryName}</h2>
         <p>
-          Rail Radar tracks {count.toLocaleString()} train stations across {countryName}. Select any
-          station to view real-time departures and arrivals, live delay information, and platform
-          assignments, refreshed every 30 seconds.
+          Rail Radar tracks {count.toLocaleString("en-US")} train stations across {countryName}.
+          Select any station to view real-time departures and arrivals, live delay information, and
+          platform assignments, refreshed every 30 seconds.
         </p>
       </div>
     </div>
