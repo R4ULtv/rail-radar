@@ -31,11 +31,29 @@ const API_ENDPOINTS = {
 export const rootRoutes = factory
   .createApp()
   .get("/", (c) => {
-    return c.json({
-      name: "Rail Radar API",
-      version: "1.0.0",
-      endpoints: API_ENDPOINTS,
-    });
+    return c.text(
+      [
+        "Rail Radar API",
+        "Version: 1.0.0",
+        "",
+        "The APIs are free to use. If you're planning to use them in your project,",
+        "I'd appreciate it if you got in touch at contact@railradar24.com.",
+        "",
+        "The underlying data providers have rate limits. By coordinating your usage,",
+        "we can find a setup that works smoothly for your project and keeps the",
+        "service reliable for everyone.",
+        "",
+        "If you haven't been in touch, I may block requests that look like spam or",
+        "show usage significantly above normal patterns, to protect provider limits",
+        "and keep the service available for everyone.",
+        "",
+        "Endpoints:",
+        ...Object.entries(API_ENDPOINTS).map(([endpoint, description]) => {
+          return `${endpoint}\n  ${description}`;
+        }),
+        "",
+      ].join("\n"),
+    );
   })
   .get("/robots.txt", (c) => {
     return c.text("User-agent: *\nDisallow: /");
