@@ -8,6 +8,11 @@ export function stationUrl(id: string) {
   return `${websiteUrl}/station/${encodeURIComponent(id)}`;
 }
 
+/** A metro or light rail line's page on the website, which also opens the line in the app. */
+export function lineUrl(id: string) {
+  return `${websiteUrl}/lines/${encodeURIComponent(id)}`;
+}
+
 /** The station a website link opened the app on, or null for any other link. */
 export function stationIdFromUrl(url: string): string | null {
   const match = /^https:\/\/(?:www\.)?railradar24\.com\/station\/([^/?#]+)\/?(?:[?#]|$)/.exec(url);

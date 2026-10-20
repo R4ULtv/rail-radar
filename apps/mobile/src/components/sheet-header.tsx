@@ -27,6 +27,7 @@ export function SheetHeader({
   titleLines,
   closeLabel,
   onClose,
+  leading,
   children,
 }: {
   title: string;
@@ -34,11 +35,14 @@ export function SheetHeader({
   titleLines?: number;
   closeLabel: string;
   onClose: () => void;
+  /** Before the title, e.g. a line's badge. */
+  leading?: ReactNode;
   /** Shown below the title, e.g. a subtitle. */
   children?: ReactNode;
 }) {
   return (
     <View className="flex-row items-start gap-3">
+      {leading}
       <View style={styles.title}>
         <Text
           accessibilityRole="header"

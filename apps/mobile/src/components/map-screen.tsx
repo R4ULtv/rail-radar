@@ -1,3 +1,4 @@
+import { getStationLines } from "@repo/data/lines";
 import type { Station } from "@repo/data/types";
 import Mapbox from "@rnmapbox/maps";
 import { StatusBar } from "expo-status-bar";
@@ -5,7 +6,15 @@ import { Alert } from "heroui-native/alert";
 import { Card } from "heroui-native/card";
 import { useThemeColor } from "heroui-native/hooks";
 import CircleAlert from "lucide-react-native/icons/circle-alert";
-import { useCallback, useEffect, useReducer, useRef, useState, type ComponentProps } from "react";
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useReducer,
+  useRef,
+  useState,
+  type ComponentProps,
+} from "react";
 import { StyleSheet, View } from "react-native";
 import { useReducedMotion } from "react-native-reanimated";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -24,26 +33,47 @@ import {
   useSheetTopInset,
 } from "@/components/map-controls";
 import { IntroSheet, useIntro } from "@/components/intro-sheet";
+import { LineSheet } from "@/components/line-sheet";
 import { MapStyleSheet } from "@/components/map-style-sheet";
 import { SearchSheet } from "@/components/search-sheet";
 import { Settings } from "@/components/settings-sheet";
-import { RailwayLines, StationImages, StationLayers } from "@/components/station-markers";
+import {
+  LineStops,
+  LineTracks,
+  RailwayLines,
+  StationImages,
+  StationLayers,
+} from "@/components/station-markers";
 import { middleStep, StationSheet } from "@/components/station-sheet";
 import { StatusBarBlur } from "@/components/status-bar-blur";
 import { UserLocationMarker } from "@/components/user-location-marker";
 import { useIsOnline } from "@/hooks/use-is-online";
+import { useLinesUrl } from "@/hooks/use-lines-url";
 import { useMapTheme } from "@/hooks/use-map-theme";
 import { useStationLinks } from "@/hooks/use-station-links";
+import { useStationsById } from "@/hooks/use-stations-by-id";
 import { useStationsUrl } from "@/hooks/use-stations-url";
 import { addRecentStation } from "@/hooks/use-stored-stations";
 import { useUserLocation } from "@/hooks/use-user-location";
 import { haptics } from "@/lib/haptics";
+import {
+  getInitialBranch,
+  getLineBounds,
+  getLineColor,
+  getRouteStops,
+  type Line,
+} from "@/lib/lines";
 import { mapFeedbackUrl, type MapPosition } from "@/lib/links";
 import type { LocationFix } from "@/lib/location-tracking";
 import { initialMapRecovery, reduceMapRecovery } from "@/lib/map-recovery";
 import { findNearbyDepartures } from "@/lib/nearby-departures";
 import { setPreference, usePreference } from "@/lib/preferences";
-import { loadStationSearch, loadStations, type NearbyStation } from "@/lib/stations";
+import {
+  loadStationSearch,
+  loadStations,
+  loadStationsById,
+  type NearbyStation,
+} from "@/lib/stations";
 import { loadLastUserLocation } from "@/lib/user-location";
 
 const accessToken = process.env.EXPO_PUBLIC_MAPBOX_TOKEN ?? "";
@@ -55,6 +85,8 @@ const locateZoomLevel = 14;
 const stationZoomLevels: Record<Station["type"], number> = { rail: 13, metro: 14, light: 14 };
 // How far a selected station sits above the station sheet's middle step, leaving room for its label.
 const stationSheetClearance = 48;
+// Around a selected line, inside the map above the line sheet's middle step.
+const lineBoundsPadding = 40;
 // Mapbox keeps the last camera padding, so moves that should be centered have to clear it.
 const noPadding = { paddingTop: 0, paddingBottom: 0, paddingLeft: 0, paddingRight: 0 };
 // The nearby button's errors are about one tap, so they go away on their own.
@@ -66,6 +98,48 @@ if (accessToken) {
 // Mapbox's telemetry would send the user's location to Mapbox; it stays on the device instead.
 // This is also the opt-out Mapbox requires, which its hidden attribution button would offer.
 Mapbox.setTelemetryEnabled(false);
+
+const noLineIds: readonly string[] = [];
+const noStops: readonly Station[] = [];
+
+// Web Mercator, as a fraction of the world's width from the top left.
+const mercatorX = (lng: number) => (lng + 180) / 360;
+const mercatorY = (lat: number) => {
+  const sin = Math.sin((lat * Math.PI) / 180);
+  return 0.5 - Math.log((1 + sin) / (1 - sin)) / (4 * Math.PI);
+};
+const inverseMercatorY = (y: number) =>
+  (Math.atan(Math.exp((0.5 - y) * 2 * Math.PI)) * 360) / Math.PI - 90;
+// The world is one 512pt tile at zoom 0.
+const worldSize = 512;
+const maxFitZoom = 15;
+
+/**
+ * The center and zoom that fit the bounds into the map, inside the padding. Mapbox's own bounds
+ * fit adds the camera's current padding to the one given, so a fit after centering a station
+ * above its sheet came out far too small.
+ */
+function fitBounds(
+  [west, south, east, north]: readonly [number, number, number, number],
+  width: number,
+  height: number,
+  padding: typeof noPadding,
+) {
+  const x0 = mercatorX(west);
+  const x1 = mercatorX(east);
+  const y0 = mercatorY(north);
+  const y1 = mercatorY(south);
+  const fitWidth = Math.max(width - padding.paddingLeft - padding.paddingRight, 1);
+  const fitHeight = Math.max(height - padding.paddingTop - padding.paddingBottom, 1);
+  const scale = Math.min(
+    fitWidth / Math.max((x1 - x0) * worldSize, 1e-9),
+    fitHeight / Math.max((y1 - y0) * worldSize, 1e-9),
+  );
+  return {
+    centerCoordinate: [(west + east) / 2, inverseMercatorY((y0 + y1) / 2)],
+    zoomLevel: Math.min(Math.log2(scale), maxFitZoom),
+  };
+}
 
 type StationPressEvent = Parameters<
   NonNullable<ComponentProps<typeof Mapbox.ShapeSource>["onPress"]>
@@ -145,11 +219,23 @@ export function MapScreen() {
   const sheetTopInset = useSheetTopInset();
   // The map's own height, since Android's window height can leave out the navigation bar.
   const mapHeight = useRef(0);
+  const mapWidth = useRef(0);
   const reduceMotion = useReducedMotion();
   const camera = useRef<Mapbox.Camera>(null);
   const stationsUrl = useStationsUrl();
   const [selectedStation, setSelectedStation] = useState<Station | null>(null);
   const [sheetOpen, setSheetOpen] = useState(false);
+  // The open line, the station it was opened from, which its sheet goes back to, and the
+  // branch it shows.
+  const [selectedLine, setSelectedLine] = useState<{
+    line: Line;
+    fromStation: Station | null;
+    branch: number;
+  } | null>(null);
+  const [lineSheetOpen, setLineSheetOpen] = useState(false);
+  // A stop opened from the line's sheet, which goes back to the line when it's closed.
+  const [stopFromLineId, setStopFromLineId] = useState<string | null>(null);
+  const linesUrl = useLinesUrl();
   // The closest train stations, while the station sheet was opened from the nearby button.
   const [nearbyStations, setNearbyStations] = useState<NearbyStation[]>([]);
   const [isFindingNearby, setIsFindingNearby] = useState(false);
@@ -205,8 +291,13 @@ export function MapScreen() {
   // Where the sheets are, for the controls that sit above them.
   const searchSheetPosition = useSheetPosition();
   const stationSheetPosition = useSheetPosition();
+  const lineSheetPosition = useSheetPosition();
   // While a sheet is fully open, the strip of map above it stays still.
-  const isMapLocked = useIsSheetFullyOpen([searchSheetPosition, stationSheetPosition]);
+  const isMapLocked = useIsSheetFullyOpen([
+    searchSheetPosition,
+    stationSheetPosition,
+    lineSheetPosition,
+  ]);
   const mapStyleSheetPosition = useSheetPosition();
   const [isMapStyleOpen, setIsMapStyleOpen] = useState(false);
 
@@ -221,13 +312,27 @@ export function MapScreen() {
     setIsFollowing(false);
   }, []);
 
-  const onStationSheetOpenChange = useCallback(
-    (isOpen: boolean) => {
-      if (isOpen) stopFollowing();
-      else setNearbyStations([]);
-      setSheetOpen(isOpen);
+  // Where the sheets' middle step starts, from the top of the map.
+  const getMiddleStepTop = useCallback(() => {
+    const height = mapHeight.current;
+    return sheetTopInset + (height - sheetTopInset) * (1 - middleStep);
+  }, [sheetTopInset]);
+
+  const centerOnStation = useCallback(
+    (station: Station) => {
+      if (!station.geo) return;
+      // Above the station sheet's middle step, and so above its peek too. The padding stays the
+      // same as the sheet changes size, so the map doesn't move with it.
+      const stationY = getMiddleStepTop() - stationSheetClearance;
+      camera.current?.setCamera({
+        centerCoordinate: [station.geo.lng, station.geo.lat],
+        zoomLevel: stationZoomLevels[station.type],
+        padding: { ...noPadding, paddingBottom: Math.max(mapHeight.current - 2 * stationY, 0) },
+        animationMode: "easeTo",
+        animationDuration: reduceMotion ? 0 : 700,
+      });
     },
-    [stopFollowing],
+    [getMiddleStepTop, reduceMotion],
   );
 
   const selectStation = useCallback(
@@ -240,25 +345,128 @@ export function MapScreen() {
       setSelectedStation(station);
       // Opened in the same update, so the first station sheet mounts already open.
       setSheetOpen(true);
+      setLineSheetOpen(false);
+      setStopFromLineId(null);
       // Let the camera move start before updating the search sheet's recent list.
       setTimeout(() => addRecentStation(station), 0);
-      if (!station.geo) return;
-
-      // Above the station sheet's middle step, and so above its peek too. The padding stays the
-      // same as the sheet changes size, so the map doesn't move with it.
-      const height = mapHeight.current;
-      const sheetTop = sheetTopInset + (height - sheetTopInset) * (1 - middleStep);
-      const stationY = sheetTop - stationSheetClearance;
-      camera.current?.setCamera({
-        centerCoordinate: [station.geo.lng, station.geo.lat],
-        zoomLevel: stationZoomLevels[station.type],
-        padding: { ...noPadding, paddingBottom: Math.max(height - 2 * stationY, 0) },
-        animationMode: "easeTo",
-        animationDuration: reduceMotion ? 0 : 700,
-      });
+      centerOnStation(station);
     },
-    [stopFollowing, sheetTopInset, reduceMotion],
+    [stopFollowing, centerOnStation],
   );
+
+  // The whole line fits above the sheets' middle step, clear of the controls on top.
+  const fitLine = useCallback(
+    (line: Line) => {
+      if (!stationsUrl) return;
+      const action = cameraAction.current;
+      void loadStationsById(stationsUrl)
+        .then((stationsById) => {
+          const bounds = getLineBounds(line, stationsById);
+          // Panning, locating, or choosing something else meanwhile takes precedence.
+          if (!bounds || action !== cameraAction.current) return;
+          const padding = {
+            paddingTop: sheetTopInset + lineBoundsPadding * 1.5,
+            paddingBottom: mapHeight.current - getMiddleStepTop() + lineBoundsPadding,
+            paddingLeft: lineBoundsPadding,
+            paddingRight: lineBoundsPadding,
+          };
+          camera.current?.setCamera({
+            ...fitBounds(bounds, mapWidth.current, mapHeight.current, padding),
+            padding,
+            animationMode: "easeTo",
+            animationDuration: reduceMotion ? 0 : 700,
+          });
+        })
+        .catch(() => {});
+    },
+    [stationsUrl, sheetTopInset, getMiddleStepTop, reduceMotion],
+  );
+
+  // Opening a line hides the station sheet; from a station, closing the line goes back to it.
+  const selectLine = useCallback(
+    (line: Line, fromStation: Station | null) => {
+      haptics.tap();
+      hasMovedMap.current = true;
+      stopFollowing();
+      setSelectedLine({
+        line,
+        fromStation,
+        branch: getInitialBranch(line, fromStation?.id ?? null),
+      });
+      setLineSheetOpen(true);
+      setSheetOpen(false);
+      setStopFromLineId(null);
+      fitLine(line);
+    },
+    [stopFollowing, fitLine],
+  );
+
+  const selectLineFromStation = useCallback(
+    (line: Line) => selectLine(line, selectedStation),
+    [selectLine, selectedStation],
+  );
+
+  // A stop opened from the line goes back to it, as the line goes back to its station.
+  const selectStopFromLine = useCallback(
+    (station: Station) => {
+      selectStation(station);
+      setStopFromLineId(station.id);
+    },
+    [selectStation],
+  );
+
+  const onLineSheetOpenChange = useCallback(
+    (isOpen: boolean) => {
+      setLineSheetOpen(isOpen);
+      if (isOpen) return;
+      // Even after one of its stops was opened in between.
+      const fromStation = selectedLine?.fromStation;
+      if (fromStation) {
+        setSelectedStation(fromStation);
+        setSheetOpen(true);
+        centerOnStation(fromStation);
+      }
+    },
+    [selectedLine, centerOnStation],
+  );
+
+  const onStationSheetOpenChange = useCallback(
+    (isOpen: boolean) => {
+      if (isOpen) stopFollowing();
+      else setNearbyStations([]);
+      setSheetOpen(isOpen);
+      if (isOpen || !stopFromLineId) return;
+      setStopFromLineId(null);
+      if (selectedLine && stopFromLineId === selectedStation?.id) {
+        setLineSheetOpen(true);
+        fitLine(selectedLine.line);
+      }
+    },
+    [stopFollowing, stopFromLineId, selectedLine, selectedStation, fitLine],
+  );
+
+  const changeLineBranch = useCallback(
+    (branch: number) => setSelectedLine((current) => current && { ...current, branch }),
+    [],
+  );
+
+  // The open branch's stops are marked on its line, so it's clear which one the sheet lists.
+  const stationsById = useStationsById(stationsUrl);
+  const lineStops = useMemo(() => {
+    if (!lineSheetOpen || !selectedLine || !stationsById) return noStops;
+    const route = selectedLine.line.routes[selectedLine.branch];
+    return route ? getRouteStops(route, stationsById) : noStops;
+  }, [lineSheetOpen, selectedLine, stationsById]);
+
+  // Only the open line's track is drawn, or those of the open station's lines.
+  const visibleLineIds = useMemo(() => {
+    if (lineSheetOpen && selectedLine) return [selectedLine.line.id];
+    if (sheetOpen && selectedStation) {
+      const stationLines = getStationLines(selectedStation.id);
+      if (stationLines.length > 0) return stationLines.map((line) => line.id);
+    }
+    return noLineIds;
+  }, [lineSheetOpen, selectedLine, sheetOpen, selectedStation]);
 
   const openNearbyDepartures = useCallback(
     () =>
@@ -416,6 +624,7 @@ export function MapScreen() {
       style={[styles.screen, { backgroundColor }]}
       onLayout={(event) => {
         mapHeight.current = event.nativeEvent.layout.height;
+        mapWidth.current = event.nativeEvent.layout.width;
       }}
     >
       <StatusBar style={mapTheme.statusBarStyle} />
@@ -478,6 +687,15 @@ export function MapScreen() {
             />
             {/* Mounted after the stations, so the lines' layer below them exists already. */}
             <RailwayLines isStreets={mapTheme.isStreets} />
+            {linesUrl ? (
+              <>
+                <LineTracks url={linesUrl} lineIds={visibleLineIds} />
+                <LineStops
+                  stops={lineStops}
+                  color={selectedLine ? getLineColor(selectedLine.line) : null}
+                />
+              </>
+            ) : null}
           </>
         ) : null}
         {userLocation ? (
@@ -488,14 +706,19 @@ export function MapScreen() {
       <StatusBarBlur />
 
       <TopControls
-        sheets={[searchSheetPosition, stationSheetPosition, mapStyleSheetPosition]}
+        sheets={[
+          searchSheetPosition,
+          stationSheetPosition,
+          lineSheetPosition,
+          mapStyleSheetPosition,
+        ]}
         top={insets.top + 12}
       >
         <Settings locationStatus={locationStatus} getMapFeedbackUrl={getMapFeedbackUrl} />
       </TopControls>
 
       <SheetControls
-        sheets={[searchSheetPosition, stationSheetPosition]}
+        sheets={[searchSheetPosition, stationSheetPosition, lineSheetPosition]}
         overlays={[mapStyleSheetPosition]}
       >
         <Compass heading={heading} onPress={resetHeading} />
@@ -508,7 +731,7 @@ export function MapScreen() {
       {stationsUrl ? (
         <SheetControls
           side="left"
-          sheets={[searchSheetPosition, stationSheetPosition]}
+          sheets={[searchSheetPosition, stationSheetPosition, lineSheetPosition]}
           overlays={[mapStyleSheetPosition]}
         >
           <NearbyButton
@@ -531,7 +754,7 @@ export function MapScreen() {
       ) : null}
 
       <SearchSheet
-        isHidden={sheetOpen}
+        isHidden={sheetOpen || lineSheetOpen}
         stationsUrl={stationsUrl}
         userLocation={userLocation}
         onSelectStation={selectStation}
@@ -549,7 +772,22 @@ export function MapScreen() {
           userLocation={userLocation}
           onOpenChange={onStationSheetOpenChange}
           onSelectStation={selectStation}
+          onSelectLine={selectLineFromStation}
           position={stationSheetPosition}
+        />
+      ) : null}
+
+      {selectedLine ? (
+        <LineSheet
+          line={selectedLine.line}
+          fromStationId={selectedLine.fromStation?.id ?? null}
+          branch={selectedLine.branch}
+          onBranchChange={changeLineBranch}
+          isOpen={lineSheetOpen}
+          stationsUrl={stationsUrl}
+          onOpenChange={onLineSheetOpenChange}
+          onSelectStation={selectStopFromLine}
+          position={lineSheetPosition}
         />
       ) : null}
 

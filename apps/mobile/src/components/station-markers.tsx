@@ -1,5 +1,10 @@
-import Mapbox, { type LineLayerStyle, type SymbolLayerStyle } from "@rnmapbox/maps";
-import type { ComponentProps } from "react";
+import type { Station } from "@repo/data/types";
+import Mapbox, {
+  type CircleLayerStyle,
+  type LineLayerStyle,
+  type SymbolLayerStyle,
+} from "@rnmapbox/maps";
+import { useMemo, type ComponentProps } from "react";
 
 import { stationIcons } from "@/lib/station-icons";
 
@@ -224,6 +229,123 @@ export function StationLayers({
         id="rail-labels"
         filter={typeFilter("rail", LABEL_MINZOOM_FILTER)}
         style={labelStyle(13, labelColors)}
+      />
+    </Mapbox.ShapeSource>
+  );
+}
+
+// Like the web's line map: a dark casing under the line's color keeps light colors visible on
+// any map style.
+const lineTrackWidth: LineLayerStyle["lineWidth"] = [
+  "interpolate",
+  ["linear"],
+  ["zoom"],
+  10,
+  3,
+  14,
+  6,
+  17,
+  9,
+];
+const lineCasingWidth: LineLayerStyle["lineWidth"] = [
+  "interpolate",
+  ["linear"],
+  ["zoom"],
+  10,
+  5,
+  14,
+  9,
+  17,
+  12,
+];
+
+/**
+ * The tracks of the given metro and light rail lines, under the stations. Mount it after
+ * `StationLayers`, like the railway lines.
+ */
+export function LineTracks({ url, lineIds }: { url: string; lineIds: readonly string[] }) {
+  // The source stays mounted, so opening another line only changes the filter.
+  const filter = ["in", ["get", "id"], ["literal", lineIds]] as LayerFilter;
+  return (
+    <Mapbox.ShapeSource id="lines-source" url={url}>
+      <Mapbox.LineLayer
+        id="line-tracks-casing"
+        belowLayerID={FIRST_STATION_LAYER_ID}
+        filter={filter}
+        style={{
+          lineColor: "#000000",
+          lineOpacity: 0.5,
+          lineWidth: lineCasingWidth,
+          lineJoin: "round",
+          lineCap: "round",
+          lineEmissiveStrength: 1,
+        }}
+      />
+      <Mapbox.LineLayer
+        id="line-tracks"
+        belowLayerID={FIRST_STATION_LAYER_ID}
+        filter={filter}
+        style={{
+          lineColor: ["get", "color"],
+          lineWidth: lineTrackWidth,
+          lineJoin: "round",
+          lineCap: "round",
+          lineEmissiveStrength: 1,
+        }}
+      />
+    </Mapbox.ShapeSource>
+  );
+}
+
+const lineStopRadius: CircleLayerStyle["circleRadius"] = [
+  "interpolate",
+  ["linear"],
+  ["zoom"],
+  10,
+  2.5,
+  14,
+  4.5,
+  17,
+  6,
+];
+
+/**
+ * A dot on the line's track at each of the given stops, like the stop strip in the line sheet.
+ * Mount it after `LineTracks` so the dots sit on top of the track.
+ */
+export function LineStops({ stops, color }: { stops: readonly Station[]; color: string | null }) {
+  const shape = useMemo<GeoJSON.FeatureCollection>(
+    () => ({
+      type: "FeatureCollection",
+      features: stops.flatMap(({ geo }) =>
+        geo
+          ? [
+              {
+                type: "Feature",
+                properties: {},
+                geometry: { type: "Point", coordinates: [geo.lng, geo.lat] },
+              },
+            ]
+          : [],
+      ),
+    }),
+    [stops],
+  );
+
+  // Always mounted with the tracks, so its layer stays above theirs.
+  return (
+    <Mapbox.ShapeSource id="line-stops-source" shape={shape}>
+      <Mapbox.CircleLayer
+        id="line-stops"
+        belowLayerID={FIRST_STATION_LAYER_ID}
+        style={{
+          circleRadius: lineStopRadius,
+          circleColor: "#ffffff",
+          circleStrokeColor: color ?? "#000000",
+          circleStrokeWidth: ["interpolate", ["linear"], ["zoom"], 10, 1.5, 14, 2.5],
+          circlePitchAlignment: "map",
+          circleEmissiveStrength: 1,
+        }}
       />
     </Mapbox.ShapeSource>
   );

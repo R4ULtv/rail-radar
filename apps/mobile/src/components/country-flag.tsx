@@ -1,4 +1,4 @@
-import { getCountry, type CountryCode } from "@repo/data/countries";
+import { COUNTRY_MAP, getCountry, type CountryCode } from "@repo/data/countries";
 import type { FC } from "react";
 import { View } from "react-native";
 import type { SvgProps } from "react-native-svg";
@@ -36,14 +36,23 @@ const flags: Record<CountryCode, FC<SvgProps>> = {
   uk,
 };
 
-export function CountryFlag({ stationId, size = 14 }: { stationId: string; size?: number }) {
-  const code = getCountry(stationId);
+/** A station's country flag, or a country's by its code. */
+export function CountryFlag({
+  stationId,
+  country,
+  size = 14,
+}: {
+  stationId?: string;
+  country?: CountryCode | null;
+  size?: number;
+}) {
+  const code = country ?? (stationId ? getCountry(stationId) : null);
   if (!code) return null;
 
   const Flag = flags[code];
   return (
     <View
-      accessibilityLabel={getCountry(stationId, { format: "name" }) ?? undefined}
+      accessibilityLabel={COUNTRY_MAP[code]}
       style={{ width: size, height: size, borderRadius: size / 2, overflow: "hidden" }}
     >
       <Flag width={size} height={size} />

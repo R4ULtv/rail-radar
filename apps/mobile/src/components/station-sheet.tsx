@@ -76,6 +76,7 @@ import { useSavedStations } from "@/hooks/use-stored-stations";
 import { distanceKm, formatDistance } from "@/lib/distance";
 import { haptics } from "@/lib/haptics";
 import { stationUrl } from "@/lib/links";
+import type { Line } from "@/lib/lines";
 import type { NearbyStation } from "@/lib/stations";
 import { getStationWarning } from "@/lib/station-warnings";
 import type { UserLocation } from "@/lib/user-location";
@@ -733,6 +734,7 @@ interface StationSheetContentProps {
   showDetails: boolean;
   onClose: () => void;
   onSelectStation: (station: Station) => void;
+  onSelectLine: (line: Line) => void;
   /** The closest train stations, when the sheet was opened from the nearby button. */
   nearbyStations: NearbyStation[];
   onSelectNearbyStation: (station: Station) => void;
@@ -748,6 +750,7 @@ function StationSheetContent({
   showDetails,
   onClose,
   onSelectStation,
+  onSelectLine,
   nearbyStations,
   onSelectNearbyStation,
   onPeekHeightChange,
@@ -846,6 +849,7 @@ function StationSheetContent({
             isOpen={isOpen}
             stationsUrl={stationsUrl}
             onSelectStation={onSelectStation}
+            onSelectLine={onSelectLine}
           />
         ) : null}
       </LiveBoard>
@@ -891,6 +895,7 @@ interface StationSheetProps {
   userLocation: UserLocation | null;
   onOpenChange: (isOpen: boolean) => void;
   onSelectStation: (station: Station) => void;
+  onSelectLine: (line: Line) => void;
   nearbyStations: NearbyStation[];
   onSelectNearbyStation: (station: Station) => void;
   /** Where the sheet is, for the map controls that sit above it. */
@@ -904,6 +909,7 @@ export function StationSheet({
   userLocation,
   onOpenChange,
   onSelectStation,
+  onSelectLine,
   nearbyStations,
   onSelectNearbyStation,
   position,
@@ -977,6 +983,7 @@ export function StationSheet({
           showDetails={index >= 0}
           onClose={() => onOpenChange(false)}
           onSelectStation={onSelectStation}
+          onSelectLine={onSelectLine}
           nearbyStations={nearbyStations}
           onSelectNearbyStation={onSelectNearbyStation}
           onPeekHeightChange={setPeekHeight}

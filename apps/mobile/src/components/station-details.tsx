@@ -18,6 +18,7 @@ import { ScrollView } from "react-native-gesture-handler";
 import { withUniwind } from "uniwind";
 
 import { CountryFlag } from "@/components/country-flag";
+import { StationLines } from "@/components/line-list";
 import { Skeleton } from "@/components/skeleton";
 import { SectionTitle, StationSection, StationSectionSkeleton } from "@/components/station-list";
 import {
@@ -27,9 +28,11 @@ import {
   type StationPhoto,
   type StationStats,
 } from "@/hooks/use-station-details";
+import { useStationsById } from "@/hooks/use-stations-by-id";
 import { USER_AGENT } from "@/lib/api";
 import { formatDistance } from "@/lib/distance";
 import { formatCount } from "@/lib/format";
+import type { Line } from "@/lib/lines";
 import { bugReportUrl, featureRequestUrl } from "@/lib/links";
 import { nearbyStationCount, type NearbyStation } from "@/lib/stations";
 
@@ -303,14 +306,16 @@ interface StationDetailsProps {
   isOpen: boolean;
   stationsUrl: string | null;
   onSelectStation: (station: Station) => void;
+  onSelectLine: (line: Line) => void;
 }
 
-/** Everything about the station besides its live trains: photos, nearby stations, stats. */
+/** Everything about the station besides its live trains: lines, photos, nearby stations, stats. */
 export const StationDetails = memo(function StationDetails({
   station,
   isOpen,
   stationsUrl,
   onSelectStation,
+  onSelectLine,
 }: StationDetailsProps) {
   const [mutedColor, successColor] = useThemeColor(["muted", "success"]);
   // Visits are counted when a live board loads, so only train stations have any.
@@ -318,10 +323,13 @@ export const StationDetails = memo(function StationDetails({
   const photos = useStationPhotos(station, isOpen);
   const stats = useStationStats(station.id, isOpen && hasStats);
   const nearby = useNearbyStations(station, stationsUrl);
+  const stationsById = useStationsById(stationsUrl);
 
   // Each section keeps its place with a skeleton while it loads, so the sheet doesn't jump.
   return (
     <View className="px-4">
+      {/* Bundled with the app, so it's there at once and comes first. */}
+      <StationLines station={station} stationsById={stationsById} onSelectLine={onSelectLine} />
       {photos.isLoading ? (
         <StationPhotosSkeleton mutedColor={mutedColor} />
       ) : (
