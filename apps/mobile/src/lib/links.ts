@@ -13,12 +13,19 @@ export function lineUrl(id: string) {
   return `${websiteUrl}/lines/${encodeURIComponent(id)}`;
 }
 
-/** The station a website link opened the app on, or null for any other link. */
-export function stationIdFromUrl(url: string): string | null {
-  const match = /^https:\/\/(?:www\.)?railradar24\.com\/station\/([^/?#]+)\/?(?:[?#]|$)/.exec(url);
+/** What a website link opens in the app. */
+export type WebsiteLink = { type: "station"; id: string } | { type: "line"; id: string };
+
+const websiteLinkPattern =
+  /^https:\/\/(?:www\.)?railradar24\.com\/(station|lines)\/([^/?#]+)\/?(?:[?#]|$)/;
+
+/** The station or line a website link opened the app on, or null for any other link. */
+export function websiteLinkFromUrl(url: string): WebsiteLink | null {
+  const match = websiteLinkPattern.exec(url);
   if (!match) return null;
   try {
-    return decodeURIComponent(match[1]!);
+    const id = decodeURIComponent(match[2]!);
+    return match[1] === "station" ? { type: "station", id } : { type: "line", id };
   } catch {
     return null;
   }

@@ -50,7 +50,7 @@ import { UserLocationMarker } from "@/components/user-location-marker";
 import { useIsOnline } from "@/hooks/use-is-online";
 import { useLinesUrl } from "@/hooks/use-lines-url";
 import { useMapTheme } from "@/hooks/use-map-theme";
-import { useStationLinks } from "@/hooks/use-station-links";
+import { useWebsiteLinks } from "@/hooks/use-website-links";
 import { useStationsById } from "@/hooks/use-stations-by-id";
 import { useStationsUrl } from "@/hooks/use-stations-url";
 import { addRecentStation } from "@/hooks/use-stored-stations";
@@ -527,8 +527,8 @@ export function MapScreen() {
     [isMapLocked, selectStation],
   );
 
-  // A shared station link opens the station like a search result.
-  useStationLinks(stationsUrl, selectStation);
+  // A shared station or line link opens it like a search result.
+  useWebsiteLinks(stationsUrl, selectStation, selectLineFromSearch);
 
   // Prepare the search index while the app is idle, so the first search can show results at once.
   // This also reads the stations needed by the first station sheet and shared links.
