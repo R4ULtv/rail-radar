@@ -110,7 +110,12 @@ function TrainListContent({
   const hasSnapshot = trainData !== null;
 
   if (!hasSnapshot && error) {
-    return <TrainBoardNotice hasSnapshot={false} isValidating={isValidating} onRetry={onRetry} />;
+    return (
+      <>
+        <TrainBoardNotice hasSnapshot={false} isValidating={isValidating} onRetry={onRetry} />
+        {REPORT_LINKS}
+      </>
+    );
   }
 
   if (!hasSnapshot && isLoading) {
@@ -135,17 +140,15 @@ function TrainListContent({
           {error ? `No ${type} were listed in the last received update.` : `No ${type} scheduled`}
         </div>
       ) : (
-        <>
-          {trainData.map((train) => (
-            <TrainRow
-              key={`${train.trainNumber}-${train.scheduledTime}-${train.platform}`}
-              train={train}
-              type={type}
-            />
-          ))}
-          {REPORT_LINKS}
-        </>
+        trainData.map((train) => (
+          <TrainRow
+            key={`${train.trainNumber}-${train.scheduledTime}-${train.platform}`}
+            train={train}
+            type={type}
+          />
+        ))
       )}
+      {REPORT_LINKS}
     </>
   );
 
