@@ -1,5 +1,6 @@
 import data from "./lines.json" with { type: "json" };
-import { COUNTRY_CODES, type CountryCode } from "./countries";
+// Self-reference resolves to the .ts file, so Node can load this from vite.config without a bundler.
+import { COUNTRY_CODES, type CountryCode } from "@repo/data/countries";
 import type { Line, LineGeometry, LineRoute } from "./types";
 
 /** Neutral gray for lines with no official color; readable on light and dark backgrounds. */
