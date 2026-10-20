@@ -3,6 +3,7 @@ import { cache } from "hono/cache";
 import { getAnalyticsOverview } from "../analytics";
 import { CACHE_TTL } from "../constants";
 import { factory } from "../lib/env";
+import { logRequestError } from "../lib/error-logging";
 import { jsonError } from "../lib/http";
 import { rateLimit } from "../middleware/rate-limit";
 
@@ -24,7 +25,8 @@ export const analyticsRoutes = factory.createApp().get(
         timestamp: new Date().toISOString(),
         ...overview,
       });
-    } catch {
+    } catch (error) {
+      logRequestError(c, error, "Analytics overview query failed");
       return jsonError(c, "Unable to fetch analytics data. Please try again later.", 500);
     }
   },

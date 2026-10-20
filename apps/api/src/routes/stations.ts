@@ -12,10 +12,11 @@ import {
 } from "../analytics";
 import { CACHE_TTL, STATION_SEARCH_LIMIT, type Period, TRENDING_LIMIT } from "../constants";
 import { factory } from "../lib/env";
+import { logRequestError } from "../lib/error-logging";
 import { jsonError } from "../lib/http";
 import { STATION_STATS_CACHE_CONTROL } from "../lib/top-station-cache";
 import { countryParamValidator, periodValidator, trainTypeValidator } from "../lib/validators";
-import { rateLimit } from "../middleware/rate-limit";
+import { rateLimit, stationRateLimit } from "../middleware/rate-limit";
 import { createStationSearch } from "../search";
 import { getScraperForStation, ScraperError } from "../scrapers";
 
@@ -95,7 +96,8 @@ export const stationsRoutes = factory
             period,
           ),
         );
-      } catch {
+      } catch (error) {
+        logRequestError(c, error, "Trending stations query failed", { period });
         return jsonError(c, "Unable to fetch analytics data. Please try again later.", 500);
       }
     },
@@ -122,7 +124,8 @@ export const stationsRoutes = factory
             country,
           ),
         );
-      } catch {
+      } catch (error) {
+        logRequestError(c, error, "Country trending stations query failed", { country, period });
         return jsonError(c, "Unable to fetch analytics data. Please try again later.", 500);
       }
     },
@@ -171,7 +174,8 @@ export const stationsRoutes = factory
             isTopStation,
           },
         });
-      } catch {
+      } catch (error) {
+        logRequestError(c, error, "Station statistics query failed", { stationId: id, period });
         return jsonError(c, "Unable to fetch analytics data. Please try again later.", 500);
       }
     },
@@ -179,6 +183,7 @@ export const stationsRoutes = factory
   .get(
     "/:id",
     rateLimit,
+    stationRateLimit,
     trainTypeValidator,
     async (c, next) => {
       await next();
@@ -264,6 +269,13 @@ export const stationsRoutes = factory
           trains,
         });
       } catch (error) {
+        logRequestError(c, error, "Station train data request failed", {
+          stationId: station.id,
+          provider,
+          country,
+          requestType: type,
+        });
+
         if (error instanceof ScraperError) {
           if (provider) {
             c.executionCtx.waitUntil(

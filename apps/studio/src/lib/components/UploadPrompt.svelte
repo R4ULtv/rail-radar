@@ -3,6 +3,7 @@
   import { Button } from "$lib/components/ui/button";
   import * as Card from "$lib/components/ui/card";
   import StationFileFormatIcon from "$lib/components/StationFileFormatIcon.svelte";
+  import WorkspaceNav from "$lib/components/WorkspaceNav.svelte";
   import { remoteStationSources, type RemoteStationSourceId } from "$lib/stores/stations";
 
   let {
@@ -26,7 +27,10 @@
 <main class="flex min-h-screen items-center justify-center p-6 text-primary">
   <Card.Root class="w-full max-w-xl shadow-2xl">
     <Card.Header>
-      <p class="text-sm font-medium text-accent">Rail Radar Studio Beta</p>
+      <div class="flex items-center justify-between gap-3">
+        <p class="text-sm font-medium text-accent">Rail Radar Studio Beta</p>
+        <WorkspaceNav />
+      </div>
       <Card.Title class="text-2xl">Open a station file</Card.Title>
       <Card.Description class="leading-6">
         The local project version loads the repository data automatically. In deployed browser mode,

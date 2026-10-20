@@ -1,22 +1,12 @@
 import { env } from "@/lib/env";
+import { APIError, parseRetryAfterMs } from "./error";
+
+export { APIError } from "./error";
 
 /**
  * Core API client for Rail Radar
  * Provides centralized fetch and error handling for TanStack Query hooks.
  */
-
-/**
- * Custom error class for API errors with status codes
- */
-export class APIError extends Error {
-  constructor(
-    message: string,
-    public status?: number,
-  ) {
-    super(message);
-    this.name = "APIError";
-  }
-}
 
 /**
  * Builds full API URL from relative path
@@ -62,7 +52,11 @@ export async function apiFetcher<T>(
       // If JSON parsing fails, use status text
     }
 
-    throw new APIError(errorMessage, response.status);
+    throw new APIError(
+      errorMessage,
+      response.status,
+      parseRetryAfterMs(response.headers.get("Retry-After")),
+    );
   }
 
   return response.json();

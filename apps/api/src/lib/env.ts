@@ -1,13 +1,17 @@
 import { createFactory } from "hono/factory";
 
 export type Bindings = {
-  RATE_LIMITER: RateLimit;
+  ASSETS: Fetcher;
+  RATE_LIMITER: CloudflareBindings["RATE_LIMITER"];
+  STATION_RATE_LIMITER: CloudflareBindings["STATION_RATE_LIMITER"];
   MAP_GENERATION_RATE_LIMITER: CloudflareBindings["MAP_GENERATION_RATE_LIMITER"];
   STATION_ANALYTICS: AnalyticsEngineDataset;
   PROVIDER_ANALYTICS: AnalyticsEngineDataset;
   CLOUDFLARE_ACCOUNT_ID: string;
   CLOUDFLARE_API_TOKEN: string;
   IP_HASH_PEPPER: string;
+  DB_CLIENT_ID: string;
+  DB_API_KEY: string;
   NS_API_KEY: string;
   LDBWS_API_KEY: string;
   TRAFIKLAB_KEY: string;
@@ -20,6 +24,8 @@ export type Bindings = {
 
 export type Variables = {
   clientIp: string;
+  requestId: string;
+  requestStartedAt: number;
 };
 
 export type Env = {

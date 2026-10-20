@@ -1,6 +1,8 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { createRouter } from "@tanstack/react-router";
 import { routeTree } from "./routeTree.gen";
+import { shouldRetryApiRequest } from "./lib/api/error";
+import { captureException } from "./lib/analytics";
 
 export function getRouter() {
   const queryClient = new QueryClient({
@@ -8,7 +10,7 @@ export function getRouter() {
       queries: {
         staleTime: 30_000,
         refetchOnWindowFocus: true,
-        retry: 2,
+        retry: shouldRetryApiRequest,
       },
     },
   });
@@ -19,6 +21,9 @@ export function getRouter() {
     defaultPreload: "intent",
     trailingSlash: "never",
     scrollRestoration: true,
+    defaultOnCatch: (error, errorInfo) => {
+      captureException(error, { source: "router", componentStack: errorInfo.componentStack });
+    },
     Wrap: ({ children }) => (
       <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
     ),

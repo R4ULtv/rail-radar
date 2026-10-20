@@ -3,6 +3,7 @@ import { cache } from "hono/cache";
 import { CACHE_TTL } from "../constants";
 import { STATION_ICON_BYTES } from "../assets/station-icon";
 import { factory } from "../lib/env";
+import { logRequestError } from "../lib/error-logging";
 import { jsonError } from "../lib/http";
 import { rateLimit } from "../middleware/rate-limit";
 
@@ -167,6 +168,17 @@ export const mapRoutes = factory
         const fallback = await fetchMapbox();
         if (!fallback) return mapLimitResponse();
         if (!fallback.ok) {
+          logRequestError(
+            c,
+            new Error("Mapbox static image request failed"),
+            "Map image request failed",
+            {
+              status: 502,
+              provider: "mapbox",
+              upstreamStatus: fallback.status,
+              initialUpstreamStatus: response.status,
+            },
+          );
           return jsonError(c, "Failed to fetch map image.", 502);
         }
         return mapImageResponse(fallback);

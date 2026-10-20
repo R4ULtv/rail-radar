@@ -1,10 +1,24 @@
+import { useState } from "react";
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { metadataToHead, type Metadata } from "@/lib/metadata";
+import { lines } from "@repo/data/lines";
 import { operators, operatorBySlug, type Operator } from "@repo/data/operators";
 import { COUNTRY_MAP, type CountryCode } from "@repo/data/countries";
 import { Badge } from "@repo/ui/components/badge";
 import { Card, CardContent } from "@repo/ui/components/card";
+import { cn } from "@repo/ui/lib/utils";
+import { LineBadge } from "@/components/line-badge";
+import { loadOperatorLines } from "@/lib/line-data.functions";
+import type { DirectoryLine, OperatorLinesData } from "@/lib/line-data.server";
+import {
+  operatorTypeColors,
+  operatorTypeLabels,
+  OperatorTypeMarker,
+  operatorRole,
+  sortOperatorTypes,
+} from "@/lib/operator-types";
 import { staticAssetUrl } from "@/lib/static-assets";
+import { prerenderedPageLinkProps } from "@/lib/station-prerender";
 import { env } from "@/lib/env";
 import {
   ArrowLeftIcon,
@@ -17,23 +31,25 @@ import {
   CodeIcon,
   BookOpenIcon,
   CalendarDaysIcon,
+  ChevronRightIcon,
   ExpandIcon,
   TrainTrackIcon,
   UsersIcon,
 } from "lucide-react";
 
 export const Route = createFileRoute("/operators/$slug")({
-  loader: ({ params }) => {
+  loader: async ({ params }) => {
     if (!operatorBySlug.has(params.slug)) throw notFound();
-    return { slug: params.slug };
+    const network = await loadOperatorLines({ data: { slug: params.slug } });
+    return { slug: params.slug, network };
   },
   head: ({ params }) => metadataToHead(getOperatorMetadata(params.slug)),
   component: OperatorRoute,
 });
 
 function OperatorRoute() {
-  const { slug } = Route.useLoaderData();
-  return <OperatorPage slug={slug} />;
+  const { slug, network } = Route.useLoaderData();
+  return <OperatorPage slug={slug} network={network} />;
 }
 
 function getOperatorMetadata(slug: string): Metadata {
@@ -44,36 +60,40 @@ function getOperatorMetadata(slug: string): Metadata {
   }
 
   const countries = formatCountryList(getTrackedCountries(operator));
-  const description = `${operator.name} is tracked on Rail Radar in ${countries}. ${operator.description}`;
+  const lineCount = lines.filter((line) => line.operator === slug).length;
+  const lineSummary =
+    lineCount > 0 ? ` It runs ${lineCount} line${lineCount === 1 ? "" : "s"} on Rail Radar.` : "";
+  const description = `${operator.name} is tracked on Rail Radar in ${countries}.${lineSummary} ${operator.description}`;
+  const title = `${operator.name} - ${operatorRole(operator.operatorTypes)}`;
 
   return {
-    title: `${operator.name} - Train Operator`,
+    title,
     description,
     alternates: {
       canonical: `/operators/${slug}`,
     },
     openGraph: {
-      title: `${operator.name} - Train Operator | Rail Radar`,
+      title: `${title} | Rail Radar`,
       description,
       images: [
         {
           url: "/assets/social/operators.webp",
           width: 1200,
           height: 630,
-          alt: "Rail Radar - Train operator directory across Europe",
+          alt: "Rail Radar - Rail operator directory across Europe",
         },
       ],
     },
     twitter: {
       card: "summary",
-      title: `${operator.name} - Train Operator | Rail Radar`,
+      title: `${title} | Rail Radar`,
       description,
       images: [
         {
           url: "/assets/social/operators.webp",
           width: 1200,
           height: 630,
-          alt: "Rail Radar - Train operator directory across Europe",
+          alt: "Rail Radar - Rail operator directory across Europe",
         },
       ],
     },
@@ -149,11 +169,20 @@ function getRelatedOperators(operator: Operator): Operator[] {
     }
   }
 
-  return [...sameCountry, ...crossCountry].slice(0, 4);
+  // Within each group, operators of the same kind first: a metro is closer to the
+  // city's trams than to the national railway, so metro and light rail count as one.
+  const modes = (o: Operator) =>
+    o.operatorTypes.map((type) => (type === "light-rail" ? "metro" : type));
+  const sharesType = (b: Operator) =>
+    modes(b).some((mode) => modes(operator).includes(mode)) ? 0 : 1;
+  const byType = (a: Operator, b: Operator) => sharesType(a) - sharesType(b);
+
+  return [...sameCountry.sort(byType), ...crossCountry.sort(byType)].slice(0, 4);
 }
 
-function OperatorPage({ slug }: { slug: string }) {
+function OperatorPage({ slug, network }: { slug: string; network: OperatorLinesData | null }) {
   const operator = operatorBySlug.get(slug);
+  const [hoveredLine, setHoveredLine] = useState<string | null>(null);
 
   if (!operator) {
     return null;
@@ -267,6 +296,22 @@ function OperatorPage({ slug }: { slug: string }) {
                 </>
               )}
             </div>
+            <div className="mt-3 flex flex-wrap gap-1.5">
+              {sortOperatorTypes(operator.operatorTypes).map((type) => (
+                <Link
+                  key={type}
+                  to="/operators"
+                  search={{ type }}
+                  className="inline-flex h-6 items-center gap-1.5 rounded-3xl py-0.5 pr-2.5 pl-1 text-xs font-medium transition-[filter] duration-150 ease-out hover:brightness-125"
+                  style={{
+                    backgroundColor: `color-mix(in oklab, ${operatorTypeColors[type]} 18%, transparent)`,
+                  }}
+                >
+                  <OperatorTypeMarker type={type} className="size-4.5" />
+                  {operatorTypeLabels[type]}
+                </Link>
+              ))}
+            </div>
           </div>
         </div>
 
@@ -297,6 +342,9 @@ function OperatorPage({ slug }: { slug: string }) {
               sizes="(max-width: 768px) calc(100vw - 32px), 848px"
               className="absolute inset-0 size-full object-cover"
             />
+            {network && network.tracks.length > 0 && (
+              <NetworkTracks tracks={network.tracks} highlighted={hoveredLine} />
+            )}
             <ExpandIcon className="absolute top-4 right-4 size-4 text-muted-foreground opacity-0 scale-95 transition-[transform,opacity] duration-200 ease-out group-hover/map:opacity-100 group-hover/map:scale-100" />
             <div className="absolute inset-x-0 bottom-0 bg-linear-to-t from-card/40 to-transparent p-4 pt-8">
               <h2 className="text-xs font-medium uppercase tracking-[0.15em] text-muted-foreground">
@@ -306,6 +354,15 @@ function OperatorPage({ slug }: { slug: string }) {
           </div>
         </Card>
       </Link>
+
+      {network && network.lines.length > 0 && (
+        <OperatorLines
+          lines={network.lines}
+          stations={network.stations}
+          onHover={setHoveredLine}
+          className="mb-6"
+        />
+      )}
 
       <div className="grid grid-cols-1 md:grid-cols-5 gap-6">
         <div className="md:col-span-3 space-y-6">
@@ -410,6 +467,7 @@ function OperatorPage({ slug }: { slug: string }) {
                       key={b.slug}
                       to="/operators/$slug"
                       params={{ slug: b.slug }}
+                      {...prerenderedPageLinkProps}
                       className="group/rel -mx-2.5 flex items-center gap-3 rounded-2xl px-2.5 py-2 transition-[background-color,transform] duration-150 ease-out lg:hover:bg-muted/50 active:scale-[0.98]"
                     >
                       <div className="flex size-8 shrink-0 items-center justify-center overflow-hidden rounded-2xl bg-background">
@@ -449,13 +507,141 @@ function OperatorPage({ slug }: { slug: string }) {
       <div className="sr-only">
         <h2>About {operator.name}</h2>
         <p>
-          {operator.name} is a train operator serving {formatCountryList(trackedCountries)}. View
-          trains operated by {operator.name} on Rail Radar, including real-time departures,
-          arrivals, delays, and platform information.{" "}
+          {operator.name} is a {operatorRole(operator.operatorTypes).toLowerCase()} serving{" "}
+          {formatCountryList(trackedCountries)}.{" "}
+          {operator.operatorTypes.includes("passenger") &&
+            `View trains operated by ${operator.name} on Rail Radar, including real-time departures, arrivals, delays, and platform information. `}
           {operator.serviceTypes.map((t) => serviceTypeLabels[t] ?? t).join(", ")} services
           available.
+          {network &&
+            network.lines.length > 0 &&
+            ` ${operator.name} runs ${network.lines.map((line) => line.name).join(", ")}.`}
         </p>
       </div>
     </div>
+  );
+}
+
+const lineModes = [
+  { type: "metro", marker: "metro" },
+  { type: "light", marker: "light-rail" },
+] as const;
+
+/** The operator's lines, drawn over its operating area like the line pages draw one line. */
+function NetworkTracks({
+  tracks,
+  highlighted,
+}: {
+  tracks: OperatorLinesData["tracks"];
+  highlighted: string | null;
+}) {
+  return (
+    <svg
+      viewBox="0 0 960 412"
+      preserveAspectRatio="xMidYMid slice"
+      className="absolute inset-0 size-full"
+      aria-hidden
+    >
+      {tracks.map((track) => (
+        <path
+          key={`casing-${track.id}`}
+          d={track.path}
+          fill="none"
+          stroke="#000"
+          strokeOpacity={highlighted && highlighted !== track.id ? 0.1 : 0.35}
+          strokeWidth={6}
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          className="transition-[stroke-opacity] duration-150"
+        />
+      ))}
+      {/* The highlighted line is drawn last so it sits on top of shared track. */}
+      {[...tracks]
+        .sort((a, b) => Number(a.id === highlighted) - Number(b.id === highlighted))
+        .map((track) => (
+          <path
+            key={track.id}
+            d={track.path}
+            fill="none"
+            stroke={track.color}
+            strokeOpacity={highlighted && highlighted !== track.id ? 0.25 : 1}
+            strokeWidth={highlighted === track.id ? 4.5 : 3}
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            className="transition-[stroke-opacity,stroke-width] duration-150"
+          />
+        ))}
+    </svg>
+  );
+}
+
+function OperatorLines({
+  lines,
+  stations,
+  onHover,
+  className,
+}: {
+  lines: DirectoryLine[];
+  stations: number;
+  onHover: (id: string | null) => void;
+  className?: string;
+}) {
+  const groups = lineModes
+    .map((mode) => ({ ...mode, lines: lines.filter((line) => line.type === mode.type) }))
+    .filter((group) => group.lines.length > 0);
+
+  return (
+    <Card size="sm" className={cn("gap-0 py-0", className)}>
+      <div className="flex items-baseline justify-between gap-3 px-4 pt-4 pb-3">
+        <h2 className="text-xs font-medium uppercase tracking-[0.15em] text-muted-foreground">
+          Lines
+        </h2>
+        <span className="text-xs tabular-nums text-muted-foreground">
+          {lines.length} line{lines.length === 1 ? "" : "s"} · {stations} station
+          {stations === 1 ? "" : "s"}
+        </span>
+      </div>
+      <div className="border-t border-foreground/5 p-1.5" onMouseLeave={() => onHover(null)}>
+        {groups.map((group) => (
+          <div key={group.type}>
+            {groups.length > 1 && (
+              <h3 className="flex items-center gap-1.5 px-2.5 pt-2 pb-1 text-xs font-medium text-muted-foreground">
+                <OperatorTypeMarker type={group.marker} className="size-4" />
+                {operatorTypeLabels[group.marker]}
+              </h3>
+            )}
+            <ul className={cn(group.lines.length > 3 && "md:columns-2 md:gap-1.5")}>
+              {group.lines.map((line) => (
+                <li key={line.id} className="break-inside-avoid">
+                  <Link
+                    to="/lines/$id"
+                    params={{ id: line.id }}
+                    {...prerenderedPageLinkProps}
+                    onMouseEnter={() => onHover(line.id)}
+                    onFocus={() => onHover(line.id)}
+                    onBlur={() => onHover(null)}
+                    className="group flex items-center gap-3 rounded-2xl px-2.5 py-2 transition-colors duration-150 lg:hover:bg-muted/60"
+                  >
+                    <LineBadge line={line} />
+                    <span className="min-w-0 flex-1 truncate text-sm">
+                      {line.routeCodes.length
+                        ? `${line.name} · ${line.routeCodes.join(" / ")}`
+                        : line.loop
+                          ? `Circle line via ${line.from}`
+                          : `${line.from} – ${line.to}`}
+                    </span>
+                    <span className="shrink-0 text-xs tabular-nums text-muted-foreground">
+                      {line.stations}
+                      <span className="sr-only"> stations</span>
+                    </span>
+                    <ChevronRightIcon className="size-4 shrink-0 text-muted-foreground/60 transition-transform duration-150 lg:group-hover:translate-x-0.5" />
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </div>
+    </Card>
   );
 }

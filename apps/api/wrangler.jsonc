@@ -8,11 +8,19 @@
   },
   "observability": {
     "enabled": true,
+    "issues": {
+      "enabled": true,
+    },
     "head_sampling_rate": 1,
     "traces": {
       "enabled": true,
       "head_sampling_rate": 0.2,
     },
+  },
+  "assets": {
+    "directory": "../../packages/data/src/lines",
+    "binding": "ASSETS",
+    "run_worker_first": true,
   },
   "routes": [
     {
@@ -30,8 +38,16 @@
       },
     },
     {
+      "name": "STATION_RATE_LIMITER",
+      "namespace_id": "1002",
+      "simple": {
+        "limit": 20,
+        "period": 60,
+      },
+    },
+    {
       "name": "MAP_GENERATION_RATE_LIMITER",
-      "namespace_id": "1006",
+      "namespace_id": "1003",
       "simple": {
         "limit": 5,
         "period": 60,

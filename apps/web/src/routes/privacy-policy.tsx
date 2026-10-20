@@ -24,7 +24,7 @@ function PrivacyPolicyPage() {
         Back to Rail Radar
       </Link>
       <h1 className="mb-8 text-3xl font-semibold">Privacy Policy</h1>
-      <p className="mb-4 text-sm text-muted-foreground">Last updated: September 27, 2026</p>
+      <p className="mb-4 text-sm text-muted-foreground">Last updated: October 19, 2026</p>
 
       <div className="space-y-8 leading-relaxed text-muted-foreground">
         <section>
@@ -32,7 +32,8 @@ function PrivacyPolicyPage() {
           <p>
             Welcome to Rail Radar (&quot;we&quot;, &quot;us&quot;, &quot;our&quot;). This Privacy
             Policy explains how we collect, use, and protect your information when you use our
-            website at railradar24.com (the &quot;Service&quot;).
+            website at railradar24.com and its API (the &quot;Service&quot;), including station
+            boards, line and operator directories, network maps, and mobile app signup forms.
           </p>
         </section>
 
@@ -47,42 +48,72 @@ function PrivacyPolicyPage() {
           </p>
           <ul className="ml-6 list-disc space-y-1">
             <li>
-              A hashed representation of your IP address for station-visit analytics and abuse
-              prevention (we do not store your raw IP address in our own analytics dataset)
+              Your IP address to serve requests and enforce API, station-board, and signup rate
+              limits. Station-visit analytics store a hashed representation rather than your raw IP
+              address; infrastructure providers may separately process raw IP addresses
             </li>
             <li>Browser type and version</li>
-            <li>Pages visited and time spent on pages</li>
+            <li>
+              Pages visited, including station, line, and operator pages, page URLs and query
+              parameters, and page timing information
+            </li>
             <li>Referring website</li>
             <li>Device type and operating system</li>
             <li>Approximate country, network speed, and Web Vitals performance measurements</li>
             <li>Stations viewed, including the type of data requested (arrivals or departures)</li>
+            <li>
+              Provider response times, success or error status, and the station and board type
+              requested, to monitor live-data reliability
+            </li>
           </ul>
+          <p className="mt-3">
+            Hashed IP addresses are pseudonymous identifiers, not a guarantee of anonymity. We use
+            station-visit counts to produce aggregate statistics such as trending stations.
+          </p>
 
           <h3 className="mb-2 mt-4 text-lg font-medium text-foreground">2.2 Local Storage</h3>
           <p className="mb-3">
-            We use your browser&apos;s local storage to save preferences on your device. This data
-            is not transmitted to our servers and includes:
+            We use your browser&apos;s local storage to keep the following on your device:
           </p>
           <ul className="ml-6 list-disc space-y-1">
-            <li>Recently viewed stations (up to 3 station IDs)</li>
-            <li>Saved/bookmarked stations (up to 7 station IDs)</li>
-            <li>Map layer preferences (station types and layer visibility settings)</li>
+            <li>Recently viewed stations (up to 3, including station details and coordinates)</li>
+            <li>Saved/bookmarked stations (up to 7, including station details and coordinates)</li>
+            <li>
+              Your last device location and the time it was saved, with a 24-hour validity period
+            </li>
+            <li>Whether you have dismissed an announcement banner</li>
           </ul>
+          <p className="mt-3">
+            We do not sync your saved or recent station lists to an account or upload them as lists.
+            Viewing a station still generates the requests and analytics described above. Search
+            terms, selected stations, directory filters, and map position may also appear in page
+            URLs, browser history, shared links, request logs, and pageview analytics.
+          </p>
 
           <h3 className="mb-2 mt-4 text-lg font-medium text-foreground">2.3 Geolocation</h3>
           <p>
             The Service may request access to your device&apos;s location to center the map on your
-            position. This is entirely optional and only activated when you use the &quot;locate
-            me&quot; feature. Your location data is used locally in the browser and is not sent to
-            our servers.
+            position, either when the map opens or when you use the &quot;locate me&quot; feature.
+            Access is optional and controlled by your browser&apos;s permission settings. If you
+            allow it, we cache your last location on your device for reuse for up to 24 hours. Map
+            coordinates may be added to the page URL and included in pageview analytics, and Mapbox
+            receives requests for the area you view. Location information is therefore not confined
+            to local storage. You can revoke location permission in your browser and clear the
+            stored location by clearing this site&apos;s data.
           </p>
 
-          <h3 className="mb-2 mt-4 text-lg font-medium text-foreground">2.4 Android Beta Signup</h3>
+          <h3 className="mb-2 mt-4 text-lg font-medium text-foreground">2.4 Mobile App Signup</h3>
           <p>
             If you sign up for the Android beta, we store the email address you enter. We use it to
             add your Google account to the closed test on Google Play and to email you about the
             beta, your invite, any promo code, and the app&apos;s launch. To have your email
             removed, reply to any beta email or contact us.
+          </p>
+          <p className="mt-2">
+            If you join the iPhone waitlist, we add your email to a separate list from the Android
+            beta and use it to notify you about iPhone availability, the beta, and the launch. The
+            iPhone app is not currently available. To have your email removed, reply to any waitlist
+            email or contact us.
           </p>
         </section>
 
@@ -96,7 +127,9 @@ function PrivacyPolicyPage() {
             <li>Analyze usage patterns to improve the Service (e.g., trending stations)</li>
             <li>Monitor and prevent technical issues</li>
             <li>Enforce rate limits to protect the Service from abuse</li>
-            <li>Send emails about the Android beta to people who sign up for it</li>
+            <li>
+              Send mobile app beta, availability, and launch emails to people who sign up for them
+            </li>
           </ul>
         </section>
 
@@ -105,32 +138,87 @@ function PrivacyPolicyPage() {
           <p className="mb-3">We use the following third-party services:</p>
           <ul className="ml-6 list-disc space-y-2">
             <li>
-              <strong className="text-foreground">PostHog (EU)</strong> &mdash; for website
-              analytics and Web Vitals performance monitoring using anonymized, cookieless data
-              points that are not tied to individual visitors. Data is processed and stored on
-              PostHog&apos;s EU infrastructure and is routed through our own domain
-              (t.railradar24.com)
+              <a
+                href="https://posthog.com/privacy"
+                className="font-semibold text-foreground underline"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                PostHog (EU)
+              </a>{" "}
+              &mdash; for website analytics and Web Vitals performance monitoring. The SDK uses
+              in-memory identifiers that can associate events while a page is open, without
+              persisting analytics identifiers in cookies or browser storage. Session recording and
+              automatic click capture are disabled. Analytics requests are routed through our domain
+              (t.railradar24.com) to PostHog&apos;s EU infrastructure
             </li>
             <li>
-              <strong className="text-foreground">Mapbox</strong> &mdash; for interactive map
-              rendering and static map images (may collect IP addresses, coordinates, and map
-              interaction data)
+              <a
+                href="https://www.mapbox.com/legal/privacy"
+                className="font-semibold text-foreground underline"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Mapbox
+              </a>{" "}
+              &mdash; for interactive map rendering and static map images (may collect IP addresses,
+              coordinates, and map interaction data)
             </li>
             <li>
-              <strong className="text-foreground">Cloudflare</strong> &mdash; for hosting the
-              website and API on Cloudflare Workers, serving static assets, security and rate
-              limiting, storing station photos in an EU R2 bucket, and storing operational analytics
-              in Analytics Engine. As our infrastructure provider, Cloudflare may process request
-              information such as IP addresses in accordance with its privacy policy
+              <a
+                href="https://www.cloudflare.com/privacypolicy/"
+                className="font-semibold text-foreground underline"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Cloudflare
+              </a>{" "}
+              &mdash; for hosting the website and API on Cloudflare Workers, serving static assets,
+              security and rate limiting, storing station photos in an EU R2 bucket, and storing
+              operational analytics in Analytics Engine. As our infrastructure provider, Cloudflare
+              may process request information such as IP addresses in accordance with its privacy
+              policy
             </li>
             <li>
-              <strong className="text-foreground">Resend</strong> &mdash; for storing Android beta
-              signups and sending beta emails. Resend processes your email address and email
-              delivery data, such as opens and bounces, in accordance with its privacy policy
+              <a
+                href="https://resend.com/legal/privacy-policy"
+                className="font-semibold text-foreground underline"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Resend
+              </a>{" "}
+              &mdash; for storing mobile app signups and sending beta emails. Resend processes your
+              email address and email delivery data, such as opens and bounces, in accordance with
+              its privacy policy
             </li>
             <li>
-              <strong className="text-foreground">Fontsource</strong> &mdash; font files are bundled
-              and self-hosted with the app; browsers do not request fonts from a third-party font
+              <strong className="text-foreground">Transit data providers</strong> &mdash; live
+              station boards are fetched by our API from the providers listed in our{" "}
+              <Link to="/terms-of-service" className="text-foreground underline">
+                Terms of Service
+              </Link>
+              . Requests are made by our servers and include the requested station and timetable
+              information. We do not forward your browser&apos;s IP address, saved stations, or
+              device location to transit data providers
+            </li>
+            <li>
+              <strong className="text-foreground">Polar</strong> &mdash; if you choose to support
+              Rail Radar, you leave our site for Polar&apos;s checkout. Polar and its payment
+              providers process contact, billing, and payment information under{" "}
+              <a
+                href="https://polar.sh/legal/privacy-policy"
+                className="text-foreground underline"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Polar&apos;s Privacy Policy
+              </a>
+              . Payment card details are entered in the external checkout
+            </li>
+            <li>
+              <strong className="text-foreground">Fonts</strong> &mdash; font files are bundled and
+              self-hosted with the app; browsers do not request fonts from a third-party font
               service when loading the Service
             </li>
           </ul>
@@ -144,21 +232,42 @@ function PrivacyPolicyPage() {
           <h2 className="mb-3 text-xl font-semibold text-foreground">5. Cookies</h2>
           <p>
             We do not use our own cookies for tracking purposes. PostHog is configured in a
-            cookieless, anonymous mode (in-memory session storage, with no visitor identification).
-            Some third-party services integrated into our Service, particularly infrastructure or
-            map providers, may use cookies or similar technologies as described in their own privacy
-            policies.
+            cookieless mode with in-memory identifiers, as described above. Local storage is used
+            for the features listed in Section 2.2. Some third-party services integrated into our
+            Service, particularly infrastructure or map providers, may use cookies or similar
+            technologies as described in their own privacy policies.
           </p>
         </section>
 
         <section>
           <h2 className="mb-3 text-xl font-semibold text-foreground">6. Data Retention</h2>
+          <p className="mb-3">
+            Station-visit analytics (containing hashed IP addresses and station metadata) and
+            provider reliability metrics are stored in Cloudflare Analytics Engine, which currently
+            retains data for{" "}
+            <a
+              href="https://developers.cloudflare.com/analytics/analytics-engine/limits/"
+              className="text-foreground underline"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              three months
+            </a>
+            . Cloudflare may also retain operational request data according to its policies and our
+            account settings. PostHog event data is retained according to our project settings and
+            its retention policies; using in-memory browser identifiers does not delete events
+            already received by PostHog.
+          </p>
+          <p className="mb-3">
+            Mobile app signup emails are stored in Resend while you remain on the relevant beta or
+            waitlist. You can request removal by replying to an email or contacting us. Email
+            delivery records are subject to Resend&apos;s retention policies, and supporter payment
+            records are subject to Polar&apos;s policies and applicable legal requirements.
+          </p>
           <p>
-            Station visit analytics (containing hashed IP addresses and station metadata) are stored
-            in Cloudflare Analytics Engine in accordance with Cloudflare&apos;s retention policies.
-            Cloudflare may also retain operational request data according to its policies and our
-            account settings. We do not maintain a separate database of personal user information.
-            Local storage data remains on your device until you clear your browser data.
+            Saved and recent stations and banner preferences remain on your device until you remove
+            them or clear site data. Cached device locations are treated as expired after 24 hours
+            and removed when next read; clearing site data removes them sooner.
           </p>
         </section>
 
@@ -174,8 +283,11 @@ function PrivacyPolicyPage() {
             <li>Data portability</li>
           </ul>
           <p className="mt-3">
-            Since we hash IP addresses before storage, we may not be able to identify your specific
-            data. To exercise any of these rights, please contact us using the information below.
+            We may not be able to identify particular analytics events from hashed IP addresses or
+            temporary browser identifiers. This does not affect your right to contact us about your
+            data, including signup emails. To exercise your rights or withdraw from a signup list,
+            please contact us using the information below. You may also lodge a complaint with your
+            data protection authority.
           </p>
         </section>
 
