@@ -177,9 +177,6 @@ const QuickActions = memo(function QuickActions({ station }: { station: Station 
   const saved = isSaved(station.id);
   const ShareIcon = Platform.OS === "ios" ? Share : Share2;
   const isRail = station.type === "rail";
-  // Saving is for live boards, which only train stations have. A stop saved before still shows
-  // the button, so it can be removed.
-  const canSave = isRail || saved;
 
   function toggleSavedStation() {
     if (saved) haptics.toggleOff();
@@ -198,27 +195,25 @@ const QuickActions = memo(function QuickActions({ station }: { station: Station 
     ).catch(() => {});
   }
 
-  if (!canSave && !station.geo) return null;
   return (
     <View className="mt-3 flex-row gap-2">
-      {canSave ? (
-        <Button
-          accessibilityLabel={saved ? "Remove from saved stations" : "Save station"}
-          accessibilityState={{ selected: saved }}
-          className="flex-1"
-          isDisabled={!station.geo}
-          size="sm"
-          variant={saved ? "secondary" : "tertiary"}
-          onPress={toggleSavedStation}
-        >
-          <Bookmark
-            size={16}
-            color={saved ? accentColor : foregroundColor}
-            fill={saved ? accentColor : "none"}
-          />
-          <Button.Label>{saved ? "Saved" : "Save"}</Button.Label>
-        </Button>
-      ) : null}
+      {/* Stops can be saved too, for their lines and to find them again. */}
+      <Button
+        accessibilityLabel={saved ? "Remove from saved stations" : "Save station"}
+        accessibilityState={{ selected: saved }}
+        className="flex-1"
+        isDisabled={!station.geo}
+        size="sm"
+        variant={saved ? "secondary" : "tertiary"}
+        onPress={toggleSavedStation}
+      >
+        <Bookmark
+          size={16}
+          color={saved ? accentColor : foregroundColor}
+          fill={saved ? accentColor : "none"}
+        />
+        <Button.Label>{saved ? "Saved" : "Save"}</Button.Label>
+      </Button>
       {station.geo ? (
         <Button
           className="flex-1"
