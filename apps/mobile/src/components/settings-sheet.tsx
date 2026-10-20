@@ -23,6 +23,7 @@ import MapPinX from "lucide-react-native/icons/map-pin-x";
 import Moon from "lucide-react-native/icons/moon";
 import Palette from "lucide-react-native/icons/palette";
 import History from "lucide-react-native/icons/rotate-ccw-clock";
+import Route from "lucide-react-native/icons/route";
 import Shield from "lucide-react-native/icons/shield";
 import Smartphone from "lucide-react-native/icons/smartphone";
 import Sun from "lucide-react-native/icons/sun";
@@ -43,6 +44,7 @@ import {
 import { PageSheetHandle } from "@/components/page-sheet-handle";
 import { SheetHeader, SheetHeaderFade, useSheetScrollOffset } from "@/components/sheet-header";
 import { RowSeparator, SectionTitle } from "@/components/station-list";
+import { clearSavedLines, useSavedLines } from "@/hooks/use-saved-lines";
 import { resetStations, useStationsDownloadedAt } from "@/hooks/use-stations-url";
 import {
   clearRecentStations,
@@ -244,6 +246,7 @@ async function clearCache() {
 function DataRows() {
   const recentStations = useRecentStations();
   const { savedStations } = useSavedStations();
+  const { savedLines } = useSavedLines();
   const stationsDownloadedAt = useStationsDownloadedAt();
   const { show: confirm, dialogProps } = useAppDialog();
   // Read when the settings open, which mounts this; nothing else changes it meanwhile.
@@ -283,6 +286,24 @@ function DataRows() {
                 ? "Your saved station will be removed."
                 : `All ${savedStations.length} saved stations will be removed.`,
             action: { label: "Clear", onConfirm: clearSavedStations },
+          })
+        }
+      />
+      <RowSeparator />
+      <Row
+        icon={Route}
+        title="Clear saved lines"
+        suffix={savedLines.length > 0 ? <Status>{savedLines.length}</Status> : null}
+        isDisabled={savedLines.length === 0}
+        isDestructive
+        onPress={() =>
+          confirm({
+            title: "Clear saved lines?",
+            message:
+              savedLines.length === 1
+                ? "Your saved line will be removed."
+                : `All ${savedLines.length} saved lines will be removed.`,
+            action: { label: "Clear", onConfirm: clearSavedLines },
           })
         }
       />
