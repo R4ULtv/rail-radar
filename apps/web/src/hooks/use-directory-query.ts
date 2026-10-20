@@ -20,20 +20,32 @@ export function useDirectoryQuery(
   const deferredQuery = useDeferredValue(query);
   const inputRef = useRef<HTMLInputElement>(null);
   const syncUrlRef = useRef(syncUrl);
+  const pendingUrlQueries = useRef<(string | undefined)[]>([]);
 
   useEffect(() => {
     syncUrlRef.current = syncUrl;
   });
 
   useEffect(() => {
-    // The page is prerendered without a query string, so it's seeded after hydration.
-    if (hydrated) setQuery(urlQuery ?? "");
-    // Only seed from the URL once; afterwards the input is the source of truth.
-  }, [hydrated]);
+    if (!hydrated) return;
+    // Our debounced navigation may finish after more typing. Its echo must not
+    // replace the newer input, while other navigation should seed the search box.
+    const pending = pendingUrlQueries.current;
+    const index = pending.indexOf(urlQuery);
+    if (index !== -1) {
+      pending.splice(0, index + 1);
+      return;
+    }
+    pending.length = 0;
+    setQuery(urlQuery ?? "");
+  }, [hydrated, urlQuery]);
 
   useEffect(() => {
     if (!hydrated || (query || undefined) === urlQuery) return;
-    const timer = setTimeout(() => syncUrlRef.current(query || undefined), URL_SYNC_DELAY);
+    const timer = setTimeout(() => {
+      pendingUrlQueries.current.push(query || undefined);
+      syncUrlRef.current(query || undefined);
+    }, URL_SYNC_DELAY);
     return () => clearTimeout(timer);
   }, [hydrated, query, urlQuery]);
 
