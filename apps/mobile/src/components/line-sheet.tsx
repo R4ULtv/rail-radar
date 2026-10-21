@@ -40,6 +40,7 @@ import { LineBadge } from "@/components/line-badge";
 import {
   useSheetBottomInset,
   useSheetTopInset,
+  type SheetCloseAction,
   type SheetPosition,
 } from "@/components/map-controls";
 import {
@@ -77,9 +78,6 @@ const minStepGap = 80;
 // Between the pinned header and the first stop.
 const stopsTopSpacing = 8;
 const skeletonStopCount = 6;
-// A stop row at the default text size, and how many show above a stop the list scrolls to.
-const stopRowHeight = 44;
-const stopsAboveFocus = 2;
 
 function LineSubtitle({ line }: { line: Line }) {
   const stopCount = getLineStopCount(line);
@@ -239,17 +237,20 @@ function BranchPicker({
   );
 }
 
-/** The strip in the line's color down the side of the stops, with each stop's dot on it. */
+/**
+ * The strip in the line's color down the side of the stops, with each stop's dot on it. The
+ * termini and the stop the line was opened from have a bigger one.
+ */
 function StopStrip({
   color,
   isFirst,
   isLast,
-  isTerminus,
+  isBig,
 }: {
   color: string;
   isFirst: boolean;
   isLast: boolean;
-  isTerminus: boolean;
+  isBig: boolean;
 }) {
   const surfaceColor = useThemeColor("surface");
   return (
@@ -262,7 +263,7 @@ function StopStrip({
       />
       <View
         style={[
-          isTerminus ? styles.terminusDot : styles.stopDot,
+          isBig ? styles.bigDot : styles.stopDot,
           { borderColor: color, backgroundColor: surfaceColor },
         ]}
       />
@@ -333,7 +334,12 @@ const LineStop = memo(function LineStop({
       className="flex-row px-4 active:bg-surface-tertiary"
       onPress={() => onSelect(station)}
     >
-      <StopStrip color={color} isFirst={isFirst} isLast={isLast} isTerminus={isTerminus} />
+      <StopStrip
+        color={color}
+        isFirst={isFirst}
+        isLast={isLast}
+        isBig={isTerminus || isHighlighted}
+      />
       <View className="ml-3 min-h-11 flex-1 flex-row items-center gap-2 py-1.5">
         <Text
           className={`flex-1 text-sm text-foreground ${isHighlighted ? "font-semibold" : isTerminus ? "font-medium" : ""}`}
@@ -347,7 +353,7 @@ const LineStop = memo(function LineStop({
   );
 });
 
-/** Dots down the strip where stops are left out; pressing them shows every stop. */
+/** Dots down the strip where stops are left out; pressing them shows those stops. */
 function HiddenStopsRow({
   count,
   color,
@@ -388,7 +394,7 @@ function StopsSkeleton({ color }: { color: string }) {
             color={color}
             isFirst={index === 0}
             isLast={index === skeletonStopCount - 1}
-            isTerminus={index === 0}
+            isBig={index === 0}
           />
           <View className="ml-3 min-h-11 flex-1 justify-center">
             <Skeleton
@@ -452,13 +458,14 @@ function LineSheetContent({
   // dots expands on its own, so the stops around that one stay where they are.
   const [expandedGaps, setExpandedGaps] = useState<ReadonlySet<string>>(() => new Set());
   const { expand: expandSheet } = useBottomSheet();
-  // Stops shown above the stop the line was opened from push it down, so the list follows it.
-  const [isFollowingFocus, setIsFollowingFocus] = useState(false);
+  // Dots above the stop the line was opened from wait for the top step to show their stops: the
+  // list only scrolls there, which it does to keep that stop still as they're added above it.
+  const [pendingGap, setPendingGap] = useState<number | null>(null);
   const [headerHeight, setHeaderHeight] = useState(0);
   const [scrollRef, scrollOffset] = useSheetScrollOffset<FlatList<ListItem>>();
   const route = line.routes[branch] ?? line.routes[0];
 
-  const stops = useMemo(() => {
+  const list = useMemo(() => {
     if (!route || !stationsById) return null;
     const stations = getRouteStops(route, stationsById);
     const toItem = (index: number): StopItem => ({
@@ -469,42 +476,45 @@ function LineSheetContent({
       isFirst: index === 0,
       isLast: index === stations.length - 1,
     });
+    // Among the stops the stations know, like the gaps' positions.
     const focusIndex = stations.findIndex(({ id }) => id === fromStationId);
-    return collapseStops(stations.length, focusIndex).flatMap((entry): ListItem[] => {
+    const items = collapseStops(stations.length, focusIndex).flatMap((entry): ListItem[] => {
       if (typeof entry === "number") return [toItem(entry)];
       if (expandedGaps.has(`${branch}:${entry.from}`)) {
         return Array.from({ length: entry.count }, (_, offset) => toItem(entry.from + offset));
       }
       return [{ type: "gap", key: `gap-${entry.from}`, from: entry.from, count: entry.count }];
     });
+    const focusItemIndex = items.findIndex(
+      (item) => item.type === "stop" && item.station.id === fromStationId,
+    );
+    return { items, focusIndex, focusItemIndex };
   }, [route, stationsById, fromStationId, expandedGaps, branch]);
+  const stops = list?.items ?? null;
+  const focusIndex = list?.focusIndex ?? -1;
+  const focusItemIndex = list?.focusItemIndex ?? -1;
+
+  const showGap = useCallback(
+    (from: number) => setExpandedGaps((gaps) => new Set(gaps).add(`${branch}:${from}`)),
+    [branch],
+  );
 
   // Taller too, since the stops are what the dots were tapped for.
   const expandGap = useCallback(
     (from: number) => {
       haptics.tap();
-      setExpandedGaps((gaps) => new Set(gaps).add(`${branch}:${from}`));
-      const focusIndex = route?.stations.indexOf(fromStationId ?? "") ?? -1;
-      if (from < focusIndex) setIsFollowingFocus(true);
+      if (from < focusIndex && !isExtended) setPendingGap(from);
+      else showGap(from);
       expandSheet();
     },
-    [branch, route, fromStationId, expandSheet],
+    [focusIndex, isExtended, showGap, expandSheet],
   );
 
-  // Once the sheet is tall enough to scroll, with the stops before it in view.
   useEffect(() => {
-    if (!isFollowingFocus || !isExtended || !stops) return;
-    setIsFollowingFocus(false);
-    const index = stops.findIndex(
-      (item) => item.type === "stop" && item.station.id === fromStationId,
-    );
-    if (index === -1) return;
-    scrollRef.current?.scrollToIndex({
-      index,
-      viewOffset: headerHeight + stopsTopSpacing + stopsAboveFocus * stopRowHeight,
-      animated: true,
-    });
-  }, [isFollowingFocus, isExtended, stops, fromStationId, headerHeight, scrollRef]);
+    if (pendingGap === null || !isExtended) return;
+    setPendingGap(null);
+    showGap(pendingGap);
+  }, [pendingGap, isExtended, showGap]);
 
   const renderItem = useCallback(
     ({ item }: ListRenderItemInfo<ListItem>) =>
@@ -552,9 +562,10 @@ function LineSheetContent({
         keyExtractor={itemKey}
         renderItem={renderItem}
         initialNumToRender={16}
-        // Stops further down than the rendered ones have no measured position yet.
-        onScrollToIndexFailed={({ index, averageItemLength }) =>
-          scrollRef.current?.scrollToOffset({ offset: index * averageItemLength, animated: true })
+        // Stops shown above the one the line was opened from scroll the list by as much, so it
+        // stays where it was.
+        maintainVisibleContentPosition={
+          focusItemIndex >= 0 ? { minIndexForVisible: focusItemIndex } : undefined
         }
         removeClippedSubviews={false}
         contentContainerStyle={{
@@ -607,13 +618,18 @@ function LineError({
 
 interface LineSheetProps {
   line: Line;
+  /**
+   * Changes each time the line is opened afresh, which starts its sheet over. The same key when
+   * it's opened again shows it as it was left, e.g. coming back from one of its stops.
+   */
+  openKey: number;
   isOpen: boolean;
   /** The station GeoJSON the map shows, which names the line's stops. */
   stationsUrl: string | null;
   fromStationId: string | null;
   branch: number;
   onBranchChange: (branch: number) => void;
-  onOpenChange: (isOpen: boolean) => void;
+  onClose: (action: SheetCloseAction) => void;
   onSelectStation: (station: Station) => void;
   /** Where the sheet is, for the map controls that sit above it. */
   position: SheetPosition;
@@ -622,12 +638,13 @@ interface LineSheetProps {
 /** A metro or light rail line: its stops in order, from the data bundled with the app. */
 export function LineSheet({
   line,
+  openKey,
   isOpen,
   stationsUrl,
   fromStationId,
   branch,
   onBranchChange,
-  onOpenChange,
+  onClose,
   onSelectStation,
   position,
 }: LineSheetProps) {
@@ -645,27 +662,34 @@ export function LineSheet({
   // The sheet mounts open, since calls made before it has measured itself are dropped.
   const [initialIndex] = useState(isOpen ? 0 : -1);
   const isMounted = useRef(false);
+  // The step it was last open at, and for which opening.
+  const lastStep = useRef({ openKey, index: 0 });
 
-  // Opens at the middle step on every line, including when picking another one.
+  // A fresh opening starts at the middle step; coming back goes to the step it was left at, since
+  // its list keeps its scroll and only scrolls at the top step.
   useEffect(() => {
     if (!isMounted.current) {
       isMounted.current = true;
       return;
     }
-    if (isOpen) sheetRef.current?.snapToIndex(0);
-    else sheetRef.current?.close();
-  }, [isOpen, line.id]);
+    if (!isOpen) {
+      sheetRef.current?.close();
+      return;
+    }
+    const isReturning = lastStep.current.openKey === openKey;
+    sheetRef.current?.snapToIndex(isReturning ? lastStep.current.index : 0);
+  }, [isOpen, openKey]);
 
   // Android back shrinks the sheet back to its middle step, then closes it.
   useEffect(() => {
     if (!isOpen) return;
     const subscription = BackHandler.addEventListener("hardwareBackPress", () => {
       if (index > 0) sheetRef.current?.snapToIndex(0);
-      else onOpenChange(false);
+      else onClose("back");
       return true;
     });
     return () => subscription.remove();
-  }, [isOpen, index, onOpenChange]);
+  }, [isOpen, index, onClose]);
 
   return (
     <BottomSheet
@@ -683,13 +707,14 @@ export function LineSheet({
       handleIndicatorStyle={{ backgroundColor: mutedColor }}
       onChange={(next) => {
         setIndex(next);
-        if (next === -1 && isOpen) onOpenChange(false);
+        if (next >= 0) lastStep.current = { openKey, index: next };
+        if (next === -1 && isOpen) onClose("dismiss");
       }}
     >
       <ErrorBoundary
-        key={`${line.id}:${fromStationId}`}
+        key={openKey}
         fallback={(reset) => (
-          <LineError line={line} onRetry={reset} onClose={() => onOpenChange(false)} />
+          <LineError line={line} onRetry={reset} onClose={() => onClose("back")} />
         )}
       >
         <LineSheetContent
@@ -699,7 +724,7 @@ export function LineSheet({
           branch={branch}
           isExtended={index === (hasMiddleStep ? 1 : 0)}
           onBranchChange={onBranchChange}
-          onClose={() => onOpenChange(false)}
+          onClose={() => onClose("back")}
           onSelectStation={onSelectStation}
           onContentHeightChange={setContentHeight}
         />
@@ -715,6 +740,6 @@ const styles = StyleSheet.create({
   gapDot: { width: 4, height: 4, borderRadius: 2 },
   stripBar: { position: "absolute", width: 6 },
   stopDot: { width: 12, height: 12, borderRadius: 6, borderWidth: 3 },
-  terminusDot: { width: 16, height: 16, borderRadius: 8, borderWidth: 4 },
+  bigDot: { width: 16, height: 16, borderRadius: 8, borderWidth: 4 },
   railIcon: { width: 18, height: 18 },
 });

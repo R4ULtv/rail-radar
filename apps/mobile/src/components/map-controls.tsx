@@ -155,6 +155,12 @@ export interface SheetPosition {
   animatedPosition: SharedValue<number>;
 }
 
+/**
+ * How a sheet was closed: its close button and Android's back button go back to whatever it was
+ * opened from, while swiping it away closes that too.
+ */
+export type SheetCloseAction = "back" | "dismiss";
+
 /** Starts closed: index -1, at the bottom of the screen. */
 export function useSheetPosition(): SheetPosition {
   const { height } = useWindowDimensions();

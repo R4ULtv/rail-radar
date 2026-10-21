@@ -264,8 +264,12 @@ const lineCasingWidth: LineLayerStyle["lineWidth"] = [
  * `StationLayers`, like the railway lines.
  */
 export function LineTracks({ url, lineIds }: { url: string; lineIds: readonly string[] }) {
-  // The source stays mounted, so opening another line only changes the filter.
-  const filter = ["in", ["get", "id"], ["literal", lineIds]] as LayerFilter;
+  // The source stays mounted, so opening another line only changes the filter. Memoized, so the
+  // map only gets a new one when the lines change.
+  const filter = useMemo(
+    () => ["in", ["get", "id"], ["literal", lineIds]] as LayerFilter,
+    [lineIds],
+  );
   return (
     <Mapbox.ShapeSource id="lines-source" url={url}>
       <Mapbox.LineLayer

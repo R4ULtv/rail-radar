@@ -197,21 +197,20 @@ export interface HiddenStops {
 
 // A list this short shows every stop.
 const maxCollapsedStops = 7;
+const stopsAroundFocus = 2;
 
 /**
  * Which of a route's stops to show before the rest are expanded: the termini, and the stop the
- * line was opened from with the ones either side of it. Hiding a single stop saves no room, so
- * only runs of two or more are hidden.
+ * line was opened from with the two either side of it. A line opened from elsewhere shows all its
+ * stops. Hiding a single stop saves no room, so only runs of two or more are hidden.
  */
 export function collapseStops(stopCount: number, focusIndex: number): (number | HiddenStops)[] {
   const all = Array.from({ length: stopCount }, (_, index) => index);
-  if (stopCount <= maxCollapsedStops) return all;
+  if (focusIndex < 0 || stopCount <= maxCollapsedStops) return all;
 
   const shown = new Set([0, stopCount - 1]);
-  if (focusIndex >= 0) {
-    for (const index of [focusIndex - 1, focusIndex, focusIndex + 1]) {
-      if (index >= 0 && index < stopCount) shown.add(index);
-    }
+  for (let index = focusIndex - stopsAroundFocus; index <= focusIndex + stopsAroundFocus; index++) {
+    if (index >= 0 && index < stopCount) shown.add(index);
   }
   const kept = [...shown].sort((a, b) => a - b);
 

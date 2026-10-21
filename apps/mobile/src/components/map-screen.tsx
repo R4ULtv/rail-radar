@@ -7,6 +7,7 @@ import { Card } from "heroui-native/card";
 import { useThemeColor } from "heroui-native/hooks";
 import CircleAlert from "lucide-react-native/icons/circle-alert";
 import {
+  memo,
   useCallback,
   useEffect,
   useMemo,
@@ -31,6 +32,7 @@ import {
   useMapHeading,
   useSheetPosition,
   useSheetTopInset,
+  type SheetCloseAction,
 } from "@/components/map-controls";
 import { IntroSheet, useIntro } from "@/components/intro-sheet";
 import { LineSheet } from "@/components/line-sheet";
@@ -44,7 +46,7 @@ import {
   StationImages,
   StationLayers,
 } from "@/components/station-markers";
-import { middleStep, StationSheet } from "@/components/station-sheet";
+import { middleStep, StationSheet, type StationSheetStep } from "@/components/station-sheet";
 import { StatusBarBlur } from "@/components/status-bar-blur";
 import { UserLocationMarker } from "@/components/user-location-marker";
 import { useIsOnline } from "@/hooks/use-is-online";
@@ -89,6 +91,8 @@ const stationSheetClearance = 48;
 const lineBoundsPadding = 40;
 // Mapbox keeps the last camera padding, so moves that should be centered have to clear it.
 const noPadding = { paddingTop: 0, paddingBottom: 0, paddingLeft: 0, paddingRight: 0 };
+// How long the camera takes to move to a station, a line or the user.
+const cameraMoveDuration = 700;
 // The nearby button's errors are about one tap, so they go away on their own.
 const nearbyErrorDuration = 4000;
 
@@ -214,6 +218,45 @@ async function findAndOpenNearbyDepartures({
   }
 }
 
+interface LineLayersProps {
+  url: string;
+  lineIds: readonly string[];
+  stops: readonly Station[];
+  color: string | null;
+  /** How long the camera move that comes with other tracks takes. */
+  delay: number;
+}
+
+/**
+ * The tracks of the given lines, and the open branch's stops on them. Other tracks make Mapbox lay
+ * the lines out again, which drops frames from the camera move that comes with them, so they show
+ * once it's done. Hiding them, or another branch's stops, is at once. Its own component, so only
+ * these layers render again when they show.
+ */
+const LineLayers = memo(function LineLayers({
+  url,
+  lineIds,
+  stops,
+  color,
+  delay,
+}: LineLayersProps) {
+  const layers = useMemo(() => ({ lineIds, stops, color }), [lineIds, stops, color]);
+  const [shown, setShown] = useState(layers);
+
+  useEffect(() => {
+    const hasOtherTracks = lineIds.length > 0 && lineIds.join() !== shown.lineIds.join();
+    const timeout = setTimeout(() => setShown(layers), hasOtherTracks ? delay : 0);
+    return () => clearTimeout(timeout);
+  }, [layers, lineIds, shown, delay]);
+
+  return (
+    <>
+      <LineTracks url={url} lineIds={shown.lineIds} />
+      <LineStops stops={shown.stops} color={shown.color} />
+    </>
+  );
+});
+
 export function MapScreen() {
   const insets = useSafeAreaInsets();
   const sheetTopInset = useSheetTopInset();
@@ -225,13 +268,19 @@ export function MapScreen() {
   const stationsUrl = useStationsUrl();
   const [selectedStation, setSelectedStation] = useState<Station | null>(null);
   const [sheetOpen, setSheetOpen] = useState(false);
-  // The open line, the station it was opened from, which its sheet goes back to, and the
-  // branch it shows.
+  // The step the station sheet opens at, and the one it's resting at.
+  const [stationOpenStep, setStationOpenStep] = useState<StationSheetStep>("peek");
+  const stationStep = useRef<StationSheetStep>("peek");
+  // The open line, the station it was opened from, which its sheet goes back to at the step it
+  // was left at, and the branch it shows. Each opening has its own key, so its sheet starts over.
   const [selectedLine, setSelectedLine] = useState<{
     line: Line;
     fromStation: Station | null;
+    fromStationStep: StationSheetStep;
     branch: number;
+    openKey: number;
   } | null>(null);
+  const lineOpenCount = useRef(0);
   const [lineSheetOpen, setLineSheetOpen] = useState(false);
   // A stop opened from the line's sheet, which goes back to the line when it's closed.
   const [stopFromLineId, setStopFromLineId] = useState<string | null>(null);
@@ -329,7 +378,7 @@ export function MapScreen() {
         zoomLevel: stationZoomLevels[station.type],
         padding: { ...noPadding, paddingBottom: Math.max(mapHeight.current - 2 * stationY, 0) },
         animationMode: "easeTo",
-        animationDuration: reduceMotion ? 0 : 700,
+        animationDuration: reduceMotion ? 0 : cameraMoveDuration,
       });
     },
     [getMiddleStepTop, reduceMotion],
@@ -343,6 +392,7 @@ export function MapScreen() {
       setNearbyStations([]);
       setNearbyError(null);
       setSelectedStation(station);
+      setStationOpenStep("peek");
       // Opened in the same update, so the first station sheet mounts already open.
       setSheetOpen(true);
       setLineSheetOpen(false);
@@ -374,7 +424,7 @@ export function MapScreen() {
             ...fitBounds(bounds, mapWidth.current, mapHeight.current, padding),
             padding,
             animationMode: "easeTo",
-            animationDuration: reduceMotion ? 0 : 700,
+            animationDuration: reduceMotion ? 0 : cameraMoveDuration,
           });
         })
         .catch(() => {});
@@ -388,10 +438,15 @@ export function MapScreen() {
       haptics.tap();
       hasMovedMap.current = true;
       stopFollowing();
+      // Its station comes back at the step it was left at.
+      const fromStationStep = fromStation ? stationStep.current : "peek";
+      if (fromStation) setStationOpenStep(fromStationStep);
       setSelectedLine({
         line,
         fromStation,
+        fromStationStep,
         branch: getInitialBranch(line, fromStation?.id ?? null),
+        openKey: ++lineOpenCount.current,
       });
       setLineSheetOpen(true);
       setSheetOpen(false);
@@ -416,34 +471,36 @@ export function MapScreen() {
     [selectStation],
   );
 
-  const onLineSheetOpenChange = useCallback(
-    (isOpen: boolean) => {
-      setLineSheetOpen(isOpen);
-      if (isOpen) return;
+  const setStationStep = useCallback((step: StationSheetStep) => {
+    stationStep.current = step;
+  }, []);
+
+  const closeLineSheet = useCallback(
+    (action: SheetCloseAction) => {
+      setLineSheetOpen(false);
+      if (action !== "back" || !selectedLine?.fromStation) return;
       // Even after one of its stops was opened in between.
-      const fromStation = selectedLine?.fromStation;
-      if (fromStation) {
-        setSelectedStation(fromStation);
-        setSheetOpen(true);
-        centerOnStation(fromStation);
-      }
+      const { fromStation, fromStationStep } = selectedLine;
+      setSelectedStation(fromStation);
+      setStationOpenStep(fromStationStep);
+      setSheetOpen(true);
+      centerOnStation(fromStation);
     },
     [selectedLine, centerOnStation],
   );
 
-  const onStationSheetOpenChange = useCallback(
-    (isOpen: boolean) => {
-      if (isOpen) stopFollowing();
-      else setNearbyStations([]);
-      setSheetOpen(isOpen);
-      if (isOpen || !stopFromLineId) return;
+  const closeStationSheet = useCallback(
+    (action: SheetCloseAction) => {
+      setNearbyStations([]);
+      setSheetOpen(false);
+      if (!stopFromLineId) return;
       setStopFromLineId(null);
-      if (selectedLine && stopFromLineId === selectedStation?.id) {
+      if (action === "back" && selectedLine && stopFromLineId === selectedStation?.id) {
         setLineSheetOpen(true);
         fitLine(selectedLine.line);
       }
     },
-    [stopFollowing, stopFromLineId, selectedLine, selectedStation, fitLine],
+    [stopFromLineId, selectedLine, selectedStation, fitLine],
   );
 
   const changeLineBranch = useCallback(
@@ -559,7 +616,7 @@ export function MapScreen() {
       zoomLevel: centerOnLaunch ? userZoomLevel : undefined,
       padding: noPadding,
       animationMode: "easeTo",
-      animationDuration: centerOnLaunch || reduceMotion ? 0 : 700,
+      animationDuration: centerOnLaunch || reduceMotion ? 0 : cameraMoveDuration,
     });
   }, [userLocation, isMapLocked, reduceMotion]);
 
@@ -587,7 +644,7 @@ export function MapScreen() {
       zoomLevel: locateZoomLevel,
       padding: noPadding,
       animationMode: "easeTo",
-      animationDuration: reduceMotion ? 0 : 700,
+      animationDuration: reduceMotion ? 0 : cameraMoveDuration,
     });
   }, [locate, reduceMotion]);
 
@@ -690,10 +747,12 @@ export function MapScreen() {
             <RailwayLines isStreets={mapTheme.isStreets} />
             {linesUrl ? (
               <>
-                <LineTracks url={linesUrl} lineIds={visibleLineIds} />
-                <LineStops
+                <LineLayers
+                  url={linesUrl}
+                  lineIds={visibleLineIds}
                   stops={lineStops}
                   color={selectedLine ? getLineColor(selectedLine.line) : null}
+                  delay={reduceMotion ? 0 : cameraMoveDuration}
                 />
               </>
             ) : null}
@@ -772,7 +831,9 @@ export function MapScreen() {
           isOpen={sheetOpen}
           stationsUrl={stationsUrl}
           userLocation={userLocation}
-          onOpenChange={onStationSheetOpenChange}
+          openStep={stationOpenStep}
+          onStepChange={setStationStep}
+          onClose={closeStationSheet}
           onSelectStation={selectStation}
           onSelectLine={selectLineFromStation}
           position={stationSheetPosition}
@@ -782,12 +843,13 @@ export function MapScreen() {
       {selectedLine ? (
         <LineSheet
           line={selectedLine.line}
+          openKey={selectedLine.openKey}
           fromStationId={selectedLine.fromStation?.id ?? null}
           branch={selectedLine.branch}
           onBranchChange={changeLineBranch}
           isOpen={lineSheetOpen}
           stationsUrl={stationsUrl}
-          onOpenChange={onLineSheetOpenChange}
+          onClose={closeLineSheet}
           onSelectStation={selectStopFromLine}
           position={lineSheetPosition}
         />

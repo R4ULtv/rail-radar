@@ -56,6 +56,7 @@ import {
   NearbyIcon,
   useSheetBottomInset,
   useSheetTopInset,
+  type SheetCloseAction,
   type SheetPosition,
 } from "@/components/map-controls";
 import { ErrorBoundary } from "@/components/error-boundary";
@@ -86,6 +87,9 @@ const handleHeight = 24;
 const defaultStationPeekHeight = 300;
 // The step between the peek and the fully open sheet, as a share of the screen.
 export const middleStep = 0.6;
+
+/** Where the station sheet rests: its peek, the step in between, or as tall as it goes. */
+export type StationSheetStep = "peek" | "middle" | "top";
 // How much further the content has to go for that step to be worth a stop.
 const minStepGap = 80;
 // Long boards are cut short so the station details below them stay in reach.
@@ -893,7 +897,10 @@ interface StationSheetProps {
   /** The station GeoJSON the map shows, where nearby stations are found. */
   stationsUrl: string | null;
   userLocation: UserLocation | null;
-  onOpenChange: (isOpen: boolean) => void;
+  /** The step it opens at: the peek for a station picked afresh, or the one it was left at. */
+  openStep: StationSheetStep;
+  onStepChange: (step: StationSheetStep) => void;
+  onClose: (action: SheetCloseAction) => void;
   onSelectStation: (station: Station) => void;
   onSelectLine: (line: Line) => void;
   nearbyStations: NearbyStation[];
@@ -907,7 +914,9 @@ export function StationSheet({
   isOpen,
   stationsUrl,
   userLocation,
-  onOpenChange,
+  openStep,
+  onStepChange,
+  onClose,
   onSelectStation,
   onSelectLine,
   nearbyStations,
@@ -919,7 +928,9 @@ export function StationSheet({
   const sheetRef = useRef<BottomSheet>(null);
   const [index, setIndex] = useState(-1);
   const [peekHeight, setPeekHeight] = useState(defaultStationPeekHeight);
-  const [contentHeight, setContentHeight] = useState(0);
+  // Another station's height doesn't count, so coming back to one keeps its steps from the start.
+  const [content, setContent] = useState({ stationId: station.id, height: 0 });
+  const contentHeight = content.stationId === station.id ? content.height : 0;
   // The sheet opens as tall as its content, up to the top of the screen. The step in between is
   // only there when the content goes well past it.
   const hasMiddleStep =
@@ -930,27 +941,40 @@ export function StationSheet({
   // The sheet mounts open, since calls made before it has measured itself are dropped.
   const [initialIndex] = useState(isOpen ? 0 : -1);
   const isMounted = useRef(false);
+  // A taller step it's coming back to, once its content has a height to size the steps by.
+  const [pendingStep, setPendingStep] = useState<StationSheetStep | null>(null);
 
-  // Opens small on every station, including when picking another one from the open sheet.
+  // Opens small on every station, including when picking another one from the open sheet, and
+  // at the step it was left at when coming back to it.
   useEffect(() => {
     if (!isMounted.current) {
       isMounted.current = true;
       return;
     }
-    if (isOpen) sheetRef.current?.snapToIndex(0);
-    else sheetRef.current?.close();
-  }, [isOpen, station.id]);
+    setPendingStep(null);
+    if (!isOpen) sheetRef.current?.close();
+    else if (openStep === "peek") sheetRef.current?.snapToIndex(0);
+    else setPendingStep(openStep);
+  }, [isOpen, station.id, openStep]);
+
+  useEffect(() => {
+    if (!pendingStep || contentHeight === 0) return;
+    setPendingStep(null);
+    // The top step is the last one, after the middle step if there is one.
+    if (pendingStep === "top") sheetRef.current?.expand();
+    else sheetRef.current?.snapToIndex(1);
+  }, [pendingStep, contentHeight]);
 
   // Android back shrinks the sheet back to its peek, then closes it.
   useEffect(() => {
     if (!isOpen) return;
     const subscription = BackHandler.addEventListener("hardwareBackPress", () => {
       if (index > 0) sheetRef.current?.snapToIndex(0);
-      else onOpenChange(false);
+      else onClose("back");
       return true;
     });
     return () => subscription.remove();
-  }, [isOpen, index, onOpenChange]);
+  }, [isOpen, index, onClose]);
 
   return (
     <BottomSheet
@@ -966,13 +990,15 @@ export function StationSheet({
       handleIndicatorStyle={{ backgroundColor: mutedColor }}
       onChange={(next) => {
         setIndex(next);
-        if (next === -1 && isOpen) onOpenChange(false);
+        if (next > 0) onStepChange(hasMiddleStep && next === 1 ? "middle" : "top");
+        else if (next === 0) onStepChange("peek");
+        if (next === -1 && isOpen) onClose("dismiss");
       }}
     >
       <ErrorBoundary
         key={station.id}
         fallback={(reset) => (
-          <StationError station={station} onRetry={reset} onClose={() => onOpenChange(false)} />
+          <StationError station={station} onRetry={reset} onClose={() => onClose("back")} />
         )}
       >
         <StationSheetContent
@@ -980,14 +1006,15 @@ export function StationSheet({
           isOpen={isOpen}
           stationsUrl={stationsUrl}
           userLocation={userLocation}
-          showDetails={index >= 0}
-          onClose={() => onOpenChange(false)}
+          // Kept while it's left for a while to come back taller, so its steps stay the same.
+          showDetails={index >= 0 || openStep !== "peek"}
+          onClose={() => onClose("back")}
           onSelectStation={onSelectStation}
           onSelectLine={onSelectLine}
           nearbyStations={nearbyStations}
           onSelectNearbyStation={onSelectNearbyStation}
           onPeekHeightChange={setPeekHeight}
-          onContentHeightChange={setContentHeight}
+          onContentHeightChange={(height) => setContent({ stationId: station.id, height })}
         />
       </ErrorBoundary>
     </BottomSheet>
