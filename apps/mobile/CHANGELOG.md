@@ -6,6 +6,35 @@ the commit they were built from.
 
 ## [Unreleased]
 
+### Added
+
+- Metro, light rail and tram lines: 192 lines across 14 countries are bundled with the app. Opening
+  a line draws its track on the map and shows a sheet with its stops in order, its operator and,
+  when available, a short description. Lines with several branches have a branch picker, and the
+  open branch's stops are marked on the track.
+- Each stop in a line shows the other lines that stop there and whether it is a train station.
+  Tapping a stop opens its station, and going back returns to the line.
+- Station sheets list the lines serving the station, with where each one runs, and draw their
+  tracks on the map. Tapping one opens the line.
+- A line opened from a station shows the two stops before and after it, with the station marked
+  by a larger dot. The other stops stay collapsed behind rows that show them on tap. A line opened
+  from search or a link shows all its stops.
+- Save lines from the line sheet. Saved lines appear in the search sheet under Saved lines, and
+  Settings can clear them.
+- Search finds lines as well as stations, with saved lines first and each line's distance to its
+  closest stop.
+- Share a line. On Android, railradar24.com line links open the line in the app.
+
+### Changed
+
+- Metro and light rail stops can be saved again, so their lines are easy to reach.
+- Closing a line opened from a station, with the close button or Android back, returns to the
+  station at the step it was left at. Swiping the sheet down closes both.
+- Android back shrinks the line sheet to its middle step before going back.
+- The search field and empty states mention lines, and the saved count includes saved lines.
+- Line tracks appear once the camera has finished moving to a station or line, keeping the move
+  as smooth as in 0.5.0.
+
 ## [0.5.0] (11) – 2026-10-07
 
 ### Added
