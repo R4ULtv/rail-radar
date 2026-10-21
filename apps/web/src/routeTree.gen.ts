@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AppRouteImport } from './routes/app'
 import { Route as PrivacyPolicyRouteImport } from './routes/privacy-policy'
+import { Route as ReportsRouteImport } from './routes/reports'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as TermsOfServiceRouteImport } from './routes/terms-of-service'
 import { Route as DonateIndexRouteImport } from './routes/donate/index'
@@ -42,6 +43,11 @@ const AppRoute = AppRouteImport.update({
 const PrivacyPolicyRoute = PrivacyPolicyRouteImport.update({
   id: '/privacy-policy',
   path: '/privacy-policy',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ReportsRoute = ReportsRouteImport.update({
+  id: '/reports',
+  path: '/reports',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
@@ -131,6 +137,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/app': typeof AppRoute
   '/privacy-policy': typeof PrivacyPolicyRoute
+  '/reports': typeof ReportsRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/terms-of-service': typeof TermsOfServiceRoute
   '/donate/success': typeof DonateSuccessRoute
@@ -152,6 +159,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/app': typeof AppRoute
   '/privacy-policy': typeof PrivacyPolicyRoute
+  '/reports': typeof ReportsRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/terms-of-service': typeof TermsOfServiceRoute
   '/donate/success': typeof DonateSuccessRoute
@@ -174,6 +182,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/app': typeof AppRoute
   '/privacy-policy': typeof PrivacyPolicyRoute
+  '/reports': typeof ReportsRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/terms-of-service': typeof TermsOfServiceRoute
   '/donate/success': typeof DonateSuccessRoute
@@ -197,6 +206,7 @@ export interface FileRouteTypes {
     | '/'
     | '/app'
     | '/privacy-policy'
+    | '/reports'
     | '/sitemap.xml'
     | '/terms-of-service'
     | '/donate/success'
@@ -218,6 +228,7 @@ export interface FileRouteTypes {
     | '/'
     | '/app'
     | '/privacy-policy'
+    | '/reports'
     | '/sitemap.xml'
     | '/terms-of-service'
     | '/donate/success'
@@ -239,6 +250,7 @@ export interface FileRouteTypes {
     | '/'
     | '/app'
     | '/privacy-policy'
+    | '/reports'
     | '/sitemap.xml'
     | '/terms-of-service'
     | '/donate/success'
@@ -261,6 +273,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AppRoute: typeof AppRoute
   PrivacyPolicyRoute: typeof PrivacyPolicyRoute
+  ReportsRoute: typeof ReportsRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   TermsOfServiceRoute: typeof TermsOfServiceRoute
   DonateSuccessRoute: typeof DonateSuccessRoute
@@ -300,6 +313,13 @@ declare module '@tanstack/react-router' {
       path: '/privacy-policy'
       fullPath: '/privacy-policy'
       preLoaderRoute: typeof PrivacyPolicyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/reports': {
+      id: '/reports'
+      path: '/reports'
+      fullPath: '/reports'
+      preLoaderRoute: typeof ReportsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/sitemap.xml': {
@@ -421,6 +441,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AppRoute: AppRoute,
   PrivacyPolicyRoute: PrivacyPolicyRoute,
+  ReportsRoute: ReportsRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   TermsOfServiceRoute: TermsOfServiceRoute,
   DonateSuccessRoute: DonateSuccessRoute,

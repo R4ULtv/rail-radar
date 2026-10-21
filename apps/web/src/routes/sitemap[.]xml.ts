@@ -6,6 +6,7 @@ import { lines } from "@repo/data/lines";
 import { operators } from "@repo/data/operators";
 import { COUNTRY_CODES, COUNTRY_SLUG } from "@repo/data/countries";
 import { env } from "@/lib/env";
+import { publishedReports } from "@/lib/reports";
 
 type SitemapEntry = {
   path: string;
@@ -36,18 +37,13 @@ const sitemapXml = createServerOnlyFn(() => {
     { path: "/stations", changeFrequency: "monthly", priority: 0.7 },
     { path: "/app", changeFrequency: "monthly", priority: 0.5 },
     { path: "/donate", changeFrequency: "monthly", priority: 0.5 },
-    {
-      path: "/report/2026-04-28",
-      lastModified: "2026-04-28T00:00:00.000Z",
+    { path: "/reports", changeFrequency: "monthly", priority: 0.5 },
+    ...publishedReports.map((report): SitemapEntry => ({
+      path: report.path,
+      lastModified: `${report.publishedAt}T00:00:00.000Z`,
       changeFrequency: "yearly",
       priority: 0.4,
-    },
-    {
-      path: "/report/2026-07-24",
-      lastModified: "2026-07-24T00:00:00.000Z",
-      changeFrequency: "yearly",
-      priority: 0.4,
-    },
+    })),
     ...COUNTRY_CODES.filter((code) => (getStationsByCountry().get(code)?.length ?? 0) > 0).map(
       (code): SitemapEntry => ({
         path: `/stations/${COUNTRY_SLUG[code]}`,

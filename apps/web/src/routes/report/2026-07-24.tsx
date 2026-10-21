@@ -1,3 +1,8 @@
+import {
+  aprilReport as previousReport,
+  julyReport as report,
+  type StationRow,
+} from "@/lib/reports";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { metadataToHead, type Metadata } from "@/lib/metadata";
 import {
@@ -34,10 +39,6 @@ export const Route = createFileRoute("/report/2026-07-24")({
   component: AnalyticsReportPage,
 });
 
-type CountryRow = [string, number, number | null, number];
-type StationRow = [string, string, string, number, number];
-type ProviderRow = [string, number, number, number, number, number];
-
 const metadata: Metadata = {
   title: "Rail Radar Traffic Report - July 2026",
   description:
@@ -63,90 +64,6 @@ const metadata: Metadata = {
     card: "summary_large_image",
     images: ["/assets/social/report-2026-07-24.webp"],
   },
-};
-
-const previousReport = {
-  firstSeen: "2026-01-26",
-  lastSeen: "2026-04-28",
-  summary: {
-    totalVisits: 22459,
-    uniqueVisitors: 2561,
-    arrivalsCount: 5922,
-    departuresCount: 16537,
-    stationsVisited: 4801,
-    countriesWithTraffic: 11,
-    visitsPerUniqueVisitor: 8.77,
-    top10Share: 15.6,
-  },
-};
-
-const report = {
-  firstSeen: "2026-04-25",
-  lastSeen: "2026-07-24",
-  summary: {
-    totalVisits: 69665,
-    uniqueVisitors: 13076,
-    arrivalsCount: 22216,
-    departuresCount: 47449,
-    stationsVisited: 4006,
-    countriesWithTraffic: 13,
-    visitsPerUniqueVisitor: 5.33,
-    top10Share: 37.3,
-  },
-  countries: [
-    ["Germany", 18710, 524, 2687],
-    ["Italy", 15721, 5531, 2779],
-    ["Switzerland", 9185, 2121, 2036],
-    ["Belgium", 4286, 700, 988],
-    ["Ireland", 3644, 330, 1368],
-    ["Netherlands", 3368, 411, 846],
-    ["Denmark", 3088, 13, 450],
-    ["France", 3072, null, 648],
-    ["United Kingdom", 2721, 712, 738],
-    ["Sweden", 2340, 282, 599],
-    ["Poland", 1595, null, 576],
-    ["Norway", 1545, 229, 393],
-    ["Finland", 390, 106, 129],
-  ] satisfies CountryRow[],
-  topStationsByVisits: [
-    ["Düsseldorf Hbf", "DE00085", "Germany", 7553, 55],
-    ["Zürich HB", "CH03000", "Switzerland", 4597, 1036],
-    ["Milano Centrale", "IT1728", "Italy", 3791, 552],
-    ["Brussel-Zuid/Bruxelles-Midi", "BE14001", "Belgium", 1899, 431],
-    ["Bologna Centrale", "IT683", "Italy", 1758, 285],
-    ["München Hbf", "DE00261", "Germany", 1683, 297],
-    ["Cork Kent", "IE30", "Ireland", 1661, 566],
-    ["Amsterdam Centraal", "NL058", "Netherlands", 1445, 401],
-    ["Firenze Santa Maria Novella", "IT1325", "Italy", 802, 195],
-    ["Berlin Hauptbahnhof", "DE11160", "Germany", 772, 222],
-  ] satisfies StationRow[],
-  topStationsByUnique: [
-    ["Zürich HB", "CH03000", "Switzerland", 4597, 1036],
-    ["Cork Kent", "IE30", "Ireland", 1661, 566],
-    ["Milano Centrale", "IT1728", "Italy", 3791, 552],
-    ["Brussel-Zuid/Bruxelles-Midi", "BE14001", "Belgium", 1899, 431],
-    ["Amsterdam Centraal", "NL058", "Netherlands", 1445, 401],
-    ["München Hbf", "DE00261", "Germany", 1683, 297],
-    ["Bologna Centrale", "IT683", "Italy", 1758, 285],
-    ["Berlin Hauptbahnhof", "DE11160", "Germany", 772, 222],
-    ["Firenze Santa Maria Novella", "IT1325", "Italy", 802, 195],
-    ["Frankfurt (Main) Hbf", "DE00105", "Germany", 475, 182],
-  ] satisfies StationRow[],
-  providers: [
-    ["rfi", 15941, 98.1, 1890, 926, 7073],
-    ["opendata-ch", 9116, 99.8, 576, 449, 1343],
-    ["irail", 4314, 98.7, 98, 58, 237],
-    ["irishrail", 3636, 99.9, 125, 52, 407],
-    ["ns", 3334, 99.1, 421, 290, 1278],
-    ["sncf", 3070, 97.7, 376, 266, 1027],
-    ["nationalrail", 2714, 100, 266, 181, 630],
-    ["entur", 1506, 98.9, 165, 129, 371],
-    ["db", 1332, 98.9, 610, 480, 1427],
-    ["digitraffic", 389, 100, 298, 273, 562],
-    ["plk", 315, 99.7, 1586, 1786, 3051],
-    ["rejseplanen", 267, 100, 252, 143, 431],
-    ["trafiklab", 243, 100, 274, 164, 1089],
-  ] satisfies ProviderRow[],
 };
 
 const numberFormatter = new Intl.NumberFormat("en-US");
@@ -391,14 +308,14 @@ function AnalyticsReportPage() {
         variant="ghost"
         size="sm"
         className="group mb-10 -ml-2.5 text-muted-foreground hover:text-foreground"
-        render={<Link to="/" />}
+        render={<Link to="/reports" />}
         nativeButton={false}
       >
         <ArrowLeftIcon
           data-icon="inline-start"
           className="transition-transform group-hover:-translate-x-0.5"
         />
-        Back to Rail Radar
+        All reports
       </Button>
 
       <article>

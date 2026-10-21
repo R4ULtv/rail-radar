@@ -1,3 +1,4 @@
+import { aprilReport as report, type StationRow } from "@/lib/reports";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { metadataToHead, type Metadata } from "@/lib/metadata";
 import { ActivityIcon, ArrowLeftIcon, GaugeIcon, MapPinnedIcon, UsersIcon } from "lucide-react";
@@ -26,11 +27,6 @@ export const Route = createFileRoute("/report/2026-04-28")({
   component: AnalyticsReportPage,
 });
 
-type CountryRow = [string, number, number, number, number, number, string];
-type StationRow = [string, string, string, number, number];
-type ProviderRow = [string, number, string, string, string, string];
-type ReleaseRow = [string, string, string];
-
 const metadata: Metadata = {
   title: "Rail Radar Traffic Report - April 2026",
   description:
@@ -55,77 +51,6 @@ const metadata: Metadata = {
     card: "summary_large_image",
     images: ["/assets/social/report-2026-04-28.webp"],
   },
-};
-
-const report = {
-  firstSeen: "2026-01-26",
-  lastSeen: "2026-04-28",
-  summary: {
-    totalVisits: 22459,
-    uniqueVisitors: 2561,
-    arrivalsCount: 5922,
-    departuresCount: 16537,
-    stationsVisited: 4801,
-    countriesWithTraffic: 11,
-    visitsPerUniqueVisitor: 8.77,
-    visitsPerStation: 4.68,
-    top10Share: 15.6,
-  },
-  countries: [
-    ["Italy", 5531, 1043, 1710, 3821, 507, "19.2%"],
-    ["Switzerland", 2121, 428, 652, 1469, 238, "13.9%"],
-    ["United Kingdom", 712, 105, 46, 666, 82, "2.8%"],
-    ["Belgium", 700, 203, 211, 489, 87, "12.3%"],
-    ["Germany", 524, 177, 129, 395, 123, "1.9%"],
-    ["Netherlands", 411, 139, 80, 331, 38, "7.2%"],
-    ["Ireland", 330, 110, 86, 244, 39, "17.7%"],
-    ["Sweden", 282, 94, 114, 168, 44, "5.0%"],
-    ["Norway", 229, 38, 94, 135, 17, "3.1%"],
-    ["Finland", 106, 46, 30, 76, 13, "7.4%"],
-    ["Denmark", 13, 8, 3, 10, 5, "1.0%"],
-  ] satisfies CountryRow[],
-  topStationsByVisits: [
-    ["Milano Centrale", "IT1728", "Italy", 845, 254],
-    ["Napoli Centrale", "IT1888", "Italy", 396, 117],
-    ["Roma Termini", "IT2416", "Italy", 348, 127],
-    ["Brindisi", "IT741", "Italy", 311, 19],
-    ["Brussel-Zuid/Bruxelles-Midi", "BE14001", "Belgium", 299, 86],
-    ["Coppet", "CH01023", "Switzerland", 271, 13],
-    ["Zürich HB", "CH03000", "Switzerland", 263, 108],
-    ["Firenze Santa Maria Novella", "IT1325", "Italy", 262, 95],
-    ["Bologna Centrale", "IT683", "Italy", 261, 94],
-    ["Amsterdam Centraal", "NL058", "Netherlands", 247, 81],
-  ] satisfies StationRow[],
-  topStationsByUnique: [
-    ["Milano Centrale", "IT1728", "Italy", 845, 254],
-    ["Roma Termini", "IT2416", "Italy", 348, 127],
-    ["Napoli Centrale", "IT1888", "Italy", 396, 117],
-    ["Zürich HB", "CH03000", "Switzerland", 263, 108],
-    ["Firenze Santa Maria Novella", "IT1325", "Italy", 262, 95],
-    ["Bologna Centrale", "IT683", "Italy", 261, 94],
-    ["Brussel-Zuid/Bruxelles-Midi", "BE14001", "Belgium", 299, 86],
-    ["Amsterdam Centraal", "NL058", "Netherlands", 247, 81],
-    ["Venezia S.Lucia", "IT3009", "Italy", 128, 67],
-    ["Torino Porta Nuova", "IT2876", "Italy", 120, 58],
-  ] satisfies StationRow[],
-  providers: [
-    ["rfi", 4221, "97.8%", "2,075 ms", "888 ms", "8,837 ms"],
-    ["opendata-ch", 1359, "99.8%", "424 ms", "228 ms", "956 ms"],
-    ["nationalrail", 702, "100.0%", "219 ms", "173 ms", "495 ms"],
-    ["irail", 425, "100.0%", "132 ms", "87 ms", "437 ms"],
-    ["ns", 354, "100.0%", "427 ms", "326 ms", "1,105 ms"],
-    ["irishrail", 330, "100.0%", "161 ms", "69 ms", "617 ms"],
-    ["entur", 229, "100.0%", "131 ms", "87 ms", "217 ms"],
-    ["digitraffic", 51, "100.0%", "280 ms", "268 ms", "514 ms"],
-  ] satisfies ProviderRow[],
-  releases: [
-    ["Initial coverage", "Italy", "Before this report window"],
-    ["February 16, 2026", "Switzerland", "Swiss train data support"],
-    ["March 9, 2026", "Finland, Belgium, Netherlands", "Mid-window expansion"],
-    ["March 22, 2026", "United Kingdom, Ireland", "Late-window expansion"],
-    ["April 3, 2026", "Germany", "German train data support"],
-    ["April 17, 2026", "Denmark", "Danish train data support"],
-  ] satisfies ReleaseRow[],
 };
 
 const numberFormatter = new Intl.NumberFormat("en-US");
@@ -357,11 +282,11 @@ function AnalyticsReportPage() {
         variant="ghost"
         size="sm"
         className="group mb-10 -ml-2.5 text-muted-foreground hover:text-foreground"
-        render={<Link to="/" />}
+        render={<Link to="/reports" />}
         nativeButton={false}
       >
         <ArrowLeftIcon className="transition-transform group-hover:-translate-x-0.5" />
-        Back to Rail Radar
+        All reports
       </Button>
 
       <article>
