@@ -1,12 +1,15 @@
 import ArrowUpDown from "lucide-react-native/icons/arrow-up-down";
+import Bookmark from "lucide-react-native/icons/bookmark";
 import Compass from "lucide-react-native/icons/compass";
 import LocateFixed from "lucide-react-native/icons/locate-fixed";
 import Map from "lucide-react-native/icons/map";
 import MapPin from "lucide-react-native/icons/map-pin";
 import RefreshCw from "lucide-react-native/icons/refresh-cw";
+import Route from "lucide-react-native/icons/route";
 import Sparkles from "lucide-react-native/icons/sparkles";
 import TrainFront from "lucide-react-native/icons/train-front";
 import TramFront from "lucide-react-native/icons/tram-front";
+import Waypoints from "lucide-react-native/icons/waypoints";
 import type { ComponentType } from "react";
 
 import { expo } from "../../app.json";
@@ -25,6 +28,29 @@ export type Release = { version: string; features: Feature[] };
  * notice; a version without an entry shows nothing.
  */
 export const releases: Release[] = [
+  {
+    version: "0.6.0",
+    features: [
+      {
+        icon: Route,
+        title: "Explore metro and tram lines",
+        description:
+          "Open any of 192 metro, light rail and tram lines in 14 countries to see its track on the map and every stop in order.",
+      },
+      {
+        icon: Waypoints,
+        title: "Lines at every stop",
+        description:
+          "Stations list the lines that serve them. Open one to see the stops on either side, then tap a stop to jump to it.",
+      },
+      {
+        icon: Bookmark,
+        title: "Save and search lines",
+        description:
+          "Save lines and find them in search next to stations. Metro and tram stops can be saved again too.",
+      },
+    ],
+  },
   {
     version: "0.5.0",
     features: [
