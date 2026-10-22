@@ -6,6 +6,8 @@ the commit they were built from.
 
 ## [Unreleased]
 
+## [0.6.0] (12) – 2026-10-22
+
 ### Added
 
 - Metro, light rail and tram lines: 192 lines across 14 countries are bundled with the app. Opening
