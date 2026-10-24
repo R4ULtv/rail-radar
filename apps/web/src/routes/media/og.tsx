@@ -1,4 +1,4 @@
-import { env } from "cloudflare:workers";
+import { env, waitUntil } from "cloudflare:workers";
 import { createFileRoute } from "@tanstack/react-router";
 import { createServerOnlyFn } from "@tanstack/react-start";
 import { measure } from "takumi-js";
@@ -31,7 +31,8 @@ const MAP_LEFT = WIDTH - MAP_WIDTH;
 const TITLE_WIDTH = 508;
 const TITLE_HEIGHT = 188;
 const BACKGROUND = "#1C1917";
-const CACHE_CONTROL = "public, max-age=86400, s-maxage=604800, stale-while-revalidate=604800";
+const CACHE_CONTROL = "public, max-age=2592000, s-maxage=2592000";
+const CACHE_NAME = "station-og-webp-v1";
 
 function fontBytes(dataUrl: string) {
   return Uint8Array.from(atob(dataUrl.slice(dataUrl.indexOf(",") + 1)), (char) =>
@@ -119,7 +120,7 @@ async function getStationMap(geo: { lat: number; lng: number }): Promise<Uint8Ar
   if (!token) return null;
 
   const url = new URL(
-    `https://api.mapbox.com/styles/v1/mapbox/dark-v11/static/${geo.lng},${geo.lat},14.2,0/${MAP_WIDTH}x${HEIGHT}`,
+    `https://api.mapbox.com/styles/v1/mapbox/dark-v11/static/${geo.lng},${geo.lat},14.2,0/${MAP_WIDTH}x${HEIGHT}.webp`,
   );
   url.searchParams.set("attribution", "false");
   url.searchParams.set("logo", "false");
@@ -151,6 +152,23 @@ const getOgImage = createServerOnlyFn(async (request: Request) => {
   const station = stationById.get(id);
   if (!station?.geo) return new Response("Station not found", { status: 404 });
 
+  // Only the station ID affects the card. Extra parameters must not bypass the cache.
+  const cacheUrl = new URL(request.url);
+  cacheUrl.search = new URLSearchParams({ id: station.id }).toString();
+  const cacheKey = new Request(cacheUrl, { method: "GET" });
+  let cache: Cache | undefined;
+  try {
+    cache = await caches.open(CACHE_NAME);
+    const cached = await cache.match(cacheKey);
+    if (cached) {
+      // Return mutable headers for the app's security middleware, and no body for HEAD.
+      return new Response(request.method === "HEAD" ? null : cached.body, cached);
+    }
+  } catch {
+    // Cache outages must not prevent generating a card.
+    cache = undefined;
+  }
+
   if (request.method === "HEAD") {
     return new Response(null, {
       headers: { "Content-Type": "image/webp", "Cache-Control": CACHE_CONTROL },
@@ -164,7 +182,7 @@ const getOgImage = createServerOnlyFn(async (request: Request) => {
   const marker = stationMarkers[station.type];
   const coords = `${formatCoordinate(station.geo.lat, true)} · ${formatCoordinate(station.geo.lng, false)}`;
 
-  return new ImageResponse(
+  const response = new ImageResponse(
     <div
       style={{
         display: "flex",
@@ -330,4 +348,9 @@ const getOgImage = createServerOnlyFn(async (request: Request) => {
       headers: { "Cache-Control": map ? CACHE_CONTROL : "public, max-age=300, s-maxage=300" },
     },
   );
+
+  if (cache) {
+    waitUntil(cache.put(cacheKey, response.clone()).catch(() => undefined));
+  }
+  return response;
 });
