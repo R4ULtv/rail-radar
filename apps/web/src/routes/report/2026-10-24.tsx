@@ -15,8 +15,7 @@ import {
   TableRow,
 } from "@repo/ui/components/table";
 import { metadataToHead } from "@/lib/metadata";
-import { julyReport as previous } from "@/lib/reports";
-import report from "@/lib/report-data/2026-10-24.json" with { type: "json" };
+import { julyReport as previous, octoberReport as report } from "@/lib/reports";
 
 export const Route = createFileRoute("/report/2026-10-24")({
   head: () =>
