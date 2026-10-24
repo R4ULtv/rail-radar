@@ -1,3 +1,4 @@
+import { COUNTRY_MAP } from "@repo/data/countries";
 import { getStationLines } from "@repo/data/lines";
 import type { Station } from "@repo/data/types";
 import BottomSheet, {
@@ -8,16 +9,17 @@ import BottomSheet, {
 } from "@gorhom/bottom-sheet";
 import { Button } from "heroui-native/button";
 import { useThemeColor } from "heroui-native/hooks";
-import { PressableFeedback } from "heroui-native/pressable-feedback";
-import { Surface } from "heroui-native/surface";
+import { ListGroup } from "heroui-native/list-group";
+import { Separator } from "heroui-native/separator";
 import Bookmark from "lucide-react-native/icons/bookmark";
 import ChevronsUpDown from "lucide-react-native/icons/chevrons-up-down";
 import CircleAlert from "lucide-react-native/icons/circle-alert";
+import GitCommitVertical from "lucide-react-native/icons/git-commit-vertical";
 import Info from "lucide-react-native/icons/info";
+import Route from "lucide-react-native/icons/route";
 import Share from "lucide-react-native/icons/share";
 import Share2 from "lucide-react-native/icons/share-2";
-import Split from "lucide-react-native/icons/split";
-import { memo, useCallback, useEffect, useMemo, useRef, useState, type Ref } from "react";
+import { Fragment, memo, useCallback, useEffect, useMemo, useRef, useState, type Ref } from "react";
 import {
   BackHandler,
   Image,
@@ -31,12 +33,11 @@ import {
   type FlatList,
   type ListRenderItemInfo,
 } from "react-native";
-// Gesture handler's, so it settles horizontal drags with the sheet's own pan gesture on Android.
-import { ScrollView } from "react-native-gesture-handler";
 
 import { CountryFlag } from "@/components/country-flag";
 import { ErrorBoundary } from "@/components/error-boundary";
 import { LineBadge } from "@/components/line-badge";
+import { LineDiagram } from "@/components/line-diagram";
 import {
   useSheetBottomInset,
   useSheetTopInset,
@@ -51,7 +52,8 @@ import {
   useSheetScrollOffset,
 } from "@/components/sheet-header";
 import { Skeleton } from "@/components/skeleton";
-import { SectionTitle } from "@/components/station-list";
+import { AboutRow, ReportLinks } from "@/components/station-details";
+import { RowSeparator, SectionTitle } from "@/components/station-list";
 import { middleStep } from "@/components/station-sheet";
 import { StatusMessage } from "@/components/status-message";
 import { useSavedLines } from "@/hooks/use-saved-lines";
@@ -59,11 +61,13 @@ import { useStationsById } from "@/hooks/use-stations-by-id";
 import { haptics } from "@/lib/haptics";
 import {
   collapseStops,
-  getBranchLabel,
+  getLineBadgeCode,
   getLineColor,
   getLineCountry,
   getLineOperatorName,
   getLineStopCount,
+  getRouteLabels,
+  getRouteStopCount,
   getRouteStops,
   lineTypeLabels,
   shortStationName,
@@ -75,8 +79,6 @@ import { stationIcons } from "@/lib/station-icons";
 const handleHeight = 24;
 // How much further the content has to go for the middle step to be worth a stop.
 const minStepGap = 80;
-// Between the pinned header and the first stop.
-const stopsTopSpacing = 8;
 const skeletonStopCount = 6;
 
 function LineSubtitle({ line }: { line: Line }) {
@@ -147,110 +149,188 @@ const QuickActions = memo(function QuickActions({ line }: { line: Line }) {
   );
 });
 
-/** The line's color at 18%, like the web's selected chips. */
-function tint(color: string) {
-  return /^#[\da-f]{6}$/i.test(color) ? `${color}2e` : "transparent";
+/** A radio for a route in the open card, and a plain dot in the line's color otherwise. */
+function RouteMark({ color, kind }: { color: string; kind: "dot" | "selected" | "unselected" }) {
+  const mutedColor = useThemeColor("muted");
+  if (kind === "dot") {
+    return (
+      <View className="size-5 items-center justify-center">
+        <View style={[styles.routeDot, { backgroundColor: color }]} />
+      </View>
+    );
+  }
+  return (
+    <View
+      className="size-5 items-center justify-center rounded-full"
+      style={{ borderWidth: 2, borderColor: kind === "selected" ? color : mutedColor }}
+    >
+      {kind === "selected" ? <View style={[styles.routeDot, { backgroundColor: color }]} /> : null}
+    </View>
+  );
 }
 
 /**
- * One chip per branch, named after where it goes, under a title saying the line splits. The
- * chosen branch's stops are the ones listed below and marked on the map.
+ * The line's routes in a card, named after their ends. Closed, it shows the chosen one; a line
+ * with more than one opens it to a list to pick from. The chosen route's stops are the ones listed
+ * below and marked on the map.
  */
-function BranchPicker({
+function LineRoutes({
   line,
   branch,
   stationsById,
+  isOpen,
+  onToggle,
   onChange,
 }: {
   line: Line;
   branch: number;
-  stationsById: ReadonlyMap<string, Station> | null;
+  stationsById: ReadonlyMap<string, Station>;
+  isOpen: boolean;
+  onToggle: () => void;
+  /** Picks another route, which closes the card too. */
   onChange: (branch: number) => void;
 }) {
   const mutedColor = useThemeColor("muted");
-  if (line.routes.length < 2) return null;
   const color = getLineColor(line);
+  const labels = useMemo(
+    () => getRouteLabels(line.routes, stationsById),
+    [line.routes, stationsById],
+  );
+  const routeCount = line.routes.length;
+  const canChoose = routeCount > 1;
+  const shown = isOpen ? line.routes.map((_, index) => index) : [branch];
 
   return (
-    <View className="mt-4">
-      <View className="mb-2 flex-row items-center gap-1.5">
-        <Split size={14} color={mutedColor} />
-        <Text className="text-sm font-medium text-muted">
-          {line.routes.length} branches · pick one to see its stops
-        </Text>
-      </View>
-      {/* Out to the sheet's edges, so the chips scroll under them instead of stopping short. */}
-      <View className="-mx-4">
-        <ScrollView
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          accessibilityRole="tablist"
-          accessibilityLabel="Branches"
-          contentContainerStyle={styles.branchChips}
-        >
-          {line.routes.map((route, index) => {
-            const isSelected = index === branch;
-            const label = stationsById
-              ? getBranchLabel(line.routes, route, stationsById)
-              : `Branch ${index + 1}`;
-            return (
-              <PressableFeedback
-                key={index}
-                accessibilityRole="tab"
-                accessibilityState={{ selected: isSelected }}
-                accessibilityLabel={`Branch ${label}`}
-                className={`h-9 flex-row items-center gap-1.5 rounded-full px-3.5 ${isSelected ? "" : "bg-default"}`}
-                style={
-                  isSelected
-                    ? { backgroundColor: tint(color), borderColor: color, borderWidth: 1.5 }
-                    : undefined
-                }
+    <View className="mt-5">
+      <SectionTitle icon={<Route size={14} color={mutedColor} />}>
+        {routeCount === 1 ? "1 route" : `${routeCount} routes`}
+      </SectionTitle>
+      {/* Clipped, so a pressed first or last row keeps the rounded corners. */}
+      <ListGroup
+        variant="secondary"
+        className="overflow-hidden"
+        accessibilityRole={isOpen ? "radiogroup" : undefined}
+      >
+        {shown.map((index, position) => {
+          const route = line.routes[index]!;
+          const { title, via } = labels[index]!;
+          const stopCount = getRouteStopCount(route, stationsById);
+          const description = [
+            via ? `via ${via}` : null,
+            `${stopCount} ${stopCount === 1 ? "stop" : "stops"}`,
+          ]
+            .filter(Boolean)
+            .join(" · ");
+          const isSelected = index === branch;
+
+          return (
+            <Fragment key={index}>
+              {position > 0 ? <RowSeparator /> : null}
+              <ListGroup.Item
+                accessibilityRole={isOpen ? "radio" : canChoose ? "button" : undefined}
+                accessibilityState={isOpen ? { checked: isSelected } : undefined}
+                accessibilityHint={!isOpen && canChoose ? "Shows the other routes" : undefined}
+                className="active:bg-surface-tertiary"
+                disabled={!canChoose}
                 onPress={() => {
-                  if (isSelected) return;
-                  haptics.selection();
-                  onChange(index);
+                  if (isOpen && !isSelected) {
+                    haptics.selection();
+                    onChange(index);
+                  } else {
+                    haptics.tap();
+                    onToggle();
+                  }
                 }}
               >
-                <View
-                  style={[
-                    styles.branchDot,
-                    isSelected
-                      ? { backgroundColor: color }
-                      : { borderColor: mutedColor, borderWidth: 1.5 },
-                  ]}
-                />
-                {route.code ? (
-                  <Text className="text-sm font-semibold text-foreground">{route.code}</Text>
+                <ListGroup.ItemPrefix>
+                  <RouteMark
+                    color={color}
+                    kind={isOpen ? (isSelected ? "selected" : "unselected") : "dot"}
+                  />
+                </ListGroup.ItemPrefix>
+                <ListGroup.ItemContent>
+                  <View className="flex-row items-center gap-1.5">
+                    {route.code ? (
+                      <ListGroup.ItemTitle className="font-semibold">
+                        {route.code}
+                      </ListGroup.ItemTitle>
+                    ) : null}
+                    <ListGroup.ItemTitle numberOfLines={2} className="shrink">
+                      {title}
+                    </ListGroup.ItemTitle>
+                  </View>
+                  <ListGroup.ItemDescription numberOfLines={1}>
+                    {description}
+                  </ListGroup.ItemDescription>
+                </ListGroup.ItemContent>
+                {!isOpen && canChoose ? (
+                  <ListGroup.ItemSuffix>
+                    <ChevronsUpDown size={16} color={mutedColor} />
+                  </ListGroup.ItemSuffix>
                 ) : null}
-                <Text
-                  className={`text-sm ${isSelected ? "font-medium text-foreground" : "text-muted"}`}
-                  numberOfLines={1}
-                >
-                  {label}
-                </Text>
-              </PressableFeedback>
-            );
-          })}
-        </ScrollView>
+              </ListGroup.Item>
+            </Fragment>
+          );
+        })}
+      </ListGroup>
+    </View>
+  );
+}
+
+/**
+ * Over the stops: what they're around while some are left out, and a link to show them all.
+ */
+function StopsTitle({
+  focusName,
+  stopCount,
+  hasHiddenStops,
+  onShowAll,
+}: {
+  focusName: string | null;
+  stopCount: number;
+  hasHiddenStops: boolean;
+  onShowAll: () => void;
+}) {
+  const mutedColor = useThemeColor("muted");
+  const allLabel = `All ${stopCount} stops`;
+  return (
+    <View className="mt-5 flex-row items-center justify-between pr-4">
+      <View className="shrink">
+        <SectionTitle icon={<GitCommitVertical size={14} color={mutedColor} />}>
+          {hasHiddenStops && focusName
+            ? `Around ${focusName}`
+            : `${stopCount} ${stopCount === 1 ? "stop" : "stops"}`}
+        </SectionTitle>
       </View>
+      {hasHiddenStops ? (
+        <Pressable
+          accessibilityRole="button"
+          accessibilityLabel={`Show all ${stopCount} stops`}
+          hitSlop={8}
+          className="mb-2 active:opacity-60"
+          onPress={onShowAll}
+        >
+          <Text className="text-sm font-medium text-foreground">{allLabel}</Text>
+        </Pressable>
+      ) : null}
     </View>
   );
 }
 
 /**
  * The strip in the line's color down the side of the stops, with each stop's dot on it. The
- * termini and the stop the line was opened from have a bigger one.
+ * termini have a bigger one, and the stop the line was opened from a dot inside it too.
  */
 function StopStrip({
   color,
   isFirst,
   isLast,
-  isBig,
+  dot,
 }: {
   color: string;
   isFirst: boolean;
   isLast: boolean;
-  isBig: boolean;
+  dot: "small" | "big" | "focus";
 }) {
   const surfaceColor = useThemeColor("surface");
   return (
@@ -263,10 +343,12 @@ function StopStrip({
       />
       <View
         style={[
-          isBig ? styles.bigDot : styles.stopDot,
+          dot === "small" ? styles.stopDot : styles.bigDot,
           { borderColor: color, backgroundColor: surfaceColor },
         ]}
-      />
+      >
+        {dot === "focus" ? <View style={[styles.focusDot, { backgroundColor: color }]} /> : null}
+      </View>
     </View>
   );
 }
@@ -288,7 +370,15 @@ interface GapItem {
   count: number;
 }
 
-type ListItem = StopItem | GapItem;
+/** The diagram, the routes and the stops' title, in the list so they scroll with the stops. */
+interface IntroItem {
+  type: "intro";
+  key: string;
+}
+
+const introItem: IntroItem = { type: "intro", key: "intro" };
+
+type ListItem = IntroItem | StopItem | GapItem;
 
 /** The other lines at a stop, and a train icon if it's a train station. */
 function StopConnections({ station, line }: { station: Station; line: Line }) {
@@ -338,7 +428,7 @@ const LineStop = memo(function LineStop({
         color={color}
         isFirst={isFirst}
         isLast={isLast}
-        isBig={isTerminus || isHighlighted}
+        dot={isHighlighted ? "focus" : isTerminus ? "big" : "small"}
       />
       <View className="ml-3 min-h-11 flex-1 flex-row items-center gap-2 py-1.5">
         <Text
@@ -387,14 +477,14 @@ function HiddenStopsRow({
 
 function StopsSkeleton({ color }: { color: string }) {
   return (
-    <View accessibilityLabel="Loading stops">
+    <View accessibilityLabel="Loading stops" className="mt-5">
       {Array.from({ length: skeletonStopCount }, (_, index) => (
         <View key={index} className="flex-row px-4" importantForAccessibility="no-hide-descendants">
           <StopStrip
             color={color}
             isFirst={index === 0}
             isLast={index === skeletonStopCount - 1}
-            isBig={index === 0}
+            dot={index === 0 || index === skeletonStopCount - 1 ? "big" : "small"}
           />
           <View className="ml-3 min-h-11 flex-1 justify-center">
             <Skeleton
@@ -408,15 +498,49 @@ function StopsSkeleton({ color }: { color: string }) {
   );
 }
 
+/** Like a station's About: the line's description, who runs it and where. */
 function LineAbout({ line }: { line: Line }) {
   const mutedColor = useThemeColor("muted");
-  if (!line.description) return null;
+  const operator = getLineOperatorName(line);
+  const countryCode = getLineCountry(line);
+  const country = countryCode ? COUNTRY_MAP[countryCode] : null;
+  const rows = [
+    operator ? (
+      <AboutRow key="operator" label="Operator">
+        <Text className="text-sm text-foreground">{operator}</Text>
+      </AboutRow>
+    ) : null,
+    country ? (
+      <AboutRow key="country" label="Country">
+        <View className="flex-row items-center gap-2">
+          <CountryFlag country={countryCode} />
+          <Text className="text-sm text-foreground">{country}</Text>
+        </View>
+      </AboutRow>
+    ) : null,
+  ].filter((row) => row !== null);
+
   return (
-    <View className="mt-5 px-4">
-      <SectionTitle icon={<Info size={14} color={mutedColor} />}>About</SectionTitle>
-      <Surface variant="secondary" className="rounded-3xl p-4">
-        <Text className="text-sm leading-5 text-foreground">{line.description}</Text>
-      </Surface>
+    <View className="px-4">
+      {line.description || rows.length > 0 ? (
+        <View className="mt-5">
+          <SectionTitle icon={<Info size={14} color={mutedColor} />}>About</SectionTitle>
+          <ListGroup variant="secondary">
+            {line.description ? (
+              <Text className="px-4 py-3.5 text-sm leading-5 text-foreground">
+                {line.description}
+              </Text>
+            ) : null}
+            {rows.map((row, index) => (
+              <Fragment key={row.key}>
+                {index > 0 || line.description ? <Separator className="mx-4" /> : null}
+                {row}
+              </Fragment>
+            ))}
+          </ListGroup>
+        </View>
+      ) : null}
+      <ReportLinks mutedColor={mutedColor} />
     </View>
   );
 }
@@ -457,10 +581,17 @@ function LineSheetContent({
   // Starts with the termini and the stops around the one the line was opened from. Each run of
   // dots expands on its own, so the stops around that one stay where they are.
   const [expandedGaps, setExpandedGaps] = useState<ReadonlySet<string>>(() => new Set());
+  const [isRoutesOpen, setIsRoutesOpen] = useState(false);
   const { expand: expandSheet } = useBottomSheet();
   // Dots above the stop the line was opened from wait for the top step to show their stops: the
   // list only scrolls there, which it does to keep that stop still as they're added above it.
   const [pendingGap, setPendingGap] = useState<number | null>(null);
+  // What the list keeps still as rows above it change: the first one on screen, so the routes
+  // card and the stops push what's below them down, or that stop while dots above it open. iOS
+  // picks the row before each change, so it's switched to that stop a render before the stops
+  // are added, and the setting stays on throughout: turned back on, it'd go by a row it picked
+  // before it was off.
+  const [anchorsFocus, setAnchorsFocus] = useState(false);
   const [headerHeight, setHeaderHeight] = useState(0);
   const [scrollRef, scrollOffset] = useSheetScrollOffset<FlatList<ListItem>>();
   const route = line.routes[branch] ?? line.routes[0];
@@ -478,21 +609,31 @@ function LineSheetContent({
     });
     // Among the stops the stations know, like the gaps' positions.
     const focusIndex = stations.findIndex(({ id }) => id === fromStationId);
-    const items = collapseStops(stations.length, focusIndex).flatMap((entry): ListItem[] => {
+    const entries = collapseStops(stations.length, focusIndex);
+    const stops = entries.flatMap((entry): ListItem[] => {
       if (typeof entry === "number") return [toItem(entry)];
       if (expandedGaps.has(`${branch}:${entry.from}`)) {
         return Array.from({ length: entry.count }, (_, offset) => toItem(entry.from + offset));
       }
       return [{ type: "gap", key: `gap-${entry.from}`, from: entry.from, count: entry.count }];
     });
-    const focusItemIndex = items.findIndex(
+    const focusStopIndex = stops.findIndex(
       (item) => item.type === "stop" && item.station.id === fromStationId,
     );
-    return { items, focusIndex, focusItemIndex };
+    return {
+      stops,
+      focusIndex,
+      // After the intro, which comes first.
+      focusItemIndex: focusStopIndex >= 0 ? focusStopIndex + 1 : -1,
+      focusName: focusIndex >= 0 ? shortStationName(stations[focusIndex]!.name) : null,
+      gaps: entries.flatMap((entry) => (typeof entry === "number" ? [] : [entry.from])),
+    };
   }, [route, stationsById, fromStationId, expandedGaps, branch]);
-  const stops = list?.items ?? null;
+  const stops = list?.stops ?? null;
   const focusIndex = list?.focusIndex ?? -1;
   const focusItemIndex = list?.focusItemIndex ?? -1;
+  const hasHiddenStops = stops?.some((item) => item.type === "gap") ?? false;
+  const items = useMemo((): ListItem[] => [introItem, ...(stops ?? [])], [stops]);
 
   const showGap = useCallback(
     (from: number) => setExpandedGaps((gaps) => new Set(gaps).add(`${branch}:${from}`)),
@@ -503,33 +644,114 @@ function LineSheetContent({
   const expandGap = useCallback(
     (from: number) => {
       haptics.tap();
-      if (from < focusIndex && !isExtended) setPendingGap(from);
-      else showGap(from);
+      if (from < focusIndex) {
+        setAnchorsFocus(true);
+        setPendingGap(from);
+      } else showGap(from);
       expandSheet();
     },
-    [focusIndex, isExtended, showGap, expandSheet],
+    [focusIndex, showGap, expandSheet],
   );
 
+  // Once the list keeps that stop still, and scrolls.
   useEffect(() => {
-    if (pendingGap === null || !isExtended) return;
+    if (pendingGap === null || !isExtended || !anchorsFocus) return;
     setPendingGap(null);
     showGap(pendingGap);
-  }, [pendingGap, isExtended, showGap]);
+  }, [pendingGap, isExtended, anchorsFocus, showGap]);
+
+  // Back to the first row on screen once they're shown.
+  useEffect(() => {
+    if (anchorsFocus && pendingGap === null) setAnchorsFocus(false);
+  }, [anchorsFocus, pendingGap, expandedGaps]);
+
+  const showAllStops = useCallback(() => {
+    if (!list) return;
+    haptics.tap();
+    setExpandedGaps((expanded) => {
+      const next = new Set(expanded);
+      for (const from of list.gaps) next.add(`${branch}:${from}`);
+      return next;
+    });
+    expandSheet();
+  }, [list, branch, expandSheet]);
+
+  const toggleRoutes = useCallback(() => setIsRoutesOpen((open) => !open), []);
+
+  const changeBranch = useCallback(
+    (next: number) => {
+      onBranchChange(next);
+      setIsRoutesOpen(false);
+    },
+    [onBranchChange],
+  );
+
+  const intro =
+    !stops || !stationsById ? (
+      <StopsSkeleton color={color} />
+    ) : (
+      <>
+        <View className="px-4">
+          <LineDiagram
+            line={line}
+            branch={branch}
+            fromStationId={fromStationId}
+            stationsById={stationsById}
+          />
+          <LineRoutes
+            line={line}
+            branch={branch}
+            stationsById={stationsById}
+            isOpen={isRoutesOpen}
+            onToggle={toggleRoutes}
+            onChange={changeBranch}
+          />
+        </View>
+        {stops.length === 0 ? (
+          <StatusMessage
+            icon={CircleAlert}
+            title="No stops to show"
+            description="This line's stops couldn't be loaded."
+          />
+        ) : (
+          <View className="px-4">
+            <StopsTitle
+              focusName={list?.focusName ?? null}
+              stopCount={route ? getRouteStopCount(route, stationsById) : 0}
+              hasHiddenStops={hasHiddenStops}
+              onShowAll={showAllStops}
+            />
+          </View>
+        )}
+      </>
+    );
 
   const renderItem = useCallback(
-    ({ item }: ListRenderItemInfo<ListItem>) =>
-      item.type === "gap" ? (
-        <HiddenStopsRow count={item.count} color={color} onExpand={() => expandGap(item.from)} />
-      ) : (
-        <LineStop
-          item={item}
-          line={line}
-          color={color}
-          isHighlighted={item.station.id === fromStationId}
-          onSelect={onSelectStation}
-        />
-      ),
-    [line, color, fromStationId, onSelectStation, expandGap],
+    ({ item }: ListRenderItemInfo<ListItem>) => {
+      switch (item.type) {
+        case "intro":
+          return intro;
+        case "gap":
+          return (
+            <HiddenStopsRow
+              count={item.count}
+              color={color}
+              onExpand={() => expandGap(item.from)}
+            />
+          );
+        default:
+          return (
+            <LineStop
+              item={item}
+              line={line}
+              color={color}
+              isHighlighted={item.station.id === fromStationId}
+              onSelect={onSelectStation}
+            />
+          );
+      }
+    },
+    [intro, line, color, fromStationId, onSelectStation, expandGap],
   );
 
   return (
@@ -541,50 +763,30 @@ function LineSheetContent({
             titleLines={2}
             closeLabel="Close line"
             onClose={onClose}
-            leading={<LineBadge line={line} size="lg" />}
+            // Like a station's icon: only lines with a code get a badge, since a plain square of
+            // color says nothing the stops' strip doesn't.
+            leading={getLineBadgeCode(line) ? <LineBadge line={line} size="lg" /> : undefined}
           >
             <LineSubtitle line={line} />
           </SheetHeader>
           <QuickActions line={line} />
-          <BranchPicker
-            line={line}
-            branch={branch}
-            stationsById={stationsById}
-            onChange={onBranchChange}
-          />
         </View>
         <SheetHeaderFade scrollOffset={scrollOffset} />
       </PinnedSheetHeader>
       <BottomSheetFlatList
         // Gorhom forwards the RN FlatList instance; its declared ref exposes only list methods.
         ref={scrollRef as Ref<BottomSheetFlatListMethods>}
-        data={stops ?? []}
+        data={items}
         keyExtractor={itemKey}
         renderItem={renderItem}
         initialNumToRender={16}
-        // Stops shown above the one the line was opened from scroll the list by as much, so it
-        // stays where it was.
-        maintainVisibleContentPosition={
-          focusItemIndex >= 0 ? { minIndexForVisible: focusItemIndex } : undefined
-        }
-        removeClippedSubviews={false}
-        contentContainerStyle={{
-          paddingTop: headerHeight + stopsTopSpacing,
-          paddingBottom: bottomInset,
+        maintainVisibleContentPosition={{
+          minIndexForVisible: anchorsFocus && focusItemIndex >= 0 ? focusItemIndex : 0,
         }}
+        removeClippedSubviews={false}
+        contentContainerStyle={{ paddingTop: headerHeight, paddingBottom: bottomInset }}
         scrollIndicatorInsets={{ top: headerHeight }}
         onContentSizeChange={(_, height) => onContentHeightChange(height)}
-        ListHeaderComponent={
-          !stops ? (
-            <StopsSkeleton color={color} />
-          ) : stops.length === 0 ? (
-            <StatusMessage
-              icon={CircleAlert}
-              title="No stops to show"
-              description="This line's stops couldn't be loaded."
-            />
-          ) : null
-        }
         ListFooterComponent={<LineAbout line={line} />}
       />
     </View>
@@ -735,11 +937,18 @@ export function LineSheet({
 
 const styles = StyleSheet.create({
   fill: { flex: 1 },
-  branchChips: { gap: 8, paddingHorizontal: 16 },
-  branchDot: { width: 8, height: 8, borderRadius: 4 },
+  routeDot: { width: 10, height: 10, borderRadius: 5 },
   gapDot: { width: 4, height: 4, borderRadius: 2 },
   stripBar: { position: "absolute", width: 6 },
   stopDot: { width: 12, height: 12, borderRadius: 6, borderWidth: 3 },
-  bigDot: { width: 16, height: 16, borderRadius: 8, borderWidth: 4 },
+  bigDot: {
+    width: 16,
+    height: 16,
+    borderRadius: 8,
+    borderWidth: 4,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  focusDot: { width: 4, height: 4, borderRadius: 2 },
   railIcon: { width: 18, height: 18 },
 });

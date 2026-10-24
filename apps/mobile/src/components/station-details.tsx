@@ -222,7 +222,7 @@ function formatDms(value: number, type: "lat" | "lng") {
   return `${degrees}°${String(minutes).padStart(2, "0")}'${seconds.toFixed(1).padStart(4, "0")}"${hemisphere}`;
 }
 
-function AboutRow({ label, children }: { label: string; children: ReactNode }) {
+export function AboutRow({ label, children }: { label: string; children: ReactNode }) {
   return (
     <ListGroup.Item>
       <ListGroup.ItemContent>
@@ -269,7 +269,7 @@ function StationAbout({ station, mutedColor }: { station: Station; mutedColor: s
   );
 }
 
-function ReportLinks({ mutedColor }: { mutedColor: string }) {
+export function ReportLinks({ mutedColor }: { mutedColor: string }) {
   const links = [
     { label: "Report a problem", icon: Bug, url: bugReportUrl },
     { label: "Request a feature", icon: Lightbulb, url: featureRequestUrl },

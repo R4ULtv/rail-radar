@@ -1,5 +1,5 @@
 import { COUNTRY_CODES, type CountryCode } from "@repo/data/countries";
-import { DEFAULT_LINE_COLOR, getLineStationIds, lineById } from "@repo/data/lines";
+import { DEFAULT_LINE_COLOR, getLineStationIds, getStationLines, lineById } from "@repo/data/lines";
 import type { Line, LineRoute, Station } from "@repo/data/types";
 
 import { distanceKm } from "@/lib/distance";
@@ -116,28 +116,72 @@ export function getLineTermini(
   return `${shortStationName(first.name)} – ${shortStationName(last.name)}`;
 }
 
-/**
- * Branch labels that say where each one goes, like the web: when every branch starts (or ends)
- * at the same stop, only the other end tells them apart, and branches that each end somewhere
- * else read as their destination.
- */
-export function getBranchLabel(
-  routes: readonly LineRoute[],
+/** A route that comes back to the stop it starts from. */
+export function isLoopRoute(route: LineRoute): boolean {
+  return route.stations.length > 2 && route.stations[0] === route.stations.at(-1);
+}
+
+/** How many of a route's stops the stations know, counting a loop's first stop once. */
+export function getRouteStopCount(
   route: LineRoute,
   stationsById: ReadonlyMap<string, Station>,
-): string {
+): number {
+  return new Set(route.stations.filter((id) => stationsById.has(id))).size;
+}
+
+/**
+ * The stop to name a stretch of a route by, "via Bank": the one served by the most lines, since
+ * that's the one people know.
+ */
+export function getViaStation(
+  ids: readonly string[],
+  stationsById: ReadonlyMap<string, Station>,
+): Station | null {
+  let best: Station | null = null;
+  let bestLines = -1;
+  for (const id of ids) {
+    const station = stationsById.get(id);
+    if (!station) continue;
+    const lineCount = getStationLines(id).length;
+    if (lineCount > bestLines) {
+      best = station;
+      bestLines = lineCount;
+    }
+  }
+  return best;
+}
+
+export interface RouteLabel {
+  /** "Abbiategrasso → Gessate", or "Full loop". */
+  title: string;
+  /** Where it goes that another route with the same title doesn't, "Bank". */
+  via: string | null;
+}
+
+/** Each route named after its ends, and a stop it takes when another route has the same ends. */
+export function getRouteLabels(
+  routes: readonly LineRoute[],
+  stationsById: ReadonlyMap<string, Station>,
+): RouteLabel[] {
   const name = (id: string | undefined) => {
     const station = id ? stationsById.get(id) : undefined;
     return station ? shortStationName(station.name) : "";
   };
-  const firsts = new Set(routes.map((other) => other.stations[0]));
-  const lasts = new Set(routes.map((other) => other.stations.at(-1)));
-  const first = name(route.stations[0]);
-  const last = name(route.stations.at(-1));
-  if (firsts.size === 1 && lasts.size === routes.length) return last;
-  if (lasts.size === 1 && firsts.size === routes.length) return first;
-  if (lasts.size === routes.length) return `To ${last}`;
-  return `${first} – ${last}`;
+  const titles = routes.map((route) =>
+    isLoopRoute(route)
+      ? "Full loop"
+      : `${name(route.stations[0])} → ${name(route.stations.at(-1))}`,
+  );
+  return routes.map((route, index) => {
+    const twins = routes.filter((_, other) => other !== index && titles[other] === titles[index]);
+    if (twins.length === 0) return { title: titles[index]!, via: null };
+    const elsewhere = new Set(twins.flatMap((twin) => twin.stations));
+    const via = getViaStation(
+      route.stations.filter((id) => !elsewhere.has(id)),
+      stationsById,
+    );
+    return { title: titles[index]!, via: via ? shortStationName(via.name) : null };
+  });
 }
 
 /** [west, south, east, north] around the line's stops, to fit the map to it. */
