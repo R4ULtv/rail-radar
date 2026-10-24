@@ -153,6 +153,10 @@ function ReportsPage() {
           counts. Repeat views, automated traffic and changes in country availability can affect the
           figures. Each full report includes its own context and methodology.
         </p>
+        <p>
+          October&apos;s figures exclude the confirmed Fredericia spam incident. Its report also
+          shows the raw totals and explains the German provider block and subsequent source change.
+        </p>
       </section>
     </main>
   );

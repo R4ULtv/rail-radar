@@ -24,6 +24,7 @@ import { Route as OperatorsIndexRouteImport } from './routes/operators/index'
 import { Route as OperatorsSlugRouteImport } from './routes/operators/$slug'
 import { Route as Report20260428RouteImport } from './routes/report/2026-04-28'
 import { Route as Report20260724RouteImport } from './routes/report/2026-07-24'
+import { Route as Report20261024RouteImport } from './routes/report/2026-10-24'
 import { Route as StationIdRouteImport } from './routes/station/$id'
 import { Route as StationsIndexRouteImport } from './routes/stations/index'
 import { Route as StationsCountryRouteImport } from './routes/stations/$country'
@@ -105,6 +106,11 @@ const Report20260724Route = Report20260724RouteImport.update({
   path: '/report/2026-07-24',
   getParentRoute: () => rootRouteImport,
 } as any)
+const Report20261024Route = Report20261024RouteImport.update({
+  id: '/report/2026-10-24',
+  path: '/report/2026-10-24',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const StationIdRoute = StationIdRouteImport.update({
   id: '/station/$id',
   path: '/station/$id',
@@ -146,6 +152,7 @@ export interface FileRoutesByFullPath {
   '/operators/$slug': typeof OperatorsSlugRoute
   '/report/2026-04-28': typeof Report20260428Route
   '/report/2026-07-24': typeof Report20260724Route
+  '/report/2026-10-24': typeof Report20261024Route
   '/station/$id': typeof StationIdRoute
   '/stations/$country': typeof StationsCountryRoute
   '/donate/': typeof DonateIndexRoute
@@ -168,6 +175,7 @@ export interface FileRoutesByTo {
   '/operators/$slug': typeof OperatorsSlugRoute
   '/report/2026-04-28': typeof Report20260428Route
   '/report/2026-07-24': typeof Report20260724Route
+  '/report/2026-10-24': typeof Report20261024Route
   '/station/$id': typeof StationIdRoute
   '/stations/$country': typeof StationsCountryRoute
   '/donate': typeof DonateIndexRoute
@@ -191,6 +199,7 @@ export interface FileRoutesById {
   '/operators/$slug': typeof OperatorsSlugRoute
   '/report/2026-04-28': typeof Report20260428Route
   '/report/2026-07-24': typeof Report20260724Route
+  '/report/2026-10-24': typeof Report20261024Route
   '/station/$id': typeof StationIdRoute
   '/stations/$country': typeof StationsCountryRoute
   '/donate/': typeof DonateIndexRoute
@@ -215,6 +224,7 @@ export interface FileRouteTypes {
     | '/operators/$slug'
     | '/report/2026-04-28'
     | '/report/2026-07-24'
+    | '/report/2026-10-24'
     | '/station/$id'
     | '/stations/$country'
     | '/donate/'
@@ -237,6 +247,7 @@ export interface FileRouteTypes {
     | '/operators/$slug'
     | '/report/2026-04-28'
     | '/report/2026-07-24'
+    | '/report/2026-10-24'
     | '/station/$id'
     | '/stations/$country'
     | '/donate'
@@ -259,6 +270,7 @@ export interface FileRouteTypes {
     | '/operators/$slug'
     | '/report/2026-04-28'
     | '/report/2026-07-24'
+    | '/report/2026-10-24'
     | '/station/$id'
     | '/stations/$country'
     | '/donate/'
@@ -282,6 +294,7 @@ export interface RootRouteChildren {
   OperatorsSlugRoute: typeof OperatorsSlugRoute
   Report20260428Route: typeof Report20260428Route
   Report20260724Route: typeof Report20260724Route
+  Report20261024Route: typeof Report20261024Route
   StationIdRoute: typeof StationIdRoute
   StationsCountryRoute: typeof StationsCountryRoute
   DonateIndexRoute: typeof DonateIndexRoute
@@ -399,6 +412,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof Report20260724RouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/report/2026-10-24': {
+      id: '/report/2026-10-24'
+      path: '/report/2026-10-24'
+      fullPath: '/report/2026-10-24'
+      preLoaderRoute: typeof Report20261024RouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/station/$id': {
       id: '/station/$id'
       path: '/station/$id'
@@ -450,6 +470,7 @@ const rootRouteChildren: RootRouteChildren = {
   OperatorsSlugRoute: OperatorsSlugRoute,
   Report20260428Route: Report20260428Route,
   Report20260724Route: Report20260724Route,
+  Report20261024Route: Report20261024Route,
   StationIdRoute: StationIdRoute,
   StationsCountryRoute: StationsCountryRoute,
   DonateIndexRoute: DonateIndexRoute,

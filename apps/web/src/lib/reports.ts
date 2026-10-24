@@ -1,3 +1,5 @@
+import octoberData from "./report-data/2026-10-24-summary.json" with { type: "json" };
+
 // Archived, published figures. Keep preliminary investigations out of this dataset.
 // Country and provider layouts preserve the tables in each original report.
 type AprilCountryRow = [string, number, number, number, number, number, string];
@@ -147,6 +149,12 @@ export const julyReport = {
   ] satisfies JulyProviderRow[],
 };
 
+export const octoberReport = {
+  firstSeen: octoberData.firstSeen,
+  lastSeen: octoberData.lastSeen,
+  summary: octoberData.summary,
+};
+
 /** Oldest first, so every comparison uses publication order. */
 export const publishedReports = [
   {
@@ -166,6 +174,15 @@ export const publishedReports = [
     description:
       "A larger international audience, Germany's rise and a closer look at repeat station views.",
     data: julyReport,
+  },
+  {
+    path: "/report/2026-10-24",
+    publishedAt: "2026-10-24",
+    label: "October 2026",
+    title: "Rail Radar's audience more than doubled across 14 countries",
+    description:
+      "A larger audience, Zürich HB's lead and a transparent look at bot traffic and provider reliability.",
+    data: octoberReport,
   },
 ] as const;
 
