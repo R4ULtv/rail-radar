@@ -52,7 +52,7 @@ function StationsPage() {
         </p>
         <h1 className="text-4xl font-semibold tracking-tight">Train Stations</h1>
         <p className="mt-3 text-muted-foreground max-w-lg text-pretty">
-          {totalStations.toLocaleString()} train stations tracked across {countries.length}{" "}
+          {totalStations.toLocaleString("en-US")} train stations tracked across {countries.length}{" "}
           countries in real time on Rail Radar. Browse by country to find live departures and
           arrivals.
         </p>
@@ -84,7 +84,7 @@ function StationsPage() {
                     {country.name}
                   </div>
                   <div className="mt-0.5 text-xs text-muted-foreground">
-                    {country.count.toLocaleString()} stations
+                    {country.count.toLocaleString("en-US")} stations
                   </div>
                 </div>
                 <ArrowRightIcon className="size-3.5 text-muted-foreground opacity-0 -translate-x-1 transition-[opacity,transform] ease-[cubic-bezier(0.23,1,0.32,1)] duration-200 lg:group-hover:opacity-100 lg:group-hover:translate-x-0 shrink-0" />

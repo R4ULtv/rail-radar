@@ -143,10 +143,17 @@ share-alike for derived databases.
 | `/analytics/overview`  | 5min cache, 1min stale-while-revalidate |
 
 Static map generation has a separate allowance of five Mapbox requests per minute per client IP.
-All map parameters share that allowance, including fallback attempts. Cache hits use only the general
+All map parameters share that allowance. Static maps request WebP directly from Mapbox without
+image conversion or fallback attempts. Cache hits use only the general
 API rate limit, and invalid parameters do not consume the generation allowance. Exhausting the
 allowance returns `429` with `Retry-After: 60` and `Cache-Control: no-store`. This Cloudflare rate limit
 is approximate and local to each data center; it does not enforce a monthly Mapbox spending cap.
+
+Static maps use a 30-day browser and Worker cache lifetime. Cache keys normalize numeric values
+and default dimensions/zoom, ignore unused parameters, and use a fixed parameter order. Equivalent
+requests therefore reuse one image instead of consuming additional Mapbox requests. HEAD requests
+never generate an image. Worker caches are local to each data center and may evict images before
+their lifetime ends.
 
 Station statistics reuse the completed global top-station aggregate for 150 seconds within a
 Cloudflare data center. This shortens the full station-statistics response cache from five minutes

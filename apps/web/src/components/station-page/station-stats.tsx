@@ -40,8 +40,8 @@ export function StationStats({ stationId }: StationStatsProps) {
           <div className="flex items-center gap-2 text-sm text-muted-foreground">
             <BarChart3Icon className="size-4" />
             <span>
-              {station.uniqueVisitors.toLocaleString()} unique visitors (
-              {station.visits.toLocaleString()} visits) in the last 7 days
+              {station.uniqueVisitors.toLocaleString("en-US")} unique visitors (
+              {station.visits.toLocaleString("en-US")} visits) in the last 7 days
             </span>
           </div>
         </div>

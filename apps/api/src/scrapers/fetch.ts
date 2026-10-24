@@ -45,14 +45,42 @@ async function fetchResponseWithTimeout(
   if (!response.ok) {
     clearTimeout(timeoutId);
     throw new ScraperError(
-      response.statusText || `HTTP ${response.status}`,
+      upstreamHttpErrorMessage(regionLabel, response.status),
       response.status as ContentfulStatusCode,
       { fetchMs },
       { upstream: { ...upstream, status: response.status } },
     );
   }
 
-  return { response, fetchMs, startTime, timeoutId, upstream };
+  return {
+    response,
+    fetchMs,
+    startTime,
+    timeoutId,
+    upstream: { ...upstream, status: response.status },
+  };
+}
+
+function upstreamHttpErrorMessage(regionLabel: string, status: number): string {
+  const source = `The ${regionLabel} train data source`;
+  const httpStatus = `(HTTP ${status})`;
+
+  switch (status) {
+    case 408:
+    case 504:
+      return `${source} timed out ${httpStatus}. Please try again.`;
+    case 429:
+      return `${source} has reached its request limit ${httpStatus}. Please try again shortly.`;
+    case 401:
+    case 403:
+      return `${source} rejected our access ${httpStatus}.`;
+    case 404:
+      return `${source} could not find the requested train data ${httpStatus}.`;
+    default:
+      return status >= 500
+        ? `${source} is temporarily unavailable ${httpStatus}. Please try again.`
+        : `${source} rejected the request ${httpStatus}.`;
+  }
 }
 
 function timeoutError(
@@ -84,7 +112,14 @@ async function readBody<T>(
     if (error instanceof Error && error.name === "AbortError") {
       throw timeoutError(regionLabel, fetchMs, upstream, error);
     }
-    throw error; // malformed-body errors keep today's behavior (generic 500 path)
+    throw new ScraperError(
+      error instanceof SyntaxError
+        ? `The ${regionLabel} train data source returned an invalid response. Please try again.`
+        : `Unable to read the response from the ${regionLabel} train data source. Please try again.`,
+      502,
+      { fetchMs },
+      { cause: error, upstream },
+    );
   } finally {
     clearTimeout(timeoutId);
   }

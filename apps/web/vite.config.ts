@@ -6,6 +6,7 @@ import { tanstackStart } from "@tanstack/react-start/plugin/vite";
 import { COUNTRY_SLUGS } from "../../packages/data/src/countries.ts";
 import { isStationPagePrerendered } from "./src/lib/station-prerender.ts";
 import { simplify } from "./src/lib/map-projection.ts";
+import { publishedReports } from "./src/lib/reports.ts";
 import viteReact from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
 
@@ -37,8 +38,8 @@ const prerenderPages = [
   "/sitemap.xml",
   "/stations",
   "/terms-of-service",
-  "/report/2026-04-28",
-  "/report/2026-07-24",
+  "/reports",
+  ...publishedReports.map((report) => report.path),
   ...lineRecords.map(({ id }) => `/lines/${id}`),
   ...operatorRecords.map(({ slug }) => `/operators/${slug}`),
   ...COUNTRY_SLUGS.map((slug) => `/stations/${slug}`),

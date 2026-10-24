@@ -110,8 +110,8 @@ const StationList = React.memo(function StationList({
               {stationCounts && (
                 <span className="shrink-0 text-xs text-muted-foreground tabular-nums ml-auto flex items-center gap-1">
                   <UserIcon className="size-3.5" />
-                  {stationCounts.uniqueVisitors.toLocaleString()} (
-                  {stationCounts.visits.toLocaleString()})
+                  {stationCounts.uniqueVisitors.toLocaleString("en-US")} (
+                  {stationCounts.visits.toLocaleString("en-US")})
                 </span>
               )}
             </button>

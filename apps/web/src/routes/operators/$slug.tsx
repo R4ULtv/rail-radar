@@ -227,7 +227,7 @@ function OperatorPage({ slug, network }: { slug: string; network: OperatorLinesD
   if (operator.networkKm)
     facts.push({
       label: "Network Length",
-      value: `${operator.networkKm.toLocaleString()} km`,
+      value: `${operator.networkKm.toLocaleString("en-US")} km`,
       icon: TrainTrackIcon,
     });
   if (operator.annualPassengers)
