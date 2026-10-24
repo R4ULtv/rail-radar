@@ -124,24 +124,52 @@ async function hashIP(ip: string, pepper: string): Promise<string> {
     .join("");
 }
 
-async function queryAnalytics<T>(accountId: string, apiToken: string, query: string): Promise<T> {
-  const response = await fetch(
-    `https://api.cloudflare.com/client/v4/accounts/${accountId}/analytics_engine/sql`,
-    {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${apiToken}`,
-        "Content-Type": "text/plain",
+async function queryAnalytics<T>(
+  accountId: string,
+  apiToken: string,
+  query: string,
+  operation: string,
+): Promise<T> {
+  let response: Response;
+  try {
+    response = await fetch(
+      `https://api.cloudflare.com/client/v4/accounts/${accountId}/analytics_engine/sql`,
+      {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${apiToken}`,
+          "Content-Type": "text/plain",
+        },
+        body: query,
       },
-      body: query,
-    },
-  );
-
-  if (!response.ok) {
-    throw new Error(`Analytics query failed: ${response.status}`);
+    );
+  } catch (cause) {
+    throw new Error(
+      `Unable to connect to Cloudflare Analytics Engine for the ${operation} query. Please try again.`,
+      { cause },
+    );
   }
 
-  return response.json() as Promise<T>;
+  if (!response.ok) {
+    const reason =
+      response.status === 401 || response.status === 403
+        ? "rejected access"
+        : response.status === 429
+          ? "reached its request limit"
+          : "could not complete the query";
+    throw new Error(
+      `Cloudflare Analytics Engine ${reason} for ${operation} (HTTP ${response.status}).`,
+    );
+  }
+
+  try {
+    return (await response.json()) as T;
+  } catch (cause) {
+    throw new Error(
+      `Unable to read the Cloudflare Analytics Engine response for ${operation} (HTTP ${response.status}).`,
+      { cause },
+    );
+  }
 }
 
 export async function recordStationVisit(
@@ -227,7 +255,12 @@ export async function getTrendingStations(
     LIMIT ${safeLimit}
   `;
 
-  const result = await queryAnalytics<AnalyticsQueryResult>(accountId, apiToken, query);
+  const result = await queryAnalytics<AnalyticsQueryResult>(
+    accountId,
+    apiToken,
+    query,
+    "trending stations",
+  );
 
   return result.data.map((row) => ({
     stationId: row.stationId,
@@ -288,7 +321,7 @@ export async function getStationStats(
   };
 
   const [stationResult, topStation] = await Promise.all([
-    queryAnalytics<AnalyticsQueryResult>(accountId, apiToken, stationQuery),
+    queryAnalytics<AnalyticsQueryResult>(accountId, apiToken, stationQuery, "station statistics"),
     getTopStation(),
   ]);
 
@@ -333,8 +366,18 @@ export async function getAnalyticsOverview(
   `;
 
   const [overviewResult, countryResult] = await Promise.all([
-    queryAnalytics<AnalyticsOverviewQueryResult>(accountId, apiToken, overviewQuery),
-    queryAnalytics<CountryBreakdownQueryResult>(accountId, apiToken, countryQuery),
+    queryAnalytics<AnalyticsOverviewQueryResult>(
+      accountId,
+      apiToken,
+      overviewQuery,
+      "analytics overview",
+    ),
+    queryAnalytics<CountryBreakdownQueryResult>(
+      accountId,
+      apiToken,
+      countryQuery,
+      "country breakdown",
+    ),
   ]);
 
   return {
