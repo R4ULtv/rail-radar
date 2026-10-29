@@ -110,7 +110,10 @@ function getStationMetadata(station: StationWithGeo): Metadata {
 
 export function getStationPageData(id: string) {
   const mapStation = stationById.get(id);
-  if (mapStation?.geo && (mapStation.type === "metro" || mapStation.type === "light")) {
+  if (
+    mapStation?.geo &&
+    (mapStation.type === "metro" || mapStation.type === "light" || mapStation.type === "freight")
+  ) {
     // Keep these URLs available for dedicated station pages in the future.
     throw redirect({
       to: "/",
@@ -184,12 +187,7 @@ function toDirectoryStation({ id, name, type, importance }: StationWithGeo): Dir
 }
 
 function indexKey(name: string): string {
-  const first = name
-    .normalize("NFD")
-    .replace(/[̀-ͯ]/g, "")
-    .trim()
-    .charAt(0)
-    .toUpperCase();
+  const first = name.normalize("NFD").replace(/[̀-ͯ]/g, "").trim().charAt(0).toUpperCase();
 
   return /[A-Z]/.test(first) ? first : "#";
 }
