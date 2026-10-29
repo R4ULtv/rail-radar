@@ -1,181 +1,133 @@
 #!/usr/bin/env node
 
-/**
- * Station Data Validator and Diff Reporter
- *
- * Validates stations.geojson and generates a PR comment
- * with statistics and detailed change information.
- */
+/** Dependency-free station validation and PR reporting. Run directly with Node 24. */
+import { appendFileSync, readFileSync, writeFileSync } from "node:fs";
+import { parseArgs } from "node:util";
+import type { FreightKind, StationProperties } from "../../packages/data/src/types.ts";
 
-import { readFileSync, writeFileSync, appendFileSync } from "fs";
-import { parseArgs } from "util";
+// Keep these exhaustive against the shared schema without loading application dependencies.
+const stationTypes = {
+  rail: "Rail",
+  metro: "Metro",
+  light: "Light rail",
+  freight: "Freight",
+} satisfies Record<StationProperties["type"], string>;
+const freightKinds = {
+  marshalling: "Marshalling yard",
+  intermodal: "Intermodal terminal",
+  port: "Port terminal",
+} satisfies Record<FreightKind, string>;
 
-interface StationProperties {
-  id: string;
-  name: string;
-  type: "rail" | "metro" | "light";
-  importance: 1 | 2 | 3 | 4;
-}
-
+// Input is deliberately untrusted: even malformed stations must produce a useful report.
 interface StationFeature {
-  type: "Feature";
-  properties: StationProperties;
-  geometry: {
-    type: "Point";
-    coordinates: [number, number];
-  };
-}
-
-interface StationGeoJSON {
-  type: "FeatureCollection";
-  features: StationFeature[];
+  properties: Record<string, unknown> & { id: string };
+  geometry?: unknown;
 }
 
 interface ValidationError {
-  stationId: string;
-  stationName: string;
+  stationId: unknown;
+  stationName: unknown;
   field: string;
   message: string;
+}
+
+interface Change {
+  field: string;
+  oldValue: unknown;
+  newValue: unknown;
 }
 
 interface DiffResult {
   added: StationFeature[];
   removed: StationFeature[];
-  modified: Array<{
-    id: string;
-    name: string;
-    changes: Array<{
-      field: string;
-      oldValue: unknown;
-      newValue: unknown;
-    }>;
-  }>;
+  modified: Array<{ base: StationFeature; head: StationFeature; changes: Change[] }>;
 }
 
-// --- Argument Parsing ---
-
-const { values } = parseArgs({
-  options: {
-    base: { type: "string" },
-    head: { type: "string" },
-    output: { type: "string" },
-  },
-});
-
-const basePath = values.base;
-const headPath = values.head;
-const outputPath = values.output;
-
-if (!basePath || !headPath || !outputPath) {
-  console.error("Usage: validate-stations.ts --base=<path> --head=<path> --output=<path>");
-  process.exit(1);
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === "object" && value !== null && !Array.isArray(value);
 }
 
-// --- File Loading ---
-
-function loadGeoJSON(path: string): StationGeoJSON {
-  const content = readFileSync(path, "utf-8");
-  return JSON.parse(content);
+function hasKey<T extends object>(object: T, key: unknown): key is keyof T {
+  return typeof key === "string" && Object.hasOwn(object, key);
 }
 
-// --- Validation ---
+function loadFeatures(path: string): unknown[] {
+  const data: unknown = JSON.parse(readFileSync(path, "utf-8"));
+  if (!isRecord(data) || data.type !== "FeatureCollection" || !Array.isArray(data.features)) {
+    throw new Error(`${path}: expected a GeoJSON FeatureCollection with a features array`);
+  }
+  return data.features;
+}
 
-function validateFeatures(features: StationFeature[]): ValidationError[] {
+function coordinates(feature: StationFeature): unknown[] {
+  return isRecord(feature.geometry) && Array.isArray(feature.geometry.coordinates)
+    ? feature.geometry.coordinates
+    : [];
+}
+
+function validateFeatures(features: unknown[]): ValidationError[] {
   const errors: ValidationError[] = [];
-  const seenIds = new Map<string, string>();
+  const seenIds = new Map<string, unknown>();
 
-  for (let i = 0; i < features.length; i++) {
-    const feature = features[i];
-    const props = feature.properties;
-
-    // Check ID exists and is a string
-    if (typeof props.id !== "string" || props.id.trim() === "") {
+  for (const [index, feature] of features.entries()) {
+    const props = isRecord(feature) && isRecord(feature.properties) ? feature.properties : {};
+    const addError = (field: string, message: string) => {
       errors.push({
-        stationId: props.id || `index ${i}`,
-        stationName: props.name || `index ${i}`,
-        field: "id",
-        message: `ID is not a valid string: ${JSON.stringify(props.id)}`,
+        stationId: props.id ?? `index ${index}`,
+        stationName: props.name ?? "(unnamed)",
+        field,
+        message,
       });
+    };
+
+    if (!isRecord(feature) || feature.type !== "Feature" || !isRecord(feature.properties)) {
+      addError("feature", "Expected a GeoJSON Feature with a properties object");
       continue;
     }
 
-    if (/[\r\n]/.test(props.id)) {
-      errors.push({
-        stationId: props.id,
-        stationName: props.name,
-        field: "id",
-        message: "ID must not contain line breaks",
-      });
-      continue;
+    if (typeof props.id !== "string" || props.id.trim() === "" || /[\r\n]/.test(props.id)) {
+      addError("id", "ID must be a non-empty string without line breaks");
+    } else {
+      if (seenIds.has(props.id)) {
+        addError("id", `Duplicate ID (also used by "${seenIds.get(props.id)}")`);
+      }
+      seenIds.set(props.id, props.name);
     }
 
-    // Check for duplicate IDs
-    if (seenIds.has(props.id)) {
-      errors.push({
-        stationId: props.id,
-        stationName: props.name,
-        field: "id",
-        message: `Duplicate ID (also used by "${seenIds.get(props.id)}")`,
-      });
-    }
-    seenIds.set(props.id, props.name);
-
-    // Check name is non-empty string
     if (typeof props.name !== "string" || props.name.trim() === "") {
-      errors.push({
-        stationId: props.id,
-        stationName: props.name || "(empty)",
-        field: "name",
-        message: "Name must be a non-empty string",
-      });
+      addError("name", "Name must be a non-empty string");
+    }
+    if (!hasKey(stationTypes, props.type)) {
+      addError("type", `Invalid type: ${props.type} (must be rail, metro, light, or freight)`);
+    }
+    if (![1, 2, 3, 4].includes(props.importance as number)) {
+      addError("importance", `Invalid importance: ${props.importance} (must be 1-4)`);
+    }
+    if (props.kind !== undefined) {
+      if (!hasKey(freightKinds, props.kind)) {
+        addError(
+          "kind",
+          `Invalid freight kind: ${props.kind} (must be marshalling, intermodal, or port)`,
+        );
+      }
+      if (props.type !== "freight") {
+        addError("kind", "Kind can only be set on freight stations");
+      }
     }
 
-    // Validate type
-    if (!["rail", "metro", "light"].includes(props.type)) {
-      errors.push({
-        stationId: props.id,
-        stationName: props.name,
-        field: "type",
-        message: `Invalid type: ${props.type} (must be rail, metro, or light)`,
-      });
+    if (!isRecord(feature.geometry) || feature.geometry.type !== "Point") {
+      addError("geometry", "Geometry must be a GeoJSON Point");
     }
-
-    // Validate importance
-    if (![1, 2, 3, 4].includes(props.importance)) {
-      errors.push({
-        stationId: props.id,
-        stationName: props.name,
-        field: "importance",
-        message: `Invalid importance: ${props.importance} (must be 1-4)`,
-      });
-    }
-
-    // Validate geometry
-    const coords = feature.geometry?.coordinates;
-    if (!coords || coords.length < 2) {
-      errors.push({
-        stationId: props.id,
-        stationName: props.name,
-        field: "geometry",
-        message: "Missing coordinates",
-      });
+    const coords = isRecord(feature.geometry) ? feature.geometry.coordinates : undefined;
+    if (!Array.isArray(coords) || coords.length < 2) {
+      addError("geometry", "Missing coordinates (expected [longitude, latitude])");
     } else {
       const [lng, lat] = coords;
-      if (typeof lat !== "number" || lat < -90 || lat > 90) {
-        errors.push({
-          stationId: props.id,
-          stationName: props.name,
-          field: "geometry.lat",
-          message: `Invalid latitude: ${lat} (must be -90 to 90)`,
-        });
+      if (typeof lat !== "number" || !Number.isFinite(lat) || lat < -90 || lat > 90) {
+        addError("geometry.lat", `Invalid latitude: ${lat} (must be -90 to 90)`);
       }
-      if (typeof lng !== "number" || lng < -180 || lng > 180) {
-        errors.push({
-          stationId: props.id,
-          stationName: props.name,
-          field: "geometry.lng",
-          message: `Invalid longitude: ${lng} (must be -180 to 180)`,
-        });
+      if (typeof lng !== "number" || !Number.isFinite(lng) || lng < -180 || lng > 180) {
+        addError("geometry.lng", `Invalid longitude: ${lng} (must be -180 to 180)`);
       }
     }
   }
@@ -183,225 +135,319 @@ function validateFeatures(features: StationFeature[]): ValidationError[] {
   return errors;
 }
 
-// --- Diff Computation ---
-
-function computeDiff(baseFeatures: StationFeature[], headFeatures: StationFeature[]): DiffResult {
-  const baseMap = new Map(baseFeatures.map((f) => [f.properties.id, f]));
-  const headMap = new Map(headFeatures.map((f) => [f.properties.id, f]));
-
-  const added: StationFeature[] = [];
-  const removed: StationFeature[] = [];
-  const modified: DiffResult["modified"] = [];
-
-  for (const [id, headFeature] of headMap) {
-    const baseFeature = baseMap.get(id);
-
-    if (!baseFeature) {
-      added.push(headFeature);
-    } else {
-      const changes = compareFeatures(baseFeature, headFeature);
-      if (changes.length > 0) {
-        modified.push({ id, name: headFeature.properties.name, changes });
-      }
+function indexFeatures(features: unknown[]): Map<string, StationFeature> {
+  const result = new Map<string, StationFeature>();
+  for (const feature of features) {
+    if (
+      isRecord(feature) &&
+      isRecord(feature.properties) &&
+      typeof feature.properties.id === "string"
+    ) {
+      result.set(feature.properties.id, feature as unknown as StationFeature);
     }
   }
-
-  for (const [id, baseFeature] of baseMap) {
-    if (!headMap.has(id)) {
-      removed.push(baseFeature);
-    }
-  }
-
-  return { added, removed, modified };
+  return result;
 }
 
-function compareFeatures(
-  base: StationFeature,
-  head: StationFeature,
-): Array<{ field: string; oldValue: unknown; newValue: unknown }> {
-  const changes: Array<{ field: string; oldValue: unknown; newValue: unknown }> = [];
-
-  if (base.properties.name !== head.properties.name) {
-    changes.push({ field: "name", oldValue: base.properties.name, newValue: head.properties.name });
+function compareFeatures(base: StationFeature, head: StationFeature): Change[] {
+  const changes: Change[] = [];
+  for (const field of ["name", "type", "importance", "kind"]) {
+    if (base.properties[field] !== head.properties[field]) {
+      changes.push({ field, oldValue: base.properties[field], newValue: head.properties[field] });
+    }
   }
-
-  if (base.properties.type !== head.properties.type) {
-    changes.push({ field: "type", oldValue: base.properties.type, newValue: head.properties.type });
+  const before = coordinates(base);
+  const after = coordinates(head);
+  // Object key order is irrelevant, but geometry type and every coordinate matter.
+  const baseType = isRecord(base.geometry) ? base.geometry.type : undefined;
+  const headType = isRecord(head.geometry) ? head.geometry.type : undefined;
+  if (baseType !== headType || JSON.stringify(before) !== JSON.stringify(after)) {
+    changes.push({ field: "location", oldValue: base.geometry, newValue: head.geometry });
   }
-
-  if (base.properties.importance !== head.properties.importance) {
-    changes.push({
-      field: "importance",
-      oldValue: base.properties.importance,
-      newValue: head.properties.importance,
-    });
-  }
-
-  const [baseLng, baseLat] = base.geometry.coordinates;
-  const [headLng, headLat] = head.geometry.coordinates;
-
-  if (baseLat !== headLat) {
-    changes.push({ field: "lat", oldValue: baseLat, newValue: headLat });
-  }
-  if (baseLng !== headLng) {
-    changes.push({ field: "lng", oldValue: baseLng, newValue: headLng });
-  }
-
   return changes;
 }
 
-// --- Report Generation ---
-
-function formatCoords(feature: StationFeature): string {
-  const [lng, lat] = feature.geometry.coordinates;
-  return `${lat}, ${lng}`;
+function computeDiff(baseFeatures: unknown[], headFeatures: unknown[]): DiffResult {
+  const baseMap = indexFeatures(baseFeatures);
+  const headMap = indexFeatures(headFeatures);
+  const diff: DiffResult = { added: [], removed: [], modified: [] };
+  for (const [id, head] of headMap) {
+    const base = baseMap.get(id);
+    if (!base) {
+      diff.added.push(head);
+    } else {
+      const changes = compareFeatures(base, head);
+      if (changes.length > 0) diff.modified.push({ base, head, changes });
+    }
+  }
+  for (const [id, base] of baseMap) {
+    if (!headMap.has(id)) diff.removed.push(base);
+  }
+  // Stable order makes large imports and rerun comments easier to compare.
+  const byId = (a: StationFeature, b: StationFeature) =>
+    a.properties.id.localeCompare(b.properties.id, "en", { numeric: true });
+  diff.added.sort(byId);
+  diff.removed.sort(byId);
+  diff.modified.sort((a, b) => byId(a.head, b.head));
+  return diff;
 }
 
-function generateReport(diff: DiffResult, errors: ValidationError[]): string {
-  const lines: string[] = [];
+// Escape untrusted data in every table cell, including HTML, Markdown, and line breaks.
+function cell(value: unknown, full: boolean): string {
+  if (value === undefined) return "—";
+  const raw = typeof value === "object" ? JSON.stringify(value) : String(value);
+  const text = !full && raw.length > 160 ? `${raw.slice(0, 157)}…` : raw;
+  return text
+    .replace(/[\r\n]+/g, " ")
+    .replace(/[&<>`*_[\]~\\|@]/g, (char) => `&#${char.charCodeAt(0)};`);
+}
 
-  lines.push("<!-- station-data-check -->");
-  lines.push("## Station Data Change Report");
-  lines.push("");
+function location(value: unknown, full: boolean): string {
+  if (!isRecord(value) || value.type !== "Point" || !Array.isArray(value.coordinates)) {
+    return cell(value, full);
+  }
+  const [lng, lat] = value.coordinates;
+  if (
+    typeof lng !== "number" ||
+    !Number.isFinite(lng) ||
+    Math.abs(lng) > 180 ||
+    typeof lat !== "number" ||
+    !Number.isFinite(lat) ||
+    Math.abs(lat) > 90
+  ) {
+    return cell(value, full);
+  }
+  const link = `[${lat}, ${lng}](https://www.openstreetmap.org/?mlat=${lat}&mlon=${lng}#map=16/${lat}/${lng})`;
+  return value.coordinates.length > 2
+    ? `${link} (extra: ${cell(value.coordinates.slice(2), full)})`
+    : link;
+}
 
-  // Validation errors
-  if (errors.length > 0) {
-    lines.push("<details>");
+function fieldValue(field: string, value: unknown, full: boolean): string {
+  if (field === "location") return location(value, full);
+  if (field === "type" && hasKey(stationTypes, value)) return stationTypes[value];
+  if (field === "kind" && hasKey(freightKinds, value)) return freightKinds[value];
+  return cell(value, full);
+}
+
+function generateReport(
+  diff: DiffResult,
+  errors: ValidationError[],
+  baseCount: number,
+  headCount: number,
+  limit: number,
+  reportUrl?: string,
+  comparisonFailed = false,
+): string {
+  const full = limit === Infinity;
+  const changed = diff.added.length + diff.removed.length + diff.modified.length;
+  const lines = [
+    "<!-- station-data-check -->",
+    "## Station data review",
+    "",
+    errors.length > 0
+      ? `❌ **Validation failed — ${errors.length} error${errors.length === 1 ? "" : "s"}.** Fix these before merging.`
+      : `✅ **Validation passed** — ${headCount.toLocaleString("en")} stations checked.`,
+    "",
+  ];
+
+  if (comparisonFailed) {
     lines.push(
-      `<summary><strong>:warning: Validation Errors (${errors.length})</strong></summary>`,
+      "**Station changes could not be compared because an input file could not be read.**",
+      "",
     );
-    lines.push("");
-    lines.push("| Station ID | Station Name | Field | Error |");
-    lines.push("|------------|--------------|-------|-------|");
-    for (const error of errors) {
-      lines.push(
-        `| ${escapeMarkdown(error.stationId)} | ${escapeMarkdown(error.stationName)} | \`${error.field}\` | ${escapeMarkdown(error.message)} |`,
-      );
-    }
-    lines.push("");
-    lines.push("</details>");
-    lines.push("");
+  } else {
+    lines.push(
+      "| Added | Modified | Removed | Total stations |",
+      "| ---: | ---: | ---: | ---: |",
+      `| +${diff.added.length} | ${diff.modified.length} | −${diff.removed.length} | ${baseCount.toLocaleString("en")} → ${headCount.toLocaleString("en")} |`,
+      "",
+    );
   }
 
-  // Added stations
-  if (diff.added.length > 0) {
-    lines.push("<details>");
-    lines.push(
-      `<summary><strong>:heavy_plus_sign: Stations Added (${diff.added.length})</strong></summary>`,
-    );
-    lines.push("");
-    lines.push("| ID | Name | Type | Coordinates |");
-    lines.push("|----|------|------|-------------|");
-    for (const feature of diff.added.slice(0, 50)) {
-      lines.push(
-        `| ${escapeMarkdown(feature.properties.id)} | ${escapeMarkdown(feature.properties.name)} | ${feature.properties.type} | ${formatCoords(feature)} |`,
-      );
-    }
-    if (diff.added.length > 50) {
-      lines.push(`| ... | _${diff.added.length - 50} more stations_ | ... | ... |`);
-    }
-    lines.push("");
-    lines.push("</details>");
-    lines.push("");
-  }
-
-  // Removed stations
-  if (diff.removed.length > 0) {
-    lines.push("<details>");
-    lines.push(
-      `<summary><strong>:heavy_minus_sign: Stations Removed (${diff.removed.length})</strong></summary>`,
-    );
-    lines.push("");
-    lines.push("| ID | Name | Type | Coordinates |");
-    lines.push("|----|------|------|-------------|");
-    for (const feature of diff.removed.slice(0, 50)) {
-      lines.push(
-        `| ${escapeMarkdown(feature.properties.id)} | ${escapeMarkdown(feature.properties.name)} | ${feature.properties.type} | ${formatCoords(feature)} |`,
-      );
-    }
-    if (diff.removed.length > 50) {
-      lines.push(`| ... | _${diff.removed.length - 50} more stations_ | ... | ... |`);
-    }
-    lines.push("");
-    lines.push("</details>");
-    lines.push("");
-  }
-
-  // Modified stations
-  if (diff.modified.length > 0) {
-    lines.push("<details>");
-    lines.push(
-      `<summary><strong>:pencil2: Stations Modified (${diff.modified.length})</strong></summary>`,
-    );
-    lines.push("");
-    for (const mod of diff.modified.slice(0, 30)) {
-      lines.push(`#### Station ${escapeMarkdown(mod.id)}: ${escapeMarkdown(mod.name)}`);
-      lines.push("");
-      lines.push("| Field | Old Value | New Value |");
-      lines.push("|-------|-----------|-----------|");
-      for (const change of mod.changes) {
+  if (changed > 0) {
+    lines.push("| Station type | Added | Modified¹ | Removed |", "| --- | ---: | ---: | ---: |");
+    for (const type of [...Object.keys(stationTypes), "other"]) {
+      const matches = (feature: StationFeature) =>
+        type === "other"
+          ? !hasKey(stationTypes, feature.properties.type)
+          : feature.properties.type === type;
+      const added = diff.added.filter(matches).length;
+      const modified = diff.modified.filter(({ head }) => matches(head)).length;
+      const removed = diff.removed.filter(matches).length;
+      if (added + modified + removed > 0) {
         lines.push(
-          `| \`${change.field}\` | ${formatValue(change.oldValue)} | ${formatValue(change.newValue)} |`,
+          `| ${hasKey(stationTypes, type) ? stationTypes[type] : "Invalid / unknown"} | ${added} | ${modified} | ${removed} |`,
         );
       }
-      lines.push("");
     }
-    if (diff.modified.length > 30) {
-      lines.push(`_... and ${diff.modified.length - 30} more modified stations_`);
-      lines.push("");
-    }
-    lines.push("</details>");
-    lines.push("");
+    lines.push("", "¹ Modified stations are counted under their new type.", "");
   }
 
-  // No changes case
-  if (diff.added.length === 0 && diff.removed.length === 0 && diff.modified.length === 0) {
-    lines.push("_No changes detected in station data._");
+  function section(
+    title: string,
+    count: number,
+    headers: string[],
+    rows: string[][],
+    open = false,
+  ) {
+    if (count === 0) return;
+    const shown = Math.min(count, limit);
+    lines.push(
+      `<details${open ? " open" : ""}>`,
+      `<summary><strong>${title} (${count})</strong></summary>`,
+      "",
+      `| ${headers.join(" | ")} |`,
+      `| ${headers.map(() => "---").join(" | ")} |`,
+    );
+    for (const row of rows) lines.push(`| ${row.join(" | ")} |`);
     lines.push("");
+    if (shown < count)
+      lines.push(`_Showing ${shown} of ${count}. All entries are in the full report._`, "");
+    lines.push("</details>", "");
   }
 
+  section(
+    "❌ Validation errors",
+    errors.length,
+    ["ID", "Station", "Field", "Problem"],
+    errors
+      .slice(0, limit)
+      .map((error) =>
+        [error.stationId, error.stationName, error.field, error.message].map((value) =>
+          cell(value, full),
+        ),
+      ),
+    true,
+  );
+
+  for (const [title, features] of [
+    ["➕ Added stations", diff.added],
+    ["➖ Removed stations", diff.removed],
+  ] as const) {
+    section(
+      title,
+      features.length,
+      ["ID", "Station", "Type", "Freight kind", "Importance", "Location (lat, lng)"],
+      features
+        .slice(0, limit)
+        .map(({ properties: props, geometry }) => [
+          cell(props.id, full),
+          cell(props.name, full),
+          fieldValue("type", props.type, full),
+          fieldValue("kind", props.kind, full),
+          cell(props.importance, full),
+          location(geometry, full),
+        ]),
+    );
+  }
+
+  section(
+    "✏️ Modified stations",
+    diff.modified.length,
+    ["ID", "Station", "Field", "Before", "After"],
+    diff.modified
+      .slice(0, limit)
+      .flatMap(({ head, changes }) =>
+        changes.map((change) => [
+          cell(head.properties.id, full),
+          cell(head.properties.name, full),
+          cell(change.field, full),
+          fieldValue(change.field, change.oldValue, full),
+          fieldValue(change.field, change.newValue, full),
+        ]),
+      ),
+  );
+
+  if (changed === 0 && !comparisonFailed) lines.push("_No station data changes detected._", "");
+  if (errors.length > 0)
+    lines.push(
+      "_Change tables use stations with string IDs; fix invalid or duplicate IDs before relying on their counts._",
+      "",
+    );
+  if (!full) {
+    lines.push(
+      reportUrl
+        ? `[Download the full station-data-report from this workflow run](${reportUrl}).`
+        : "_Use --full-output=<path> to save every change and validation error._",
+      "",
+    );
+  }
   return lines.join("\n");
 }
 
-function escapeMarkdown(value: unknown): string {
-  return String(value)
-    .replace(/\|/g, "\\|")
-    .replace(/[\r\n]/g, " ");
-}
-
-function formatValue(value: unknown): string {
-  if (value === undefined) return "_undefined_";
-  if (value === null) return "_null_";
-  if (typeof value === "object") return `\`${JSON.stringify(value)}\``;
-  return `\`${value}\``;
-}
-
-// --- Main ---
-
-async function main() {
-  const baseGeoJSON = loadGeoJSON(basePath);
-  const headGeoJSON = loadGeoJSON(headPath);
-
-  const errors = validateFeatures(headGeoJSON.features);
-  const diff = computeDiff(baseGeoJSON.features, headGeoJSON.features);
-
-  const report = generateReport(diff, errors);
-
-  writeFileSync(outputPath, report);
-
-  // Set GitHub Actions output
-  if (process.env.GITHUB_OUTPUT) {
-    appendFileSync(process.env.GITHUB_OUTPUT, `has_errors=${errors.length > 0}\n`);
+function main() {
+  const { values } = parseArgs({
+    options: {
+      base: { type: "string" },
+      head: { type: "string" },
+      output: { type: "string" },
+      "full-output": { type: "string" },
+      "report-url": { type: "string" },
+    },
+  });
+  if (!values.base || !values.head || !values.output) {
+    throw new Error(
+      "Usage: validate-stations.ts --base=<path> --head=<path> --output=<path> [--full-output=<path>] [--report-url=<https-url>]",
+    );
+  }
+  if (values["report-url"] && !/^https:\/\/[^\s<>()[\]]+$/.test(values["report-url"])) {
+    throw new Error("Report URL must be an HTTPS URL without Markdown delimiters");
   }
 
-  console.log(`Report generated: ${outputPath}`);
+  let base: unknown[] = [];
+  let head: unknown[] = [];
+  let diff: DiffResult = { added: [], removed: [], modified: [] };
+  let errors: ValidationError[];
+  let comparisonFailed = false;
+  try {
+    base = loadFeatures(values.base);
+    head = loadFeatures(values.head);
+    errors = validateFeatures(head);
+    diff = computeDiff(base, head);
+  } catch (error) {
+    comparisonFailed = true;
+    errors = [{ stationId: "(file)", stationName: "—", field: "file", message: String(error) }];
+  }
+
+  const report = (limit: number) =>
+    generateReport(
+      diff,
+      errors,
+      base.length,
+      head.length,
+      limit,
+      values["report-url"],
+      comparisonFailed,
+    );
+  // Leave room below GitHub's comment limit, even for large imports or invalid data.
+  let limit = 50;
+  let comment = report(limit);
+  while (Buffer.byteLength(comment, "utf-8") > 60_000 && limit > 0) {
+    limit = Math.floor(limit / 2);
+    comment = report(limit);
+  }
+  writeFileSync(values.output, comment);
+  if (values["full-output"]) writeFileSync(values["full-output"], report(Infinity));
+  // This script runs directly in GitHub Actions, outside Turbo's task cache.
+  // eslint-disable-next-line turbo/no-undeclared-env-vars
+  const githubOutput = process.env.GITHUB_OUTPUT;
+  if (githubOutput) {
+    appendFileSync(githubOutput, `has_errors=${errors.length > 0}\n`);
+  }
+  console.log(`Report generated: ${values.output}`);
   console.log(`Validation errors: ${errors.length}`);
   console.log(
     `Added: ${diff.added.length}, Removed: ${diff.removed.length}, Modified: ${diff.modified.length}`,
   );
+  // The workflow posts the report before failing its final step on has_errors.
+  // Local CLI runs still return a useful failure status.
+  if (errors.length > 0 && !githubOutput) process.exitCode = 1;
 }
 
-main().catch((err) => {
-  console.error("Error:", err);
-  process.exit(1);
-});
+try {
+  main();
+} catch (error) {
+  console.error("Error:", error);
+  process.exitCode = 1;
+}
