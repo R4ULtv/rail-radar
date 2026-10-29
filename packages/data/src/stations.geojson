@@ -290706,6 +290706,3786 @@
         "type": "Point",
         "coordinates": [2.29414, 48.88602]
       }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "BEF00001",
+        "name": "Antwerpen Waaslandhaven (Kallo)",
+        "type": "freight",
+        "importance": 3,
+        "kind": "port"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [4.27399, 51.24277]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "BEF00002",
+        "name": "Antwerpen-Noord",
+        "type": "freight",
+        "importance": 3,
+        "kind": "marshalling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [4.376, 51.294]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "BEF00003",
+        "name": "Kinkempois",
+        "type": "freight",
+        "importance": 3,
+        "kind": "marshalling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [5.574, 50.6075]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "BEF00004",
+        "name": "Zeebrugge-Vorming",
+        "type": "freight",
+        "importance": 3,
+        "kind": "port"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [3.18852, 51.31542]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "BEF00005",
+        "name": "Antwerpen-Lillo",
+        "type": "freight",
+        "importance": 4,
+        "kind": "port"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [4.34358, 51.29241]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "BEF00006",
+        "name": "Athus Terminal",
+        "type": "freight",
+        "importance": 4,
+        "kind": "intermodal"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [5.82527, 49.55505]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "BEF00007",
+        "name": "Charleroi Dry Port",
+        "type": "freight",
+        "importance": 4,
+        "kind": "intermodal"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [4.49488, 50.39948]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "BEF00008",
+        "name": "Châtelet",
+        "type": "freight",
+        "importance": 4,
+        "kind": "marshalling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [4.53083, 50.41956]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "BEF00009",
+        "name": "Genk-Goederen",
+        "type": "freight",
+        "importance": 4,
+        "kind": "marshalling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [5.46887, 50.99279]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "BEF00010",
+        "name": "Gent-Zeehaven",
+        "type": "freight",
+        "importance": 4,
+        "kind": "marshalling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [3.74266, 51.06598]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "BEF00011",
+        "name": "Liège Renory",
+        "type": "freight",
+        "importance": 4,
+        "kind": "intermodal"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [5.55056, 50.60645]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "BEF00012",
+        "name": "Liège Trilogiport",
+        "type": "freight",
+        "importance": 4,
+        "kind": "intermodal"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [5.65796, 50.68525]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "BEF00013",
+        "name": "Monceau",
+        "type": "freight",
+        "importance": 4,
+        "kind": "marshalling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [4.39159, 50.42628]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "BEF00014",
+        "name": "Montzen",
+        "type": "freight",
+        "importance": 4,
+        "kind": "marshalling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [5.93809, 50.72472]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "BEF00015",
+        "name": "Muizen",
+        "type": "freight",
+        "importance": 4,
+        "kind": "marshalling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [4.50564, 51.01345]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "BEF00016",
+        "name": "Oostende-Zeehaven",
+        "type": "freight",
+        "importance": 4,
+        "kind": "port"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [2.96569, 51.21328]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "BEF00017",
+        "name": "Ronet",
+        "type": "freight",
+        "importance": 4,
+        "kind": "marshalling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [4.82234, 50.45476]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "BEF00018",
+        "name": "Schaarbeek-Vorming / Schaerbeek-Formation",
+        "type": "freight",
+        "importance": 4,
+        "kind": "marshalling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [4.396, 50.8835]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHF00001",
+        "name": "Basel Hafen Kleinhüningen",
+        "type": "freight",
+        "importance": 3,
+        "kind": "port"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [7.58694, 47.57922]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHF00002",
+        "name": "Lausanne-Triage",
+        "type": "freight",
+        "importance": 3,
+        "kind": "marshalling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [6.53887, 46.52755]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHF00003",
+        "name": "Rangierbahnhof Limmattal",
+        "type": "freight",
+        "importance": 3,
+        "kind": "marshalling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [8.38098, 47.42021]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHF00004",
+        "name": "Rangierbahnhof Muttenz",
+        "type": "freight",
+        "importance": 3,
+        "kind": "marshalling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [7.6463, 47.53626]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHF00005",
+        "name": "Basel Güterbahnhof Wolf",
+        "type": "freight",
+        "importance": 4,
+        "kind": "intermodal"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [7.60743, 47.54174]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHF00006",
+        "name": "Chiasso Smistamento",
+        "type": "freight",
+        "importance": 4,
+        "kind": "marshalling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [8.99956, 45.83646]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHF00007",
+        "name": "Genève-La Praille",
+        "type": "freight",
+        "importance": 4,
+        "kind": "intermodal"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [6.1256, 46.1831]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHF00008",
+        "name": "Hafen Birsfelden",
+        "type": "freight",
+        "importance": 4,
+        "kind": "port"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [7.65458, 47.54366]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHF00009",
+        "name": "Rangierbahnhof Biel/Bienne",
+        "type": "freight",
+        "importance": 4,
+        "kind": "marshalling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [7.2682, 47.14329]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHF00010",
+        "name": "Rangierbahnhof Buchs SG",
+        "type": "freight",
+        "importance": 4,
+        "kind": "marshalling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [9.47703, 47.17571]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHF00011",
+        "name": "Terminal Lugano Vedeggio",
+        "type": "freight",
+        "importance": 4,
+        "kind": "intermodal"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [8.9177, 46.02005]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CHF00012",
+        "name": "Terminal Stabio",
+        "type": "freight",
+        "importance": 4,
+        "kind": "intermodal"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [8.9352, 45.8445]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "DEF00001",
+        "name": "DIT Duisburg Intermodal Terminal (Logport I)",
+        "type": "freight",
+        "importance": 3,
+        "kind": "intermodal"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [6.73139, 51.39363]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "DEF00002",
+        "name": "Hamburg Hafen Alte Süderelbe",
+        "type": "freight",
+        "importance": 3,
+        "kind": "port"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [9.90955, 53.50346]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "DEF00003",
+        "name": "Köln-Gremberg Rbf",
+        "type": "freight",
+        "importance": 3,
+        "kind": "marshalling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [7.039, 50.90403]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "DEF00004",
+        "name": "Mannheim Rbf",
+        "type": "freight",
+        "importance": 3,
+        "kind": "marshalling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [8.51044, 49.45878]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "DEF00005",
+        "name": "Maschen Rbf",
+        "type": "freight",
+        "importance": 3,
+        "kind": "marshalling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [10.05367, 53.40703]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "DEF00006",
+        "name": "München Nord Rbf",
+        "type": "freight",
+        "importance": 3,
+        "kind": "marshalling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [11.48247, 48.19884]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "DEF00007",
+        "name": "Nürnberg Rbf",
+        "type": "freight",
+        "importance": 3,
+        "kind": "marshalling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [11.09098, 49.41586]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "DEF00008",
+        "name": "Seelze Rbf",
+        "type": "freight",
+        "importance": 3,
+        "kind": "marshalling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [9.61051, 52.38915]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "DEF00009",
+        "name": "Basel Bad Rbf",
+        "type": "freight",
+        "importance": 4,
+        "kind": "marshalling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [7.6018, 47.583]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "DEF00010",
+        "name": "Bremen Rbf",
+        "type": "freight",
+        "importance": 4,
+        "kind": "marshalling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [8.76604, 53.12535]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "DEF00011",
+        "name": "Bremerhaven Speckenbüttel",
+        "type": "freight",
+        "importance": 4,
+        "kind": "port"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [8.56681, 53.59836]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "DEF00012",
+        "name": "Duisburg-Ruhrort Hafen",
+        "type": "freight",
+        "importance": 4,
+        "kind": "port"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [6.78294, 51.46096]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "DEF00013",
+        "name": "DUSS-Terminal Karlsruhe",
+        "type": "freight",
+        "importance": 4,
+        "kind": "intermodal"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [8.42075, 48.99783]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "DEF00014",
+        "name": "DUSS-Terminal Ulm-Dornstadt",
+        "type": "freight",
+        "importance": 4,
+        "kind": "intermodal"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [9.97155, 48.46147]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "DEF00015",
+        "name": "Großbeeren KV-Terminal",
+        "type": "freight",
+        "importance": 4,
+        "kind": "intermodal"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [13.2913, 52.36402]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "DEF00016",
+        "name": "Hagen-Vorhalle Rbf",
+        "type": "freight",
+        "importance": 4,
+        "kind": "marshalling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [7.42135, 51.38333]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "DEF00017",
+        "name": "Halle (Saale) Gbf",
+        "type": "freight",
+        "importance": 4,
+        "kind": "marshalling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [11.9981, 51.4945]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "DEF00018",
+        "name": "Hamm (Westf) Rbf",
+        "type": "freight",
+        "importance": 4,
+        "kind": "marshalling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [7.8033, 51.6608]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "DEF00019",
+        "name": "Kassel Rbf",
+        "type": "freight",
+        "importance": 4,
+        "kind": "marshalling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [9.47079, 51.33283]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "DEF00020",
+        "name": "Köln Eifeltor Umschlagbahnhof",
+        "type": "freight",
+        "importance": 4,
+        "kind": "intermodal"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [6.91779, 50.88706]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "DEF00021",
+        "name": "Kornwestheim Rbf",
+        "type": "freight",
+        "importance": 4,
+        "kind": "marshalling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [9.1712, 48.8542]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "DEF00022",
+        "name": "Leipzig-Engelsdorf Rbf",
+        "type": "freight",
+        "importance": 4,
+        "kind": "marshalling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [12.47019, 51.34373]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "DEF00023",
+        "name": "Leipzig-Wahren KV-Terminal",
+        "type": "freight",
+        "importance": 4,
+        "kind": "intermodal"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [12.30168, 51.38822]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "DEF00024",
+        "name": "Lübeck Skandinavienkai",
+        "type": "freight",
+        "importance": 4,
+        "kind": "port"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [10.85676, 53.94173]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "DEF00025",
+        "name": "Ludwigshafen KTL Kombi-Terminal",
+        "type": "freight",
+        "importance": 4,
+        "kind": "intermodal"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [8.41272, 49.53841]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "DEF00026",
+        "name": "Oberhausen-Osterfeld Rbf",
+        "type": "freight",
+        "importance": 4,
+        "kind": "marshalling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [6.8772, 51.499]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "DEF00027",
+        "name": "Rostock Seehafen",
+        "type": "freight",
+        "importance": 4,
+        "kind": "port"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [12.16415, 54.11579]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "DEF00028",
+        "name": "Saarbrücken Rbf",
+        "type": "freight",
+        "importance": 4,
+        "kind": "marshalling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [7.00264, 49.25317]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "DEF00029",
+        "name": "Sassnitz-Mukran Fährhafen",
+        "type": "freight",
+        "importance": 4,
+        "kind": "port"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [13.5628, 54.4981]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "DEF00030",
+        "name": "Seddin Rbf",
+        "type": "freight",
+        "importance": 4,
+        "kind": "marshalling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [12.98485, 52.29023]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "DEF00031",
+        "name": "TriCon Container-Terminal Nürnberg",
+        "type": "freight",
+        "importance": 4,
+        "kind": "intermodal"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [11.0543, 49.39694]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "DEF00032",
+        "name": "Umschlagbahnhof Hamburg-Billwerder",
+        "type": "freight",
+        "importance": 4,
+        "kind": "intermodal"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [10.11103, 53.50737]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "DEF00033",
+        "name": "Umschlagbahnhof München-Riem",
+        "type": "freight",
+        "importance": 4,
+        "kind": "intermodal"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [11.70017, 48.14586]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "DEF00034",
+        "name": "Wilhelmshaven JadeWeserPort",
+        "type": "freight",
+        "importance": 4,
+        "kind": "port"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [8.12975, 53.59808]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "DEF00035",
+        "name": "Würzburg Rbf (Zell)",
+        "type": "freight",
+        "importance": 4,
+        "kind": "marshalling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [9.87833, 49.81527]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "DEF00036",
+        "name": "Wustermark Rbf",
+        "type": "freight",
+        "importance": 4,
+        "kind": "marshalling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [13.00129, 52.54697]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "DKF00001",
+        "name": "Fredericia godsstation",
+        "type": "freight",
+        "importance": 3,
+        "kind": "marshalling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [9.7427, 55.5625]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "DKF00002",
+        "name": "Taulov kombiterminal",
+        "type": "freight",
+        "importance": 3,
+        "kind": "intermodal"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [9.6403, 55.5475]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "DKF00003",
+        "name": "Aarhus Havn",
+        "type": "freight",
+        "importance": 4,
+        "kind": "port"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [10.241, 56.151]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "DKF00004",
+        "name": "Esbjerg Havn",
+        "type": "freight",
+        "importance": 4,
+        "kind": "port"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [8.4464, 55.4638]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "DKF00005",
+        "name": "Høje Taastrup kombiterminal",
+        "type": "freight",
+        "importance": 4,
+        "kind": "intermodal"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [12.25, 55.6393]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "DKF00006",
+        "name": "Padborg godsbanegård",
+        "type": "freight",
+        "importance": 4,
+        "kind": "marshalling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [9.35674, 54.82735]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "FIF00001",
+        "name": "Kouvolan ratapiha",
+        "type": "freight",
+        "importance": 3,
+        "kind": "marshalling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [26.7264, 60.8669]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "FIF00002",
+        "name": "Mussalon satama",
+        "type": "freight",
+        "importance": 3,
+        "kind": "port"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [26.8975, 60.4318]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "FIF00003",
+        "name": "Vuosaaren satama",
+        "type": "freight",
+        "importance": 3,
+        "kind": "port"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [25.168, 60.2275]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "FIF00004",
+        "name": "Haminan satama",
+        "type": "freight",
+        "importance": 4,
+        "kind": "port"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [27.1665, 60.5523]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "FIF00005",
+        "name": "Kemin Ajoksen satama",
+        "type": "freight",
+        "importance": 4,
+        "kind": "port"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [24.5417, 65.6737]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "FIF00006",
+        "name": "Kouvola RailGate",
+        "type": "freight",
+        "importance": 4,
+        "kind": "intermodal"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [26.8099, 60.8723]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "FIF00007",
+        "name": "Nokelan ratapiha",
+        "type": "freight",
+        "importance": 4,
+        "kind": "marshalling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [25.4757, 64.9893]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "FIF00008",
+        "name": "Pieksämäen ratapiha",
+        "type": "freight",
+        "importance": 4,
+        "kind": "marshalling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [27.1726, 62.31885]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "FIF00009",
+        "name": "Rauman satama",
+        "type": "freight",
+        "importance": 4,
+        "kind": "port"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [21.4924, 61.1324]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "FIF00010",
+        "name": "Riihimäen ratapiha",
+        "type": "freight",
+        "importance": 4,
+        "kind": "marshalling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [24.7929, 60.7254]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "FIF00011",
+        "name": "Seinäjoen ratapiha",
+        "type": "freight",
+        "importance": 4,
+        "kind": "marshalling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [22.8663, 62.7848]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "FIF00012",
+        "name": "Viinikan ratapiha",
+        "type": "freight",
+        "importance": 4,
+        "kind": "marshalling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [23.7736, 61.4803]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "FIF00013",
+        "name": "Ykspihlajan satama",
+        "type": "freight",
+        "importance": 4,
+        "kind": "port"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [23.0831, 63.8386]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "FRF00001",
+        "name": "Delta 3 Dourges",
+        "type": "freight",
+        "importance": 3,
+        "kind": "intermodal"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [3.01717, 50.45483]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "FRF00002",
+        "name": "Dunkerque Port",
+        "type": "freight",
+        "importance": 3,
+        "kind": "port"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [2.32983, 51.00707]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "FRF00003",
+        "name": "Fos-sur-Mer",
+        "type": "freight",
+        "importance": 3,
+        "kind": "port"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [4.9048, 43.47456]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "FRF00004",
+        "name": "Le Havre Port",
+        "type": "freight",
+        "importance": 3,
+        "kind": "port"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [0.19443, 49.50723]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "FRF00005",
+        "name": "Miramas Triage",
+        "type": "freight",
+        "importance": 3,
+        "kind": "marshalling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [4.99, 43.5815]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "FRF00006",
+        "name": "Sibelin Triage (Lyon)",
+        "type": "freight",
+        "importance": 3,
+        "kind": "marshalling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [4.8443, 45.6555]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "FRF00007",
+        "name": "Valenton",
+        "type": "freight",
+        "importance": 3,
+        "kind": "intermodal"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [2.45416, 48.75815]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "FRF00008",
+        "name": "Woippy Triage",
+        "type": "freight",
+        "importance": 3,
+        "kind": "marshalling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [6.1562, 49.1585]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "FRF00009",
+        "name": "Avignon-Champfleury",
+        "type": "freight",
+        "importance": 4,
+        "kind": "intermodal"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [4.7977, 43.94155]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "FRF00010",
+        "name": "Bonneuil-sur-Marne",
+        "type": "freight",
+        "importance": 4,
+        "kind": "intermodal"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [2.5032, 48.7656]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "FRF00011",
+        "name": "Bordeaux-Hourcade",
+        "type": "freight",
+        "importance": 4,
+        "kind": "marshalling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-0.5492, 44.7807]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "FRF00012",
+        "name": "Gevrey Triage",
+        "type": "freight",
+        "importance": 4,
+        "kind": "marshalling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [5.0246, 47.2658]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "FRF00013",
+        "name": "Hendaye (transbordement)",
+        "type": "freight",
+        "importance": 4,
+        "kind": "intermodal"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-1.7747, 43.3573]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "FRF00014",
+        "name": "Le Boulou",
+        "type": "freight",
+        "importance": 4,
+        "kind": "intermodal"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [2.82591, 42.52456]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "FRF00015",
+        "name": "Le Bourget Triage",
+        "type": "freight",
+        "importance": 4,
+        "kind": "marshalling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [2.4311, 48.9317]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "FRF00016",
+        "name": "Lille-Délivrance",
+        "type": "freight",
+        "importance": 4,
+        "kind": "intermodal"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [2.9924, 50.6283]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "FRF00017",
+        "name": "Lyon Port Édouard-Herriot",
+        "type": "freight",
+        "importance": 4,
+        "kind": "port"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [4.84746, 45.728]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "FRF00018",
+        "name": "Lyon-Vénissieux",
+        "type": "freight",
+        "importance": 4,
+        "kind": "intermodal"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [4.91, 45.69629]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "FRF00019",
+        "name": "Montoir-de-Bretagne",
+        "type": "freight",
+        "importance": 4,
+        "kind": "port"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-2.156, 47.3222]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "FRF00020",
+        "name": "Mulhouse-Île Napoléon",
+        "type": "freight",
+        "importance": 4,
+        "kind": "port"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [7.39096, 47.76744]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "FRF00021",
+        "name": "Mulhouse-Nord Triage",
+        "type": "freight",
+        "importance": 4,
+        "kind": "marshalling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [7.301, 47.755]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "FRF00022",
+        "name": "Nîmes-Courbessac",
+        "type": "freight",
+        "importance": 4,
+        "kind": "marshalling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [4.4149, 43.8452]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "FRF00023",
+        "name": "Perpignan Saint-Charles",
+        "type": "freight",
+        "importance": 4,
+        "kind": "intermodal"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [2.8467, 42.6851]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "FRF00024",
+        "name": "Port de Gennevilliers",
+        "type": "freight",
+        "importance": 4,
+        "kind": "port"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [2.2655, 48.9435]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "FRF00025",
+        "name": "Saint-Jory Triage (Toulouse)",
+        "type": "freight",
+        "importance": 4,
+        "kind": "marshalling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [1.382, 43.7196]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "FRF00026",
+        "name": "Saint-Pierre-des-Corps",
+        "type": "freight",
+        "importance": 4,
+        "kind": "marshalling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [0.7655, 47.392]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "FRF00027",
+        "name": "Somain Triage",
+        "type": "freight",
+        "importance": 4,
+        "kind": "marshalling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [3.259, 50.3553]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "FRF00028",
+        "name": "Sotteville Triage",
+        "type": "freight",
+        "importance": 4,
+        "kind": "marshalling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [1.108, 49.39]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "FRF00029",
+        "name": "Strasbourg Port du Rhin",
+        "type": "freight",
+        "importance": 4,
+        "kind": "port"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [7.79446, 48.5743]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "FRF00030",
+        "name": "Strasbourg-Cronenbourg Triage",
+        "type": "freight",
+        "importance": 4,
+        "kind": "marshalling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [7.7281, 48.6001]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "FRF00031",
+        "name": "Vaires-sur-Marne Triage",
+        "type": "freight",
+        "importance": 4,
+        "kind": "marshalling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [2.607, 48.874]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "FRF00032",
+        "name": "Villeneuve-Saint-Georges Triage",
+        "type": "freight",
+        "importance": 4,
+        "kind": "marshalling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [2.435, 48.7525]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "IEF00001",
+        "name": "Dublin Port (North Wall)",
+        "type": "freight",
+        "importance": 3,
+        "kind": "port"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-6.22797, 53.35101]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "IEF00002",
+        "name": "Ballina Freight Terminal",
+        "type": "freight",
+        "importance": 4,
+        "kind": "intermodal"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-9.1634, 54.10675]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "IEF00003",
+        "name": "Belview Port",
+        "type": "freight",
+        "importance": 4,
+        "kind": "port"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-7.03726, 52.26282]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "ITF00001",
+        "name": "Bologna San Donato",
+        "type": "freight",
+        "importance": 3,
+        "kind": "marshalling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [11.41396, 44.50917]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "ITF00002",
+        "name": "Genova Pra'",
+        "type": "freight",
+        "importance": 3,
+        "kind": "port"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [8.78841, 44.42291]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "ITF00003",
+        "name": "La Spezia Marittima",
+        "type": "freight",
+        "importance": 3,
+        "kind": "port"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [9.84927, 44.11072]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "ITF00004",
+        "name": "Maddaloni-Marcianise Smistamento",
+        "type": "freight",
+        "importance": 3,
+        "kind": "marshalling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [14.36135, 41.00357]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "ITF00005",
+        "name": "Milano Smistamento",
+        "type": "freight",
+        "importance": 3,
+        "kind": "marshalling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [9.28606, 45.47751]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "ITF00006",
+        "name": "Terminal Busto Arsizio-Gallarate",
+        "type": "freight",
+        "importance": 3,
+        "kind": "intermodal"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [8.8299, 45.63993]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "ITF00007",
+        "name": "Torino Orbassano",
+        "type": "freight",
+        "importance": 3,
+        "kind": "marshalling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [7.57434, 45.03356]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "ITF00008",
+        "name": "Trieste Campo Marzio",
+        "type": "freight",
+        "importance": 3,
+        "kind": "port"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [13.75416, 45.64044]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "ITF00009",
+        "name": "Verona Porta Nuova Scalo",
+        "type": "freight",
+        "importance": 3,
+        "kind": "marshalling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [10.97608, 45.42541]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "ITF00010",
+        "name": "Verona Quadrante Europa",
+        "type": "freight",
+        "importance": 3,
+        "kind": "intermodal"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [10.92793, 45.42198]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "ITF00011",
+        "name": "Alessandria Smistamento",
+        "type": "freight",
+        "importance": 4,
+        "kind": "marshalling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [8.59336, 44.905]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "ITF00012",
+        "name": "Bari Lamasinata",
+        "type": "freight",
+        "importance": 4,
+        "kind": "marshalling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [16.82013, 41.1296]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "ITF00013",
+        "name": "Bologna Interporto",
+        "type": "freight",
+        "importance": 4,
+        "kind": "intermodal"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [11.37352, 44.60256]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "ITF00014",
+        "name": "Brescia Scalo",
+        "type": "freight",
+        "importance": 4,
+        "kind": "marshalling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [10.19052, 45.53299]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "ITF00015",
+        "name": "Catania Bicocca",
+        "type": "freight",
+        "importance": 4,
+        "kind": "marshalling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [15.0412, 37.4572]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "ITF00016",
+        "name": "Cervignano Smistamento",
+        "type": "freight",
+        "importance": 4,
+        "kind": "marshalling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [13.32211, 45.84047]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "ITF00017",
+        "name": "Domodossola II",
+        "type": "freight",
+        "importance": 4,
+        "kind": "marshalling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [8.2866, 46.07047]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "ITF00018",
+        "name": "Genova Parco Fuori Muro",
+        "type": "freight",
+        "importance": 4,
+        "kind": "port"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [8.89274, 44.40837]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "ITF00019",
+        "name": "Gioia Tauro Porto",
+        "type": "freight",
+        "importance": 4,
+        "kind": "port"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [15.92696, 38.477]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "ITF00020",
+        "name": "Interporto di Parma",
+        "type": "freight",
+        "importance": 4,
+        "kind": "intermodal"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [10.22848, 44.84825]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "ITF00021",
+        "name": "Livorno Calambrone",
+        "type": "freight",
+        "importance": 4,
+        "kind": "port"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [10.32718, 43.5849]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "ITF00022",
+        "name": "Nola Interporto",
+        "type": "freight",
+        "importance": 4,
+        "kind": "intermodal"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [14.47046, 40.96757]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "ITF00023",
+        "name": "Novara Boschetto",
+        "type": "freight",
+        "importance": 4,
+        "kind": "intermodal"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [8.6297, 45.45299]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "ITF00024",
+        "name": "Novi San Bovo",
+        "type": "freight",
+        "importance": 4,
+        "kind": "marshalling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [8.77483, 44.77478]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "ITF00025",
+        "name": "Padova Interporto",
+        "type": "freight",
+        "importance": 4,
+        "kind": "intermodal"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [11.92326, 45.39613]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "ITF00026",
+        "name": "Ravenna Scalo Candiano",
+        "type": "freight",
+        "importance": 4,
+        "kind": "port"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [12.22251, 44.44019]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "ITF00027",
+        "name": "Roma Smistamento",
+        "type": "freight",
+        "importance": 4,
+        "kind": "marshalling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [12.50846, 41.96332]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "ITF00028",
+        "name": "Savona Parco Doria",
+        "type": "freight",
+        "importance": 4,
+        "kind": "port"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [8.45711, 44.29536]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "ITF00029",
+        "name": "Scalo di Marzaglia",
+        "type": "freight",
+        "importance": 4,
+        "kind": "intermodal"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [10.8413, 44.6534]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "ITF00030",
+        "name": "Terminal Intermodale di Melzo",
+        "type": "freight",
+        "importance": 4,
+        "kind": "intermodal"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [9.40762, 45.49576]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "ITF00031",
+        "name": "Terminal Intermodale di Mortara",
+        "type": "freight",
+        "importance": 4,
+        "kind": "intermodal"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [8.71104, 45.24249]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "ITF00032",
+        "name": "Terminal Intermodale di Rivalta Scrivia",
+        "type": "freight",
+        "importance": 4,
+        "kind": "intermodal"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [8.81095, 44.86814]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "ITF00033",
+        "name": "Trento Roncafort",
+        "type": "freight",
+        "importance": 4,
+        "kind": "intermodal"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [11.09431, 46.11138]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "ITF00034",
+        "name": "Udine Parco",
+        "type": "freight",
+        "importance": 4,
+        "kind": "marshalling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [13.25758, 46.05448]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "ITF00035",
+        "name": "Venezia Marghera Scalo",
+        "type": "freight",
+        "importance": 4,
+        "kind": "port"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [12.24174, 45.46704]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "LUF00001",
+        "name": "Bettembourg Triage",
+        "type": "freight",
+        "importance": 3,
+        "kind": "marshalling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [6.1048, 49.4993]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "LUF00002",
+        "name": "Bettembourg-Dudelange Terminal Multimodal",
+        "type": "freight",
+        "importance": 3,
+        "kind": "intermodal"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [6.099, 49.4885]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "NLF00001",
+        "name": "Hutchison Ports Venlo",
+        "type": "freight",
+        "importance": 3,
+        "kind": "intermodal"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [6.1407, 51.3793]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "NLF00002",
+        "name": "Kijfhoek",
+        "type": "freight",
+        "importance": 3,
+        "kind": "marshalling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [4.5982, 51.8317]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "NLF00003",
+        "name": "Maasvlakte",
+        "type": "freight",
+        "importance": 3,
+        "kind": "port"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [4.0343, 51.935]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "NLF00004",
+        "name": "Rail Service Center Rotterdam",
+        "type": "freight",
+        "importance": 3,
+        "kind": "intermodal"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [4.42218, 51.87373]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "NLF00005",
+        "name": "Amersfoort Goederen",
+        "type": "freight",
+        "importance": 4,
+        "kind": "marshalling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [5.371, 52.1526]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "NLF00006",
+        "name": "Amsterdam Westhaven",
+        "type": "freight",
+        "importance": 4,
+        "kind": "port"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [4.8411, 52.4015]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "NLF00007",
+        "name": "Botlek",
+        "type": "freight",
+        "importance": 4,
+        "kind": "port"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [4.3097, 51.8694]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "NLF00008",
+        "name": "Europoort",
+        "type": "freight",
+        "importance": 4,
+        "kind": "port"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [4.1966, 51.911]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "NLF00009",
+        "name": "Moerdijk",
+        "type": "freight",
+        "importance": 4,
+        "kind": "port"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [4.623, 51.6832]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "NLF00010",
+        "name": "Onnen",
+        "type": "freight",
+        "importance": 4,
+        "kind": "marshalling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [6.6278, 53.1594]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "NLF00011",
+        "name": "Pernis",
+        "type": "freight",
+        "importance": 4,
+        "kind": "marshalling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [4.3761, 51.8777]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "NLF00012",
+        "name": "Prinses Amaliahaven",
+        "type": "freight",
+        "importance": 4,
+        "kind": "port"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [3.9831, 51.9537]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "NLF00013",
+        "name": "Roosendaal",
+        "type": "freight",
+        "importance": 4,
+        "kind": "marshalling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [4.45, 51.5375]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "NLF00014",
+        "name": "Sloehaven",
+        "type": "freight",
+        "importance": 4,
+        "kind": "port"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [3.7408, 51.4521]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "NLF00015",
+        "name": "Valburg",
+        "type": "freight",
+        "importance": 4,
+        "kind": "intermodal"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [5.8018, 51.898]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "NLF00016",
+        "name": "Waalhaven Zuid",
+        "type": "freight",
+        "importance": 4,
+        "kind": "marshalling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [4.4422, 51.8706]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "NOF00001",
+        "name": "Alnabru godsterminal",
+        "type": "freight",
+        "importance": 3,
+        "kind": "intermodal"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [10.8399, 59.9345]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "NOF00002",
+        "name": "Narvik malmterminal",
+        "type": "freight",
+        "importance": 3,
+        "kind": "port"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [17.41375, 68.43093]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "NOF00003",
+        "name": "Drammen godsterminal (Holmen)",
+        "type": "freight",
+        "importance": 4,
+        "kind": "port"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [10.2295, 59.7362]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "NOF00004",
+        "name": "Ganddal godsterminal",
+        "type": "freight",
+        "importance": 4,
+        "kind": "intermodal"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [5.7046, 58.8073]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "NOF00005",
+        "name": "Heggstadmoen godsterminal",
+        "type": "freight",
+        "importance": 4,
+        "kind": "intermodal"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [10.3547, 63.3428]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "NOF00006",
+        "name": "Nygårdstangen godsterminal",
+        "type": "freight",
+        "importance": 4,
+        "kind": "intermodal"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [5.33995, 60.38701]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "NOF00007",
+        "name": "Rolvsøy godsterminal",
+        "type": "freight",
+        "importance": 4,
+        "kind": "intermodal"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [11.0092, 59.2573]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "PLF00001",
+        "name": "Baltic Hub",
+        "type": "freight",
+        "importance": 3,
+        "kind": "port"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [18.72136, 54.38357]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "PLF00002",
+        "name": "Euroterminal Sławków",
+        "type": "freight",
+        "importance": 3,
+        "kind": "intermodal"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [19.30818, 50.28146]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "PLF00003",
+        "name": "Małaszewicze",
+        "type": "freight",
+        "importance": 3,
+        "kind": "marshalling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [23.49911, 52.0164]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "PLF00004",
+        "name": "Port Gdynia",
+        "type": "freight",
+        "importance": 3,
+        "kind": "port"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [18.48552, 54.54402]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "PLF00005",
+        "name": "Poznań Franowo",
+        "type": "freight",
+        "importance": 3,
+        "kind": "marshalling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [16.99755, 52.37695]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "PLF00006",
+        "name": "Tarnowskie Góry",
+        "type": "freight",
+        "importance": 3,
+        "kind": "marshalling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [18.89349, 50.4748]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "PLF00007",
+        "name": "Zduńska Wola Karsznice",
+        "type": "freight",
+        "importance": 3,
+        "kind": "marshalling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [19.01, 51.578]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "PLF00008",
+        "name": "Częstochowa Towarowa",
+        "type": "freight",
+        "importance": 4,
+        "kind": "marshalling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [19.1443, 50.79247]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "PLF00009",
+        "name": "Dąbrowa Górnicza Towarowa",
+        "type": "freight",
+        "importance": 4,
+        "kind": "marshalling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [19.33658, 50.3179]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "PLF00010",
+        "name": "Gdańsk Port Północny",
+        "type": "freight",
+        "importance": 4,
+        "kind": "port"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [18.68996, 54.35784]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "PLF00011",
+        "name": "Gdańsk Zaspa Towarowa",
+        "type": "freight",
+        "importance": 4,
+        "kind": "marshalling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [18.63976, 54.39453]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "PLF00012",
+        "name": "Gliwice",
+        "type": "freight",
+        "importance": 4,
+        "kind": "marshalling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [18.72983, 50.2968]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "PLF00013",
+        "name": "Katowice Szopienice Północne",
+        "type": "freight",
+        "importance": 4,
+        "kind": "marshalling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [19.09016, 50.26223]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "PLF00014",
+        "name": "Kędzierzyn-Koźle",
+        "type": "freight",
+        "importance": 4,
+        "kind": "marshalling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [18.22345, 50.32867]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "PLF00015",
+        "name": "Koluszki",
+        "type": "freight",
+        "importance": 4,
+        "kind": "marshalling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [19.8027, 51.73402]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "PLF00016",
+        "name": "Kraków Prokocim Towarowy",
+        "type": "freight",
+        "importance": 4,
+        "kind": "marshalling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [20.01071, 50.02753]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "PLF00017",
+        "name": "Łazy",
+        "type": "freight",
+        "importance": 4,
+        "kind": "marshalling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [19.40082, 50.43831]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "PLF00018",
+        "name": "Łódź Olechów",
+        "type": "freight",
+        "importance": 4,
+        "kind": "marshalling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [19.5725, 51.72869]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "PLF00019",
+        "name": "Medyka",
+        "type": "freight",
+        "importance": 4,
+        "kind": "marshalling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [22.90781, 49.79881]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "PLF00020",
+        "name": "Port Gliwice",
+        "type": "freight",
+        "importance": 4,
+        "kind": "intermodal"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [18.64612, 50.3207]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "PLF00021",
+        "name": "Port Świnoujście",
+        "type": "freight",
+        "importance": 4,
+        "kind": "port"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [14.33, 53.8982]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "PLF00022",
+        "name": "Rybnik Towarowy",
+        "type": "freight",
+        "importance": 4,
+        "kind": "marshalling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [18.51372, 50.06612]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "PLF00023",
+        "name": "Szczecin Port Centralny",
+        "type": "freight",
+        "importance": 4,
+        "kind": "marshalling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [14.58616, 53.38795]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "PLF00024",
+        "name": "Terminal Dorohusk",
+        "type": "freight",
+        "importance": 4,
+        "kind": "intermodal"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [23.74064, 51.16535]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "PLF00025",
+        "name": "Terminal kontenerowy Warszawa Praga",
+        "type": "freight",
+        "importance": 4,
+        "kind": "intermodal"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [21.00265, 52.30894]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "PLF00026",
+        "name": "Terminal Metrans Gądki",
+        "type": "freight",
+        "importance": 4,
+        "kind": "intermodal"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [17.03418, 52.30829]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "PLF00027",
+        "name": "Terminal Metrans Pruszków",
+        "type": "freight",
+        "importance": 4,
+        "kind": "intermodal"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [20.78959, 52.1661]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "PLF00028",
+        "name": "Terminal PCC Intermodal Kutno",
+        "type": "freight",
+        "importance": 4,
+        "kind": "intermodal"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [19.42697, 52.22711]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "PLF00029",
+        "name": "Terminal Spedcont Łódź Olechów",
+        "type": "freight",
+        "importance": 4,
+        "kind": "intermodal"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [19.54646, 51.72637]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "PLF00030",
+        "name": "Terminale Małaszewicze",
+        "type": "freight",
+        "importance": 4,
+        "kind": "intermodal"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [23.51233, 52.03617]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "PLF00031",
+        "name": "Warszawa Wschodnia Towarowa",
+        "type": "freight",
+        "importance": 4,
+        "kind": "marshalling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [21.08947, 52.25934]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "PLF00032",
+        "name": "Wrocław Brochów",
+        "type": "freight",
+        "importance": 4,
+        "kind": "marshalling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [17.09397, 51.05573]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "PLF00033",
+        "name": "Zabrze Makoszowy",
+        "type": "freight",
+        "importance": 4,
+        "kind": "marshalling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [18.76478, 50.2784]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "PLF00034",
+        "name": "Zajączkowo Tczewskie",
+        "type": "freight",
+        "importance": 4,
+        "kind": "marshalling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [18.76142, 54.12538]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "PLF00035",
+        "name": "Żurawica",
+        "type": "freight",
+        "importance": 4,
+        "kind": "marshalling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [22.83051, 49.82309]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "SEF00001",
+        "name": "Göteborgs hamn – Skandiahamnen",
+        "type": "freight",
+        "importance": 3,
+        "kind": "port"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [11.8592, 57.6993]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "SEF00002",
+        "name": "Hallsbergs rangerbangård",
+        "type": "freight",
+        "importance": 3,
+        "kind": "marshalling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [15.0593, 59.0587]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "SEF00003",
+        "name": "Malmö godsbangård",
+        "type": "freight",
+        "importance": 3,
+        "kind": "marshalling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [13.0349, 55.6127]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "SEF00004",
+        "name": "Sävenäs rangerbangård",
+        "type": "freight",
+        "importance": 3,
+        "kind": "marshalling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [12.0462, 57.7301]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "SEF00005",
+        "name": "Älvsjö godsbangård",
+        "type": "freight",
+        "importance": 4,
+        "kind": "marshalling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [18.0244, 59.2951]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "SEF00006",
+        "name": "Ånge godsbangård",
+        "type": "freight",
+        "importance": 4,
+        "kind": "marshalling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [15.6428, 62.5254]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "SEF00007",
+        "name": "Borlänge godsbangård",
+        "type": "freight",
+        "importance": 4,
+        "kind": "marshalling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [15.42, 60.477]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "SEF00008",
+        "name": "Gävle godsbangård",
+        "type": "freight",
+        "importance": 4,
+        "kind": "marshalling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [17.1491, 60.6873]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "SEF00009",
+        "name": "Helsingborgs godsbangård",
+        "type": "freight",
+        "importance": 4,
+        "kind": "marshalling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [12.7219, 56.0271]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "SEF00010",
+        "name": "Jönköpings godsbangård",
+        "type": "freight",
+        "importance": 4,
+        "kind": "marshalling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [14.1751, 57.7642]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "SEF00011",
+        "name": "Kiruna malmbangård",
+        "type": "freight",
+        "importance": 4,
+        "kind": "marshalling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [20.191, 67.8735]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "SEF00012",
+        "name": "Luleå malmbangård",
+        "type": "freight",
+        "importance": 4,
+        "kind": "port"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [22.1833, 65.577]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "SEF00013",
+        "name": "Nässjö kombiterminal",
+        "type": "freight",
+        "importance": 4,
+        "kind": "intermodal"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [14.6892, 57.6858]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "SEF00014",
+        "name": "Norrköpings godsbangård",
+        "type": "freight",
+        "importance": 4,
+        "kind": "marshalling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [16.2, 58.6458]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "SEF00015",
+        "name": "Oxelösunds hamn",
+        "type": "freight",
+        "importance": 4,
+        "kind": "port"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [17.0999, 58.6705]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "SEF00016",
+        "name": "Södertälje hamn",
+        "type": "freight",
+        "importance": 4,
+        "kind": "port"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [17.6472, 59.1776]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "SEF00017",
+        "name": "Torsboda kombiterminal",
+        "type": "freight",
+        "importance": 4,
+        "kind": "intermodal"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [17.47375, 62.52345]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "SEF00018",
+        "name": "Trelleborgs hamn",
+        "type": "freight",
+        "importance": 4,
+        "kind": "port"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [13.1558, 55.3698]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKF00001",
+        "name": "Basford Hall Yard",
+        "type": "freight",
+        "importance": 3,
+        "kind": "marshalling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-2.42855, 53.07562]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKF00002",
+        "name": "DIRFT",
+        "type": "freight",
+        "importance": 3,
+        "kind": "intermodal"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-1.16797, 52.34775]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKF00003",
+        "name": "Doncaster Belmont Yard",
+        "type": "freight",
+        "importance": 3,
+        "kind": "marshalling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-1.13482, 53.50748]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKF00004",
+        "name": "Hams Hall Rail Freight Terminal",
+        "type": "freight",
+        "importance": 3,
+        "kind": "intermodal"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-1.70424, 52.51781]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKF00005",
+        "name": "London Gateway",
+        "type": "freight",
+        "importance": 3,
+        "kind": "port"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [0.49344, 51.5076]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKF00006",
+        "name": "Mossend Yard",
+        "type": "freight",
+        "importance": 3,
+        "kind": "marshalling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-4.00309, 55.81774]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKF00007",
+        "name": "Port of Felixstowe",
+        "type": "freight",
+        "importance": 3,
+        "kind": "port"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [1.31, 51.96133]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKF00008",
+        "name": "Southampton Container Port",
+        "type": "freight",
+        "importance": 3,
+        "kind": "port"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-1.45536, 50.9124]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKF00009",
+        "name": "Trafford Park Freightliner Terminal",
+        "type": "freight",
+        "importance": 3,
+        "kind": "intermodal"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-2.30356, 53.45813]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKF00010",
+        "name": "Barking Rail Freight Terminal",
+        "type": "freight",
+        "importance": 4,
+        "kind": "intermodal"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [0.12647, 51.52757]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKF00011",
+        "name": "Bescot Yard",
+        "type": "freight",
+        "importance": 4,
+        "kind": "marshalling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-1.98628, 52.56029]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKF00012",
+        "name": "Birch Coppice Rail Freight Terminal",
+        "type": "freight",
+        "importance": 4,
+        "kind": "intermodal"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-1.63208, 52.59116]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKF00013",
+        "name": "Coatbridge Freightliner Terminal",
+        "type": "freight",
+        "importance": 4,
+        "kind": "intermodal"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-4.04041, 55.87206]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKF00014",
+        "name": "Dollands Moor Freight Yard",
+        "type": "freight",
+        "importance": 4,
+        "kind": "marshalling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [1.10178, 51.09195]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKF00015",
+        "name": "Doncaster iPort",
+        "type": "freight",
+        "importance": 4,
+        "kind": "intermodal"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-1.11149, 53.47744]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKF00016",
+        "name": "East Midlands Gateway Rail Freight Terminal",
+        "type": "freight",
+        "importance": 4,
+        "kind": "intermodal"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-1.2999, 52.83966]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKF00017",
+        "name": "Garston Freightliner Terminal",
+        "type": "freight",
+        "importance": 4,
+        "kind": "intermodal"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-2.90272, 53.35328]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKF00018",
+        "name": "Grangemouth Docks",
+        "type": "freight",
+        "importance": 4,
+        "kind": "port"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-3.7089, 56.0222]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKF00019",
+        "name": "Hoo Junction Yard",
+        "type": "freight",
+        "importance": 4,
+        "kind": "marshalling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [0.44676, 51.43592]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKF00020",
+        "name": "Kingmoor Yard",
+        "type": "freight",
+        "importance": 4,
+        "kind": "marshalling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-2.97592, 54.92777]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKF00021",
+        "name": "Lawley Street Freightliner Terminal",
+        "type": "freight",
+        "importance": 4,
+        "kind": "intermodal"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-1.87045, 52.48385]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKF00022",
+        "name": "Leeds Freightliner Terminal",
+        "type": "freight",
+        "importance": 4,
+        "kind": "intermodal"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-1.50859, 53.76839]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKF00023",
+        "name": "Margam Knuckle Yard",
+        "type": "freight",
+        "importance": 4,
+        "kind": "marshalling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-3.74938, 51.5521]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKF00024",
+        "name": "Millbrook Freightliner Terminal",
+        "type": "freight",
+        "importance": 4,
+        "kind": "intermodal"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-1.43905, 50.91256]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKF00025",
+        "name": "Millerhill Yard",
+        "type": "freight",
+        "importance": 4,
+        "kind": "marshalling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-3.08187, 55.92399]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKF00026",
+        "name": "Mossend Euroterminal",
+        "type": "freight",
+        "importance": 4,
+        "kind": "intermodal"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-3.99806, 55.8272]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKF00027",
+        "name": "Port of Immingham",
+        "type": "freight",
+        "importance": 4,
+        "kind": "port"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-0.19881, 53.62301]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKF00028",
+        "name": "Port of Tilbury",
+        "type": "freight",
+        "importance": 4,
+        "kind": "port"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [0.34176, 51.468]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKF00029",
+        "name": "Seaforth Container Terminal",
+        "type": "freight",
+        "importance": 4,
+        "kind": "port"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-3.015, 53.4603]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKF00030",
+        "name": "Tees Yard",
+        "type": "freight",
+        "importance": 4,
+        "kind": "marshalling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-1.26638, 54.56705]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKF00031",
+        "name": "Trafford Park Euroterminal",
+        "type": "freight",
+        "importance": 4,
+        "kind": "intermodal"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-2.29929, 53.46243]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKF00032",
+        "name": "Tyne Yard",
+        "type": "freight",
+        "importance": 4,
+        "kind": "marshalling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-1.6009, 54.91348]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKF00033",
+        "name": "Wakefield Europort",
+        "type": "freight",
+        "importance": 4,
+        "kind": "intermodal"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-1.40736, 53.7144]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKF00034",
+        "name": "Warrington Arpley Yard",
+        "type": "freight",
+        "importance": 4,
+        "kind": "marshalling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-2.6016, 53.382]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKF00035",
+        "name": "Wembley Yard",
+        "type": "freight",
+        "importance": 4,
+        "kind": "marshalling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-0.29282, 51.54945]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKF00036",
+        "name": "Wentloog Freightliner Terminal",
+        "type": "freight",
+        "importance": 4,
+        "kind": "intermodal"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-3.09232, 51.51382]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "UKF00037",
+        "name": "Westbury Yard",
+        "type": "freight",
+        "importance": 4,
+        "kind": "marshalling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-2.20343, 51.26358]
+      }
     }
   ]
 }
