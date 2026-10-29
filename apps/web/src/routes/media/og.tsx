@@ -9,6 +9,7 @@ import geistFont from "@/assets/fonts/Geist/Geist[wght].woff2?inline";
 import geistMonoFont from "@/assets/fonts/Geist/GeistMono.woff2?inline";
 import {
   LIGHT_ICON_SVG,
+  FREIGHT_ICON_SVG,
   METRO_ICON_SVG,
   RAIL_ICON_SVG,
   svgDataUri,
@@ -53,6 +54,7 @@ const flags = import.meta.glob<string>("../../../public/assets/flags/*.svg", {
 
 const stationMarkers = {
   rail: { src: svgDataUri(RAIL_ICON_SVG), label: "Rail station" },
+  freight: { src: svgDataUri(FREIGHT_ICON_SVG), label: "Freight yard" },
   metro: { src: svgDataUri(METRO_ICON_SVG), label: "Metro station" },
   light: { src: svgDataUri(LIGHT_ICON_SVG), label: "Light rail station" },
 };

@@ -13,7 +13,11 @@ import tailwindcss from "@tailwindcss/vite";
 type OperatorRecord = { slug: string };
 type LineRecord = { id: string };
 type StationFeatureRecord = {
-  properties: { id: string; importance: 1 | 2 | 3 | 4; type: "rail" | "metro" | "light" };
+  properties: {
+    id: string;
+    importance: 1 | 2 | 3 | 4;
+    type: "rail" | "metro" | "light" | "freight";
+  };
 };
 
 const operatorRecords = JSON.parse(

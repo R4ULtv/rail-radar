@@ -71,6 +71,9 @@ const serviceTypeLabels: Record<string, string> = {
   "night-train": "Night Train",
   international: "International",
   scenic: "Scenic",
+  intermodal: "Intermodal",
+  wagonload: "Wagonload",
+  "block-train": "Block Train",
 };
 
 const OPERATOR_GROUPS = ["international", ...COUNTRY_CODES] as const;

@@ -108,6 +108,9 @@ const serviceTypeLabels: Record<string, string> = {
   "night-train": "Night Train",
   international: "International",
   scenic: "Scenic",
+  intermodal: "Intermodal",
+  wagonload: "Wagonload",
+  "block-train": "Block Train",
 };
 
 const linkIcons: Record<string, React.ComponentType<{ className?: string }>> = {
@@ -511,8 +514,8 @@ function OperatorPage({ slug, network }: { slug: string; network: OperatorLinesD
           {formatCountryList(trackedCountries)}.{" "}
           {operator.operatorTypes.includes("passenger") &&
             `View trains operated by ${operator.name} on Rail Radar, including real-time departures, arrivals, delays, and platform information. `}
-          {operator.serviceTypes.map((t) => serviceTypeLabels[t] ?? t).join(", ")} services
-          available.
+          {operator.serviceTypes.length > 0 &&
+            `${operator.serviceTypes.map((t) => serviceTypeLabels[t] ?? t).join(", ")} services available.`}
           {network &&
             network.lines.length > 0 &&
             ` ${operator.name} runs ${network.lines.map((line) => line.name).join(", ")}.`}
