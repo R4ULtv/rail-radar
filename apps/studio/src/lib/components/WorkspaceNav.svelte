@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { MapPinIcon, RouteIcon } from "@lucide/svelte";
+  import { Building2Icon, MapPinIcon, RouteIcon } from "@lucide/svelte";
   import { page } from "$app/state";
   import { cn } from "$lib/utils";
 
@@ -8,6 +8,7 @@
   const workspaces = [
     { href: "/", label: "Stations", icon: MapPinIcon },
     { href: "/lines", label: "Lines", icon: RouteIcon },
+    { href: "/operators", label: "Operators", icon: Building2Icon },
   ];
   const pathname = $derived(page.url.pathname.replace(/\/$/, "") || "/");
 </script>
@@ -20,6 +21,8 @@
     {@const active = pathname === workspace.href}
     <a
       href={workspace.href}
+      aria-label={workspace.label}
+      title={workspace.label}
       aria-current={active ? "page" : undefined}
       class={cn(
         "inline-flex h-full items-center gap-1.5 border border-transparent px-2.5 text-xs font-medium text-muted-foreground transition-colors hover:text-foreground focus-visible:border-ring focus-visible:outline-none",
@@ -27,7 +30,7 @@
       )}
     >
       <workspace.icon class="size-3.5" />
-      {workspace.label}
+      <span class="hidden sm:inline">{workspace.label}</span>
     </a>
   {/each}
 </nav>

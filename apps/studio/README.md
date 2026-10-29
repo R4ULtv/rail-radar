@@ -1,6 +1,6 @@
 # Rail Radar Studio
 
-Admin tool for managing railway stations and transit lines across Europe. Use the Stations and Lines workspaces to curate the shared datasets.
+Admin tool for managing railway stations, transit lines and railway operators across Europe. Use the Stations, Lines and Operators workspaces to curate the shared datasets.
 
 ## Tech Stack
 
@@ -76,7 +76,37 @@ pnpm --filter=studio preview
 3. Click **Open in GitHub** — GitHub opens with the body pre-filled.
 4. Create a branch (suggested format: `studio/YYYY-MM-DD-description`), commit, and open the PR.
 
-Changes are persisted to `localStorage`, so closing the tab won't lose work.
+Station history and contribution summaries are persisted to `localStorage`. In browser mode,
+export your edited dataset before leaving to keep the actual data changes.
+
+## Operators
+
+Open **Operators** in the workspace navigation, or visit `/operators`.
+
+- Search by name, slug or country; filter by country and operator type, including freight.
+- Create and edit passenger, freight, metro and light rail profiles, including operators with multiple types.
+- Edit every profile field: identity, logo asset path, countries, services, description, website,
+  network bounds, company details, statistics and external links. Empty optional statistics
+  are saved as `null`, so freight operators do not need passenger totals.
+- Local mode previews logos directly from `apps/web/public/assets/operators`; browser mode
+  uses the website's published assets. Missing artwork uses a placeholder. This editor references
+  SVG files; add or replace the artwork in the repository separately.
+- **Save operator** writes to `packages/data/src/operators.json` in local development.
+  Writes are atomic, preserve editorial order and untouched profiles, and reject stale or
+  competing edits. Reload after external data changes.
+- Operators assigned to saved lines cannot be renamed or deleted until those line assignments
+  are changed in the Lines workspace. Browser mode checks against the bundled lines.
+- In browser mode, the workspace starts from the bundled operators. Saves stay in memory;
+  **Not exported** remains visible until you export `operators.json`. Importing a JSON file
+  switches to browser editing even during local development, so it never overwrites the local file.
+- Unsaved drafts and unexported browser changes prompt before they are discarded. Use
+  `⌘K` / `Ctrl+K` to search, arrow keys or Home/End to browse, `⌘S` / `Ctrl+S` to save,
+  and Escape to close the editor outside a text field.
+
+Operator imports and edits validate slugs, duplicates, supported countries/types/services,
+URLs, bounds and numeric values. Unknown fields are rejected instead of silently removed.
+The legacy missing parent-company value is treated as unknown (`null`) when loaded.
+Run the Studio regression tests with `pnpm --filter=studio test`.
 
 ## Transit lines
 

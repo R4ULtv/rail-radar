@@ -12,7 +12,8 @@
     "versions": "wrangler versions upload",
     "cf-typegen": "wrangler types",
     "lint": "oxlint --deny warnings src",
-    "check-types": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json"
+    "check-types": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
+    "test": "node --experimental-strip-types --test tests/*.test.ts"
   },
   "dependencies": {
     "@sveltejs/kit": "^2.70.3",

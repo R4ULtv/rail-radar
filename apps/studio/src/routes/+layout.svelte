@@ -6,9 +6,9 @@
   let { children } = $props();
 
   const siteName = "Rail Radar";
-  const title = "Rail Studio - Stations and Lines";
+  const title = "Rail Studio - Stations, Lines and Operators";
   const description =
-    "Contributor workspace for curating Rail Radar's stations and transit lines across Europe.";
+    "Contributor workspace for curating Rail Radar's stations, transit lines and railway operators across Europe.";
   const url = "https://studio.railradar24.com";
   const image = `${url}/og-image.webp`;
   onMount(() => {

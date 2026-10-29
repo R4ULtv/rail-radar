@@ -22,7 +22,7 @@
 </script>
 
 <header
-  class="flex h-13 shrink-0 items-center gap-3 border-b border-border bg-card/90 px-3 text-card-foreground backdrop-blur"
+  class="flex h-13 shrink-0 items-center gap-2 border-b border-border bg-card/90 px-2 text-card-foreground backdrop-blur sm:gap-3 sm:px-3"
 >
   <button
     type="button"
@@ -62,7 +62,7 @@
     </div>
   {/if}
 
-  <div class="ml-auto flex shrink-0 items-center gap-2">
+  <div class="ml-auto flex shrink-0 items-center gap-1 sm:gap-2">
     {@render actions()}
   </div>
 </header>
