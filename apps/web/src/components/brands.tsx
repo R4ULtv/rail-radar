@@ -51,6 +51,7 @@ const brandPaths: Record<string, string> = {
   eurostar: "eurostar",
   arriva: "arriva",
   dsb: "dk/dsb",
+  "dsb vores tog": "dk/dsb",
   lokaltog: "dk/lokaltog",
   nj: "dk/nj",
   "midtjyske jernbaner": "dk/mj",
@@ -95,7 +96,7 @@ const brandPaths: Record<string, string> = {
   malartag: "se/malartag",
   västtrafik: "se/vasttrafik",
   vasttrafik: "se/vasttrafik",
-  "mtr express": "se/mtr",
+  "vr snabbtåg": "fi/vr",
   snälltåget: "se/snalltaget",
   transdev: "transdev",
   "go-ahead norge": "no/go_ahead",
@@ -129,6 +130,14 @@ const brandPaths: Record<string, string> = {
 
 // Aliases for brands that share icons
 const brandAliases: Record<string, string> = {
+  "mtr express": "vr snabbtåg",
+  "mtr express ab": "vr snabbtåg",
+  mtrx: "vr snabbtåg",
+  "vr snabbtag": "vr snabbtåg",
+  "vr snabbtåg ab": "vr snabbtåg",
+  "vores tog": "dsb vores tog",
+  gocollective: "dsb vores tog",
+  "go collective": "dsb vores tog",
   ntv: "italo",
   frecciabianca: "trenitalia",
   frecciargento: "trenitalia",
@@ -233,6 +242,7 @@ const brandSlugMap: Record<string, string> = {
   sncb: "sncb",
   eurostar: "eurostar",
   dsb: "dsb",
+  "dsb vores tog": "dsb-vores-tog",
   lokaltog: "lokaltog",
   db: "db",
   flixtrain: "flixtrain",
@@ -280,7 +290,7 @@ const brandSlugMap: Record<string, string> = {
   malartag: "malartag",
   västtrafik: "vasttrafik",
   vasttrafik: "vasttrafik",
-  "mtr express": "mtr-express",
+  "vr snabbtåg": "vr-snabbtag",
   snälltåget: "snalltaget",
   transdev: "transdev",
   // UK brands

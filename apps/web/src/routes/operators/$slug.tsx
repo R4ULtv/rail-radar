@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { createFileRoute, Link, notFound } from "@tanstack/react-router";
+import { createFileRoute, Link, notFound, redirect } from "@tanstack/react-router";
 import { metadataToHead, type Metadata } from "@/lib/metadata";
 import { lines } from "@repo/data/lines";
 import { operators, operatorBySlug, type Operator } from "@repo/data/operators";
@@ -39,7 +39,15 @@ import {
 
 export const Route = createFileRoute("/operators/$slug")({
   loader: async ({ params }) => {
-    if (!operatorBySlug.has(params.slug)) throw notFound();
+    const operator = operatorBySlug.get(params.slug);
+    if (!operator) throw notFound();
+    if (operator.slug !== params.slug) {
+      throw redirect({
+        to: "/operators/$slug",
+        params: { slug: operator.slug },
+        statusCode: 301,
+      });
+    }
     const network = await loadOperatorLines({ data: { slug: params.slug } });
     return { slug: params.slug, network };
   },

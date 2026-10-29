@@ -101,7 +101,15 @@ function getBrand(entry: TrafiklabDeparture): string | null {
   if (lower.startsWith("sj ") || lower === "sj ab") return "SJ";
   if (lower === "vr sverige ab" || lower === "vr sverige") return "VR";
   if (lower === "vygruppen as") return "Vy";
-  if (lower === "mtr express ab") return "MTR Express";
+  if (
+    lower === "mtr express ab" ||
+    lower === "mtr express" ||
+    lower === "mtrx" ||
+    lower === "vr snabbtåg ab" ||
+    lower === "vr snabbtåg"
+  ) {
+    return "VR Snabbtåg";
+  }
   if (lower === "snälltåget ab") return "Snälltåget";
   if (lower === "transdev sverige ab" || lower.startsWith("transdev ")) return "Transdev";
   if (lower === "svenska tågkompaniet ab" || lower === "tågab") return "Transdev";
