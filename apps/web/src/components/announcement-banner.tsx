@@ -1,14 +1,11 @@
 "use client";
 
 import { useReducer, useRef, useSyncExternalStore } from "react";
-import { ArrowRightIcon, RouteIcon, XIcon } from "lucide-react";
+import { ContainerIcon, XIcon } from "lucide-react";
 import { LazyMotion, domAnimation, m, AnimatePresence } from "motion/react";
-import { Link } from "@tanstack/react-router";
-import { Button, buttonVariants } from "@repo/ui/components/button";
-import { cn } from "@repo/ui/lib/utils";
-import { prerenderedPageLinkProps } from "@/lib/station-prerender";
+import { Button } from "@repo/ui/components/button";
 
-const STORAGE_KEY = "banner-dismissed-v17";
+const STORAGE_KEY = "banner-dismissed-v18";
 
 const subscribe = () => () => {};
 const getSnapshot = () => !localStorage.getItem(STORAGE_KEY);
@@ -46,32 +43,19 @@ export function AnnouncementBanner() {
                 aria-hidden="true"
                 className="flex size-10 shrink-0 items-center justify-center rounded-2xl bg-brand/15 text-brand md:size-11"
               >
-                <RouteIcon className="size-5 md:size-6" />
+                <ContainerIcon className="size-5 md:size-6" />
               </div>
 
               <div className="min-w-0 flex-1">
                 <div className="mb-0.5 flex items-center gap-1.5">
                   <p className="truncate text-sm font-semibold tracking-tight">
-                    New: metro &amp; light rail
+                    New: freight stations
                   </p>
                 </div>
                 <p className="truncate text-xs text-muted-foreground">
-                  Explore lines, routes, and stops
+                  Discover yards, terminals, and ports
                 </p>
               </div>
-
-              <Link
-                to="/lines"
-                {...prerenderedPageLinkProps}
-                onClick={dismiss}
-                className={cn(
-                  buttonVariants({ variant: "default", size: "sm" }),
-                  "hidden transition-transform duration-150 active:scale-[0.97] md:inline-flex",
-                )}
-              >
-                Explore lines
-                <ArrowRightIcon data-icon="inline-end" />
-              </Link>
 
               <Button
                 variant="ghost"
@@ -82,16 +66,6 @@ export function AnnouncementBanner() {
               >
                 <XIcon className="size-3.5" />
               </Button>
-
-              <Link
-                to="/lines"
-                {...prerenderedPageLinkProps}
-                onClick={dismiss}
-                aria-label="Explore metro and light rail lines"
-                className="absolute inset-0 rounded-3xl focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/30 focus-visible:ring-inset md:hidden"
-              >
-                <span className="sr-only">Explore metro and light rail lines</span>
-              </Link>
             </div>
           </m.div>
         )}
