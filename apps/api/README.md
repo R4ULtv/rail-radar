@@ -35,8 +35,8 @@ Returns a JSON object with `count` and `operators`.
 - `?q=trenitalia`: text search across operator metadata
 - `?country=it|international`: filter by served countries
 - `?origin=it|international`: filter by operator origin country
-- `?type=passenger|cargo|metro|light-rail`: filter by operator type
-- `?serviceType=high-speed|intercity|regional|commuter|night-train|international|scenic`: filter by service type
+- `?type=passenger|freight|metro|light-rail`: filter by operator type
+- `?serviceType=high-speed|intercity|regional|commuter|night-train|international|scenic|intermodal|wagonload|block-train`: filter by service type
 - Comma-separated values are supported for filters like `?country=it,ch`
 
 ### `GET /operators/:slug`
