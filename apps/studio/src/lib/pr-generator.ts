@@ -75,6 +75,11 @@ function formatChangeDescription(change: StationChange): {
   if (details.typeChanged && details.previousType && details.newType) {
     updates.push(`Type changed from ${details.previousType} to ${details.newType}`);
   }
+  if (details.kindChanged) {
+    updates.push(
+      `Yard kind changed from ${details.previousKind ?? "unspecified"} to ${details.newKind ?? "unspecified"}`,
+    );
+  }
   if (
     details.importanceChanged &&
     details.previousImportance !== undefined &&
@@ -114,7 +119,11 @@ export function generatePRBody(changes: StationChange[], stats: ContributionStat
     );
   }
 
-  lines.push(`${summaryParts.join(". ")}.`);
+  lines.push(
+    summaryParts.length
+      ? `${summaryParts.join(". ")}.`
+      : `Updated data for ${stats.changesCount} station${stats.changesCount !== 1 ? "s" : ""}.`,
+  );
   lines.push("");
   lines.push("## Changes");
   lines.push("| Station | Type | Details | Map | RFI |");
@@ -123,7 +132,10 @@ export function generatePRBody(changes: StationChange[], stats: ContributionStat
   for (const change of changes) {
     const { details, mapLink } = formatChangeDescription(change);
     const mapCell = mapLink ? `[View](${mapLink})` : "-";
-    const rfiCell = change.type !== "deleted" ? `[Check](${generateRfiLink(change.id)})` : "-";
+    const rfiCell =
+      change.type !== "deleted" && change.stationType !== "freight" && /^IT\d+$/.test(change.id)
+        ? `[Check](${generateRfiLink(change.id)})`
+        : "-";
     lines.push(
       `| ${change.stationName} | ${getTypeBadge(change.type)} | ${details} | ${mapCell} | ${rfiCell} |`,
     );

@@ -3,6 +3,7 @@
   import { onMount, tick } from "svelte";
   import {
     CopyIcon,
+    ContainerIcon,
     ListIcon,
     SearchIcon,
     SquareMIcon,
@@ -22,6 +23,7 @@
     type StationTypeFilter,
   } from "$lib/station-filters";
   import type { ChangeType } from "$lib/types/contribution";
+  import { freightKindLabels } from "$lib/stations";
   import { cn } from "$lib/utils";
 
   const importanceLabels: Record<Exclude<StationImportanceFilter, "any">, string> = {
@@ -222,6 +224,15 @@
           <TramFrontIcon class="size-3" />
           {#if typeFilter === "light"}<span class="text-xs">Light</span>{/if}
         </Tabs.Trigger>
+        <Tabs.Trigger
+          value="freight"
+          title="Freight yards"
+          aria-label="Freight yards"
+          class="gap-1.5"
+        >
+          <ContainerIcon />
+          {#if typeFilter === "freight"}<span class="text-xs">Yards</span>{/if}
+        </Tabs.Trigger>
         <Tabs.Trigger value="duplicate" title="Duplicates" class="gap-1.5">
           <CopyIcon class="size-3" />
           {#if typeFilter === "duplicate"}<span class="text-xs">Duplicates</span>{/if}
@@ -284,6 +295,13 @@
               {#if station.type === "light"}<TramFrontIcon
                   class="size-3 text-muted-foreground"
                 />{/if}
+              {#if station.type === "freight"}
+                <span title={station.kind ? freightKindLabels[station.kind] : "Freight yard"}>
+                  <ContainerIcon
+                    aria-label={station.kind ? freightKindLabels[station.kind] : "Freight yard"}
+                  />
+                </span>
+              {/if}
             </Button>
           {/each}
         </div>

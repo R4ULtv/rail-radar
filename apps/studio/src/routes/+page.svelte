@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { Station } from "@repo/data";
+  import type { FreightKind, Station } from "@repo/data";
   import { onMount } from "svelte";
   import ContributionPanel from "$lib/components/ContributionPanel.svelte";
   import CreateStationDialog from "$lib/components/CreateStationDialog.svelte";
@@ -88,6 +88,7 @@
       a.id === b.id &&
       a.name === b.name &&
       a.type === b.type &&
+      a.kind === b.kind &&
       a.importance === b.importance &&
       a.geo?.lat === b.geo?.lat &&
       a.geo?.lng === b.geo?.lng
@@ -190,14 +191,19 @@
     pendingNewStation = { lat, lng };
   }
 
-  async function handleConfirmCreate(id: string, name: string) {
+  async function handleConfirmCreate(
+    id: string,
+    name: string,
+    type: Station["type"],
+    kind?: FreightKind,
+  ) {
     if (!pendingNewStation) return;
     const { lat, lng } = pendingNewStation;
     pendingNewStation = null;
 
     try {
       isSaving = true;
-      const station = await stationStore.createStation(name, { lat, lng }, { id });
+      const station = await stationStore.createStation(name, { lat, lng }, { id, type, kind });
       historyStore.push({ kind: "create", station });
       reconcileContribution(station.id);
       selectedStationId = station.id;
@@ -255,8 +261,9 @@
   async function handleSave(updates: {
     name: string;
     geo: { lat: number; lng: number };
-    type: "rail" | "metro" | "light";
+    type: Station["type"];
     importance: 1 | 2 | 3 | 4;
+    kind: FreightKind | null;
   }) {
     if (!selectedStationId) return;
     const previousStation = stationState.stations.find(
@@ -304,9 +311,10 @@
       stationId = target.id;
       await stationStore.updateStation(target.id, {
         name: target.name,
-        geo: target.geo,
+        geo: target.geo ?? null,
         type: target.type,
         importance: target.importance,
+        kind: target.kind ?? null,
       });
     }
     reconcileContribution(stationId);
@@ -466,6 +474,9 @@
       open={pendingNewStation !== null}
       {existingIds}
       {existingPrefixes}
+      initialType={stationTypeFilter === "all" || stationTypeFilter === "duplicate"
+        ? "rail"
+        : stationTypeFilter}
       onConfirm={handleConfirmCreate}
       onCancel={handleCancelCreate}
     />

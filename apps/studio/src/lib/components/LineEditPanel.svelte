@@ -65,10 +65,12 @@
     query.trim().length < 2
       ? []
       : stations
-          .filter((station) =>
-            `${station.id} ${station.name}`
-              .toLocaleLowerCase()
-              .includes(query.trim().toLocaleLowerCase()),
+          .filter(
+            (station) =>
+              station.type !== "freight" &&
+              `${station.id} ${station.name}`
+                .toLocaleLowerCase()
+                .includes(query.trim().toLocaleLowerCase()),
           )
           .slice(0, 15),
   );

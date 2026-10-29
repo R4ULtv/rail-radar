@@ -87,7 +87,7 @@
   const unlinked = $derived(
     stations.filter(
       (station) =>
-        station.type !== "rail" &&
+        (station.type === "metro" || station.type === "light") &&
         countries.has(station.id.slice(0, 2)) &&
         !index.getStationLines(station.id).length,
     ),

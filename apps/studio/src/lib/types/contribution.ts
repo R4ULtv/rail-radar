@@ -1,3 +1,5 @@
+import type { FreightKind, Station } from "@repo/data";
+
 export type ChangeType = "created" | "updated" | "deleted";
 
 export interface GeoCoordinates {
@@ -15,6 +17,9 @@ export interface ChangeDetails {
   typeChanged?: boolean;
   previousType?: string;
   newType?: string;
+  kindChanged?: boolean;
+  previousKind?: FreightKind;
+  newKind?: FreightKind;
   importanceChanged?: boolean;
   previousImportance?: number;
   newImportance?: number;
@@ -24,6 +29,7 @@ export interface StationChange {
   id: string;
   type: ChangeType;
   stationName: string;
+  stationType?: Station["type"];
   timestamp: Date;
   details: ChangeDetails;
 }

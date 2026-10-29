@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { Station } from "@repo/data";
+  import type { FreightKind, Station } from "@repo/data";
   import {
     BookOpenIcon,
     ExternalLinkIcon,
@@ -15,7 +15,7 @@
   import { ScrollArea } from "$lib/components/ui/scroll-area";
   import * as Select from "$lib/components/ui/select";
   import { Separator } from "$lib/components/ui/separator";
-  import { COORDINATE_DECIMAL_PLACES, roundCoordinate } from "$lib/stations";
+  import { COORDINATE_DECIMAL_PLACES, freightKindLabels, roundCoordinate } from "$lib/stations";
   import { stationStore } from "$lib/stores/stations";
 
   let {
@@ -30,8 +30,9 @@
     onSave: (updates: {
       name: string;
       geo: { lat: number; lng: number };
-      type: "rail" | "metro" | "light";
+      type: Station["type"];
       importance: 1 | 2 | 3 | 4;
+      kind: FreightKind | null;
     }) => void;
     onDelete: () => void;
     onClose: () => void;
@@ -39,7 +40,8 @@
 
   let lastStationFields = $state<string | null>(null);
   let name = $state("");
-  let type = $state<"rail" | "metro" | "light">("rail");
+  let type = $state<Station["type"]>("rail");
+  let kind = $state<FreightKind | "unspecified">("unspecified");
   let importance = $state("4");
   let lat = $state("");
   let lng = $state("");
@@ -49,6 +51,7 @@
       id: station.id,
       name: station.name,
       type: station.type,
+      kind: station.kind,
       importance: station.importance,
       lat: station.geo?.lat ?? null,
       lng: station.geo?.lng ?? null,
@@ -57,6 +60,7 @@
     lastStationFields = stationFields;
     name = station.name;
     type = station.type;
+    kind = station.kind ?? "unspecified";
     importance = station.importance.toString();
     lat = station.geo?.lat.toString() ?? "";
     lng = station.geo?.lng.toString() ?? "";
@@ -65,12 +69,21 @@
   const hasChanges = $derived(
     name !== station.name ||
       type !== station.type ||
+      (type === "freight" && (kind === "unspecified" ? undefined : kind) !== station.kind) ||
       Number(importance) !== station.importance ||
       lat !== (station.geo?.lat.toString() ?? "") ||
       lng !== (station.geo?.lng.toString() ?? ""),
   );
 
-  const typeLabel = $derived(type === "rail" ? "Rail" : type === "metro" ? "Metro" : "Light");
+  const typeLabel = $derived(
+    type === "rail"
+      ? "Rail"
+      : type === "metro"
+        ? "Metro"
+        : type === "light"
+          ? "Light"
+          : "Freight yard",
+  );
   const importanceLabel = $derived(
     importance === "1"
       ? "Major"
@@ -89,11 +102,12 @@
       name,
       geo: { lat: roundCoordinate(parsedLat), lng: roundCoordinate(parsedLng) },
       type,
+      kind: type === "freight" && kind !== "unspecified" ? kind : null,
       importance: Number(importance) as 1 | 2 | 3 | 4,
     });
   }
 
-  const isItalianStation = $derived(/^IT[LM]?/.test(station.id));
+  const isItalianStation = $derived(type === "rail" && /^IT\d/.test(station.id));
   const railRadarBaseUrl = $derived(
     $stationStore.mode === "local" ? "http://localhost:3000" : "https://railradar24.com",
   );
@@ -147,9 +161,12 @@
               {typeLabel}
             </Select.Trigger>
             <Select.Content>
-              <Select.Item value="rail">Rail</Select.Item>
-              <Select.Item value="metro">Metro</Select.Item>
-              <Select.Item value="light">Light</Select.Item>
+              <Select.Group>
+                <Select.Item value="rail">Rail</Select.Item>
+                <Select.Item value="metro">Metro</Select.Item>
+                <Select.Item value="light">Light</Select.Item>
+                <Select.Item value="freight">Freight yard</Select.Item>
+              </Select.Group>
             </Select.Content>
           </Select.Root>
         </div>
@@ -169,6 +186,25 @@
           </Select.Root>
         </div>
       </div>
+
+      {#if type === "freight"}
+        <div class="flex flex-col gap-1.5">
+          <Label for="station-kind">Yard kind</Label>
+          <Select.Root type="single" bind:value={kind}>
+            <Select.Trigger id="station-kind" class="w-full">
+              {kind === "unspecified" ? "Unspecified" : freightKindLabels[kind]}
+            </Select.Trigger>
+            <Select.Content>
+              <Select.Group>
+                <Select.Item value="unspecified">Unspecified</Select.Item>
+                {#each Object.entries(freightKindLabels) as [value, label] (value)}
+                  <Select.Item {value}>{label}</Select.Item>
+                {/each}
+              </Select.Group>
+            </Select.Content>
+          </Select.Root>
+        </div>
+      {/if}
 
       <div class="grid grid-cols-2 gap-3">
         <div class="flex flex-col gap-1.5">

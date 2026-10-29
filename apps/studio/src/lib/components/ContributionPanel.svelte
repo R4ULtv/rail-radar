@@ -8,6 +8,7 @@
   import { ScrollArea } from "$lib/components/ui/scroll-area";
   import { Separator } from "$lib/components/ui/separator";
   import { generatePRBody, generatePRTitle } from "$lib/pr-generator";
+  import { freightKindLabels } from "$lib/stations";
   import { contributionStore } from "$lib/stores/contribution";
   import type { StationChange } from "$lib/types/contribution";
 
@@ -46,6 +47,11 @@
     }
     if (change.details.nameChanged) updates.push(`Renamed from "${change.details.previousName}"`);
     if (change.details.typeChanged) updates.push(`Type changed to ${change.details.newType}`);
+    if (change.details.kindChanged) {
+      updates.push(
+        `Yard kind changed to ${change.details.newKind ? freightKindLabels[change.details.newKind] : "unspecified"}`,
+      );
+    }
     if (change.details.importanceChanged) {
       updates.push(`Importance changed to ${change.details.newImportance}`);
     }

@@ -21,6 +21,7 @@
   const railCount = $derived(stations.filter((station) => station.type === "rail").length);
   const metroCount = $derived(stations.filter((station) => station.type === "metro").length);
   const lightCount = $derived(stations.filter((station) => station.type === "light").length);
+  const freightCount = $derived(stations.filter((station) => station.type === "freight").length);
   const stateLabel = $derived.by(() => {
     if (isAddingStation) return "Adding";
     if (selectedStation && !selectedStation.geo) return "Placing";
@@ -42,24 +43,30 @@
       ><span class="uppercase tracking-wider">Total</span>
       <span class="text-foreground">{stations.length}</span></span
     >
-    <span
+    <span title="Rail stations"
       ><span
         class="mr-1.5 inline-block size-1.5 rounded-full align-middle"
         style:background-color={STATION_TYPE_COLOR.rail}
       ></span>{railCount}</span
     >
-    <span
+    <span title="Metro stations"
       ><span
         class="mr-1.5 inline-block size-1.5 rounded-full align-middle"
         style:background-color={STATION_TYPE_COLOR.metro}
       ></span>{metroCount}</span
     >
-    <span
+    <span title="Light rail stations"
       ><span
         class="mr-1.5 inline-block size-1.5 rounded-full align-middle"
         style:background-color={STATION_TYPE_COLOR.light}
       ></span>{lightCount}</span
     >
+    <span title="Freight yards">
+      <span
+        class="mr-1.5 inline-block size-1.5 rounded-full align-middle"
+        style:background-color={STATION_TYPE_COLOR.freight}
+      ></span>{freightCount}
+    </span>
   </div>
   <span class="hidden text-muted-foreground/40 sm:inline">|</span>
   <div class="hidden items-center gap-1.5 sm:flex">
