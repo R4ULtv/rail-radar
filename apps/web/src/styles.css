@@ -1,20 +1,6 @@
 @import "@repo/ui/styles/globals.css";
 
-@font-face {
-  font-family: "Geist";
-  font-style: normal;
-  font-display: swap;
-  font-weight: 400 700;
-  src: url("./assets/fonts/Geist/Geist.woff2") format("woff2-variations");
-}
-
-@font-face {
-  font-family: "Geist Mono";
-  font-style: normal;
-  font-display: swap;
-  font-weight: 400;
-  src: url("./assets/fonts/Geist/GeistMono.woff2") format("woff2");
-}
+@import "./assets/fonts/Geist/font-faces.css";
 
 @theme inline {
   --color-brand: #6363fd;

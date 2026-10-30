@@ -1,3 +1,5 @@
+import type { FreightKind } from "@repo/data";
+
 /** Map marker icons: a white glyph on a rounded square in the mode's color, with a white border. */
 
 export const RAIL_ICON_SVG = `<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" fill="none" viewBox="0 0 512 512">
@@ -22,7 +24,7 @@ export const LIGHT_ICON_SVG = `<svg xmlns="http://www.w3.org/2000/svg" width="64
   </svg>
 </svg>`;
 
-/** No freight stations on the map yet; drawn the same way for the operator directory. */
+/** Freight operators and intermodal terminals (lucide `container`). */
 export const FREIGHT_ICON_SVG = `<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" fill="none" viewBox="0 0 512 512">
   <rect width="464" height="464" x="24" y="24" fill="#d97706" stroke="#fff" stroke-opacity="100%" stroke-width="48" paint-order="stroke" rx="112"/>
   <svg xmlns="http://www.w3.org/2000/svg" width="352" height="352" x="80" y="80" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" alignment-baseline="middle" viewBox="0 0 24 24">
@@ -30,6 +32,30 @@ export const FREIGHT_ICON_SVG = `<svg xmlns="http://www.w3.org/2000/svg" width="
     <path d="M10 21.9V14L2.1 9.1"/><path d="m10 14 11.9-6.9"/><path d="M14 19.8v-8.1"/><path d="M18 17.5V9.4"/>
   </svg>
 </svg>`;
+
+/** Marshalling yards (lucide `split`). */
+export const MARSHALLING_YARD_ICON_SVG = `<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" fill="none" viewBox="0 0 512 512">
+  <rect width="464" height="464" x="24" y="24" fill="#d97706" stroke="#fff" stroke-opacity="100%" stroke-width="48" paint-order="stroke" rx="112"/>
+  <svg xmlns="http://www.w3.org/2000/svg" width="352" height="352" x="80" y="80" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" alignment-baseline="middle" viewBox="0 0 24 24">
+    <path d="M16 3h5v5"/><path d="M8 3H3v5"/><path d="M12 22v-8.3a4 4 0 0 0-1.172-2.872L3 3"/><path d="m15 9 6-6"/>
+  </svg>
+</svg>`;
+
+/** Port rail terminals (lucide `ship-cargo`). */
+export const PORT_TERMINAL_ICON_SVG = `<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" fill="none" viewBox="0 0 512 512">
+  <rect width="464" height="464" x="24" y="24" fill="#d97706" stroke="#fff" stroke-opacity="100%" stroke-width="48" paint-order="stroke" rx="112"/>
+  <svg xmlns="http://www.w3.org/2000/svg" width="352" height="352" x="80" y="80" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" alignment-baseline="middle" viewBox="0 0 24 24">
+    <path d="M12 15v-3"/><path d="M12 2v2"/><path d="M16.5 12V9a1 1 0 011-1h1a1 1 0 001-1V5a1 1 0 00-1-1h-13a1 1 0 00-1 1v2a1 1 0 001 1h1a1 1 0 011 1v3"/>
+    <path d="M19.38 19c1.076-1.815 1.636-4.89 1.628-6.008a1 1 0 00-1-.992H3.984a1 1 0 00-1 .984c-.03 1.86.97 5.621 2.826 7.776"/>
+    <path d="M2 20c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1s1.2 1 2.5 1c2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/>
+  </svg>
+</svg>`;
+
+export const FREIGHT_KIND_ICON_SVG: Record<FreightKind, string> = {
+  marshalling: MARSHALLING_YARD_ICON_SVG,
+  intermodal: FREIGHT_ICON_SVG,
+  port: PORT_TERMINAL_ICON_SVG,
+};
 
 export function svgDataUri(svg: string): string {
   return `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`;

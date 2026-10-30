@@ -223,10 +223,15 @@ function createStationStore() {
     async createStation(
       name: string,
       geo: { lat: number; lng: number },
-      options?: { id?: string; type?: "rail" | "metro" | "light"; importance?: 1 | 2 | 3 | 4 },
+      options?: {
+        id?: string;
+        type?: Station["type"];
+        importance?: 1 | 2 | 3 | 4;
+        kind?: Station["kind"];
+      },
     ): Promise<Station> {
       const state = get(store);
-      const { id, type, importance } = options ?? {};
+      const { id, type, importance, kind } = options ?? {};
 
       if (id && state.stations.some((station) => station.id === id)) {
         throw new Error(`Station ID "${id}" already exists`);
@@ -236,7 +241,7 @@ function createStationStore() {
         const response = await fetch("/api/stations", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ id, name, geo, type, importance }),
+          body: JSON.stringify({ id, name, geo, type, importance, kind }),
         });
         if (!response.ok) throw new Error(await readApiError(response, "Failed to create station"));
         const station: Station = await response.json();
@@ -247,7 +252,7 @@ function createStationStore() {
         return station;
       }
 
-      const station = normalizeNewStation({ id, name, geo, type, importance });
+      const station = normalizeNewStation({ id, name, geo, type, importance, kind });
       store.update((current) => ({
         ...current,
         stations: sortStations([...current.stations, station]),

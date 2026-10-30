@@ -10,13 +10,14 @@ import {
   getCountrySlug,
 } from "@repo/data/countries";
 import { getCountryStationBounds, getStationsByCountry } from "@repo/data/directory";
-import { stationById, stations } from "@repo/data/stations";
-import type { Station } from "@repo/data";
+import { stationById } from "@repo/data/stations";
+import nearbyStationIds from "virtual:nearby-stations";
+import { resolveNearbyStations } from "@/lib/nearby-stations";
+import type { NearbyStation, StationWithGeo } from "@/lib/nearby-stations";
 import type { Metadata } from "@/lib/metadata";
 import { isStationPagePrerendered } from "@/lib/station-prerender";
 
-export type StationWithGeo = Station & { geo: { lat: number; lng: number } };
-export type NearbyStation = StationWithGeo & { distance: number };
+export type { NearbyStation, StationWithGeo } from "@/lib/nearby-stations";
 /**
  * The country directory only renders a name and a link per station, and it lists up to
  * ~6k of them, so its loader data (serialized into the page for hydration) carries only
@@ -24,45 +25,7 @@ export type NearbyStation = StationWithGeo & { distance: number };
  */
 export type DirectoryStation = { id: string; name: string; prerendered?: true };
 
-const DEG_TO_RAD = Math.PI / 180;
-const EARTH_RADIUS_KM = 6371;
 const MAX_HUBS = 24;
-
-function haversineDistance(lat1: number, lng1: number, lat2: number, lng2: number): number {
-  const dLat = (lat2 - lat1) * DEG_TO_RAD;
-  const dLng = (lng2 - lng1) * DEG_TO_RAD;
-  const lat1Rad = lat1 * DEG_TO_RAD;
-  const lat2Rad = lat2 * DEG_TO_RAD;
-  const a =
-    Math.sin(dLat / 2) ** 2 + Math.cos(lat1Rad) * Math.cos(lat2Rad) * Math.sin(dLng / 2) ** 2;
-
-  return EARTH_RADIUS_KM * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-}
-
-function nearestStations(
-  currentStation: StationWithGeo,
-  predicate: (station: Station) => boolean,
-  limit: number,
-): NearbyStation[] {
-  const result: NearbyStation[] = [];
-
-  for (const station of stations) {
-    if (station.id === currentStation.id || !station.geo || !predicate(station)) continue;
-
-    const distance = haversineDistance(
-      currentStation.geo.lat,
-      currentStation.geo.lng,
-      station.geo.lat,
-      station.geo.lng,
-    );
-    let index = result.findIndex((candidate) => candidate.distance >= distance);
-    if (index === -1) index = result.length;
-    result.splice(index, 0, { ...(station as StationWithGeo), distance });
-    if (result.length > limit) result.pop();
-  }
-
-  return result;
-}
 
 export function getRailStation(id: string): StationWithGeo | null {
   const station = stationById.get(id);
@@ -71,10 +34,7 @@ export function getRailStation(id: string): StationWithGeo | null {
 }
 
 export function getNearbyStations(station: StationWithGeo): NearbyStation[] {
-  const nearbyRail = nearestStations(station, (candidate) => candidate.type === "rail", 4);
-  const nearbyMetro = nearestStations(station, (candidate) => candidate.type === "metro", 1);
-
-  return [...nearbyRail, ...nearbyMetro].sort((a, b) => a.distance - b.distance).slice(0, 4);
+  return resolveNearbyStations(station, nearbyStationIds[station.id] ?? [], stationById);
 }
 
 function getStationMetadata(station: StationWithGeo): Metadata {
@@ -110,7 +70,10 @@ function getStationMetadata(station: StationWithGeo): Metadata {
 
 export function getStationPageData(id: string) {
   const mapStation = stationById.get(id);
-  if (mapStation?.geo && (mapStation.type === "metro" || mapStation.type === "light")) {
+  if (
+    mapStation?.geo &&
+    (mapStation.type === "metro" || mapStation.type === "light" || mapStation.type === "freight")
+  ) {
     // Keep these URLs available for dedicated station pages in the future.
     throw redirect({
       to: "/",
@@ -184,12 +147,7 @@ function toDirectoryStation({ id, name, type, importance }: StationWithGeo): Dir
 }
 
 function indexKey(name: string): string {
-  const first = name
-    .normalize("NFD")
-    .replace(/[̀-ͯ]/g, "")
-    .trim()
-    .charAt(0)
-    .toUpperCase();
+  const first = name.normalize("NFD").replace(/[̀-ͯ]/g, "").trim().charAt(0).toUpperCase();
 
   return /[A-Z]/.test(first) ? first : "#";
 }

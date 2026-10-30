@@ -211,7 +211,9 @@ export default function StationInfo() {
   // Derive open state from selectedStation
   const isOpen = !!selectedStation;
   // Metro and light rail stations have no train board; they show the lines serving them.
-  const isLines = selectedStation != null && selectedStation.type !== "rail";
+  const isLines =
+    selectedStation != null &&
+    (selectedStation.type === "metro" || selectedStation.type === "light");
   const lineView = useStationLineView(selectedStation);
   const arrivalsSupported = selectedStation ? getCountry(selectedStation.id) !== "lu" : true;
   const activeType = arrivalsSupported ? type : "departures";

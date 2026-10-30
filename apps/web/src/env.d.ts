@@ -10,3 +10,8 @@ interface ImportMetaEnv {
 interface ImportMeta {
   readonly env: ImportMetaEnv;
 }
+
+declare module "virtual:nearby-stations" {
+  const ids: import("./lib/nearby-stations").NearbyStationIds;
+  export default ids;
+}

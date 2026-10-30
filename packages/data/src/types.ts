@@ -1,11 +1,16 @@
 import type { Feature, FeatureCollection, MultiLineString, Point } from "geojson";
 import type { CountryCode } from "./countries";
 
+/** What a freight yard handles: sorting wagons, transferring containers, or serving a port. */
+export type FreightKind = "marshalling" | "intermodal" | "port";
+
 export interface Station {
   id: string;
   name: string;
-  type: "rail" | "metro" | "light";
+  type: "rail" | "metro" | "light" | "freight";
   importance: 1 | 2 | 3 | 4;
+  /** Set on freight stations only. */
+  kind?: FreightKind;
   geo?: {
     lat: number;
     lng: number;
@@ -15,8 +20,10 @@ export interface Station {
 export interface StationProperties {
   id: string;
   name: string;
-  type: "rail" | "metro" | "light";
+  type: "rail" | "metro" | "light" | "freight";
   importance: 1 | 2 | 3 | 4;
+  /** Set on freight stations only. */
+  kind?: FreightKind;
 }
 
 export type StationFeature = Feature<Point, StationProperties>;
@@ -72,9 +79,12 @@ export type ServiceType =
   | "commuter"
   | "night-train"
   | "international"
-  | "scenic";
+  | "scenic"
+  | "intermodal"
+  | "wagonload"
+  | "block-train";
 
-export type OperatorType = "passenger" | "cargo" | "metro" | "light-rail";
+export type OperatorType = "passenger" | "freight" | "metro" | "light-rail";
 export type OperatorCountry = CountryCode | "international";
 
 export interface OperatorLink {

@@ -46,11 +46,7 @@ export const Route = createFileRoute("/lines/")({
 
 /** Lowercase without accents, so "mollers" finds "Aksel Møllers Have". */
 function normalize(text: string): string {
-  return text
-    .normalize("NFD")
-    .replace(/[̀-ͯ]/g, "")
-    .toLowerCase()
-    .trim();
+  return text.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase().trim();
 }
 
 function searchText(line: DirectoryLine): string {

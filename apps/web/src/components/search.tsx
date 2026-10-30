@@ -8,9 +8,6 @@ import {
   ListIcon,
   SearchIcon,
   SearchXIcon,
-  SquareMIcon,
-  TrainFrontIcon,
-  TramFrontIcon,
   TrendingUpIcon,
   XIcon,
   UserIcon,
@@ -44,8 +41,18 @@ import { useTrendingStations } from "@/hooks/use-trending-stations";
 import { cn } from "@repo/ui/lib/utils";
 import { getCountry } from "@repo/data/countries";
 import type { Station } from "@repo/data";
+import type { OperatorType } from "@repo/data/operators";
 import { Button } from "@repo/ui/components/button";
 import { useHomeSearch } from "@/hooks/use-home-search";
+import { FreightKindMarker, OperatorTypeMarker } from "@/lib/operator-types";
+
+/** The map marker drawn for each station type. */
+const markerType = {
+  rail: "passenger",
+  metro: "metro",
+  light: "light-rail",
+  freight: "freight",
+} as const satisfies Record<Station["type"], OperatorType>;
 
 const StationList = React.memo(function StationList({
   stations,
@@ -92,12 +99,10 @@ const StationList = React.memo(function StationList({
                 isFocused && "bg-muted",
               )}
             >
-              {station.type === "metro" ? (
-                <SquareMIcon className="size-4 text-muted-foreground" />
-              ) : station.type === "light" ? (
-                <TramFrontIcon className="size-4 text-muted-foreground" />
+              {station.kind ? (
+                <FreightKindMarker kind={station.kind} className="size-4" />
               ) : (
-                <TrainFrontIcon className="size-4 text-muted-foreground" />
+                <OperatorTypeMarker type={markerType[station.type]} className="size-4" />
               )}
               <span className="max-w-75 md:max-w-61 truncate">{station.name}</span>
               <img

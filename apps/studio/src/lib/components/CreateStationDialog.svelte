@@ -1,31 +1,46 @@
 <script lang="ts">
+  import type { FreightKind, Station } from "@repo/data";
   import { Button } from "$lib/components/ui/button";
   import * as Dialog from "$lib/components/ui/dialog";
   import { Input } from "$lib/components/ui/input";
   import { Label } from "$lib/components/ui/label";
-  import { isValidStationId } from "$lib/stations";
+  import * as Select from "$lib/components/ui/select";
+  import { freightKindLabels, isValidStationId } from "$lib/stations";
 
   let {
     open,
     existingIds,
     existingPrefixes,
+    initialType = "rail",
     onConfirm,
     onCancel,
   }: {
     open: boolean;
     existingIds: Map<string, string>;
     existingPrefixes: Set<string>;
-    onConfirm: (id: string, name: string) => void;
+    initialType?: Station["type"];
+    onConfirm: (id: string, name: string, type: Station["type"], kind?: FreightKind) => void;
     onCancel: () => void;
   } = $props();
 
   let id = $state("");
   let name = $state("New Station");
+  let type = $state<Station["type"]>("rail");
+  let kind = $state<FreightKind | "unspecified">("unspecified");
+
+  const typeLabels: Record<Station["type"], string> = {
+    rail: "Rail",
+    metro: "Metro",
+    light: "Light rail",
+    freight: "Freight yard",
+  };
 
   $effect(() => {
     if (open) {
       id = "";
-      name = "New Station";
+      name = initialType === "freight" ? "New Yard" : "New Station";
+      type = initialType;
+      kind = "unspecified";
     }
   });
 
@@ -55,7 +70,12 @@
   function handleSubmit(event: Event) {
     event.preventDefault();
     if (!canSubmit) return;
-    onConfirm(trimmedId, name.trim());
+    onConfirm(
+      trimmedId,
+      name.trim(),
+      type,
+      type === "freight" && kind !== "unspecified" ? kind : undefined,
+    );
   }
 
   function handleOpenChange(next: boolean) {
@@ -66,7 +86,7 @@
 <Dialog.Root {open} onOpenChange={handleOpenChange}>
   <Dialog.Content class="sm:max-w-md">
     <Dialog.Header>
-      <Dialog.Title>New Station</Dialog.Title>
+      <Dialog.Title>New station or yard</Dialog.Title>
       <Dialog.Description>
         Choose an ID. Format is a 2-3 letter country prefix (e.g. <code>IT</code>, <code>ITM</code>,
         <code>BE</code>, <code>UK</code>) followed by 3+ digits — typically 6 to 8.
@@ -106,6 +126,39 @@
         <Label for="new-station-name">Name</Label>
         <Input id="new-station-name" bind:value={name} placeholder="Station name" />
       </div>
+
+      <div class="flex flex-col gap-1.5">
+        <Label for="new-station-type">Type</Label>
+        <Select.Root type="single" bind:value={type}>
+          <Select.Trigger id="new-station-type" class="w-full">{typeLabels[type]}</Select.Trigger>
+          <Select.Content>
+            <Select.Group>
+              {#each Object.entries(typeLabels) as [value, label] (value)}
+                <Select.Item {value}>{label}</Select.Item>
+              {/each}
+            </Select.Group>
+          </Select.Content>
+        </Select.Root>
+      </div>
+
+      {#if type === "freight"}
+        <div class="flex flex-col gap-1.5">
+          <Label for="new-station-kind">Yard kind</Label>
+          <Select.Root type="single" bind:value={kind}>
+            <Select.Trigger id="new-station-kind" class="w-full">
+              {kind === "unspecified" ? "Unspecified" : freightKindLabels[kind]}
+            </Select.Trigger>
+            <Select.Content>
+              <Select.Group>
+                <Select.Item value="unspecified">Unspecified</Select.Item>
+                {#each Object.entries(freightKindLabels) as [value, label] (value)}
+                  <Select.Item {value}>{label}</Select.Item>
+                {/each}
+              </Select.Group>
+            </Select.Content>
+          </Select.Root>
+        </div>
+      {/if}
 
       <div class="flex justify-end gap-2 pt-2">
         <Button type="button" variant="outline" onclick={onCancel}>Cancel</Button>

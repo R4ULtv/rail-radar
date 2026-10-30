@@ -3,10 +3,10 @@
     "slug": "trenitalia",
     "name": "Trenitalia",
     "logoPath": "it/trenitalia",
-    "countries": ["it"],
+    "countries": ["it", "fr"],
     "operatorTypes": ["passenger"],
-    "bounds": [6.6, 36.6, 18.5, 47.1],
-    "description": "Trenitalia, the primary passenger railway operator in Italy and a subsidiary of the FS Group, manages a vast network of regional, intercity, and high-speed services. Operating under public service contracts for local transport and in the open market for high-speed rail, it provides critical mobility across the entire Italian peninsula.",
+    "bounds": [2.2, 36.6, 18.5, 48.9],
+    "description": "Trenitalia is a passenger railway operator within the FS Group. It runs regional, intercity and high-speed services across Italy, with Frecciarossa services in France operated by its Trenitalia France subsidiary, including Paris–Lyon, Paris–Marseille and Paris–Milan.",
     "website": "https://www.trenitalia.com",
     "founded": 2000,
     "headquarters": "Rome, Italy",
@@ -97,9 +97,9 @@
     "slug": "frecciarossa",
     "name": "Frecciarossa",
     "logoPath": "it/frecciarossa",
-    "countries": ["it"],
+    "countries": ["it", "fr"],
     "operatorTypes": ["passenger"],
-    "bounds": [2, 40.5, 16.5, 48.8],
+    "bounds": [2, 40.5, 16.5, 48.9],
     "description": "Frecciarossa is Trenitalia's premier high-speed service, reaching operational speeds of 300 km/h. Utilizing advanced trainsets like the ETR 500 and ETR 1000, it forms the rapid transit backbone of Italy along the Turin-Salerno and Milan-Venice corridors, while also expanding its reach into international markets like France and Spain.",
     "website": "https://www.trenitalia.com",
     "founded": 2008,
@@ -1321,9 +1321,9 @@
     "slug": "obb",
     "name": "ÖBB",
     "logoPath": "obb",
-    "countries": ["international", "it", "ch"],
+    "countries": ["international", "it", "ch", "de", "nl"],
     "operatorTypes": ["passenger"],
-    "bounds": [9.5, 46.3, 17.2, 48.9],
+    "bounds": [4.7, 41.8, 17.2, 53.7],
     "description": "The Austrian Federal Railways (ÖBB) operates a comprehensive domestic and international network. It is Europe's leading night train operator through its expansive Nightjet network, while its high-speed Railjet services provide premier daytime connections across Austria, Germany, Switzerland, and Italy.",
     "website": "https://www.oebb.at",
     "founded": 1947,
@@ -1696,15 +1696,23 @@
     "name": "VR Group",
     "logoPath": "fi/vr",
     "countries": ["fi", "se"],
-    "operatorTypes": ["passenger"],
+    "operatorTypes": ["passenger", "freight", "light-rail"],
     "bounds": [11, 55.3, 31.6, 70.1],
-    "description": "VR Group is Finland’s state-owned railway group, with roots in the country’s first regular rail services in 1862. It operates long-distance, commuter and freight trains in Finland and passenger services in Sweden. VR Sverige runs contracted regional services, while VR Snabbtåg operates long-distance trains between Stockholm and Göteborg.",
+    "description": "VR Group is Finland's state-owned railway company, with roots in the country's first rail service in 1862 and incorporated in its current form in 1995. Its freight arm, VR Transpoint, carries the large majority of Finnish rail freight, and its passenger trains run long-distance and commuter services across Finland. In Sweden, VR Sverige runs contracted regional services and VR Snabbtåg operates long-distance trains between Stockholm and Göteborg. In Finland, VR also operates the Tampereen Ratikka tram service as part of its operating alliance.",
     "website": "https://www.vr.fi",
     "founded": 1995,
     "headquarters": "Helsinki, Finland",
     "networkKm": null,
     "annualPassengers": null,
-    "serviceTypes": ["high-speed", "intercity", "regional", "commuter", "night-train"],
+    "serviceTypes": [
+      "high-speed",
+      "intercity",
+      "regional",
+      "commuter",
+      "night-train",
+      "wagonload",
+      "block-train"
+    ],
     "parentCompany": "State of Finland",
     "links": [
       {
@@ -1733,9 +1741,9 @@
     "slug": "sncb",
     "name": "SNCB/NMBS",
     "logoPath": "sncb",
-    "countries": ["be", "lu"],
+    "countries": ["be", "lu", "nl"],
     "operatorTypes": ["passenger"],
-    "bounds": [2.5, 49.5, 6.4, 51.5],
+    "bounds": [2.5, 49.5, 6.4, 52.6],
     "description": "The National Railway Company of Belgium (SNCB/NMBS) operates one of the world's most densely spaced railway networks. It provides high-frequency intercity and local services, functioning as a central hub for international transit in Western Europe and managing the comprehensive Brussels RER system.",
     "website": "https://www.belgiantrain.be",
     "founded": 1926,
@@ -1771,9 +1779,9 @@
     "slug": "eurostar",
     "name": "Eurostar",
     "logoPath": "eurostar",
-    "countries": ["international", "fr", "uk", "be", "nl"],
+    "countries": ["international", "fr", "uk", "be", "nl", "de"],
     "operatorTypes": ["passenger"],
-    "bounds": [-0.5, 48.8, 7, 52.4],
+    "bounds": [-0.5, 48.7, 8.1, 52.5],
     "description": "Eurostar operates high-speed international rail services connecting the UK with mainland Europe via the Channel Tunnel. Following its merger with Thalys, the unified Eurostar brand now also manages the premier high-speed network linking Paris, Brussels, Amsterdam, and Cologne, creating a unified Western European high-speed giant.",
     "website": "https://www.eurostar.com",
     "founded": 1994,
@@ -1799,9 +1807,9 @@
     "slug": "db",
     "name": "Deutsche Bahn",
     "logoPath": "de/db",
-    "countries": ["de", "ch", "it", "be"],
+    "countries": ["de", "ch", "it", "be", "nl"],
     "operatorTypes": ["passenger"],
-    "bounds": [5.9, 47.3, 15, 55.1],
+    "bounds": [4.2, 44.4, 15, 55.1],
     "description": "Deutsche Bahn (DB) is Germany's national railway operator and a major force in European transit. Its ICE (Intercity-Express) network forms the high-speed backbone of Central Europe, deeply integrated with regular-interval timetables that connect major German hubs with Switzerland, Austria, and beyond.",
     "website": "https://www.bahn.de",
     "founded": 1994,
@@ -1865,10 +1873,10 @@
     "slug": "arriva",
     "name": "Arriva",
     "logoPath": "arriva",
-    "countries": ["international", "uk", "nl", "de", "dk", "pl"],
+    "countries": ["international", "uk", "nl", "de", "pl", "be"],
     "operatorTypes": ["passenger"],
     "bounds": [-5.7, 47.3, 24.2, 57.9],
-    "description": "Arriva is a major European transport operator. Acquired by I Squared Capital in 2024, it runs regional rail and bus services across multiple countries, including Arriva Nederland in the Netherlands and the former Arriva Denmark rail business that now operates under the GoCollective name. It also operates transit networks in the UK, Germany, the Czech Republic, Poland, and other European markets.",
+    "description": "Arriva is a European public transport group owned by I Squared Capital. Its rail businesses include Arriva Nederland, Arriva RP in Poland and UK operating companies. The former Arriva Denmark business was sold and renamed GoCollective; its railway services transferred to DSB Vores Tog on 1 September 2026 and are not part of Arriva’s current Danish rail operations.",
     "website": "https://www.arriva.co.uk",
     "founded": 1938,
     "headquarters": "Sunderland, United Kingdom",
@@ -1975,6 +1983,39 @@
         "label": "Wikipedia",
         "url": "https://en.wikipedia.org/wiki/DSB_(railway_company)",
         "type": "wikipedia"
+      }
+    ]
+  },
+  {
+    "slug": "dsb-vores-tog",
+    "name": "DSB Vores Tog",
+    "logoPath": "dk/dsb",
+    "countries": ["dk", "de"],
+    "operatorTypes": ["passenger"],
+    "bounds": [8.1, 54.7, 10.9, 57],
+    "description": "DSB Vores Tog operates the regional railway services previously run by GoCollective in Mid- and West Jutland and on the Svendborg line. The DSB subsidiary took over all of GoCollective’s railway routes on 1 September 2026, including the cross-border service to Niebüll in Germany.",
+    "website": "https://vorestog.dk",
+    "founded": null,
+    "headquarters": null,
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["regional", "international"],
+    "parentCompany": "DSB",
+    "links": [
+      {
+        "label": "Official Site",
+        "url": "https://vorestog.dk",
+        "type": "website"
+      },
+      {
+        "label": "Transfer from GoCollective",
+        "url": "https://vorestog.dk/nyheder/velkommen-i-vores-tog/",
+        "type": "website"
+      },
+      {
+        "label": "Niebüll Station",
+        "url": "https://vorestog.dk/station/niebull-station/",
+        "type": "website"
       }
     ]
   },
@@ -2216,10 +2257,10 @@
     "slug": "vias",
     "name": "Vias Rail",
     "logoPath": "de/vias",
-    "countries": ["de"],
+    "countries": ["de", "nl"],
     "operatorTypes": ["passenger"],
-    "bounds": [7.5, 49.4, 10, 51],
-    "description": "Vias Rail is a regional rail operator in Hesse and Rhineland-Palatinate, running RB and RE services in the Rhine-Main area. It operates lines connecting Frankfurt, Mainz, Darmstadt, and Wiesbaden with the surrounding region.",
+    "bounds": [5.8, 49.4, 10, 52.1],
+    "description": "VIAS operates regional passenger rail services in North Rhine-Westphalia, Hesse and Rhineland-Palatinate, with cross-border RE19 services reaching Arnhem in the Netherlands. Its networks serve the Rhine-Ruhr and Rhine-Main regions as well as surrounding communities.",
     "website": "https://www.vias-online.de",
     "founded": 2005,
     "headquarters": "Düren, Germany",
@@ -2300,7 +2341,7 @@
     "slug": "ns",
     "name": "NS",
     "logoPath": "nl/ns",
-    "countries": ["nl"],
+    "countries": ["nl", "be"],
     "operatorTypes": ["passenger"],
     "bounds": [3.3, 50.75, 7.2, 53.5],
     "description": "Nederlandse Spoorwegen (NS) is the Netherlands' principal passenger railway operator and a state-owned company. It operates domestic Intercity and Sprinter services and selected international trains. Trains run to a published timetable, with regular-interval services on some busy corridors.",
@@ -2954,16 +2995,16 @@
     "slug": "ir",
     "name": "Iarnród Éireann",
     "logoPath": "ie/ir",
-    "countries": ["ie"],
-    "operatorTypes": ["passenger"],
+    "countries": ["ie", "uk"],
+    "operatorTypes": ["passenger", "freight"],
     "bounds": [-10.5, 51.4, -5.9, 55.4],
-    "description": "Iarnród Éireann (Irish Rail) is the Republic of Ireland's national rail operator, providing intercity, commuter, DART and regional passenger services, as well as rail freight. It operates the Dublin–Belfast Enterprise service jointly with Northern Ireland Railways; its DART coastal service serves the greater Dublin area.",
+    "description": "Iarnród Éireann (Irish Rail) is the Republic of Ireland's national rail operator, running intercity, commuter, DART and regional passenger services, and the Dublin–Belfast Enterprise jointly with Northern Ireland Railways. It also runs the country's small rail freight business: zinc ore from Tara Mines to Dublin Port, timber to Waterford, and container trains from Ballina to the ports of Dublin and Waterford.",
     "website": "https://www.irishrail.ie",
     "founded": 1987,
     "headquarters": "Dublin, Ireland",
     "networkKm": 2400,
     "annualPassengers": 55000000,
-    "serviceTypes": ["intercity", "commuter", "regional"],
+    "serviceTypes": ["intercity", "commuter", "regional", "block-train", "intermodal"],
     "parentCompany": "Córas Iompair Éireann",
     "links": [
       {
@@ -3119,9 +3160,9 @@
     "slug": "sj",
     "name": "SJ",
     "logoPath": "se/sj",
-    "countries": ["se"],
+    "countries": ["se", "no"],
     "operatorTypes": ["passenger"],
-    "bounds": [11, 55.3, 24.2, 69.1],
+    "bounds": [5, 55.3, 24.2, 69.1],
     "description": "SJ AB is Sweden's state-owned national rail operator, running high-speed, intercity, regional, commuter, and night-train services across the country. SJ operates the tilting X 2000 and SJ 3000 long-distance trains, and since 2024 also runs Stockholm commuter rail (Stockholmståg). Its subsidiaries include SJ Götalandståg, SJ Norrlandståg, and SJ Öresundståg.",
     "website": "https://www.sj.se",
     "founded": 2001,
@@ -3226,7 +3267,7 @@
     "name": "Västtrafik",
     "logoPath": "se/vasttrafik",
     "countries": ["se"],
-    "operatorTypes": ["passenger"],
+    "operatorTypes": ["passenger", "light-rail"],
     "bounds": [10.9, 57, 13.7, 59.2],
     "description": "Västtrafik organises and commissions public transport in Västra Götaland on behalf of its owner, Västra Götalandsregionen. Contracted operators run its trains, trams, buses and boats. Its rail services link Göteborg with regional centres including Alingsås, Borås, Skövde, Uddevalla and Strömstad.",
     "website": "https://www.vasttrafik.se",
@@ -3255,14 +3296,14 @@
     ]
   },
   {
-    "slug": "mtr-express",
-    "name": "MTR Express",
-    "logoPath": "se/mtr",
+    "slug": "vr-snabbtag",
+    "name": "VR Snabbtåg",
+    "logoPath": "fi/vr",
     "countries": ["se"],
     "operatorTypes": ["passenger"],
     "bounds": [11.9, 57.7, 18.1, 59.4],
-    "description": "MTR Express was Sweden's first private open-access intercity rail operator, running frequent services between Stockholm and Göteborg. Originally a subsidiary of Hong Kong's MTR Corporation, it was acquired by VR Group in 2024 and rebranded as VR Snabbtåg.",
-    "website": "https://www.mtrexpress.se",
+    "description": "VR Snabbtåg operates open-access intercity trains between Stockholm and Göteborg. Previously branded MTR Express and MTRX, the Swedish business was acquired by VR Group in 2024 and now uses the VR identity. It is distinct from VR Sverige’s contracted regional services.",
+    "website": "https://vrresa.se",
     "founded": 2015,
     "headquarters": "Stockholm, Sweden",
     "networkKm": 455,
@@ -3272,13 +3313,13 @@
     "links": [
       {
         "label": "Official Site",
-        "url": "https://www.vrresa.se",
+        "url": "https://vrresa.se",
         "type": "website"
       },
       {
-        "label": "Wikipedia",
-        "url": "https://en.wikipedia.org/wiki/MTR_Express",
-        "type": "wikipedia"
+        "label": "Transition from MTRX to VR",
+        "url": "https://vrresa.se/kundservice/fragor-om-overgangen-till-vr",
+        "type": "website"
       }
     ]
   },
@@ -3286,10 +3327,10 @@
     "slug": "snalltaget",
     "name": "Snälltåget",
     "logoPath": "se/snalltaget",
-    "countries": ["se"],
+    "countries": ["se", "dk", "de"],
     "operatorTypes": ["passenger"],
-    "bounds": [11, 55.3, 24.2, 69.1],
-    "description": "Snälltåget is a Swedish open-access long-distance rail operator running intercity and night-train services, including seasonal routes to Berlin and ski trains to Åre and Swedish Lapland. It is owned by the French transport group Transdev.",
+    "bounds": [9.4, 50.9, 24.2, 69.1],
+    "description": "Snälltåget is a Swedish passenger rail operator owned by Transdev. It runs daytime and overnight trains in Sweden, with international services through Denmark to Germany, including Copenhagen, Hamburg and Berlin, as well as seasonal ski services.",
     "website": "https://www.snalltaget.se",
     "founded": 2006,
     "headquarters": "Malmö, Sweden",
@@ -3843,8 +3884,8 @@
     "name": "STIB-MIVB",
     "logoPath": "be/stib-mivb",
     "countries": ["be"],
-    "operatorTypes": ["metro"],
-    "bounds": [4.257, 50.802, 4.474, 50.907],
+    "operatorTypes": ["metro", "light-rail"],
+    "bounds": [4.24, 50.76, 4.53, 50.93],
     "description": "STIB-MIVB operates Brussels metro lines 1, 2, 5 and 6, as well as the city’s tram and bus networks. The metro connects the city centre with Stockel, Erasme, Herrmann-Debroux and Roi Baudouin.",
     "website": "https://www.stib-mivb.be",
     "founded": null,
@@ -3867,8 +3908,8 @@
     "logoPath": "be/letec",
     "countries": ["be"],
     "operatorTypes": ["light-rail"],
-    "bounds": [4.261, 50.39, 4.513, 50.487],
-    "description": "LETEC operates Wallonia’s public transport network, including the Charleroi light metro. During the Villette works, M2 connects Anderlues with Gare Centrale, M3 connects Gosselies with Gare Centrale, and M4 connects Soleilmont with Ouest. M1 is temporarily replaced by M2; the future M5 is not yet in passenger service.",
+    "bounds": [4.261, 50.39, 5.7, 50.72],
+    "description": "LETEC is Wallonia’s public transport network, including the Charleroi light metro and the Liège tram network.",
     "website": "https://www.letec.be",
     "founded": null,
     "headquarters": "Namur, Belgium",
@@ -4285,8 +4326,8 @@
     "name": "Berliner Verkehrsbetriebe",
     "logoPath": "de/bvg",
     "countries": ["de"],
-    "operatorTypes": ["metro"],
-    "bounds": [13.1898, 52.4062, 13.6431, 52.6056],
+    "operatorTypes": ["metro", "light-rail"],
+    "bounds": [13.1898, 52.35, 13.75, 52.66],
     "description": "Berlin’s municipal transport company operates the U-Bahn alongside the city’s tram and bus networks. Its U-Bahn lines connect the main railway terminals, central districts and outer boroughs, with connections to the separately operated S-Bahn.",
     "website": "https://www.bvg.de",
     "founded": null,
@@ -4354,8 +4395,8 @@
     "name": "Münchner Verkehrsgesellschaft",
     "logoPath": "de/mvg",
     "countries": ["de"],
-    "operatorTypes": ["metro"],
-    "bounds": [11.4636, 48.0784, 11.7134, 48.2747],
+    "operatorTypes": ["metro", "light-rail"],
+    "bounds": [11.43, 48.02, 11.7134, 48.2747],
     "description": "Münchner Verkehrsgesellschaft is Munich’s public transport operator for U-Bahn, tram and bus services. The U-Bahn connects the city centre with the exhibition grounds, universities and outer districts, extending beyond the city boundary to Garching.",
     "website": "https://www.mvg.de",
     "founded": null,
@@ -4377,8 +4418,8 @@
     "name": "VAG Nürnberg",
     "logoPath": "de/vag-nuernberg",
     "countries": ["de"],
-    "operatorTypes": ["metro"],
-    "bounds": [10.9475, 49.3887, 11.1506, 49.504],
+    "operatorTypes": ["metro", "light-rail"],
+    "bounds": [10.9475, 49.3887, 11.1506, 49.53],
     "description": "VAG operates Nuremberg’s U-Bahn, trams and buses. Its three U-Bahn lines connect Nuremberg and Fürth, including the airport, exhibition grounds and main railway stations; the U2 and U3 use automatic train operation.",
     "website": "https://www.vag.de",
     "founded": null,
@@ -4400,9 +4441,9 @@
     "name": "RATP",
     "logoPath": "fr/ratp",
     "countries": ["fr"],
-    "operatorTypes": ["metro"],
-    "bounds": [2.21833, 48.71844, 2.49034, 48.95597],
-    "description": "RATP operates the Paris Métro for Île-de-France Mobilités, connecting central Paris with surrounding municipalities across sixteen numbered lines, including 3 bis and 7 bis. The network serves major railway stations, business districts, universities and cultural destinations. Fully automated lines 1, 4 and 14 complement the other metro routes, with line 14 reaching Orly airport.",
+    "operatorTypes": ["passenger", "metro", "light-rail"],
+    "bounds": [2, 48.68, 2.8, 49.04],
+    "description": "RATP operates the Paris Métro, tram services and parts of the RER A and B suburban railway network for Île-de-France Mobilités. These rail services connect central Paris with surrounding municipalities, major railway stations, airports, business districts and university campuses.",
     "website": "https://www.ratp.fr",
     "founded": null,
     "headquarters": "Paris, France",
@@ -4428,8 +4469,8 @@
     "name": "TCL",
     "logoPath": "fr/tcl",
     "countries": ["fr"],
-    "operatorTypes": ["metro"],
-    "bounds": [4.79433, 45.69176, 4.9319, 45.79528],
+    "operatorTypes": ["metro", "light-rail"],
+    "bounds": [4.75, 45.65, 5.12, 45.85],
     "description": "TCL is the public transport network serving Lyon and its surrounding area under SYTRAL Mobilités. Its four metro lines connect the Presqu’île, Part-Dieu, Villeurbanne and the southern suburbs, with line C climbing to Croix-Rousse using rack assistance. RATP Dev operates the metro and funicular network under the contract that began in January 2025.",
     "website": "https://www.tcl.fr",
     "founded": null,
@@ -4456,8 +4497,8 @@
     "name": "RTM",
     "logoPath": "fr/rtm",
     "countries": ["fr"],
-    "operatorTypes": ["metro"],
-    "bounds": [5.35726, 43.26089, 5.43969, 43.34315],
+    "operatorTypes": ["metro", "light-rail"],
+    "bounds": [5.33, 43.22, 5.45, 43.4],
     "description": "Régie des Transports Métropolitains operates Marseille’s public transport network, including the M1 and M2 metro lines. The two routes connect residential districts with Saint-Charles railway station, the city centre, hospitals and the stadium area. Saint-Charles and Castellane are the metro interchanges, with connections to the wider bus and tram network.",
     "website": "https://www.rtm.fr",
     "founded": null,
@@ -4484,7 +4525,7 @@
     "name": "Ilévia",
     "logoPath": "fr/ilevia",
     "countries": ["fr"],
-    "operatorTypes": ["metro"],
+    "operatorTypes": ["metro", "light-rail"],
     "bounds": [2.9643, 50.59536, 3.191, 50.75348],
     "description": "Ilévia is the public transport network of the Métropole Européenne de Lille, operated by Keolis Lille Ilévia. Its two automated metro lines serve sixty stations across Lille and neighbouring municipalities, including Villeneuve-d’Ascq, Roubaix and Tourcoing. The network connects the Lille Flandres and Lille Europe railway stations with university campuses, hospitals and local centres.",
     "website": "https://www.ilevia.fr",
@@ -4512,8 +4553,8 @@
     "name": "Tisséo",
     "logoPath": "fr/tisseo",
     "countries": ["fr"],
-    "operatorTypes": ["metro"],
-    "bounds": [1.38227, 43.54577, 1.49278, 43.65038],
+    "operatorTypes": ["metro", "light-rail"],
+    "bounds": [1.3, 43.54577, 1.49278, 43.72],
     "description": "Tisséo is the public transport network serving the Toulouse metropolitan area, with metro services operated by Tisséo Voyageurs. Automated lines A and B cross at Jean Jaurès, linking the historic centre with residential districts, university campuses and hospital areas. Metro connections with trams, regional trains and Matabiau station support journeys across the wider urban area.",
     "website": "https://www.tisseo.fr",
     "founded": null,
@@ -4559,6 +4600,1305 @@
       {
         "label": "Network and lines",
         "url": "https://www.star.fr/reseau-star/bus-metro",
+        "type": "website"
+      }
+    ]
+  },
+  {
+    "slug": "mercitalia-rail",
+    "name": "Mercitalia Rail",
+    "logoPath": "it/trenitalia",
+    "countries": ["it"],
+    "operatorTypes": ["freight"],
+    "bounds": [6.6, 36.7, 18.4, 47.1],
+    "description": "Mercitalia Rail is the rail freight company of the FS Italiane group and Italy's largest freight operator. Created in 2017 from Trenitalia's cargo division, it runs wagonload, intermodal and industrial block trains between ports, inland terminals and private sidings. It belongs to FS Logistix, the group's logistics arm, alongside sister company TX Logistik, which handles much of the traffic north of the Alps.",
+    "website": "https://www.fslogistix.com",
+    "founded": 2017,
+    "headquarters": "Rome, Italy",
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["wagonload", "block-train", "intermodal"],
+    "parentCompany": "FS Italiane",
+    "links": [
+      {
+        "label": "Official Site",
+        "url": "https://www.fslogistix.com",
+        "type": "website"
+      },
+      {
+        "label": "Wikipedia",
+        "url": "https://it.wikipedia.org/wiki/Mercitalia_Rail",
+        "type": "wikipedia"
+      }
+    ]
+  },
+  {
+    "slug": "captrain-italia",
+    "name": "Captrain Italia",
+    "logoPath": "it/captrain-italia",
+    "countries": ["it"],
+    "operatorTypes": ["freight"],
+    "bounds": [6.6, 36.7, 18.4, 47.1],
+    "description": "Captrain Italia is an Italian rail freight operator owned by SNCF through Rail Logistics Europe and part of its Captrain network. Based in Assago near Milan, it hauls steel, chemicals and other industrial traffic as well as intermodal trains, with operating bases at the main Alpine border crossings. It is Italy's third-largest freight operator by planned train paths, behind Mercitalia Rail and CFI.",
+    "website": "https://www.captrain.it",
+    "founded": 1998,
+    "headquarters": "Assago, Italy",
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["block-train", "intermodal"],
+    "parentCompany": "Rail Logistics Europe",
+    "links": [
+      {
+        "label": "Official Site",
+        "url": "https://www.captrain.it",
+        "type": "website"
+      }
+    ]
+  },
+  {
+    "slug": "cfi",
+    "name": "Compagnia Ferroviaria Italiana",
+    "logoPath": "it/cfi",
+    "countries": ["it"],
+    "operatorTypes": ["freight"],
+    "bounds": [6.6, 36.7, 18.4, 47.1],
+    "description": "Compagnia Ferroviaria Italiana (CFI) is a private Italian rail freight operator founded in 2007 and Italy's second-largest by planned train paths. It runs intermodal, steel, automotive and bulk trains, and carries liquid food products through its subsidiary Lotras. Since 2025 it has been part of FHP Group, the port and logistics holding of the infrastructure fund F2i.",
+    "website": "https://www.fhpgroup.it/servizi/servizi-ferroviari",
+    "founded": 2007,
+    "headquarters": "Rome, Italy",
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["block-train", "intermodal"],
+    "parentCompany": "FHP Group",
+    "links": [
+      {
+        "label": "Official Site",
+        "url": "https://www.fhpgroup.it/servizi/servizi-ferroviari",
+        "type": "website"
+      },
+      {
+        "label": "Wikipedia",
+        "url": "https://it.wikipedia.org/wiki/Compagnia_Ferroviaria_Italiana",
+        "type": "wikipedia"
+      }
+    ]
+  },
+  {
+    "slug": "sbb-cargo",
+    "name": "SBB Cargo",
+    "logoPath": "ch/sbb",
+    "countries": ["ch"],
+    "operatorTypes": ["freight"],
+    "bounds": [5.9, 45.8, 10.3, 47.8],
+    "description": "SBB Cargo is the freight subsidiary of Swiss Federal Railways and the leading rail freight operator in Switzerland. It runs the national single-wagonload network, block trains and combined transport for industry, retail and logistics customers, and carries chemicals and mineral oil through ChemOil Logistics. Transalpine traffic is handled by SBB Cargo International, in which it holds a majority stake.",
+    "website": "https://www.sbbcargo.com",
+    "founded": 1999,
+    "headquarters": "Olten, Switzerland",
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["wagonload", "block-train", "intermodal"],
+    "parentCompany": "SBB CFF FFS",
+    "links": [
+      {
+        "label": "Official Site",
+        "url": "https://www.sbbcargo.com",
+        "type": "website"
+      },
+      {
+        "label": "Wikipedia",
+        "url": "https://en.wikipedia.org/wiki/SBB_Cargo",
+        "type": "wikipedia"
+      }
+    ]
+  },
+  {
+    "slug": "sbb-cargo-international",
+    "name": "SBB Cargo International",
+    "logoPath": "ch/sbb",
+    "countries": ["ch", "de", "it", "nl", "fr"],
+    "operatorTypes": ["freight"],
+    "bounds": [-4.5, 36.7, 18.4, 55],
+    "description": "SBB Cargo International runs block and intermodal trains on the north–south corridor through the Swiss Alps, linking the North Sea ports and Germany with Italy. Founded in 2010 as a joint venture of SBB Cargo and the intermodal operator Hupac, it runs its own trains in Germany, Italy, the Netherlands and France through local subsidiaries.",
+    "website": "https://www.sbbcargo-international.com",
+    "founded": 2010,
+    "headquarters": "Olten, Switzerland",
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["intermodal", "block-train", "international"],
+    "parentCompany": "SBB Cargo / Hupac",
+    "links": [
+      {
+        "label": "Official Site",
+        "url": "https://www.sbbcargo-international.com",
+        "type": "website"
+      },
+      {
+        "label": "Wikipedia",
+        "url": "https://en.wikipedia.org/wiki/SBB_Cargo_International",
+        "type": "wikipedia"
+      }
+    ]
+  },
+  {
+    "slug": "bls-cargo",
+    "name": "BLS Cargo",
+    "logoPath": "ch/bls",
+    "countries": ["ch", "de", "it", "be", "nl"],
+    "operatorTypes": ["freight"],
+    "bounds": [2.6, 36.7, 18.4, 55],
+    "description": "BLS Cargo is a Swiss rail freight operator specialising in transalpine block and intermodal trains on the Lötschberg–Simplon and Gotthard routes between the North Sea ports and Italy. It is majority-owned by BLS, with SNCF's Captrain as the main minority shareholder, and runs its own trains in Germany, Italy, Belgium and the Netherlands through subsidiaries including BLS Cargo Nord.",
+    "website": "https://www.blscargo.ch",
+    "founded": 2001,
+    "headquarters": "Bern, Switzerland",
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["intermodal", "block-train", "international"],
+    "parentCompany": "BLS",
+    "links": [
+      {
+        "label": "Official Site",
+        "url": "https://www.blscargo.ch",
+        "type": "website"
+      },
+      {
+        "label": "Wikipedia",
+        "url": "https://de.wikipedia.org/wiki/BLS_Cargo",
+        "type": "wikipedia"
+      }
+    ]
+  },
+  {
+    "slug": "fenniarail",
+    "name": "Fenniarail",
+    "logoPath": "fi/fenniarail",
+    "countries": ["fi"],
+    "operatorTypes": ["freight"],
+    "bounds": [21.4, 59.8, 30.3, 67.4],
+    "description": "Fenniarail is a privately owned Finnish rail freight operator and the main competitor to VR since it began running trains in 2016. It mainly hauls roundwood and sawn timber for the forest industry, along with other industrial wagonload traffic, using diesel and Vectron electric locomotives on Finland's 1524 mm network.",
+    "website": "https://www.fenniarail.fi",
+    "founded": 2009,
+    "headquarters": "Helsinki, Finland",
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["block-train", "wagonload"],
+    "parentCompany": null,
+    "links": [
+      {
+        "label": "Official Site",
+        "url": "https://www.fenniarail.fi",
+        "type": "website"
+      },
+      {
+        "label": "Wikipedia",
+        "url": "https://en.wikipedia.org/wiki/Fenniarail",
+        "type": "wikipedia"
+      }
+    ]
+  },
+  {
+    "slug": "lineas",
+    "name": "Lineas",
+    "logoPath": "be/lineas",
+    "countries": ["be", "nl", "fr"],
+    "operatorTypes": ["freight"],
+    "bounds": [-4.5, 42.4, 8.2, 53.5],
+    "description": "Lineas is Belgium's largest rail freight operator, created from the freight division of SNCB and known as B Logistics until 2017. It runs a wagonload network centred on the Port of Antwerp along with intermodal and block trains to the Netherlands, France and beyond. Since April 2026 it has been wholly owned by the Belgian state, following a state rescue loan and a court-supervised reorganisation.",
+    "website": "https://lineas.net",
+    "founded": 2011,
+    "headquarters": "Brussels, Belgium",
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["wagonload", "intermodal", "block-train", "international"],
+    "parentCompany": "Belgian State",
+    "links": [
+      {
+        "label": "Official Site",
+        "url": "https://lineas.net",
+        "type": "website"
+      },
+      {
+        "label": "Wikipedia",
+        "url": "https://en.wikipedia.org/wiki/Lineas",
+        "type": "wikipedia"
+      }
+    ]
+  },
+  {
+    "slug": "rail-force-one",
+    "name": "Rail Force One",
+    "logoPath": "nl/rail-force-one",
+    "countries": ["nl", "de", "pl"],
+    "operatorTypes": ["freight"],
+    "bounds": [3.5, 47.4, 24, 55],
+    "description": "Rail Force One is a Dutch rail freight operator based in Rotterdam and part of the Rail Innovators Group. Running its own trains since 2017, it provides traction for block trains carrying bulk goods, chemicals and containers, mainly in the Netherlands and Germany, with a fleet of more than 40 electric, hybrid and diesel locomotives.",
+    "website": "https://railforce.one",
+    "founded": 2016,
+    "headquarters": "Rotterdam, Netherlands",
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["block-train", "intermodal", "international"],
+    "parentCompany": "Rail Innovators Group",
+    "links": [
+      {
+        "label": "Official Site",
+        "url": "https://railforce.one",
+        "type": "website"
+      }
+    ]
+  },
+  {
+    "slug": "db-cargo-uk",
+    "name": "DB Cargo UK",
+    "logoPath": "de/db",
+    "countries": ["uk"],
+    "operatorTypes": ["freight"],
+    "bounds": [-5.9, 50.1, 1.8, 58.6],
+    "description": "DB Cargo UK is a British rail freight operator based in Doncaster and a subsidiary of Deutsche Bahn. Founded in 1996 as English Welsh & Scottish Railway (EWS) when British Rail's freight business was privatised, it hauls construction materials, metals, industrial and intermodal traffic, as well as infrastructure trains and freight through the Channel Tunnel.",
+    "website": "https://uk.dbcargo.com",
+    "founded": 1996,
+    "headquarters": "Doncaster, United Kingdom",
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["block-train", "intermodal", "international"],
+    "parentCompany": "Deutsche Bahn",
+    "links": [
+      {
+        "label": "Official Site",
+        "url": "https://uk.dbcargo.com",
+        "type": "website"
+      },
+      {
+        "label": "Wikipedia",
+        "url": "https://en.wikipedia.org/wiki/DB_Cargo_UK",
+        "type": "wikipedia"
+      }
+    ]
+  },
+  {
+    "slug": "freightliner",
+    "name": "Freightliner",
+    "logoPath": "uk/freightliner",
+    "countries": ["uk"],
+    "operatorTypes": ["freight"],
+    "bounds": [-5.9, 50.1, 1.8, 58.6],
+    "description": "Freightliner is a British intermodal operator running container trains between deep-sea ports such as Felixstowe and Southampton and inland terminals across Great Britain, alongside road haulage and terminal services. Privatised from British Rail in 1996, it has been owned by the shipping group CMA CGM since January 2026. Its former bulk business now trades separately as Heavy Haul Rail.",
+    "website": "https://www.freightliner.co.uk",
+    "founded": 1995,
+    "headquarters": "Birmingham, United Kingdom",
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["intermodal"],
+    "parentCompany": "CMA CGM",
+    "links": [
+      {
+        "label": "Official Site",
+        "url": "https://www.freightliner.co.uk",
+        "type": "website"
+      },
+      {
+        "label": "Wikipedia",
+        "url": "https://en.wikipedia.org/wiki/Freightliner_Group",
+        "type": "wikipedia"
+      }
+    ]
+  },
+  {
+    "slug": "gb-railfreight",
+    "name": "GB Railfreight",
+    "logoPath": "uk/gb-railfreight",
+    "countries": ["uk"],
+    "operatorTypes": ["freight"],
+    "bounds": [-5.9, 50.1, 1.8, 58.6],
+    "description": "GB Railfreight (GBRf) is one of Great Britain's largest rail freight operators, founded in 1999. It hauls intermodal containers, biomass, aggregates, construction materials, metals and Network Rail infrastructure trains, and provides the locomotives for the Caledonian Sleeper. It has been owned by Infracapital, the infrastructure investment arm of M&G, since 2019.",
+    "website": "https://www.gbrailfreight.com",
+    "founded": 1999,
+    "headquarters": "London, United Kingdom",
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["intermodal", "block-train"],
+    "parentCompany": "Infracapital",
+    "links": [
+      {
+        "label": "Official Site",
+        "url": "https://www.gbrailfreight.com",
+        "type": "website"
+      },
+      {
+        "label": "Wikipedia",
+        "url": "https://en.wikipedia.org/wiki/GB_Railfreight",
+        "type": "wikipedia"
+      }
+    ]
+  },
+  {
+    "slug": "direct-rail-services",
+    "name": "Direct Rail Services",
+    "logoPath": "uk/direct-rail-services",
+    "countries": ["uk"],
+    "operatorTypes": ["freight"],
+    "bounds": [-5.9, 50.1, 1.8, 58.6],
+    "description": "Direct Rail Services (DRS) is a British rail freight operator based in Carlisle and owned by the Nuclear Decommissioning Authority through Nuclear Transport Solutions. Set up in 1995 to move spent nuclear fuel for British Nuclear Fuels, it still carries nuclear flasks to and from Sellafield, and also runs commercial freight such as intermodal trains for Tesco.",
+    "website": "https://www.directrailservices.com",
+    "founded": 1995,
+    "headquarters": "Carlisle, United Kingdom",
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["block-train", "intermodal"],
+    "parentCompany": "Nuclear Transport Solutions",
+    "links": [
+      {
+        "label": "Official Site",
+        "url": "https://www.directrailservices.com",
+        "type": "website"
+      },
+      {
+        "label": "Wikipedia",
+        "url": "https://en.wikipedia.org/wiki/Direct_Rail_Services",
+        "type": "wikipedia"
+      }
+    ]
+  },
+  {
+    "slug": "cfl-cargo",
+    "name": "CFL cargo",
+    "logoPath": "lu/cfl",
+    "countries": ["lu", "fr", "be", "de"],
+    "operatorTypes": ["freight"],
+    "bounds": [-4.5, 42.4, 15, 55],
+    "description": "CFL cargo is Luxembourg's rail freight operator, founded in 2006 as a joint venture of the national railway CFL and ArcelorMittal. Based at the Bettembourg-Dudelange multimodal hub, it serves the country's steel industry and runs conventional and intermodal trains to Belgium, France and Germany and on longer European corridors. It belongs to the CFL multimodal group.",
+    "website": "https://www.cfl-mm.lu/en-gb/organisation/cfl-cargo",
+    "founded": 2006,
+    "headquarters": "Dudelange, Luxembourg",
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["block-train", "intermodal", "international"],
+    "parentCompany": "CFL Group",
+    "links": [
+      {
+        "label": "Official Site",
+        "url": "https://www.cfl-mm.lu/en-gb/organisation/cfl-cargo",
+        "type": "website"
+      }
+    ]
+  },
+  {
+    "slug": "cargonet",
+    "name": "CargoNet",
+    "logoPath": "no/cargonet",
+    "countries": ["no", "se"],
+    "operatorTypes": ["freight"],
+    "bounds": [5.3, 55.3, 22.2, 68.5],
+    "description": "CargoNet is Norway's largest rail freight operator and a subsidiary of the state-owned Vy Group. Formed in 2002 from NSB's freight division, it runs intermodal container trains from Oslo to Bergen, Stavanger, Trondheim and northern Norway, and cross-border services to Gothenburg and southern Sweden through CargoNet AB.",
+    "website": "https://www.cargonet.no/en",
+    "founded": 2002,
+    "headquarters": "Oslo, Norway",
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["intermodal", "international"],
+    "parentCompany": "Vy Group",
+    "links": [
+      {
+        "label": "Official Site",
+        "url": "https://www.cargonet.no/en",
+        "type": "website"
+      },
+      {
+        "label": "Wikipedia",
+        "url": "https://en.wikipedia.org/wiki/CargoNet",
+        "type": "wikipedia"
+      }
+    ]
+  },
+  {
+    "slug": "green-cargo",
+    "name": "Green Cargo",
+    "logoPath": "se/green-cargo",
+    "countries": ["se"],
+    "operatorTypes": ["freight"],
+    "bounds": [11.5, 55.3, 22.2, 68.5],
+    "description": "Green Cargo is Sweden's largest rail freight operator, a state-owned company created in 2001 from the freight division of SJ. It runs a national wagonload network and block trains for the forest, steel and automotive industries, intermodal traffic, and international trains to Germany and Italy via Denmark. It ended its domestic operations in Norway in 2023.",
+    "website": "https://www.greencargo.com/en",
+    "founded": 2001,
+    "headquarters": "Solna, Sweden",
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["wagonload", "block-train", "intermodal", "international"],
+    "parentCompany": "Swedish State",
+    "links": [
+      {
+        "label": "Official Site",
+        "url": "https://www.greencargo.com/en",
+        "type": "website"
+      },
+      {
+        "label": "Wikipedia",
+        "url": "https://en.wikipedia.org/wiki/Green_Cargo",
+        "type": "wikipedia"
+      }
+    ]
+  },
+  {
+    "slug": "hector-rail",
+    "name": "Hector Rail",
+    "logoPath": "se/hector-rail",
+    "countries": ["se", "no", "dk", "de"],
+    "operatorTypes": ["freight"],
+    "bounds": [5.3, 47.4, 22.2, 68.5],
+    "description": "Hector Rail is a Swedish rail freight operator founded in 2004 that provides traction and logistics for timber, steel, energy and intermodal flows. It runs trains in Sweden, Norway and Denmark and, through Hector Rail GmbH, in Germany, with a fleet of about 100 locomotives. It is owned by the infrastructure investor Ancala.",
+    "website": "https://www.hectorrail.com",
+    "founded": 2004,
+    "headquarters": "Danderyd, Sweden",
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["block-train", "intermodal", "international"],
+    "parentCompany": "Ancala",
+    "links": [
+      {
+        "label": "Official Site",
+        "url": "https://www.hectorrail.com",
+        "type": "website"
+      },
+      {
+        "label": "Wikipedia",
+        "url": "https://en.wikipedia.org/wiki/Hector_Rail",
+        "type": "wikipedia"
+      }
+    ]
+  },
+  {
+    "slug": "lkab-malmtrafik",
+    "name": "LKAB Malmtrafik",
+    "logoPath": "se/lkab-malmtrafik",
+    "countries": ["se", "no"],
+    "operatorTypes": ["freight"],
+    "bounds": [17.2, 65.4, 22.4, 68.6],
+    "description": "LKAB Malmtrafik is the railway subsidiary of the Swedish state-owned mining company LKAB. On the Iron Ore Line it hauls iron ore from the mines at Kiruna, Svappavaara and Malmberget to the ports of Narvik in Norway and Luleå, with trains of 68 wagons weighing up to about 8,500 tonnes. The Norwegian section is run by its sister company Malmtrafikk AS.",
+    "website": "https://lkab.com",
+    "founded": 1996,
+    "headquarters": "Kiruna, Sweden",
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["block-train", "international"],
+    "parentCompany": "LKAB",
+    "links": [
+      {
+        "label": "Official Site",
+        "url": "https://lkab.com",
+        "type": "website"
+      },
+      {
+        "label": "Wikipedia",
+        "url": "https://en.wikipedia.org/wiki/LKAB_Malmtrafik",
+        "type": "wikipedia"
+      }
+    ]
+  },
+  {
+    "slug": "db-cargo-scandinavia",
+    "name": "DB Cargo Scandinavia",
+    "logoPath": "de/db",
+    "countries": ["dk", "se"],
+    "operatorTypes": ["freight"],
+    "bounds": [8.1, 54.7, 22.2, 68.5],
+    "description": "DB Cargo Scandinavia is Deutsche Bahn's rail freight company in Denmark, formed in 2001 from the freight business of DSB. It runs wagonload, block and intermodal trains between Scandinavia and Germany over the Great Belt and Øresund links, with terminals at Høje-Taastrup and Taulov, and has run its own trains in Sweden since 2023.",
+    "website": "https://dk.dbcargo.com",
+    "founded": 2001,
+    "headquarters": "Taastrup, Denmark",
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["wagonload", "block-train", "intermodal", "international"],
+    "parentCompany": "Deutsche Bahn",
+    "links": [
+      {
+        "label": "Official Site",
+        "url": "https://dk.dbcargo.com",
+        "type": "website"
+      }
+    ]
+  },
+  {
+    "slug": "db-cargo",
+    "name": "DB Cargo",
+    "logoPath": "de/db",
+    "countries": ["de"],
+    "operatorTypes": ["freight"],
+    "bounds": [6, 47.4, 15, 55],
+    "description": "DB Cargo is the rail freight company of Deutsche Bahn and the largest rail freight operator in Germany and in Europe. Its German business runs the national wagonload network as well as block and intermodal trains, while national subsidiaries operate in other European countries. Following a 2024 EU state-aid ruling, it is being restructured to become profitable without support from the DB group.",
+    "website": "https://www.dbcargo.com",
+    "founded": 1999,
+    "headquarters": "Mainz, Germany",
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["wagonload", "block-train", "intermodal", "international"],
+    "parentCompany": "Deutsche Bahn",
+    "links": [
+      {
+        "label": "Official Site",
+        "url": "https://www.dbcargo.com",
+        "type": "website"
+      },
+      {
+        "label": "Wikipedia",
+        "url": "https://en.wikipedia.org/wiki/DB_Cargo",
+        "type": "wikipedia"
+      }
+    ]
+  },
+  {
+    "slug": "captrain-deutschland",
+    "name": "Captrain Deutschland",
+    "logoPath": "it/captrain-italia",
+    "countries": ["de", "pl"],
+    "operatorTypes": ["freight"],
+    "bounds": [6, 47.4, 24, 55],
+    "description": "Captrain Deutschland is a Berlin-based group of German rail freight and industrial railway companies owned by SNCF through Rail Logistics Europe. It was formed in 2010 from Veolia Cargo Deutschland and includes ITL and Captrain Polska. Its companies run block and intermodal trains within Germany and Poland and across their borders, and operate railways on industrial sites.",
+    "website": "https://www.captrain.de",
+    "founded": 2010,
+    "headquarters": "Berlin, Germany",
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["block-train", "intermodal", "international"],
+    "parentCompany": "Rail Logistics Europe",
+    "links": [
+      {
+        "label": "Official Site",
+        "url": "https://www.captrain.de",
+        "type": "website"
+      },
+      {
+        "label": "Wikipedia",
+        "url": "https://de.wikipedia.org/wiki/Captrain_Deutschland",
+        "type": "wikipedia"
+      }
+    ]
+  },
+  {
+    "slug": "tx-logistik",
+    "name": "TX Logistik",
+    "logoPath": "de/tx-logistik",
+    "countries": ["de", "ch", "dk", "se"],
+    "operatorTypes": ["freight"],
+    "bounds": [5.9, 45.8, 22.2, 68.5],
+    "description": "TX Logistik is a German rail freight operator based in Troisdorf that focuses on intermodal and trainload traffic across Europe. Its main corridors link Germany with Italy through the Alps and with Denmark and Sweden, where it runs its own trains through local subsidiaries. Since 2017 it has been wholly owned by FS Italiane's freight arm, now FS Logistix.",
+    "website": "https://www.txlogistik.eu",
+    "founded": 1999,
+    "headquarters": "Troisdorf, Germany",
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["intermodal", "block-train", "international"],
+    "parentCompany": "FS Italiane",
+    "links": [
+      {
+        "label": "Official Site",
+        "url": "https://www.txlogistik.eu",
+        "type": "website"
+      },
+      {
+        "label": "Wikipedia",
+        "url": "https://de.wikipedia.org/wiki/TX_Logistik",
+        "type": "wikipedia"
+      }
+    ]
+  },
+  {
+    "slug": "pkp-cargo",
+    "name": "PKP Cargo",
+    "logoPath": "pl/pkp-cargo",
+    "countries": ["pl"],
+    "operatorTypes": ["freight"],
+    "bounds": [14.2, 49.2, 24, 54.8],
+    "description": "PKP Cargo is Poland's largest rail freight operator, created in 2001 from the freight division of Polish State Railways. It hauls coal, aggregates, metals and other bulk goods as well as intermodal containers, plus cross-border traffic with neighbouring countries. It is listed on the Warsaw Stock Exchange with PKP S.A. as its largest shareholder, and has been in court-supervised restructuring since 2024.",
+    "website": "https://www.pkpcargo.com",
+    "founded": 2001,
+    "headquarters": "Warsaw, Poland",
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["block-train", "intermodal", "international"],
+    "parentCompany": null,
+    "links": [
+      {
+        "label": "Official Site",
+        "url": "https://www.pkpcargo.com",
+        "type": "website"
+      },
+      {
+        "label": "Wikipedia",
+        "url": "https://en.wikipedia.org/wiki/PKP_Cargo",
+        "type": "wikipedia"
+      }
+    ]
+  },
+  {
+    "slug": "db-cargo-polska",
+    "name": "DB Cargo Polska",
+    "logoPath": "de/db",
+    "countries": ["pl"],
+    "operatorTypes": ["freight"],
+    "bounds": [14.2, 49.2, 24, 54.8],
+    "description": "DB Cargo Polska is Deutsche Bahn's rail freight company in Poland and the country's second-largest freight operator by tonnage. Based in Zabrze, it mainly hauls coal, aggregates, metals and other bulk goods, along with intermodal and cross-border traffic. It traces back to PCC Rail, which Deutsche Bahn acquired in 2009.",
+    "website": "https://pl.dbcargo.com",
+    "founded": null,
+    "headquarters": "Zabrze, Poland",
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["block-train", "intermodal", "international"],
+    "parentCompany": "Deutsche Bahn",
+    "links": [
+      {
+        "label": "Official Site",
+        "url": "https://pl.dbcargo.com",
+        "type": "website"
+      },
+      {
+        "label": "Wikipedia",
+        "url": "https://pl.wikipedia.org/wiki/DB_Cargo_Polska",
+        "type": "wikipedia"
+      }
+    ]
+  },
+  {
+    "slug": "orlen-kolej",
+    "name": "Orlen Kolej",
+    "logoPath": "pl/orlen-kolej",
+    "countries": ["pl"],
+    "operatorTypes": ["freight"],
+    "bounds": [14.2, 49.2, 24, 54.8],
+    "description": "Orlen Kolej is the rail freight company of the Polish energy group ORLEN. It grew out of the Gdańsk refinery's rail operation as Lotos Kolej, absorbed Orlen KolTrans in 2023 and took its current name in 2024. It mainly carries fuels, refinery products and chemicals, along with other bulk and intermodal freight, and is one of Poland's largest rail freight operators.",
+    "website": "https://kolej.orlen.pl",
+    "founded": 2002,
+    "headquarters": "Gdańsk, Poland",
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["block-train", "intermodal"],
+    "parentCompany": "ORLEN",
+    "links": [
+      {
+        "label": "Official Site",
+        "url": "https://kolej.orlen.pl",
+        "type": "website"
+      },
+      {
+        "label": "Wikipedia",
+        "url": "https://en.wikipedia.org/wiki/Orlen_Kolej",
+        "type": "wikipedia"
+      }
+    ]
+  },
+  {
+    "slug": "pkp-lhs",
+    "name": "PKP LHS",
+    "logoPath": "pl/pkp-lhs",
+    "countries": ["pl"],
+    "operatorTypes": ["freight"],
+    "bounds": [19.2, 50, 24.2, 51],
+    "description": "PKP LHS manages and operates the Linia Hutnicza Szerokotorowa, Poland's longest broad-gauge (1520 mm) railway, which runs about 395 km from the Ukrainian border near Hrubieszów to Sławków in Upper Silesia. It is both the line's infrastructure manager and its freight carrier, mainly moving iron ore, coal and other bulk goods. It is wholly owned by PKP S.A.",
+    "website": "https://www.lhs.com.pl",
+    "founded": 2000,
+    "headquarters": "Zamość, Poland",
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["block-train"],
+    "parentCompany": "PKP S.A.",
+    "links": [
+      {
+        "label": "Official Site",
+        "url": "https://www.lhs.com.pl",
+        "type": "website"
+      },
+      {
+        "label": "Wikipedia",
+        "url": "https://en.wikipedia.org/wiki/PKP_Linia_Hutnicza_Szerokotorowa",
+        "type": "wikipedia"
+      }
+    ]
+  },
+  {
+    "slug": "hexafret",
+    "name": "Hexafret",
+    "logoPath": "fr/hexafret",
+    "countries": ["fr"],
+    "operatorTypes": ["freight"],
+    "bounds": [-4.5, 42.4, 8.2, 51.1],
+    "description": "Hexafret is a French rail freight operator owned by SNCF through Rail Logistics Europe, created on 1 January 2025 when Fret SNCF was dissolved following a European Commission state-aid decision. It took over Fret SNCF's freight trains, while locomotive maintenance went to its sister company Technis. It specialises in wagonload and trainload transport for industrial customers across France.",
+    "website": "https://hexafret.com",
+    "founded": 2025,
+    "headquarters": "Saint-Ouen-sur-Seine, France",
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["wagonload", "block-train"],
+    "parentCompany": "Rail Logistics Europe",
+    "links": [
+      {
+        "label": "Official Site",
+        "url": "https://hexafret.com",
+        "type": "website"
+      },
+      {
+        "label": "Wikipedia",
+        "url": "https://fr.wikipedia.org/wiki/Hexafret",
+        "type": "wikipedia"
+      }
+    ]
+  },
+  {
+    "slug": "captrain-france",
+    "name": "Captrain France",
+    "logoPath": "it/captrain-italia",
+    "countries": ["fr"],
+    "operatorTypes": ["freight"],
+    "bounds": [-4.5, 42.4, 8.2, 51.1],
+    "description": "Captrain France is a French rail freight operator owned by SNCF through Rail Logistics Europe. Founded in 1998 as VFLI (Voies Ferrées Locales et Industrielles) and renamed in 2021, it provides main-line freight traction, rail operations inside industrial sites and ports, and haulage of infrastructure works trains.",
+    "website": "https://www.captrain.fr",
+    "founded": 1998,
+    "headquarters": "Paris, France",
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["block-train"],
+    "parentCompany": "Rail Logistics Europe",
+    "links": [
+      {
+        "label": "Official Site",
+        "url": "https://www.captrain.fr",
+        "type": "website"
+      },
+      {
+        "label": "Wikipedia",
+        "url": "https://en.wikipedia.org/wiki/Captrain_France",
+        "type": "wikipedia"
+      }
+    ]
+  },
+  {
+    "slug": "europorte",
+    "name": "Europorte",
+    "logoPath": "fr/europorte",
+    "countries": ["fr"],
+    "operatorTypes": ["freight"],
+    "bounds": [-4.5, 42.4, 8.2, 51.1],
+    "description": "Europorte is a French rail freight operator owned by Getlink, the operator of the Channel Tunnel. Formed in 2009 from Eurotunnel's freight subsidiary and Veolia Cargo France, it provides main-line freight traction, including services through the Channel Tunnel, and runs railways on industrial sites through its subsidiary Socorail.",
+    "website": "https://www.europorte.com",
+    "founded": 2009,
+    "headquarters": "Lille, France",
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["block-train", "international"],
+    "parentCompany": "Getlink",
+    "links": [
+      {
+        "label": "Official Site",
+        "url": "https://www.europorte.com",
+        "type": "website"
+      },
+      {
+        "label": "Wikipedia",
+        "url": "https://en.wikipedia.org/wiki/Europorte",
+        "type": "wikipedia"
+      }
+    ]
+  },
+  {
+    "slug": "db-cargo-france",
+    "name": "DB Cargo France",
+    "logoPath": "de/db",
+    "countries": ["fr"],
+    "operatorTypes": ["freight"],
+    "bounds": [-4.5, 42.4, 8.2, 51.1],
+    "description": "DB Cargo France is Deutsche Bahn's rail freight company in France. Founded in 2005 as Euro Cargo Rail by the British operator EWS and renamed in 2021, it was one of the first private operators on the French network after the freight market opened. It hauls aggregates, gypsum, steel and other industrial traffic as well as combined transport, including cross-border flows.",
+    "website": "https://fr.dbcargo.com",
+    "founded": 2005,
+    "headquarters": "Aubervilliers, France",
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["block-train", "intermodal", "international"],
+    "parentCompany": "Deutsche Bahn",
+    "links": [
+      {
+        "label": "Official Site",
+        "url": "https://fr.dbcargo.com",
+        "type": "website"
+      },
+      {
+        "label": "Wikipedia",
+        "url": "https://en.wikipedia.org/wiki/DB_Cargo_France",
+        "type": "wikipedia"
+      }
+    ]
+  },
+  {
+    "slug": "tilo",
+    "name": "TILO",
+    "logoPath": "ch/tilo",
+    "countries": ["ch", "it"],
+    "operatorTypes": ["passenger"],
+    "bounds": [8.2, 45.4, 9.6, 46.6],
+    "description": "TILO is the joint venture of SBB and Trenord providing regional and suburban trains in Ticino and Lombardy, including cross-border services between Switzerland and Italy.",
+    "website": "https://www.tilo.ch",
+    "founded": 2004,
+    "headquarters": "Bellinzona, Switzerland",
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["regional", "commuter", "international"],
+    "parentCompany": "SBB / Trenord",
+    "links": [
+      {
+        "label": "Official website",
+        "url": "https://www.tilo.ch",
+        "type": "website"
+      },
+      {
+        "label": "Operator information",
+        "url": "https://www.tilo.ch/chi-siamo/dati-e-fatti-tilo-new/",
+        "type": "website"
+      }
+    ]
+  },
+  {
+    "slug": "arverio",
+    "name": "Arverio",
+    "logoPath": "de/arverio",
+    "countries": ["de"],
+    "operatorTypes": ["passenger"],
+    "bounds": [8.3, 47.4, 11.8, 50.1],
+    "description": "Arverio operates regional passenger trains in Baden-Württemberg and Bavaria through its regional operating companies. Its networks include services around Stuttgart and connections linking Munich, Augsburg, Ulm, Würzburg and Lindau.",
+    "website": "https://www.arverio-bw.de",
+    "founded": null,
+    "headquarters": null,
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["regional"],
+    "parentCompany": null,
+    "links": [
+      {
+        "label": "Official website",
+        "url": "https://www.arverio-bw.de",
+        "type": "website"
+      },
+      {
+        "label": "Timetables",
+        "url": "https://www.arverio-bw.de/unterwegs-mit-arverio/fahrplaene",
+        "type": "timetables"
+      }
+    ]
+  },
+  {
+    "slug": "agilis",
+    "name": "agilis",
+    "logoPath": "de/agilis",
+    "countries": ["de"],
+    "operatorTypes": ["passenger"],
+    "bounds": [9.8, 48.2, 13.6, 50.5],
+    "description": "agilis operates regional passenger trains in Bavaria and to Ulm. Its networks serve the Regensburg area and the Danube corridor, as well as Upper Franconia and the northern Upper Palatinate.",
+    "website": "https://www.agilis.de",
+    "founded": null,
+    "headquarters": null,
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["regional"],
+    "parentCompany": null,
+    "links": [
+      {
+        "label": "Official website",
+        "url": "https://www.agilis.de",
+        "type": "website"
+      },
+      {
+        "label": "Operator information",
+        "url": "https://www.agilis.de/streckennetz/",
+        "type": "website"
+      }
+    ]
+  },
+  {
+    "slug": "renfe",
+    "name": "Renfe",
+    "logoPath": "renfe",
+    "countries": ["international", "fr"],
+    "operatorTypes": ["passenger"],
+    "bounds": [-3.8, 40.3, 5.5, 45.9],
+    "description": "Renfe operates AVE high-speed passenger services between Spain and France, linking Barcelona with Lyon and Madrid with Marseille via Barcelona and southern France.",
+    "website": "https://www.renfe.com",
+    "founded": null,
+    "headquarters": null,
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["high-speed", "international"],
+    "parentCompany": null,
+    "links": [
+      {
+        "label": "Official website",
+        "url": "https://www.renfe.com",
+        "type": "website"
+      },
+      {
+        "label": "Operator information",
+        "url": "https://www.renfe.com/es/es/viajar/prepara-tu-viaje/ave-francia/destinos",
+        "type": "website"
+      }
+    ]
+  },
+  {
+    "slug": "cfc",
+    "name": "Chemins de fer de la Corse",
+    "logoPath": "fr/cfc",
+    "countries": ["fr"],
+    "operatorTypes": ["passenger"],
+    "bounds": [8.6, 41.8, 9.6, 42.8],
+    "description": "Chemins de fer de la Corse operates the Corsican railway linking Bastia, Ajaccio and Calvi. Its network also provides suburban services around Bastia, Ajaccio and the Balagne coast.",
+    "website": "https://cf-corse.corsica",
+    "founded": null,
+    "headquarters": null,
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["regional", "commuter", "scenic"],
+    "parentCompany": null,
+    "links": [
+      {
+        "label": "Official website",
+        "url": "https://cf-corse.corsica",
+        "type": "website"
+      },
+      {
+        "label": "Timetables",
+        "url": "https://cf-corse.corsica/horaires/",
+        "type": "timetables"
+      }
+    ]
+  },
+  {
+    "slug": "arenaways",
+    "name": "Arenaways",
+    "logoPath": "it/arenaways",
+    "countries": ["it"],
+    "operatorTypes": ["passenger"],
+    "bounds": [7.45, 44.3, 7.8, 44.7],
+    "description": "Arenaways operates regional passenger trains on the Cuneo–Saluzzo–Savigliano line in Piedmont.",
+    "website": "https://arenaways.it",
+    "founded": null,
+    "headquarters": null,
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["regional"],
+    "parentCompany": null,
+    "links": [
+      {
+        "label": "Official website",
+        "url": "https://arenaways.it",
+        "type": "website"
+      },
+      {
+        "label": "Timetables",
+        "url": "https://arenaways.it/orari-e-tariffe/orari-treni",
+        "type": "timetables"
+      }
+    ]
+  },
+  {
+    "slug": "fs-sud-est",
+    "name": "FS Sud Est",
+    "logoPath": "it/trenitalia",
+    "countries": ["it"],
+    "operatorTypes": ["passenger"],
+    "bounds": [16.4, 39.75, 18.6, 41.2],
+    "description": "FS Sud Est operates regional passenger trains in south-eastern Puglia, including the Bari, Valle d’Itria and Salento networks. It succeeded the former Ferrovie del Sud Est transport business in 2026.",
+    "website": "https://www.fssudest.it",
+    "founded": null,
+    "headquarters": null,
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["regional"],
+    "parentCompany": null,
+    "links": [
+      {
+        "label": "Official website",
+        "url": "https://www.fssudest.it",
+        "type": "website"
+      }
+    ]
+  },
+  {
+    "slug": "ferrotramviaria",
+    "name": "Ferrotramviaria",
+    "logoPath": "it/ferrotramviaria",
+    "countries": ["it"],
+    "operatorTypes": ["passenger"],
+    "bounds": [16.2, 41, 16.95, 41.4],
+    "description": "Ferrotramviaria operates the Ferrovie del Nord Barese passenger network between Bari and Barletta, including connections to Bari Airport and the San Paolo district.",
+    "website": "https://www.ferrotramviaria.it/web/guest/orari-e-percorsi",
+    "founded": null,
+    "headquarters": null,
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["regional", "commuter"],
+    "parentCompany": null,
+    "links": [
+      {
+        "label": "Official website",
+        "url": "https://www.ferrotramviaria.it/web/guest/orari-e-percorsi",
+        "type": "website"
+      }
+    ]
+  },
+  {
+    "slug": "fal",
+    "name": "Ferrovie Appulo Lucane",
+    "logoPath": "it/fal",
+    "countries": ["it"],
+    "operatorTypes": ["passenger"],
+    "bounds": [15.5, 40.3, 17, 41.2],
+    "description": "Ferrovie Appulo Lucane operates narrow-gauge regional passenger railways in Puglia and Basilicata, serving Bari, Altamura, Matera and the Potenza area.",
+    "website": "https://ferrovieappulolucane.it",
+    "founded": null,
+    "headquarters": null,
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["regional", "commuter"],
+    "parentCompany": null,
+    "links": [
+      {
+        "label": "Official website",
+        "url": "https://ferrovieappulolucane.it",
+        "type": "website"
+      }
+    ]
+  },
+  {
+    "slug": "ferrovie-del-gargano",
+    "name": "Ferrovie del Gargano",
+    "logoPath": "it/ferrovie-del-gargano",
+    "countries": ["it"],
+    "operatorTypes": ["passenger"],
+    "bounds": [15.2, 41.3, 16.2, 42],
+    "description": "Ferrovie del Gargano operates regional passenger trains in the province of Foggia, linking Foggia with Lucera and with San Severo, Rodi Garganico and Peschici Calenella.",
+    "website": "https://ferroviedelgargano.com",
+    "founded": null,
+    "headquarters": null,
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["regional"],
+    "parentCompany": null,
+    "links": [
+      {
+        "label": "Official website",
+        "url": "https://ferroviedelgargano.com",
+        "type": "website"
+      }
+    ]
+  },
+  {
+    "slug": "trentino-trasporti",
+    "name": "Trentino trasporti",
+    "logoPath": "it/trentino-trasporti",
+    "countries": ["it"],
+    "operatorTypes": ["passenger"],
+    "bounds": [10.7, 45.7, 11.8, 46.5],
+    "description": "Trentino trasporti operates the Trento–Malè–Mezzana railway and part of the Trento–Bassano del Grappa regional service on the Valsugana line.",
+    "website": "https://www.trentinotrasporti.it",
+    "founded": null,
+    "headquarters": null,
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["regional", "commuter"],
+    "parentCompany": null,
+    "links": [
+      {
+        "label": "Official website",
+        "url": "https://www.trentinotrasporti.it",
+        "type": "website"
+      },
+      {
+        "label": "Operator information",
+        "url": "https://www.trentinotrasporti.it/en/valsugana-en",
+        "type": "website"
+      }
+    ]
+  },
+  {
+    "slug": "european-sleeper",
+    "name": "European Sleeper",
+    "logoPath": "european-sleeper",
+    "countries": ["international", "nl", "be", "de", "fr", "ch", "it"],
+    "operatorTypes": ["passenger"],
+    "bounds": [2.2, 45.4, 14.6, 53.7],
+    "description": "European Sleeper provides overnight passenger trains across Europe. Its services connect Belgium and the Netherlands with Berlin and Prague, Paris with Berlin, and Brussels with Milan via Germany and Switzerland.",
+    "website": "https://europeansleeper.eu",
+    "founded": null,
+    "headquarters": null,
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["night-train", "international"],
+    "parentCompany": null,
+    "links": [
+      {
+        "label": "Official website",
+        "url": "https://europeansleeper.eu",
+        "type": "website"
+      },
+      {
+        "label": "Timetables",
+        "url": "https://europeansleeper.eu/timetable",
+        "type": "timetables"
+      }
+    ]
+  },
+  {
+    "slug": "qbuzz",
+    "name": "Qbuzz",
+    "logoPath": "nl/qbuzz",
+    "countries": ["nl"],
+    "operatorTypes": ["passenger"],
+    "bounds": [4.6, 51.75, 5.35, 51.95],
+    "description": "Qbuzz operates the MerwedeLingelijn passenger railway between Dordrecht and Geldermalsen, serving communities including Sliedrecht, Gorinchem and Leerdam.",
+    "website": "https://www.qbuzz.nl",
+    "founded": null,
+    "headquarters": null,
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["regional", "commuter"],
+    "parentCompany": null,
+    "links": [
+      {
+        "label": "Official website",
+        "url": "https://www.qbuzz.nl",
+        "type": "website"
+      },
+      {
+        "label": "Operator information",
+        "url": "https://www.merwedelingelijn.nl/contact/",
+        "type": "website"
+      }
+    ]
+  },
+  {
+    "slug": "skm-warszawa",
+    "name": "SKM Warszawa",
+    "logoPath": "pl/skm-warszawa",
+    "countries": ["pl"],
+    "operatorTypes": ["passenger"],
+    "bounds": [20.3, 51.9, 21.5, 52.7],
+    "description": "SKM Warszawa is Warsaw’s municipal suburban railway operator. Its trains connect the capital with surrounding communities and Warsaw Chopin Airport as part of the integrated Warsaw public transport network.",
+    "website": "https://skm.warszawa.pl",
+    "founded": null,
+    "headquarters": null,
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["commuter", "regional"],
+    "parentCompany": null,
+    "links": [
+      {
+        "label": "Official website",
+        "url": "https://skm.warszawa.pl",
+        "type": "website"
+      },
+      {
+        "label": "Operator information",
+        "url": "https://skm.warszawa.pl/o-nas/",
+        "type": "website"
+      }
+    ]
+  },
+  {
+    "slug": "lumo",
+    "name": "Lumo",
+    "logoPath": "uk/lumo",
+    "countries": ["uk"],
+    "operatorTypes": ["passenger"],
+    "bounds": [-4.4, 51.4, 0, 56.2],
+    "description": "Lumo runs open-access intercity trains between London and Scotland. Its East Coast services connect London King’s Cross, Newcastle, Edinburgh and Glasgow, while its West Coast services link London Euston and Stirling.",
+    "website": "https://www.lumo.co.uk",
+    "founded": null,
+    "headquarters": null,
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["intercity"],
+    "parentCompany": null,
+    "links": [
+      {
+        "label": "Official website",
+        "url": "https://www.lumo.co.uk",
+        "type": "website"
+      },
+      {
+        "label": "Timetables",
+        "url": "https://www.lumo.co.uk/plan-your-journey/our-timetable",
+        "type": "timetables"
+      }
+    ]
+  },
+  {
+    "slug": "merseyrail",
+    "name": "Merseyrail",
+    "logoPath": "uk/merseyrail",
+    "countries": ["uk"],
+    "operatorTypes": ["passenger"],
+    "bounds": [-3.25, 53.1, -2.65, 53.72],
+    "description": "Merseyrail operates the Northern and Wirral lines of the Liverpool city region’s suburban railway, linking Liverpool with destinations including Southport, Ormskirk, Headbolt Lane, Chester, Ellesmere Port, New Brighton and West Kirby.",
+    "website": "https://www.merseyrail.org",
+    "founded": null,
+    "headquarters": null,
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["commuter", "regional"],
+    "parentCompany": null,
+    "links": [
+      {
+        "label": "Official website",
+        "url": "https://www.merseyrail.org",
+        "type": "website"
+      },
+      {
+        "label": "Operator information",
+        "url": "https://www.merseyrail.org/journey-planning/plan-your-journey/network-map/",
+        "type": "website"
+      }
+    ]
+  },
+  {
+    "slug": "heathrow-express",
+    "name": "Heathrow Express",
+    "logoPath": "uk/heathrow-express",
+    "countries": ["uk"],
+    "operatorTypes": ["passenger"],
+    "bounds": [-0.51, 51.45, -0.16, 51.54],
+    "description": "Heathrow Express provides direct airport trains between London Paddington and Heathrow Terminals 2 & 3 and Terminal 5.",
+    "website": "https://www.heathrowexpress.com",
+    "founded": null,
+    "headquarters": null,
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["regional"],
+    "parentCompany": null,
+    "links": [
+      {
+        "label": "Official website",
+        "url": "https://www.heathrowexpress.com",
+        "type": "website"
+      }
+    ]
+  },
+  {
+    "slug": "ni-railways",
+    "name": "NI Railways",
+    "logoPath": "uk/ni-railways",
+    "countries": ["uk", "ie"],
+    "operatorTypes": ["passenger"],
+    "bounds": [-7.5, 53.3, -5.4, 55.3],
+    "description": "NI Railways, part of Translink, operates regional and commuter trains across Northern Ireland. It jointly operates the Enterprise service between Belfast and Dublin with Iarnród Éireann.",
+    "website": "https://www.translink.co.uk",
+    "founded": null,
+    "headquarters": null,
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["regional", "commuter", "intercity", "international"],
+    "parentCompany": "Translink",
+    "links": [
+      {
+        "label": "Official website",
+        "url": "https://www.translink.co.uk",
+        "type": "website"
+      },
+      {
+        "label": "Operator information",
+        "url": "https://www.nidirect.gov.uk/articles/rail-services",
         "type": "website"
       }
     ]

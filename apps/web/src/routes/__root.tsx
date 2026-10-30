@@ -12,7 +12,8 @@ import { Analytics } from "@/components/analytics";
 import { SiteFooter } from "@/components/site-footer";
 import { env } from "@/lib/env";
 import appCss from "../styles.css?url";
-import geistFont from "../assets/fonts/Geist/Geist.woff2?url";
+import geistFont from "../assets/fonts/Geist/Geist-web.woff2?url";
+import geistMonoFont from "../assets/fonts/Geist/GeistMono-core.woff2?url";
 import { prerenderedPageLinkProps } from "@/lib/station-prerender";
 
 const DEFAULT_TITLE = "Rail Radar | Live Train Tracker Across Europe";
@@ -59,6 +60,13 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       {
         rel: "preload",
         href: geistFont,
+        as: "font",
+        type: "font/woff2",
+        crossOrigin: "anonymous" as const,
+      },
+      {
+        rel: "preload",
+        href: geistMonoFont,
         as: "font",
         type: "font/woff2",
         crossOrigin: "anonymous" as const,

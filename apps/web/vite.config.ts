@@ -1,5 +1,6 @@
 import { defineConfig, loadEnv } from "vite";
 import type { Plugin } from "vite";
+import type { StationFeatureCollection } from "../../packages/data/src/types.ts";
 import { readFileSync } from "node:fs";
 import { cloudflare } from "@cloudflare/vite-plugin";
 import { tanstackStart } from "@tanstack/react-start/plugin/vite";
@@ -7,14 +8,12 @@ import { COUNTRY_SLUGS } from "../../packages/data/src/countries.ts";
 import { isStationPagePrerendered } from "./src/lib/station-prerender.ts";
 import { simplify } from "./src/lib/map-projection.ts";
 import { publishedReports } from "./src/lib/reports.ts";
+import { generateNearbyStationIds } from "./vite/nearby-stations.ts";
 import viteReact from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
 
 type OperatorRecord = { slug: string };
 type LineRecord = { id: string };
-type StationFeatureRecord = {
-  properties: { id: string; importance: 1 | 2 | 3 | 4; type: "rail" | "metro" | "light" };
-};
 
 const operatorRecords = JSON.parse(
   readFileSync(new URL("../../packages/data/src/operators.json", import.meta.url), "utf8"),
@@ -26,7 +25,7 @@ const lineRecords = JSON.parse(
 
 const stationRecords = JSON.parse(
   readFileSync(new URL("../../packages/data/src/stations.geojson", import.meta.url), "utf8"),
-) as { features: StationFeatureRecord[] };
+) as StationFeatureCollection;
 
 const prerenderPages = [
   "/",
@@ -59,6 +58,27 @@ const geojsonPlugin: Plugin = {
     // is ~6 MB, so this is the single largest contributor to isolate startup CPU.
     // Minifying first also drops ~2 MB of the source file's indentation.
     const data = JSON.stringify(JSON.parse(readFileSync(filename, "utf8")));
+    return `export default JSON.parse(${JSON.stringify(data)});`;
+  },
+};
+
+const nearbyStationsPlugin: Plugin = {
+  name: "rail-radar-nearby-stations",
+  resolveId(id) {
+    if (id === "virtual:nearby-stations") return "\0virtual:nearby-stations";
+  },
+  load(id) {
+    if (id !== "\0virtual:nearby-stations") return;
+    const filename = new URL("../../packages/data/src/stations.geojson", import.meta.url);
+    this.addWatchFile(filename.pathname);
+    const catalog = JSON.parse(readFileSync(filename, "utf8")) as StationFeatureCollection;
+    const stations = catalog.features.map(({ properties, geometry }) => ({
+      ...properties,
+      geo: { lat: geometry.coordinates[1]!, lng: geometry.coordinates[0]! },
+    }));
+    // Generate only IDs, so the Worker keeps using the shared station records and
+    // computes just four distances. No station scan or spatial index runs on requests.
+    const data = JSON.stringify(generateNearbyStationIds(stations));
     return `export default JSON.parse(${JSON.stringify(data)});`;
   },
 };
@@ -127,6 +147,7 @@ export default defineConfig(({ command, mode }) => {
         },
       }),
       geojsonPlugin,
+      nearbyStationsPlugin,
       lineTrackPlugin,
       tailwindcss(),
       tanstackStart({

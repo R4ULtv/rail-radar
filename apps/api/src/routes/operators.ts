@@ -20,7 +20,7 @@ const OPERATOR_COUNTRIES = [
 ] as const satisfies readonly OperatorCountry[];
 const OPERATOR_TYPES = [
   "passenger",
-  "cargo",
+  "freight",
   "metro",
   "light-rail",
 ] as const satisfies readonly OperatorType[];
@@ -32,6 +32,9 @@ const SERVICE_TYPES = [
   "night-train",
   "international",
   "scenic",
+  "intermodal",
+  "wagonload",
+  "block-train",
 ] as const satisfies readonly ServiceType[];
 
 function matchesOperatorQuery(operator: Operator, query: string): boolean {

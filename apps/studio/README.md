@@ -1,6 +1,6 @@
 # Rail Radar Studio
 
-Admin tool for managing railway stations and transit lines across Europe. Use the Stations and Lines workspaces to curate the shared datasets.
+Admin tool for managing railway stations, transit lines and railway operators across Europe. Use the Stations, Lines and Operators workspaces to curate the shared datasets.
 
 ## Tech Stack
 
@@ -45,10 +45,10 @@ pnpm --filter=studio preview
 
 ## Features
 
-- Interactive map with all stations, filterable by type (rail / metro / light) and country
+- Interactive map with all stations and freight yards, filterable by type (rail / metro / light / freight), importance and duplicates
 - Sidebar search and filtering
 - Drag markers to fine-tune coordinates
-- Edit station name, type and importance
+- Edit station name, type and importance, plus freight yard kind (marshalling / intermodal / port)
 - Create new stations by clicking the map, with ID validation:
   - 2-3 letter country prefix + 3+ digits (typically 6-8)
   - duplicate-ID detection with the conflicting station's name
@@ -64,7 +64,7 @@ pnpm --filter=studio preview
 2. Make changes:
    - **Move** — drag the marker.
    - **Rename / retype** — edit the side panel and save.
-   - **Add** — click "Add Station", click on the map, choose an ID.
+   - **Add** — click "Add Station", click on the map, choose an ID and type. Freight yards also have an optional yard kind; the Yards filter preselects the freight type.
    - **Delete** — open the edit panel and click delete.
 3. Use the Wikipedia panel to pull suggested coordinates from Wikidata when a station is missing them.
 4. Click **Review** to open the contribution panel and see a summary of every change.
@@ -76,7 +76,37 @@ pnpm --filter=studio preview
 3. Click **Open in GitHub** — GitHub opens with the body pre-filled.
 4. Create a branch (suggested format: `studio/YYYY-MM-DD-description`), commit, and open the PR.
 
-Changes are persisted to `localStorage`, so closing the tab won't lose work.
+Station history and contribution summaries are persisted to `localStorage`. In browser mode,
+export your edited dataset before leaving to keep the actual data changes.
+
+## Operators
+
+Open **Operators** in the workspace navigation, or visit `/operators`.
+
+- Search by name, slug or country; filter by country and operator type, including freight.
+- Create and edit passenger, freight, metro and light rail profiles, including operators with multiple types.
+- Edit every profile field: identity, logo asset path, countries, services, description, website,
+  network bounds, company details, statistics and external links. Empty optional statistics
+  are saved as `null`, so freight operators do not need passenger totals.
+- Local mode previews logos directly from `apps/web/public/assets/operators`; browser mode
+  uses the website's published assets. Missing artwork uses a placeholder. This editor references
+  SVG files; add or replace the artwork in the repository separately.
+- **Save operator** writes to `packages/data/src/operators.json` in local development.
+  Writes are atomic, preserve editorial order and untouched profiles, and reject stale or
+  competing edits. Reload after external data changes.
+- Operators assigned to saved lines cannot be renamed or deleted until those line assignments
+  are changed in the Lines workspace. Browser mode checks against the bundled lines.
+- In browser mode, the workspace starts from the bundled operators. Saves stay in memory;
+  **Not exported** remains visible until you export `operators.json`. Importing a JSON file
+  switches to browser editing even during local development, so it never overwrites the local file.
+- Unsaved drafts and unexported browser changes prompt before they are discarded. Use
+  `⌘K` / `Ctrl+K` to search, arrow keys or Home/End to browse, `⌘S` / `Ctrl+S` to save,
+  and Escape to close the editor outside a text field.
+
+Operator imports and edits validate slugs, duplicates, supported countries/types/services,
+URLs, bounds and numeric values. Unknown fields are rejected instead of silently removed.
+The legacy missing parent-company value is treated as unknown (`null`) when loaded.
+Run the Studio regression tests with `pnpm --filter=studio test`.
 
 ## Transit lines
 
@@ -113,6 +143,16 @@ development. Unsaved draft changes prompt before switching lines or leaving the 
 ## Station data
 
 Station data lives in `packages/data/src/stations.geojson` and is shared with the rest of the monorepo via `@repo/data`.
+
+Freight yards use `type: "freight"` and an optional `kind` of `marshalling`, `intermodal`, or
+`port`. Create and edit them in the Stations workspace using the Yards filter. Selecting
+**Unspecified** clears a yard's kind; changing its type away from freight also clears it.
+Kind changes are included in undo/redo and contribution review. Yards are excluded from
+the Lines workspace's unlinked transit stops and station search.
+
+GeoJSON, JSON and CSV imports and exports preserve yard kinds. JSON records have an optional
+`kind` field; CSV adds an optional `kind` column after `lng`. Older files without kinds remain
+supported. Unsupported kinds and kinds on passenger stations are rejected on import.
 
 Studio rounds new and edited coordinates, including JSON and CSV imports, to at most five decimal
 places. Coordinate inputs use a `0.00001` step, and the Wikipedia panel and status bar display five

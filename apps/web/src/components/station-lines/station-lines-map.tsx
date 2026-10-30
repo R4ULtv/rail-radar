@@ -16,7 +16,7 @@ import type { StationLineView } from "./use-station-line-view";
 const DESKTOP_PADDING = { top: 72, bottom: 48, left: 48, right: 432 };
 const MOBILE_PADDING = { top: 80, bottom: 250, left: 32, right: 32 };
 
-const STATION_LAYERS = ["metro-stations", "light-stations", "rail-stations"];
+const STATION_LAYERS = ["metro-stations", "light-stations", "rail-stations", "freight-stations"];
 const STOPS_LAYER_ID = "station-lines-stops";
 
 const lineCasingStyle: LayerProps = {

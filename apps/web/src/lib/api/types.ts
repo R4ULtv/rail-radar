@@ -27,7 +27,7 @@ export interface TrendingStationsResponse {
     visits: number;
     uniqueVisitors: number;
     geo: { lat: number; lng: number } | null;
-    type: "rail" | "metro" | "light";
+    type: Station["type"];
     importance: 1 | 2 | 3 | 4;
   }[];
 }

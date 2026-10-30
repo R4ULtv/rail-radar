@@ -50,6 +50,7 @@ const ID_PREFIX_TO_COUNTRY = Object.fromEntries(
       [prefix, code],
       [`${prefix}M`, code],
       [`${prefix}L`, code],
+      [`${prefix}F`, code],
     ];
   }),
 ) as Record<string, CountryCode>;

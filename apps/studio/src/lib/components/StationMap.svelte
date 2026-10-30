@@ -99,7 +99,7 @@
     const query = searchValue.trim().toLowerCase();
 
     if (query) conditions.push(["in", query, ["get", "searchText"]]);
-    if (typeFilterValue === "rail" || typeFilterValue === "metro" || typeFilterValue === "light") {
+    if (typeFilterValue !== "all" && typeFilterValue !== "duplicate") {
       conditions.push(["==", ["get", "type"], typeFilterValue]);
     }
     if (typeFilterValue === "duplicate") {
@@ -264,6 +264,8 @@
             STATION_TYPE_COLOR.metro,
             "light",
             STATION_TYPE_COLOR.light,
+            "freight",
+            STATION_TYPE_COLOR.freight,
             STATION_TYPE_COLOR.rail,
           ],
           "circle-stroke-color": "#ffffff",
@@ -328,6 +330,10 @@
     <div class="flex items-center gap-2">
       <span class="size-2 rounded-full" style:background-color={STATION_TYPE_COLOR.light}></span>
       <span>Light rail</span>
+    </div>
+    <div class="flex items-center gap-2">
+      <span class="size-2 rounded-full" style:background-color={STATION_TYPE_COLOR.freight}></span>
+      <span>Freight yard</span>
     </div>
   </div>
 

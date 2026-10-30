@@ -115,6 +115,7 @@ function createContributionStore() {
           id: station.id,
           type,
           stationName: station.name,
+          stationType: station.type,
           timestamp: new Date(),
           details: {},
         };
@@ -122,12 +123,15 @@ function createContributionStore() {
         if (type === "created") {
           change.details.newName = station.name;
           change.details.newGeo = station.geo ?? null;
+          change.details.newKind = station.kind;
         } else if (type === "deleted") {
           change.details.previousName = station.name;
           change.details.previousGeo = station.geo ?? null;
+          change.details.previousKind = station.kind;
         } else if (previousStation) {
           const nameChanged = previousStation.name !== station.name;
           const typeChanged = previousStation.type !== station.type;
+          const kindChanged = previousStation.kind !== station.kind;
           const importanceChanged = previousStation.importance !== station.importance;
           const coordinatesUpdated =
             previousStation.geo?.lat !== station.geo?.lat ||
@@ -143,6 +147,9 @@ function createContributionStore() {
             typeChanged,
             previousType: typeChanged ? previousStation.type : undefined,
             newType: typeChanged ? station.type : undefined,
+            kindChanged,
+            previousKind: kindChanged ? previousStation.kind : undefined,
+            newKind: kindChanged ? station.kind : undefined,
             importanceChanged,
             previousImportance: importanceChanged ? previousStation.importance : undefined,
             newImportance: importanceChanged ? station.importance : undefined,

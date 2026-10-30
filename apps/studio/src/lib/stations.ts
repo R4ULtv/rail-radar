@@ -1,23 +1,46 @@
-import type { Station, StationFeature, StationFeatureCollection } from "@repo/data";
+import type { FreightKind, Station, StationFeature, StationFeatureCollection } from "@repo/data";
 
 export type StationUpdates = {
   name?: string;
   geo?: { lat: number; lng: number } | null;
-  type?: "rail" | "metro" | "light";
+  type?: Station["type"];
   importance?: 1 | 2 | 3 | 4;
+  kind?: FreightKind | null;
 };
 
 export type StationFileFormat = "geojson" | "json" | "csv";
 export type StationJsonRecord = {
   id: string;
   name: string;
-  type: "rail" | "metro" | "light";
+  type: Station["type"];
   importance: 1 | 2 | 3 | 4;
+  kind?: FreightKind;
   lat: number | null;
   lng: number | null;
 };
 
 export const COORDINATE_DECIMAL_PLACES = 5;
+
+export const freightKindLabels: Record<FreightKind, string> = {
+  marshalling: "Marshalling yard",
+  intermodal: "Intermodal terminal",
+  port: "Port terminal",
+};
+
+function normalizeFreightKind(
+  value: unknown,
+  type: Station["type"],
+  sourceLabel: string,
+): FreightKind | undefined {
+  if (value === undefined || value === null || value === "") return undefined;
+  if (value !== "marshalling" && value !== "intermodal" && value !== "port") {
+    throw new Error(`${sourceLabel} has an invalid freight yard kind`);
+  }
+  if (type !== "freight") {
+    throw new Error(`${sourceLabel} can only have a yard kind when its type is freight`);
+  }
+  return value;
+}
 
 export function roundCoordinate(value: number): number {
   const scale = 10 ** COORDINATE_DECIMAL_PLACES;
@@ -31,6 +54,9 @@ export function featureToStation(feature: StationFeature): Station {
     name: feature.properties.name,
     type: feature.properties.type,
     importance: feature.properties.importance,
+    ...(feature.properties.type === "freight" && feature.properties.kind
+      ? { kind: feature.properties.kind }
+      : {}),
     geo: { lat: lat!, lng: lng! },
   };
 }
@@ -41,6 +67,7 @@ export function stationToJsonRecord(station: Station): StationJsonRecord {
     name: station.name,
     type: station.type,
     importance: station.importance,
+    ...(station.type === "freight" && station.kind ? { kind: station.kind } : {}),
     lat: station.geo?.lat ?? null,
     lng: station.geo?.lng ?? null,
   };
@@ -58,6 +85,7 @@ export function stationToFeature(station: Station): StationFeature {
       name: station.name,
       type: station.type,
       importance: station.importance,
+      ...(station.type === "freight" && station.kind ? { kind: station.kind } : {}),
     },
     geometry: {
       type: "Point",
@@ -83,7 +111,7 @@ export function stationsToJson(stations: Station[]): StationJsonRecord[] {
 
 export function stationsToCsv(stations: Station[]): string {
   const rows = [
-    ["id", "name", "type", "importance", "lat", "lng"],
+    ["id", "name", "type", "importance", "lat", "lng", "kind"],
     ...stations.map((station) => {
       const record = stationToJsonRecord(station);
       return [
@@ -93,6 +121,7 @@ export function stationsToCsv(stations: Station[]): string {
         String(record.importance),
         record.lat === null ? "" : String(record.lat),
         record.lng === null ? "" : String(record.lng),
+        record.kind ?? "",
       ];
     }),
   ];
@@ -120,6 +149,8 @@ export function validateGeojson(value: unknown): StationFeatureCollection {
     ) {
       throw new Error("GeoJSON contains an unsupported station feature");
     }
+    const type = normalizeImportedType(feature.properties.type, `Station ${feature.properties.id}`);
+    normalizeFreightKind(feature.properties.kind, type, `Station ${feature.properties.id}`);
   }
 
   return geojson;
@@ -175,7 +206,7 @@ function splitCsvRecords(csv: string): string[] {
 
     if (char === '"') {
       if (inQuotes && nextChar === '"') {
-        current += '"';
+        current += '""';
         index += 1;
         continue;
       }
@@ -232,6 +263,7 @@ export function csvToStations(csv: string): Station[] {
         name: getCell("name"),
         type: getCell("type"),
         importance: getCell("importance"),
+        kind: getCell("kind"),
         lat: getCell("lat") ?? getCell("latitude"),
         lng: getCell("lng") ?? getCell("lon") ?? getCell("longitude"),
       },
@@ -320,8 +352,9 @@ export function normalizeNewStation(input: {
   geo: unknown;
   type: unknown;
   importance: unknown;
+  kind?: unknown;
 }): Station {
-  const { id, name, geo, type, importance } = input;
+  const { id, name, geo, type, importance, kind } = input;
   if (!name || typeof name !== "string") {
     throw new Error("Name is required");
   }
@@ -341,7 +374,7 @@ export function normalizeNewStation(input: {
     );
   }
 
-  const stationType = type === "metro" ? "metro" : type === "light" ? "light" : "rail";
+  const stationType = type === "metro" || type === "light" || type === "freight" ? type : "rail";
   const stationImportance =
     importance === 1 || importance === 2 || importance === 3 || importance === 4 ? importance : 4;
   const coordinates = geo as { lat: number; lng: number };
@@ -351,6 +384,7 @@ export function normalizeNewStation(input: {
     name: name.trim(),
     type: stationType,
     importance: stationImportance,
+    kind: normalizeFreightKind(kind, stationType, "Station"),
     geo: {
       lat: roundCoordinate(coordinates.lat),
       lng: roundCoordinate(coordinates.lng),
@@ -368,6 +402,7 @@ function normalizeImportedStation(input: unknown, sourceLabel: string): Station 
     name?: unknown;
     type?: unknown;
     importance?: unknown;
+    kind?: unknown;
     lat?: unknown;
     lng?: unknown;
     lon?: unknown;
@@ -401,6 +436,7 @@ function normalizeImportedStation(input: unknown, sourceLabel: string): Station 
     name,
     type,
     importance,
+    kind: normalizeFreightKind(record.kind, type, sourceLabel),
     geo:
       lat === null || lng === null
         ? undefined
@@ -425,7 +461,8 @@ function normalizeImportedName(value: unknown, sourceLabel: string): string {
 }
 
 function normalizeImportedType(value: unknown, sourceLabel: string): Station["type"] {
-  if (value === "rail" || value === "metro" || value === "light") return value;
+  if (value === "rail" || value === "metro" || value === "light" || value === "freight")
+    return value;
   throw new Error(`${sourceLabel} has an invalid station type`);
 }
 
@@ -461,7 +498,10 @@ function sortStationsByName(stations: Station[]): Station[] {
 
 export function applyStationUpdates(station: Station, updates: StationUpdates): Station {
   const updatedType =
-    updates.type === "rail" || updates.type === "metro" || updates.type === "light"
+    updates.type === "rail" ||
+    updates.type === "metro" ||
+    updates.type === "light" ||
+    updates.type === "freight"
       ? updates.type
       : station.type;
   const updatedImportance =
@@ -483,6 +523,14 @@ export function applyStationUpdates(station: Station, updates: StationUpdates): 
     name: updates.name !== undefined ? String(updates.name).trim() : station.name,
     type: updatedType,
     importance: updatedImportance,
+    kind:
+      updatedType === "freight"
+        ? normalizeFreightKind(
+            updates.kind === undefined ? station.kind : updates.kind,
+            updatedType,
+            "Station",
+          )
+        : undefined,
     geo: updatedGeo,
   };
 }
