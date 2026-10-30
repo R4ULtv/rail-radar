@@ -5423,5 +5423,484 @@
         "type": "wikipedia"
       }
     ]
+  },
+  {
+    "slug": "tilo",
+    "name": "TILO",
+    "logoPath": "ch/tilo",
+    "countries": ["ch", "it"],
+    "operatorTypes": ["passenger"],
+    "bounds": [8.2, 45.4, 9.6, 46.6],
+    "description": "TILO is the joint venture of SBB and Trenord providing regional and suburban trains in Ticino and Lombardy, including cross-border services between Switzerland and Italy.",
+    "website": "https://www.tilo.ch",
+    "founded": 2004,
+    "headquarters": "Bellinzona, Switzerland",
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["regional", "commuter", "international"],
+    "parentCompany": "SBB / Trenord",
+    "links": [
+      {
+        "label": "Official website",
+        "url": "https://www.tilo.ch",
+        "type": "website"
+      },
+      {
+        "label": "Operator information",
+        "url": "https://www.tilo.ch/chi-siamo/dati-e-fatti-tilo-new/",
+        "type": "website"
+      }
+    ]
+  },
+  {
+    "slug": "arverio",
+    "name": "Arverio",
+    "logoPath": "de/arverio",
+    "countries": ["de"],
+    "operatorTypes": ["passenger"],
+    "bounds": [8.3, 47.4, 11.8, 50.1],
+    "description": "Arverio operates regional passenger trains in Baden-Württemberg and Bavaria through its regional operating companies. Its networks include services around Stuttgart and connections linking Munich, Augsburg, Ulm, Würzburg and Lindau.",
+    "website": "https://www.arverio-bw.de",
+    "founded": null,
+    "headquarters": null,
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["regional"],
+    "parentCompany": null,
+    "links": [
+      {
+        "label": "Official website",
+        "url": "https://www.arverio-bw.de",
+        "type": "website"
+      },
+      {
+        "label": "Timetables",
+        "url": "https://www.arverio-bw.de/unterwegs-mit-arverio/fahrplaene",
+        "type": "timetables"
+      }
+    ]
+  },
+  {
+    "slug": "agilis",
+    "name": "agilis",
+    "logoPath": "de/agilis",
+    "countries": ["de"],
+    "operatorTypes": ["passenger"],
+    "bounds": [9.8, 48.2, 13.6, 50.5],
+    "description": "agilis operates regional passenger trains in Bavaria and to Ulm. Its networks serve the Regensburg area and the Danube corridor, as well as Upper Franconia and the northern Upper Palatinate.",
+    "website": "https://www.agilis.de",
+    "founded": null,
+    "headquarters": null,
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["regional"],
+    "parentCompany": null,
+    "links": [
+      {
+        "label": "Official website",
+        "url": "https://www.agilis.de",
+        "type": "website"
+      },
+      {
+        "label": "Operator information",
+        "url": "https://www.agilis.de/streckennetz/",
+        "type": "website"
+      }
+    ]
+  },
+  {
+    "slug": "renfe",
+    "name": "Renfe",
+    "logoPath": "renfe",
+    "countries": ["international", "fr"],
+    "operatorTypes": ["passenger"],
+    "bounds": [-3.8, 40.3, 5.5, 45.9],
+    "description": "Renfe operates AVE high-speed passenger services between Spain and France, linking Barcelona with Lyon and Madrid with Marseille via Barcelona and southern France.",
+    "website": "https://www.renfe.com",
+    "founded": null,
+    "headquarters": null,
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["high-speed", "international"],
+    "parentCompany": null,
+    "links": [
+      {
+        "label": "Official website",
+        "url": "https://www.renfe.com",
+        "type": "website"
+      },
+      {
+        "label": "Operator information",
+        "url": "https://www.renfe.com/es/es/viajar/prepara-tu-viaje/ave-francia/destinos",
+        "type": "website"
+      }
+    ]
+  },
+  {
+    "slug": "cfc",
+    "name": "Chemins de fer de la Corse",
+    "logoPath": "fr/cfc",
+    "countries": ["fr"],
+    "operatorTypes": ["passenger"],
+    "bounds": [8.6, 41.8, 9.6, 42.8],
+    "description": "Chemins de fer de la Corse operates the Corsican railway linking Bastia, Ajaccio and Calvi. Its network also provides suburban services around Bastia, Ajaccio and the Balagne coast.",
+    "website": "https://cf-corse.corsica",
+    "founded": null,
+    "headquarters": null,
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["regional", "commuter", "scenic"],
+    "parentCompany": null,
+    "links": [
+      {
+        "label": "Official website",
+        "url": "https://cf-corse.corsica",
+        "type": "website"
+      },
+      {
+        "label": "Timetables",
+        "url": "https://cf-corse.corsica/horaires/",
+        "type": "timetables"
+      }
+    ]
+  },
+  {
+    "slug": "arenaways",
+    "name": "Arenaways",
+    "logoPath": "it/arenaways",
+    "countries": ["it"],
+    "operatorTypes": ["passenger"],
+    "bounds": [7.45, 44.3, 7.8, 44.7],
+    "description": "Arenaways operates regional passenger trains on the Cuneo–Saluzzo–Savigliano line in Piedmont.",
+    "website": "https://arenaways.it",
+    "founded": null,
+    "headquarters": null,
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["regional"],
+    "parentCompany": null,
+    "links": [
+      {
+        "label": "Official website",
+        "url": "https://arenaways.it",
+        "type": "website"
+      },
+      {
+        "label": "Timetables",
+        "url": "https://arenaways.it/orari-e-tariffe/orari-treni",
+        "type": "timetables"
+      }
+    ]
+  },
+  {
+    "slug": "fs-sud-est",
+    "name": "FS Sud Est",
+    "logoPath": "it/trenitalia",
+    "countries": ["it"],
+    "operatorTypes": ["passenger"],
+    "bounds": [16.4, 39.75, 18.6, 41.2],
+    "description": "FS Sud Est operates regional passenger trains in south-eastern Puglia, including the Bari, Valle d’Itria and Salento networks. It succeeded the former Ferrovie del Sud Est transport business in 2026.",
+    "website": "https://www.fssudest.it",
+    "founded": null,
+    "headquarters": null,
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["regional"],
+    "parentCompany": null,
+    "links": [
+      {
+        "label": "Official website",
+        "url": "https://www.fssudest.it",
+        "type": "website"
+      }
+    ]
+  },
+  {
+    "slug": "ferrotramviaria",
+    "name": "Ferrotramviaria",
+    "logoPath": "it/ferrotramviaria",
+    "countries": ["it"],
+    "operatorTypes": ["passenger"],
+    "bounds": [16.2, 41, 16.95, 41.4],
+    "description": "Ferrotramviaria operates the Ferrovie del Nord Barese passenger network between Bari and Barletta, including connections to Bari Airport and the San Paolo district.",
+    "website": "https://www.ferrotramviaria.it/web/guest/orari-e-percorsi",
+    "founded": null,
+    "headquarters": null,
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["regional", "commuter"],
+    "parentCompany": null,
+    "links": [
+      {
+        "label": "Official website",
+        "url": "https://www.ferrotramviaria.it/web/guest/orari-e-percorsi",
+        "type": "website"
+      }
+    ]
+  },
+  {
+    "slug": "fal",
+    "name": "Ferrovie Appulo Lucane",
+    "logoPath": "it/fal",
+    "countries": ["it"],
+    "operatorTypes": ["passenger"],
+    "bounds": [15.5, 40.3, 17, 41.2],
+    "description": "Ferrovie Appulo Lucane operates narrow-gauge regional passenger railways in Puglia and Basilicata, serving Bari, Altamura, Matera and the Potenza area.",
+    "website": "https://ferrovieappulolucane.it",
+    "founded": null,
+    "headquarters": null,
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["regional", "commuter"],
+    "parentCompany": null,
+    "links": [
+      {
+        "label": "Official website",
+        "url": "https://ferrovieappulolucane.it",
+        "type": "website"
+      }
+    ]
+  },
+  {
+    "slug": "ferrovie-del-gargano",
+    "name": "Ferrovie del Gargano",
+    "logoPath": "it/ferrovie-del-gargano",
+    "countries": ["it"],
+    "operatorTypes": ["passenger"],
+    "bounds": [15.2, 41.3, 16.2, 42],
+    "description": "Ferrovie del Gargano operates regional passenger trains in the province of Foggia, linking Foggia with Lucera and with San Severo, Rodi Garganico and Peschici Calenella.",
+    "website": "https://ferroviedelgargano.com",
+    "founded": null,
+    "headquarters": null,
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["regional"],
+    "parentCompany": null,
+    "links": [
+      {
+        "label": "Official website",
+        "url": "https://ferroviedelgargano.com",
+        "type": "website"
+      }
+    ]
+  },
+  {
+    "slug": "trentino-trasporti",
+    "name": "Trentino trasporti",
+    "logoPath": "it/trentino-trasporti",
+    "countries": ["it"],
+    "operatorTypes": ["passenger"],
+    "bounds": [10.7, 45.7, 11.8, 46.5],
+    "description": "Trentino trasporti operates the Trento–Malè–Mezzana railway and part of the Trento–Bassano del Grappa regional service on the Valsugana line.",
+    "website": "https://www.trentinotrasporti.it",
+    "founded": null,
+    "headquarters": null,
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["regional", "commuter"],
+    "parentCompany": null,
+    "links": [
+      {
+        "label": "Official website",
+        "url": "https://www.trentinotrasporti.it",
+        "type": "website"
+      },
+      {
+        "label": "Operator information",
+        "url": "https://www.trentinotrasporti.it/en/valsugana-en",
+        "type": "website"
+      }
+    ]
+  },
+  {
+    "slug": "european-sleeper",
+    "name": "European Sleeper",
+    "logoPath": "european-sleeper",
+    "countries": ["international", "nl", "be", "de", "fr", "ch", "it"],
+    "operatorTypes": ["passenger"],
+    "bounds": [2.2, 45.4, 14.6, 53.7],
+    "description": "European Sleeper provides overnight passenger trains across Europe. Its services connect Belgium and the Netherlands with Berlin and Prague, Paris with Berlin, and Brussels with Milan via Germany and Switzerland.",
+    "website": "https://europeansleeper.eu",
+    "founded": null,
+    "headquarters": null,
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["night-train", "international"],
+    "parentCompany": null,
+    "links": [
+      {
+        "label": "Official website",
+        "url": "https://europeansleeper.eu",
+        "type": "website"
+      },
+      {
+        "label": "Timetables",
+        "url": "https://europeansleeper.eu/timetable",
+        "type": "timetables"
+      }
+    ]
+  },
+  {
+    "slug": "qbuzz",
+    "name": "Qbuzz",
+    "logoPath": "nl/qbuzz",
+    "countries": ["nl"],
+    "operatorTypes": ["passenger"],
+    "bounds": [4.6, 51.75, 5.35, 51.95],
+    "description": "Qbuzz operates the MerwedeLingelijn passenger railway between Dordrecht and Geldermalsen, serving communities including Sliedrecht, Gorinchem and Leerdam.",
+    "website": "https://www.qbuzz.nl",
+    "founded": null,
+    "headquarters": null,
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["regional", "commuter"],
+    "parentCompany": null,
+    "links": [
+      {
+        "label": "Official website",
+        "url": "https://www.qbuzz.nl",
+        "type": "website"
+      },
+      {
+        "label": "Operator information",
+        "url": "https://www.merwedelingelijn.nl/contact/",
+        "type": "website"
+      }
+    ]
+  },
+  {
+    "slug": "skm-warszawa",
+    "name": "SKM Warszawa",
+    "logoPath": "pl/skm-warszawa",
+    "countries": ["pl"],
+    "operatorTypes": ["passenger"],
+    "bounds": [20.3, 51.9, 21.5, 52.7],
+    "description": "SKM Warszawa is Warsaw’s municipal suburban railway operator. Its trains connect the capital with surrounding communities and Warsaw Chopin Airport as part of the integrated Warsaw public transport network.",
+    "website": "https://skm.warszawa.pl",
+    "founded": null,
+    "headquarters": null,
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["commuter", "regional"],
+    "parentCompany": null,
+    "links": [
+      {
+        "label": "Official website",
+        "url": "https://skm.warszawa.pl",
+        "type": "website"
+      },
+      {
+        "label": "Operator information",
+        "url": "https://skm.warszawa.pl/o-nas/",
+        "type": "website"
+      }
+    ]
+  },
+  {
+    "slug": "lumo",
+    "name": "Lumo",
+    "logoPath": "uk/lumo",
+    "countries": ["uk"],
+    "operatorTypes": ["passenger"],
+    "bounds": [-4.4, 51.4, 0, 56.2],
+    "description": "Lumo runs open-access intercity trains between London and Scotland. Its East Coast services connect London King’s Cross, Newcastle, Edinburgh and Glasgow, while its West Coast services link London Euston and Stirling.",
+    "website": "https://www.lumo.co.uk",
+    "founded": null,
+    "headquarters": null,
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["intercity"],
+    "parentCompany": null,
+    "links": [
+      {
+        "label": "Official website",
+        "url": "https://www.lumo.co.uk",
+        "type": "website"
+      },
+      {
+        "label": "Timetables",
+        "url": "https://www.lumo.co.uk/plan-your-journey/our-timetable",
+        "type": "timetables"
+      }
+    ]
+  },
+  {
+    "slug": "merseyrail",
+    "name": "Merseyrail",
+    "logoPath": "uk/merseyrail",
+    "countries": ["uk"],
+    "operatorTypes": ["passenger"],
+    "bounds": [-3.25, 53.1, -2.65, 53.72],
+    "description": "Merseyrail operates the Northern and Wirral lines of the Liverpool city region’s suburban railway, linking Liverpool with destinations including Southport, Ormskirk, Headbolt Lane, Chester, Ellesmere Port, New Brighton and West Kirby.",
+    "website": "https://www.merseyrail.org",
+    "founded": null,
+    "headquarters": null,
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["commuter", "regional"],
+    "parentCompany": null,
+    "links": [
+      {
+        "label": "Official website",
+        "url": "https://www.merseyrail.org",
+        "type": "website"
+      },
+      {
+        "label": "Operator information",
+        "url": "https://www.merseyrail.org/journey-planning/plan-your-journey/network-map/",
+        "type": "website"
+      }
+    ]
+  },
+  {
+    "slug": "heathrow-express",
+    "name": "Heathrow Express",
+    "logoPath": "uk/heathrow-express",
+    "countries": ["uk"],
+    "operatorTypes": ["passenger"],
+    "bounds": [-0.51, 51.45, -0.16, 51.54],
+    "description": "Heathrow Express provides direct airport trains between London Paddington and Heathrow Terminals 2 & 3 and Terminal 5.",
+    "website": "https://www.heathrowexpress.com",
+    "founded": null,
+    "headquarters": null,
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["regional"],
+    "parentCompany": null,
+    "links": [
+      {
+        "label": "Official website",
+        "url": "https://www.heathrowexpress.com",
+        "type": "website"
+      }
+    ]
+  },
+  {
+    "slug": "ni-railways",
+    "name": "NI Railways",
+    "logoPath": "uk/ni-railways",
+    "countries": ["uk", "ie"],
+    "operatorTypes": ["passenger"],
+    "bounds": [-7.5, 53.3, -5.4, 55.3],
+    "description": "NI Railways, part of Translink, operates regional and commuter trains across Northern Ireland. It jointly operates the Enterprise service between Belfast and Dublin with Iarnród Éireann.",
+    "website": "https://www.translink.co.uk",
+    "founded": null,
+    "headquarters": null,
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["regional", "commuter", "intercity", "international"],
+    "parentCompany": "Translink",
+    "links": [
+      {
+        "label": "Official website",
+        "url": "https://www.translink.co.uk",
+        "type": "website"
+      },
+      {
+        "label": "Operator information",
+        "url": "https://www.nidirect.gov.uk/articles/rail-services",
+        "type": "website"
+      }
+    ]
   }
 ]

@@ -1,6 +1,26 @@
 import { staticAssetUrl } from "@/lib/static-assets";
 // Maps brand names to their SVG file paths (relative to /assets/operators/)
 const brandPaths: Record<string, string> = {
+  // Passenger operators added in the first coverage expansion batch.
+  "fs sud est": "it/trenitalia",
+  "ferrovie appulo lucane": "it/fal",
+  ferrotramviaria: "it/ferrotramviaria",
+  "ferrovie del gargano": "it/ferrovie-del-gargano",
+  "trentino trasporti": "it/trentino-trasporti",
+  arenaways: "it/arenaways",
+  tilo: "ch/tilo",
+  renfe: "fr/renfe",
+  "chemins de fer de la corse": "fr/cfc",
+  qbuzz: "nl/qbuzz",
+  "european sleeper": "nl/european-sleeper",
+  "skm warszawa": "pl/skm-warszawa",
+  arverio: "de/arverio",
+  agilis: "de/agilis",
+  lumo: "uk/lumo",
+  merseyrail: "uk/merseyrail",
+  "heathrow express": "uk/heathrow-express",
+  "ni railways": "uk/ni-railways",
+
   // Italian brands
   trenitalia: "it/trenitalia",
   regionale: "it/regionale",
@@ -130,6 +150,28 @@ const brandPaths: Record<string, string> = {
 
 // Aliases for brands that share icons
 const brandAliases: Record<string, string> = {
+  "ferrovie del sud est": "fs sud est",
+  fal: "ferrovie appulo lucane",
+  "ferrovie appulo-lucane": "ferrovie appulo lucane",
+  "ferrovie del nord barese": "ferrotramviaria",
+  "ferrovie nord barese": "ferrotramviaria",
+  "ferrovie del nordbarese": "ferrotramviaria",
+  fdg: "ferrovie del gargano",
+  "trentino trasporti s.p.a.": "trentino trasporti",
+  ave: "renfe",
+  cfc: "chemins de fer de la corse",
+  "skm warsaw": "skm warszawa",
+  "szybka kolej miejska w warszawie": "skm warszawa",
+  "arverio bayern": "arverio",
+  "arverio baden-württemberg": "arverio",
+  "go-ahead bayern": "arverio",
+  "go-ahead baden-württemberg": "arverio",
+  ld: "lumo",
+  me: "merseyrail",
+  hx: "heathrow express",
+  nir: "ni railways",
+  "northern ireland railways": "ni railways",
+
   "mtr express": "vr snabbtåg",
   "mtr express ab": "vr snabbtåg",
   mtrx: "vr snabbtåg",
@@ -141,7 +183,7 @@ const brandAliases: Record<string, string> = {
   ntv: "italo",
   frecciabianca: "trenitalia",
   frecciargento: "trenitalia",
-  fse: "trenitalia",
+  fse: "fs sud est",
   "leonardo express": "trenitalia",
   "obb railjet": "obb",
   "obb nightjet": "obb",
@@ -190,6 +232,26 @@ function getBrandPath(brand: string): string | null {
 
 // Maps raw brand names (lowercased) to brand slugs
 const brandSlugMap: Record<string, string> = {
+  // Passenger operators added in the first coverage expansion batch.
+  "fs sud est": "fs-sud-est",
+  "ferrovie appulo lucane": "fal",
+  ferrotramviaria: "ferrotramviaria",
+  "ferrovie del gargano": "ferrovie-del-gargano",
+  "trentino trasporti": "trentino-trasporti",
+  arenaways: "arenaways",
+  tilo: "tilo",
+  renfe: "renfe",
+  "chemins de fer de la corse": "cfc",
+  qbuzz: "qbuzz",
+  "european sleeper": "european-sleeper",
+  "skm warszawa": "skm-warszawa",
+  arverio: "arverio",
+  agilis: "agilis",
+  lumo: "lumo",
+  merseyrail: "merseyrail",
+  "heathrow express": "heathrow-express",
+  "ni railways": "ni-railways",
+
   trenitalia: "trenitalia",
   regionale: "regionale",
   italo: "italo",
@@ -203,7 +265,7 @@ const brandSlugMap: Record<string, string> = {
   "trenitalia tper": "trenitalia-tper",
   sad: "sad",
   tua: "tua",
-  fse: "trenitalia",
+  fse: "fs-sud-est",
   "leonardo express": "trenitalia",
   bls: "bls",
   sbb: "sbb",
