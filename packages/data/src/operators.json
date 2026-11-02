@@ -1320,7 +1320,7 @@
   {
     "slug": "obb",
     "name": "ÖBB",
-    "logoPath": "obb",
+    "logoPath": "at/obb",
     "countries": ["international", "it", "ch", "de", "nl"],
     "operatorTypes": ["passenger"],
     "bounds": [4.7, 41.8, 17.2, 53.7],
@@ -1740,7 +1740,7 @@
   {
     "slug": "sncb",
     "name": "SNCB/NMBS",
-    "logoPath": "sncb",
+    "logoPath": "be/sncb",
     "countries": ["be", "lu", "nl"],
     "operatorTypes": ["passenger"],
     "bounds": [2.5, 49.5, 6.4, 52.6],
@@ -1900,7 +1900,7 @@
   {
     "slug": "leo-express",
     "name": "Leo Express",
-    "logoPath": "leo-express",
+    "logoPath": "cz/leo-express",
     "countries": ["international", "pl"],
     "operatorTypes": ["passenger"],
     "bounds": [14.1, 49, 24.2, 52.5],
@@ -1928,7 +1928,7 @@
   {
     "slug": "regiojet",
     "name": "RegioJet",
-    "logoPath": "regiojet",
+    "logoPath": "cz/regiojet",
     "countries": ["international", "pl"],
     "operatorTypes": ["passenger"],
     "bounds": [14.1, 48.5, 24.2, 52.5],
@@ -5511,7 +5511,7 @@
   {
     "slug": "renfe",
     "name": "Renfe",
-    "logoPath": "renfe",
+    "logoPath": "es/renfe",
     "countries": ["international", "fr"],
     "operatorTypes": ["passenger"],
     "bounds": [-3.8, 40.3, 5.5, 45.9],
@@ -5899,6 +5899,327 @@
       {
         "label": "Operator information",
         "url": "https://www.nidirect.gov.uk/articles/rail-services",
+        "type": "website"
+      }
+    ]
+  },
+  {
+    "slug": "cj",
+    "name": "Chemins de fer du Jura",
+    "logoPath": "ch/cj",
+    "countries": ["ch"],
+    "operatorTypes": ["passenger", "freight"],
+    "bounds": [6.75, 47.05, 7.3, 47.55],
+    "description": "Chemins de fer du Jura operates regional passenger trains in the Swiss Jura, including routes linking La Chaux-de-Fonds, Le Noirmont, Saignelégier, Glovelier, Tramelan, Tavannes, Porrentruy and Bonfol. It also carries freight, including timber and waste containers.",
+    "website": "https://www.les-cj.ch",
+    "founded": null,
+    "headquarters": null,
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["regional", "wagonload"],
+    "parentCompany": null,
+    "links": [
+      {
+        "label": "Official website",
+        "url": "https://www.les-cj.ch",
+        "type": "website"
+      },
+      {
+        "label": "Services and operator information",
+        "url": "https://www.les-cj.ch/Reisen/Fahrplan-und-Netz",
+        "type": "website"
+      }
+    ]
+  },
+  {
+    "slug": "nstcm",
+    "name": "NStCM",
+    "logoPath": "ch/nstcm",
+    "countries": ["ch"],
+    "operatorTypes": ["passenger"],
+    "bounds": [6.03, 46.35, 6.26, 46.5],
+    "description": "NStCM is the regional railway linking Nyon with Saint-Cergue and La Cure in the Swiss Jura. The passenger-facing rail brand remains in use following the administrative merger with Transports publics nyonnais in 2025.",
+    "website": "https://www.nstcm.ch",
+    "founded": null,
+    "headquarters": null,
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["regional", "commuter"],
+    "parentCompany": null,
+    "links": [
+      {
+        "label": "Official website",
+        "url": "https://www.nstcm.ch",
+        "type": "website"
+      },
+      {
+        "label": "Services and operator information",
+        "url": "https://www.nstcm.ch/fr/horaires",
+        "type": "website"
+      }
+    ]
+  },
+  {
+    "slug": "mbc",
+    "name": "MBC",
+    "logoPath": "ch/mbc",
+    "countries": ["ch"],
+    "operatorTypes": ["passenger", "freight"],
+    "bounds": [6.2, 46.4, 6.6, 46.7],
+    "description": "MBC, Transports de la région Morges–Bière–Cossonay, operates the Bière–Apples–Morges and Apples–L’Isle railways and the Cossonay funicular. Its rail freight activity includes gravel, timber, agricultural products and military vehicles.",
+    "website": "https://www.mbc.ch",
+    "founded": null,
+    "headquarters": null,
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["regional", "commuter", "wagonload"],
+    "parentCompany": null,
+    "links": [
+      {
+        "label": "Official website",
+        "url": "https://www.mbc.ch",
+        "type": "website"
+      },
+      {
+        "label": "Services and operator information",
+        "url": "https://www.mbc.ch/l-entreprise",
+        "type": "website"
+      }
+    ]
+  },
+  {
+    "slug": "travys",
+    "name": "TRAVYS",
+    "logoPath": "ch/travys",
+    "countries": ["ch"],
+    "operatorTypes": ["passenger", "freight"],
+    "bounds": [6.15, 46.5, 6.75, 46.9],
+    "description": "TRAVYS operates regional passenger railways in northern Vaud, including Yverdon-les-Bains–Sainte-Croix, the Vallée de Joux line and Orbe–Chavornay. Its activities also include rail freight on the Orbe–Chavornay network.",
+    "website": "https://www.travys.ch",
+    "founded": null,
+    "headquarters": null,
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["regional", "commuter", "wagonload"],
+    "parentCompany": null,
+    "links": [
+      {
+        "label": "Official website",
+        "url": "https://www.travys.ch",
+        "type": "website"
+      },
+      {
+        "label": "Services and operator information",
+        "url": "https://admin-website-478fe4.travys.ch/app/uploads/2025/11/Travys-regional-2026-schematique.pdf",
+        "type": "website"
+      }
+    ]
+  },
+  {
+    "slug": "fart",
+    "name": "FART",
+    "logoPath": "it/vigezzina-centovalli",
+    "countries": ["ch", "it"],
+    "operatorTypes": ["passenger"],
+    "bounds": [8.25, 46.05, 8.85, 46.25],
+    "description": "FART, Ferrovie Autolinee Regionali Ticinesi, operates the Swiss section of the Vigezzina-Centovalli railway between Locarno and Camedo. Together with Italy’s SSIF, it provides regional and scenic cross-border trains linking Locarno and Domodossola under a shared passenger brand.",
+    "website": "https://fartiamo.ch",
+    "founded": null,
+    "headquarters": null,
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["regional", "international", "scenic"],
+    "parentCompany": null,
+    "links": [
+      {
+        "label": "Official website",
+        "url": "https://fartiamo.ch",
+        "type": "website"
+      },
+      {
+        "label": "Services and operator information",
+        "url": "https://fartiamo.ch/en/the-company-about-us/",
+        "type": "website"
+      }
+    ]
+  },
+  {
+    "slug": "bob",
+    "name": "Berner Oberland-Bahnen",
+    "logoPath": "ch/bob",
+    "countries": ["ch"],
+    "operatorTypes": ["passenger"],
+    "bounds": [7.8, 46.55, 8.08, 46.72],
+    "description": "Berner Oberland-Bahnen operates regional trains from Interlaken Ost via Zweilütschinen to Grindelwald and Lauterbrunnen. The company also operates the seasonal Schynige Platte Railway from Wilderswil and is part of the Jungfrau Railways marketing alliance.",
+    "website": "https://www.jungfrau.ch/en-gb/corporate/jungfrau-railways/berner-oberland-bahnen-ag/berner-oberland-bahn/",
+    "founded": null,
+    "headquarters": null,
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["regional", "commuter", "scenic"],
+    "parentCompany": null,
+    "links": [
+      {
+        "label": "Official website",
+        "url": "https://www.jungfrau.ch/en-gb/corporate/jungfrau-railways/berner-oberland-bahnen-ag/berner-oberland-bahn/",
+        "type": "website"
+      }
+    ]
+  },
+  {
+    "slug": "fuc",
+    "name": "Ferrovie Udine Cividale",
+    "logoPath": "it/fuc",
+    "countries": ["it"],
+    "operatorTypes": ["passenger", "freight"],
+    "bounds": [12.7, 45.55, 13.95, 46.7],
+    "description": "Ferrovie Udine Cividale operates regional passenger trains between Udine and Cividale del Friuli and the Italian portion of the joint MICOTRA service linking Trieste, Udine and Villach in Austria. It also provides freight services on regional railway routes.",
+    "website": "https://www.ferrovieudinecividale.it",
+    "founded": null,
+    "headquarters": null,
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["regional", "international"],
+    "parentCompany": null,
+    "links": [
+      {
+        "label": "Official website",
+        "url": "https://www.ferrovieudinecividale.it",
+        "type": "website"
+      },
+      {
+        "label": "Services and operator information",
+        "url": "https://www.ferrovieudinecividale.it/wp-content/uploads/2026/03/Carta-servizi-ud-civ-2026.pdf",
+        "type": "website"
+      }
+    ]
+  },
+  {
+    "slug": "ssif",
+    "name": "SSIF",
+    "logoPath": "it/vigezzina-centovalli",
+    "countries": ["it", "ch"],
+    "operatorTypes": ["passenger"],
+    "bounds": [8.25, 46.05, 8.85, 46.25],
+    "description": "SSIF, Società Subalpina di Imprese Ferroviarie, operates the Italian section of the Vigezzina-Centovalli railway between Domodossola and the Swiss border. Together with FART, it provides regional and scenic international trains to Locarno under a shared passenger brand.",
+    "website": "https://www.vigezzina.com",
+    "founded": null,
+    "headquarters": null,
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["regional", "international", "scenic"],
+    "parentCompany": null,
+    "links": [
+      {
+        "label": "Official website",
+        "url": "https://www.vigezzina.com",
+        "type": "website"
+      },
+      {
+        "label": "Services and operator information",
+        "url": "https://www.vigezzina.com/index.php/l-azienda",
+        "type": "website"
+      }
+    ]
+  },
+  {
+    "slug": "nordwestbahn",
+    "name": "NordWestBahn",
+    "logoPath": "transdev",
+    "countries": ["de"],
+    "operatorTypes": ["passenger"],
+    "bounds": [7.4, 51.4, 10.1, 53.75],
+    "description": "NordWestBahn operates regional passenger trains in north-western Germany. Its networks include Weser-Ems services, the Bremen–Lower Saxony Regio-S-Bahn and routes in Ostwestfalen around Osnabrück, Bielefeld, Paderborn and Göttingen.",
+    "website": "https://www.nordwestbahn.de",
+    "founded": null,
+    "headquarters": null,
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["regional", "commuter"],
+    "parentCompany": "Transdev",
+    "links": [
+      {
+        "label": "Official website",
+        "url": "https://www.nordwestbahn.de",
+        "type": "website"
+      }
+    ]
+  },
+  {
+    "slug": "erixx",
+    "name": "erixx",
+    "logoPath": "de/erixx",
+    "countries": ["de"],
+    "operatorTypes": ["passenger"],
+    "bounds": [9.6, 51.85, 11.25, 53.3],
+    "description": "erixx operates regional passenger trains in Lower Saxony, including Hannover–Hildesheim–Bad Harzburg, Braunschweig–Goslar/Bad Harzburg, Braunschweig–Uelzen and Lüneburg–Dannenberg.",
+    "website": "https://www.erixx.de",
+    "founded": null,
+    "headquarters": null,
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["regional"],
+    "parentCompany": null,
+    "links": [
+      {
+        "label": "Official website",
+        "url": "https://www.erixx.de",
+        "type": "website"
+      }
+    ]
+  },
+  {
+    "slug": "akn",
+    "name": "AKN Eisenbahn",
+    "logoPath": "de/akn",
+    "countries": ["de"],
+    "operatorTypes": ["passenger"],
+    "bounds": [9.6, 53.55, 10.15, 54.15],
+    "description": "AKN Eisenbahn operates regional and suburban passenger trains in Hamburg and Schleswig-Holstein. Its A1, A2 and A3 routes link Hamburg-Eidelstedt, Quickborn, Ulzburg Süd, Norderstedt Mitte, Neumünster and Elmshorn.",
+    "website": "https://www.akn.de",
+    "founded": null,
+    "headquarters": null,
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["regional", "commuter"],
+    "parentCompany": null,
+    "links": [
+      {
+        "label": "Official website",
+        "url": "https://www.akn.de",
+        "type": "website"
+      },
+      {
+        "label": "Services and operator information",
+        "url": "https://www.akn.de/en/fahrplaene-tickets/fahrplaene",
+        "type": "website"
+      }
+    ]
+  },
+  {
+    "slug": "keolis-nederland",
+    "name": "Keolis Nederland",
+    "logoPath": "nl/keolis",
+    "countries": ["nl"],
+    "operatorTypes": ["passenger"],
+    "bounds": [5.3, 51.95, 6.95, 52.65],
+    "description": "Keolis Nederland operates regional passenger trains in the Netherlands. Its Blauwnet services link Zwolle with Kampen and Enschede, while its RRReis rail service runs between Amersfoort and Ede-Wageningen.",
+    "website": "https://www.keolis.nl",
+    "founded": null,
+    "headquarters": null,
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["regional", "commuter"],
+    "parentCompany": "Keolis",
+    "links": [
+      {
+        "label": "Official website",
+        "url": "https://www.keolis.nl",
+        "type": "website"
+      },
+      {
+        "label": "Services and operator information",
+        "url": "https://www.keolis.nl/reisgebieden/",
         "type": "website"
       }
     ]

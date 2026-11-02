@@ -1,6 +1,21 @@
 import { staticAssetUrl } from "@/lib/static-assets";
 // Maps brand names to their SVG file paths (relative to /assets/operators/)
 const brandPaths: Record<string, string> = {
+  // Additional regional operators.
+  "vigezzina-centovalli": "it/vigezzina-centovalli",
+  cj: "ch/cj",
+  nstcm: "ch/nstcm",
+  mbc: "ch/mbc",
+  travys: "ch/travys",
+  fart: "it/vigezzina-centovalli",
+  bob: "ch/bob",
+  fuc: "it/fuc",
+  ssif: "it/vigezzina-centovalli",
+  nordwestbahn: "transdev",
+  erixx: "de/erixx",
+  akn: "de/akn",
+  "keolis nederland": "nl/keolis",
+
   // Passenger operators added in the first coverage expansion batch.
   "fs sud est": "it/trenitalia",
   "ferrovie appulo lucane": "it/fal",
@@ -9,10 +24,10 @@ const brandPaths: Record<string, string> = {
   "trentino trasporti": "it/trentino-trasporti",
   arenaways: "it/arenaways",
   tilo: "ch/tilo",
-  renfe: "fr/renfe",
+  renfe: "es/renfe",
   "chemins de fer de la corse": "fr/cfc",
   qbuzz: "nl/qbuzz",
-  "european sleeper": "nl/european-sleeper",
+  "european sleeper": "european-sleeper",
   "skm warszawa": "pl/skm-warszawa",
   arverio: "de/arverio",
   agilis: "de/agilis",
@@ -50,7 +65,7 @@ const brandPaths: Record<string, string> = {
   mob: "ch/mob",
   flp: "ch/flp",
   // Other
-  obb: "obb",
+  obb: "at/obb",
   cfl: "lu/cfl",
   // French brands (SNCF networks)
   sncf: "fr/sncf",
@@ -67,7 +82,7 @@ const brandPaths: Record<string, string> = {
   "ter na": "fr/ter-na",
   "zou !": "fr/zou",
   vr: "fi/vr",
-  sncb: "sncb",
+  sncb: "be/sncb",
   eurostar: "eurostar",
   arriva: "arriva",
   dsb: "dk/dsb",
@@ -107,8 +122,8 @@ const brandPaths: Record<string, string> = {
   łka: "pl/lka",
   "warszawska kolej dojazdowa": "pl/wkd",
   railpolonia: "pl/railpolonia",
-  "leo express": "leo-express",
-  regiojet: "regiojet",
+  "leo express": "cz/leo-express",
+  regiojet: "cz/regiojet",
   // Swedish brands
   sj: "se/sj",
   "arlanda express": "se/arlanda",
@@ -150,6 +165,22 @@ const brandPaths: Record<string, string> = {
 
 // Aliases for brands that share icons
 const brandAliases: Record<string, string> = {
+  "chemins de fer du jura": "cj",
+  "nyon–st-cergue–morez": "nstcm",
+  "berner oberland-bahnen": "bob",
+  "berner oberland-bahn": "bob",
+  "bernese oberland railway": "bob",
+  "ferrovie udine cividale": "fuc",
+  "ferrovie udine-cividale": "fuc",
+  "ferrovie autolinee regionali ticinesi": "fart",
+  "società subalpina di imprese ferroviarie": "ssif",
+  "ferrovia vigezzina-centovalli": "vigezzina-centovalli",
+  nwb: "nordwestbahn",
+  "nordwestbahn gmbh": "nordwestbahn",
+  "erixx gmbh": "erixx",
+  "akn eisenbahn": "akn",
+  "keolis blauwnet": "keolis nederland",
+
   "ferrovie del sud est": "fs sud est",
   fal: "ferrovie appulo lucane",
   "ferrovie appulo-lucane": "ferrovie appulo lucane",
@@ -232,6 +263,20 @@ function getBrandPath(brand: string): string | null {
 
 // Maps raw brand names (lowercased) to brand slugs
 const brandSlugMap: Record<string, string> = {
+  // Additional regional operators.
+  cj: "cj",
+  nstcm: "nstcm",
+  mbc: "mbc",
+  travys: "travys",
+  fart: "fart",
+  bob: "bob",
+  fuc: "fuc",
+  ssif: "ssif",
+  nordwestbahn: "nordwestbahn",
+  erixx: "erixx",
+  akn: "akn",
+  "keolis nederland": "keolis-nederland",
+
   // Passenger operators added in the first coverage expansion batch.
   "fs sud est": "fs-sud-est",
   "ferrovie appulo lucane": "fal",
