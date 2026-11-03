@@ -27,7 +27,7 @@ const stationRecords = JSON.parse(
   readFileSync(new URL("../../packages/data/src/stations.geojson", import.meta.url), "utf8"),
 ) as StationFeatureCollection;
 
-const prerenderPages = [
+const prerenderPaths = new Set([
   "/",
   "/app",
   "/donate",
@@ -45,7 +45,33 @@ const prerenderPages = [
   ...stationRecords.features
     .filter(({ properties }) => isStationPagePrerendered(properties))
     .map(({ properties }) => `/station/${properties.id}`),
-].map((path) => ({ path }));
+]);
+
+const prerenderPages = [...prerenderPaths].map((path) => ({ path }));
+
+// TanStack currently crawls slash-ended URLs, while our router uses slashless URLs.
+const prerenderCanonicalUrlsPlugin: Plugin = {
+  name: "rail-radar-prerender-canonical-urls",
+  apply: (_config, { isPreview }) => !!isPreview,
+  configurePreviewServer: {
+    order: "pre",
+    handler(server) {
+      // oxlint-disable-next-line turbo/no-undeclared-env-vars -- Internal TanStack build flag.
+      if (process.env.TSS_PRERENDERING !== "true") return;
+      server.middlewares.use((req, _res, next) => {
+        const url = req.originalUrl ?? req.url ?? "/";
+        const query = url.indexOf("?");
+        const path = query < 0 ? url : url.slice(0, query);
+        if (path.endsWith("/") && prerenderPaths.has(path.slice(0, -1))) {
+          req.url = path.slice(0, -1) + (query < 0 ? "" : url.slice(query));
+          // Cloudflare's request adapter restores req.url from originalUrl.
+          req.originalUrl = req.url;
+        }
+        next();
+      });
+    },
+  },
+};
 
 const geojsonPlugin: Plugin = {
   name: "rail-radar-geojson",
@@ -136,6 +162,7 @@ export default defineConfig(({ command, mode }) => {
       tsconfigPaths: true,
     },
     plugins: [
+      prerenderCanonicalUrlsPlugin,
       cloudflare({
         viteEnvironment: { name: "ssr" },
         config: (config) => {
