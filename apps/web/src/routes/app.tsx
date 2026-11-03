@@ -90,7 +90,7 @@ const screens = [
     name: "map",
     alt: "The Rail Radar app showing train stations on a street map of Milan.",
     title: "Every station on the map",
-    description: "22,000+ stations in 14 countries, on a simple or street map.",
+    description: "23,000+ stations in 15 countries, on a simple or street map.",
   },
   {
     name: "departures",
