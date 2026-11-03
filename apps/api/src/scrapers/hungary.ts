@@ -50,8 +50,11 @@ const BOARD_QUERY = `query Board($id: String!, $start: Long!, $range: Int!, $n: 
 const AGENCY_BRANDS: Record<string, string> = {
   "1:198": "MÁV",
   "1:1164": "MÁV",
+  // Gyermekvasút: the Budapest Children's Railway, run by MÁV.
+  "1:1663": "MÁV",
   "1:134": "GYSEV",
   "1:204": "OBB",
+  "1:209": "PKP Intercity",
 };
 
 // Same train number at the same minute appears under several products
