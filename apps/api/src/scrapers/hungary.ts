@@ -298,6 +298,8 @@ function mapStoptime(
  * name and one end of the journey; opposite-direction trains share neither.
  */
 function isSameService(a: MappedTrain, b: MappedTrain): boolean {
+  // Keep cancelled portions separate so their destinations retain a cancelled status.
+  if ((a.train.status === "cancelled") !== (b.train.status === "cancelled")) return false;
   if (a.train.trainNumber === b.train.trainNumber) return true;
   if (!a.names.some((name) => b.names.includes(name))) return false;
   return (
