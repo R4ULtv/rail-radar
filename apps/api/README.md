@@ -9,24 +9,24 @@ Cloudflare Workers API that provides real-time European train data from official
 
 ## Endpoints
 
-| Method | Path                          | Description                                                                                                                                         |
-| ------ | ----------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `GET`  | `/`                           | API info and endpoint documentation                                                                                                                 |
-| `GET`  | `/robots.txt`                 | Blocks crawlers from indexing the API                                                                                                               |
-| `GET`  | `/operators`                  | List train operators with optional filtering                                                                                                        |
-| `GET`  | `/operators/:slug`            | Get a single train operator by slug                                                                                                                 |
-| `GET`  | `/lines`                      | Metro and light rail lines with ordered routes, without track (see below)                                                                           |
-| `GET`  | `/lines.geojson`              | The same lines as GeoJSON with full track (see below)                                                                                               |
-| `GET`  | `/map/static`                 | Static map image via Mapbox                                                                                                                         |
-| `GET`  | `/stations/search`            | Station search endpoint returning JSON arrays                                                                                                       |
-| `GET`  | `/stations.geojson`           | GeoJSON FeatureCollection of all stations (see below)                                                                                               |
-| `GET`  | `/stations/trending`          | Get trending stations ranked by unique visitors (`?period=hour\|day\|week\|month`, default: `day`)                                                  |
-| `GET`  | `/stations/trending/:country` | Get country-filtered trending stations ranked by unique visitors (`it\|ch\|de\|fi\|be\|dk\|nl\|no\|se\|pl\|uk\|ie\|fr\|lu`, same `?period` options) |
-| `GET`  | `/stations/:id`               | Get station with trains (`?type=arrivals\|departures`)                                                                                              |
-| `GET`  | `/stations/:id/lines`         | Lines serving a station, without track                                                                                                              |
-| `GET`  | `/stations/:id/lines.geojson` | Lines serving a station as GeoJSON with full track                                                                                                  |
-| `GET`  | `/stations/:id/stats`         | Get station visit stats (`?period=hour\|day\|week\|month`, default: `day`)                                                                          |
-| `GET`  | `/analytics/overview`         | Get global analytics (total visits, unique visitors, country breakdown)                                                                             |
+| Method | Path                          | Description                                                                                                                                             |
+| ------ | ----------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `GET`  | `/`                           | API info and endpoint documentation                                                                                                                     |
+| `GET`  | `/robots.txt`                 | Blocks crawlers from indexing the API                                                                                                                   |
+| `GET`  | `/operators`                  | List train operators with optional filtering                                                                                                            |
+| `GET`  | `/operators/:slug`            | Get a single train operator by slug                                                                                                                     |
+| `GET`  | `/lines`                      | Metro and light rail lines with ordered routes, without track (see below)                                                                               |
+| `GET`  | `/lines.geojson`              | The same lines as GeoJSON with full track (see below)                                                                                                   |
+| `GET`  | `/map/static`                 | Static map image via Mapbox                                                                                                                             |
+| `GET`  | `/stations/search`            | Station search endpoint returning JSON arrays                                                                                                           |
+| `GET`  | `/stations.geojson`           | GeoJSON FeatureCollection of all stations (see below)                                                                                                   |
+| `GET`  | `/stations/trending`          | Get trending stations ranked by unique visitors (`?period=hour\|day\|week\|month`, default: `day`)                                                      |
+| `GET`  | `/stations/trending/:country` | Get country-filtered trending stations ranked by unique visitors (`it\|ch\|de\|fi\|be\|dk\|nl\|no\|se\|pl\|uk\|ie\|fr\|lu\|hu`, same `?period` options) |
+| `GET`  | `/stations/:id`               | Get station with trains (`?type=arrivals\|departures`)                                                                                                  |
+| `GET`  | `/stations/:id/lines`         | Lines serving a station, without track                                                                                                                  |
+| `GET`  | `/stations/:id/lines.geojson` | Lines serving a station as GeoJSON with full track                                                                                                      |
+| `GET`  | `/stations/:id/stats`         | Get station visit stats (`?period=hour\|day\|week\|month`, default: `day`)                                                                              |
+| `GET`  | `/analytics/overview`         | Get global analytics (total visits, unique visitors, country breakdown)                                                                                 |
 
 ### `GET /operators`
 
@@ -68,7 +68,7 @@ Returns `application/geo+json` FeatureCollection consumed directly by Mapbox GL 
 
 - No params: all stations (pre-serialized for performance)
 - `?type=rail|metro|light`: filter by station type
-- `?country=it|ch|de|fi|be|dk|nl|no|se|pl|uk|ie|fr|lu`: filter by country
+- `?country=it|ch|de|fi|be|dk|nl|no|se|pl|uk|ie|fr|lu|hu`: filter by country
 - Filters can be combined: `?type=rail&country=it`
 
 ### Lines
@@ -92,7 +92,7 @@ them, and empty values mean no filter:
 
 - `?id=it-milano-m1,it-milano-m2`: line IDs
 - `?q=m3`: case- and diacritic-insensitive text match on line ID, code, name and route codes
-- `?country=it|ch|de|fi|be|dk|nl|no|se|pl|uk|ie|fr|lu`: country, taken from the line ID prefix
+- `?country=it|ch|de|fi|be|dk|nl|no|se|pl|uk|ie|fr|lu|hu`: country, taken from the line ID prefix
 - `?type=metro|light`: line type
 - `?operator=atm-milano`: operator slug, as listed by `/operators`
 
@@ -221,7 +221,8 @@ src/
 │   ├── uk.ts          # UK National Rail API scraper
 │   ├── ireland.ts     # Irish Rail API scraper
 │   ├── france.ts      # French SNCF (Navitia) API scraper
-│   └── luxembourg.ts  # Mobiliteit.lu departures (CFL rail)
+│   ├── luxembourg.ts  # Mobiliteit.lu departures (CFL rail)
+│   └── hungary.ts     # MÁVPlusz (OTP2 GraphQL) arrivals and departures
 ├── analytics.ts   # Cloudflare Analytics Engine integration for visits and provider metrics
 ├── search.ts      # Deterministic station search
 └── constants.ts   # Shared constants (cache TTL, timeouts, validation)

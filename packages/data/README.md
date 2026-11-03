@@ -111,6 +111,7 @@ getCountry("UK1072"); // "uk"
 getCountry("IE360"); // "ie"
 getCountry("FR751008"); // "fr"
 getCountry("LU200405060"); // "lu"
+getCountry("HU5510033"); // "hu"
 getCountry("IT01700", { format: "name" }); // "Italy"
 ```
 

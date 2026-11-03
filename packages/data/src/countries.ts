@@ -13,6 +13,7 @@ export const COUNTRY_MAP = {
   de: "Germany",
   pl: "Poland",
   fr: "France",
+  hu: "Hungary",
 } as const;
 
 export type CountryCode = keyof typeof COUNTRY_MAP;
