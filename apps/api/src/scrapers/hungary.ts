@@ -363,11 +363,17 @@ function dedupeSortLimit(trains: MappedTrain[], type: "arrivals" | "departures")
 
   for (const mapped of trains) {
     const services = servicesBySecond.get(mapped.scheduledSeconds) ?? [];
-    const service = services.find((members) =>
+    const [service, ...bridgedServices] = services.filter((members) =>
       members.some((member) => isSameService(member, mapped)),
     );
-    if (service) service.push(mapped);
-    else services.push([mapped]);
+    if (service) {
+      // A joined-train row can connect several previously separate services.
+      for (const bridged of bridgedServices) {
+        service.push(...bridged);
+        services.splice(services.indexOf(bridged), 1);
+      }
+      service.push(mapped);
+    } else services.push([mapped]);
     servicesBySecond.set(mapped.scheduledSeconds, services);
   }
 
