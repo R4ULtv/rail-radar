@@ -5514,25 +5514,40 @@
     "logoPath": "es/renfe",
     "countries": ["international", "fr"],
     "operatorTypes": ["passenger"],
-    "bounds": [-3.8, 40.3, 5.5, 45.9],
-    "description": "Renfe operates AVE high-speed passenger services between Spain and France, linking Barcelona with Lyon and Madrid with Marseille via Barcelona and southern France.",
+    "bounds": [-9.3, 36, 5.5, 45.9],
+    "description": "Renfe is Spain's state-owned national passenger railway operator, created in 2005 when the former RENFE was split into separate operator and infrastructure companies. It runs AVE, Avlo, Alvia and Intercity long-distance trains, Media Distancia regional services and Cercanías/Rodalies commuter networks around the main cities. AVE trains also run from Spain to France, reaching Lyon and Marseille.",
     "website": "https://www.renfe.com",
-    "founded": null,
-    "headquarters": null,
+    "founded": 2005,
+    "headquarters": "Madrid, Spain",
     "networkKm": null,
-    "annualPassengers": null,
-    "serviceTypes": ["high-speed", "international"],
-    "parentCompany": null,
+    "annualPassengers": 531400000,
+    "serviceTypes": ["high-speed", "intercity", "regional", "commuter", "international"],
+    "parentCompany": "Spanish State",
     "links": [
       {
-        "label": "Official website",
+        "label": "Official Site",
         "url": "https://www.renfe.com",
         "type": "website"
       },
       {
-        "label": "Operator information",
+        "label": "Timetables",
+        "url": "https://www.renfe.com/es/es/viajar/informacion-util/horarios",
+        "type": "timetables"
+      },
+      {
+        "label": "AVE France destinations",
         "url": "https://www.renfe.com/es/es/viajar/prepara-tu-viaje/ave-francia/destinos",
         "type": "website"
+      },
+      {
+        "label": "Open Data (GTFS)",
+        "url": "https://data.renfe.com/dataset/horarios-de-alta-velocidad-larga-distancia-y-media-distancia",
+        "type": "api"
+      },
+      {
+        "label": "Wikipedia",
+        "url": "https://en.wikipedia.org/wiki/Renfe",
+        "type": "wikipedia"
       }
     ]
   },
