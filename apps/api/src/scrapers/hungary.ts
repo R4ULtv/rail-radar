@@ -40,6 +40,7 @@ const BOARD_QUERY = `query Board($id: String!, $start: Long!, $range: Int!, $n: 
         gtfsId tripShortName
         route { longName mode agency { gtfsId } }
         departureStoptime { stop { name } }
+        alerts { alertHeaderText alertDescriptionText effectiveEndDate }
       }
     }
   }
@@ -59,6 +60,10 @@ const AGENCY_BRANDS: Record<string, string> = {
   "1:196": "CFR Călători",
   "1:120": "UZ",
 };
+
+// Agencies whose trip numbers are the Hungarian train numbers; through-car
+// portions of foreign railways carry prefixed numbers (10476, 40347).
+const HOME_AGENCIES = new Set(["1:198", "1:1164", "1:1663", "1:134"]);
 
 // Same train number at the same minute appears under several products
 // (e.g. "706 NAPFÉNY gyorsvonat" and "706 NAPFÉNY InterCity"). Keep the
@@ -107,7 +112,14 @@ interface OtpStoptime {
       agency: { gtfsId: string } | null;
     } | null;
     departureStoptime: { stop: { name: string | null } | null } | null;
+    alerts: OtpAlert[] | null;
   } | null;
+}
+
+interface OtpAlert {
+  alertHeaderText: string | null;
+  alertDescriptionText: string | null;
+  effectiveEndDate: number | null;
 }
 
 interface OtpBoardResponse {
@@ -120,7 +132,14 @@ interface OtpBoardResponse {
 interface MappedTrain {
   train: Train;
   scheduledSeconds: number;
-  rank: number;
+  categoryRank: number;
+  hasRealtime: boolean;
+  agencyId: string;
+  /** Named-train parts, e.g. ["DACIA", "RUTHENIA"] for "40347 DACIA - RUTHENIA gyorsvonat". */
+  names: string[];
+  origin: string | null;
+  destination: string | null;
+  alerts: string[];
 }
 
 const HTML_TAG_REGEX = /<\/?[a-z][^>]*>/gi;
@@ -169,6 +188,32 @@ function parseCategory(routeLongName: string | null): string | null {
   return CATEGORY_ALIASES[token.toLowerCase()] ?? token;
 }
 
+/**
+ * Names the trip carries, from "476 METROPOL EuroNight" or "40347 DACIA - RUTHENIA
+ * gyorsvonat": upper-case words after the number, before the mixed-case product.
+ * Joined trains list each part. Route longNames list every train on the route.
+ */
+function parseTrainNames(tripShortName: string | null): string[] {
+  const words = cleanLabel(tripShortName)?.split(" ").slice(1) ?? [];
+  const nameEnd = words.findIndex((word) => word !== word.toLocaleUpperCase("hu"));
+  return words
+    .slice(0, nameEnd === -1 ? undefined : nameEnd)
+    .join(" ")
+    .split(/\s+-\s+|\//)
+    .map((name) => name.trim())
+    .filter((name) => /\p{L}/u.test(name));
+}
+
+function parseAlerts(alerts: OtpAlert[] | null | undefined, nowMs: number): string[] {
+  const texts = (alerts ?? [])
+    .filter((alert) => alert.effectiveEndDate === null || alert.effectiveEndDate * 1000 >= nowMs)
+    .map((alert) =>
+      cleanLabel(alert.alertDescriptionText ?? alert.alertHeaderText)?.replace(/[;:]$/, ""),
+    )
+    .filter((text): text is string => Boolean(text));
+  return [...new Set(texts)];
+}
+
 function categoryRank(category: string | null): number {
   if (!category) return -1;
   // Suburban lines (S70, Z30, G43) rank with plain stopping trains.
@@ -213,15 +258,24 @@ function mapStoptime(
   if (!cancelled && actualSeconds * 1000 < nowMs - RECENT_TRAIN_SECONDS * 1000) return null;
 
   const category = parseCategory(stoptime.trip.route.longName);
+  const agencyId = stoptime.trip.route.agency?.gtfsId ?? "";
+  const origin = cleanLabel(stoptime.trip.departureStoptime?.stop?.name);
+  const destination = cleanLabel(stoptime.headsign);
   const place = isDeparture
-    ? { destination: cleanLabel(stoptime.headsign) ?? undefined }
-    : { origin: cleanLabel(stoptime.trip.departureStoptime?.stop?.name) ?? undefined };
+    ? { destination: destination ?? undefined }
+    : { origin: origin ?? undefined };
 
   return {
     scheduledSeconds,
-    rank: categoryRank(category) * 2 + (hasRealtime ? 1 : 0),
+    categoryRank: categoryRank(category),
+    hasRealtime,
+    agencyId,
+    names: parseTrainNames(stoptime.trip.tripShortName),
+    origin,
+    destination,
+    alerts: parseAlerts(stoptime.trip.alerts, nowMs),
     train: {
-      brand: AGENCY_BRANDS[stoptime.trip.route.agency?.gtfsId ?? ""] ?? null,
+      brand: AGENCY_BRANDS[agencyId] ?? null,
       category,
       trainNumber: parseTrainNumber(stoptime),
       ...place,
@@ -237,25 +291,90 @@ function mapStoptime(
   };
 }
 
-function dedupeSortLimit(trains: MappedTrain[]): Train[] {
-  const byService = new Map<string, MappedTrain>();
+/**
+ * One service can appear as several trips: the same number under two products,
+ * or a named train with through-car portions under their own numbers (EN 476
+ * METROPOL departs with 10476 to Praha and 40476 to Berlin). Portions share a
+ * name and one end of the journey; opposite-direction trains share neither.
+ */
+function isSameService(a: MappedTrain, b: MappedTrain): boolean {
+  if (a.train.trainNumber === b.train.trainNumber) return true;
+  if (!a.names.some((name) => b.names.includes(name))) return false;
+  return (
+    (a.origin !== null && a.origin === b.origin) ||
+    (a.destination !== null && a.destination === b.destination)
+  );
+}
 
-  for (const mapped of trains) {
-    const key = `${mapped.train.trainNumber}|${mapped.scheduledSeconds}`;
-    const existing = byService.get(key);
-    if (!existing || mapped.rank > existing.rank) {
-      byService.set(key, {
-        ...mapped,
-        train: {
-          ...mapped.train,
-          platform: mapped.train.platform ?? existing?.train.platform ?? null,
-        },
-      });
-    }
+function trainNumberValue(train: Train): number {
+  return Number.parseInt(train.trainNumber, 10) || Number.MAX_SAFE_INTEGER;
+}
+
+/** Prefers the most specific product, then the main train over prefixed portions. */
+function comparePrimary(a: MappedTrain, b: MappedTrain): number {
+  return (
+    b.categoryRank - a.categoryRank ||
+    a.train.trainNumber.length - b.train.trainNumber.length ||
+    Number(HOME_AGENCIES.has(b.agencyId)) - Number(HOME_AGENCIES.has(a.agencyId)) ||
+    Number(b.hasRealtime) - Number(a.hasRealtime) ||
+    trainNumberValue(a.train) - trainNumberValue(b.train)
+  );
+}
+
+function mergeService(members: MappedTrain[], type: "arrivals" | "departures"): MappedTrain {
+  const [primary, ...others] = [...members].sort(comparePrimary);
+  if (!primary) throw new Error("Cannot merge an empty service");
+
+  const live = primary.hasRealtime ? primary : (others.find((m) => m.hasRealtime) ?? primary);
+  const place = (m: MappedTrain) => (type === "departures" ? m.destination : m.origin);
+  const primaryPlace = place(primary);
+  // Same-number rows of one agency are one train sold as two products, often
+  // with the domestic one ending at the border; they continue nowhere else.
+  const otherPlaces = [
+    ...new Set(
+      others
+        .filter(
+          (m) =>
+            m.train.trainNumber !== primary.train.trainNumber || m.agencyId !== primary.agencyId,
+        )
+        .map(place)
+        .filter((p): p is string => p !== null && p !== primaryPlace),
+    ),
+  ];
+  const info = [...new Set(members.flatMap((m) => m.alerts))];
+  if (otherPlaces.length > 0) {
+    info.push(`${type === "departures" ? "Also to" : "Also from"} ${otherPlaces.join(", ")}`);
   }
 
-  return [...byService.values()]
-    .sort((a, b) => a.scheduledSeconds - b.scheduledSeconds || b.rank - a.rank)
+  return {
+    ...primary,
+    train: {
+      ...primary.train,
+      platform: [primary, ...others].map((m) => m.train.platform).find((p) => p !== null) ?? null,
+      delay: live.train.delay,
+      status: primary.train.status === "cancelled" ? "cancelled" : live.train.status,
+      info: info.join(" · ") || null,
+    },
+  };
+}
+
+function dedupeSortLimit(trains: MappedTrain[], type: "arrivals" | "departures"): Train[] {
+  const servicesBySecond = new Map<number, MappedTrain[][]>();
+
+  for (const mapped of trains) {
+    const services = servicesBySecond.get(mapped.scheduledSeconds) ?? [];
+    const service = services.find((members) =>
+      members.some((member) => isSameService(member, mapped)),
+    );
+    if (service) service.push(mapped);
+    else services.push([mapped]);
+    servicesBySecond.set(mapped.scheduledSeconds, services);
+  }
+
+  return [...servicesBySecond.values()]
+    .flat()
+    .map((members) => mergeService(members, type))
+    .sort((a, b) => a.scheduledSeconds - b.scheduledSeconds || b.categoryRank - a.categoryRank)
     .slice(0, TRAIN_LIMIT)
     .map(({ train }) => train);
 }
@@ -323,7 +442,7 @@ export async function scrapeHungaryTrains(
     .filter((train): train is MappedTrain => train !== null);
 
   return {
-    trains: dedupeSortLimit(mapped),
+    trains: dedupeSortLimit(mapped, type),
     info: null,
     timing: { fetchMs },
   };
