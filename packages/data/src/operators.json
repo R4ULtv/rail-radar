@@ -6401,5 +6401,104 @@
         "type": "website"
       }
     ]
+  },
+  {
+    "slug": "cd",
+    "name": "České dráhy",
+    "logoPath": "cz/cd",
+    "countries": ["international", "de", "pl", "dk", "hu"],
+    "operatorTypes": ["passenger"],
+    "bounds": [9.9, 46.6, 21.3, 55.7],
+    "description": "České dráhy (ČD) is the Czech state-owned national railway operator and the country's largest passenger train operator. It runs long-distance and regional services across Czechia under public-service contracts, and international trains to Germany, Poland, Austria, Slovakia, Hungary and Denmark. ČD is also the parent of freight operator ČD Cargo.",
+    "website": "https://www.cd.cz/",
+    "founded": 2003,
+    "headquarters": "Prague, Czechia",
+    "networkKm": null,
+    "annualPassengers": 168000000,
+    "serviceTypes": ["intercity", "regional", "commuter", "night-train", "international"],
+    "parentCompany": "Czech Republic",
+    "links": [
+      {
+        "label": "Official Site",
+        "url": "https://www.cd.cz/",
+        "type": "website"
+      },
+      {
+        "label": "Timetables",
+        "url": "https://www.cd.cz/en/spojeni-a-jizdenka/",
+        "type": "timetables"
+      },
+      {
+        "label": "Wikipedia",
+        "url": "https://en.wikipedia.org/wiki/%C4%8Cesk%C3%A9_dr%C3%A1hy",
+        "type": "wikipedia"
+      }
+    ]
+  },
+  {
+    "slug": "cfr-calatori",
+    "name": "CFR Călători",
+    "logoPath": "ro/cfr-calatori",
+    "countries": ["international", "hu"],
+    "operatorTypes": ["passenger"],
+    "bounds": [19, 43.6, 29.7, 48.3],
+    "description": "CFR Călători is the state-owned national passenger railway operator of Romania, created in 1998 when the former Romanian railways were split into separate companies. It runs InterCity, InterRegio and Regio services across the country, plus international trains to neighbouring states, over infrastructure managed by CFR Infrastructură.",
+    "website": "https://www.cfrcalatori.ro",
+    "founded": 1998,
+    "headquarters": "Bucharest, Romania",
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["intercity", "regional", "night-train", "international"],
+    "parentCompany": "Romanian State",
+    "links": [
+      {
+        "label": "Official Site",
+        "url": "https://www.cfrcalatori.ro",
+        "type": "website"
+      },
+      {
+        "label": "Timetables",
+        "url": "https://bilete.cfrcalatori.ro/en-GB/Itineraries",
+        "type": "timetables"
+      },
+      {
+        "label": "Wikipedia",
+        "url": "https://en.wikipedia.org/wiki/CFR_C%C4%83l%C4%83tori",
+        "type": "wikipedia"
+      }
+    ]
+  },
+  {
+    "slug": "uz",
+    "name": "Ukrzaliznytsia",
+    "logoPath": "ua/uz",
+    "countries": ["international", "hu"],
+    "operatorTypes": ["passenger", "freight"],
+    "bounds": [16.9, 44.3, 40.3, 52.4],
+    "description": "Ukrzaliznytsia (UZ) is Ukraine's state-owned national railway company. It runs passenger and freight trains and manages the country's rail network. Its international passenger trains link Ukraine with neighbouring countries, including through cars to Budapest and Vienna over the Chop–Záhony border crossing.",
+    "website": "https://uz.gov.ua",
+    "founded": 1991,
+    "headquarters": "Kyiv, Ukraine",
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["intercity", "regional", "night-train", "international"],
+    "parentCompany": "Ukrainian State",
+    "links": [
+      {
+        "label": "Official Site",
+        "url": "https://uz.gov.ua",
+        "type": "website"
+      },
+      {
+        "label": "Timetables",
+        "url": "https://booking.uz.gov.ua",
+        "type": "timetables"
+      },
+      {
+        "label": "Wikipedia",
+        "url": "https://en.wikipedia.org/wiki/Ukrainian_Railways",
+        "type": "wikipedia"
+      }
+    ]
   }
 ]

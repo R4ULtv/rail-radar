@@ -55,6 +55,9 @@ const AGENCY_BRANDS: Record<string, string> = {
   "1:134": "GYSEV",
   "1:204": "OBB",
   "1:209": "PKP Intercity",
+  "1:197": "ČD",
+  "1:196": "CFR Călători",
+  "1:120": "UZ",
 };
 
 // Same train number at the same minute appears under several products
