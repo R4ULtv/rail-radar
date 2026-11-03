@@ -183668,45 +183668,6 @@
     {
       "type": "Feature",
       "properties": {
-        "id": "HU5599001",
-        "name": "Alcsúti arborétum",
-        "type": "rail",
-        "importance": 4
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [18.58364, 47.42393]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "HU5599002",
-        "name": "Felcsút",
-        "type": "rail",
-        "importance": 4
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [18.58838, 47.44155]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "HU5599003",
-        "name": "Puskás Akadémia",
-        "type": "rail",
-        "importance": 4
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [18.59474, 47.46618]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
         "id": "HUL001",
         "name": "Batthyány tér",
         "type": "light",
