@@ -308949,6 +308949,244 @@
     {
       "type": "Feature",
       "properties": {
+        "id": "HUF00001",
+        "name": "BILK Kombiterminál",
+        "type": "freight",
+        "importance": 3,
+        "kind": "intermodal"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [19.11742, 47.37746]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "HUF00002",
+        "name": "Budapest Szabadkikötő",
+        "type": "freight",
+        "importance": 3,
+        "kind": "port"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [19.06343, 47.4453]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "HUF00003",
+        "name": "East-West Gate",
+        "type": "freight",
+        "importance": 3,
+        "kind": "intermodal"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [22.11558, 48.27481]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "HUF00004",
+        "name": "Eperjeske-Rendező",
+        "type": "freight",
+        "importance": 3,
+        "kind": "marshalling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [22.19553, 48.35978]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "HUF00005",
+        "name": "Ferencváros-Rendező",
+        "type": "freight",
+        "importance": 3,
+        "kind": "marshalling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [19.0968, 47.4606]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "HUF00006",
+        "name": "Szolnok-Rendező",
+        "type": "freight",
+        "importance": 3,
+        "kind": "marshalling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [20.17042, 47.18346]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "HUF00007",
+        "name": "Dunaújvárosi kikötő",
+        "type": "freight",
+        "importance": 4,
+        "kind": "port"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [18.94554, 46.97469]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "HUF00008",
+        "name": "Győr-Gönyű kikötő",
+        "type": "freight",
+        "importance": 4,
+        "kind": "port"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [17.78243, 47.73455]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "HUF00009",
+        "name": "Győr-Rendező",
+        "type": "freight",
+        "importance": 4,
+        "kind": "marshalling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [17.64983, 47.68517]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "HUF00010",
+        "name": "Hatvan-Rendező",
+        "type": "freight",
+        "importance": 4,
+        "kind": "marshalling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [19.66284, 47.65145]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "HUF00011",
+        "name": "Komárom-Rendező",
+        "type": "freight",
+        "importance": 4,
+        "kind": "marshalling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [18.12573, 47.74816]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "HUF00012",
+        "name": "Miskolc-Rendező",
+        "type": "freight",
+        "importance": 4,
+        "kind": "marshalling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [20.80061, 48.09301]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "HUF00013",
+        "name": "Sopron-Rendező",
+        "type": "freight",
+        "importance": 4,
+        "kind": "marshalling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [16.60264, 47.66621]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "HUF00014",
+        "name": "Szeged-Rendező",
+        "type": "freight",
+        "importance": 4,
+        "kind": "marshalling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [20.1254, 46.23013]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "HUF00015",
+        "name": "Szombathely-Rendező",
+        "type": "freight",
+        "importance": 4,
+        "kind": "marshalling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [16.63715, 47.22934]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "HUF00016",
+        "name": "Záhony-Átrakó",
+        "type": "freight",
+        "importance": 4,
+        "kind": "intermodal"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [22.1578, 48.37982]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "HUF00017",
+        "name": "Záhony-Rendező",
+        "type": "freight",
+        "importance": 4,
+        "kind": "marshalling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [22.17345, 48.39173]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
         "id": "IEF00001",
         "name": "Dublin Port (North Wall)",
         "type": "freight",
