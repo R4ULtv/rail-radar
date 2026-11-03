@@ -35,7 +35,7 @@ export const Route = createFileRoute("/app")({
 const metadata: Metadata = {
   title: "Mobile App",
   description:
-    "Join the Rail Radar Android beta on Google Play or get notified when the iPhone app is available.",
+    "Try the Rail Radar Android beta for free. The public release will be a paid app. Join the beta or get notified when the iPhone app is available.",
   alternates: {
     canonical: "/app",
   },
@@ -56,7 +56,6 @@ const metadata: Metadata = {
 
 const TEST_DAYS = 14;
 const APP_PRICE = "€3";
-const FREE_BETA_PLACES = 20;
 const GOOGLE_MAIL_DOMAINS = new Set(["gmail.com", "googlemail.com"]);
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -67,12 +66,13 @@ const steps = [
   },
   {
     title: "Get the invite",
-    description: `Once we add you to the test, you'll get an email with a link to join it on Google Play. If you receive one of the ${FREE_BETA_PLACES} free places, your invite will include a promo code.`,
+    description:
+      "Once we add you to the test, you'll get an email with a link to join it on Google Play and a promo code to install the beta for free.",
   },
   {
     title: "Install from Google Play",
     description:
-      "Open the link on your phone and accept the invite. Then buy Rail Radar, redeem your promo code, or wait for the public release.",
+      "Open the link on your phone, accept the invite and redeem your promo code. Testing the beta is free; the public release will be a paid app.",
   },
   {
     title: `Keep it for at least ${TEST_DAYS} days`,
@@ -153,11 +153,12 @@ function AppPage() {
 
       <div className="mt-8 mb-5">
         <h1 className="text-3xl font-semibold tracking-tight text-balance sm:text-4xl">
-          Get Rail Radar on your phone before launch.
+          Try Rail Radar for free during the beta.
         </h1>
         <p className="mt-3 text-muted-foreground text-pretty">
           Find nearby departures, search stations offline and follow your position on the map. Join
-          the Android beta now, or get on the iPhone waitlist.
+          the free Android beta now, or get on the iPhone waitlist. The public release will be a
+          paid app.
         </p>
       </div>
 
@@ -302,7 +303,7 @@ function PlatformLogo({ platform, className }: { platform: AppPlatform; classNam
   );
 }
 
-/** Both apps, the price and the free places as rows on a departure board, like the station pages. */
+/** Both apps, free beta access and the launch price as rows on a departure board. */
 function BetaBoard() {
   return (
     <div className="overflow-hidden rounded-4xl bg-card shadow-md ring-1 ring-foreground/10">
@@ -326,24 +327,19 @@ function BetaBoard() {
           status={<span className="text-muted-foreground">Waitlist</span>}
         />
         <BoardRow
+          accent="green"
+          badge={<GiftIcon className="size-5 text-muted-foreground" />}
+          title="Beta access"
+          subtitle="Free during the beta"
+          time={<span className="text-green-600 dark:text-green-400">Free</span>}
+          status={<span className="text-muted-foreground">Code with invite</span>}
+        />
+        <BoardRow
           badge={<TicketIcon className="size-5 text-muted-foreground" />}
-          title="App price"
+          title="Price at launch"
           subtitle="One-time purchase"
           time={APP_PRICE}
           status={<span className="text-muted-foreground">plus VAT</span>}
-        />
-        <BoardRow
-          accent="green"
-          badge={<GiftIcon className="size-5 text-muted-foreground" />}
-          title="Free beta access"
-          subtitle={`Limited to ${FREE_BETA_PLACES} Android testers`}
-          time={
-            <>
-              <s className="font-normal text-muted-foreground decoration-1">{APP_PRICE}</s>{" "}
-              <span className="text-green-600 dark:text-green-400">Free</span>
-            </>
-          }
-          status={<span className="text-muted-foreground">Code with invite</span>}
         />
       </ul>
       <p className="m-3 flex items-center gap-2.5 rounded-3xl bg-muted/50 px-3.5 py-2.5 text-xs font-medium uppercase tracking-wide text-muted-foreground md:mx-4">
@@ -651,15 +647,12 @@ function SignupCard({
                         {isIos ? (
                           "Joining the waitlist is free."
                         ) : !isAndroid ? (
-                          "Signing up is free. The website stays free for everyone."
+                          "The Android beta is free to test. The public release will be a paid app."
                         ) : (
                           <>
-                            <strong className="font-medium">
-                              The app is free for {FREE_BETA_PLACES} beta testers.
-                            </strong>{" "}
-                            If you receive a free place, your invite will include a Google Play
-                            promo code. Otherwise, the app costs {APP_PRICE} plus VAT. Signing up is
-                            free.
+                            <strong className="font-medium">Free to test during the beta.</strong>{" "}
+                            Your invite includes a Google Play promo code. The public release will
+                            cost {APP_PRICE} plus VAT as a one-time purchase.
                           </>
                         )}
                       </span>
@@ -787,7 +780,7 @@ function BoardingPass({
         <p className="mt-1 text-sm leading-6 text-muted-foreground text-pretty">
           {isIos
             ? "We'll email you as soon as the iPhone app is ready to try."
-            : "We'll email your invite once we add you to the test. Installing the beta is up to you, and you can wait for the public release instead."}
+            : "We'll email your invite and promo code once we add you to the test, so you can install the beta for free. The public release will be a paid app."}
         </p>
         <Button variant="outline" className="mt-4 w-full sm:w-auto" onClick={onReset}>
           Use a different email
