@@ -169761,7 +169761,7 @@
         "id": "HU5501024",
         "name": "Budapest-Kelenföld",
         "type": "rail",
-        "importance": 1
+        "importance": 2
       },
       "geometry": {
         "type": "Point",
@@ -175052,7 +175052,7 @@
         "id": "HU5510033",
         "name": "Budapest-Nyugati",
         "type": "rail",
-        "importance": 1
+        "importance": 2
       },
       "geometry": {
         "type": "Point",
