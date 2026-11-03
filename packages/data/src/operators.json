@@ -1321,9 +1321,9 @@
     "slug": "obb",
     "name": "ÖBB",
     "logoPath": "at/obb",
-    "countries": ["international", "it", "ch", "de", "nl"],
+    "countries": ["international", "it", "ch", "de", "nl", "hu"],
     "operatorTypes": ["passenger"],
-    "bounds": [4.7, 41.8, 17.2, 53.7],
+    "bounds": [4.7, 41.8, 19.2, 53.7],
     "description": "The Austrian Federal Railways (ÖBB) operates a comprehensive domestic and international network. It is Europe's leading night train operator through its expansive Nightjet network, while its high-speed Railjet services provide premier daytime connections across Austria, Germany, Switzerland, and Italy.",
     "website": "https://www.oebb.at",
     "founded": 1947,
@@ -6220,6 +6220,184 @@
       {
         "label": "Services and operator information",
         "url": "https://www.keolis.nl/reisgebieden/",
+        "type": "website"
+      }
+    ]
+  },
+  {
+    "slug": "mav",
+    "name": "MÁV",
+    "logoPath": "hu/mav",
+    "countries": ["hu"],
+    "operatorTypes": ["passenger", "light-rail"],
+    "bounds": [16.21, 45.78, 22.85, 48.61],
+    "description": "MÁV, the Hungarian State Railways, runs most passenger trains in Hungary, from Budapest suburban services to InterCity and international EuroCity trains. Its network radiates from the three Budapest terminals – Keleti, Nyugati and Déli – to every region of the country. MÁV also operates the Szeged–Hódmezővásárhely tram-train, and its subsidiary MÁV-HÉV runs the Budapest suburban HÉV lines.",
+    "website": "https://www.mavcsoport.hu",
+    "founded": 1868,
+    "headquarters": "Budapest, Hungary",
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["intercity", "regional", "commuter", "international"],
+    "parentCompany": "Hungarian State",
+    "links": [
+      {
+        "label": "Official Site",
+        "url": "https://www.mavcsoport.hu",
+        "type": "website"
+      },
+      {
+        "label": "Journey planner",
+        "url": "https://mavplusz.hu",
+        "type": "timetables"
+      },
+      {
+        "label": "Wikipedia",
+        "url": "https://en.wikipedia.org/wiki/M%C3%81V",
+        "type": "wikipedia"
+      }
+    ]
+  },
+  {
+    "slug": "gysev",
+    "name": "GYSEV",
+    "logoPath": "hu/gysev",
+    "countries": ["hu"],
+    "operatorTypes": ["passenger"],
+    "bounds": [16.1, 46.85, 17.7, 47.97],
+    "description": "GYSEV (Győr–Sopron–Ebenfurti Vasút), known in Austria as Raaberbahn, is a jointly Hungarian and Austrian owned railway in western Hungary. It runs regional and fast trains around Sopron, Szombathely and Győr, plus cross-border services towards Ebenfurth, Wiener Neustadt and Neusiedl am See. It is one of the oldest railway companies in Europe still operating under its original name.",
+    "website": "https://www.gysev.hu",
+    "founded": 1872,
+    "headquarters": "Sopron, Hungary",
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["regional", "international"],
+    "parentCompany": null,
+    "links": [
+      {
+        "label": "Official Site",
+        "url": "https://www.gysev.hu",
+        "type": "website"
+      },
+      {
+        "label": "Wikipedia",
+        "url": "https://en.wikipedia.org/wiki/Raab-Oedenburg-Ebenfurter_Eisenbahn",
+        "type": "wikipedia"
+      }
+    ]
+  },
+  {
+    "slug": "mav-hev",
+    "name": "MÁV-HÉV",
+    "logoPath": "hu/mav-hev",
+    "countries": ["hu"],
+    "operatorTypes": ["light-rail"],
+    "bounds": [18.93, 47.17, 19.37, 47.67],
+    "description": "MÁV-HÉV operates Budapest’s five suburban HÉV lines, which link the city with Szentendre, Ráckeve, Csepel, Gödöllő and Csömör. The lines start at Batthyány tér, Közvágóhíd, Boráros tér and Örs vezér tere, with connections to the metro and tram network. The company took over the HÉV from BKV in 2016 and is part of the MÁV Group.",
+    "website": "https://www.mavcsoport.hu",
+    "founded": 2016,
+    "headquarters": "Budapest, Hungary",
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["commuter"],
+    "parentCompany": "MÁV",
+    "links": [
+      {
+        "label": "Official Site",
+        "url": "https://www.mavcsoport.hu",
+        "type": "website"
+      },
+      {
+        "label": "Journey planner",
+        "url": "https://mavplusz.hu",
+        "type": "timetables"
+      },
+      {
+        "label": "Wikipedia",
+        "url": "https://en.wikipedia.org/wiki/BH%C3%89V",
+        "type": "wikipedia"
+      }
+    ]
+  },
+  {
+    "slug": "bkv",
+    "name": "BKV",
+    "logoPath": "hu/bkv",
+    "countries": ["hu"],
+    "operatorTypes": ["metro"],
+    "bounds": [19.01, 47.45, 19.16, 47.57],
+    "description": "BKV (Budapesti Közlekedési Zrt.) operates the Budapest metro on behalf of the transport authority BKK, alongside the city’s trams, buses and trolleybuses. Its four lines include M1, the oldest underground railway in continental Europe, and the automated M4. Deák Ferenc tér is the main interchange between M1, M2 and M3.",
+    "website": "https://bkv.hu",
+    "founded": 1968,
+    "headquarters": "Budapest, Hungary",
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["commuter"],
+    "parentCompany": "City of Budapest",
+    "links": [
+      {
+        "label": "Official Site",
+        "url": "https://bkv.hu",
+        "type": "website"
+      },
+      {
+        "label": "Journey planner",
+        "url": "https://futar.bkk.hu",
+        "type": "timetables"
+      },
+      {
+        "label": "Wikipedia",
+        "url": "https://en.wikipedia.org/wiki/Budapest_Metro",
+        "type": "wikipedia"
+      }
+    ]
+  },
+  {
+    "slug": "rail-cargo-hungaria",
+    "name": "Rail Cargo Hungaria",
+    "logoPath": "hu/rail-cargo-hungaria",
+    "countries": ["hu"],
+    "operatorTypes": ["freight"],
+    "bounds": [16.21, 45.78, 22.85, 48.61],
+    "description": "Rail Cargo Hungaria is Hungary’s largest rail freight operator, formed from the former MÁV Cargo after its sale to the Austrian Federal Railways in 2008. As part of the ÖBB Rail Cargo Group, it carries bulk, wagonload and intermodal traffic within Hungary and on transit corridors between Western Europe, the Balkans and Ukraine.",
+    "website": "https://www.railcargo.com/hu",
+    "founded": 2008,
+    "headquarters": "Budapest, Hungary",
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["wagonload", "block-train", "intermodal", "international"],
+    "parentCompany": "ÖBB Rail Cargo Group",
+    "links": [
+      {
+        "label": "Official Site",
+        "url": "https://www.railcargo.com/hu",
+        "type": "website"
+      },
+      {
+        "label": "Wikipedia",
+        "url": "https://en.wikipedia.org/wiki/Rail_Cargo_Hungaria",
+        "type": "wikipedia"
+      }
+    ]
+  },
+  {
+    "slug": "gysev-cargo",
+    "name": "GYSEV Cargo",
+    "logoPath": "hu/gysev",
+    "countries": ["hu"],
+    "operatorTypes": ["freight"],
+    "bounds": [16.21, 45.78, 22.85, 48.61],
+    "description": "GYSEV Cargo is the rail freight subsidiary of GYSEV, based in Sopron. It runs block trains, wagonload and intermodal services across Hungary and on cross-border routes into Austria and neighbouring countries.",
+    "website": "https://www.gysevcargo.hu",
+    "founded": 2011,
+    "headquarters": "Sopron, Hungary",
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["wagonload", "block-train", "intermodal", "international"],
+    "parentCompany": "GYSEV",
+    "links": [
+      {
+        "label": "Official Site",
+        "url": "https://www.gysevcargo.hu",
         "type": "website"
       }
     ]

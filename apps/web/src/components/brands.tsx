@@ -161,6 +161,9 @@ const brandPaths: Record<string, string> = {
   ht: "uk/ht",
   // Irish brands
   ir: "ie/ir",
+  // Hungarian brands
+  máv: "hu/mav",
+  gysev: "hu/gysev",
 };
 
 // Aliases for brands that share icons
@@ -250,6 +253,10 @@ const brandAliases: Record<string, string> = {
   "go-ahead nordic as": "go-ahead norge",
   oresundstag: "øresundståg",
   skanetrafiken: "skånetrafiken",
+  // Hungarian brands
+  mav: "máv",
+  "máv-start": "máv",
+  "mav-start": "máv",
 };
 
 function normalizeBrandName(brand: string): string {
@@ -422,6 +429,9 @@ const brandSlugMap: Record<string, string> = {
   cc: "c2c",
   // Irish brands
   ir: "ir",
+  // Hungarian brands
+  máv: "mav",
+  gysev: "gysev",
 };
 
 const brandSlugs = new Set(Object.values(brandSlugMap));
