@@ -1,22 +1,22 @@
 <script lang="ts">
   import type { Line, Operator } from "@repo/data";
   import { ExternalLinkIcon, PlusIcon, SaveIcon, Trash2Icon, XIcon } from "@lucide/svelte";
-  import { Button } from "$lib/components/ui/button";
-  import { Badge } from "$lib/components/ui/badge";
-  import * as Field from "$lib/components/ui/field";
-  import * as Alert from "$lib/components/ui/alert";
-  import { Input } from "$lib/components/ui/input";
-  import { Textarea } from "$lib/components/ui/textarea";
-  import { ScrollArea } from "$lib/components/ui/scroll-area";
-  import * as Select from "$lib/components/ui/select";
-  import OperatorChoices from "$lib/components/OperatorChoices.svelte";
-  import OperatorLogo from "$lib/components/OperatorLogo.svelte";
+  import { Button } from "#lib/components/ui/button/index.ts";
+  import { Badge } from "#lib/components/ui/badge/index.ts";
+  import * as Field from "#lib/components/ui/field/index.ts";
+  import * as Alert from "#lib/components/ui/alert/index.ts";
+  import { Input } from "#lib/components/ui/input/index.ts";
+  import { Textarea } from "#lib/components/ui/textarea/index.ts";
+  import { ScrollArea } from "#lib/components/ui/scroll-area/index.ts";
+  import * as Select from "#lib/components/ui/select/index.ts";
+  import OperatorChoices from "#lib/components/OperatorChoices.svelte";
+  import OperatorLogo from "#lib/components/OperatorLogo.svelte";
   import {
     operatorCountryLabels,
     operatorLinkTypes,
     operatorTypeLabels,
     serviceTypeLabels,
-  } from "$lib/operators";
+  } from "#lib/operators.ts";
 
   let {
     draft = $bindable(),

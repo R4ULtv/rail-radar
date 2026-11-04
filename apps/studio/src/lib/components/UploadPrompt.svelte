@@ -1,10 +1,10 @@
 <script lang="ts">
   import { CloudDownloadIcon } from "@lucide/svelte";
-  import { Button } from "$lib/components/ui/button";
-  import * as Card from "$lib/components/ui/card";
-  import StationFileFormatIcon from "$lib/components/StationFileFormatIcon.svelte";
-  import WorkspaceNav from "$lib/components/WorkspaceNav.svelte";
-  import { remoteStationSources, type RemoteStationSourceId } from "$lib/stores/stations";
+  import { Button } from "#lib/components/ui/button/index.ts";
+  import * as Card from "#lib/components/ui/card/index.ts";
+  import StationFileFormatIcon from "#lib/components/StationFileFormatIcon.svelte";
+  import WorkspaceNav from "#lib/components/WorkspaceNav.svelte";
+  import { remoteStationSources, type RemoteStationSourceId } from "#lib/stores/stations.ts";
 
   let {
     error = null,

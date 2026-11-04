@@ -8,15 +8,15 @@
     Trash2Icon,
     XIcon,
   } from "@lucide/svelte";
-  import WikipediaInfo from "$lib/components/WikipediaInfo.svelte";
-  import { Button } from "$lib/components/ui/button";
-  import { Input } from "$lib/components/ui/input";
-  import { Label } from "$lib/components/ui/label";
-  import { ScrollArea } from "$lib/components/ui/scroll-area";
-  import * as Select from "$lib/components/ui/select";
-  import { Separator } from "$lib/components/ui/separator";
-  import { COORDINATE_DECIMAL_PLACES, freightKindLabels, roundCoordinate } from "$lib/stations";
-  import { stationStore } from "$lib/stores/stations";
+  import WikipediaInfo from "#lib/components/WikipediaInfo.svelte";
+  import { Button } from "#lib/components/ui/button/index.ts";
+  import { Input } from "#lib/components/ui/input/index.ts";
+  import { Label } from "#lib/components/ui/label/index.ts";
+  import { ScrollArea } from "#lib/components/ui/scroll-area/index.ts";
+  import * as Select from "#lib/components/ui/select/index.ts";
+  import { Separator } from "#lib/components/ui/separator/index.ts";
+  import { COORDINATE_DECIMAL_PLACES, freightKindLabels, roundCoordinate } from "#lib/stations.ts";
+  import { stationStore } from "#lib/stores/stations.ts";
 
   let {
     station,

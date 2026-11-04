@@ -1,6 +1,6 @@
 <script lang="ts" generics="T extends string">
-  import { Checkbox } from "$lib/components/ui/checkbox";
-  import * as Field from "$lib/components/ui/field";
+  import { Checkbox } from "#lib/components/ui/checkbox/index.ts";
+  import * as Field from "#lib/components/ui/field/index.ts";
 
   let {
     label,

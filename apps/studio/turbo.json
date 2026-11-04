@@ -2,7 +2,7 @@
   "extends": ["//"],
   "tasks": {
     "sync": {
-      "outputs": [".svelte-kit/tsconfig.json", ".svelte-kit/*.d.ts", ".svelte-kit/types/**"]
+      "outputs": ["node_modules/$app/**", ".svelte-kit/types/**"]
     },
     "lint": {
       "dependsOn": ["$TURBO_EXTENDS$", "sync"]

@@ -1,8 +1,8 @@
 <script lang="ts">
   import type { Station } from "@repo/data";
   import { ActivityIcon, DatabaseIcon, GitBranchIcon, MapPinIcon } from "@lucide/svelte";
-  import { STATION_TYPE_COLOR } from "$lib/station-colors";
-  import { COORDINATE_DECIMAL_PLACES } from "$lib/stations";
+  import { STATION_TYPE_COLOR } from "#lib/station-colors.ts";
+  import { COORDINATE_DECIMAL_PLACES } from "#lib/stations.ts";
 
   let {
     stations,

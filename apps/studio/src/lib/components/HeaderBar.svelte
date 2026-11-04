@@ -8,12 +8,12 @@
     Undo2Icon,
     UploadIcon,
   } from "@lucide/svelte";
-  import AppHeader from "$lib/components/AppHeader.svelte";
-  import { Badge } from "$lib/components/ui/badge";
-  import { Button } from "$lib/components/ui/button";
-  import * as DropdownMenu from "$lib/components/ui/dropdown-menu";
-  import StationFileFormatIcon from "$lib/components/StationFileFormatIcon.svelte";
-  import type { StationFileFormat } from "$lib/stations";
+  import AppHeader from "#lib/components/AppHeader.svelte";
+  import { Badge } from "#lib/components/ui/badge/index.ts";
+  import { Button } from "#lib/components/ui/button/index.ts";
+  import * as DropdownMenu from "#lib/components/ui/dropdown-menu/index.ts";
+  import StationFileFormatIcon from "#lib/components/StationFileFormatIcon.svelte";
+  import type { StationFileFormat } from "#lib/stations.ts";
 
   let {
     fileName,

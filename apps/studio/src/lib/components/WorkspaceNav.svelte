@@ -1,7 +1,7 @@
 <script lang="ts">
   import { Building2Icon, MapPinIcon, RouteIcon } from "@lucide/svelte";
   import { page } from "$app/state";
-  import { cn } from "$lib/utils";
+  import { cn } from "#lib/utils.ts";
 
   let { class: className }: { class?: string } = $props();
 

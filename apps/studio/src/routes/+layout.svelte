@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { initPostHog } from "$lib/analytics";
+  import { initPostHog } from "#lib/analytics.ts";
   import { onMount } from "svelte";
   import "../app.css";
 

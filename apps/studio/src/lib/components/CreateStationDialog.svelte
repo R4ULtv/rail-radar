@@ -1,11 +1,11 @@
 <script lang="ts">
   import type { FreightKind, Station } from "@repo/data";
-  import { Button } from "$lib/components/ui/button";
-  import * as Dialog from "$lib/components/ui/dialog";
-  import { Input } from "$lib/components/ui/input";
-  import { Label } from "$lib/components/ui/label";
-  import * as Select from "$lib/components/ui/select";
-  import { freightKindLabels, isValidStationId } from "$lib/stations";
+  import { Button } from "#lib/components/ui/button/index.ts";
+  import * as Dialog from "#lib/components/ui/dialog/index.ts";
+  import { Input } from "#lib/components/ui/input/index.ts";
+  import { Label } from "#lib/components/ui/label/index.ts";
+  import * as Select from "#lib/components/ui/select/index.ts";
+  import { freightKindLabels, isValidStationId } from "#lib/stations.ts";
 
   let {
     open,
