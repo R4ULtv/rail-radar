@@ -435,7 +435,10 @@ function getCategory(entry: JsonRecord): string | null {
 function parseTrainNumber(name: string | null): string | null {
   if (!name) return null;
 
-  const match = name.match(/([A-Za-z]?\d+[A-Za-z]?)$/);
+  // A leading letter belongs to the number only when it stands alone ("E10", "Bus 5A"); in
+  // "IC123" it is the end of the category, so only the digits are the number.
+  const match =
+    name.match(/(?<![A-Za-z\d])([A-Za-z]?\d+[A-Za-z]?)$/) ?? name.match(/(\d+[A-Za-z]?)$/);
   if (match) {
     return match[1] ?? null;
   }

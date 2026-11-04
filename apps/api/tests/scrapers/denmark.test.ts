@@ -411,6 +411,17 @@ describe("scrapeDenmarkTrains", () => {
       expect(trains[0]?.category).toBeNull();
     });
 
+    it("parses the number from entry names with and without a space", async () => {
+      const { trains } = await scrape([
+        entry({ name: "IC123", ProductAtStop: undefined }),
+        entry({ name: "IC 124", ProductAtStop: undefined }),
+        entry({ name: "Re1234A", ProductAtStop: undefined }),
+        entry({ name: "E10", ProductAtStop: undefined }),
+      ]);
+
+      expect(trains.map((train) => train.trainNumber)).toEqual(["123", "124", "1234A", "E10"]);
+    });
+
     it("takes the train number from num, then from the entry name, then from the line", async () => {
       const { trains } = await scrape([
         entry({ name: "IC 999", ProductAtStop: { num: "77" } }),
