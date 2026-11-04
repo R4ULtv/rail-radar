@@ -166,9 +166,11 @@ change.
 ## Preview deployment
 
 Worker Previews use the production custom domain as their base and do not expose `workers.dev`
-URLs. From the `preview` branch, deploy with:
+URLs. Workers Builds deploys the `preview` branch automatically. To deploy by hand from the
+`preview` branch, build first, because `deploy:preview` only deploys the existing `dist`:
 
 ```bash
+pnpm --filter=web build
 pnpm --filter=web deploy:preview
 ```
 
