@@ -1,7 +1,12 @@
 {
   "extends": ["../../.oxlintrc.json"],
   "plugins": ["react"],
-  "ignorePatterns": [".output/**", ".vinxi/**", "src/routeTree.gen.ts"],
+  "ignorePatterns": [
+    ".output/**",
+    ".vinxi/**",
+    "src/routeTree.gen.ts",
+    "worker-configuration.d.ts"
+  ],
   "categories": {
     "correctness": "off"
   },
