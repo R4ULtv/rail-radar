@@ -153,6 +153,12 @@ describe("scrapeLuxembourgTrains", () => {
       expect(trains[0]).toMatchObject({ delay: 2, scheduledTime: "10:20" });
     });
 
+    it("reports zero delay for a train running early", async () => {
+      const { trains } = await board(departure({ rtTime: "10:18:00", rtDate: "2026-03-10" }));
+
+      expect(trains[0]).toMatchObject({ delay: 0, scheduledTime: "10:20" });
+    });
+
     it("handles realtime that rolls over midnight", async () => {
       freezeTime("2026-03-10T22:50:00.000Z"); // 23:50 local
       const { trains } = await board(
