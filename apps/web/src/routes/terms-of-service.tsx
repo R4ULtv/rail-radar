@@ -222,6 +222,17 @@ function TermsOfServicePage() {
               </a>
               )
             </li>
+            <li>
+              <strong className="text-foreground">Hungary</strong> &mdash;{" "}
+              <a
+                href="https://mavplusz.hu"
+                className="text-foreground underline"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                MÁVPlusz
+              </a>
+            </li>
           </ul>
           <p className="mt-3">
             Metro and light rail line data, including stop sequences and track geometry, is derived

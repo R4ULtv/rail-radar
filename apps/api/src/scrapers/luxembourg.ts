@@ -226,7 +226,8 @@ function mapDeparture(departure: MobiliteitDeparture, nowMinutes: number): Mappe
       trainNumber,
       destination: departure.direction,
       scheduledTime: boardTime(departure.time),
-      delay: cancelled ? null : actualMinutes - scheduledMinutes,
+      // Trains running early still count as on time.
+      delay: cancelled ? null : Math.max(0, actualMinutes - scheduledMinutes),
       platform:
         departure.rtTrack ??
         departure.rtPlatform?.text ??

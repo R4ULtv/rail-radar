@@ -19,8 +19,10 @@ import {
   TableRow,
 } from "@repo/ui/components/table";
 import type { StationRow } from "@/lib/reports";
+import { prerenderedPageLinkProps } from "@/lib/station-prerender";
 
-const number = new Intl.NumberFormat("en-US").format;
+const numberFormatter = new Intl.NumberFormat("en-US");
+const number = (value: number) => numberFormatter.format(value);
 const publicationDate = new Intl.DateTimeFormat("en-US", {
   month: "long",
   day: "numeric",
@@ -191,6 +193,7 @@ export function ReportStationTable({
                 <Link
                   to="/station/$id"
                   params={{ id: station.stationId }}
+                  {...prerenderedPageLinkProps}
                   className="font-medium text-foreground underline underline-offset-4"
                 >
                   {station.stationName}

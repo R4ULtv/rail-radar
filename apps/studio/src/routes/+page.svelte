@@ -1,19 +1,19 @@
 <script lang="ts">
   import type { FreightKind, Station } from "@repo/data";
   import { onMount } from "svelte";
-  import ContributionPanel from "$lib/components/ContributionPanel.svelte";
-  import CreateStationDialog from "$lib/components/CreateStationDialog.svelte";
-  import HeaderBar from "$lib/components/HeaderBar.svelte";
-  import StationEditPanel from "$lib/components/StationEditPanel.svelte";
-  import StationMap from "$lib/components/StationMap.svelte";
-  import StationSidebar from "$lib/components/StationSidebar.svelte";
-  import StatusBar from "$lib/components/StatusBar.svelte";
-  import UploadPrompt from "$lib/components/UploadPrompt.svelte";
-  import type { StationFileFormat } from "$lib/stations";
-  import type { StationImportanceFilter, StationTypeFilter } from "$lib/station-filters";
-  import { contributionStore } from "$lib/stores/contribution";
-  import { historyStore, type HistoryOp } from "$lib/stores/history";
-  import { stationStore, type RemoteStationSourceId } from "$lib/stores/stations";
+  import ContributionPanel from "#lib/components/ContributionPanel.svelte";
+  import CreateStationDialog from "#lib/components/CreateStationDialog.svelte";
+  import HeaderBar from "#lib/components/HeaderBar.svelte";
+  import StationEditPanel from "#lib/components/StationEditPanel.svelte";
+  import StationMap from "#lib/components/StationMap.svelte";
+  import StationSidebar from "#lib/components/StationSidebar.svelte";
+  import StatusBar from "#lib/components/StatusBar.svelte";
+  import UploadPrompt from "#lib/components/UploadPrompt.svelte";
+  import type { StationFileFormat } from "#lib/stations.ts";
+  import type { StationImportanceFilter, StationTypeFilter } from "#lib/station-filters.ts";
+  import { contributionStore } from "#lib/stores/contribution.ts";
+  import { historyStore, type HistoryOp } from "#lib/stores/history.ts";
+  import { stationStore, type RemoteStationSourceId } from "#lib/stores/stations.ts";
   import type { PageData } from "./$types";
 
   let { data }: { data: PageData } = $props();

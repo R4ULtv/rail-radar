@@ -8,12 +8,13 @@
     "format": "oxfmt",
     "format:check": "oxfmt --check",
     "check-types": "turbo run check-types",
+    "test": "turbo run test",
     "optimize-svgs": "node scripts/optimize-svgs.mjs"
   },
   "devDependencies": {
     "eslint-plugin-turbo": "^2.11.10",
     "oxfmt": "^0.75.0",
-    "oxlint": "^1.90.0",
+    "oxlint": "^1.91.0",
     "oxlint-tsgolint": "^7.0.2005",
     "svgo": "^4.1.0",
     "turbo": "^2.11.10",
@@ -22,5 +23,5 @@
   "engines": {
     "node": ">=22"
   },
-  "packageManager": "pnpm@12.14.0"
+  "packageManager": "pnpm@12.17.0"
 }

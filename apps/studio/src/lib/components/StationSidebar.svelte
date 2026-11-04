@@ -11,20 +11,20 @@
     TramFrontIcon,
     XIcon,
   } from "@lucide/svelte";
-  import { Button } from "$lib/components/ui/button";
-  import { Input } from "$lib/components/ui/input";
-  import { ScrollArea } from "$lib/components/ui/scroll-area";
-  import * as Select from "$lib/components/ui/select";
-  import * as Tabs from "$lib/components/ui/tabs";
+  import { Button } from "#lib/components/ui/button/index.ts";
+  import { Input } from "#lib/components/ui/input/index.ts";
+  import { ScrollArea } from "#lib/components/ui/scroll-area/index.ts";
+  import * as Select from "#lib/components/ui/select/index.ts";
+  import * as Tabs from "#lib/components/ui/tabs/index.ts";
   import {
     findDuplicateStationIds,
     stationMatchesFilters,
     type StationImportanceFilter,
     type StationTypeFilter,
-  } from "$lib/station-filters";
-  import type { ChangeType } from "$lib/types/contribution";
-  import { freightKindLabels } from "$lib/stations";
-  import { cn } from "$lib/utils";
+  } from "#lib/station-filters.ts";
+  import type { ChangeType } from "#lib/types/contribution.ts";
+  import { freightKindLabels } from "#lib/stations.ts";
+  import { cn } from "#lib/utils.ts";
 
   const importanceLabels: Record<Exclude<StationImportanceFilter, "any">, string> = {
     "1": "Major",

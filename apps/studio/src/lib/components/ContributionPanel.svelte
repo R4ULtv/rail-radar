@@ -1,16 +1,16 @@
 <script lang="ts">
   import { CheckIcon, CopyIcon, ExternalLinkIcon, MapPinIcon } from "@lucide/svelte";
-  import { Badge } from "$lib/components/ui/badge";
-  import { Button } from "$lib/components/ui/button";
-  import * as Dialog from "$lib/components/ui/dialog";
-  import { Input } from "$lib/components/ui/input";
-  import { Label } from "$lib/components/ui/label";
-  import { ScrollArea } from "$lib/components/ui/scroll-area";
-  import { Separator } from "$lib/components/ui/separator";
-  import { generatePRBody, generatePRTitle } from "$lib/pr-generator";
-  import { freightKindLabels } from "$lib/stations";
-  import { contributionStore } from "$lib/stores/contribution";
-  import type { StationChange } from "$lib/types/contribution";
+  import { Badge } from "#lib/components/ui/badge/index.ts";
+  import { Button } from "#lib/components/ui/button/index.ts";
+  import * as Dialog from "#lib/components/ui/dialog/index.ts";
+  import { Input } from "#lib/components/ui/input/index.ts";
+  import { Label } from "#lib/components/ui/label/index.ts";
+  import { ScrollArea } from "#lib/components/ui/scroll-area/index.ts";
+  import { Separator } from "#lib/components/ui/separator/index.ts";
+  import { generatePRBody, generatePRTitle } from "#lib/pr-generator.ts";
+  import { freightKindLabels } from "#lib/stations.ts";
+  import { contributionStore } from "#lib/stores/contribution.ts";
+  import type { StationChange } from "#lib/types/contribution.ts";
 
   let {
     open,

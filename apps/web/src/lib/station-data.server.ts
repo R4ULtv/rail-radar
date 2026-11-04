@@ -140,10 +140,9 @@ function getCountryMetadata(slug: string, countryName: string, count: number): M
   };
 }
 
-function toDirectoryStation({ id, name, type, importance }: StationWithGeo): DirectoryStation {
-  return isStationPagePrerendered({ type, importance })
-    ? { id, name, prerendered: true }
-    : { id, name };
+function toDirectoryStation(station: StationWithGeo): DirectoryStation {
+  const { id, name } = station;
+  return isStationPagePrerendered(station) ? { id, name, prerendered: true } : { id, name };
 }
 
 function indexKey(name: string): string {

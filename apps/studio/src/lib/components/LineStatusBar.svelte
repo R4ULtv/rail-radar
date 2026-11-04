@@ -1,7 +1,7 @@
 <script lang="ts">
   import type { Line, LineRoute } from "@repo/data";
   import { ActivityIcon, DatabaseIcon, RouteIcon, UnlinkIcon } from "@lucide/svelte";
-  import { STATION_TYPE_COLOR } from "$lib/station-colors";
+  import { STATION_TYPE_COLOR } from "#lib/station-colors.ts";
 
   let {
     lines,

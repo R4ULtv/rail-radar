@@ -1,0 +1,301 @@
+diff --git a/dist/esm/prerender.js b/dist/esm/prerender.js
+index 3dc4e19f221a2ed509bd2c710d5334157bb7ddfd..94e33d543be5e805c5890791ccff8b7b0d82e0b6 100644
+--- a/dist/esm/prerender.js
++++ b/dist/esm/prerender.js
+@@ -2,7 +2,7 @@ import { createLogger } from "./utils.js";
+ import { Queue } from "./queue.js";
+ import path from "pathe";
+ import { promises } from "node:fs";
+-import { joinURL, withBase, withTrailingSlash, withoutBase } from "ufo";
++import { joinURL, withBase, withoutBase } from "ufo";
+ import os from "node:os";
+ //#region src/prerender.ts
+ var DEFAULT_RETRY_DELAY = 500;
+@@ -73,7 +73,7 @@ async function prerender({ startConfig, handler }) {
+ 				logger.info(`Crawling: ${page.path}`);
+ 				const retries = retriesByPath.get(page.path) || 0;
+ 				try {
+-					const res = await requestWithRedirects(withTrailingSlash(withBase(page.path, routerBasePath)), { headers: { ...prerenderOptions.headers ?? {} } }, prerenderOptions.maxRedirects);
++					const res = await requestWithRedirects(withBase(page.path, routerBasePath), { headers: { ...prerenderOptions.headers ?? {} } }, prerenderOptions.maxRedirects);
+ 					if (!res.ok) {
+ 						if (isRedirectResponse(res)) logger.warn(`Max redirects reached for ${page.path}`);
+ 						throw new Error(`Failed to fetch ${page.path}: ${res.statusText}`, { cause: res });
+diff --git a/dist/esm/rsbuild/schema.d.ts b/dist/esm/rsbuild/schema.d.ts
+index b169fbef11f5c166676ac813e3c2138fe5710706..27c3fd05adf0363d98c2d5f554ba2bfd743c8dc4 100644
+--- a/dist/esm/rsbuild/schema.d.ts
++++ b/dist/esm/rsbuild/schema.d.ts
+@@ -162,6 +162,7 @@ export declare const tanstackStartRsbuildOptionsSchema: z.ZodPrefault<z.ZodOptio
+     prerender: z.ZodOptional<z.ZodIntersection<z.ZodObject<{
+         enabled: z.ZodOptional<z.ZodBoolean>;
+         concurrency: z.ZodOptional<z.ZodNumber>;
++        workers: z.ZodOptional<z.ZodNumber>;
+         filter: z.ZodOptional<z.ZodCustom<(page: z.infer<z.ZodObject<{
+             path: z.ZodString;
+             sitemap: z.ZodOptional<z.ZodObject<{
+@@ -513,6 +514,7 @@ export declare function parseStartConfig(opts: z.input<typeof tanstackStartRsbui
+     prerender?: ({
+         enabled?: boolean | undefined;
+         concurrency?: number | undefined;
++        workers?: number | undefined;
+         filter?: ((page: z.infer<z.ZodObject<{
+             path: z.ZodString;
+             sitemap: z.ZodOptional<z.ZodObject<{
+diff --git a/dist/esm/schema.d.ts b/dist/esm/schema.d.ts
+index 7f0101c6a188dce07a6b96c0d2476062f85c484c..2c275baf2095bf624afa4c83b1fc863baf308a92 100644
+--- a/dist/esm/schema.d.ts
++++ b/dist/esm/schema.d.ts
+@@ -180,6 +180,7 @@ export declare function parseStartConfig(opts: z.input<typeof tanstackStartOptio
+     prerender?: ({
+         enabled?: boolean | undefined;
+         concurrency?: number | undefined;
++        workers?: number | undefined;
+         filter?: ((page: z.infer<typeof pageSchema>) => unknown) | undefined;
+         failOnError?: boolean | undefined;
+         autoStaticPathsDiscovery?: boolean | undefined;
+@@ -493,6 +494,7 @@ export declare const tanstackStartOptionsObjectSchema: z.ZodObject<{
+     prerender: z.ZodOptional<z.ZodIntersection<z.ZodObject<{
+         enabled: z.ZodOptional<z.ZodBoolean>;
+         concurrency: z.ZodOptional<z.ZodNumber>;
++        workers: z.ZodOptional<z.ZodNumber>;
+         filter: z.ZodOptional<z.ZodCustom<(page: z.infer<typeof pageSchema>) => unknown, (page: z.infer<typeof pageSchema>) => unknown>>;
+         failOnError: z.ZodOptional<z.ZodBoolean>;
+         autoStaticPathsDiscovery: z.ZodOptional<z.ZodBoolean>;
+@@ -761,6 +763,7 @@ export declare const tanstackStartOptionsSchema: z.ZodPrefault<z.ZodOptional<z.Z
+     prerender: z.ZodOptional<z.ZodIntersection<z.ZodObject<{
+         enabled: z.ZodOptional<z.ZodBoolean>;
+         concurrency: z.ZodOptional<z.ZodNumber>;
++        workers: z.ZodOptional<z.ZodNumber>;
+         filter: z.ZodOptional<z.ZodCustom<(page: z.infer<typeof pageSchema>) => unknown, (page: z.infer<typeof pageSchema>) => unknown>>;
+         failOnError: z.ZodOptional<z.ZodBoolean>;
+         autoStaticPathsDiscovery: z.ZodOptional<z.ZodBoolean>;
+diff --git a/dist/esm/schema.js b/dist/esm/schema.js
+index 06a1ceaa7331d37725fe35e032730e1dca49b61b..dcfd447a722b072749772d449b6166fcd8cedae5 100644
+--- a/dist/esm/schema.js
++++ b/dist/esm/schema.js
+@@ -174,6 +174,7 @@ var tanstackStartOptionsObjectSchema = z.object({
+ 	prerender: z.object({
+ 		enabled: z.boolean().optional(),
+ 		concurrency: z.number().optional(),
++		workers: z.number().int().min(1).optional(),
+ 		filter: z.custom((value) => typeof value === "function").optional(),
+ 		failOnError: z.boolean().optional(),
+ 		autoStaticPathsDiscovery: z.boolean().optional(),
+diff --git a/dist/esm/vite/prerender-worker.js b/dist/esm/vite/prerender-worker.js
+new file mode 100644
+index 0000000000000000000000000000000000000000..fd689ebc078ef9ea6542c6a315829b2d907bb5fd
+--- /dev/null
++++ b/dist/esm/vite/prerender-worker.js
+@@ -0,0 +1,40 @@
++// Runs one Vite preview server for parallel prerendering (prerender.workers).
++// Each worker is a separate process, so plugins that keep module-level state
++// (such as a single runtime instance) get their own copy per worker.
++import { preview } from "vite";
++const { configFile } = JSON.parse(process.env.TSS_PRERENDER_PREVIEW_OPTIONS ?? "{}");
++let server;
++try {
++	server = await preview({
++		configFile,
++		preview: {
++			port: 0,
++			open: false
++		}
++	});
++	const url = server.resolvedUrls?.local[0];
++	if (!url) throw new Error("No resolved URL is available from the Vite preview server");
++	process.send({
++		type: "ready",
++		url
++	});
++} catch (error) {
++	process.send({
++		type: "error",
++		message: error instanceof Error ? error.message : String(error),
++		stack: error instanceof Error ? error.stack : void 0
++	});
++	process.exit(1);
++}
++async function shutdown() {
++	try {
++		await server.close();
++	} finally {
++		process.exit(0);
++	}
++}
++process.on("message", (message) => {
++	if (message?.type === "close") shutdown();
++});
++// The build process exited or crashed: don't leave this server running.
++process.on("disconnect", shutdown);
+diff --git a/dist/esm/vite/prerender.js b/dist/esm/vite/prerender.js
+index 3036f05ab112d16ed52e037a3ba9e2a6c21115b5..fadb4bb4ffcc05dd8fbec4d3f9ed2667fffb3c0c 100644
+--- a/dist/esm/vite/prerender.js
++++ b/dist/esm/vite/prerender.js
+@@ -1,5 +1,7 @@
+ import { VITE_ENVIRONMENT_NAMES } from "../constants.js";
+ import { prerender } from "../prerender.js";
++import { fork } from "node:child_process";
++import { fileURLToPath } from "node:url";
+ //#region src/vite/prerender.ts
+ async function prerenderWithVite({ startConfig, builder }) {
+ 	const serverEnv = builder.environments[VITE_ENVIRONMENT_NAMES.server];
+@@ -9,8 +11,9 @@ async function prerenderWithVite({ startConfig, builder }) {
+ 	const outputDir = clientEnv.config.build.outDir;
+ 	process.env.TSS_PRERENDERING = "true";
+ 	process.env.TSS_CLIENT_OUTPUT_DIR = outputDir;
+-	const previewServer = await startPreviewServer(serverEnv.config);
+-	const baseUrl = getResolvedUrl(previewServer);
++	const workerCount = normalizeWorkerCount(startConfig.prerender?.workers);
++	const workers = await startPreviewServers(serverEnv.config, workerCount);
++	const baseUrl = workers[0].baseUrl;
+ 	return prerender({
+ 		startConfig,
+ 		handler: {
+@@ -20,17 +23,124 @@ async function prerenderWithVite({ startConfig, builder }) {
+ 			getOrigin() {
+ 				return baseUrl.origin;
+ 			},
+-			request(path, options) {
++			async request(path, options) {
+ 				const url = new URL(path, baseUrl);
+ 				if (url.origin !== baseUrl.origin) throw new Error(`Prerender request URL must be relative: ${path}`);
+-				return fetch(new Request(url, options));
++				// Every preview server is an identical copy of the built app, so any of them
++				// can answer. Send the request to the least busy one, so CPU-bound rendering
++				// runs in parallel across servers instead of queueing on a single one.
++				const worker = workers.reduce((best, candidate) => candidate.active < best.active ? candidate : best);
++				worker.active++;
++				try {
++					const target = new URL(url);
++					target.host = worker.baseUrl.host;
++					const response = await fetch(new Request(target, options));
++					// Read the whole body before freeing the slot: rendering continues while
++					// the response streams, and prerender reads the full text anyway.
++					return await buffered(response, worker.baseUrl, baseUrl);
++				} finally {
++					worker.active--;
++				}
+ 			},
+-			close() {
+-				return previewServer.close();
++			async close() {
++				await Promise.all(workers.map((worker) => worker.server.close()));
+ 			}
+ 		}
+ 	});
+ }
++/** Buffers a response and points redirects to another preview server at the primary origin. */
++async function buffered(response, workerUrl, primaryUrl) {
++	const headers = new Headers(response.headers);
++	const location = headers.get("location");
++	if (location && workerUrl.origin !== primaryUrl.origin) {
++		try {
++			const resolved = new URL(location, workerUrl);
++			if (resolved.origin === workerUrl.origin) {
++				resolved.host = primaryUrl.host;
++				headers.set("location", resolved.href);
++			}
++		} catch {}
++	}
++	const nullBody = [101, 204, 205, 304].includes(response.status);
++	const body = nullBody ? null : await response.arrayBuffer();
++	return new Response(body, {
++		status: response.status,
++		statusText: response.statusText,
++		headers
++	});
++}
++function normalizeWorkerCount(value) {
++	if (value === void 0) return 1;
++	if (!Number.isInteger(value) || value < 1) throw new Error(`prerender.workers must be a positive integer, received: ${value}`);
++	return value;
++}
++async function startPreviewServers(viteConfig, count) {
++	if (count === 1) {
++		// Same flag the worker processes get, so the Vite config can detect prerendering.
++		process.env.TSS_PRERENDER_WORKER = "0";
++		let server;
++		try {
++			server = await startPreviewServer(viteConfig);
++		} finally {
++			delete process.env.TSS_PRERENDER_WORKER;
++		}
++		return [{
++			server,
++			baseUrl: getResolvedUrl(server),
++			active: 0
++		}];
++	}
++	// Several preview servers in one process would share module-level plugin state.
++	// The Cloudflare plugin, for example, keeps one workerd for the whole process.
++	// So each worker runs its own preview server in a separate process.
++	const started = await Promise.allSettled(Array.from({ length: count }, (_, index) => startPreviewWorker(viteConfig, index)));
++	const workers = started.filter((result) => result.status === "fulfilled").map((result) => result.value);
++	const failed = started.find((result) => result.status === "rejected");
++	if (failed) {
++		await Promise.allSettled(workers.map((worker) => worker.server.close()));
++		throw failed.reason;
++	}
++	return workers;
++}
++function startPreviewWorker(viteConfig, index) {
++	return new Promise((resolve, reject) => {
++		const child = fork(fileURLToPath(new URL("./prerender-worker.js", import.meta.url)), [], {
++			cwd: process.cwd(),
++			env: {
++				...process.env,
++				TSS_PRERENDER_WORKER: String(index),
++				TSS_PRERENDER_PREVIEW_OPTIONS: JSON.stringify({ configFile: viteConfig.configFile || void 0 })
++			},
++			stdio: ["ignore", "inherit", "inherit", "ipc"]
++		});
++		let exited = false;
++		const exitedPromise = new Promise((resolveExit) => child.once("exit", () => {
++			exited = true;
++			resolveExit();
++		}));
++		const server = { async close() {
++			if (exited) return;
++			child.send({ type: "close" });
++			const timeout = setTimeout(() => child.kill("SIGKILL"), 1e4);
++			await exitedPromise;
++			clearTimeout(timeout);
++		} };
++		child.once("message", (message) => {
++			if (message?.type === "ready") resolve({
++				server,
++				baseUrl: new URL(message.url),
++				active: 0
++			});
++			else {
++				const error = new Error(`Failed to start prerender worker ${index}: ${message?.message}`);
++				if (message?.stack) error.stack = message.stack;
++				reject(error);
++			}
++		});
++		child.once("error", reject);
++		child.once("exit", (code, signal) => reject(new Error(`Prerender worker ${index} exited before it was ready (code ${code}, signal ${signal})`)));
++	});
++}
+ async function startPreviewServer(viteConfig) {
+ 	const vite = await import("vite");
+ 	try {
+diff --git a/dist/esm/vite/schema.d.ts b/dist/esm/vite/schema.d.ts
+index ef5e030f699a73621536ebf9ffeb480615651c31..6d51bfe33bf0c0d25c0f64ae0cd63605c6b87d7b 100644
+--- a/dist/esm/vite/schema.d.ts
++++ b/dist/esm/vite/schema.d.ts
+@@ -158,6 +158,7 @@ export declare const tanstackStartViteOptionsSchema: z.ZodPrefault<z.ZodOptional
+     prerender: z.ZodOptional<z.ZodIntersection<z.ZodObject<{
+         enabled: z.ZodOptional<z.ZodBoolean>;
+         concurrency: z.ZodOptional<z.ZodNumber>;
++        workers: z.ZodOptional<z.ZodNumber>;
+         filter: z.ZodOptional<z.ZodCustom<(page: z.infer<z.ZodObject<{
+             path: z.ZodString;
+             sitemap: z.ZodOptional<z.ZodObject<{
+@@ -503,6 +504,7 @@ export declare function parseStartConfig(opts: z.input<typeof tanstackStartViteO
+     prerender?: ({
+         enabled?: boolean | undefined;
+         concurrency?: number | undefined;
++        workers?: number | undefined;
+         filter?: ((page: z.infer<z.ZodObject<{
+             path: z.ZodString;
+             sitemap: z.ZodOptional<z.ZodObject<{

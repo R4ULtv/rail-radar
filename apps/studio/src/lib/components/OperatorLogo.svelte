@@ -1,6 +1,6 @@
 <script lang="ts">
   import { Building2Icon } from "@lucide/svelte";
-  import { cn } from "$lib/utils";
+  import { cn } from "#lib/utils.ts";
 
   let {
     path,

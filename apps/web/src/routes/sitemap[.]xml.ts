@@ -21,7 +21,7 @@ function xmlEscape(value: string): string {
       "&": "&amp;",
       "<": "&lt;",
       ">": "&gt;",
-      '\"': "&quot;",
+      '"': "&quot;",
       "'": "&apos;",
     };
     return entities[character]!;

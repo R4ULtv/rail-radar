@@ -1,8 +1,14 @@
 {
   "extends": ["//"],
   "tasks": {
-    "check-types": {
+    "cf-typegen": {
       "outputs": ["worker-configuration.d.ts"]
+    },
+    "lint": {
+      "dependsOn": ["$TURBO_EXTENDS$", "cf-typegen"]
+    },
+    "check-types": {
+      "dependsOn": ["$TURBO_EXTENDS$", "cf-typegen"]
     }
   }
 }

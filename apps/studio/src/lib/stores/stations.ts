@@ -1,6 +1,6 @@
 import type { Station, StationFeatureCollection } from "@repo/data";
 import { get, writable } from "svelte/store";
-import { getStationInUseError } from "$lib/line-usage";
+import { getStationInUseError } from "#lib/line-usage.ts";
 import {
   applyStationUpdates,
   geojsonToStations,
@@ -12,7 +12,7 @@ import {
   validateGeojson,
   type StationFileFormat,
   type StationUpdates,
-} from "$lib/stations";
+} from "#lib/stations.ts";
 
 export type DataMode = "local" | "browser";
 export type RemoteStationSourceId = "main" | "preview";

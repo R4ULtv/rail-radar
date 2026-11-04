@@ -1320,10 +1320,10 @@
   {
     "slug": "obb",
     "name": "ÖBB",
-    "logoPath": "obb",
-    "countries": ["international", "it", "ch", "de", "nl"],
+    "logoPath": "at/obb",
+    "countries": ["international", "it", "ch", "de", "nl", "hu"],
     "operatorTypes": ["passenger"],
-    "bounds": [4.7, 41.8, 17.2, 53.7],
+    "bounds": [4.7, 41.8, 19.2, 53.7],
     "description": "The Austrian Federal Railways (ÖBB) operates a comprehensive domestic and international network. It is Europe's leading night train operator through its expansive Nightjet network, while its high-speed Railjet services provide premier daytime connections across Austria, Germany, Switzerland, and Italy.",
     "website": "https://www.oebb.at",
     "founded": 1947,
@@ -1740,7 +1740,7 @@
   {
     "slug": "sncb",
     "name": "SNCB/NMBS",
-    "logoPath": "sncb",
+    "logoPath": "be/sncb",
     "countries": ["be", "lu", "nl"],
     "operatorTypes": ["passenger"],
     "bounds": [2.5, 49.5, 6.4, 52.6],
@@ -1900,7 +1900,7 @@
   {
     "slug": "leo-express",
     "name": "Leo Express",
-    "logoPath": "leo-express",
+    "logoPath": "cz/leo-express",
     "countries": ["international", "pl"],
     "operatorTypes": ["passenger"],
     "bounds": [14.1, 49, 24.2, 52.5],
@@ -1928,7 +1928,7 @@
   {
     "slug": "regiojet",
     "name": "RegioJet",
-    "logoPath": "regiojet",
+    "logoPath": "cz/regiojet",
     "countries": ["international", "pl"],
     "operatorTypes": ["passenger"],
     "bounds": [14.1, 48.5, 24.2, 52.5],
@@ -5511,28 +5511,43 @@
   {
     "slug": "renfe",
     "name": "Renfe",
-    "logoPath": "renfe",
+    "logoPath": "es/renfe",
     "countries": ["international", "fr"],
     "operatorTypes": ["passenger"],
-    "bounds": [-3.8, 40.3, 5.5, 45.9],
-    "description": "Renfe operates AVE high-speed passenger services between Spain and France, linking Barcelona with Lyon and Madrid with Marseille via Barcelona and southern France.",
+    "bounds": [-9.3, 36, 5.5, 45.9],
+    "description": "Renfe is Spain's state-owned national passenger railway operator, created in 2005 when the former RENFE was split into separate operator and infrastructure companies. It runs AVE, Avlo, Alvia and Intercity long-distance trains, Media Distancia regional services and Cercanías/Rodalies commuter networks around the main cities. AVE trains also run from Spain to France, reaching Lyon and Marseille.",
     "website": "https://www.renfe.com",
-    "founded": null,
-    "headquarters": null,
+    "founded": 2005,
+    "headquarters": "Madrid, Spain",
     "networkKm": null,
-    "annualPassengers": null,
-    "serviceTypes": ["high-speed", "international"],
-    "parentCompany": null,
+    "annualPassengers": 531400000,
+    "serviceTypes": ["high-speed", "intercity", "regional", "commuter", "international"],
+    "parentCompany": "Spanish State",
     "links": [
       {
-        "label": "Official website",
+        "label": "Official Site",
         "url": "https://www.renfe.com",
         "type": "website"
       },
       {
-        "label": "Operator information",
+        "label": "Timetables",
+        "url": "https://www.renfe.com/es/es/viajar/informacion-util/horarios",
+        "type": "timetables"
+      },
+      {
+        "label": "AVE France destinations",
         "url": "https://www.renfe.com/es/es/viajar/prepara-tu-viaje/ave-francia/destinos",
         "type": "website"
+      },
+      {
+        "label": "Open Data (GTFS)",
+        "url": "https://data.renfe.com/dataset/horarios-de-alta-velocidad-larga-distancia-y-media-distancia",
+        "type": "api"
+      },
+      {
+        "label": "Wikipedia",
+        "url": "https://en.wikipedia.org/wiki/Renfe",
+        "type": "wikipedia"
       }
     ]
   },
@@ -5900,6 +5915,604 @@
         "label": "Operator information",
         "url": "https://www.nidirect.gov.uk/articles/rail-services",
         "type": "website"
+      }
+    ]
+  },
+  {
+    "slug": "cj",
+    "name": "Chemins de fer du Jura",
+    "logoPath": "ch/cj",
+    "countries": ["ch"],
+    "operatorTypes": ["passenger", "freight"],
+    "bounds": [6.75, 47.05, 7.3, 47.55],
+    "description": "Chemins de fer du Jura operates regional passenger trains in the Swiss Jura, including routes linking La Chaux-de-Fonds, Le Noirmont, Saignelégier, Glovelier, Tramelan, Tavannes, Porrentruy and Bonfol. It also carries freight, including timber and waste containers.",
+    "website": "https://www.les-cj.ch",
+    "founded": null,
+    "headquarters": null,
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["regional", "wagonload"],
+    "parentCompany": null,
+    "links": [
+      {
+        "label": "Official website",
+        "url": "https://www.les-cj.ch",
+        "type": "website"
+      },
+      {
+        "label": "Services and operator information",
+        "url": "https://www.les-cj.ch/Reisen/Fahrplan-und-Netz",
+        "type": "website"
+      }
+    ]
+  },
+  {
+    "slug": "nstcm",
+    "name": "NStCM",
+    "logoPath": "ch/nstcm",
+    "countries": ["ch"],
+    "operatorTypes": ["passenger"],
+    "bounds": [6.03, 46.35, 6.26, 46.5],
+    "description": "NStCM is the regional railway linking Nyon with Saint-Cergue and La Cure in the Swiss Jura. The passenger-facing rail brand remains in use following the administrative merger with Transports publics nyonnais in 2025.",
+    "website": "https://www.nstcm.ch",
+    "founded": null,
+    "headquarters": null,
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["regional", "commuter"],
+    "parentCompany": null,
+    "links": [
+      {
+        "label": "Official website",
+        "url": "https://www.nstcm.ch",
+        "type": "website"
+      },
+      {
+        "label": "Services and operator information",
+        "url": "https://www.nstcm.ch/fr/horaires",
+        "type": "website"
+      }
+    ]
+  },
+  {
+    "slug": "mbc",
+    "name": "MBC",
+    "logoPath": "ch/mbc",
+    "countries": ["ch"],
+    "operatorTypes": ["passenger", "freight"],
+    "bounds": [6.2, 46.4, 6.6, 46.7],
+    "description": "MBC, Transports de la région Morges–Bière–Cossonay, operates the Bière–Apples–Morges and Apples–L’Isle railways and the Cossonay funicular. Its rail freight activity includes gravel, timber, agricultural products and military vehicles.",
+    "website": "https://www.mbc.ch",
+    "founded": null,
+    "headquarters": null,
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["regional", "commuter", "wagonload"],
+    "parentCompany": null,
+    "links": [
+      {
+        "label": "Official website",
+        "url": "https://www.mbc.ch",
+        "type": "website"
+      },
+      {
+        "label": "Services and operator information",
+        "url": "https://www.mbc.ch/l-entreprise",
+        "type": "website"
+      }
+    ]
+  },
+  {
+    "slug": "travys",
+    "name": "TRAVYS",
+    "logoPath": "ch/travys",
+    "countries": ["ch"],
+    "operatorTypes": ["passenger", "freight"],
+    "bounds": [6.15, 46.5, 6.75, 46.9],
+    "description": "TRAVYS operates regional passenger railways in northern Vaud, including Yverdon-les-Bains–Sainte-Croix, the Vallée de Joux line and Orbe–Chavornay. Its activities also include rail freight on the Orbe–Chavornay network.",
+    "website": "https://www.travys.ch",
+    "founded": null,
+    "headquarters": null,
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["regional", "commuter", "wagonload"],
+    "parentCompany": null,
+    "links": [
+      {
+        "label": "Official website",
+        "url": "https://www.travys.ch",
+        "type": "website"
+      },
+      {
+        "label": "Services and operator information",
+        "url": "https://admin-website-478fe4.travys.ch/app/uploads/2025/11/Travys-regional-2026-schematique.pdf",
+        "type": "website"
+      }
+    ]
+  },
+  {
+    "slug": "fart",
+    "name": "FART",
+    "logoPath": "it/vigezzina-centovalli",
+    "countries": ["ch", "it"],
+    "operatorTypes": ["passenger"],
+    "bounds": [8.25, 46.05, 8.85, 46.25],
+    "description": "FART, Ferrovie Autolinee Regionali Ticinesi, operates the Swiss section of the Vigezzina-Centovalli railway between Locarno and Camedo. Together with Italy’s SSIF, it provides regional and scenic cross-border trains linking Locarno and Domodossola under a shared passenger brand.",
+    "website": "https://fartiamo.ch",
+    "founded": null,
+    "headquarters": null,
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["regional", "international", "scenic"],
+    "parentCompany": null,
+    "links": [
+      {
+        "label": "Official website",
+        "url": "https://fartiamo.ch",
+        "type": "website"
+      },
+      {
+        "label": "Services and operator information",
+        "url": "https://fartiamo.ch/en/the-company-about-us/",
+        "type": "website"
+      }
+    ]
+  },
+  {
+    "slug": "bob",
+    "name": "Berner Oberland-Bahnen",
+    "logoPath": "ch/bob",
+    "countries": ["ch"],
+    "operatorTypes": ["passenger"],
+    "bounds": [7.8, 46.55, 8.08, 46.72],
+    "description": "Berner Oberland-Bahnen operates regional trains from Interlaken Ost via Zweilütschinen to Grindelwald and Lauterbrunnen. The company also operates the seasonal Schynige Platte Railway from Wilderswil and is part of the Jungfrau Railways marketing alliance.",
+    "website": "https://www.jungfrau.ch/en-gb/corporate/jungfrau-railways/berner-oberland-bahnen-ag/berner-oberland-bahn/",
+    "founded": null,
+    "headquarters": null,
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["regional", "commuter", "scenic"],
+    "parentCompany": null,
+    "links": [
+      {
+        "label": "Official website",
+        "url": "https://www.jungfrau.ch/en-gb/corporate/jungfrau-railways/berner-oberland-bahnen-ag/berner-oberland-bahn/",
+        "type": "website"
+      }
+    ]
+  },
+  {
+    "slug": "fuc",
+    "name": "Ferrovie Udine Cividale",
+    "logoPath": "it/fuc",
+    "countries": ["it"],
+    "operatorTypes": ["passenger", "freight"],
+    "bounds": [12.7, 45.55, 13.95, 46.7],
+    "description": "Ferrovie Udine Cividale operates regional passenger trains between Udine and Cividale del Friuli and the Italian portion of the joint MICOTRA service linking Trieste, Udine and Villach in Austria. It also provides freight services on regional railway routes.",
+    "website": "https://www.ferrovieudinecividale.it",
+    "founded": null,
+    "headquarters": null,
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["regional", "international"],
+    "parentCompany": null,
+    "links": [
+      {
+        "label": "Official website",
+        "url": "https://www.ferrovieudinecividale.it",
+        "type": "website"
+      },
+      {
+        "label": "Services and operator information",
+        "url": "https://www.ferrovieudinecividale.it/wp-content/uploads/2026/03/Carta-servizi-ud-civ-2026.pdf",
+        "type": "website"
+      }
+    ]
+  },
+  {
+    "slug": "ssif",
+    "name": "SSIF",
+    "logoPath": "it/vigezzina-centovalli",
+    "countries": ["it", "ch"],
+    "operatorTypes": ["passenger"],
+    "bounds": [8.25, 46.05, 8.85, 46.25],
+    "description": "SSIF, Società Subalpina di Imprese Ferroviarie, operates the Italian section of the Vigezzina-Centovalli railway between Domodossola and the Swiss border. Together with FART, it provides regional and scenic international trains to Locarno under a shared passenger brand.",
+    "website": "https://www.vigezzina.com",
+    "founded": null,
+    "headquarters": null,
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["regional", "international", "scenic"],
+    "parentCompany": null,
+    "links": [
+      {
+        "label": "Official website",
+        "url": "https://www.vigezzina.com",
+        "type": "website"
+      },
+      {
+        "label": "Services and operator information",
+        "url": "https://www.vigezzina.com/index.php/l-azienda",
+        "type": "website"
+      }
+    ]
+  },
+  {
+    "slug": "nordwestbahn",
+    "name": "NordWestBahn",
+    "logoPath": "transdev",
+    "countries": ["de"],
+    "operatorTypes": ["passenger"],
+    "bounds": [7.4, 51.4, 10.1, 53.75],
+    "description": "NordWestBahn operates regional passenger trains in north-western Germany. Its networks include Weser-Ems services, the Bremen–Lower Saxony Regio-S-Bahn and routes in Ostwestfalen around Osnabrück, Bielefeld, Paderborn and Göttingen.",
+    "website": "https://www.nordwestbahn.de",
+    "founded": null,
+    "headquarters": null,
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["regional", "commuter"],
+    "parentCompany": "Transdev",
+    "links": [
+      {
+        "label": "Official website",
+        "url": "https://www.nordwestbahn.de",
+        "type": "website"
+      }
+    ]
+  },
+  {
+    "slug": "erixx",
+    "name": "erixx",
+    "logoPath": "de/erixx",
+    "countries": ["de"],
+    "operatorTypes": ["passenger"],
+    "bounds": [9.6, 51.85, 11.25, 53.3],
+    "description": "erixx operates regional passenger trains in Lower Saxony, including Hannover–Hildesheim–Bad Harzburg, Braunschweig–Goslar/Bad Harzburg, Braunschweig–Uelzen and Lüneburg–Dannenberg.",
+    "website": "https://www.erixx.de",
+    "founded": null,
+    "headquarters": null,
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["regional"],
+    "parentCompany": null,
+    "links": [
+      {
+        "label": "Official website",
+        "url": "https://www.erixx.de",
+        "type": "website"
+      }
+    ]
+  },
+  {
+    "slug": "akn",
+    "name": "AKN Eisenbahn",
+    "logoPath": "de/akn",
+    "countries": ["de"],
+    "operatorTypes": ["passenger"],
+    "bounds": [9.6, 53.55, 10.15, 54.15],
+    "description": "AKN Eisenbahn operates regional and suburban passenger trains in Hamburg and Schleswig-Holstein. Its A1, A2 and A3 routes link Hamburg-Eidelstedt, Quickborn, Ulzburg Süd, Norderstedt Mitte, Neumünster and Elmshorn.",
+    "website": "https://www.akn.de",
+    "founded": null,
+    "headquarters": null,
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["regional", "commuter"],
+    "parentCompany": null,
+    "links": [
+      {
+        "label": "Official website",
+        "url": "https://www.akn.de",
+        "type": "website"
+      },
+      {
+        "label": "Services and operator information",
+        "url": "https://www.akn.de/en/fahrplaene-tickets/fahrplaene",
+        "type": "website"
+      }
+    ]
+  },
+  {
+    "slug": "keolis-nederland",
+    "name": "Keolis Nederland",
+    "logoPath": "nl/keolis",
+    "countries": ["nl"],
+    "operatorTypes": ["passenger"],
+    "bounds": [5.3, 51.95, 6.95, 52.65],
+    "description": "Keolis Nederland operates regional passenger trains in the Netherlands. Its Blauwnet services link Zwolle with Kampen and Enschede, while its RRReis rail service runs between Amersfoort and Ede-Wageningen.",
+    "website": "https://www.keolis.nl",
+    "founded": null,
+    "headquarters": null,
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["regional", "commuter"],
+    "parentCompany": "Keolis",
+    "links": [
+      {
+        "label": "Official website",
+        "url": "https://www.keolis.nl",
+        "type": "website"
+      },
+      {
+        "label": "Services and operator information",
+        "url": "https://www.keolis.nl/reisgebieden/",
+        "type": "website"
+      }
+    ]
+  },
+  {
+    "slug": "mav",
+    "name": "MÁV",
+    "logoPath": "hu/mav",
+    "countries": ["hu"],
+    "operatorTypes": ["passenger", "light-rail"],
+    "bounds": [16.21, 45.78, 22.85, 48.61],
+    "description": "MÁV, the Hungarian State Railways, runs most passenger trains in Hungary, from Budapest suburban services to InterCity and international EuroCity trains. Its network radiates from the three Budapest terminals – Keleti, Nyugati and Déli – to every region of the country. MÁV also operates the Szeged–Hódmezővásárhely tram-train, and its subsidiary MÁV-HÉV runs the Budapest suburban HÉV lines.",
+    "website": "https://www.mavcsoport.hu",
+    "founded": 1868,
+    "headquarters": "Budapest, Hungary",
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["intercity", "regional", "commuter", "international"],
+    "parentCompany": "Hungarian State",
+    "links": [
+      {
+        "label": "Official Site",
+        "url": "https://www.mavcsoport.hu",
+        "type": "website"
+      },
+      {
+        "label": "Journey planner",
+        "url": "https://mavplusz.hu",
+        "type": "timetables"
+      },
+      {
+        "label": "Wikipedia",
+        "url": "https://en.wikipedia.org/wiki/M%C3%81V",
+        "type": "wikipedia"
+      }
+    ]
+  },
+  {
+    "slug": "gysev",
+    "name": "GYSEV",
+    "logoPath": "hu/gysev",
+    "countries": ["hu"],
+    "operatorTypes": ["passenger"],
+    "bounds": [16.1, 46.85, 17.7, 47.97],
+    "description": "GYSEV (Győr–Sopron–Ebenfurti Vasút), known in Austria as Raaberbahn, is a jointly Hungarian and Austrian owned railway in western Hungary. It runs regional and fast trains around Sopron, Szombathely and Győr, plus cross-border services towards Ebenfurth, Wiener Neustadt and Neusiedl am See. It is one of the oldest railway companies in Europe still operating under its original name.",
+    "website": "https://www.gysev.hu",
+    "founded": 1872,
+    "headquarters": "Sopron, Hungary",
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["regional", "international"],
+    "parentCompany": null,
+    "links": [
+      {
+        "label": "Official Site",
+        "url": "https://www.gysev.hu",
+        "type": "website"
+      },
+      {
+        "label": "Wikipedia",
+        "url": "https://en.wikipedia.org/wiki/Raab-Oedenburg-Ebenfurter_Eisenbahn",
+        "type": "wikipedia"
+      }
+    ]
+  },
+  {
+    "slug": "mav-hev",
+    "name": "MÁV-HÉV",
+    "logoPath": "hu/mav-hev",
+    "countries": ["hu"],
+    "operatorTypes": ["light-rail"],
+    "bounds": [18.93, 47.17, 19.37, 47.67],
+    "description": "MÁV-HÉV operates Budapest’s five suburban HÉV lines, which link the city with Szentendre, Ráckeve, Csepel, Gödöllő and Csömör. The lines start at Batthyány tér, Közvágóhíd, Boráros tér and Örs vezér tere, with connections to the metro and tram network. The company took over the HÉV from BKV in 2016 and is part of the MÁV Group.",
+    "website": "https://www.mavcsoport.hu",
+    "founded": 2016,
+    "headquarters": "Budapest, Hungary",
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["commuter"],
+    "parentCompany": "MÁV",
+    "links": [
+      {
+        "label": "Official Site",
+        "url": "https://www.mavcsoport.hu",
+        "type": "website"
+      },
+      {
+        "label": "Journey planner",
+        "url": "https://mavplusz.hu",
+        "type": "timetables"
+      },
+      {
+        "label": "Wikipedia",
+        "url": "https://en.wikipedia.org/wiki/BH%C3%89V",
+        "type": "wikipedia"
+      }
+    ]
+  },
+  {
+    "slug": "bkv",
+    "name": "BKV",
+    "logoPath": "hu/bkv",
+    "countries": ["hu"],
+    "operatorTypes": ["metro"],
+    "bounds": [19.01, 47.45, 19.16, 47.57],
+    "description": "BKV (Budapesti Közlekedési Zrt.) operates the Budapest metro on behalf of the transport authority BKK, alongside the city’s trams, buses and trolleybuses. Its four lines include M1, the oldest underground railway in continental Europe, and the automated M4. Deák Ferenc tér is the main interchange between M1, M2 and M3.",
+    "website": "https://bkv.hu",
+    "founded": 1968,
+    "headquarters": "Budapest, Hungary",
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["commuter"],
+    "parentCompany": "City of Budapest",
+    "links": [
+      {
+        "label": "Official Site",
+        "url": "https://bkv.hu",
+        "type": "website"
+      },
+      {
+        "label": "Journey planner",
+        "url": "https://futar.bkk.hu",
+        "type": "timetables"
+      },
+      {
+        "label": "Wikipedia",
+        "url": "https://en.wikipedia.org/wiki/Budapest_Metro",
+        "type": "wikipedia"
+      }
+    ]
+  },
+  {
+    "slug": "rail-cargo-hungaria",
+    "name": "Rail Cargo Hungaria",
+    "logoPath": "hu/rail-cargo-hungaria",
+    "countries": ["hu"],
+    "operatorTypes": ["freight"],
+    "bounds": [16.21, 45.78, 22.85, 48.61],
+    "description": "Rail Cargo Hungaria is Hungary’s largest rail freight operator, formed from the former MÁV Cargo after its sale to the Austrian Federal Railways in 2008. As part of the ÖBB Rail Cargo Group, it carries bulk, wagonload and intermodal traffic within Hungary and on transit corridors between Western Europe, the Balkans and Ukraine.",
+    "website": "https://www.railcargo.com/hu",
+    "founded": 2008,
+    "headquarters": "Budapest, Hungary",
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["wagonload", "block-train", "intermodal", "international"],
+    "parentCompany": "ÖBB Rail Cargo Group",
+    "links": [
+      {
+        "label": "Official Site",
+        "url": "https://www.railcargo.com/hu",
+        "type": "website"
+      },
+      {
+        "label": "Wikipedia",
+        "url": "https://en.wikipedia.org/wiki/Rail_Cargo_Hungaria",
+        "type": "wikipedia"
+      }
+    ]
+  },
+  {
+    "slug": "gysev-cargo",
+    "name": "GYSEV Cargo",
+    "logoPath": "hu/gysev",
+    "countries": ["hu"],
+    "operatorTypes": ["freight"],
+    "bounds": [16.21, 45.78, 22.85, 48.61],
+    "description": "GYSEV Cargo is the rail freight subsidiary of GYSEV, based in Sopron. It runs block trains, wagonload and intermodal services across Hungary and on cross-border routes into Austria and neighbouring countries.",
+    "website": "https://www.gysevcargo.hu",
+    "founded": 2011,
+    "headquarters": "Sopron, Hungary",
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["wagonload", "block-train", "intermodal", "international"],
+    "parentCompany": "GYSEV",
+    "links": [
+      {
+        "label": "Official Site",
+        "url": "https://www.gysevcargo.hu",
+        "type": "website"
+      }
+    ]
+  },
+  {
+    "slug": "cd",
+    "name": "České dráhy",
+    "logoPath": "cz/cd",
+    "countries": ["international", "de", "pl", "dk", "hu"],
+    "operatorTypes": ["passenger"],
+    "bounds": [9.9, 46.6, 21.3, 55.7],
+    "description": "České dráhy (ČD) is the Czech state-owned national railway operator and the country's largest passenger train operator. It runs long-distance and regional services across Czechia under public-service contracts, and international trains to Germany, Poland, Austria, Slovakia, Hungary and Denmark. ČD is also the parent of freight operator ČD Cargo.",
+    "website": "https://www.cd.cz/",
+    "founded": 2003,
+    "headquarters": "Prague, Czechia",
+    "networkKm": null,
+    "annualPassengers": 168000000,
+    "serviceTypes": ["intercity", "regional", "commuter", "night-train", "international"],
+    "parentCompany": "Czech Republic",
+    "links": [
+      {
+        "label": "Official Site",
+        "url": "https://www.cd.cz/",
+        "type": "website"
+      },
+      {
+        "label": "Timetables",
+        "url": "https://www.cd.cz/en/spojeni-a-jizdenka/",
+        "type": "timetables"
+      },
+      {
+        "label": "Wikipedia",
+        "url": "https://en.wikipedia.org/wiki/%C4%8Cesk%C3%A9_dr%C3%A1hy",
+        "type": "wikipedia"
+      }
+    ]
+  },
+  {
+    "slug": "cfr-calatori",
+    "name": "CFR Călători",
+    "logoPath": "ro/cfr-calatori",
+    "countries": ["international", "hu"],
+    "operatorTypes": ["passenger"],
+    "bounds": [19, 43.6, 29.7, 48.3],
+    "description": "CFR Călători is the state-owned national passenger railway operator of Romania, created in 1998 when the former Romanian railways were split into separate companies. It runs InterCity, InterRegio and Regio services across the country, plus international trains to neighbouring states, over infrastructure managed by CFR Infrastructură.",
+    "website": "https://www.cfrcalatori.ro",
+    "founded": 1998,
+    "headquarters": "Bucharest, Romania",
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["intercity", "regional", "night-train", "international"],
+    "parentCompany": "Romanian State",
+    "links": [
+      {
+        "label": "Official Site",
+        "url": "https://www.cfrcalatori.ro",
+        "type": "website"
+      },
+      {
+        "label": "Timetables",
+        "url": "https://bilete.cfrcalatori.ro/en-GB/Itineraries",
+        "type": "timetables"
+      },
+      {
+        "label": "Wikipedia",
+        "url": "https://en.wikipedia.org/wiki/CFR_C%C4%83l%C4%83tori",
+        "type": "wikipedia"
+      }
+    ]
+  },
+  {
+    "slug": "uz",
+    "name": "Ukrzaliznytsia",
+    "logoPath": "ua/uz",
+    "countries": ["international", "hu"],
+    "operatorTypes": ["passenger", "freight"],
+    "bounds": [16.9, 44.3, 40.3, 52.4],
+    "description": "Ukrzaliznytsia (UZ) is Ukraine's state-owned national railway company. It runs passenger and freight trains and manages the country's rail network. Its international passenger trains link Ukraine with neighbouring countries, including through cars to Budapest and Vienna over the Chop–Záhony border crossing.",
+    "website": "https://uz.gov.ua",
+    "founded": 1991,
+    "headquarters": "Kyiv, Ukraine",
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["intercity", "regional", "night-train", "international"],
+    "parentCompany": "Ukrainian State",
+    "links": [
+      {
+        "label": "Official Site",
+        "url": "https://uz.gov.ua",
+        "type": "website"
+      },
+      {
+        "label": "Timetables",
+        "url": "https://booking.uz.gov.ua",
+        "type": "timetables"
+      },
+      {
+        "label": "Wikipedia",
+        "url": "https://en.wikipedia.org/wiki/Ukrainian_Railways",
+        "type": "wikipedia"
       }
     ]
   }

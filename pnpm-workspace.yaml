@@ -1,8 +1,14 @@
 packages:
   - apps/*
   - packages/*
+overrides:
+  # These UI packages still request runed 0.35; 0.38 supports SvelteKit 3.
+  "bits-ui@2.20.4>runed": "0.38.0"
+  "svelte-toolbelt@0.10.6>runed": "0.38.0"
 allowBuilds:
   core-js: true
   esbuild: true
   sharp: true
   workerd: true
+patchedDependencies:
+  "@tanstack/start-plugin-core@1.171.55": patches/@tanstack__start-plugin-core@1.171.55.patch

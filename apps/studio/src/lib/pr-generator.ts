@@ -1,4 +1,4 @@
-import type { ContributionStats, StationChange } from "$lib/types/contribution";
+import type { ContributionStats, StationChange } from "#lib/types/contribution.ts";
 
 function generateGoogleMapsLink(lat: number, lng: number): string {
   return `https://www.google.com/maps?q=${lat},${lng}`;

@@ -1,13 +1,9 @@
 import { useQuery } from "@tanstack/react-query";
-import { useEffect, useState } from "react";
+import { useHydrated } from "@tanstack/react-router";
 import { getStationPhotos } from "@/lib/station-photos";
 
 export function useStationPhotos(stationId: string, enabled: boolean) {
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+  const mounted = useHydrated();
 
   const { data } = useQuery({
     queryKey: ["station-photos", stationId],

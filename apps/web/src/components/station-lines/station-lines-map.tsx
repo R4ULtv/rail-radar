@@ -4,7 +4,7 @@ import type { Station } from "@repo/data";
 import { getStationLines } from "@repo/data/lines";
 import { useIsMobile } from "@repo/ui/hooks/use-mobile";
 import type { MapMouseEvent } from "mapbox-gl";
-import { useEffect, useMemo, useRef } from "react";
+import { useEffect, useEffectEvent, useMemo, useRef } from "react";
 import { Layer, Source, useMap } from "react-map-gl/mapbox";
 import type { LayerProps } from "react-map-gl/mapbox";
 
@@ -222,8 +222,7 @@ export function StationLinesMap({
   // The line is known before its stops load, so only fit once they're here to bound it.
   const fitKey = line && collections ? `${line.id}/${route}` : null;
   const failed = stationId !== null && (view.isError || lines.length === 0);
-  const boundsRef = useRef(collections?.bounds);
-  boundsRef.current = collections?.bounds;
+  const getBounds = useEffectEvent(() => collections?.bounds);
   const lastFit = useRef<{ key: string; stationId: string } | null>(null);
   useEffect(() => {
     if (!map || !stationId || !geo) {
@@ -237,7 +236,7 @@ export function StationLinesMap({
       lastFit.current = null;
       return;
     }
-    const bounds = boundsRef.current;
+    const bounds = getBounds();
     if (!fitKey || !bounds) return;
     if (lastFit.current?.key !== fitKey) {
       map.fitBounds(bounds, { padding, maxZoom: 15, duration: 1200 });
@@ -247,8 +246,7 @@ export function StationLinesMap({
     lastFit.current = { key: fitKey, stationId };
   }, [map, stationId, geo, fitKey, failed, isMobile]);
 
-  const selectStopRef = useRef(view.selectStop);
-  selectStopRef.current = view.selectStop;
+  const selectStop = useEffectEvent((id: string) => view.selectStop(id));
   useEffect(() => {
     if (!map) return;
     const handleClick = (e: MapMouseEvent & { features?: GeoJSON.Feature[] }) => {
@@ -257,7 +255,7 @@ export function StationLinesMap({
       // A visible station marker on top handles the click itself.
       const layers = STATION_LAYERS.filter((layer) => map.getLayer(layer));
       if (map.queryRenderedFeatures(e.point, { layers }).length > 0) return;
-      selectStopRef.current(id);
+      selectStop(id);
     };
     const handleMouseEnter = () => {
       map.getCanvas().style.cursor = "pointer";

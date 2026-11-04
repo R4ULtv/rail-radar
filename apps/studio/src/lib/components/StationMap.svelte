@@ -1,16 +1,16 @@
 <script lang="ts">
   import type { Station } from "@repo/data";
-  import * as maplibregl from "$lib/maplibre";
+  import * as maplibregl from "#lib/maplibre.ts";
   import type { ExpressionSpecification, GeoJSONSource, Map, Marker } from "maplibre-gl";
   import { onDestroy, onMount } from "svelte";
-  import { STATION_TYPE_COLOR } from "$lib/station-colors";
+  import { STATION_TYPE_COLOR } from "#lib/station-colors.ts";
   import {
     findDuplicateStationIds,
     stationMatchesFilters,
     type StationImportanceFilter,
     type StationTypeFilter,
-  } from "$lib/station-filters";
-  import { roundCoordinate } from "$lib/stations";
+  } from "#lib/station-filters.ts";
+  import { roundCoordinate } from "#lib/stations.ts";
 
   const SOURCE_ID = "stations-source";
   const LAYER_ID = "stations-layer";

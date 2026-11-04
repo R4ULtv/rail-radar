@@ -1,11 +1,14 @@
 "use client";
 
-import { useReducer, useRef, useSyncExternalStore } from "react";
-import { ContainerIcon, XIcon } from "lucide-react";
+import { useState, useSyncExternalStore } from "react";
+import { ArrowRightIcon, XIcon } from "lucide-react";
 import { LazyMotion, domAnimation, m, AnimatePresence } from "motion/react";
-import { Button } from "@repo/ui/components/button";
+import { Link } from "@tanstack/react-router";
+import { Button, buttonVariants } from "@repo/ui/components/button";
+import { cn } from "@repo/ui/lib/utils";
+import { prerenderedPageLinkProps } from "@/lib/station-prerender";
 
-const STORAGE_KEY = "banner-dismissed-v18";
+const STORAGE_KEY = "banner-dismissed-v19";
 
 const subscribe = () => () => {};
 const getSnapshot = () => !localStorage.getItem(STORAGE_KEY);
@@ -13,15 +16,13 @@ const getServerSnapshot = () => false;
 
 export function AnnouncementBanner() {
   const shouldShow = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
-  const dismissedRef = useRef(false);
-  const [, rerender] = useReducer((value: number) => value + 1, 0);
+  const [dismissed, setDismissed] = useState(false);
 
-  const visible = shouldShow && !dismissedRef.current;
+  const visible = shouldShow && !dismissed;
 
   const dismiss = () => {
-    dismissedRef.current = true;
+    setDismissed(true);
     localStorage.setItem(STORAGE_KEY, "1");
-    rerender();
   };
 
   return (
@@ -39,23 +40,39 @@ export function AnnouncementBanner() {
               role="status"
               className="relative flex items-center gap-3 overflow-hidden rounded-3xl bg-card p-2.5 pr-10 text-card-foreground shadow-md ring-1 ring-foreground/5 md:gap-3.5 md:p-3 md:pr-12 dark:ring-foreground/10"
             >
-              <div
+              <img
                 aria-hidden="true"
-                className="flex size-10 shrink-0 items-center justify-center rounded-2xl bg-brand/15 text-brand md:size-11"
-              >
-                <ContainerIcon className="size-5 md:size-6" />
-              </div>
+                src="/assets/flags/hu.svg"
+                alt=""
+                width={44}
+                height={44}
+                className="size-10 shrink-0 rounded-2xl border border-border object-cover md:size-11"
+              />
 
               <div className="min-w-0 flex-1">
                 <div className="mb-0.5 flex items-center gap-1.5">
                   <p className="truncate text-sm font-semibold tracking-tight">
-                    New: freight stations
+                    Hungary is now live
                   </p>
                 </div>
                 <p className="truncate text-xs text-muted-foreground">
-                  Discover yards, terminals, and ports
+                  Explore stations across Hungary
                 </p>
               </div>
+
+              <Link
+                to="/stations/$country"
+                params={{ country: "hungary" }}
+                {...prerenderedPageLinkProps}
+                onClick={dismiss}
+                className={cn(
+                  buttonVariants({ variant: "default", size: "sm" }),
+                  "hidden transition-transform duration-150 active:scale-[0.97] md:inline-flex",
+                )}
+              >
+                Explore
+                <ArrowRightIcon data-icon="inline-end" />
+              </Link>
 
               <Button
                 variant="ghost"
@@ -66,6 +83,17 @@ export function AnnouncementBanner() {
               >
                 <XIcon className="size-3.5" />
               </Button>
+
+              <Link
+                to="/stations/$country"
+                params={{ country: "hungary" }}
+                {...prerenderedPageLinkProps}
+                onClick={dismiss}
+                aria-label="Explore train stations in Hungary"
+                className="absolute inset-0 rounded-3xl focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/30 focus-visible:ring-inset md:hidden"
+              >
+                <span className="sr-only">Explore train stations in Hungary</span>
+              </Link>
             </div>
           </m.div>
         )}

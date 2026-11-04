@@ -1,8 +1,8 @@
 <script lang="ts">
   import { DownloadIcon, PlusIcon, RefreshCwIcon, UploadIcon } from "@lucide/svelte";
-  import AppHeader from "$lib/components/AppHeader.svelte";
-  import { Badge } from "$lib/components/ui/badge";
-  import { Button } from "$lib/components/ui/button";
+  import AppHeader from "#lib/components/AppHeader.svelte";
+  import { Badge } from "#lib/components/ui/badge/index.ts";
+  import { Button } from "#lib/components/ui/button/index.ts";
 
   let {
     fileLabel,

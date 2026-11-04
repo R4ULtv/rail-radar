@@ -1,8 +1,8 @@
 <script lang="ts">
   import { FileUpIcon } from "@lucide/svelte";
   import type { Snippet } from "svelte";
-  import { Separator } from "$lib/components/ui/separator";
-  import WorkspaceNav from "$lib/components/WorkspaceNav.svelte";
+  import { Separator } from "#lib/components/ui/separator/index.ts";
+  import WorkspaceNav from "#lib/components/WorkspaceNav.svelte";
 
   let {
     fileLabel,

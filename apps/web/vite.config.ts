@@ -2,6 +2,7 @@ import { defineConfig, loadEnv } from "vite";
 import type { Plugin } from "vite";
 import type { StationFeatureCollection } from "../../packages/data/src/types.ts";
 import { readFileSync } from "node:fs";
+import { availableParallelism } from "node:os";
 import { cloudflare } from "@cloudflare/vite-plugin";
 import { tanstackStart } from "@tanstack/react-start/plugin/vite";
 import { COUNTRY_SLUGS } from "../../packages/data/src/countries.ts";
@@ -27,7 +28,7 @@ const stationRecords = JSON.parse(
   readFileSync(new URL("../../packages/data/src/stations.geojson", import.meta.url), "utf8"),
 ) as StationFeatureCollection;
 
-const prerenderPages = [
+const prerenderPaths = new Set([
   "/",
   "/app",
   "/donate",
@@ -45,7 +46,18 @@ const prerenderPages = [
   ...stationRecords.features
     .filter(({ properties }) => isStationPagePrerendered(properties))
     .map(({ properties }) => `/station/${properties.id}`),
-].map((path) => ({ path }));
+]);
+
+const prerenderPages = [...prerenderPaths].map((path) => ({ path }));
+
+// Our patch to @tanstack/start-plugin-core (see /patches) sets this while it starts the
+// prerender preview servers, one per worker.
+// oxlint-disable-next-line turbo/no-undeclared-env-vars -- Set by our start-plugin-core patch.
+const isPrerenderPreview = process.env.TSS_PRERENDER_WORKER !== undefined;
+
+// Each prerender worker is its own workerd process, so rendering uses several cores.
+// Leave one core for the build process, which fetches pages and writes the HTML files.
+const prerenderWorkers = Math.max(1, Math.min(4, availableParallelism() - 1));
 
 const geojsonPlugin: Plugin = {
   name: "rail-radar-geojson",
@@ -138,6 +150,10 @@ export default defineConfig(({ command, mode }) => {
     plugins: [
       cloudflare({
         viteEnvironment: { name: "ssr" },
+        // Prerender workers run side by side. Sharing .wrangler/state makes their SQLite
+        // files collide (SQLITE_BUSY), and they would all claim the same inspector port.
+        // Prerendered pages read no local bindings, so in-memory state is enough.
+        ...(isPrerenderPreview && { persistState: false, inspectorPort: false }),
         config: (config) => {
           config.r2_buckets?.forEach((bucket) => {
             // Development can show the real station photos. Production builds use local R2 so
@@ -159,7 +175,9 @@ export default defineConfig(({ command, mode }) => {
           autoSubfolderIndex: false,
           autoStaticPathsDiscovery: false,
           crawlLinks: false,
-          concurrency: 2,
+          workers: prerenderWorkers,
+          // Two requests per worker, so each has the next page queued while it renders.
+          concurrency: prerenderWorkers * 2,
           failOnError: true,
         },
       }),

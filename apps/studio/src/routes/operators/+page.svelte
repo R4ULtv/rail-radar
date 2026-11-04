@@ -3,12 +3,12 @@
   import { Building2Icon, PlusIcon } from "@lucide/svelte";
   import { beforeNavigate } from "$app/navigation";
   import { onMount } from "svelte";
-  import OperatorEditPanel from "$lib/components/OperatorEditPanel.svelte";
-  import OperatorHeaderBar from "$lib/components/OperatorHeaderBar.svelte";
-  import OperatorSidebar from "$lib/components/OperatorSidebar.svelte";
-  import { Button } from "$lib/components/ui/button";
-  import * as Alert from "$lib/components/ui/alert";
-  import * as Empty from "$lib/components/ui/empty";
+  import OperatorEditPanel from "#lib/components/OperatorEditPanel.svelte";
+  import OperatorHeaderBar from "#lib/components/OperatorHeaderBar.svelte";
+  import OperatorSidebar from "#lib/components/OperatorSidebar.svelte";
+  import { Button } from "#lib/components/ui/button/index.ts";
+  import * as Alert from "#lib/components/ui/alert/index.ts";
+  import * as Empty from "#lib/components/ui/empty/index.ts";
   import {
     createOperator,
     getOperatorInUseError,
@@ -17,8 +17,8 @@
     validateOperators,
     type OperatorCountryFilter,
     type OperatorTypeFilter,
-  } from "$lib/operators";
-  import type { DataMode } from "$lib/stores/stations";
+  } from "#lib/operators.ts";
+  import type { DataMode } from "#lib/stores/stations.ts";
   import type { PageData } from "./$types";
 
   let { data }: { data: PageData } = $props();

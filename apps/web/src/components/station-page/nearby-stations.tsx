@@ -1,10 +1,12 @@
 import { Link } from "@tanstack/react-router";
 import type { Station } from "@repo/data";
 import { SquareMIcon, TrainFrontIcon } from "lucide-react";
+import { cn } from "@repo/ui/lib/utils";
 import { stationPageLinkProps } from "@/lib/station-prerender";
 
 interface NearbyStationsProps {
   stations: Array<Station & { distance: number }>;
+  className?: string;
 }
 
 function formatDistance(km: number): string {
@@ -14,13 +16,13 @@ function formatDistance(km: number): string {
   return `${km.toFixed(1)} km`;
 }
 
-export function NearbyStations({ stations }: NearbyStationsProps) {
+export function NearbyStations({ stations, className }: NearbyStationsProps) {
   if (stations.length === 0) {
     return null;
   }
 
   return (
-    <section className="flex flex-col gap-3">
+    <section className={cn("flex flex-col gap-3", className)}>
       <h2 className="text-sm font-medium text-muted-foreground">Nearby Stations</h2>
       <ul className="flex flex-col gap-1">
         {stations.map((station) => {

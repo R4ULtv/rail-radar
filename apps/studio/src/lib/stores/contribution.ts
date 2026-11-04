@@ -5,7 +5,7 @@ import type {
   ContributionSession,
   ContributionStats,
   StationChange,
-} from "$lib/types/contribution";
+} from "#lib/types/contribution.ts";
 
 const STORAGE_KEY = "rail-radar-studio-beta-contribution-session";
 

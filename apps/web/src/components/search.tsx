@@ -45,6 +45,7 @@ import type { OperatorType } from "@repo/data/operators";
 import { Button } from "@repo/ui/components/button";
 import { useHomeSearch } from "@/hooks/use-home-search";
 import { FreightKindMarker, OperatorTypeMarker } from "@/lib/operator-types";
+import { AppTicket } from "@/components/app-ticket";
 
 /** The map marker drawn for each station type. */
 const markerType = {
@@ -176,6 +177,7 @@ function SearchContent({
   focusedIndex,
   setFocusedIndex,
   limit,
+  className,
 }: {
   isSearchActive: boolean;
   searchResults: Station[];
@@ -193,6 +195,7 @@ function SearchContent({
   focusedIndex: number;
   setFocusedIndex: (index: number) => void;
   limit?: number;
+  className?: string;
 }) {
   // Keep-previous only helps when there are rows on screen. A prior search that
   // returned nothing leaves us with none, so fall back to skeletons there too —
@@ -200,7 +203,12 @@ function SearchContent({
   const hasKeptResults = searchResults.length > 0;
 
   return (
-    <div role="region" aria-label="Station search results" aria-busy={isUpdatingResults}>
+    <div
+      role="region"
+      aria-label="Station search results"
+      aria-busy={isUpdatingResults}
+      className={className}
+    >
       {isUpdatingResults && !hasKeptResults && !hasSearchError && (
         <>
           <div className="px-4 py-2 not-first:mt-1">
@@ -308,6 +316,13 @@ function SearchContent({
           />
         </>
       )}
+      {showDefaultLists && (
+        <>
+          {/* In the drawer, this pushes the ticket to the bottom when the lists are short. */}
+          <div aria-hidden="true" className="grow" />
+          <AppTicket layout="compact" className="mx-4 mt-4 mb-2" />
+        </>
+      )}
       <div role="status" aria-live="polite" className="sr-only">
         {isUpdatingResults ? (hasKeptResults ? "Updating results" : "Searching stations") : ""}
       </div>
@@ -335,7 +350,7 @@ export function Search() {
 
   // Sync debounced query to URL
   React.useEffect(() => {
-    setUrlQuery(debouncedQuery || null);
+    void setUrlQuery(debouncedQuery || null);
   }, [debouncedQuery, setUrlQuery]);
   const [focus, setFocus] = React.useState({ listKey: "", index: -1 });
   const [isDrawerOpen, setIsDrawerOpen] = React.useState(() => isMobile && query.length > 0);
@@ -404,7 +419,7 @@ export function Search() {
     hasMinimumSearchLength && !noResults && !canActivateSearchResults;
   const showSearchSpinner = isUpdatingResults || isFetching;
 
-  const cardHeight = useAnimatedHeight();
+  const { contentRef: cardContentRef, height: cardHeight } = useAnimatedHeight();
 
   const handleSelectStation = React.useCallback(
     (station: Station) => {
@@ -616,8 +631,8 @@ export function Search() {
               </InputGroup>
             </DrawerHeader>
 
-            <div className="flex-1 overflow-auto pt-2">
-              <SearchContent {...searchContentProps} />
+            <div className="flex flex-1 flex-col overflow-auto pt-2 pb-2">
+              <SearchContent {...searchContentProps} className="flex grow flex-col" />
             </div>
           </DrawerContent>
         </Drawer>
@@ -672,11 +687,11 @@ export function Search() {
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.15, ease: [0.23, 1, 0.32, 1] }}
-          style={{ height: cardHeight.height }}
+          style={{ height: cardHeight }}
           className="pointer-events-auto overflow-hidden rounded-3xl"
         >
           <div
-            ref={cardHeight.contentRef}
+            ref={cardContentRef}
             className="flex flex-col rounded-3xl bg-card py-2 text-card-foreground shadow-md ring-1 ring-foreground/5 dark:ring-foreground/10"
           >
             <div>

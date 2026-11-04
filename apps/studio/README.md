@@ -4,13 +4,15 @@ Admin tool for managing railway stations, transit lines and railway operators ac
 
 ## Tech Stack
 
-- SvelteKit 2 + Svelte 5 (runes)
+- SvelteKit 3 + Svelte 5 (runes)
 - MapLibre GL (interactive map)
 - Tailwind CSS 4 + shadcn-svelte / bits-ui
 - Wikidata + Wikipedia for station enrichment
-- Cloudflare adapter for deployment, custom Vite middleware for local edits
+- Static adapter with Cloudflare Workers hosting, custom Vite middleware for local edits
 
 ## Getting Started
+
+Requires Node.js >=22.17. SvelteKit configuration lives in `vite.config.ts`; local library imports use `#lib/*` with explicit file extensions.
 
 For development with hot-reload:
 

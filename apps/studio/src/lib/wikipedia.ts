@@ -1,10 +1,10 @@
-import { parseStationInfobox } from "$lib/wikipedia-parser";
+import { parseStationInfobox } from "#lib/wikipedia-parser.ts";
 import type {
   StationInfobox,
   WikipediaContentResponse,
   WikipediaPage,
   WikipediaSearchResponse,
-} from "$lib/types/wikipedia";
+} from "#lib/types/wikipedia.ts";
 
 const IT_WIKIPEDIA_API = "https://it.wikipedia.org/w/api.php";
 const WIKIDATA_API = "https://www.wikidata.org/w/api.php";

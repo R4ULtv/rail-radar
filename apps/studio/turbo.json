@@ -1,0 +1,14 @@
+{
+  "extends": ["//"],
+  "tasks": {
+    "sync": {
+      "outputs": ["node_modules/$app/**", ".svelte-kit/types/**"]
+    },
+    "lint": {
+      "dependsOn": ["$TURBO_EXTENDS$", "sync"]
+    },
+    "check-types": {
+      "dependsOn": ["$TURBO_EXTENDS$", "sync"]
+    }
+  }
+}

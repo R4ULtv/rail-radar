@@ -1,19 +1,19 @@
 <script lang="ts">
   import type { Operator } from "@repo/data";
   import { onMount, tick } from "svelte";
-  import { Input } from "$lib/components/ui/input";
-  import { Button } from "$lib/components/ui/button";
-  import { ScrollArea } from "$lib/components/ui/scroll-area";
-  import * as Select from "$lib/components/ui/select";
-  import * as Empty from "$lib/components/ui/empty";
+  import { Input } from "#lib/components/ui/input/index.ts";
+  import { Button } from "#lib/components/ui/button/index.ts";
+  import { ScrollArea } from "#lib/components/ui/scroll-area/index.ts";
+  import * as Select from "#lib/components/ui/select/index.ts";
+  import * as Empty from "#lib/components/ui/empty/index.ts";
   import {
     operatorCountryLabels,
     operatorTypeLabels,
     type OperatorCountryFilter,
     type OperatorTypeFilter,
-  } from "$lib/operators";
-  import OperatorLogo from "$lib/components/OperatorLogo.svelte";
-  import { cn } from "$lib/utils";
+  } from "#lib/operators.ts";
+  import OperatorLogo from "#lib/components/OperatorLogo.svelte";
+  import { cn } from "#lib/utils.ts";
 
   let {
     operators,
