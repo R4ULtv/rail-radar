@@ -34,7 +34,7 @@ function linesCacheKey(c: Context<Env>): string {
   const query = normalizeText(c.req.query("q") ?? "");
   if (query) key.set("q", query);
 
-  return `${url.origin}${url.pathname}?${key}`;
+  return `${url.origin}${url.pathname}?${key.toString()}`;
 }
 
 const linesCache = () =>

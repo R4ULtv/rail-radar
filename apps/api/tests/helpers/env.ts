@@ -49,9 +49,8 @@ export function createEnv(overrides: Partial<Record<keyof Bindings, unknown>> = 
     SNCF_API_KEY: "test-sncf-key",
     MOBILITEIT_API_KEY: "test-mobiliteit-key",
     MAPBOX_TOKEN: "test-mapbox-token",
-    ...overrides,
   };
-  return env as typeof env & Bindings;
+  return { ...env, ...overrides } as typeof env & { ASSETS: Omit<Fetcher, "fetch"> };
 }
 
 /** An ExecutionContext that collects `waitUntil` promises so tests can await them. */

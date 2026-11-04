@@ -631,7 +631,10 @@ describe("scrapeHungaryTrains", () => {
         stoptime({ number: "706", headsign: "Siófok", extra: { realtimeState: "CANCELED" } }),
       ]);
 
-      expect(trains.map((train) => train.status).sort()).toEqual(["cancelled", null]);
+      expect(trains.map((train) => train.status)).toEqual(
+        expect.arrayContaining(["cancelled", null]),
+      );
+      expect(trains).toHaveLength(2);
     });
 
     it("merges rows of one number under the same cancellation state", async () => {

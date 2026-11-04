@@ -20,10 +20,12 @@ type Route = {
 
 /** A JSON response with the given status (200 by default). */
 export function jsonResponse(body: unknown, init: ResponseInit = {}): Response {
+  const headers = new Headers(init.headers);
+  if (!headers.has("Content-Type")) headers.set("Content-Type", "application/json");
   return new Response(JSON.stringify(body), {
     status: 200,
     ...init,
-    headers: { "Content-Type": "application/json", ...init.headers },
+    headers,
   });
 }
 
