@@ -29,7 +29,7 @@ type Entry = {
   stop: { id: string; name: string; lat: number; lon: number };
   scheduled_platform: { id: string; designation: string } | null;
   realtime_platform: { id: string; designation: string } | null;
-  alerts: { type: string; title: string; text: string }[];
+  alerts?: { type: string; title: string; text: string }[];
 };
 
 type EntryOverrides = Partial<Omit<Entry, "route" | "agency" | "stop">> & {
@@ -325,6 +325,14 @@ describe("scrapeSwedenTrains", () => {
       const [train] = (await scrapeSwedenTrains("SE098001", "departures", ENV)).trains;
 
       expect(train?.info).toBe("First");
+    });
+
+    it("has no info when the alerts field is missing", async () => {
+      fetchMock.on("realtime-api.trafiklab.se", board([entry({ alerts: undefined })]));
+
+      const [train] = (await scrapeSwedenTrains("SE098001", "departures", ENV)).trains;
+
+      expect(train?.info).toBeNull();
     });
   });
 

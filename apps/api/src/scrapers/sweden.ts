@@ -46,7 +46,7 @@ interface TrafiklabDeparture {
   stop: { id: string; name: string; lat: number; lon: number };
   scheduled_platform: { id: string; designation: string } | null;
   realtime_platform: { id: string; designation: string } | null;
-  alerts: { type: string; title: string; text: string }[];
+  alerts?: { type: string; title: string; text: string }[];
 }
 
 interface TrafiklabResponse {
@@ -197,7 +197,7 @@ function mapEntry(entry: TrafiklabDeparture, type: SwedenBoardType): Train {
     delay: getDelay(entry),
     platform: entry.realtime_platform?.designation ?? entry.scheduled_platform?.designation ?? null,
     status: getStatus(entry, type),
-    info: entry.alerts[0]?.title ?? null,
+    info: entry.alerts?.[0]?.title ?? null,
   };
 
   if (type === "departures") {
