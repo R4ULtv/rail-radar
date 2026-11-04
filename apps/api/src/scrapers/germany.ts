@@ -364,7 +364,7 @@ function toBoardEntry(
     trainNumber: stop.label.n ?? "",
     scheduledTime: `${attributes.pt!.slice(6, 8)}:${attributes.pt!.slice(8, 10)}`,
     delay:
-      Number.isFinite(changed) && changed > scheduled
+      !cancelled && Number.isFinite(changed) && changed > scheduled
         ? Math.round((changed - scheduled) / 60_000)
         : null,
     platform: attributes.cp ?? attributes.pp ?? null,

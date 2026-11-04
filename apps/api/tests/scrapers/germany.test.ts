@@ -659,6 +659,14 @@ describe("scrapeGermanTrains", () => {
       expect(trains[0]?.delay).toBeNull();
     });
 
+    it("shows no delay for a cancelled train with a later changed time", async () => {
+      serve({ "260310/10": timetable([dep("1", "10:20", { cs: "c", ct: t("10:35") })]) });
+
+      const { trains } = await run();
+
+      expect(trains[0]).toMatchObject({ status: "cancelled", delay: null });
+    });
+
     it("honours a planned cancellation unless the change status overrides it", async () => {
       serve({
         "260310/10": timetable([
