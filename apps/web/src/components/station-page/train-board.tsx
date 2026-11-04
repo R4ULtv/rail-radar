@@ -33,9 +33,10 @@ export function TrainBoard({ stationId }: { stationId: string }) {
     arrivalsSupported && mounted && (isMobile === false || activeType === "arrivals"),
   );
 
-  // Prevent hydration mismatch - loading skeleton is handled by loading.tsx
+  // The prerendered page can't know the viewport, so it shows the loading board until hydration
+  // swaps in the same layout, without a jump.
   if (!mounted) {
-    return null;
+    return <TrainBoardLoading arrivalsSupported={arrivalsSupported} />;
   }
 
   // Desktop: Two columns side by side
@@ -86,5 +87,43 @@ export function TrainBoard({ stationId }: { stationId: string }) {
       onTypeChange={setType}
       arrivalsDisabled={!arrivalsSupported}
     />
+  );
+}
+
+const loadingColumn = {
+  trainData: null,
+  isLoading: true,
+  isValidating: false,
+  error: null,
+  lastUpdated: null,
+  onRetry: () => {},
+};
+
+/** The board as it first loads, for both viewports; CSS shows the one that fits. */
+export function TrainBoardLoading({ arrivalsSupported = true }: { arrivalsSupported?: boolean }) {
+  return (
+    <>
+      <div className="md:hidden">
+        <TrainColumn
+          title="Departures"
+          type="departures"
+          {...loadingColumn}
+          showTypeToggle
+          onTypeChange={loadingColumn.onRetry}
+          arrivalsDisabled={!arrivalsSupported}
+        />
+      </div>
+      <div className="hidden grid-cols-2 gap-6 md:grid">
+        <TrainColumn title="Departures" type="departures" {...loadingColumn} />
+        <TrainColumn
+          title="Arrivals"
+          type="arrivals"
+          {...loadingColumn}
+          unavailableMessage={
+            arrivalsSupported ? undefined : "Live arrivals for Luxembourg are coming soon."
+          }
+        />
+      </div>
+    </>
   );
 }

@@ -5,6 +5,7 @@ import { joinBeta, joinIphoneWaitlist } from "@/lib/beta-signup.functions";
 import { metadataToHead, type Metadata } from "@/lib/metadata";
 import { MIN_ANDROID_VERSION, useDeviceCheck, type DeviceCheck } from "@/hooks/use-device-check";
 import { PlatformLogo, type AppPlatform } from "@/components/platform-logo";
+import { dismissAppTickets } from "@/components/app-ticket";
 import { Button } from "@repo/ui/components/button";
 import { Card, CardContent } from "@repo/ui/components/card";
 import { Input } from "@repo/ui/components/input";
@@ -128,6 +129,11 @@ const mobileFeatures = [
 ];
 
 function AppPage() {
+  // Visitors who reach this page have found the app, so the tickets stop inviting them here.
+  useEffect(() => {
+    dismissAppTickets();
+  }, []);
+
   const [appearance, setAppearance] = useState<Appearance>("dark");
   const device = useDeviceCheck();
   const [selectedPlatform, setSelectedPlatform] = useState<AppPlatform | null>(null);

@@ -36,7 +36,11 @@ const DISMISSED_KEY = "app-ticket-dismissed:v1";
  */
 export const appTicketDismissedScript = `try{if(localStorage.getItem("${DISMISSED_KEY}"))document.documentElement.dataset.appTicketDismissed=""}catch(e){}`;
 
-function dismissAppTickets() {
+/**
+ * Retires the app tickets for good: on dismissal, and once the visitor has seen the app page, so
+ * they aren't invited back to it.
+ */
+export function dismissAppTickets() {
   // The attribute hides tickets through styles.css, wherever they are on the page.
   document.documentElement.dataset.appTicketDismissed = "";
   try {
@@ -48,8 +52,8 @@ function dismissAppTickets() {
 
 /**
  * A link to the mobile app page, drawn as a ticket like the footer's directory links. `stacked`
- * tears off at the bottom; `compact` tears off at the side, for narrow lists. Visitors can dismiss
- * it for good, which hides every ticket.
+ * tears off at the bottom; `compact` tears off at the side, for narrow lists. Dismissing one, or
+ * opening the app page, hides every ticket for good.
  */
 export function AppTicket({
   layout = "stacked",
