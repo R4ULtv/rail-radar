@@ -46,7 +46,8 @@ export const Route = createFileRoute("/report/2026-10-24")({
   component: OctoberReportPage,
 });
 
-const number = new Intl.NumberFormat("en-US").format;
+const numberFormatter = new Intl.NumberFormat("en-US");
+const number = (value: number) => numberFormatter.format(value);
 const summary = report.summary;
 const db = report.providers.find(({ provider }) => provider === "db")!;
 const swiss = report.providers.find(({ provider }) => provider === "opendata-ch")!;
