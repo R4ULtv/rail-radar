@@ -194,7 +194,10 @@ write. Saved/recent stations, location, and station downloads keep their own dat
   levels the same.
 - After changing the web's station icon SVGs, run `pnpm --filter=mobile generate:station-icons`.
 - After changing `apps/web/public/icon.svg`, run `pnpm --filter=mobile generate:app-icon`.
-- After adding operator logos, run `pnpm --filter=mobile generate:brand-logos`.
+- Metro refreshes bundled operator logos and station icons automatically for development,
+  exports, and native release builds. `pnpm --filter=mobile generate:brand-logos` also refreshes
+  the committed registry without starting Metro; mobile lint rejects a stale registry or missing
+  source logo.
 - Country flags import the web's SVGs directly, and a new country fails the type check until its
   flag is imported in `country-flag.tsx`.
 - The previews in `assets/map-styles` are Milano Centrale at zoom 14 in each style and theme,
@@ -210,6 +213,10 @@ write. Saved/recent stations, location, and station downloads keep their own dat
   of movement. Opening search, changing the query, or receiving the first fix refreshes immediately.
 - Stations are bundled from `packages/data/src/stations.geojson`. Background API updates are
   downloaded at most once a day and applied on the next launch.
+- Operator logos and aliases, country flags, line definitions, tracks, and line operator names
+  stay bundled and require an app release to update on installed devices. A newer operator from
+  the live API still shows its brand name when the installed app has no matching logo. Station
+  downloads do not update these bundled assets or add support for new station types.
 - API and photo requests use a `RailRadar/<version>` User-Agent. Filter on `RailRadar/` in
   Cloudflare Workers Logs to find them.
 - Mapbox telemetry is disabled. Map credits appear in the search and map style sheets and settings.

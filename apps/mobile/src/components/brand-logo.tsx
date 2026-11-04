@@ -1,11 +1,18 @@
-import { View } from "react-native";
+import { Text, View } from "react-native";
 
 import { getBrandLogo } from "@/lib/brands";
 
-/** The train operator's logo, bundled from the web app. Nothing when the brand has none. */
+/** Bundled logo, or the API's brand name when this app version has no artwork for it. */
 export function BrandLogo({ brand, size = 16 }: { brand: string | null; size?: number }) {
-  const Logo = brand ? getBrandLogo(brand) : null;
-  if (!Logo) return null;
+  if (!brand?.trim()) return null;
+  const Logo = getBrandLogo(brand);
+  if (!Logo) {
+    return (
+      <Text className="shrink text-xs text-muted" numberOfLines={1} style={{ maxWidth: 96 }}>
+        {brand.trim()}
+      </Text>
+    );
+  }
 
   return (
     <View

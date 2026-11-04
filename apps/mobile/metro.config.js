@@ -1,8 +1,16 @@
 const fs = require("node:fs");
+const { execFileSync } = require("node:child_process");
 const path = require("node:path");
 const { getDefaultConfig } = require("expo/metro-config");
 const { withUniwindConfig } = require("uniwind/metro");
 const { writeLineAssets } = require("./scripts/line-assets.cjs");
+
+// Refresh bundled artwork before Metro builds its graph, including native release builds.
+for (const script of ["generate-brand-logos.mjs", "generate-station-icons.mjs"]) {
+  execFileSync(process.execPath, [path.join(__dirname, "scripts", script)], {
+    stdio: "inherit",
+  });
+}
 
 // The app bundles the stations minified, 40% smaller. The shared file stays readable for
 // Studio and reviews, so the copy is made here, whenever Metro starts, and isn't committed.
