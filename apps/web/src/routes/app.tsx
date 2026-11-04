@@ -19,9 +19,9 @@ import {
   CircleDashedIcon,
   GiftIcon,
   MegaphoneIcon,
-  LocateFixedIcon,
-  MapPinIcon,
   MoonIcon,
+  RouteIcon,
+  SearchIcon,
   SunIcon,
   TicketIcon,
   TrainFrontIcon,
@@ -103,28 +103,34 @@ const screens = [
 
 const mobileFeatures = [
   {
-    icon: MapPinIcon,
-    title: "Nearby departures, one tap away",
+    icon: TrainFrontIcon,
+    title: "Departures near you in one tap",
     description:
-      "Tap Nearby to open your closest station's live departures. Switch between the three nearest train stations, with distances shown.",
+      "Tap Nearby to open the live board of your closest train station. The next two nearest are one tap away, with distances shown, in case your GPS picked the wrong one.",
   },
   {
     icon: WifiOffIcon,
-    title: "Search without a connection",
+    title: "Built for a weak connection",
     description:
-      "Every station is stored on your phone, so you can search even offline. Live departures need an internet connection.",
+      "Every station, line and operator logo is stored on your phone, so search and lines open instantly, even offline. Only live departures need a connection, and the last board you loaded stays on screen.",
+  },
+  {
+    icon: SearchIcon,
+    title: "Search ranked by where you are",
+    description:
+      'Stations and lines in one list, with your saved and recent stations first and nearby matches ahead of distant ones. Type "M1" and the closest M1 comes up. Search runs on your phone, so your location never leaves it.',
+  },
+  {
+    icon: RouteIcon,
+    title: "Metro and tram lines at every stop",
+    description:
+      "Each station lists the metro, light rail and tram lines that serve it, in 14 countries. Open a line to see its track on the map and every stop in order, then tap a stop to jump to it.",
   },
   {
     icon: BookmarkIcon,
-    title: "Search that puts your stations first",
+    title: "Unlimited saved stations and lines",
     description:
-      "Matching saved and recent stations come first. Nearby matches rank higher, with distances shown when location is enabled.",
-  },
-  {
-    icon: LocateFixedIcon,
-    title: "Follow your position on the map",
-    description:
-      "Tap Locate to follow your live position as you move. Pan the map whenever you want to explore somewhere else.",
+      "Save as many stations and lines as you need, and hold one to drag it into your own order.",
   },
 ];
 
@@ -162,9 +168,8 @@ function AppPage() {
           Try Rail Radar for free during the beta.
         </h1>
         <p className="mt-3 text-muted-foreground text-pretty">
-          Find nearby departures, search stations offline and follow your position on the map. Join
-          the free Android beta now, or get on the iPhone waitlist. The public release will be a
-          paid app.
+          Nearby departures in one tap, and search and lines that work even offline. Join the free
+          Android beta now, or get on the iPhone waitlist. The public release will be a paid app.
         </p>
       </div>
 
@@ -173,13 +178,13 @@ function AppPage() {
       <section className="mt-12">
         <SectionHeading>What the app adds</SectionHeading>
         <p className="mb-6 text-sm leading-6 text-muted-foreground text-pretty">
-          The same European railway coverage as the website, with more ways to find your next
-          station on the go.
+          The same European coverage as the website, built to be faster on your phone. Everything
+          except live departures works offline.
         </p>
         <ul className="divide-y divide-border">
           {mobileFeatures.map(({ icon: Icon, title, description }) => (
             <li key={title} className="flex gap-4 py-5 first:pt-0 last:pb-0">
-              <span className="flex size-10 shrink-0 items-center justify-center rounded-2xl bg-muted text-blue-600 dark:text-blue-400">
+              <span className="flex size-10 shrink-0 items-center justify-center rounded-2xl bg-muted text-brand">
                 <Icon aria-hidden="true" className="size-5" />
               </span>
               <div className="min-w-0">
@@ -254,7 +259,7 @@ function AppPage() {
                   aria-hidden="true"
                   className={cn(
                     "relative mt-0.5 size-5 shrink-0 rounded-full border-[5px]",
-                    index === 0 ? "border-blue-500 bg-background" : "border-muted bg-background",
+                    index === 0 ? "border-brand bg-background" : "border-muted bg-background",
                   )}
                 />
                 <div className="min-w-0">
@@ -289,7 +294,7 @@ function BetaBoard() {
       </div>
       <ul className="divide-y divide-border border-y border-border">
         <BoardRow
-          accent="blue"
+          accent="brand"
           badge={<PlatformLogo platform="android" className="size-7" />}
           title="Android beta"
           subtitle="To Google Play"
@@ -334,7 +339,7 @@ function BoardRow({
   time,
   status,
 }: {
-  accent?: "blue" | "green";
+  accent?: "brand" | "green";
   badge: ReactNode;
   title: string;
   subtitle: string;
@@ -345,7 +350,7 @@ function BoardRow({
     <li
       className={cn(
         "flex items-center gap-3 border-l-3 py-3.5 pr-4 pl-[13px] md:pr-5 md:pl-[17px]",
-        accent === "blue" && "border-l-blue-500",
+        accent === "brand" && "border-l-brand",
         accent === "green" && "border-l-green-500",
         !accent && "border-l-transparent",
       )}
@@ -557,7 +562,7 @@ function SignupCard({
                           key={value}
                           value={value}
                           aria-invalid={platformMissing || undefined}
-                          className="h-11 flex-1 shrink text-base aria-pressed:border-blue-500 aria-pressed:bg-blue-500/10 sm:text-sm"
+                          className="h-11 flex-1 shrink text-base aria-pressed:border-brand aria-pressed:bg-brand/10 sm:text-sm"
                         >
                           <PlatformLogo platform={value} />
                           {value === "ios" ? "iPhone" : "Android"}
@@ -714,7 +719,7 @@ function BoardingPass({
           </div>
           <div aria-hidden="true" className="mb-2.5 flex flex-1 items-center gap-1.5">
             <span className="h-px flex-1 border-t border-dashed border-muted-foreground/40" />
-            <TrainFrontIcon className="size-4 text-blue-600 dark:text-blue-400" />
+            <TrainFrontIcon className="size-4 text-brand" />
             <span className="h-px flex-1 border-t border-dashed border-muted-foreground/40" />
           </div>
           <div className="min-w-0 text-right">
