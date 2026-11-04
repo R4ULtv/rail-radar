@@ -558,6 +558,35 @@ describe("scrapeFranceTrains", () => {
       expect(train?.info).toBe("Grève");
     });
 
+    it("shows a disruption linked from both the passage and its informations once", async () => {
+      const link = { type: "disruption", id: "d1" };
+      const [train] = await trainsFor(
+        [passage({ links: [link], info: { links: [link] } })],
+        [disruption("d1", "SIGNIFICANT_DELAYS", "Retard")],
+      );
+
+      expect(train?.info).toBe("Retard");
+    });
+
+    it("shows a message repeated by several disruptions once", async () => {
+      const [train] = await trainsFor(
+        [
+          passage({
+            links: [
+              { type: "disruption", id: "d1" },
+              { type: "disruption", id: "d2" },
+            ],
+          }),
+        ],
+        [
+          disruption("d1", "SIGNIFICANT_DELAYS", "Retard", "Travaux"),
+          disruption("d2", "DETOUR", "<p>Retard</p>"),
+        ],
+      );
+
+      expect(train?.info).toBe("Retard; Travaux");
+    });
+
     it("shows messages of non-cancelling disruptions without changing the status", async () => {
       const [train] = await trainsFor(
         [

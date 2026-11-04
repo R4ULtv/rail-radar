@@ -248,16 +248,26 @@ export async function scrapeFranceTrains(
       ? passage.stop_date_time.arrival_date_time
       : passage.stop_date_time.departure_date_time;
 
-    const linked = [...(passage.links ?? []), ...(info.links ?? [])]
-      .filter((link) => link.type === "disruption")
-      .map((link) => disruptionsById.get(link.id))
+    // The passage and its display informations often link the same disruption.
+    const linkedIds = new Set(
+      [...(passage.links ?? []), ...(info.links ?? [])]
+        .filter((link) => link.type === "disruption")
+        .map((link) => link.id),
+    );
+    const linked = [...linkedIds]
+      .map((id) => disruptionsById.get(id))
       .filter((d): d is Disruption => Boolean(d));
 
     const cancelled = linked.some((d) => d.severity?.effect === "NO_SERVICE");
-    const messages = linked
-      .flatMap((d) => d.messages ?? [])
-      .map((m) => stripHtml(m.text))
-      .filter(Boolean);
+    // Separate disruptions can also carry the same text.
+    const messages = [
+      ...new Set(
+        linked
+          .flatMap((d) => d.messages ?? [])
+          .map((m) => stripHtml(m.text))
+          .filter(Boolean),
+      ),
+    ];
 
     const train: Train = {
       brand: info.network ?? info.commercial_mode ?? "SNCF",
