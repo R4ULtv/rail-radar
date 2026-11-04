@@ -89,7 +89,7 @@ function validateFeatures(features: unknown[]): ValidationError[] {
       addError("id", "ID must be a non-empty string without line breaks");
     } else {
       if (seenIds.has(props.id)) {
-        addError("id", `Duplicate ID (also used by "${seenIds.get(props.id)}")`);
+        addError("id", `Duplicate ID (also used by "${formatValue(seenIds.get(props.id))}")`);
       }
       seenIds.set(props.id, props.name);
     }
@@ -98,16 +98,19 @@ function validateFeatures(features: unknown[]): ValidationError[] {
       addError("name", "Name must be a non-empty string");
     }
     if (!hasKey(stationTypes, props.type)) {
-      addError("type", `Invalid type: ${props.type} (must be rail, metro, light, or freight)`);
+      addError(
+        "type",
+        `Invalid type: ${formatValue(props.type)} (must be rail, metro, light, or freight)`,
+      );
     }
     if (![1, 2, 3, 4].includes(props.importance as number)) {
-      addError("importance", `Invalid importance: ${props.importance} (must be 1-4)`);
+      addError("importance", `Invalid importance: ${formatValue(props.importance)} (must be 1-4)`);
     }
     if (props.kind !== undefined) {
       if (!hasKey(freightKinds, props.kind)) {
         addError(
           "kind",
-          `Invalid freight kind: ${props.kind} (must be marshalling, intermodal, or port)`,
+          `Invalid freight kind: ${formatValue(props.kind)} (must be marshalling, intermodal, or port)`,
         );
       }
       if (props.type !== "freight") {
@@ -192,10 +195,15 @@ function computeDiff(baseFeatures: unknown[], headFeatures: unknown[]): DiffResu
   return diff;
 }
 
+function formatValue(value: unknown): string {
+  if (value === undefined) return "—";
+  if (typeof value === "string") return value;
+  return JSON.stringify(value) ?? "—";
+}
+
 // Escape untrusted data in every table cell, including HTML, Markdown, and line breaks.
 function cell(value: unknown, full: boolean): string {
-  if (value === undefined) return "—";
-  const raw = typeof value === "object" ? JSON.stringify(value) : String(value);
+  const raw = formatValue(value);
   const text = !full && raw.length > 160 ? `${raw.slice(0, 157)}…` : raw;
   return text
     .replace(/[\r\n]+/g, " ")
