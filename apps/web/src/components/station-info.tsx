@@ -206,7 +206,7 @@ export default function StationInfo() {
   const { selectedStation, clearStation } = useSelectedStation();
   const [type, setType] = useState<"arrivals" | "departures">("departures");
   const [snap, setSnap] = useState<number | string | null>(snapPoints[0] as string);
-  const cardHeight = useAnimatedHeight();
+  const { contentRef: cardContentRef, height: cardHeight } = useAnimatedHeight();
 
   // Derive open state from selectedStation
   const isOpen = !!selectedStation;
@@ -263,9 +263,9 @@ export default function StationInfo() {
               >
                 <XIcon className="size-4" />
               </Button>
-              <m.div style={{ height: cardHeight.height }} className="overflow-hidden rounded-4xl">
+              <m.div style={{ height: cardHeight }} className="overflow-hidden rounded-4xl">
                 <Card
-                  ref={cardHeight.contentRef}
+                  ref={cardContentRef}
                   className={cn(
                     "flex w-96 flex-1 flex-col gap-2 pt-4 pb-0",
                     isLines && "max-h-[calc(100dvh-2rem)]",

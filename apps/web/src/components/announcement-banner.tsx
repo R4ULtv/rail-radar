@@ -1,6 +1,6 @@
 "use client";
 
-import { useReducer, useRef, useSyncExternalStore } from "react";
+import { useState, useSyncExternalStore } from "react";
 import { ArrowRightIcon, XIcon } from "lucide-react";
 import { LazyMotion, domAnimation, m, AnimatePresence } from "motion/react";
 import { Link } from "@tanstack/react-router";
@@ -16,15 +16,13 @@ const getServerSnapshot = () => false;
 
 export function AnnouncementBanner() {
   const shouldShow = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
-  const dismissedRef = useRef(false);
-  const [, rerender] = useReducer((value: number) => value + 1, 0);
+  const [dismissed, setDismissed] = useState(false);
 
-  const visible = shouldShow && !dismissedRef.current;
+  const visible = shouldShow && !dismissed;
 
   const dismiss = () => {
-    dismissedRef.current = true;
+    setDismissed(true);
     localStorage.setItem(STORAGE_KEY, "1");
-    rerender();
   };
 
   return (

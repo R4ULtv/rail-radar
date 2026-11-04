@@ -301,7 +301,7 @@ export function StationGallery({ stationName, lat, lng, photos }: StationGallery
           isDragging && "snap-none scroll-auto md:cursor-grabbing",
         )}
       >
-        {items.map((item, index) => (
+        {items.map((item) => (
           <div key={item.key} className="relative size-full shrink-0 snap-start overflow-hidden">
             {item.type === "map" ? (
               <StaticMap lat={lat} lng={lng} zoom={14} priority className="absolute inset-0" />

@@ -57,7 +57,7 @@ export function SelectedStationProvider({ children }: { children: React.ReactNod
   // Clear a stale ?station= param (one no longer backed by a selection)
   React.useEffect(() => {
     if (stationId && !stationRef.current && stationId !== linkedStationId) {
-      setStationId(null);
+      void setStationId(null);
     }
   }, [stationId, linkedStationId, setStationId]);
 
@@ -69,14 +69,14 @@ export function SelectedStationProvider({ children }: { children: React.ReactNod
       if (station.type === "freight") {
         stationRef.current = null;
         setStationObject(null);
-        setStationId(null);
+        void setStationId(null);
         if (station.geo) flyToRef.current(station.geo, false);
         return;
       }
 
       stationRef.current = station;
       setStationObject(station);
-      setStationId(station.id);
+      void setStationId(station.id);
 
       // Metro and light rail stations frame their lines instead (StationLinesMap).
       if (station.geo && station.type === "rail") {
@@ -110,7 +110,7 @@ export function SelectedStationProvider({ children }: { children: React.ReactNod
 
   const clearStation = React.useCallback(() => {
     stationRef.current = null;
-    setStationId(null);
+    void setStationId(null);
     setStationObject(null);
   }, [setStationId]);
 

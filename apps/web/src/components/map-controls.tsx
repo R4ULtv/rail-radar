@@ -42,17 +42,18 @@ export function MapControls({
   const { current: map } = useMap();
   const [bearing, setBearing] = React.useState(0);
   const [isRequestingLocation, setIsRequestingLocation] = React.useState(false);
-  const [showLocatingIndicator, setShowLocatingIndicator] = React.useState(false);
   const isLocating = isAutoLocating || isRequestingLocation;
+  const [indicator, setIndicator] = React.useState({ locating: isLocating, visible: false });
+  if (indicator.locating !== isLocating) {
+    setIndicator({ locating: isLocating, visible: false });
+  }
+  const showLocatingIndicator = isLocating && indicator.visible;
 
   React.useEffect(() => {
-    if (!isLocating) {
-      setShowLocatingIndicator(false);
-      return;
-    }
+    if (!isLocating) return;
 
     const timeoutId = setTimeout(() => {
-      setShowLocatingIndicator(true);
+      setIndicator({ locating: true, visible: true });
     }, 300);
 
     return () => clearTimeout(timeoutId);

@@ -350,7 +350,7 @@ export function Search() {
 
   // Sync debounced query to URL
   React.useEffect(() => {
-    setUrlQuery(debouncedQuery || null);
+    void setUrlQuery(debouncedQuery || null);
   }, [debouncedQuery, setUrlQuery]);
   const [focus, setFocus] = React.useState({ listKey: "", index: -1 });
   const [isDrawerOpen, setIsDrawerOpen] = React.useState(() => isMobile && query.length > 0);
@@ -419,7 +419,7 @@ export function Search() {
     hasMinimumSearchLength && !noResults && !canActivateSearchResults;
   const showSearchSpinner = isUpdatingResults || isFetching;
 
-  const cardHeight = useAnimatedHeight();
+  const { contentRef: cardContentRef, height: cardHeight } = useAnimatedHeight();
 
   const handleSelectStation = React.useCallback(
     (station: Station) => {
@@ -687,11 +687,11 @@ export function Search() {
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.15, ease: [0.23, 1, 0.32, 1] }}
-          style={{ height: cardHeight.height }}
+          style={{ height: cardHeight }}
           className="pointer-events-auto overflow-hidden rounded-3xl"
         >
           <div
-            ref={cardHeight.contentRef}
+            ref={cardContentRef}
             className="flex flex-col rounded-3xl bg-card py-2 text-card-foreground shadow-md ring-1 ring-foreground/5 dark:ring-foreground/10"
           >
             <div>
