@@ -82,7 +82,7 @@ for (const file of files) {
   });
 
   if ("error" in optimized) {
-    throw new Error(`${path.relative(repoRoot, file)}: ${optimized.error}`);
+    throw new Error(`${path.relative(repoRoot, file)}: ${String(optimized.error)}`);
   }
 
   const output = ensureSvgBackground(
