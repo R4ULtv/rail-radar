@@ -6,3 +6,5 @@ allowBuilds:
   esbuild: true
   sharp: true
   workerd: true
+patchedDependencies:
+  "@tanstack/start-plugin-core@1.171.55": patches/@tanstack__start-plugin-core@1.171.55.patch

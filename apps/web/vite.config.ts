@@ -2,6 +2,7 @@ import { defineConfig, loadEnv } from "vite";
 import type { Plugin } from "vite";
 import type { StationFeatureCollection } from "../../packages/data/src/types.ts";
 import { readFileSync } from "node:fs";
+import { availableParallelism } from "node:os";
 import { cloudflare } from "@cloudflare/vite-plugin";
 import { tanstackStart } from "@tanstack/react-start/plugin/vite";
 import { COUNTRY_SLUGS } from "../../packages/data/src/countries.ts";
@@ -49,29 +50,14 @@ const prerenderPaths = new Set([
 
 const prerenderPages = [...prerenderPaths].map((path) => ({ path }));
 
-// TanStack currently crawls slash-ended URLs, while our router uses slashless URLs.
-const prerenderCanonicalUrlsPlugin: Plugin = {
-  name: "rail-radar-prerender-canonical-urls",
-  apply: (_config, { isPreview }) => !!isPreview,
-  configurePreviewServer: {
-    order: "pre",
-    handler(server) {
-      // oxlint-disable-next-line turbo/no-undeclared-env-vars -- Internal TanStack build flag.
-      if (process.env.TSS_PRERENDERING !== "true") return;
-      server.middlewares.use((req, _res, next) => {
-        const url = req.originalUrl ?? req.url ?? "/";
-        const query = url.indexOf("?");
-        const path = query < 0 ? url : url.slice(0, query);
-        if (path.endsWith("/") && prerenderPaths.has(path.slice(0, -1))) {
-          req.url = path.slice(0, -1) + (query < 0 ? "" : url.slice(query));
-          // Cloudflare's request adapter restores req.url from originalUrl.
-          req.originalUrl = req.url;
-        }
-        next();
-      });
-    },
-  },
-};
+// Our patch to @tanstack/start-plugin-core (see /patches) sets this while it starts the
+// prerender preview servers, one per worker.
+// oxlint-disable-next-line turbo/no-undeclared-env-vars -- Set by our start-plugin-core patch.
+const isPrerenderPreview = process.env.TSS_PRERENDER_WORKER !== undefined;
+
+// Each prerender worker is its own workerd process, so rendering uses several cores.
+// Leave one core for the build process, which fetches pages and writes the HTML files.
+const prerenderWorkers = Math.max(1, Math.min(4, availableParallelism() - 1));
 
 const geojsonPlugin: Plugin = {
   name: "rail-radar-geojson",
@@ -162,9 +148,12 @@ export default defineConfig(({ command, mode }) => {
       tsconfigPaths: true,
     },
     plugins: [
-      prerenderCanonicalUrlsPlugin,
       cloudflare({
         viteEnvironment: { name: "ssr" },
+        // Prerender workers run side by side. Sharing .wrangler/state makes their SQLite
+        // files collide (SQLITE_BUSY), and they would all claim the same inspector port.
+        // Prerendered pages read no local bindings, so in-memory state is enough.
+        ...(isPrerenderPreview && { persistState: false, inspectorPort: false }),
         config: (config) => {
           config.r2_buckets?.forEach((bucket) => {
             // Development can show the real station photos. Production builds use local R2 so
@@ -186,7 +175,9 @@ export default defineConfig(({ command, mode }) => {
           autoSubfolderIndex: false,
           autoStaticPathsDiscovery: false,
           crawlLinks: false,
-          concurrency: 2,
+          workers: prerenderWorkers,
+          // Two requests per worker, so each has the next page queued while it renders.
+          concurrency: prerenderWorkers * 2,
           failOnError: true,
         },
       }),
