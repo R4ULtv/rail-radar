@@ -1,6 +1,10 @@
 packages:
   - apps/*
   - packages/*
+overrides:
+  # These UI packages still request runed 0.35; 0.38 supports SvelteKit 3.
+  "bits-ui@2.20.4>runed": "0.38.0"
+  "svelte-toolbelt@0.10.6>runed": "0.38.0"
 allowBuilds:
   core-js: true
   esbuild: true
