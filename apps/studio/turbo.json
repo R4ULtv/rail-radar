@@ -1,0 +1,14 @@
+{
+  "extends": ["//"],
+  "tasks": {
+    "sync": {
+      "outputs": [".svelte-kit/tsconfig.json", ".svelte-kit/*.d.ts", ".svelte-kit/types/**"]
+    },
+    "lint": {
+      "dependsOn": ["$TURBO_EXTENDS$", "sync"]
+    },
+    "check-types": {
+      "dependsOn": ["$TURBO_EXTENDS$", "sync"]
+    }
+  }
+}
