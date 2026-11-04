@@ -102,7 +102,7 @@ const cameraMoveDuration = 700;
 const nearbyErrorDuration = 4000;
 
 if (accessToken) {
-  Mapbox.setAccessToken(accessToken);
+  void Mapbox.setAccessToken(accessToken);
 }
 // Mapbox's telemetry would send the user's location to Mapbox; it stays on the device instead.
 // This is also the opt-out Mapbox requires, which its hidden attribution button would offer.

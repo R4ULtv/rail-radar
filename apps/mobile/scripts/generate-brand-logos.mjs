@@ -2,6 +2,7 @@
 // Run `pnpm --filter=mobile generate:brand-logos` after changing the web's brands or logos.
 import { access, readFile, writeFile } from "node:fs/promises";
 import { format } from "oxfmt";
+import ts from "typescript";
 
 const source = new URL("../../web/src/components/brands.tsx", import.meta.url);
 const logosDir = new URL("../../web/public/assets/operators/", import.meta.url);
@@ -9,18 +10,40 @@ const output = new URL("../src/lib/brands.ts", import.meta.url);
 const logosImportPath = "../../../web/public/assets/operators";
 
 const code = await readFile(source, "utf8");
+const sourceFile = ts.createSourceFile(
+  source.pathname,
+  code,
+  ts.ScriptTarget.Latest,
+  true,
+  ts.ScriptKind.TSX,
+);
 
 function readObject(name) {
-  const body = code.match(
-    new RegExp(`const ${name}: Record<string, string> = \\{([\\s\\S]*?)\\n\\};`),
-  )?.[1];
-  if (!body) throw new Error(`${name} not found in ${source.pathname}`);
-  return new Function(`return {${body}};`)();
+  const declaration = sourceFile.statements
+    .filter(ts.isVariableStatement)
+    .flatMap((statement) => [...statement.declarationList.declarations])
+    .find((entry) => ts.isIdentifier(entry.name) && entry.name.text === name);
+  const object = declaration?.initializer;
+  if (!object || !ts.isObjectLiteralExpression(object)) {
+    throw new Error(`${name} not found in ${source.pathname}`);
+  }
+  return Object.fromEntries(
+    object.properties.map((property) => {
+      if (
+        !ts.isPropertyAssignment(property) ||
+        !(ts.isIdentifier(property.name) || ts.isStringLiteral(property.name)) ||
+        !ts.isStringLiteral(property.initializer)
+      ) {
+        throw new Error(`${name} must contain only literal string mappings.`);
+      }
+      return [property.name.text, property.initializer.text];
+    }),
+  );
 }
 
 const brandPaths = readObject("brandPaths");
 const brandAliases = readObject("brandAliases");
-const paths = [...new Set(Object.values(brandPaths))].sort();
+const paths = [...new Set(Object.values(brandPaths))].sort((a, b) => (a < b ? -1 : a > b ? 1 : 0));
 
 for (const path of paths) {
   await access(new URL(`${path}.svg`, logosDir)).catch(() => {
