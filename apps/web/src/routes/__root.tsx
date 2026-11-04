@@ -10,6 +10,7 @@ import type { QueryClient } from "@tanstack/react-query";
 import { Button } from "@repo/ui/components/button";
 import { Analytics } from "@/components/analytics";
 import { SiteFooter } from "@/components/site-footer";
+import { appTicketDismissedScript } from "@/components/app-ticket";
 import { env } from "@/lib/env";
 import appCss from "../styles.css?url";
 import geistFont from "../assets/fonts/Geist/Geist-web.woff2?url";
@@ -142,8 +143,11 @@ function RootDocument() {
       className="dark scheme-only-dark scroll-smooth scroll-pt-8"
       style={{ colorScheme: "dark" }}
       data-scroll-behavior="smooth"
+      // The app ticket script below may mark the root before hydration.
+      suppressHydrationWarning
     >
       <head>
+        <script dangerouslySetInnerHTML={{ __html: appTicketDismissedScript }} />
         <HeadContent />
       </head>
       <body className="antialiased">

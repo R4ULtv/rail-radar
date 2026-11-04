@@ -45,6 +45,7 @@ import type { OperatorType } from "@repo/data/operators";
 import { Button } from "@repo/ui/components/button";
 import { useHomeSearch } from "@/hooks/use-home-search";
 import { FreightKindMarker, OperatorTypeMarker } from "@/lib/operator-types";
+import { AppTicket } from "@/components/app-ticket";
 
 /** The map marker drawn for each station type. */
 const markerType = {
@@ -176,6 +177,7 @@ function SearchContent({
   focusedIndex,
   setFocusedIndex,
   limit,
+  className,
 }: {
   isSearchActive: boolean;
   searchResults: Station[];
@@ -193,6 +195,7 @@ function SearchContent({
   focusedIndex: number;
   setFocusedIndex: (index: number) => void;
   limit?: number;
+  className?: string;
 }) {
   // Keep-previous only helps when there are rows on screen. A prior search that
   // returned nothing leaves us with none, so fall back to skeletons there too —
@@ -200,7 +203,12 @@ function SearchContent({
   const hasKeptResults = searchResults.length > 0;
 
   return (
-    <div role="region" aria-label="Station search results" aria-busy={isUpdatingResults}>
+    <div
+      role="region"
+      aria-label="Station search results"
+      aria-busy={isUpdatingResults}
+      className={className}
+    >
       {isUpdatingResults && !hasKeptResults && !hasSearchError && (
         <>
           <div className="px-4 py-2 not-first:mt-1">
@@ -306,6 +314,13 @@ function SearchContent({
             onFocusIndex={setFocusedIndex}
             counts={trendingCounts}
           />
+        </>
+      )}
+      {showDefaultLists && (
+        <>
+          {/* In the drawer, this pushes the ticket to the bottom when the lists are short. */}
+          <div aria-hidden="true" className="grow" />
+          <AppTicket layout="compact" className="mx-4 mt-4 mb-2" />
         </>
       )}
       <div role="status" aria-live="polite" className="sr-only">
@@ -616,8 +631,8 @@ export function Search() {
               </InputGroup>
             </DrawerHeader>
 
-            <div className="flex-1 overflow-auto pt-2">
-              <SearchContent {...searchContentProps} />
+            <div className="flex flex-1 flex-col overflow-auto pt-2 pb-2">
+              <SearchContent {...searchContentProps} className="flex grow flex-col" />
             </div>
           </DrawerContent>
         </Drawer>

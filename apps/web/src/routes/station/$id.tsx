@@ -18,6 +18,7 @@ import { StationActions } from "@/components/station-page/station-actions";
 import { StationStats } from "@/components/station-page/station-stats";
 import { NearbyStations } from "@/components/station-page/nearby-stations";
 import { TrainBoard } from "@/components/station-page/train-board";
+import { AppPromo } from "@/components/station-page/app-promo";
 import { Skeleton } from "@repo/ui/components/skeleton";
 import { prerenderedPageLinkProps } from "@/lib/station-prerender";
 
@@ -112,10 +113,15 @@ function StationPage({
         {/* Station header */}
         <StationHeader station={station} />
 
-        {/* Stats and nearby stations row */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {/* Stats and nearby stations row. On desktop the app invitation fills the space under
+            the stats; on phones it follows the nearby stations. */}
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 md:grid-rows-[auto_1fr]">
           <StationStats stationId={station.id} />
-          <NearbyStations stations={nearbyStations} />
+          <NearbyStations
+            stations={nearbyStations}
+            className="md:col-start-2 md:row-span-2 md:row-start-1"
+          />
+          <AppPromo className="md:col-start-1 md:self-start" />
         </div>
       </div>
 
