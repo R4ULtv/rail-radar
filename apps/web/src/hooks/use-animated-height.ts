@@ -7,6 +7,8 @@ import {
   type BezierDefinition,
 } from "motion/react";
 
+const DEFAULT_EASE: BezierDefinition = [0.23, 1, 0.32, 1];
+
 interface UseAnimatedHeightOptions {
   duration?: number;
   shrinkDuration?: number;
@@ -19,16 +21,14 @@ interface UseAnimatedHeightReturn {
 }
 
 export function useAnimatedHeight(options: UseAnimatedHeightOptions = {}): UseAnimatedHeightReturn {
-  const {
-    duration = 0.2,
-    shrinkDuration = 0.1,
-    ease = [0.23, 1, 0.32, 1] as BezierDefinition,
-  } = options;
+  const { duration = 0.2, shrinkDuration = 0.1, ease = DEFAULT_EASE } = options;
 
   const height = useMotionValue(0);
 
   const optionsRef = React.useRef({ duration, shrinkDuration, ease });
-  optionsRef.current = { duration, shrinkDuration, ease };
+  React.useLayoutEffect(() => {
+    optionsRef.current = { duration, shrinkDuration, ease };
+  }, [duration, shrinkDuration, ease]);
 
   const contentRef = React.useCallback(
     (node: HTMLElement | null) => {
