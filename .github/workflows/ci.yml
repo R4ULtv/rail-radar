@@ -13,8 +13,8 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  lint-and-typecheck:
-    name: Lint & Type Check
+  checks:
+    name: Checks
     runs-on: ubuntu-latest
     timeout-minutes: 3
     env:
@@ -40,9 +40,34 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Check formatting
-        run: pnpm format:check
+      # Install once and run every check at the same time: formatting in the background beside
+      # one Turbo run, which parallelises lint, types and tests and records each task's result.
+      # This step only runs them; the steps below report and fail each check separately.
+      - name: Run checks
+        id: run
+        run: |
+          pnpm format:check > "$RUNNER_TEMP/format.log" 2>&1 &
+          format_pid=$!
+          pnpm exec turbo run lint check-types test \
+            --affected --continue=always --summarize --output-logs=none || true
+          format_status=0
+          wait "$format_pid" || format_status=$?
+          echo "format=$format_status" >> "$GITHUB_OUTPUT"
 
-      # Share Turbo startup and run independent checks together, even if one fails.
-      - name: Run linting and type checking
-        run: pnpm exec turbo run lint check-types --affected --continue=always
+      - name: Format
+        if: ${{ !cancelled() && steps.run.outcome == 'success' }}
+        run: |
+          cat "$RUNNER_TEMP/format.log"
+          exit ${{ steps.run.outputs.format }}
+
+      - name: Lint
+        if: ${{ !cancelled() && steps.run.outcome == 'success' }}
+        run: node .github/scripts/report-turbo-task.mts lint
+
+      - name: Type Check
+        if: ${{ !cancelled() && steps.run.outcome == 'success' }}
+        run: node .github/scripts/report-turbo-task.mts check-types
+
+      - name: Test
+        if: ${{ !cancelled() && steps.run.outcome == 'success' }}
+        run: node .github/scripts/report-turbo-task.mts test
