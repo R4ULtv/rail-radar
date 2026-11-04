@@ -13,6 +13,8 @@ export function initPostHog() {
     ui_host: "https://eu.posthog.com",
     defaults: "2026-08-29",
     persistence: "memory",
+    // Avoid merging a new anonymous ID on each load when identify() is called.
+    reuseAnonymousId: true,
     capture_pageview: "history_change",
     autocapture: false,
     // Without attribution PostHog uses the plain "web-vitals" bundle imported above.

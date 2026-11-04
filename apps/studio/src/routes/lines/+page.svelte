@@ -8,15 +8,15 @@
   } from "@repo/data/lines";
   import { beforeNavigate } from "$app/navigation";
   import { onMount } from "svelte";
-  import LineEditPanel from "$lib/components/LineEditPanel.svelte";
-  import LineHeaderBar from "$lib/components/LineHeaderBar.svelte";
-  import LineMap from "$lib/components/LineMap.svelte";
-  import LineSidebar from "$lib/components/LineSidebar.svelte";
-  import LineStationCard from "$lib/components/LineStationCard.svelte";
-  import LineStatusBar from "$lib/components/LineStatusBar.svelte";
-  import { Button } from "$lib/components/ui/button";
-  import { emptyGeometry, loadBundledGeometries } from "$lib/line-geometry";
-  import type { DataMode } from "$lib/stores/stations";
+  import LineEditPanel from "#lib/components/LineEditPanel.svelte";
+  import LineHeaderBar from "#lib/components/LineHeaderBar.svelte";
+  import LineMap from "#lib/components/LineMap.svelte";
+  import LineSidebar from "#lib/components/LineSidebar.svelte";
+  import LineStationCard from "#lib/components/LineStationCard.svelte";
+  import LineStatusBar from "#lib/components/LineStatusBar.svelte";
+  import { Button } from "#lib/components/ui/button/index.ts";
+  import { emptyGeometry, loadBundledGeometries } from "#lib/line-geometry.ts";
+  import type { DataMode } from "#lib/stores/stations.ts";
   import type { PageData } from "./$types";
 
   let { data }: { data: PageData } = $props();
@@ -87,7 +87,7 @@
   const unlinked = $derived(
     stations.filter(
       (station) =>
-        station.type !== "rail" &&
+        (station.type === "metro" || station.type === "light") &&
         countries.has(station.id.slice(0, 2)) &&
         !index.getStationLines(station.id).length,
     ),

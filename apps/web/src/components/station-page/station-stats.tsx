@@ -15,9 +15,21 @@ export function StationStats({ stationId }: StationStatsProps) {
     return (
       <div className="flex flex-col gap-3">
         <h2 className="text-sm font-medium text-muted-foreground">Station Statistics</h2>
-        <div className="flex flex-col gap-2">
-          <Skeleton className="h-5 w-24" />
-          <Skeleton className="h-4 w-32" />
+        {/* Shaped like the loaded stats: the visitor line, then the comparison, whose sentence
+            wraps to two lines on phones. */}
+        <div className="flex h-5 items-center">
+          <Skeleton className="h-4 w-64 max-w-full" />
+        </div>
+        <div className="flex flex-col gap-2 border-t pt-3">
+          <div>
+            <div className="flex h-4 items-center">
+              <Skeleton className="h-3 w-full md:w-4/5" />
+            </div>
+            <div className="flex h-4 items-center md:hidden">
+              <Skeleton className="h-3 w-1/2" />
+            </div>
+          </div>
+          <Skeleton className="h-1.5 rounded-full" />
         </div>
       </div>
     );
@@ -40,8 +52,8 @@ export function StationStats({ stationId }: StationStatsProps) {
           <div className="flex items-center gap-2 text-sm text-muted-foreground">
             <BarChart3Icon className="size-4" />
             <span>
-              {station.uniqueVisitors.toLocaleString()} unique visitors (
-              {station.visits.toLocaleString()} visits) in the last 7 days
+              {station.uniqueVisitors.toLocaleString("en-US")} unique visitors (
+              {station.visits.toLocaleString("en-US")} visits) in the last 7 days
             </span>
           </div>
         </div>

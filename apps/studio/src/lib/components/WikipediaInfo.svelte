@@ -1,11 +1,11 @@
 <script lang="ts">
   import { ExternalLinkIcon, MapPinIcon } from "@lucide/svelte";
-  import { Badge } from "$lib/components/ui/badge";
-  import { Button } from "$lib/components/ui/button";
-  import { COORDINATE_DECIMAL_PLACES, roundCoordinate } from "$lib/stations";
-  import type { StationInfobox, StationStatus } from "$lib/types/wikipedia";
-  import { fetchWikipediaStation } from "$lib/wikipedia";
-  import { calculateDistance, formatDistance, getStationStatus } from "$lib/wikipedia-parser";
+  import { Badge } from "#lib/components/ui/badge/index.ts";
+  import { Button } from "#lib/components/ui/button/index.ts";
+  import { COORDINATE_DECIMAL_PLACES, roundCoordinate } from "#lib/stations.ts";
+  import type { StationInfobox, StationStatus } from "#lib/types/wikipedia.ts";
+  import { fetchWikipediaStation } from "#lib/wikipedia.ts";
+  import { calculateDistance, formatDistance, getStationStatus } from "#lib/wikipedia-parser.ts";
 
   let {
     stationName,

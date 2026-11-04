@@ -1,9 +1,9 @@
 import type { Station } from "@repo/data";
 
-type StationPrerenderCandidate = Pick<Station, "type" | "importance">;
+type StationPrerenderCandidate = Pick<Station, "type">;
 
 export function isStationPagePrerendered(station: StationPrerenderCandidate): boolean {
-  return station.type === "rail" && station.importance <= 3;
+  return station.type === "rail";
 }
 
 /**
@@ -11,8 +11,8 @@ export function isStationPagePrerendered(station: StationPrerenderCandidate): bo
  * `/stations/$country`, `/stations`). A client-side navigation or intent preload runs
  * that server function on the Worker, while a document navigation to a prerendered
  * page is answered by the static asset layer without invoking the Worker at all.
- * Non-prerendered station pages keep client navigation — a server function is far
- * cheaper than a full SSR — but skip hover preloading.
+ * Rail station pages all use static document navigation. Other station types keep
+ * client navigation without hover preloading; their dedicated pages redirect to the map.
  */
 export const prerenderedPageLinkProps = { reloadDocument: true } as const;
 

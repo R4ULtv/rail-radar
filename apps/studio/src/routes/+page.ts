@@ -1,5 +1,5 @@
-import { dev } from "$app/environment";
-import type { DataMode } from "$lib/stores/stations";
+import { dev } from "$app/env";
+import type { DataMode } from "#lib/stores/stations.ts";
 
 export const prerender = true;
 

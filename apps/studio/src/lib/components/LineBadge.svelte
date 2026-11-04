@@ -1,7 +1,7 @@
 <script lang="ts">
   import type { Line } from "@repo/data";
-  import { getLineBadgeCode, getLineColor, getLineTextColor } from "$lib/line-colors";
-  import { cn } from "$lib/utils";
+  import { getLineBadgeCode, getLineColor, getLineTextColor } from "#lib/line-colors.ts";
+  import { cn } from "#lib/utils.ts";
 
   let { line, class: className }: { line: Pick<Line, "code" | "color">; class?: string } = $props();
 

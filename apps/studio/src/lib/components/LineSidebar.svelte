@@ -11,12 +11,12 @@
     XIcon,
   } from "@lucide/svelte";
   import { onMount, tick } from "svelte";
-  import LineBadge from "$lib/components/LineBadge.svelte";
-  import { Button } from "$lib/components/ui/button";
-  import { Input } from "$lib/components/ui/input";
-  import { ScrollArea } from "$lib/components/ui/scroll-area";
-  import * as Tabs from "$lib/components/ui/tabs";
-  import { cn } from "$lib/utils";
+  import LineBadge from "#lib/components/LineBadge.svelte";
+  import { Button } from "#lib/components/ui/button/index.ts";
+  import { Input } from "#lib/components/ui/input/index.ts";
+  import { ScrollArea } from "#lib/components/ui/scroll-area/index.ts";
+  import * as Tabs from "#lib/components/ui/tabs/index.ts";
+  import { cn } from "#lib/utils.ts";
 
   const ROW_HEIGHT = 36;
   const OVERSCAN = 4;

@@ -1,4 +1,4 @@
 {
   "extends": ["../../.oxlintrc.json"],
-  "ignorePatterns": [".svelte-kit/**", "build/**", ".wrangler/**"]
+  "ignorePatterns": [".svelte-kit/**", "build/**", ".wrangler/**", "worker-configuration.d.ts"]
 }

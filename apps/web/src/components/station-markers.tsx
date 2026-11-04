@@ -8,6 +8,7 @@ import { useSelectedStation } from "@/hooks/use-selected-station";
 import { env } from "@/lib/env";
 import { STATIONS_SOURCE_ID, stationFromFeature } from "@/lib/station-features";
 import {
+  FREIGHT_KIND_ICON_SVG,
   LIGHT_ICON_SVG,
   METRO_ICON_SVG,
   RAIL_ICON_SVG,
@@ -16,6 +17,10 @@ import {
 
 const RAIL_LAYER_ID = "rail-stations";
 const RAIL_ICON_ID = "rail-icon";
+const FREIGHT_LAYER_ID = "freight-stations";
+const MARSHALLING_ICON_ID = "freight-marshalling-icon";
+const INTERMODAL_ICON_ID = "freight-intermodal-icon";
+const PORT_ICON_ID = "freight-port-icon";
 const METRO_ICON_ID = "metro-icon";
 const LIGHT_ICON_ID = "light-icon";
 
@@ -27,6 +32,8 @@ const MINZOOM_EXPR = [
   13,
   "light",
   ["match", ["get", "importance"], 3, 11, 13],
+  "freight",
+  11,
   /* rail */ ["match", ["get", "importance"], 1, 3, 2, 7, 3, 9, 11],
 ];
 const MINZOOM_FILTER = ["<=", MINZOOM_EXPR, ["zoom"]];
@@ -153,6 +160,48 @@ const railLabelStyle = (): LayerProps => ({
   },
 });
 
+const freightLayerStyle = (): LayerProps => ({
+  id: FREIGHT_LAYER_ID,
+  type: "symbol",
+  source: STATIONS_SOURCE_ID,
+  filter: ["all", ["==", ["get", "type"], "freight"], MINZOOM_FILTER],
+  layout: {
+    "icon-image": [
+      "match",
+      ["get", "kind"],
+      "marshalling",
+      MARSHALLING_ICON_ID,
+      "port",
+      PORT_ICON_ID,
+      INTERMODAL_ICON_ID,
+    ],
+    "icon-size": ["interpolate", ["linear"], ["zoom"], 11, 0.25, 14, 0.3, 16, 0.35],
+    "icon-allow-overlap": false,
+    "icon-anchor": "center",
+    "symbol-sort-key": ["get", "importance"],
+  },
+});
+
+const freightLabelStyle = (): LayerProps => ({
+  id: "freight-labels",
+  type: "symbol",
+  source: STATIONS_SOURCE_ID,
+  filter: ["all", ["==", ["get", "type"], "freight"], LABEL_MINZOOM_FILTER],
+  layout: {
+    "text-field": ["get", "name"],
+    "text-size": 13,
+    "text-offset": [0, 1.3],
+    "text-anchor": "top",
+    "text-optional": true,
+  },
+  paint: {
+    "text-color": "#ffffff",
+    "text-halo-color": "rgba(0,0,0,0.5)",
+    "text-halo-width": 1.5,
+    "text-halo-blur": 1,
+  },
+});
+
 const railwayLineStyle = (): LayerProps => ({
   id: "railway-lines",
   type: "line",
@@ -218,6 +267,9 @@ export function StationMarkers() {
     loadIcon(RAIL_ICON_ID, RAIL_ICON_SVG);
     loadIcon(METRO_ICON_ID, METRO_ICON_SVG);
     loadIcon(LIGHT_ICON_ID, LIGHT_ICON_SVG);
+    loadIcon(MARSHALLING_ICON_ID, FREIGHT_KIND_ICON_SVG.marshalling);
+    loadIcon(INTERMODAL_ICON_ID, FREIGHT_KIND_ICON_SVG.intermodal);
+    loadIcon(PORT_ICON_ID, FREIGHT_KIND_ICON_SVG.port);
 
     const handleClick = (e: MapMouseEvent & { features?: GeoJSON.Feature[] }) => {
       const station = e.features?.[0] && stationFromFeature(e.features[0]);
@@ -244,6 +296,9 @@ export function StationMarkers() {
     map.on("click", LIGHT_LAYER_ID, handleClick);
     map.on("mouseenter", LIGHT_LAYER_ID, handleMouseEnter);
     map.on("mouseleave", LIGHT_LAYER_ID, handleMouseLeave);
+    map.on("click", FREIGHT_LAYER_ID, handleClick);
+    map.on("mouseenter", FREIGHT_LAYER_ID, handleMouseEnter);
+    map.on("mouseleave", FREIGHT_LAYER_ID, handleMouseLeave);
 
     return () => {
       map.off("click", RAIL_LAYER_ID, handleClick);
@@ -255,6 +310,9 @@ export function StationMarkers() {
       map.off("click", LIGHT_LAYER_ID, handleClick);
       map.off("mouseenter", LIGHT_LAYER_ID, handleMouseEnter);
       map.off("mouseleave", LIGHT_LAYER_ID, handleMouseLeave);
+      map.off("click", FREIGHT_LAYER_ID, handleClick);
+      map.off("mouseenter", FREIGHT_LAYER_ID, handleMouseEnter);
+      map.off("mouseleave", FREIGHT_LAYER_ID, handleMouseLeave);
     };
   }, [map, selectStation]);
 
@@ -270,6 +328,8 @@ export function StationMarkers() {
         <Layer {...metroLabelStyle()} />
         <Layer {...lightLayerStyle()} />
         <Layer {...lightLabelStyle()} />
+        <Layer {...freightLayerStyle()} />
+        <Layer {...freightLabelStyle()} />
         <Layer {...railLayerStyle()} />
         <Layer {...railLabelStyle()} />
       </Source>

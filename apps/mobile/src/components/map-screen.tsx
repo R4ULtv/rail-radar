@@ -84,7 +84,12 @@ const defaultCamera = { centerCoordinate: [12, 50] as [number, number], zoomLeve
 const userZoomLevel = 13;
 const locateZoomLevel = 14;
 // Like the web, selecting a station zooms in on it, a little closer for metro and light rail.
-const stationZoomLevels: Record<Station["type"], number> = { rail: 13, metro: 14, light: 14 };
+const stationZoomLevels: Record<Station["type"], number> = {
+  rail: 13,
+  metro: 14,
+  light: 14,
+  freight: 14,
+};
 // How far a selected station sits above the station sheet's middle step, leaving room for its label.
 const stationSheetClearance = 48;
 // Around a selected line, inside the map above the line sheet's middle step.

@@ -339,7 +339,9 @@ function getBrand(entry: JsonRecord): string | null {
     if (lower.includes("s-tog") || lower.includes("s-train")) return "DSB";
     if (lower.includes("øresund") || lower.includes("oresund")) return "Øresundståg";
     if (lower.includes("skånetrafiken") || lower.includes("skanetrafiken")) return "Skånetrafiken";
-    if (lower.includes("gocollective") || lower.includes("arriva")) return "Arriva";
+    if (lower.includes("vores tog") || lower.includes("gocollective") || lower.includes("arriva")) {
+      return "DSB Vores Tog";
+    }
     if (lower.includes("nordjyske jernbaner") || lower === "nj") return "NJ";
     if (lower.includes("lokaltog")) return "Lokaltog";
     if (lower.includes("midtjyske jernbaner")) return "Midtjyske Jernbaner";
@@ -364,7 +366,13 @@ function getBrand(entry: JsonRecord): string | null {
   if (signature.includes("skånetrafiken") || signature.includes("skanetrafiken")) {
     return "Skånetrafiken";
   }
-  if (signature.includes("gocollective") || signature.includes("arriva")) return "Arriva";
+  if (
+    signature.includes("vores tog") ||
+    signature.includes("gocollective") ||
+    signature.includes("arriva")
+  ) {
+    return "DSB Vores Tog";
+  }
   if (signature.includes("nordjyske jernbaner") || /\bnj\b/.test(signature)) return "NJ";
   if (signature.includes("lokaltog")) return "Lokaltog";
   if (signature.includes("midtjyske jernbaner")) return "Midtjyske Jernbaner";
@@ -427,7 +435,10 @@ function getCategory(entry: JsonRecord): string | null {
 function parseTrainNumber(name: string | null): string | null {
   if (!name) return null;
 
-  const match = name.match(/([A-Za-z]?\d+[A-Za-z]?)$/);
+  // A leading letter belongs to the number only when it stands alone ("E10", "Bus 5A"); in
+  // "IC123" it is the end of the category, so only the digits are the number.
+  const match =
+    name.match(/(?<![A-Za-z\d])([A-Za-z]?\d+[A-Za-z]?)$/) ?? name.match(/(\d+[A-Za-z]?)$/);
   if (match) {
     return match[1] ?? null;
   }

@@ -205,8 +205,8 @@ type StationMatch = {
   sortName: string;
 };
 
-/** Rail stations before metro stations, and those before light rail, then lines. */
-const TYPE_ORDER: Record<Station["type"], number> = { rail: 0, metro: 1, light: 2 };
+/** Passenger stations first, then lines, then freight yards. */
+const TYPE_ORDER: Record<Station["type"], number> = { rail: 0, metro: 1, light: 2, freight: 4 };
 const LINE_TYPE_ORDER = 3;
 
 // Built field by field: it runs for every matching station, and spreading is slower on the

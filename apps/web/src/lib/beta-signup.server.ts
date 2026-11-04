@@ -51,15 +51,15 @@ async function joinList(list: SignupList, email: string): Promise<JoinBetaResult
     return { status: "failed" };
   }
 
-  const resend = (path: string, init: RequestInit = {}) =>
-    fetch(`${RESEND_API_URL}${path}`, {
+  const resend = (path: string, init: RequestInit = {}) => {
+    const headers = new Headers(init.headers);
+    if (!headers.has("Authorization")) headers.set("Authorization", `Bearer ${apiKey}`);
+    if (!headers.has("Content-Type")) headers.set("Content-Type", "application/json");
+    return fetch(`${RESEND_API_URL}${path}`, {
       ...init,
-      headers: {
-        Authorization: `Bearer ${apiKey}`,
-        "Content-Type": "application/json",
-        ...init.headers,
-      },
+      headers,
     });
+  };
 
   if (!(await addToSegment(resend, list, email))) return { status: "failed" };
   console.info(`${list.name} signup joined`);

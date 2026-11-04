@@ -4,8 +4,9 @@ on:
   pull_request:
     branches: [main, preview]
     paths:
-      - ".github/scripts/validate-stations.ts"
+      - ".github/scripts/validate-stations*.ts"
       - ".github/workflows/station-data-check.yml"
+      - "packages/data/src/types.ts"
       # The validator uses only Node built-ins; dependency updates do not affect it.
       - "packages/data/src/stations.geojson"
 
@@ -48,22 +49,24 @@ jobs:
           node .github/scripts/validate-stations.ts \
             --base=/tmp/stations-base.geojson \
             --head=packages/data/src/stations.geojson \
-            --output=/tmp/report.md
+            --output=/tmp/report.md \
+            --full-output=/tmp/station-data-report.md \
+            --report-url="$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
 
-      - name: Read report
-        id: report
-        run: |
-          delimiter="$(openssl rand -hex 32)"
-          while grep -Fqx "$delimiter" /tmp/report.md; do
-            delimiter="$(openssl rand -hex 32)"
-          done
-          {
-            echo "report<<$delimiter"
-            cat /tmp/report.md
-            echo "$delimiter"
-          } >> "$GITHUB_OUTPUT"
+      - name: Publish job summary
+        run: cat /tmp/report.md >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload full station report
+        uses: actions/upload-artifact@v7
+        with:
+          name: station-data-report
+          path: /tmp/station-data-report.md
+          if-no-files-found: error
+          retention-days: 30
 
       - name: Find existing comment
+        # Fork and Dependabot tokens cannot write PR comments; the summary and artifact still work.
+        if: github.event.pull_request.head.repo.full_name == github.repository && github.actor != 'dependabot[bot]'
         uses: peter-evans/find-comment@v3
         id: find-comment
         with:
@@ -72,13 +75,14 @@ jobs:
           body-includes: "<!-- station-data-check -->"
 
       - name: Create or update PR comment
+        if: github.event.pull_request.head.repo.full_name == github.repository && github.actor != 'dependabot[bot]'
         uses: peter-evans/create-or-update-comment@v4
         with:
           comment-id: ${{ steps.find-comment.outputs.comment-id }}
           issue-number: ${{ github.event.pull_request.number }}
-          body: ${{ steps.report.outputs.report }}
+          body-path: /tmp/report.md
           edit-mode: replace
 
       - name: Fail if validation errors
-        if: steps.validate.outputs.has_errors == 'true'
+        if: always() && steps.validate.outputs.has_errors == 'true'
         run: exit 1

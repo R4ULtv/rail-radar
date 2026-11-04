@@ -111,6 +111,7 @@ getCountry("UK1072"); // "uk"
 getCountry("IE360"); // "ie"
 getCountry("FR751008"); // "fr"
 getCountry("LU200405060"); // "lu"
+getCountry("HU5510033"); // "hu"
 getCountry("IT01700", { format: "name" }); // "Italy"
 ```
 
@@ -194,7 +195,7 @@ interface Operator {
   name: string;
   logoPath: string;
   countries: OperatorCountry[]; // CountryCode | "international"
-  operatorTypes: OperatorType[]; // "passenger" | "cargo" | "metro" | "light-rail"
+  operatorTypes: OperatorType[]; // "passenger" | "freight" | "metro" | "light-rail"
   bounds: [number, number, number, number]; // [west, south, east, north]
   description: string;
   website: string;
@@ -202,7 +203,7 @@ interface Operator {
   headquarters: string | null;
   networkKm: number | null;
   annualPassengers: number | null;
-  serviceTypes: ServiceType[]; // "high-speed" | "intercity" | "regional" | "commuter" | "night-train" | "international" | "scenic"
+  serviceTypes: ServiceType[]; // "high-speed" | "intercity" | "regional" | "commuter" | "night-train" | "international" | "scenic" | "intermodal" | "wagonload" | "block-train"
   parentCompany: string | null;
   links: OperatorLink[];
 }

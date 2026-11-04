@@ -4,12 +4,13 @@
 import { mkdir, readFile } from "node:fs/promises";
 import sharp from "sharp";
 
-const source = new URL("../../web/src/components/station-markers.tsx", import.meta.url);
+const source = new URL("../../web/src/lib/station-marker-icons.ts", import.meta.url);
 const outDir = new URL("../assets/station-icons/", import.meta.url);
 const icons = {
   RAIL_ICON_SVG: "rail-icon",
   METRO_ICON_SVG: "metro-icon",
   LIGHT_ICON_SVG: "light-icon",
+  FREIGHT_ICON_SVG: "freight-icon",
 };
 const size = 64;
 

@@ -1,5 +1,7 @@
 {
-  "extends": "./.svelte-kit/tsconfig.json",
+  "extends": "$app/tsconfig",
+  "include": ["src", "tests", "vite-plugins", "vite.config.ts"],
+  "exclude": ["src/service-worker", "node_modules", "build"],
   "compilerOptions": {
     "allowImportingTsExtensions": true,
     "allowJs": true,
@@ -13,6 +15,6 @@
     "strict": true,
     "module": "esnext",
     "target": "esnext",
-    "types": ["node", "svelte"]
+    "types": ["$app/types", "node", "svelte"]
   }
 }

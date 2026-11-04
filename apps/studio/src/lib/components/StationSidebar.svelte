@@ -3,6 +3,7 @@
   import { onMount, tick } from "svelte";
   import {
     CopyIcon,
+    ContainerIcon,
     ListIcon,
     SearchIcon,
     SquareMIcon,
@@ -10,19 +11,20 @@
     TramFrontIcon,
     XIcon,
   } from "@lucide/svelte";
-  import { Button } from "$lib/components/ui/button";
-  import { Input } from "$lib/components/ui/input";
-  import { ScrollArea } from "$lib/components/ui/scroll-area";
-  import * as Select from "$lib/components/ui/select";
-  import * as Tabs from "$lib/components/ui/tabs";
+  import { Button } from "#lib/components/ui/button/index.ts";
+  import { Input } from "#lib/components/ui/input/index.ts";
+  import { ScrollArea } from "#lib/components/ui/scroll-area/index.ts";
+  import * as Select from "#lib/components/ui/select/index.ts";
+  import * as Tabs from "#lib/components/ui/tabs/index.ts";
   import {
     findDuplicateStationIds,
     stationMatchesFilters,
     type StationImportanceFilter,
     type StationTypeFilter,
-  } from "$lib/station-filters";
-  import type { ChangeType } from "$lib/types/contribution";
-  import { cn } from "$lib/utils";
+  } from "#lib/station-filters.ts";
+  import type { ChangeType } from "#lib/types/contribution.ts";
+  import { freightKindLabels } from "#lib/stations.ts";
+  import { cn } from "#lib/utils.ts";
 
   const importanceLabels: Record<Exclude<StationImportanceFilter, "any">, string> = {
     "1": "Major",
@@ -222,6 +224,15 @@
           <TramFrontIcon class="size-3" />
           {#if typeFilter === "light"}<span class="text-xs">Light</span>{/if}
         </Tabs.Trigger>
+        <Tabs.Trigger
+          value="freight"
+          title="Freight yards"
+          aria-label="Freight yards"
+          class="gap-1.5"
+        >
+          <ContainerIcon />
+          {#if typeFilter === "freight"}<span class="text-xs">Yards</span>{/if}
+        </Tabs.Trigger>
         <Tabs.Trigger value="duplicate" title="Duplicates" class="gap-1.5">
           <CopyIcon class="size-3" />
           {#if typeFilter === "duplicate"}<span class="text-xs">Duplicates</span>{/if}
@@ -284,6 +295,13 @@
               {#if station.type === "light"}<TramFrontIcon
                   class="size-3 text-muted-foreground"
                 />{/if}
+              {#if station.type === "freight"}
+                <span title={station.kind ? freightKindLabels[station.kind] : "Freight yard"}>
+                  <ContainerIcon
+                    aria-label={station.kind ? freightKindLabels[station.kind] : "Freight yard"}
+                  />
+                </span>
+              {/if}
             </Button>
           {/each}
         </div>

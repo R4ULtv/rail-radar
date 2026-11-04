@@ -9,4 +9,5 @@ export const stationIcons: Record<Station["type"], ImageSourcePropType> = {
   rail: require("../../assets/station-icons/rail-icon.png"),
   metro: require("../../assets/station-icons/metro-icon.png"),
   light: require("../../assets/station-icons/light-icon.png"),
+  freight: require("../../assets/station-icons/freight-icon.png"),
 };

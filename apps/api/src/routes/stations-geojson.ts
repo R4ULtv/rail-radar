@@ -19,11 +19,11 @@ export const stationsGeoJsonRoutes = factory.createApp().get(
     cacheControl: CACHE_TTL.GEOJSON,
   }),
   (c) => {
-    const typeFilter = c.req.query("type") as "rail" | "metro" | "light" | undefined;
+    const typeFilter = c.req.query("type") as "rail" | "metro" | "light" | "freight" | undefined;
     const countryFilter = c.req.query("country") as CountryCode | undefined;
 
-    if (typeFilter && !["rail", "metro", "light"].includes(typeFilter)) {
-      return jsonError(c, 'Invalid type. Must be "rail", "metro", or "light".', 400);
+    if (typeFilter && !["rail", "metro", "light", "freight"].includes(typeFilter)) {
+      return jsonError(c, 'Invalid type. Must be "rail", "metro", "light", or "freight".', 400);
     }
     if (countryFilter && !COUNTRY_CODES.includes(countryFilter)) {
       return jsonError(c, `Invalid country. Must be one of: ${COUNTRY_CODES.join(", ")}`, 400);

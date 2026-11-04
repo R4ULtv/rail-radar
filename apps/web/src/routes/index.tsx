@@ -122,7 +122,7 @@ function Home() {
             </a>
             <span className="hidden md:inline">{" ·"}</span>
           </span>
-          <nav aria-label="Rail directories" className="flex items-center gap-1">
+          <nav aria-label="Explore Rail Radar" className="flex items-center gap-1">
             <Link
               to="/operators"
               className="rounded-sm hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
@@ -144,6 +144,13 @@ function Home() {
               className="rounded-sm hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
             >
               Lines
+            </Link>
+            <span aria-hidden="true">·</span>
+            <Link
+              to="/reports"
+              className="rounded-sm hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+            >
+              Reports
             </Link>
           </nav>
         </div>

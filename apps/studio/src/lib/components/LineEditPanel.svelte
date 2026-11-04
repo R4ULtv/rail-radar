@@ -10,13 +10,13 @@
     Trash2Icon,
     XIcon,
   } from "@lucide/svelte";
-  import LineBadge from "$lib/components/LineBadge.svelte";
-  import { DEFAULT_LINE_COLOR } from "$lib/line-colors";
-  import { Button } from "$lib/components/ui/button";
-  import { Input } from "$lib/components/ui/input";
-  import { Label } from "$lib/components/ui/label";
-  import { ScrollArea } from "$lib/components/ui/scroll-area";
-  import * as Select from "$lib/components/ui/select";
+  import LineBadge from "#lib/components/LineBadge.svelte";
+  import { DEFAULT_LINE_COLOR } from "#lib/line-colors.ts";
+  import { Button } from "#lib/components/ui/button/index.ts";
+  import { Input } from "#lib/components/ui/input/index.ts";
+  import { Label } from "#lib/components/ui/label/index.ts";
+  import { ScrollArea } from "#lib/components/ui/scroll-area/index.ts";
+  import * as Select from "#lib/components/ui/select/index.ts";
 
   let {
     draft = $bindable(),
@@ -65,10 +65,12 @@
     query.trim().length < 2
       ? []
       : stations
-          .filter((station) =>
-            `${station.id} ${station.name}`
-              .toLocaleLowerCase()
-              .includes(query.trim().toLocaleLowerCase()),
+          .filter(
+            (station) =>
+              station.type !== "freight" &&
+              `${station.id} ${station.name}`
+                .toLocaleLowerCase()
+                .includes(query.trim().toLocaleLowerCase()),
           )
           .slice(0, 15),
   );

@@ -8,9 +8,6 @@ import {
   ListIcon,
   SearchIcon,
   SearchXIcon,
-  SquareMIcon,
-  TrainFrontIcon,
-  TramFrontIcon,
   TrendingUpIcon,
   XIcon,
   UserIcon,
@@ -44,8 +41,19 @@ import { useTrendingStations } from "@/hooks/use-trending-stations";
 import { cn } from "@repo/ui/lib/utils";
 import { getCountry } from "@repo/data/countries";
 import type { Station } from "@repo/data";
+import type { OperatorType } from "@repo/data/operators";
 import { Button } from "@repo/ui/components/button";
 import { useHomeSearch } from "@/hooks/use-home-search";
+import { FreightKindMarker, OperatorTypeMarker } from "@/lib/operator-types";
+import { AppTicket } from "@/components/app-ticket";
+
+/** The map marker drawn for each station type. */
+const markerType = {
+  rail: "passenger",
+  metro: "metro",
+  light: "light-rail",
+  freight: "freight",
+} as const satisfies Record<Station["type"], OperatorType>;
 
 const StationList = React.memo(function StationList({
   stations,
@@ -92,12 +100,10 @@ const StationList = React.memo(function StationList({
                 isFocused && "bg-muted",
               )}
             >
-              {station.type === "metro" ? (
-                <SquareMIcon className="size-4 text-muted-foreground" />
-              ) : station.type === "light" ? (
-                <TramFrontIcon className="size-4 text-muted-foreground" />
+              {station.kind ? (
+                <FreightKindMarker kind={station.kind} className="size-4" />
               ) : (
-                <TrainFrontIcon className="size-4 text-muted-foreground" />
+                <OperatorTypeMarker type={markerType[station.type]} className="size-4" />
               )}
               <span className="max-w-75 md:max-w-61 truncate">{station.name}</span>
               <img
@@ -110,8 +116,8 @@ const StationList = React.memo(function StationList({
               {stationCounts && (
                 <span className="shrink-0 text-xs text-muted-foreground tabular-nums ml-auto flex items-center gap-1">
                   <UserIcon className="size-3.5" />
-                  {stationCounts.uniqueVisitors.toLocaleString()} (
-                  {stationCounts.visits.toLocaleString()})
+                  {stationCounts.uniqueVisitors.toLocaleString("en-US")} (
+                  {stationCounts.visits.toLocaleString("en-US")})
                 </span>
               )}
             </button>
@@ -171,6 +177,7 @@ function SearchContent({
   focusedIndex,
   setFocusedIndex,
   limit,
+  className,
 }: {
   isSearchActive: boolean;
   searchResults: Station[];
@@ -188,6 +195,7 @@ function SearchContent({
   focusedIndex: number;
   setFocusedIndex: (index: number) => void;
   limit?: number;
+  className?: string;
 }) {
   // Keep-previous only helps when there are rows on screen. A prior search that
   // returned nothing leaves us with none, so fall back to skeletons there too —
@@ -195,7 +203,12 @@ function SearchContent({
   const hasKeptResults = searchResults.length > 0;
 
   return (
-    <div role="region" aria-label="Station search results" aria-busy={isUpdatingResults}>
+    <div
+      role="region"
+      aria-label="Station search results"
+      aria-busy={isUpdatingResults}
+      className={className}
+    >
       {isUpdatingResults && !hasKeptResults && !hasSearchError && (
         <>
           <div className="px-4 py-2 not-first:mt-1">
@@ -303,6 +316,13 @@ function SearchContent({
           />
         </>
       )}
+      {showDefaultLists && (
+        <>
+          {/* In the drawer, this pushes the ticket to the bottom when the lists are short. */}
+          <div aria-hidden="true" className="grow" />
+          <AppTicket layout="compact" className="mx-4 mt-4 mb-2" />
+        </>
+      )}
       <div role="status" aria-live="polite" className="sr-only">
         {isUpdatingResults ? (hasKeptResults ? "Updating results" : "Searching stations") : ""}
       </div>
@@ -330,7 +350,7 @@ export function Search() {
 
   // Sync debounced query to URL
   React.useEffect(() => {
-    setUrlQuery(debouncedQuery || null);
+    void setUrlQuery(debouncedQuery || null);
   }, [debouncedQuery, setUrlQuery]);
   const [focus, setFocus] = React.useState({ listKey: "", index: -1 });
   const [isDrawerOpen, setIsDrawerOpen] = React.useState(() => isMobile && query.length > 0);
@@ -399,7 +419,7 @@ export function Search() {
     hasMinimumSearchLength && !noResults && !canActivateSearchResults;
   const showSearchSpinner = isUpdatingResults || isFetching;
 
-  const cardHeight = useAnimatedHeight();
+  const { contentRef: cardContentRef, height: cardHeight } = useAnimatedHeight();
 
   const handleSelectStation = React.useCallback(
     (station: Station) => {
@@ -611,8 +631,8 @@ export function Search() {
               </InputGroup>
             </DrawerHeader>
 
-            <div className="flex-1 overflow-auto pt-2">
-              <SearchContent {...searchContentProps} />
+            <div className="flex flex-1 flex-col overflow-auto pt-2 pb-2">
+              <SearchContent {...searchContentProps} className="flex grow flex-col" />
             </div>
           </DrawerContent>
         </Drawer>
@@ -667,11 +687,11 @@ export function Search() {
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.15, ease: [0.23, 1, 0.32, 1] }}
-          style={{ height: cardHeight.height }}
+          style={{ height: cardHeight }}
           className="pointer-events-auto overflow-hidden rounded-3xl"
         >
           <div
-            ref={cardHeight.contentRef}
+            ref={cardContentRef}
             className="flex flex-col rounded-3xl bg-card py-2 text-card-foreground shadow-md ring-1 ring-foreground/5 dark:ring-foreground/10"
           >
             <div>

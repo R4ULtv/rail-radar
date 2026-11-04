@@ -13,6 +13,7 @@ export const COUNTRY_MAP = {
   de: "Germany",
   pl: "Poland",
   fr: "France",
+  hu: "Hungary",
 } as const;
 
 export type CountryCode = keyof typeof COUNTRY_MAP;
@@ -50,6 +51,7 @@ const ID_PREFIX_TO_COUNTRY = Object.fromEntries(
       [prefix, code],
       [`${prefix}M`, code],
       [`${prefix}L`, code],
+      [`${prefix}F`, code],
     ];
   }),
 ) as Record<string, CountryCode>;

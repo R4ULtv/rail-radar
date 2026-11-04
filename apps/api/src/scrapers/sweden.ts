@@ -46,7 +46,7 @@ interface TrafiklabDeparture {
   stop: { id: string; name: string; lat: number; lon: number };
   scheduled_platform: { id: string; designation: string } | null;
   realtime_platform: { id: string; designation: string } | null;
-  alerts: { type: string; title: string; text: string }[];
+  alerts?: { type: string; title: string; text: string }[];
 }
 
 interface TrafiklabResponse {
@@ -101,7 +101,15 @@ function getBrand(entry: TrafiklabDeparture): string | null {
   if (lower.startsWith("sj ") || lower === "sj ab") return "SJ";
   if (lower === "vr sverige ab" || lower === "vr sverige") return "VR";
   if (lower === "vygruppen as") return "Vy";
-  if (lower === "mtr express ab") return "MTR Express";
+  if (
+    lower === "mtr express ab" ||
+    lower === "mtr express" ||
+    lower === "mtrx" ||
+    lower === "vr snabbtåg ab" ||
+    lower === "vr snabbtåg"
+  ) {
+    return "VR Snabbtåg";
+  }
   if (lower === "snälltåget ab") return "Snälltåget";
   if (lower === "transdev sverige ab" || lower.startsWith("transdev ")) return "Transdev";
   if (lower === "svenska tågkompaniet ab" || lower === "tågab") return "Transdev";
@@ -189,7 +197,7 @@ function mapEntry(entry: TrafiklabDeparture, type: SwedenBoardType): Train {
     delay: getDelay(entry),
     platform: entry.realtime_platform?.designation ?? entry.scheduled_platform?.designation ?? null,
     status: getStatus(entry, type),
-    info: entry.alerts[0]?.title ?? null,
+    info: entry.alerts?.[0]?.title ?? null,
   };
 
   if (type === "departures") {

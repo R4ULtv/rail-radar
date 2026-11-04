@@ -20,7 +20,8 @@ const NO_LINES: readonly Line[] = [];
  * survives stepping along the line to another of its stops.
  */
 export function useStationLineView(station: Station | null) {
-  const stationId = station && station.type !== "rail" ? station.id : null;
+  const stationId =
+    station && (station.type === "metro" || station.type === "light") ? station.id : null;
   const lines = stationId ? getStationLines(stationId) : NO_LINES;
   const ids = useMemo(() => lines.map((line) => line.id), [lines]);
   const query = useLineData(ids);

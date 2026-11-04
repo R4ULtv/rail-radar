@@ -43,9 +43,9 @@ function parseDelay(text: string): DelayResult {
 
 function parseCategory(text: string | null): string | null {
   if (!text) return null;
-  const category = text
+  const category = decodeHtmlEntities(text)
     .replace(/^Categoria\s+/i, "")
-    .replace(/&#?\w+;/g, "") // Remove HTML entities like &#39; &nbsp; etc.
+    .replace(/&#?\w+;/g, "") // Drop any entity the decoder does not know.
     .trim();
   if (/^ALTA\s+VELOCIT[AÀ]['’]?$/i.test(category)) return "AV";
 
@@ -63,10 +63,16 @@ function parseCategory(text: string | null): string | null {
   }
 }
 
+/** Accented letters RFI writes as named entities ("VELOCIT&agrave;"). */
+const ACCENTS: Record<string, string> = { grave: "\u0300", acute: "\u0301" };
+
 function decodeHtmlEntities(text: string): string {
   return text
     .replace(/&#(\d+);/g, (_, code) => String.fromCharCode(parseInt(code, 10)))
     .replace(/&#x([0-9a-fA-F]+);/g, (_, code) => String.fromCharCode(parseInt(code, 16)))
+    .replace(/&([AEIOUaeiou])(grave|acute);/g, (_, letter: string, accent: string) =>
+      (letter + ACCENTS[accent]).normalize("NFC"),
+    )
     .replace(/&nbsp;/gi, " ")
     .replace(/&amp;/gi, "&")
     .replace(/&lt;/gi, "<")

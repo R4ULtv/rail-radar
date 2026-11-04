@@ -14,6 +14,7 @@ import { stationIcons } from "@/lib/station-icons";
 const RAIL_ICON_ID = "rail-icon";
 const METRO_ICON_ID = "metro-icon";
 const LIGHT_ICON_ID = "light-icon";
+const FREIGHT_ICON_ID = "freight-icon";
 
 type LayerFilter = NonNullable<ComponentProps<typeof Mapbox.SymbolLayer>["filter"]>;
 type ShapeSourcePressEvent = Parameters<
@@ -25,6 +26,7 @@ const mapIcons = {
   [RAIL_ICON_ID]: stationIcons.rail,
   [METRO_ICON_ID]: stationIcons.metro,
   [LIGHT_ICON_ID]: stationIcons.light,
+  [FREIGHT_ICON_ID]: stationIcons.freight,
 };
 
 export function StationImages() {
@@ -39,6 +41,8 @@ const MINZOOM_EXPR = [
   13,
   "light",
   ["match", ["get", "importance"], 3, 11, 13],
+  "freight",
+  11,
   /* rail */ ["match", ["get", "importance"], 1, 3, 2, 7, 3, 9, 11],
 ];
 const MINZOOM_FILTER = ["<=", MINZOOM_EXPR, ["zoom"]];
@@ -228,6 +232,23 @@ export function StationLayers({
       <Mapbox.SymbolLayer
         id="rail-labels"
         filter={typeFilter("rail", LABEL_MINZOOM_FILTER)}
+        style={labelStyle(13, labelColors)}
+      />
+      <Mapbox.SymbolLayer
+        id="freight-stations"
+        filter={typeFilter("freight", MINZOOM_FILTER)}
+        style={{
+          iconImage: FREIGHT_ICON_ID,
+          iconSize: ["interpolate", ["linear"], ["zoom"], 11, 0.25, 14, 0.3, 16, 0.35],
+          iconAllowOverlap: false,
+          iconAnchor: "center",
+          iconEmissiveStrength: 1,
+          symbolSortKey: ["get", "importance"],
+        }}
+      />
+      <Mapbox.SymbolLayer
+        id="freight-labels"
+        filter={typeFilter("freight", LABEL_MINZOOM_FILTER)}
         style={labelStyle(13, labelColors)}
       />
     </Mapbox.ShapeSource>

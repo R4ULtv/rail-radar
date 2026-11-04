@@ -1,8 +1,9 @@
 import { cache } from "hono/cache";
+import type { Context } from "hono";
 
 import { CACHE_TTL } from "../constants";
 import { STATION_ICON_BYTES } from "../assets/station-icon";
-import { factory } from "../lib/env";
+import { factory, type Env } from "../lib/env";
 import { logRequestError } from "../lib/error-logging";
 import { jsonError } from "../lib/http";
 import { rateLimit } from "../middleware/rate-limit";
@@ -44,12 +45,35 @@ function parseBbox(value: string): [number, number, number, number] | null {
 }
 
 function buildMapboxUrl(path: string, size: string, token: string, extra = "") {
-  return `${MAPBOX_STYLE}/${path}/${size}@2x?attribution=false&logo=false${extra}&access_token=${token}`;
+  return `${MAPBOX_STYLE}/${path}/${size}@2x.webp?attribution=false&logo=false${extra}&access_token=${token}`;
+}
+
+/** Key the rendered image, ignoring parameter order, unused parameters and numeric spelling. */
+function staticMapCacheKey(c: Context<Env>): string {
+  const url = new URL(c.req.url);
+  const bbox = c.req.query("bbox");
+  const { width, height } = parseDimensions(
+    c.req.query("w"),
+    c.req.query("h"),
+    bbox ? [960, 412] : [1280, 256],
+  );
+  const params = new URLSearchParams();
+  if (bbox) {
+    params.set("bbox", parseBbox(bbox)?.join(",") ?? bbox);
+  } else {
+    params.set("lat", String(Number.parseFloat(c.req.query("lat") ?? "")));
+    params.set("lng", String(Number.parseFloat(c.req.query("lng") ?? "")));
+    params.set("zoom", String(Number.parseInt(c.req.query("zoom") ?? "15", 10)));
+  }
+  params.set("w", String(width));
+  params.set("h", String(height));
+  url.search = params.toString();
+  return url.toString();
 }
 
 function mapImageResponse(res: Response) {
   return new Response(res.body, {
-    headers: { "content-type": res.headers.get("content-type") ?? "image/png" },
+    headers: { "content-type": res.headers.get("content-type") ?? "image/webp" },
   });
 }
 
@@ -80,8 +104,9 @@ export const mapRoutes = factory
     "/static",
     rateLimit,
     cache({
-      cacheName: "static-map-cache",
+      cacheName: "static-map-webp-cache",
       cacheControl: CACHE_TTL.STATIC_MAP,
+      keyGenerator: staticMapCacheKey,
     }),
     async (c) => {
       const bbox = c.req.query("bbox");
@@ -140,18 +165,18 @@ export const mapRoutes = factory
         );
       }
 
-      const supportsWebp = /image\/webp/.test(c.req.header("accept") ?? "");
-      const cfOptions = { image: supportsWebp ? { format: "webp" as const } : {}, quality: 100 };
-
-      const fetchMapbox = async (options?: RequestInit) => {
-        // Cache hits skip this handler. Every upstream attempt shares one allowance per IP.
-        const { success } = await c.env.MAP_GENERATION_RATE_LIMITER.limit({
-          key: `static-map:${c.get("clientIp")}`,
+      if (c.req.method === "HEAD") {
+        return new Response(null, {
+          headers: { "Content-Type": "image/webp", "Cache-Control": CACHE_TTL.STATIC_MAP },
         });
-        return success ? fetch(mapboxUrl, options) : null;
-      };
-      const mapLimitResponse = () =>
-        c.json(
+      }
+
+      // Cache hits skip this handler. Each upstream request uses one allowance per IP.
+      const { success } = await c.env.MAP_GENERATION_RATE_LIMITER.limit({
+        key: `static-map:${c.get("clientIp")}`,
+      });
+      if (!success) {
+        return c.json(
           { error: "Too many map images requested. Please wait a minute and try again." },
           429,
           {
@@ -159,29 +184,21 @@ export const mapRoutes = factory
             "Cache-Control": "no-store",
           },
         );
+      }
 
-      const response = await fetchMapbox({ cf: cfOptions });
-      if (!response) return mapLimitResponse();
-
-      const resized = response.headers.get("cf-resized") ?? "";
-      if (!response.ok || resized.includes("err=")) {
-        const fallback = await fetchMapbox();
-        if (!fallback) return mapLimitResponse();
-        if (!fallback.ok) {
-          logRequestError(
-            c,
-            new Error("Mapbox static image request failed"),
-            "Map image request failed",
-            {
-              status: 502,
-              provider: "mapbox",
-              upstreamStatus: fallback.status,
-              initialUpstreamStatus: response.status,
-            },
-          );
-          return jsonError(c, "Failed to fetch map image.", 502);
-        }
-        return mapImageResponse(fallback);
+      const response = await fetch(mapboxUrl);
+      if (!response.ok) {
+        logRequestError(
+          c,
+          new Error("Mapbox static image request failed"),
+          "Map image request failed",
+          {
+            status: 502,
+            provider: "mapbox",
+            upstreamStatus: response.status,
+          },
+        );
+        return jsonError(c, "Failed to fetch map image.", 502);
       }
 
       return mapImageResponse(response);

@@ -1,20 +1,6 @@
 @import "@repo/ui/styles/globals.css";
 
-@font-face {
-  font-family: "Geist";
-  font-style: normal;
-  font-display: swap;
-  font-weight: 400 700;
-  src: url("./assets/fonts/Geist/Geist.woff2") format("woff2-variations");
-}
-
-@font-face {
-  font-family: "Geist Mono";
-  font-style: normal;
-  font-display: swap;
-  font-weight: 400;
-  src: url("./assets/fonts/Geist/GeistMono.woff2") format("woff2");
-}
+@import "./assets/fonts/Geist/font-faces.css";
 
 @theme inline {
   --color-brand: #6363fd;
@@ -33,13 +19,41 @@
   backface-visibility: hidden;
 }
 
+html[data-app-ticket-dismissed] [data-app-ticket] {
+  display: none;
+}
+
+/* App tickets cut their notches out, so they read on any surface. Stacked tickets tear off
+   44.5px above the bottom edge; compact ones 48px inside the right edge. */
+.app-ticket-stacked {
+  mask:
+    radial-gradient(circle at 0 calc(100% - 44.5px), #0000 8px, #000 8.5px),
+    radial-gradient(circle at 100% calc(100% - 44.5px), #0000 8px, #000 8.5px);
+  mask-composite: intersect;
+}
+
+.app-ticket-compact {
+  mask:
+    radial-gradient(circle at calc(100% - 48px) 0, #0000 8px, #000 8.5px),
+    radial-gradient(circle at calc(100% - 48px) 100%, #0000 8px, #000 8.5px);
+  mask-composite: intersect;
+}
+
+/* Station and directory links load whole prerendered documents; fade between them rather than
+   cutting from one page to the next. */
+@media (prefers-reduced-motion: no-preference) {
+  @view-transition {
+    navigation: auto;
+  }
+}
+
 @media (prefers-reduced-motion: no-preference) {
   .footer-ticket {
     transition: transform 240ms cubic-bezier(0.22, 1, 0.36, 1);
     will-change: transform;
   }
 
-  .footer-ticket-link:active .footer-ticket {
+  .footer-ticket-link:active:not(:has([data-ticket-dismiss]:active)) .footer-ticket {
     transform: translate3d(0, -2px, 0) rotate(0deg) scale(0.98);
     transition-duration: 120ms;
   }

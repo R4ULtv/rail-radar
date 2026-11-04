@@ -113,6 +113,9 @@ export function SiteFooter() {
             <Link to="/app" className={utilityLinkClassName}>
               App
             </Link>
+            <Link to="/reports" className={utilityLinkClassName}>
+              Reports
+            </Link>
             <Link to="/donate" className={utilityLinkClassName}>
               Donate
             </Link>

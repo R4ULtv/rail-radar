@@ -71,6 +71,9 @@ const serviceTypeLabels: Record<string, string> = {
   "night-train": "Night Train",
   international: "International",
   scenic: "Scenic",
+  intermodal: "Intermodal",
+  wagonload: "Wagonload",
+  "block-train": "Block Train",
 };
 
 const OPERATOR_GROUPS = ["international", ...COUNTRY_CODES] as const;
@@ -426,6 +429,7 @@ function ModeFilter({
       aria-current={isActive ? "page" : undefined}
       className={cn(
         "flex items-center gap-3 rounded-3xl bg-card p-3 shadow-md ring-1 ring-foreground/5 transition-[background-color,box-shadow,transform] duration-200 ease-[cubic-bezier(0.23,1,0.32,1)] active:scale-[0.97] dark:ring-foreground/10",
+        !type && "col-span-2 md:col-span-1",
         !isActive &&
           "lg:hover:bg-[color-mix(in_oklab,var(--muted)_50%,var(--card))] lg:hover:ring-foreground/20 dark:lg:hover:ring-foreground/20",
         count === 0 && !isActive && "opacity-50",

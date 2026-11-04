@@ -1,6 +1,41 @@
 import { staticAssetUrl } from "@/lib/static-assets";
 // Maps brand names to their SVG file paths (relative to /assets/operators/)
 const brandPaths: Record<string, string> = {
+  // Additional regional operators.
+  "vigezzina-centovalli": "it/vigezzina-centovalli",
+  cj: "ch/cj",
+  nstcm: "ch/nstcm",
+  mbc: "ch/mbc",
+  travys: "ch/travys",
+  fart: "it/vigezzina-centovalli",
+  bob: "ch/bob",
+  fuc: "it/fuc",
+  ssif: "it/vigezzina-centovalli",
+  nordwestbahn: "transdev",
+  erixx: "de/erixx",
+  akn: "de/akn",
+  "keolis nederland": "nl/keolis",
+
+  // Passenger operators added in the first coverage expansion batch.
+  "fs sud est": "it/trenitalia",
+  "ferrovie appulo lucane": "it/fal",
+  ferrotramviaria: "it/ferrotramviaria",
+  "ferrovie del gargano": "it/ferrovie-del-gargano",
+  "trentino trasporti": "it/trentino-trasporti",
+  arenaways: "it/arenaways",
+  tilo: "ch/tilo",
+  renfe: "es/renfe",
+  "chemins de fer de la corse": "fr/cfc",
+  qbuzz: "nl/qbuzz",
+  "european sleeper": "european-sleeper",
+  "skm warszawa": "pl/skm-warszawa",
+  arverio: "de/arverio",
+  agilis: "de/agilis",
+  lumo: "uk/lumo",
+  merseyrail: "uk/merseyrail",
+  "heathrow express": "uk/heathrow-express",
+  "ni railways": "uk/ni-railways",
+
   // Italian brands
   trenitalia: "it/trenitalia",
   regionale: "it/regionale",
@@ -30,7 +65,7 @@ const brandPaths: Record<string, string> = {
   mob: "ch/mob",
   flp: "ch/flp",
   // Other
-  obb: "obb",
+  obb: "at/obb",
   cfl: "lu/cfl",
   // French brands (SNCF networks)
   sncf: "fr/sncf",
@@ -47,10 +82,11 @@ const brandPaths: Record<string, string> = {
   "ter na": "fr/ter-na",
   "zou !": "fr/zou",
   vr: "fi/vr",
-  sncb: "sncb",
+  sncb: "be/sncb",
   eurostar: "eurostar",
   arriva: "arriva",
   dsb: "dk/dsb",
+  "dsb vores tog": "dk/dsb",
   lokaltog: "dk/lokaltog",
   nj: "dk/nj",
   "midtjyske jernbaner": "dk/mj",
@@ -86,8 +122,8 @@ const brandPaths: Record<string, string> = {
   łka: "pl/lka",
   "warszawska kolej dojazdowa": "pl/wkd",
   railpolonia: "pl/railpolonia",
-  "leo express": "leo-express",
-  regiojet: "regiojet",
+  "leo express": "cz/leo-express",
+  regiojet: "cz/regiojet",
   // Swedish brands
   sj: "se/sj",
   "arlanda express": "se/arlanda",
@@ -95,7 +131,7 @@ const brandPaths: Record<string, string> = {
   malartag: "se/malartag",
   västtrafik: "se/vasttrafik",
   vasttrafik: "se/vasttrafik",
-  "mtr express": "se/mtr",
+  "vr snabbtåg": "fi/vr",
   snälltåget: "se/snalltaget",
   transdev: "transdev",
   "go-ahead norge": "no/go_ahead",
@@ -125,14 +161,67 @@ const brandPaths: Record<string, string> = {
   ht: "uk/ht",
   // Irish brands
   ir: "ie/ir",
+  // Hungarian brands
+  máv: "hu/mav",
+  gysev: "hu/gysev",
+  // Foreign operators running into Hungary
+  čd: "cz/cd",
+  "cfr călători": "ro/cfr-calatori",
+  uz: "ua/uz",
 };
 
 // Aliases for brands that share icons
 const brandAliases: Record<string, string> = {
+  "chemins de fer du jura": "cj",
+  "nyon–st-cergue–morez": "nstcm",
+  "berner oberland-bahnen": "bob",
+  "berner oberland-bahn": "bob",
+  "bernese oberland railway": "bob",
+  "ferrovie udine cividale": "fuc",
+  "ferrovie udine-cividale": "fuc",
+  "ferrovie autolinee regionali ticinesi": "fart",
+  "società subalpina di imprese ferroviarie": "ssif",
+  "ferrovia vigezzina-centovalli": "vigezzina-centovalli",
+  nwb: "nordwestbahn",
+  "nordwestbahn gmbh": "nordwestbahn",
+  "erixx gmbh": "erixx",
+  "akn eisenbahn": "akn",
+  "keolis blauwnet": "keolis nederland",
+
+  "ferrovie del sud est": "fs sud est",
+  fal: "ferrovie appulo lucane",
+  "ferrovie appulo-lucane": "ferrovie appulo lucane",
+  "ferrovie del nord barese": "ferrotramviaria",
+  "ferrovie nord barese": "ferrotramviaria",
+  "ferrovie del nordbarese": "ferrotramviaria",
+  fdg: "ferrovie del gargano",
+  "trentino trasporti s.p.a.": "trentino trasporti",
+  ave: "renfe",
+  cfc: "chemins de fer de la corse",
+  "skm warsaw": "skm warszawa",
+  "szybka kolej miejska w warszawie": "skm warszawa",
+  "arverio bayern": "arverio",
+  "arverio baden-württemberg": "arverio",
+  "go-ahead bayern": "arverio",
+  "go-ahead baden-württemberg": "arverio",
+  ld: "lumo",
+  me: "merseyrail",
+  hx: "heathrow express",
+  nir: "ni railways",
+  "northern ireland railways": "ni railways",
+
+  "mtr express": "vr snabbtåg",
+  "mtr express ab": "vr snabbtåg",
+  mtrx: "vr snabbtåg",
+  "vr snabbtag": "vr snabbtåg",
+  "vr snabbtåg ab": "vr snabbtåg",
+  "vores tog": "dsb vores tog",
+  gocollective: "dsb vores tog",
+  "go collective": "dsb vores tog",
   ntv: "italo",
   frecciabianca: "trenitalia",
   frecciargento: "trenitalia",
-  fse: "trenitalia",
+  fse: "fs sud est",
   "leonardo express": "trenitalia",
   "obb railjet": "obb",
   "obb nightjet": "obb",
@@ -168,6 +257,15 @@ const brandAliases: Record<string, string> = {
   "go-ahead nordic as": "go-ahead norge",
   oresundstag: "øresundståg",
   skanetrafiken: "skånetrafiken",
+  // Hungarian brands
+  mav: "máv",
+  "máv-start": "máv",
+  "mav-start": "máv",
+  // Foreign operators running into Hungary
+  cd: "čd",
+  cfr: "cfr călători",
+  "cfr calatori": "cfr călători",
+  ukrzaliznytsia: "uz",
 };
 
 function normalizeBrandName(brand: string): string {
@@ -181,6 +279,40 @@ function getBrandPath(brand: string): string | null {
 
 // Maps raw brand names (lowercased) to brand slugs
 const brandSlugMap: Record<string, string> = {
+  // Additional regional operators.
+  cj: "cj",
+  nstcm: "nstcm",
+  mbc: "mbc",
+  travys: "travys",
+  fart: "fart",
+  bob: "bob",
+  fuc: "fuc",
+  ssif: "ssif",
+  nordwestbahn: "nordwestbahn",
+  erixx: "erixx",
+  akn: "akn",
+  "keolis nederland": "keolis-nederland",
+
+  // Passenger operators added in the first coverage expansion batch.
+  "fs sud est": "fs-sud-est",
+  "ferrovie appulo lucane": "fal",
+  ferrotramviaria: "ferrotramviaria",
+  "ferrovie del gargano": "ferrovie-del-gargano",
+  "trentino trasporti": "trentino-trasporti",
+  arenaways: "arenaways",
+  tilo: "tilo",
+  renfe: "renfe",
+  "chemins de fer de la corse": "cfc",
+  qbuzz: "qbuzz",
+  "european sleeper": "european-sleeper",
+  "skm warszawa": "skm-warszawa",
+  arverio: "arverio",
+  agilis: "agilis",
+  lumo: "lumo",
+  merseyrail: "merseyrail",
+  "heathrow express": "heathrow-express",
+  "ni railways": "ni-railways",
+
   trenitalia: "trenitalia",
   regionale: "regionale",
   italo: "italo",
@@ -194,7 +326,7 @@ const brandSlugMap: Record<string, string> = {
   "trenitalia tper": "trenitalia-tper",
   sad: "sad",
   tua: "tua",
-  fse: "trenitalia",
+  fse: "fs-sud-est",
   "leonardo express": "trenitalia",
   bls: "bls",
   sbb: "sbb",
@@ -233,6 +365,7 @@ const brandSlugMap: Record<string, string> = {
   sncb: "sncb",
   eurostar: "eurostar",
   dsb: "dsb",
+  "dsb vores tog": "dsb-vores-tog",
   lokaltog: "lokaltog",
   db: "db",
   flixtrain: "flixtrain",
@@ -280,7 +413,7 @@ const brandSlugMap: Record<string, string> = {
   malartag: "malartag",
   västtrafik: "vasttrafik",
   vasttrafik: "vasttrafik",
-  "mtr express": "mtr-express",
+  "vr snabbtåg": "vr-snabbtag",
   snälltåget: "snalltaget",
   transdev: "transdev",
   // UK brands
@@ -305,6 +438,13 @@ const brandSlugMap: Record<string, string> = {
   cc: "c2c",
   // Irish brands
   ir: "ir",
+  // Hungarian brands
+  máv: "mav",
+  gysev: "gysev",
+  // Foreign operators running into Hungary
+  čd: "cd",
+  "cfr călători": "cfr-calatori",
+  uz: "uz",
 };
 
 const brandSlugs = new Set(Object.values(brandSlugMap));

@@ -17,6 +17,7 @@ import { jsonError } from "../lib/http";
 import { STATION_STATS_CACHE_CONTROL } from "../lib/top-station-cache";
 import { countryParamValidator, periodValidator, trainTypeValidator } from "../lib/validators";
 import { rateLimit, stationRateLimit } from "../middleware/rate-limit";
+import { stationSearchCache } from "../middleware/station-search-cache";
 import { createStationSearch } from "../search";
 import { getScraperForStation, ScraperError } from "../scrapers";
 
@@ -69,14 +70,9 @@ async function createTrendingResponse(
 
 export const stationsRoutes = factory
   .createApp()
-  .get(
-    "/search",
-    rateLimit,
-    cache({ cacheName: "search-cache", cacheControl: CACHE_TTL.SEARCH }),
-    (c) => {
-      return c.json(getSearchResults(c.req.query("q")));
-    },
-  )
+  .get("/search", rateLimit, stationSearchCache, (c) => {
+    return c.json(getSearchResults(c.req.query("q")));
+  })
   .get(
     "/trending",
     rateLimit,

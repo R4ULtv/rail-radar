@@ -12,10 +12,13 @@ import { fetchTextWithTimeout } from "./fetch";
 const DB_BASE_URL = "https://apis.deutschebahn.com/db-api-marketplace/apis/timetables/v1";
 const TRAIN_LIMIT = 24;
 // Berlin's public ID denotes the station group. Its through platforms use this
-// verified Timetables EVA; selecting one section keeps each cold load to two calls.
+// verified Timetables EVA; keep requests scoped to this section.
 const EVA_OVERRIDES: Record<string, string> = { DE11160: "8098160" };
 const NON_RAIL_CATEGORIES = new Set(["BUS", "SEV", "SCHIFF", "STR", "U", "UBAHN"]);
 const BOARD_WINDOW_MS = 2 * 60 * 60 * 1000;
+// Include earlier plans so delayed trains retain their planned time and identity.
+const PLAN_LOOKBACK_MS = 2 * 60 * 60 * 1000;
+const HOUR_MS = 60 * 60 * 1000;
 
 // DB Timetables uses attribute-based XML. Keep this parser scoped to that format;
 // in particular, nested connection/reference stops must not become board rows.
@@ -361,7 +364,7 @@ function toBoardEntry(
     trainNumber: stop.label.n ?? "",
     scheduledTime: `${attributes.pt!.slice(6, 8)}:${attributes.pt!.slice(8, 10)}`,
     delay:
-      Number.isFinite(changed) && changed > scheduled
+      !cancelled && Number.isFinite(changed) && changed > scheduled
         ? Math.round((changed - scheduled) / 60_000)
         : null,
     platform: attributes.cp ?? attributes.pp ?? null,
@@ -403,14 +406,22 @@ export async function scrapeGermanTrains(
     // Also allows local scraper execution without a Workers Cache API.
   }
   const load = (path: string) => readXml(path, headers, cache, accountCacheKey);
-  const slice = formatDbTime(now).slice(0, 8);
-  // One current-hour plan plus one full change set. No station discovery or
-  // section/hour fan-out on the request path; both directions share these caches.
-  const [plan, changes] = await Promise.all([
-    load(`plan/${eva}/${slice.slice(0, 6)}/${slice.slice(6)}`),
+  // Walk real hours, then convert to Berlin time: this crosses midnight and DST
+  // correctly. The repeated autumn hour shares one upstream plan URL.
+  const planPaths = new Set<string>();
+  const firstHour = Math.floor((now - PLAN_LOOKBACK_MS) / HOUR_MS) * HOUR_MS;
+  const lastHour = Math.floor((now + BOARD_WINDOW_MS) / HOUR_MS) * HOUR_MS;
+  for (let hour = firstHour; hour <= lastHour; hour += HOUR_MS) {
+    const slice = formatDbTime(hour).slice(0, 8);
+    planPaths.add(`plan/${eva}/${slice.slice(0, 6)}/${slice.slice(6)}`);
+  }
+  // At most five plan slices plus changes on a cold load. Nonempty plans retain
+  // the existing day-long cache, shared by both board directions.
+  const [plans, changes] = await Promise.all([
+    Promise.all([...planPaths].map(load)),
     load(`fchg/${eva}`),
   ]);
-  const timetable: Timetable = mergeTimetables([parseTimetable(plan)], parseTimetable(changes));
+  const timetable: Timetable = mergeTimetables(plans.map(parseTimetable), parseTimetable(changes));
 
   const entries = timetable.stops
     .map((stop) => toBoardEntry(stop, type, now))

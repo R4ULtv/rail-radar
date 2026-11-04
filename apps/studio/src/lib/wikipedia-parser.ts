@@ -1,4 +1,4 @@
-import type { StationInfobox, StationStatus } from "$lib/types/wikipedia";
+import type { StationInfobox, StationStatus } from "#lib/types/wikipedia.ts";
 
 export function parseStationInfobox(wikitext: string): StationInfobox | null {
   const infoboxMatch = findInfoboxTemplate(wikitext);

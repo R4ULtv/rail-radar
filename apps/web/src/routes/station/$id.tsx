@@ -2,13 +2,7 @@ import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { metadataToHead } from "@/lib/metadata";
 import { loadStationPage } from "@/lib/station-data.functions";
 import { Button } from "@repo/ui/components/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@repo/ui/components/card";
+import { Card, CardContent } from "@repo/ui/components/card";
 import { ArrowLeftIcon, ArrowRightIcon, MapIcon, SearchIcon } from "lucide-react";
 import { staticAssetUrl } from "@/lib/static-assets";
 import { useStationPhotos } from "@/hooks/use-station-photos";
@@ -17,7 +11,8 @@ import { StationHeader } from "@/components/station-page/station-header";
 import { StationActions } from "@/components/station-page/station-actions";
 import { StationStats } from "@/components/station-page/station-stats";
 import { NearbyStations } from "@/components/station-page/nearby-stations";
-import { TrainBoard } from "@/components/station-page/train-board";
+import { TrainBoard, TrainBoardLoading } from "@/components/station-page/train-board";
+import { AppPromo } from "@/components/station-page/app-promo";
 import { Skeleton } from "@repo/ui/components/skeleton";
 import { prerenderedPageLinkProps } from "@/lib/station-prerender";
 
@@ -112,10 +107,15 @@ function StationPage({
         {/* Station header */}
         <StationHeader station={station} />
 
-        {/* Stats and nearby stations row */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {/* Stats and nearby stations row. On desktop the app invitation fills the space under
+            the stats; on phones it follows the nearby stations. */}
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 md:grid-rows-[auto_1fr]">
           <StationStats stationId={station.id} />
-          <NearbyStations stations={nearbyStations} />
+          <NearbyStations
+            stations={nearbyStations}
+            className="md:col-start-2 md:row-span-2 md:row-start-1"
+          />
+          <AppPromo className="md:col-start-1 md:self-start" />
         </div>
       </div>
 
@@ -230,75 +230,9 @@ function StationLoading() {
         </div>
       </div>
 
-      {/* Train board skeleton - matches the real TrainBoard component */}
+      {/* Train board, as it first loads */}
       <div className="md:mx-auto md:px-4 md:pb-6 max-w-7xl">
-        {/* Mobile: single column with toggle in header */}
-        <div className="md:hidden">
-          <Card className="flex flex-col h-[500px] pt-4 pb-0 gap-4 rounded-none ring-0 shadow-none">
-            <CardHeader className="px-4">
-              <div className="flex items-center justify-between gap-2">
-                <CardTitle className="flex items-center gap-2 text-base">
-                  <Skeleton className="size-4" />
-                  <Skeleton className="h-5 w-24" />
-                </CardTitle>
-                <Skeleton className="h-7 w-32 rounded-full" />
-              </div>
-              <CardDescription>
-                <Skeleton className="h-4 w-32" />
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="flex-1 px-0 overflow-auto">
-              <div>
-                {Array.from({ length: 6 }).map((_, i) => (
-                  <div key={i} className="flex items-center gap-3 px-4 py-3 border-b">
-                    <Skeleton className="h-4 w-12" />
-                    <Skeleton className="size-8 rounded-full" />
-                    <div className="flex-1">
-                      <Skeleton className="h-4 w-32 mb-1" />
-                      <Skeleton className="h-3 w-24" />
-                    </div>
-                    <Skeleton className="h-4 w-16" />
-                  </div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
-        </div>
-
-        {/* Desktop: two columns side by side */}
-        <div className="hidden md:grid grid-cols-2 gap-6">
-          {Array.from({ length: 2 }).map((_, columnIndex) => (
-            <Card
-              key={columnIndex}
-              className="flex h-[500px] flex-col gap-4 rounded-4xl py-4 shadow-md ring-1"
-            >
-              <CardHeader className="px-4">
-                <CardTitle className="flex items-center gap-2 text-base">
-                  <Skeleton className="size-4" />
-                  <Skeleton className="h-5 w-24" />
-                </CardTitle>
-                <CardDescription>
-                  <Skeleton className="h-4 w-32" />
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="flex-1 px-0 overflow-auto">
-                <div>
-                  {Array.from({ length: 6 }).map((_, i) => (
-                    <div key={i} className="flex items-center gap-3 px-4 py-3 border-b">
-                      <Skeleton className="h-4 w-12" />
-                      <Skeleton className="size-8 rounded-full" />
-                      <div className="flex-1">
-                        <Skeleton className="h-4 w-32 mb-1" />
-                        <Skeleton className="h-3 w-24" />
-                      </div>
-                      <Skeleton className="h-4 w-16" />
-                    </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
+        <TrainBoardLoading />
       </div>
     </div>
   );

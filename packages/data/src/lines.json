@@ -3639,6 +3639,305 @@
     "description": "Toulouse metro B links Borderouge with Ramonville through Compans-Caffarelli, Jean Jaurès, Carmes and Rangueil. It serves the university and medical campuses in the southeast, including Faculté de Pharmacie and Université Paul Sabatier. Jean Jaurès connects with line A, Palais de Justice with the tram, and Saint-Agne with regional trains."
   },
   {
+    "id": "hu-budapest-m1",
+    "code": "M1",
+    "name": "Metró M1",
+    "description": "M1 opened in 1896 as the first underground railway in continental Europe and still runs beneath Andrássy út. It links Vörösmarty tér in the city centre with the Opera, Oktogon, Heroes’ Square and the Széchenyi baths in City Park, and meets lines M2 and M3 at Deák Ferenc tér.",
+    "type": "metro",
+    "color": "#FFD800",
+    "operator": "bkv",
+    "routes": [
+      {
+        "stations": [
+          "HUM001",
+          "HUM002",
+          "HUM003",
+          "HUM004",
+          "HUM005",
+          "HUM006",
+          "HUM007",
+          "HUM008",
+          "HUM009",
+          "HUM010",
+          "HUM011"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "hu-budapest-m2",
+    "code": "M2",
+    "name": "Metró M2",
+    "description": "M2 crosses Budapest from west to east, running from Déli pályaudvar in Buda under the Danube to Örs vezér tere in Pest. It serves Batthyány tér, the Parliament at Kossuth Lajos tér, Deák Ferenc tér and Keleti pályaudvar, with HÉV connections at Batthyány tér and Örs vezér tere.",
+    "type": "metro",
+    "color": "#E41F18",
+    "operator": "bkv",
+    "routes": [
+      {
+        "stations": [
+          "HUM012",
+          "HUM013",
+          "HUM014",
+          "HUM015",
+          "HUM002",
+          "HUM016",
+          "HUM017",
+          "HUM018",
+          "HUM019",
+          "HUM020",
+          "HUM021"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "hu-budapest-m3",
+    "code": "M3",
+    "name": "Metró M3",
+    "description": "M3 is Budapest’s longest metro line, running north–south through Pest from Kőbánya-Kispest to Újpest-központ. It serves Kálvin tér, Ferenciek tere, Deák Ferenc tér and Nyugati pályaudvar, and Kőbánya-Kispest links it with suburban trains and the airport bus. The line was fully renovated between 2017 and 2023.",
+    "type": "metro",
+    "color": "#005CA5",
+    "operator": "bkv",
+    "routes": [
+      {
+        "stations": [
+          "HUM022",
+          "HUM023",
+          "HUM024",
+          "HUM025",
+          "HUM026",
+          "HUM027",
+          "HUM028",
+          "HUM029",
+          "HUM030",
+          "HUM031",
+          "HUM002",
+          "HUM032",
+          "HUM033",
+          "HUM034",
+          "HUM035",
+          "HUM036",
+          "HUM037",
+          "HUM038",
+          "HUM039",
+          "HUM040"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "hu-budapest-m4",
+    "code": "M4",
+    "name": "Metró M4",
+    "description": "M4 opened in 2014 as Budapest’s first automated metro line, linking Kelenföld vasútállomás in south Buda with Keleti pályaudvar. It crosses under the Danube between Szent Gellért tér and Fővám tér, and connects with M3 at Kálvin tér and M2 at Keleti pályaudvar.",
+    "type": "metro",
+    "color": "#4CA22F",
+    "operator": "bkv",
+    "routes": [
+      {
+        "stations": [
+          "HUM041",
+          "HUM042",
+          "HUM043",
+          "HUM044",
+          "HUM045",
+          "HUM046",
+          "HUM030",
+          "HUM047",
+          "HUM048",
+          "HUM018"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "hu-budapest-h5",
+    "code": "H5",
+    "name": "Szentendrei HÉV",
+    "description": "The Szentendre HÉV runs north from Batthyány tér along the Buda bank of the Danube, through Óbuda and Békásmegyer, to the riverside town of Szentendre. It passes the Roman ruins at Aquincum and connects with metro M2 at Batthyány tér; many trains turn back at Békásmegyer.",
+    "type": "light",
+    "color": "#900166",
+    "operator": "mav-hev",
+    "routes": [
+      {
+        "stations": [
+          "HUL001",
+          "HUL002",
+          "HUL003",
+          "HUL004",
+          "HUL005",
+          "HUL006",
+          "HUL007",
+          "HUL008",
+          "HUL009",
+          "HUL010",
+          "HUL011",
+          "HUL012",
+          "HUL013",
+          "HUL014",
+          "HUL015",
+          "HUL016",
+          "HUL017"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "hu-budapest-h6",
+    "code": "H6",
+    "name": "Ráckevei HÉV",
+    "description": "The Ráckeve HÉV leaves Közvágóhíd in southern Pest and runs through Pesterzsébet and Soroksár onto Csepel Island, ending at Ráckeve. Most trains run only as far as Tököl or Dunaharaszti külső, with fewer services covering the rural southern section.",
+    "type": "light",
+    "color": "#814F26",
+    "operator": "mav-hev",
+    "routes": [
+      {
+        "stations": [
+          "HUL018",
+          "HUL019",
+          "HUL020",
+          "HUL021",
+          "HUL022",
+          "HUL023",
+          "HUL024",
+          "HUL025",
+          "HUL026",
+          "HUL027",
+          "HUL028",
+          "HUL029",
+          "HUL030",
+          "HUL031",
+          "HUL032",
+          "HUL033",
+          "HUL034",
+          "HUL035",
+          "HUL036",
+          "HUL037",
+          "HUL038",
+          "HUL039"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "hu-budapest-h7",
+    "code": "H7",
+    "name": "Csepeli HÉV",
+    "description": "The Csepel HÉV is a short urban line from Boráros tér, at the Pest end of Petőfi Bridge, to the centre of Csepel. It serves the Müpa and National Theatre cultural quarter and the Szabadkikötő freeport along the Danube.",
+    "type": "light",
+    "color": "#F47D35",
+    "operator": "mav-hev",
+    "routes": [
+      {
+        "stations": [
+          "HUL040",
+          "HUL041",
+          "HUL042",
+          "HUL043",
+          "HUL044",
+          "HUL045"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "hu-budapest-h8",
+    "code": "H8",
+    "name": "Gödöllői HÉV",
+    "description": "The Gödöllő HÉV runs from Örs vezér tere, the eastern terminus of metro M2, through Sashalom, Mátyásföld and Cinkota to Kistarcsa, Kerepes and Gödöllő. In Gödöllő it serves the town centre and the Royal Palace before ending near the mainline station.",
+    "type": "light",
+    "color": "#F27689",
+    "operator": "mav-hev",
+    "routes": [
+      {
+        "stations": [
+          "HUL046",
+          "HUL047",
+          "HUL048",
+          "HUL049",
+          "HUL050",
+          "HUL051",
+          "HUL052",
+          "HUL053",
+          "HUL054",
+          "HUL055",
+          "HUL056",
+          "HUL057",
+          "HUL058",
+          "HUL059",
+          "HUL060",
+          "HUL061",
+          "HUL062",
+          "HUL063",
+          "HUL064",
+          "HUL065"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "hu-budapest-h9",
+    "code": "H9",
+    "name": "Csömöri HÉV",
+    "description": "The Csömör HÉV shares the Gödöllő line from Örs vezér tere to Cinkota, then branches north through Árpádföld to Csömör. It gives the outer districts of eastern Budapest a direct link to metro M2.",
+    "type": "light",
+    "color": "#F27689",
+    "operator": "mav-hev",
+    "routes": [
+      {
+        "stations": [
+          "HUL046",
+          "HUL047",
+          "HUL048",
+          "HUL049",
+          "HUL050",
+          "HUL051",
+          "HUL052",
+          "HUL053",
+          "HUL066",
+          "HUL067",
+          "HUL068",
+          "HUL069"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "hu-szeged-1",
+    "code": "1",
+    "name": "Tram-train",
+    "description": "Hungary’s first tram-train, opened in 2021, links Szeged with Hódmezővásárhely. It runs on Szeged’s tram tracks through the city centre to Rókus station, follows the mainline railway via Algyő, and returns to street tracks in Hódmezővásárhely to reach the town’s railway station.",
+    "type": "light",
+    "color": "#FDC434",
+    "operator": "mav",
+    "routes": [
+      {
+        "stations": [
+          "HU5517228",
+          "HUL070",
+          "HUL071",
+          "HUL072",
+          "HUL073",
+          "HUL074",
+          "HUL075",
+          "HUL076",
+          "HUL077",
+          "HUL078",
+          "HUL079",
+          "HUL080",
+          "HU5518531",
+          "HUL081",
+          "HU5518564",
+          "HUL082",
+          "HUL083",
+          "HUL084",
+          "HUL085",
+          "HU5518572"
+        ]
+      }
+    ]
+  },
+  {
     "id": "ie-dublin-green",
     "code": null,
     "name": "Luas Green Line",

@@ -1,8 +1,8 @@
 <script lang="ts">
   import type { Line, LineRoute, Station } from "@repo/data";
   import { CheckIcon, PlusIcon, XIcon } from "@lucide/svelte";
-  import LineBadge from "$lib/components/LineBadge.svelte";
-  import { Button } from "$lib/components/ui/button";
+  import LineBadge from "#lib/components/LineBadge.svelte";
+  import { Button } from "#lib/components/ui/button/index.ts";
 
   let {
     station,

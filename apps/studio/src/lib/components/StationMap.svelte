@@ -1,16 +1,16 @@
 <script lang="ts">
   import type { Station } from "@repo/data";
-  import * as maplibregl from "$lib/maplibre";
+  import * as maplibregl from "#lib/maplibre.ts";
   import type { ExpressionSpecification, GeoJSONSource, Map, Marker } from "maplibre-gl";
   import { onDestroy, onMount } from "svelte";
-  import { STATION_TYPE_COLOR } from "$lib/station-colors";
+  import { STATION_TYPE_COLOR } from "#lib/station-colors.ts";
   import {
     findDuplicateStationIds,
     stationMatchesFilters,
     type StationImportanceFilter,
     type StationTypeFilter,
-  } from "$lib/station-filters";
-  import { roundCoordinate } from "$lib/stations";
+  } from "#lib/station-filters.ts";
+  import { roundCoordinate } from "#lib/stations.ts";
 
   const SOURCE_ID = "stations-source";
   const LAYER_ID = "stations-layer";
@@ -99,7 +99,7 @@
     const query = searchValue.trim().toLowerCase();
 
     if (query) conditions.push(["in", query, ["get", "searchText"]]);
-    if (typeFilterValue === "rail" || typeFilterValue === "metro" || typeFilterValue === "light") {
+    if (typeFilterValue !== "all" && typeFilterValue !== "duplicate") {
       conditions.push(["==", ["get", "type"], typeFilterValue]);
     }
     if (typeFilterValue === "duplicate") {
@@ -264,6 +264,8 @@
             STATION_TYPE_COLOR.metro,
             "light",
             STATION_TYPE_COLOR.light,
+            "freight",
+            STATION_TYPE_COLOR.freight,
             STATION_TYPE_COLOR.rail,
           ],
           "circle-stroke-color": "#ffffff",
@@ -328,6 +330,10 @@
     <div class="flex items-center gap-2">
       <span class="size-2 rounded-full" style:background-color={STATION_TYPE_COLOR.light}></span>
       <span>Light rail</span>
+    </div>
+    <div class="flex items-center gap-2">
+      <span class="size-2 rounded-full" style:background-color={STATION_TYPE_COLOR.freight}></span>
+      <span>Freight yard</span>
     </div>
   </div>
 

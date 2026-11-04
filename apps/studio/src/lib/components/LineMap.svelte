@@ -1,15 +1,15 @@
 <script lang="ts">
   import type { Line, LineGeometry, Station } from "@repo/data";
   import { getLineStationIds } from "@repo/data/lines";
-  import * as maplibregl from "$lib/maplibre";
+  import * as maplibregl from "#lib/maplibre.ts";
   import type {
     DataDrivenPropertyValueSpecification,
     GeoJSONSource,
     Map as LibreMap,
   } from "maplibre-gl";
   import { onMount, untrack } from "svelte";
-  import { DEFAULT_LINE_COLOR } from "$lib/line-colors";
-  import { STATION_TYPE_COLOR } from "$lib/station-colors";
+  import { DEFAULT_LINE_COLOR } from "#lib/line-colors.ts";
+  import { STATION_TYPE_COLOR } from "#lib/station-colors.ts";
 
   let {
     lines,

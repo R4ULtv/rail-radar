@@ -13,6 +13,7 @@ export function stationFromFeature(feature: GeoJSON.Feature): Station | null {
 
   const type = feature.properties.type as Station["type"];
   const importance = (feature.properties.importance ?? 4) as Station["importance"];
+  const kind = feature.properties.kind as Station["kind"];
   const [lng, lat] = feature.geometry.coordinates;
-  return { id, name, type, importance, geo: { lat: lat!, lng: lng! } };
+  return { id, name, type, importance, kind, geo: { lat: lat!, lng: lng! } };
 }

@@ -1,7 +1,7 @@
 <script lang="ts">
   import { FileBracesIcon, FileSpreadsheetIcon, GlobeIcon } from "@lucide/svelte";
-  import type { StationFileFormat } from "$lib/stations";
-  import { cn } from "$lib/utils";
+  import type { StationFileFormat } from "#lib/stations.ts";
+  import { cn } from "#lib/utils.ts";
 
   let {
     format,

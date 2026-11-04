@@ -10,6 +10,7 @@ import de from "../../../web/public/assets/flags/de.svg";
 import dk from "../../../web/public/assets/flags/dk.svg";
 import fi from "../../../web/public/assets/flags/fi.svg";
 import fr from "../../../web/public/assets/flags/fr.svg";
+import hu from "../../../web/public/assets/flags/hu.svg";
 import ie from "../../../web/public/assets/flags/ie.svg";
 import it from "../../../web/public/assets/flags/it.svg";
 import lu from "../../../web/public/assets/flags/lu.svg";
@@ -26,6 +27,7 @@ const flags: Record<CountryCode, FC<SvgProps>> = {
   dk,
   fi,
   fr,
+  hu,
   ie,
   it,
   lu,

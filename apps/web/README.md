@@ -83,6 +83,13 @@ GET /media/stations/{stationId}/photos
 GET /media/stations/{stationId}/photo/{image-key}.webp
 ```
 
+Open Graph images use an explicit Worker cache with a 30-day browser and shared-cache lifetime.
+Cache keys keep only the station ID, so tracking parameters and parameter order do not trigger
+additional Mapbox requests or image rendering. HEAD requests reuse cached headers and never
+generate an image. Cards generated without a Mapbox background have a five-minute lifetime so
+they can recover after an upstream outage. Worker caches are local to each data center and may
+evict images before their lifetime ends.
+
 Station manifests are requested by the browser after hydration and are never read while station
 pages are prerendered. The Vite development server connects to the real bucket so photos remain
 testable locally; production builds keep the R2 binding local, and deployed Workers use the bound
@@ -159,9 +166,11 @@ change.
 ## Preview deployment
 
 Worker Previews use the production custom domain as their base and do not expose `workers.dev`
-URLs. From the `preview` branch, deploy with:
+URLs. Workers Builds deploys the `preview` branch automatically. To deploy by hand from the
+`preview` branch, build first, because `deploy:preview` only deploys the existing `dist`:
 
 ```bash
+pnpm --filter=web build
 pnpm --filter=web deploy:preview
 ```
 

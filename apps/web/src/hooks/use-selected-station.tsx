@@ -40,13 +40,13 @@ export function SelectedStationProvider({ children }: { children: React.ReactNod
 
   const stationRef = React.useRef<Station | null>(null);
 
-  const flyToRef = React.useRef((_geo: { lat: number; lng: number }) => {});
+  const flyToRef = React.useRef((_geo: { lat: number; lng: number }, _withPanel: boolean) => {});
   React.useEffect(() => {
-    flyToRef.current = (geo) => {
+    flyToRef.current = (geo, withPanel) => {
       map?.flyTo({
         center: [geo.lng, geo.lat],
         zoom: 14,
-        padding: isMobile ? { bottom: 250, top: 0, left: 0, right: 0 } : undefined,
+        padding: isMobile && withPanel ? { bottom: 250, top: 0, left: 0, right: 0 } : undefined,
       });
     };
   }, [map, isMobile]);
@@ -57,20 +57,30 @@ export function SelectedStationProvider({ children }: { children: React.ReactNod
   // Clear a stale ?station= param (one no longer backed by a selection)
   React.useEffect(() => {
     if (stationId && !stationRef.current && stationId !== linkedStationId) {
-      setStationId(null);
+      void setStationId(null);
     }
   }, [stationId, linkedStationId, setStationId]);
 
   const selectStation = React.useCallback(
     (station: Station) => {
+      addRecentStation(station);
+
+      // Freight yards have no panel: the map only centers on them.
+      if (station.type === "freight") {
+        stationRef.current = null;
+        setStationObject(null);
+        void setStationId(null);
+        if (station.geo) flyToRef.current(station.geo, false);
+        return;
+      }
+
       stationRef.current = station;
       setStationObject(station);
-      setStationId(station.id);
-      addRecentStation(station);
+      void setStationId(station.id);
 
       // Metro and light rail stations frame their lines instead (StationLinesMap).
       if (station.geo && station.type === "rail") {
-        flyToRef.current(station.geo);
+        flyToRef.current(station.geo, true);
       }
     },
     [setStationId, addRecentStation],
@@ -100,7 +110,7 @@ export function SelectedStationProvider({ children }: { children: React.ReactNod
 
   const clearStation = React.useCallback(() => {
     stationRef.current = null;
-    setStationId(null);
+    void setStationId(null);
     setStationObject(null);
   }, [setStationId]);
 

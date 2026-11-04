@@ -109,8 +109,10 @@ function mapTrain(
   const stationRow = getStationRow(rows, stationShortCode, rowType);
   if (!stationRow) return null;
 
-  // Skip cancelled trains whose scheduled time is more than 10 minutes in the past
-  if (entry.cancelled) {
+  // A train can still run while its arrival/departure at this station is cancelled.
+  const cancelled = entry.cancelled || stationRow.cancelled;
+  // Keep recent cancellations visible, but drop them after ten minutes.
+  if (cancelled) {
     const scheduled = new Date(stationRow.scheduledTime).getTime();
     if (scheduled < Date.now() - 10 * 60 * 1000) return null;
   }
@@ -132,7 +134,7 @@ function mapTrain(
     delay:
       stationRow.differenceInMinutes != null ? Math.max(0, stationRow.differenceInMinutes) : null,
     platform: stationRow.commercialTrack || null,
-    status: entry.cancelled ? "cancelled" : getStatus(stationRow, type),
+    status: cancelled ? "cancelled" : getStatus(stationRow, type),
     info: null,
   };
 

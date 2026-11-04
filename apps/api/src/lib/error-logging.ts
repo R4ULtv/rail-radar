@@ -43,11 +43,31 @@ export function logRequestError(
   message: string,
   details: Record<string, string | number | null | undefined> = {},
 ) {
+  logRequestIssue(c, error, message, details, "error");
+}
+
+/** Background failures must not modify a response that may already have been sent. */
+export function logRequestWarning(
+  c: Context<Env>,
+  error: unknown,
+  message: string,
+  details: Record<string, string | number | null | undefined> = {},
+) {
+  logRequestIssue(c, error, message, details, "warn");
+}
+
+function logRequestIssue(
+  c: Context<Env>,
+  error: unknown,
+  message: string,
+  details: Record<string, string | number | null | undefined>,
+  level: "error" | "warn",
+) {
   const requestId = c.get("requestId") ?? c.req.header("cf-ray") ?? crypto.randomUUID();
   const startedAt = c.get("requestStartedAt");
-  c.header("X-Request-Id", requestId);
+  if (level === "error") c.header("X-Request-Id", requestId);
 
-  console.error(
+  console[level](
     JSON.stringify({
       message,
       service: "api",

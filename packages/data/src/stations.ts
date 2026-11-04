@@ -23,6 +23,7 @@ for (const { properties, geometry } of stationsGeoJSON.features) {
     name: properties.name,
     type: properties.type,
     importance: properties.importance,
+    kind: properties.kind,
     geo: {
       lat: geometry.coordinates[1]!,
       lng: geometry.coordinates[0]!,

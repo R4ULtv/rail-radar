@@ -97,10 +97,11 @@ const collapsedTrainCount = 10;
 // Between the tabs and the board, the same as between the actions and the tabs. It's still more
 // than the header fade's gap.
 const boardTopSpacing = 12;
-const stationTypeLabels = {
+const stationTypeLabels: Record<Station["type"], string> = {
   rail: "Train station",
   metro: "Metro station",
   light: "Light rail stop",
+  freight: "Freight yard",
 };
 
 function formatUpdated(secondsAgo: number) {
