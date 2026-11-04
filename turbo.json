@@ -31,6 +31,10 @@
     "check-types": {
       "dependsOn": ["transit"]
     },
+    "test": {
+      "dependsOn": ["transit"],
+      "outputs": []
+    },
     "dev": {
       "cache": false,
       "persistent": true
