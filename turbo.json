@@ -1,5 +1,8 @@
 {
   "$schema": "https://turborepo.com/schema.json",
+  "futureFlags": {
+    "githubActionsRemoteBaseRefFallback": true
+  },
   "ui": "tui",
   "remoteCache": {
     "enabled": true
