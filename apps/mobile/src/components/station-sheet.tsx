@@ -49,7 +49,15 @@ import {
 } from "react-native";
 // Gesture handler's, so it settles horizontal drags with the sheet's own pan gesture on Android.
 import { ScrollView } from "react-native-gesture-handler";
-import type { AnimatedRef } from "react-native-reanimated";
+import Animated, {
+  Extrapolation,
+  interpolate,
+  useAnimatedReaction,
+  useAnimatedStyle,
+  useDerivedValue,
+  type AnimatedRef,
+} from "react-native-reanimated";
+import { scheduleOnRN } from "react-native-worklets";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { CountryFlag } from "@/components/country-flag";
 import {
@@ -284,7 +292,7 @@ const BoardTabs = memo(function BoardTabs({
   );
 });
 
-/** The station's notice from the live board: one line until it's pressed. */
+/** The station's notice from the live board: two lines until it's pressed. */
 function StationInfo({ info }: { info: string }) {
   const [foregroundColor, mutedColor] = useThemeColor(["default-foreground", "muted"]);
   const [isExpanded, setIsExpanded] = useState(false);
@@ -303,7 +311,8 @@ function StationInfo({ info }: { info: string }) {
       <View style={styles.noticeIcon}>
         <Megaphone size={16} color={mutedColor} />
       </View>
-      <Text className="flex-1 text-sm leading-5 text-muted" numberOfLines={isExpanded ? 0 : 1}>
+      {/* Two lines, so a notice says what it's about before it's opened. */}
+      <Text className="flex-1 text-sm leading-5 text-muted" numberOfLines={isExpanded ? 0 : 2}>
         {info}
       </Text>
       <View style={[styles.noticeIcon, isExpanded && styles.chevronUp]}>
@@ -444,6 +453,10 @@ const LiveBoard = memo(function LiveBoard({
     });
   }, [data, showAll]);
 
+  // Some sources never send platforms (Ireland and France for now): a column of question marks
+  // would say nothing, so the board leaves it out until a train has one.
+  const showPlatform = data?.trains.some((train) => train.platform) ?? false;
+
   const measurementKey = `${type}:${data ? (trains.length > 0 ? "trains" : "empty") : error ? "error" : "loading"}`;
   const [introLayout, setIntroLayout] = useState<{ key: string; height: number } | null>(null);
   const [firstLayout, setFirstLayout] = useState<{ key: string; bottom: number } | null>(null);
@@ -498,10 +511,11 @@ const LiveBoard = memo(function LiveBoard({
           isExpanded={expandedTrain === trainKey(item.train)}
           onToggle={toggleTrain}
           onLayout={index === 0 ? onFirstItemLayout : undefined}
+          showPlatform={showPlatform}
         />
       </View>
     ),
-    [type, expandedTrain, toggleTrain, onFirstItemLayout, measurementKey],
+    [type, expandedTrain, toggleTrain, onFirstItemLayout, measurementKey, showPlatform],
   );
 
   let emptyContent: ReactNode = null;
@@ -793,6 +807,28 @@ function StationSheetContent({
     [hasBoard],
   );
 
+  // The actions scroll away with the board, as if they were its top, while the tabs stay pinned
+  // once they reach the title: more trains fit, and scrolling back up brings the actions back.
+  const [actionsHeight, setActionsHeight] = useState(0);
+  const [isCollapsed, setIsCollapsed] = useState(false);
+  const collapsedBy = useDerivedValue(() =>
+    Math.min(Math.max(scrollOffset.get(), 0), actionsHeight),
+  );
+  // Once they're mostly gone, presses go to the board beneath them instead.
+  useAnimatedReaction(
+    () => actionsHeight > 0 && collapsedBy.get() > actionsHeight / 2,
+    (collapsed, previous) => {
+      if (collapsed !== previous) scheduleOnRN(setIsCollapsed, collapsed);
+    },
+  );
+  const actionsStyle = useAnimatedStyle(() => ({
+    opacity: interpolate(collapsedBy.get(), [0, actionsHeight * 0.7], [1, 0], Extrapolation.CLAMP),
+    transform: [{ translateY: -collapsedBy.get() }],
+  }));
+  const tabsStyle = useAnimatedStyle(() => ({
+    transform: [{ translateY: -collapsedBy.get() }],
+  }));
+
   const selectType = useCallback(
     (next: BoardType) => {
       if (next === type) return;
@@ -804,8 +840,8 @@ function StationSheetContent({
 
   return (
     <View style={styles.fill}>
-      <PinnedSheetHeader onHeightChange={setHeaderHeight}>
-        <View className="px-4">
+      <PinnedSheetHeader onHeightChange={setHeaderHeight} collapsedBy={collapsedBy}>
+        <View className="px-4" pointerEvents="box-none">
           <SheetHeader
             title={station.name}
             titleLines={2}
@@ -828,14 +864,25 @@ function StationSheetContent({
               onSelect={onSelectNearbyStation}
             />
           ) : null}
-          <QuickActions station={station} />
+          {/* Clipped, so the actions slide away beneath the subtitle rather than over it. */}
+          <View
+            className="overflow-hidden"
+            pointerEvents={isCollapsed ? "none" : "auto"}
+            importantForAccessibility={isCollapsed ? "no-hide-descendants" : "auto"}
+            accessibilityElementsHidden={isCollapsed}
+            onLayout={(event) => setActionsHeight(event.nativeEvent.layout.height)}
+          >
+            <Animated.View style={actionsStyle}>
+              <QuickActions station={station} />
+            </Animated.View>
+          </View>
           {isRail ? (
-            <View className="pt-3">
+            <Animated.View className="pt-3" style={tabsStyle}>
               <BoardTabs type={type} arrivalsSupported={arrivalsSupported} onChange={selectType} />
-            </View>
+            </Animated.View>
           ) : null}
         </View>
-        <SheetHeaderFade scrollOffset={scrollOffset} />
+        <SheetHeaderFade scrollOffset={scrollOffset} collapsedBy={collapsedBy} />
       </PinnedSheetHeader>
       <LiveBoard
         board={board}

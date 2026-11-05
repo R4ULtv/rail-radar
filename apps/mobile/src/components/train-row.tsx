@@ -3,7 +3,8 @@ import { useThemeColor } from "heroui-native/hooks";
 import ArrowDown from "lucide-react-native/icons/arrow-down";
 import ArrowRight from "lucide-react-native/icons/arrow-right";
 import Ban from "lucide-react-native/icons/ban";
-import Info from "lucide-react-native/icons/info";
+import ChevronDown from "lucide-react-native/icons/chevron-down";
+import CircleQuestionMark from "lucide-react-native/icons/circle-question-mark";
 import { PressableFeedback } from "heroui-native/pressable-feedback";
 import { Separator } from "heroui-native/separator";
 import { memo } from "react";
@@ -71,6 +72,8 @@ interface TrainRowProps {
   isExpanded: boolean;
   onToggle: (key: string) => void;
   onLayout?: (event: LayoutChangeEvent) => void;
+  /** Off for a board with no platforms at all, whose source likely doesn't send them. */
+  showPlatform: boolean;
 }
 
 // A record, so a new train field fails to type-check until it's compared too.
@@ -93,6 +96,7 @@ function areRowPropsEqual(previous: TrainRowProps, next: TrainRowProps) {
   return (
     previous.type === next.type &&
     previous.isExpanded === next.isExpanded &&
+    previous.showPlatform === next.showPlatform &&
     previous.onToggle === next.onToggle &&
     previous.onLayout === next.onLayout &&
     trainFields.every((field) => previous.train[field] === next.train[field])
@@ -105,6 +109,7 @@ export const TrainRow = memo(function TrainRow({
   isExpanded,
   onToggle,
   onLayout,
+  showPlatform,
 }: TrainRowProps) {
   const mutedColor = useThemeColor("muted");
   const route = type === "arrivals" ? train.origin : train.destination;
@@ -116,21 +121,24 @@ export const TrainRow = memo(function TrainRow({
   const row = (
     <View className="flex-row gap-3 px-4 py-3">
       {status ? <View className={statusBarClassNames[status]} style={styles.statusBar} /> : null}
-      <View
-        className="h-12 min-w-12 items-center justify-center rounded-2xl bg-default px-2"
-        accessibilityLabel={platform ? `Platform ${platform}` : "Platform unknown"}
-      >
-        {platform ? (
-          <Text
-            className={`font-bold text-foreground ${platform.length > 2 ? "text-sm" : "text-xl"}`}
-            numberOfLines={1}
-          >
-            {platform}
-          </Text>
-        ) : (
-          <Text className="text-base font-medium text-muted">–</Text>
-        )}
-      </View>
+      {/* Without a platform, which may be still to come or never sent, a question mark in an outline. */}
+      {showPlatform ? (
+        <View
+          className={`h-12 min-w-12 items-center justify-center rounded-2xl px-2 ${platform ? "bg-default" : "border-[1.5px] border-dashed border-border"}`}
+          accessibilityLabel={platform ? `Platform ${platform}` : "Platform unknown"}
+        >
+          {platform ? (
+            <Text
+              className={`font-bold text-foreground ${platform.length > 2 ? "text-sm" : "text-xl"}`}
+              numberOfLines={1}
+            >
+              {platform}
+            </Text>
+          ) : (
+            <CircleQuestionMark size={18} color={mutedColor} />
+          )}
+        </View>
+      ) : null}
 
       <View style={styles.details}>
         <View className="flex-row items-center justify-between gap-2">
@@ -146,7 +154,6 @@ export const TrainRow = memo(function TrainRow({
             <Text className="shrink font-medium text-foreground" numberOfLines={1}>
               {train.trainNumber}
             </Text>
-            {train.info ? <Info size={14} color={mutedColor} /> : null}
           </View>
           <View className="flex-row items-center gap-1.5">
             <Text
@@ -164,9 +171,17 @@ export const TrainRow = memo(function TrainRow({
         </View>
 
         <View className="mt-1 flex-row items-center justify-between gap-2">
-          <Text className="flex-1 text-sm text-muted" numberOfLines={1}>
-            {route ? `${type === "arrivals" ? "From" : "To"} ${route}` : "–"}
-          </Text>
+          {/* The chevron opens the train's info, like the station's notice. */}
+          <View className="flex-1 flex-row items-center gap-1">
+            <Text className="shrink text-sm text-muted" numberOfLines={1}>
+              {route ? `${type === "arrivals" ? "From" : "To"} ${route}` : "–"}
+            </Text>
+            {train.info ? (
+              <View style={isExpanded ? styles.chevronUp : undefined}>
+                <ChevronDown size={14} color={mutedColor} />
+              </View>
+            ) : null}
+          </View>
           {status ? <TrainStatus status={status} /> : null}
         </View>
 
@@ -228,4 +243,5 @@ const styles = StyleSheet.create({
   // Beside the platform, as tall as it, rather than along the sheet's edge.
   statusBar: { position: "absolute", left: 6, top: 12, bottom: 12, width: 3, borderRadius: 1.5 },
   tabularNums: { fontVariant: ["tabular-nums"] },
+  chevronUp: { transform: [{ rotate: "180deg" }] },
 });

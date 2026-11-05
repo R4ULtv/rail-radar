@@ -67,17 +67,32 @@ export function SheetHeader({
  */
 export function PinnedSheetHeader({
   onHeightChange,
+  collapsedBy,
   children,
 }: {
   onHeightChange: (height: number) => void;
+  /**
+   * How much shorter the header looks, e.g. once a row of it has moved out of the way. It keeps
+   * its height, so the list's padding doesn't change, and the list shows through below. Its
+   * children move themselves, and leave touches there to the list with `pointerEvents`.
+   */
+  collapsedBy?: SharedValue<number>;
   children: ReactNode;
 }) {
   const color = useThemeColor("surface");
+  const backgroundStyle = useAnimatedStyle(() => ({ bottom: collapsedBy?.get() ?? 0 }));
   return (
     <View
-      style={[styles.pinned, { backgroundColor: color }]}
+      pointerEvents={collapsedBy ? "box-none" : "auto"}
+      style={[styles.pinned, collapsedBy ? null : { backgroundColor: color }]}
       onLayout={(event) => onHeightChange(event.nativeEvent.layout.height)}
     >
+      {collapsedBy ? (
+        <Animated.View
+          pointerEvents="none"
+          style={[styles.pinnedBackground, { backgroundColor: color }, backgroundStyle]}
+        />
+      ) : null}
       {children}
     </View>
   );
@@ -110,15 +125,25 @@ export function useSheetScrollOffset<T extends Component = Animated.ScrollView>(
  * The bottom edge of a sticky header: lists fade out under it instead of being cut off. It hangs
  * below the header, so give it a parent without padding, and leave the gap above the list.
  */
-export function SheetHeaderFade({ scrollOffset }: { scrollOffset: SharedValue<number> }) {
+export function SheetHeaderFade({
+  scrollOffset,
+  collapsedBy,
+}: {
+  scrollOffset: SharedValue<number>;
+  /** The header's `collapsedBy`, to stay at the bottom of what's left of it. */
+  collapsedBy?: SharedValue<number>;
+}) {
   const color = useThemeColor("surface");
+  const shiftStyle = useAnimatedStyle(() => ({
+    transform: [{ translateY: -(collapsedBy?.get() ?? 0) }],
+  }));
   const fadeStyle = useAnimatedStyle(() => ({
     transform: [
       { scaleY: cssEaseInOut(Math.min(Math.max(scrollOffset.get(), 0) / fadeRevealDistance, 1)) },
     ],
   }));
   return (
-    <View pointerEvents="none" style={styles.fade}>
+    <Animated.View pointerEvents="none" style={[styles.fade, shiftStyle]}>
       <View style={[styles.fadeGap, { backgroundColor: color }]} />
       <Animated.View style={[styles.fadeGradient, fadeStyle]}>
         <Svg width="100%" height="100%">
@@ -131,13 +156,14 @@ export function SheetHeaderFade({ scrollOffset }: { scrollOffset: SharedValue<nu
           <Rect width="100%" height="100%" fill="url(#fade)" />
         </Svg>
       </Animated.View>
-    </View>
+    </Animated.View>
   );
 }
 
 const styles = StyleSheet.create({
   // Drawn over the list, which comes after it so screen readers still start at the header.
   pinned: { position: "absolute", top: 0, left: 0, right: 0, zIndex: 1 },
+  pinnedBackground: { position: "absolute", top: 0, left: 0, right: 0 },
   fade: { position: "absolute", top: "100%", left: 0, right: 0 },
   fadeGap: { height: fadeGap },
   // Scaled from the top, which moves where it turns transparent like the web's mask does.
