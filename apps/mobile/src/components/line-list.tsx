@@ -9,7 +9,7 @@ import { View } from "react-native";
 
 import { CountryFlag } from "@/components/country-flag";
 import { LineBadge } from "@/components/line-badge";
-import { RowSeparator, SectionTitle } from "@/components/station-list";
+import { HighlightedName, RowSeparator, SectionTitle } from "@/components/station-list";
 import {
   getLineCountry,
   getLineOperatorName,
@@ -28,6 +28,8 @@ interface LineRowProps {
   /** Below the name; the line's type and operator by default. */
   description?: string;
   suffix?: ReactNode;
+  /** The search query, to show what it matched in the name. */
+  highlight?: string;
   onSelect: (line: Line) => void;
 }
 
@@ -36,6 +38,7 @@ export const LineRow = memo(function LineRow({
   line,
   description = getLineDescription(line),
   suffix,
+  highlight,
   onSelect,
 }: LineRowProps) {
   return (
@@ -51,7 +54,7 @@ export const LineRow = memo(function LineRow({
       <ListGroup.ItemContent>
         <View className="flex-row items-center gap-2">
           <ListGroup.ItemTitle numberOfLines={1} className="shrink">
-            {line.name}
+            <HighlightedName name={line.name} query={highlight} />
           </ListGroup.ItemTitle>
           <CountryFlag country={getLineCountry(line)} />
         </View>

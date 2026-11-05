@@ -10,6 +10,7 @@ import { Image, StyleSheet, Text, View, type AccessibilityProps } from "react-na
 import { CountryFlag } from "@/components/country-flag";
 import { Skeleton } from "@/components/skeleton";
 import { haptics } from "@/lib/haptics";
+import { getHighlightRanges } from "@/lib/search-highlight";
 import { freightIcons, stationIcons } from "@/lib/station-icons";
 
 /** A Lucide icon, drawn at the section title's size and color. */
@@ -29,6 +30,37 @@ export function SectionTitle({ icon, children }: { icon?: ReactNode; children: R
   );
 }
 
+/**
+ * A row's name with the part a search matched standing out: the rest is muted, like Spotlight.
+ * Bold alone barely showed against the title's medium weight.
+ */
+export function HighlightedName({ name, query }: { name: string; query?: string }) {
+  const ranges = query ? getHighlightRanges(name, query) : [];
+  if (ranges.length === 0) return name;
+  const parts: ReactNode[] = [];
+  let end = 0;
+  const pushRest = (to: number) => {
+    if (to > end) {
+      parts.push(
+        <Text key={`rest-${end}`} className="text-muted">
+          {name.slice(end, to)}
+        </Text>,
+      );
+    }
+  };
+  for (const [start, rangeEnd] of ranges) {
+    pushRest(start);
+    parts.push(
+      <Text key={start} className="font-semibold">
+        {name.slice(start, rangeEnd)}
+      </Text>,
+    );
+    end = rangeEnd;
+  }
+  pushRest(name.length);
+  return parts;
+}
+
 /** The line between two rows that start with an icon, inset to their titles. */
 export function RowSeparator() {
   return <Separator className="mr-4 ml-13" />;
@@ -40,12 +72,15 @@ interface StationRowProps<T extends Station> extends Pick<
 > {
   station: T;
   renderSuffix?: (station: T) => ReactNode;
+  /** The search query, to show what it matched in the name. */
+  highlight?: string;
   onSelect: (station: Station) => void;
 }
 
 function StationRowContent<T extends Station>({
   station,
   renderSuffix,
+  highlight,
   onSelect,
   accessibilityActions,
   onAccessibilityAction,
@@ -66,7 +101,7 @@ function StationRowContent<T extends Station>({
       <ListGroup.ItemContent>
         <View className="flex-row items-center gap-2">
           <ListGroup.ItemTitle numberOfLines={1} className="shrink">
-            {station.name}
+            <HighlightedName name={station.name} query={highlight} />
           </ListGroup.ItemTitle>
           <CountryFlag stationId={station.id} />
         </View>
