@@ -1,4 +1,5 @@
 import { getCountry } from "@repo/data/countries";
+import { getStationLines } from "@repo/data/lines";
 import type { Station, Train } from "@repo/data/types";
 import BottomSheet, {
   BottomSheetFlatList,
@@ -85,7 +86,7 @@ import { useSavedStations } from "@/hooks/use-stored-stations";
 import { distanceKm, formatDistance } from "@/lib/distance";
 import { haptics } from "@/lib/haptics";
 import { stationUrl } from "@/lib/links";
-import type { Line } from "@/lib/lines";
+import { splitStationName, type Line } from "@/lib/lines";
 import type { NearbyStation } from "@/lib/stations";
 import { getStationWarning } from "@/lib/station-warnings";
 import type { UserLocation } from "@/lib/user-location";
@@ -110,6 +111,12 @@ const stationTypeLabels: Record<Station["type"], string> = {
   metro: "Metro station",
   light: "Light rail stop",
   freight: "Freight yard",
+};
+// Before the city, "Metro · Milano", which already says it's a stop there.
+const shortStationTypeLabels: Record<Station["type"], string> = {
+  ...stationTypeLabels,
+  metro: "Metro",
+  light: "Light rail",
 };
 
 function formatUpdated(secondsAgo: number) {
@@ -148,6 +155,8 @@ interface StationSubtitleProps {
   /** The label only ticks while the sheet is open. */
   isOpen: boolean;
   userLocation: UserLocation | null;
+  /** The city a stop's name was shortened by, "Milano" for "Loreto (Milano)". */
+  place: string | null;
 }
 
 // Its own component, so the label's every-second tick only re-renders this line.
@@ -158,12 +167,16 @@ function StationSubtitle({
   isOnline,
   isOpen,
   userLocation,
+  place,
 }: StationSubtitleProps) {
   const updatedLabel = useUpdatedLabel(timestamp, hasError, isOnline, isOpen);
   const distance =
     userLocation && station.geo ? formatDistance(distanceKm(userLocation, station.geo)) : null;
   const subtitle = [
-    station.type === "rail" ? updatedLabel : stationTypeLabels[station.type],
+    station.type === "rail"
+      ? updatedLabel
+      : (place ? shortStationTypeLabels : stationTypeLabels)[station.type],
+    place,
     distance,
   ]
     .filter(Boolean)
@@ -190,7 +203,6 @@ const QuickActions = memo(function QuickActions({ station }: { station: Station 
   const { isSaved, toggleSaved } = useSavedStations();
   const saved = isSaved(station.id);
   const ShareIcon = Platform.OS === "ios" ? Share : Share2;
-  const isRail = station.type === "rail";
 
   function toggleSavedStation() {
     if (saved) haptics.toggleOff();
@@ -242,13 +254,12 @@ const QuickActions = memo(function QuickActions({ station }: { station: Station 
           <Button.Label>Directions</Button.Label>
         </Button>
       ) : null}
-      {/* The website only has pages for train stations. */}
-      {isRail ? (
-        <Button className="flex-1" size="sm" variant="tertiary" onPress={share}>
-          <ShareIcon size={16} color={foregroundColor} />
-          <Button.Label>Share</Button.Label>
-        </Button>
-      ) : null}
+      {/* The website has pages for train stations only, and opens other stops on its map. Either
+          way, the link opens the stop in the app where it's installed. */}
+      <Button className="flex-1" size="sm" variant="tertiary" onPress={share}>
+        <ShareIcon size={16} color={foregroundColor} />
+        <Button.Label>Share</Button.Label>
+      </Button>
     </View>
   );
 });
@@ -784,18 +795,34 @@ function StationSheetContent({
 
   // The sheet peeks down to the end of the first train, below the header. The train is measured
   // once the board has loaded, and then kept, so refreshes and tab switches don't move the sheet.
-  // Other stations have no board, so they peek down to the header.
+  // Other stations have no board, so they peek down to their lines, or the header without any.
   const [headerHeight, setHeaderHeight] = useState(0);
   const [firstItemBottom, setFirstItemBottom] = useState(0);
+  const [linesBottom, setLinesBottom] = useState(0);
+  const hasLines = getStationLines(station.id).length > 0;
   const isPeekFinal = useRef(false);
   const [scrollRef, scrollOffset] = useSheetScrollOffset<FlatList<BoardTrain>>();
   const hasBoard = board.data !== null || board.error !== null;
 
   useEffect(() => {
-    if (!headerHeight || (isRail && !firstItemBottom)) return;
-    const boardHeight = isRail ? firstItemBottom : 0;
-    onPeekHeightChange(handleHeight + headerHeight + boardHeight + Math.max(insets.bottom, 12));
-  }, [isRail, headerHeight, firstItemBottom, insets.bottom, onPeekHeightChange]);
+    if (!headerHeight || (isRail ? !firstItemBottom : hasLines && !linesBottom)) return;
+    const contentHeight = isRail ? firstItemBottom : linesBottom;
+    onPeekHeightChange(handleHeight + headerHeight + contentHeight + Math.max(insets.bottom, 12));
+  }, [
+    isRail,
+    hasLines,
+    headerHeight,
+    firstItemBottom,
+    linesBottom,
+    insets.bottom,
+    onPeekHeightChange,
+  ]);
+  const onLinesBottomChange = useCallback(
+    (bottom: number) =>
+      setLinesBottom((current) => (Math.abs(current - bottom) < 1 ? current : bottom)),
+    [],
+  );
+  const { name, place } = splitStationName(station);
 
   // A stable callback, so the memoized board skips the sheet's other re-renders.
   const onFirstItemBottomChange = useCallback(
@@ -842,12 +869,7 @@ function StationSheetContent({
     <View style={styles.fill}>
       <PinnedSheetHeader onHeightChange={setHeaderHeight} collapsedBy={collapsedBy}>
         <View className="px-4" pointerEvents="box-none">
-          <SheetHeader
-            title={station.name}
-            titleLines={2}
-            closeLabel="Close station"
-            onClose={onClose}
-          >
+          <SheetHeader title={name} titleLines={2} closeLabel="Close station" onClose={onClose}>
             <StationSubtitle
               station={station}
               timestamp={board.data?.timestamp}
@@ -855,6 +877,7 @@ function StationSheetContent({
               isOnline={board.isOnline}
               isOpen={isOpen}
               userLocation={userLocation}
+              place={place}
             />
           </SheetHeader>
           {nearbyStations.length > 1 ? (
@@ -902,6 +925,8 @@ function StationSheetContent({
             stationsUrl={stationsUrl}
             onSelectStation={onSelectStation}
             onSelectLine={onSelectLine}
+            // Only the stops without a board peek down to their lines.
+            onLinesBottomChange={isRail ? undefined : onLinesBottomChange}
           />
         ) : null}
       </LiveBoard>

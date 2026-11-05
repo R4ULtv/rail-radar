@@ -4,7 +4,7 @@ import { useThemeColor } from "heroui-native/hooks";
 import { ListGroup } from "heroui-native/list-group";
 import ChevronRight from "lucide-react-native/icons/chevron-right";
 import Route from "lucide-react-native/icons/route";
-import { Fragment, memo, type ReactNode } from "react";
+import { Fragment, memo, useEffect, useState, type ReactNode } from "react";
 import { View } from "react-native";
 
 import { CountryFlag } from "@/components/country-flag";
@@ -30,6 +30,8 @@ interface LineRowProps {
   suffix?: ReactNode;
   /** The search query, to show what it matched in the name. */
   highlight?: string;
+  /** Off where the country is already known, like the lines of an open station. */
+  showCountry?: boolean;
   onSelect: (line: Line) => void;
 }
 
@@ -39,6 +41,7 @@ export const LineRow = memo(function LineRow({
   description = getLineDescription(line),
   suffix,
   highlight,
+  showCountry = true,
   onSelect,
 }: LineRowProps) {
   return (
@@ -56,7 +59,7 @@ export const LineRow = memo(function LineRow({
           <ListGroup.ItemTitle numberOfLines={1} className="shrink">
             <HighlightedName name={line.name} query={highlight} />
           </ListGroup.ItemTitle>
-          <CountryFlag country={getLineCountry(line)} />
+          {showCountry ? <CountryFlag country={getLineCountry(line)} /> : null}
         </View>
         {description ? (
           <ListGroup.ItemDescription numberOfLines={1}>{description}</ListGroup.ItemDescription>
@@ -67,27 +70,63 @@ export const LineRow = memo(function LineRow({
   );
 });
 
+// A stop's sheet peeks down to this many of its lines; the busiest stops have eight.
+const peekLineCount = 3;
+
 /** The lines serving a station, each opening the line. Nothing for a station without lines. */
 export const StationLines = memo(function StationLines({
   station,
   stationsById,
   onSelectLine,
+  onPeekBottomChange,
 }: {
   station: Station;
   /** Names where each line runs, once the stations have loaded. */
   stationsById: ReadonlyMap<string, Station> | null;
   onSelectLine: (line: Line) => void;
+  /** Where the first few lines end, from the top of the section's parent. */
+  onPeekBottomChange?: (bottom: number) => void;
 }) {
   const mutedColor = useThemeColor("muted");
   const lines = getStationLines(station.id);
+  const [layout, setLayout] = useState<{ top: number; listTop: number; listHeight: number }>({
+    top: 0,
+    listTop: 0,
+    listHeight: 0,
+  });
+
+  useEffect(() => {
+    if (!onPeekBottomChange || !layout.listHeight || lines.length === 0) return;
+    // The rows are all as tall, a name over where the line runs.
+    const shown = Math.min(lines.length, peekLineCount) / lines.length;
+    onPeekBottomChange(layout.top + layout.listTop + layout.listHeight * shown);
+  }, [onPeekBottomChange, layout, lines.length]);
+
   if (lines.length === 0) return null;
 
   return (
-    <View className="mt-5">
+    <View
+      className="mt-5"
+      onLayout={(event) => {
+        const { y } = event.nativeEvent.layout;
+        setLayout((current) => (current.top === y ? current : { ...current, top: y }));
+      }}
+    >
       <SectionTitle icon={<Route size={14} color={mutedColor} />}>
         {lines.length === 1 ? "Line" : `${lines.length} lines`}
       </SectionTitle>
-      <ListGroup variant="secondary" className="overflow-hidden">
+      <ListGroup
+        variant="secondary"
+        className="overflow-hidden"
+        onLayout={(event) => {
+          const { y, height } = event.nativeEvent.layout;
+          setLayout((current) =>
+            current.listTop === y && current.listHeight === height
+              ? current
+              : { ...current, listTop: y, listHeight: height },
+          );
+        }}
+      >
         {lines.map((line, index) => (
           <Fragment key={line.id}>
             {index > 0 ? <RowSeparator /> : null}
@@ -97,6 +136,8 @@ export const StationLines = memo(function StationLines({
                 (stationsById && getLineTermini(line, stationsById)) || getLineDescription(line)
               }
               suffix={<ChevronRight size={16} color={mutedColor} />}
+              // The station's header already shows its country.
+              showCountry={false}
               onSelect={onSelectLine}
             />
           </Fragment>

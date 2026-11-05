@@ -1,3 +1,4 @@
+import { getStationLines } from "@repo/data/lines";
 import type { Station } from "@repo/data/types";
 import { Button } from "heroui-native/button";
 import { useThemeColor } from "heroui-native/hooks";
@@ -8,6 +9,7 @@ import { Fragment, memo, useState, type ComponentType, type ReactNode } from "re
 import { Image, StyleSheet, Text, View, type AccessibilityProps } from "react-native";
 
 import { CountryFlag } from "@/components/country-flag";
+import { LineBadge } from "@/components/line-badge";
 import { Skeleton } from "@/components/skeleton";
 import { haptics } from "@/lib/haptics";
 import { getHighlightRanges } from "@/lib/search-highlight";
@@ -74,17 +76,24 @@ interface StationRowProps<T extends Station> extends Pick<
   renderSuffix?: (station: T) => ReactNode;
   /** The search query, to show what it matched in the name. */
   highlight?: string;
+  /** The badges of the lines stopping there, after the name. */
+  showLines?: boolean;
   onSelect: (station: Station) => void;
 }
+
+// More than this many badges wouldn't leave the name any room.
+const maxRowLineBadges = 4;
 
 function StationRowContent<T extends Station>({
   station,
   renderSuffix,
   highlight,
+  showLines = false,
   onSelect,
   accessibilityActions,
   onAccessibilityAction,
 }: StationRowProps<T>) {
+  const lines = showLines ? getStationLines(station.id).slice(0, maxRowLineBadges) : [];
   return (
     <ListGroup.Item
       accessibilityRole="button"
@@ -103,6 +112,13 @@ function StationRowContent<T extends Station>({
           <ListGroup.ItemTitle numberOfLines={1} className="shrink">
             <HighlightedName name={station.name} query={highlight} />
           </ListGroup.ItemTitle>
+          {lines.length > 0 ? (
+            <View className="flex-row gap-1">
+              {lines.map((line) => (
+                <LineBadge key={line.id} line={line} size="xs" />
+              ))}
+            </View>
+          ) : null}
           <CountryFlag stationId={station.id} />
         </View>
       </ListGroup.ItemContent>
@@ -126,6 +142,7 @@ function StationSectionContent<T extends Station>({
   renderSuffix,
   onSelect,
   collapsedCount,
+  showLines,
 }: {
   title: string;
   icon: SectionIcon;
@@ -135,6 +152,8 @@ function StationSectionContent<T extends Station>({
   onSelect: (station: Station) => void;
   /** Shows only this many stations, with a row to show the rest. */
   collapsedCount?: number;
+  /** The badges of each station's lines, after its name. */
+  showLines?: boolean;
 }) {
   const [isExpanded, setIsExpanded] = useState(false);
   if (stations.length === 0) return null;
@@ -150,7 +169,12 @@ function StationSectionContent<T extends Station>({
         {visibleStations.map((station, index) => (
           <Fragment key={station.id}>
             {index > 0 ? <RowSeparator /> : null}
-            <StationRow station={station} renderSuffix={renderSuffix} onSelect={onSelect} />
+            <StationRow
+              station={station}
+              renderSuffix={renderSuffix}
+              showLines={showLines}
+              onSelect={onSelect}
+            />
           </Fragment>
         ))}
       </ListGroup>

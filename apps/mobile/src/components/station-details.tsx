@@ -6,13 +6,14 @@ import { ListGroup } from "heroui-native/list-group";
 import { Separator } from "heroui-native/separator";
 import { Surface } from "heroui-native/surface";
 import BarChart from "lucide-react-native/icons/chart-no-axes-column";
+import ChevronDown from "lucide-react-native/icons/chevron-down";
 import Bug from "lucide-react-native/icons/bug";
 import Images from "lucide-react-native/icons/images";
 import Info from "lucide-react-native/icons/info";
 import Lightbulb from "lucide-react-native/icons/lightbulb";
 import MapPin from "lucide-react-native/icons/map-pin";
 import TrendingUp from "lucide-react-native/icons/trending-up";
-import { memo, type ReactNode } from "react";
+import { memo, useState, type ReactNode } from "react";
 import { Linking, Pressable, StyleSheet, Text, View } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import { withUniwind } from "uniwind";
@@ -30,6 +31,7 @@ import {
 } from "@/hooks/use-station-details";
 import { useStationsById } from "@/hooks/use-stations-by-id";
 import { USER_AGENT } from "@/lib/api";
+import { haptics } from "@/lib/haptics";
 import { formatDistance } from "@/lib/distance";
 import { formatCount } from "@/lib/format";
 import type { Line } from "@/lib/lines";
@@ -235,11 +237,14 @@ export function AboutRow({ label, children }: { label: string; children: ReactNo
 
 function StationAbout({ station, mutedColor }: { station: Station; mutedColor: string }) {
   const country = getCountry(station.id, { format: "name" });
+  // Coordinates and the ID are for reports and developers, so they wait behind a row.
+  const [showIdentifiers, setShowIdentifiers] = useState(false);
 
   return (
     <View className="mt-5">
       <SectionTitle icon={<Info size={14} color={mutedColor} />}>About</SectionTitle>
-      <ListGroup variant="secondary">
+      {/* Clipped, so the pressed row keeps the rounded corners. */}
+      <ListGroup variant="secondary" className="overflow-hidden">
         {country ? (
           <AboutRow label="Country">
             <View className="flex-row items-center gap-2">
@@ -248,9 +253,30 @@ function StationAbout({ station, mutedColor }: { station: Station; mutedColor: s
             </View>
           </AboutRow>
         ) : null}
-        {station.geo ? (
+        {country ? <Separator className="mx-4" /> : null}
+        <ListGroup.Item
+          accessibilityRole="button"
+          accessibilityState={{ expanded: showIdentifiers }}
+          className="active:bg-surface-tertiary"
+          onPress={() => {
+            haptics.selection();
+            setShowIdentifiers((shown) => !shown);
+          }}
+        >
+          <ListGroup.ItemContent>
+            <ListGroup.ItemDescription>
+              {station.geo ? "Coordinates and station ID" : "Station ID"}
+            </ListGroup.ItemDescription>
+          </ListGroup.ItemContent>
+          <ListGroup.ItemSuffix>
+            <View style={showIdentifiers ? styles.chevronUp : undefined}>
+              <ChevronDown size={16} color={mutedColor} />
+            </View>
+          </ListGroup.ItemSuffix>
+        </ListGroup.Item>
+        {showIdentifiers && station.geo ? (
           <>
-            {country ? <Separator className="mx-4" /> : null}
+            <Separator className="mx-4" />
             <AboutRow label="Coordinates">
               <Text selectable className="text-sm text-foreground" style={styles.tabularNums}>
                 {formatDms(station.geo.lat, "lat")} {formatDms(station.geo.lng, "lng")}
@@ -258,12 +284,16 @@ function StationAbout({ station, mutedColor }: { station: Station; mutedColor: s
             </AboutRow>
           </>
         ) : null}
-        <Separator className="mx-4" />
-        <AboutRow label="Station ID">
-          <Text selectable className="text-sm text-foreground" style={styles.tabularNums}>
-            {station.id}
-          </Text>
-        </AboutRow>
+        {showIdentifiers ? (
+          <>
+            <Separator className="mx-4" />
+            <AboutRow label="Station ID">
+              <Text selectable className="text-sm text-foreground" style={styles.tabularNums}>
+                {station.id}
+              </Text>
+            </AboutRow>
+          </>
+        ) : null}
       </ListGroup>
     </View>
   );
@@ -307,6 +337,8 @@ interface StationDetailsProps {
   stationsUrl: string | null;
   onSelectStation: (station: Station) => void;
   onSelectLine: (line: Line) => void;
+  /** Where the first few lines end, for a stop's sheet to peek down to. */
+  onLinesBottomChange?: (bottom: number) => void;
 }
 
 /** Everything about the station besides its live trains: lines, photos, nearby stations, stats. */
@@ -316,6 +348,7 @@ export const StationDetails = memo(function StationDetails({
   stationsUrl,
   onSelectStation,
   onSelectLine,
+  onLinesBottomChange,
 }: StationDetailsProps) {
   const [mutedColor, successColor] = useThemeColor(["muted", "success"]);
   // Visits are counted when a live board loads, so only train stations have any.
@@ -329,7 +362,12 @@ export const StationDetails = memo(function StationDetails({
   return (
     <View className="px-4">
       {/* Bundled with the app, so it's there at once and comes first. */}
-      <StationLines station={station} stationsById={stationsById} onSelectLine={onSelectLine} />
+      <StationLines
+        station={station}
+        stationsById={stationsById}
+        onSelectLine={onSelectLine}
+        onPeekBottomChange={onLinesBottomChange}
+      />
       {photos.isLoading ? (
         <StationPhotosSkeleton mutedColor={mutedColor} />
       ) : (
@@ -348,6 +386,8 @@ export const StationDetails = memo(function StationDetails({
           icon={MapPin}
           stations={nearby.stations}
           renderSuffix={renderNearbyDistance}
+          // Which lines each stop has, to tell the stops apart, and a change from a train.
+          showLines
           onSelect={onSelectStation}
         />
       )}
@@ -371,4 +411,5 @@ const styles = StyleSheet.create({
   photoRow: { gap: 10, paddingHorizontal: 16 },
   photo: { width: photoWidth, height: photoHeight },
   tabularNums: { fontVariant: ["tabular-nums"] },
+  chevronUp: { transform: [{ rotate: "180deg" }] },
 });

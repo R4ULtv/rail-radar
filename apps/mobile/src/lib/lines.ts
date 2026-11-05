@@ -87,6 +87,32 @@ export function shortStationName(name: string): string {
   return name.replace(/\s+\([^)]*\)$/, "");
 }
 
+// Suffixes that only repeat what kind of stop it is, like "Howald, Gare (Tram)".
+const typeSuffixes = new Set(["tram", "metro", "métro", "metrolink"]);
+
+function toSlug(text: string) {
+  return text.normalize("NFD").replace(/\p{M}/gu, "").toLowerCase().replace(/\s+/g, "-");
+}
+
+/**
+ * A stop's name for its own title, with the city its suffix names on its own: "Loreto (Milano)"
+ * is "Loreto" in Milano. A suffix that tells stops apart, like Bochum Rathaus (Nord) and (Süd),
+ * stays in the name.
+ */
+export function splitStationName(station: Pick<Station, "id" | "name" | "type">): {
+  name: string;
+  place: string | null;
+} {
+  const match = station.type === "rail" ? null : /^(.+?)\s+\(([^)]+)\)$/.exec(station.name);
+  if (!match) return { name: station.name, place: null };
+  const name = match[1]!;
+  const suffix = match[2]!;
+  if (typeSuffixes.has(suffix.toLowerCase())) return { name, place: null };
+  const slug = toSlug(suffix);
+  const isNetwork = getStationLines(station.id).some((line) => getLineNetwork(line) === slug);
+  return isNetwork ? { name, place: suffix } : { name: station.name, place: null };
+}
+
 /** The stops of a route that the stations know, in order. */
 export function getRouteStops(route: LineRoute, stationsById: ReadonlyMap<string, Station>) {
   return route.stations.flatMap((id) => {
