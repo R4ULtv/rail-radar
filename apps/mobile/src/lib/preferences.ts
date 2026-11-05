@@ -7,6 +7,8 @@ export type MapStyle = "simple" | "streets";
 type Preferences = {
   theme: ThemePreference;
   mapStyle: MapStyle;
+  /** Every metro and light rail line on the map, not just the open one's. Off: it's busy. */
+  showTransitLines: boolean;
   welcomeSeen: boolean;
   nearbyButtonUsed: boolean;
   lastSeenRelease: string | null;
@@ -15,6 +17,7 @@ type Preferences = {
 const defaults: Preferences = {
   theme: "system",
   mapStyle: "simple",
+  showTransitLines: false,
   welcomeSeen: false,
   nearbyButtonUsed: false,
   lastSeenRelease: null,
@@ -37,6 +40,10 @@ function normalize(value: unknown): Preferences {
       saved.mapStyle === "simple" || saved.mapStyle === "streets"
         ? saved.mapStyle
         : defaults.mapStyle,
+    showTransitLines:
+      typeof saved.showTransitLines === "boolean"
+        ? saved.showTransitLines
+        : defaults.showTransitLines,
     welcomeSeen: typeof saved.welcomeSeen === "boolean" ? saved.welcomeSeen : defaults.welcomeSeen,
     nearbyButtonUsed:
       typeof saved.nearbyButtonUsed === "boolean"
