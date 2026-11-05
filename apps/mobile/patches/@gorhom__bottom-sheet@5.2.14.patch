@@ -1,0 +1,53 @@
+diff --git a/src/components/bottomSheet/BottomSheet.tsx b/src/components/bottomSheet/BottomSheet.tsx
+index fc520337115ce7a2c7aacb0f81f16b9046ce2c89..3acd38400dbbe9fd3e8dfe0d3d4644958984d8ba 100644
+--- a/src/components/bottomSheet/BottomSheet.tsx
++++ b/src/components/bottomSheet/BottomSheet.tsx
+@@ -608,6 +608,20 @@ const BottomSheetComponent = forwardRef<BottomSheet, BottomSheetProps>(
+         }
+ 
+         if (position === animatedPosition.get()) {
++          /**
++           * the sheet is already at the position, e.g. a gesture that ended
++           * right on a detent, so nothing animates; still report the detent
++           * it reached, or `onChange` and the current index go stale.
++           */
++          const reachedIndex =
++            animatedDetentsState.get().detents?.indexOf(position) ?? -1;
++          if (
++            reachedIndex !== -1 &&
++            reachedIndex !== animatedCurrentIndex.get()
++          ) {
++            animatedCurrentIndex.set(reachedIndex);
++            runOnJS(handleOnChange)(reachedIndex, position);
++          }
+           return;
+         }
+ 
+@@ -698,8 +712,10 @@ const BottomSheetComponent = forwardRef<BottomSheet, BottomSheetProps>(
+       },
+       [
+         handleOnAnimate,
++        handleOnChange,
+         stopAnimation,
+         animateToPositionCompleted,
++        animatedCurrentIndex,
+         keyboardBehavior,
+         _providedAnimationConfigs,
+         _providedOverrideReduceMotion,
+diff --git a/src/hooks/useGestureEventsHandlersDefault.tsx b/src/hooks/useGestureEventsHandlersDefault.tsx
+index acf389032a56317107183ea0951acdb4802914b5..4ec78408681811f3c9a479354eca43e2be8a3484 100644
+--- a/src/hooks/useGestureEventsHandlersDefault.tsx
++++ b/src/hooks/useGestureEventsHandlersDefault.tsx
+@@ -396,9 +396,11 @@ export const useGestureEventsHandlersDefault: GestureEventsHandlersHookType =
+ 
+         /**
+          * if destination point is the same as the current position,
+-         * then no need to perform animation.
++         * then no need to perform animation, but the sheet may still have
++         * reached a new detent, which `animateToPosition` reports.
+          */
+         if (destinationPoint === animatedPosition.value) {
++          animateToPosition(destinationPoint, ANIMATION_SOURCE.GESTURE);
+           return;
+         }
+ 

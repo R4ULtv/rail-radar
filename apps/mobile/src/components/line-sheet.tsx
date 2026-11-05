@@ -370,6 +370,17 @@ interface GapItem {
   count: number;
 }
 
+/**
+ * The stops shown where dots were. They stay one row, so the list keeps its row count and the
+ * rows after them their indexes: the list only follows the stop it keeps still when rows are
+ * added if that stop's index doesn't change, and adding them above it otherwise breaks it.
+ */
+interface StopRunItem {
+  type: "run";
+  key: string;
+  stops: StopItem[];
+}
+
 /** The diagram, the routes and the stops' title, in the list so they scroll with the stops. */
 interface IntroItem {
   type: "intro";
@@ -378,7 +389,7 @@ interface IntroItem {
 
 const introItem: IntroItem = { type: "intro", key: "intro" };
 
-type ListItem = IntroItem | StopItem | GapItem;
+type ListItem = IntroItem | StopItem | GapItem | StopRunItem;
 
 /** The other lines at a stop, and a train icon if it's a train station. */
 function StopConnections({ station, line }: { station: Station; line: Line }) {
@@ -613,7 +624,8 @@ function LineSheetContent({
     const stops = entries.flatMap((entry): ListItem[] => {
       if (typeof entry === "number") return [toItem(entry)];
       if (expandedGaps.has(`${branch}:${entry.from}`)) {
-        return Array.from({ length: entry.count }, (_, offset) => toItem(entry.from + offset));
+        const run = Array.from({ length: entry.count }, (_, offset) => toItem(entry.from + offset));
+        return [{ type: "run", key: `run-${entry.from}`, stops: run }];
       }
       return [{ type: "gap", key: `gap-${entry.from}`, from: entry.from, count: entry.count }];
     });
@@ -738,6 +750,21 @@ function LineSheetContent({
               color={color}
               onExpand={() => expandGap(item.from)}
             />
+          );
+        case "run":
+          return (
+            <>
+              {item.stops.map((stop) => (
+                <LineStop
+                  key={stop.key}
+                  item={stop}
+                  line={line}
+                  color={color}
+                  isHighlighted={stop.station.id === fromStationId}
+                  onSelect={onSelectStation}
+                />
+              ))}
+            </>
           );
         default:
           return (
