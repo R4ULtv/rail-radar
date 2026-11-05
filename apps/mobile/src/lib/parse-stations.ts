@@ -10,6 +10,7 @@ function appendStations(stations: Station[], features: StationFeature[]) {
       id: properties.id,
       name: properties.name,
       type: properties.type,
+      kind: properties.kind,
       importance: properties.importance,
       geo: { lat: geometry.coordinates[1]!, lng: geometry.coordinates[0]! },
     });

@@ -381,7 +381,10 @@ export function MapScreen() {
       camera.current?.setCamera({
         centerCoordinate: [station.geo.lng, station.geo.lat],
         zoomLevel: stationZoomLevels[station.type],
-        padding: { ...noPadding, paddingBottom: Math.max(mapHeight.current - 2 * stationY, 0) },
+        padding:
+          station.type === "freight"
+            ? noPadding
+            : { ...noPadding, paddingBottom: Math.max(mapHeight.current - 2 * stationY, 0) },
         animationMode: "easeTo",
         animationDuration: reduceMotion ? 0 : cameraMoveDuration,
       });
@@ -396,10 +399,12 @@ export function MapScreen() {
       stopFollowing();
       setNearbyStations([]);
       setNearbyError(null);
-      setSelectedStation(station);
+      // Match the web: freight yards center the map without opening a passenger station sheet.
+      const hasSheet = station.type !== "freight";
+      setSelectedStation(hasSheet ? station : null);
       setStationOpenStep("peek");
       // Opened in the same update, so the first station sheet mounts already open.
-      setSheetOpen(true);
+      setSheetOpen(hasSheet);
       setLineSheetOpen(false);
       setStopFromLineId(null);
       // Let the camera move start before updating the search sheet's recent list.
@@ -572,7 +577,7 @@ export function MapScreen() {
       if (
         typeof properties?.id !== "string" ||
         typeof properties.name !== "string" ||
-        !["rail", "metro", "light"].includes(properties.type)
+        !["rail", "metro", "light", "freight"].includes(properties.type)
       ) {
         return;
       }
@@ -582,6 +587,7 @@ export function MapScreen() {
         id: properties.id,
         name: properties.name,
         type: properties.type as Station["type"],
+        kind: properties.kind,
         importance: [1, 2, 3, 4].includes(properties.importance) ? properties.importance : 4,
         geo: typeof lat === "number" && typeof lng === "number" ? { lat, lng } : undefined,
       });

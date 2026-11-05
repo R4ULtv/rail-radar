@@ -18,8 +18,8 @@ function isStoredStation(value: unknown): value is Station {
 }
 
 /** Only the station itself, not extras like the popular list's visitor counts. */
-function toStoredStation({ id, name, type, importance, geo }: Station): Station {
-  return { id, name, type, importance, geo };
+function toStoredStation({ id, name, type, importance, kind, geo }: Station): Station {
+  return { id, name, type, importance, kind, geo };
 }
 
 function createStationStore(fileName: string) {

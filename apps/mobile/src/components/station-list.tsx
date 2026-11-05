@@ -10,13 +10,14 @@ import { Image, StyleSheet, Text, View, type AccessibilityProps } from "react-na
 import { CountryFlag } from "@/components/country-flag";
 import { Skeleton } from "@/components/skeleton";
 import { haptics } from "@/lib/haptics";
-import { stationIcons } from "@/lib/station-icons";
+import { freightIcons, stationIcons } from "@/lib/station-icons";
 
 /** A Lucide icon, drawn at the section title's size and color. */
 export type SectionIcon = ComponentType<{ size?: number; color?: string }>;
 
-export function StationTypeIcon({ type }: { type: Station["type"] }) {
-  return <Image source={stationIcons[type]} style={styles.stationIcon} />;
+export function StationTypeIcon({ type, kind }: Pick<Station, "type" | "kind">) {
+  const icon = type === "freight" && kind ? freightIcons[kind] : null;
+  return <Image source={icon ?? stationIcons[type]} style={styles.stationIcon} />;
 }
 
 export function SectionTitle({ icon, children }: { icon?: ReactNode; children: ReactNode }) {
@@ -60,7 +61,7 @@ function StationRowContent<T extends Station>({
       onPress={() => onSelect(station)}
     >
       <ListGroup.ItemPrefix>
-        <StationTypeIcon type={station.type} />
+        <StationTypeIcon type={station.type} kind={station.kind} />
       </ListGroup.ItemPrefix>
       <ListGroup.ItemContent>
         <View className="flex-row items-center gap-2">

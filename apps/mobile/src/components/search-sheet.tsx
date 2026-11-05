@@ -328,9 +328,11 @@ const SearchSheetContent = memo(function SearchSheetContent({
   const selectStation = useCallback(
     (station: Station) => {
       Keyboard.dismiss();
+      // Freight opens no station sheet to hide search, so reveal the map directly.
+      if (station.type === "freight") snapToIndex(0);
       onSelectStation(station);
     },
-    [onSelectStation],
+    [onSelectStation, snapToIndex],
   );
 
   const selectLine = useCallback(

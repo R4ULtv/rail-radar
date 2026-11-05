@@ -1,4 +1,4 @@
-import type { Station } from "@repo/data/types";
+import type { FreightKind, Station } from "@repo/data/types";
 import type { ImageSourcePropType } from "react-native";
 
 /**
@@ -10,4 +10,10 @@ export const stationIcons: Record<Station["type"], ImageSourcePropType> = {
   metro: require("../../assets/station-icons/metro-icon.png"),
   light: require("../../assets/station-icons/light-icon.png"),
   freight: require("../../assets/station-icons/freight-icon.png"),
+};
+
+export const freightIcons: Record<FreightKind, ImageSourcePropType> = {
+  marshalling: require("../../assets/station-icons/freight-marshalling-icon.png"),
+  intermodal: stationIcons.freight,
+  port: require("../../assets/station-icons/freight-port-icon.png"),
 };

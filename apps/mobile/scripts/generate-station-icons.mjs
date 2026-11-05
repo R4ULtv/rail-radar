@@ -11,6 +11,8 @@ const icons = {
   METRO_ICON_SVG: "metro-icon",
   LIGHT_ICON_SVG: "light-icon",
   FREIGHT_ICON_SVG: "freight-icon",
+  MARSHALLING_YARD_ICON_SVG: "freight-marshalling-icon",
+  PORT_TERMINAL_ICON_SVG: "freight-port-icon",
 };
 const size = 64;
 

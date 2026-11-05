@@ -6,7 +6,7 @@ import Mapbox, {
 } from "@rnmapbox/maps";
 import { useMemo, type ComponentProps } from "react";
 
-import { stationIcons } from "@/lib/station-icons";
+import { freightIcons, stationIcons } from "@/lib/station-icons";
 
 // Mirrors apps/web/src/components/station-markers.tsx. Keep the icons, zoom
 // levels and sizes in sync with the web map.
@@ -15,6 +15,8 @@ const RAIL_ICON_ID = "rail-icon";
 const METRO_ICON_ID = "metro-icon";
 const LIGHT_ICON_ID = "light-icon";
 const FREIGHT_ICON_ID = "freight-icon";
+const MARSHALLING_ICON_ID = "freight-marshalling-icon";
+const PORT_ICON_ID = "freight-port-icon";
 
 type LayerFilter = NonNullable<ComponentProps<typeof Mapbox.SymbolLayer>["filter"]>;
 type ShapeSourcePressEvent = Parameters<
@@ -27,6 +29,8 @@ const mapIcons = {
   [METRO_ICON_ID]: stationIcons.metro,
   [LIGHT_ICON_ID]: stationIcons.light,
   [FREIGHT_ICON_ID]: stationIcons.freight,
+  [MARSHALLING_ICON_ID]: freightIcons.marshalling,
+  [PORT_ICON_ID]: freightIcons.port,
 };
 
 export function StationImages() {
@@ -238,7 +242,15 @@ export function StationLayers({
         id="freight-stations"
         filter={typeFilter("freight", MINZOOM_FILTER)}
         style={{
-          iconImage: FREIGHT_ICON_ID,
+          iconImage: [
+            "match",
+            ["get", "kind"],
+            "marshalling",
+            MARSHALLING_ICON_ID,
+            "port",
+            PORT_ICON_ID,
+            FREIGHT_ICON_ID,
+          ],
           iconSize: ["interpolate", ["linear"], ["zoom"], 11, 0.25, 14, 0.3, 16, 0.35],
           iconAllowOverlap: false,
           iconAnchor: "center",
