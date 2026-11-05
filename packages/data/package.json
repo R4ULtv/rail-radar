@@ -12,6 +12,8 @@
     "./lines/*": "./src/lines/*",
     "./operators": "./src/operators.ts",
     "./stations": "./src/stations.ts",
+    "./transfers": "./src/transfers.ts",
+    "./transfers.json": "./src/transfers.json",
     "./types": "./src/types.ts"
   },
   "scripts": {
