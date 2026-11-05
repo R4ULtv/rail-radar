@@ -2,6 +2,7 @@ import type { Train } from "@repo/data";
 
 import { type ScrapeResult, stripCountryPrefix } from "./core";
 import { fetchTextWithTimeout } from "./fetch";
+import { formatNotice, formatPlaceNames } from "./text-case";
 
 const RFI_BASE_URL = "https://iechub.rfi.it/ArriviPartenze/en/ArrivalsDepartures/Monitor";
 
@@ -94,7 +95,8 @@ function parseStationInfo(text: string): string | null {
     /\s*\/\s*(?=(?:FROM|DUE TO|THE|TRAINS?|SERVICES?|PLEASE|FOR|UNTIL|BETWEEN|ON|IN THE|IN CASE)\b)/i,
     1,
   )[0];
-  return italian?.trim() || null;
+  const notice = italian?.trim();
+  return notice ? formatNotice(notice) : null;
 }
 
 function parseInfo(text: string): string | null {
@@ -102,9 +104,9 @@ function parseInfo(text: string): string | null {
   if (!trimmed) return null;
   const match = trimmed.match(/STOPS AT:\s*(.+)/i);
   if (match?.[1]) {
-    return match[1].trim();
+    return formatPlaceNames(match[1].trim());
   }
-  return trimmed || null;
+  return formatNotice(trimmed);
 }
 
 // State class to manage parsing state across HTMLRewriter handlers
@@ -150,9 +152,9 @@ class ParserState {
         break;
       case 3: // Origin/Destination
         if (this.type === "departures") {
-          train.destination = text;
+          train.destination = formatPlaceNames(text);
         } else {
-          train.origin = text;
+          train.origin = formatPlaceNames(text);
         }
         break;
       case 4: // Scheduled time

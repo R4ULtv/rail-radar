@@ -135,12 +135,12 @@ describe("scrapeTrains (Italy)", () => {
           brand: "TRENITALIA",
           category: "AV",
           trainNumber: "9615",
-          destination: "MILANO CENTRALE",
+          destination: "Milano Centrale",
           scheduledTime: "10:25",
           delay: 5,
           platform: "12",
           status: "departing",
-          info: "BOLOGNA CENTRALE, FIRENZE S.M.N.",
+          info: "Bologna Centrale, Firenze S.M.N.",
         },
       ]);
     });
@@ -165,7 +165,7 @@ describe("scrapeTrains (Italy)", () => {
           brand: "ITALO",
           category: "IC",
           trainNumber: "8905",
-          origin: "NAPOLI CENTRALE",
+          origin: "Napoli Centrale",
           scheduledTime: "10:25",
           delay: 0,
           platform: "7",
@@ -210,7 +210,7 @@ describe("scrapeTrains (Italy)", () => {
         brand: null,
         category: null,
         trainNumber: "2",
-        destination: "MILANO CENTRALE",
+        destination: "Milano Centrale",
         scheduledTime: "10:25",
         delay: 0,
         platform: null,
@@ -244,7 +244,7 @@ describe("scrapeTrains (Italy)", () => {
           brand: null,
           category: null,
           trainNumber: "5555",
-          destination: "BARI CENTRALE",
+          destination: "Bari Centrale",
           scheduledTime: "11:11",
           delay: null,
           platform: null,
@@ -291,10 +291,10 @@ describe("scrapeTrains (Italy)", () => {
       ).trains;
 
       expect(trains.map((train) => train.destination)).toEqual([
-        "PONTE D'ADDA",
-        "SANT'ANTIMO",
-        "TORRE & CASTELLO",
-        "S. MARIA N <X> \"Q\" 'A'",
+        "Ponte d'Adda",
+        "Sant'Antimo",
+        "Torre & Castello",
+        "S. Maria N <X> \"Q\" 'a'",
       ]);
     });
   });
@@ -413,11 +413,17 @@ describe("scrapeTrains (Italy)", () => {
   });
 
   describe("train info", () => {
-    it("extracts the stop list after STOPS AT", async () => {
+    it("extracts the stop list after STOPS AT, cased as names", async () => {
       expect((await trainsOf({ info: "Note: STOPS AT:  ROMA TERMINI, NAPOLI C.LE " }))?.info).toBe(
-        "ROMA TERMINI, NAPOLI C.LE",
+        "Roma Termini, Napoli C.le",
       );
-      expect((await trainsOf({ info: "stops at: LECCE" }))?.info).toBe("LECCE");
+      expect((await trainsOf({ info: "stops at: LECCE" }))?.info).toBe("Lecce");
+    });
+
+    it("cases an all-caps notice as a sentence", async () => {
+      expect((await trainsOf({ info: "TRENO IN RITARDO PER UN GUASTO. CI SCUSIAMO" }))?.info).toBe(
+        "Treno in ritardo per un guasto. Ci scusiamo",
+      );
     });
 
     it("keeps other notices as they are, decoded", async () => {
@@ -436,7 +442,7 @@ describe("scrapeTrains (Italy)", () => {
     it("returns the station notice", async () => {
       const result = await scrape([row()], "departures", "LAVORI IN CORSO SUL BINARIO 3");
 
-      expect(result.info).toBe("LAVORI IN CORSO SUL BINARIO 3");
+      expect(result.info).toBe("Lavori in corso sul binario 3");
     });
 
     it("drops the English translation RFI appends after a slash", async () => {
@@ -446,7 +452,7 @@ describe("scrapeTrains (Italy)", () => {
         "SCIOPERO DAL 10 AL 11 MARZO / FROM 10 TO 11 MARCH TRAINS MAY BE CANCELLED",
       );
 
-      expect(result.info).toBe("SCIOPERO DAL 10 AL 11 MARZO");
+      expect(result.info).toBe("Sciopero dal 10 al 11 marzo");
     });
 
     it.each([
@@ -464,7 +470,7 @@ describe("scrapeTrains (Italy)", () => {
     ])("recognises %s as the start of the translation", async (keyword) => {
       const result = await scrape([], "departures", `AVVISO / ${keyword} SOMETHING`);
 
-      expect(result.info).toBe("AVVISO");
+      expect(result.info).toBe("Avviso");
     });
 
     it("keeps slashes that do not introduce a translation", async () => {
@@ -474,7 +480,7 @@ describe("scrapeTrains (Italy)", () => {
         "BINARI 1/2 CHIUSI / THE PLATFORMS 1/2 ARE CLOSED",
       );
 
-      expect(result.info).toBe("BINARI 1/2 CHIUSI");
+      expect(result.info).toBe("Binari 1/2 chiusi");
     });
 
     it("decodes entities and repeated apostrophes", async () => {
@@ -484,7 +490,7 @@ describe("scrapeTrains (Italy)", () => {
         "ATTENZIONE: SCIOPERO DELL''''&#39;AREA &amp; DEPOSITO",
       );
 
-      expect(result.info).toBe("ATTENZIONE: SCIOPERO DELL'AREA & DEPOSITO");
+      expect(result.info).toBe("Attenzione: sciopero dell'area & deposito");
     });
 
     it("is null when the banner is empty or blank", async () => {
