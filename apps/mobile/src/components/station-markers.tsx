@@ -58,9 +58,43 @@ function typeFilter(type: string, minZoomFilter: unknown[]) {
 
 export type LabelColors = { labelColor: string; labelHaloColor: string };
 
-function labelStyle(textSize: number, colors: LabelColors): SymbolLayerStyle {
+const NAME: SymbolLayerStyle["textField"] = ["get", "name"];
+// Metro and light rail names end in their city or "(Tram)" to tell them apart in search.
+// The map already shows where they are, so their labels leave that out.
+const SUFFIX_START = ["index-of", " (", ["get", "name"]];
+const STOP_NAME: SymbolLayerStyle["textField"] = [
+  "case",
+  [
+    "all",
+    [">", SUFFIX_START, 0],
+    ["==", ["slice", ["get", "name"], ["-", ["length", ["get", "name"]], 1]], ")"],
+  ],
+  ["slice", ["get", "name"], 0, SUFFIX_START],
+  ["get", "name"],
+];
+// Metro and light rail stops only show close in, so they're named one level after their icon
+// shows, instead of two (MINZOOM_EXPR + 1). Their names share the icon's layer: in a layer of
+// their own, a name stayed when its icon was hidden by a train station's. Until then the name
+// has no size, so it takes no room. Leaving it empty instead would change the symbol's text,
+// and Mapbox would take the named symbol for a new one, fading the icon out and in again.
+const METRO_LABEL_SIZE: SymbolLayerStyle["textSize"] = ["step", ["zoom"], 0, 14, 12];
+const LIGHT_LABEL_SIZE: SymbolLayerStyle["textSize"] = [
+  "step",
+  ["zoom"],
+  0,
+  12,
+  ["match", ["get", "importance"], 3, 12, 0],
+  14,
+  12,
+];
+
+function labelStyle(
+  textSize: SymbolLayerStyle["textSize"],
+  colors: LabelColors,
+  textField: SymbolLayerStyle["textField"] = NAME,
+): SymbolLayerStyle {
   return {
-    textField: ["get", "name"],
+    textField,
     textSize,
     textOffset: [0, 1.3],
     textAnchor: "top",
@@ -177,12 +211,8 @@ export function StationLayers({
           iconAllowOverlap: false,
           iconAnchor: "center",
           iconEmissiveStrength: 1,
+          ...labelStyle(METRO_LABEL_SIZE, labelColors, STOP_NAME),
         }}
-      />
-      <Mapbox.SymbolLayer
-        id="metro-labels"
-        filter={typeFilter("metro", LABEL_MINZOOM_FILTER)}
-        style={labelStyle(12, labelColors)}
       />
       <Mapbox.SymbolLayer
         id="light-stations"
@@ -204,12 +234,8 @@ export function StationLayers({
           iconAnchor: "center",
           iconEmissiveStrength: 1,
           symbolSortKey: ["get", "importance"],
+          ...labelStyle(LIGHT_LABEL_SIZE, labelColors, STOP_NAME),
         }}
-      />
-      <Mapbox.SymbolLayer
-        id="light-labels"
-        filter={typeFilter("light", LABEL_MINZOOM_FILTER)}
-        style={labelStyle(12, labelColors)}
       />
       <Mapbox.SymbolLayer
         id="rail-stations"
