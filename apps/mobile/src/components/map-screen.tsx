@@ -230,6 +230,8 @@ interface LineLayersProps {
   color: string | null;
   /** How long the camera move that comes with other tracks takes. */
   delay: number;
+  /** Every other line too, under these. */
+  showNetwork: boolean;
 }
 
 /**
@@ -244,6 +246,7 @@ const LineLayers = memo(function LineLayers({
   stops,
   color,
   delay,
+  showNetwork,
 }: LineLayersProps) {
   const layers = useMemo(() => ({ lineIds, stops, color }), [lineIds, stops, color]);
   const [shown, setShown] = useState(layers);
@@ -256,7 +259,7 @@ const LineLayers = memo(function LineLayers({
 
   return (
     <>
-      <LineTracks url={url} lineIds={shown.lineIds} />
+      <LineTracks url={url} lineIds={shown.lineIds} showNetwork={showNetwork} />
       <LineStops stops={shown.stops} color={shown.color} />
     </>
   );
@@ -296,6 +299,7 @@ export function MapScreen() {
   const findingNearby = useRef(false);
   const [nearbyError, setNearbyError] = useState<string | null>(null);
   const hasUsedNearby = usePreference("nearbyButtonUsed");
+  const showTransitLines = usePreference("showTransitLines");
   const intro = useIntro();
   const isIntroOpen = intro.page !== null;
   const {
@@ -526,7 +530,8 @@ export function MapScreen() {
     return route ? getRouteStops(route, stationsById) : noStops;
   }, [lineSheetOpen, selectedLine, stationsById]);
 
-  // Only the open line's track is drawn, or those of the open station's lines.
+  // The open line's track is drawn, or those of the open station's lines, over the rest if the map
+  // shows every line.
   const visibleLineIds = useMemo(() => {
     if (lineSheetOpen && selectedLine) return [selectedLine.line.id];
     if (sheetOpen && selectedStation) {
@@ -764,6 +769,7 @@ export function MapScreen() {
                   stops={lineStops}
                   color={selectedLine ? getLineColor(selectedLine.line) : null}
                   delay={reduceMotion ? 0 : cameraMoveDuration}
+                  showNetwork={showTransitLines}
                 />
               </>
             ) : null}

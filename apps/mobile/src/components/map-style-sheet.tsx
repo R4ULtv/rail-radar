@@ -5,6 +5,8 @@ import BottomSheet, {
 } from "@gorhom/bottom-sheet";
 import { Image } from "expo-image";
 import { useThemeColor } from "heroui-native/hooks";
+import { ListGroup } from "heroui-native/list-group";
+import { Switch } from "heroui-native/switch";
 import { useEffect, useRef } from "react";
 import { BackHandler, Pressable, StyleSheet, Text, View } from "react-native";
 import { useUniwind } from "uniwind";
@@ -86,7 +88,44 @@ function MapStyleOption({
   );
 }
 
-/** Picks the map style with a preview of each, like Apple Maps' map modes. */
+/** Every metro and light rail line on the map. Off at first, since it's busy. */
+function TransitLinesRow() {
+  const isSelected = usePreference("showTransitLines");
+  // The switch's own off color is the row's, so it would show only its thumb.
+  const [offColor, accentColor] = useThemeColor(["surface-tertiary", "accent"]);
+  const toggle = (next: boolean) => {
+    haptics.selection();
+    setPreference("showTransitLines", next);
+  };
+
+  return (
+    <ListGroup variant="secondary">
+      <ListGroup.Item
+        accessibilityRole="switch"
+        accessibilityState={{ checked: isSelected }}
+        className="active:bg-surface-tertiary"
+        onPress={() => toggle(!isSelected)}
+      >
+        <ListGroup.ItemContent>
+          <ListGroup.ItemTitle>Metro & light rail</ListGroup.ItemTitle>
+          <ListGroup.ItemDescription>Show every line when zoomed in</ListGroup.ItemDescription>
+        </ListGroup.ItemContent>
+        <ListGroup.ItemSuffix>
+          {/* The row is the switch for screen readers. */}
+          <View importantForAccessibility="no-hide-descendants" accessibilityElementsHidden>
+            <Switch
+              isSelected={isSelected}
+              onSelectedChange={toggle}
+              animation={{ backgroundColor: { value: [offColor, accentColor] } }}
+            />
+          </View>
+        </ListGroup.ItemSuffix>
+      </ListGroup.Item>
+    </ListGroup>
+  );
+}
+
+/** Picks the map style with a preview of each, like Apple Maps' map modes, and which lines show. */
 export function MapStyleSheet({
   onClose,
   position,
@@ -142,6 +181,9 @@ export function MapStyleSheet({
               isSelected={mapStyle === value}
             />
           ))}
+        </View>
+        <View className="mt-6">
+          <TransitLinesRow />
         </View>
         <MapAttribution className="mt-8" getMapFeedbackUrl={getMapFeedbackUrl} />
       </BottomSheetView>

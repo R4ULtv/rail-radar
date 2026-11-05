@@ -292,19 +292,94 @@ const lineCasingWidth: LineLayerStyle["lineWidth"] = [
   12,
 ];
 
+// Every line, when the map shows them all: thinner than an open line's, and from the zoom the
+// busiest light rail stops show at, fading in, like the stations.
+const NETWORK_MIN_ZOOM = 11;
+const networkTrackWidth: LineLayerStyle["lineWidth"] = [
+  "interpolate",
+  ["linear"],
+  ["zoom"],
+  10,
+  1.5,
+  14,
+  3,
+  17,
+  5,
+];
+const networkCasingWidth: LineLayerStyle["lineWidth"] = [
+  "interpolate",
+  ["linear"],
+  ["zoom"],
+  10,
+  2.5,
+  14,
+  4.5,
+  17,
+  7,
+];
+
+function networkOpacity(opacity: number): LineLayerStyle["lineOpacity"] {
+  return ["interpolate", ["linear"], ["zoom"], NETWORK_MIN_ZOOM, 0, NETWORK_MIN_ZOOM + 1, opacity];
+}
+
 /**
- * The tracks of the given metro and light rail lines, under the stations. Mount it after
+ * The tracks of the given metro and light rail lines, under the stations, and the other lines'
+ * if `showNetwork` is on, under those, faded while lines are open. Mount it after
  * `StationLayers`, like the railway lines.
  */
-export function LineTracks({ url, lineIds }: { url: string; lineIds: readonly string[] }) {
+export function LineTracks({
+  url,
+  lineIds,
+  showNetwork,
+}: {
+  url: string;
+  lineIds: readonly string[];
+  showNetwork: boolean;
+}) {
   // The source stays mounted, so opening another line only changes the filter. Memoized, so the
   // map only gets a new one when the lines change.
   const filter = useMemo(
     () => ["in", ["get", "id"], ["literal", lineIds]] as LayerFilter,
     [lineIds],
   );
+  const networkFilter = useMemo(() => ["!", filter] as LayerFilter, [filter]);
+  // Always mounted and hidden instead, since each layer goes right below the stations: mounted
+  // later, the network would cover the open lines.
+  const visibility = showNetwork ? "visible" : "none";
+  const isDimmed = lineIds.length > 0;
+
   return (
     <Mapbox.ShapeSource id="lines-source" url={url}>
+      <Mapbox.LineLayer
+        id="network-tracks-casing"
+        belowLayerID={FIRST_STATION_LAYER_ID}
+        minZoomLevel={NETWORK_MIN_ZOOM}
+        filter={networkFilter}
+        style={{
+          visibility,
+          lineColor: "#000000",
+          lineOpacity: networkOpacity(isDimmed ? 0.1 : 0.3),
+          lineWidth: networkCasingWidth,
+          lineJoin: "round",
+          lineCap: "round",
+          lineEmissiveStrength: 1,
+        }}
+      />
+      <Mapbox.LineLayer
+        id="network-tracks"
+        belowLayerID={FIRST_STATION_LAYER_ID}
+        minZoomLevel={NETWORK_MIN_ZOOM}
+        filter={networkFilter}
+        style={{
+          visibility,
+          lineColor: ["get", "color"],
+          lineOpacity: networkOpacity(isDimmed ? 0.35 : 0.9),
+          lineWidth: networkTrackWidth,
+          lineJoin: "round",
+          lineCap: "round",
+          lineEmissiveStrength: 1,
+        }}
+      />
       <Mapbox.LineLayer
         id="line-tracks-casing"
         belowLayerID={FIRST_STATION_LAYER_ID}
