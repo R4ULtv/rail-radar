@@ -7,7 +7,9 @@ import { getLineBadgeCode, getLineColor, getLineTextColor, type Line } from "@/l
 const sizes = {
   xs: { box: "h-4 min-w-5 rounded-[5px] px-1", text: "text-[10px]" },
   sm: { box: "h-5 min-w-7 rounded-md px-1.5", text: "text-[11px]" },
-  icon: { box: "h-6 min-w-6 rounded-md px-1", text: "text-xs" },
+  // As wide as a station's icon, so the names of lines and stations line up in lists. Longer codes
+  // shrink to fit instead.
+  icon: { box: "size-6 rounded-md px-0.5", text: "text-xs" },
   lg: { box: "h-10 min-w-10 rounded-xl px-2", text: "text-base" },
 };
 
@@ -35,7 +37,9 @@ export function LineBadge({
           className={`font-semibold ${text}`}
           style={{ color: getLineTextColor(color), fontVariant: ["tabular-nums"] }}
           numberOfLines={1}
-          maxFontSizeMultiplier={1.4}
+          adjustsFontSizeToFit={size === "icon"}
+          minimumFontScale={0.6}
+          maxFontSizeMultiplier={size === "icon" ? 1 : 1.4}
         >
           {code}
         </Text>
