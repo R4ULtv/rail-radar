@@ -1,0 +1,12 @@
+{
+  "extends": ["//"],
+  "tasks": {
+    "lint": {
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        "$TURBO_ROOT$/apps/web/src/components/brands.tsx",
+        "$TURBO_ROOT$/apps/web/public/assets/operators/**"
+      ]
+    }
+  }
+}
