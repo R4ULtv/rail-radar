@@ -1,6 +1,7 @@
 // Started from the API's search (apps/api/src/search.ts) but kept separate: on the
 // device, saved and recent stations come first, closer stations rank higher among ones that
-// match equally well, and a single character is enough to search. Metro and light rail lines
+// match equally well (and among names starting with the query, even an exact one), and a single
+// character is enough to search. Metro and light rail lines
 // are searched along with the stations.
 import type { Line, Station } from "@repo/data/types";
 
@@ -87,7 +88,11 @@ const OTHER_GROUP = 3;
 /** The rank of a name equal to the query, the best a name can match. */
 const EXACT_NAME_RANK = 2;
 const WORST_RANK = 7;
-/** Ranks up to this one need a name starting with the query. */
+/**
+ * Ranks up to this one need a name starting with the query. They count as one match for
+ * distance: from Milan, "loreto" brings up the metro's Loreto (Milano) before the town of Loreto,
+ * 400 km away, though only the town's name is exactly the query.
+ */
 const PREFIX_RANK = 3;
 /**
  * Ranks up to this one need a word starting with the query. The user's stations need one too to
@@ -237,11 +242,17 @@ function compareText(a: string, b: string): number {
   return a < b ? -1 : a > b ? 1 : 0;
 }
 
+/** How well a rank matches before distance counts: see `PREFIX_RANK`. */
+function getMatchTier(rank: number): number {
+  return Math.max(rank, PREFIX_RANK);
+}
+
 function compareSearchResults(a: SearchResult, b: SearchResult): number {
   return (
     a.group - b.group ||
-    a.rank - b.rank ||
+    getMatchTier(a.rank) - getMatchTier(b.rank) ||
     a.distanceBand - b.distanceBand ||
+    a.rank - b.rank ||
     a.typeOrder - b.typeOrder ||
     a.importance - b.importance ||
     a.distance - b.distance ||
@@ -537,8 +548,8 @@ export async function createStationSearch(sourceStations: Station[], lines: read
     function getMaxRank(): number {
       if (results.length < limit) return WORST_RANK;
       const last = results[limit - 1]!;
-      // No other station can beat one of the user's.
-      return last.group < OTHER_GROUP ? 0 : last.rank;
+      // No other station can beat one of the user's. A closer one can beat an exact name.
+      return last.group < OTHER_GROUP ? 0 : getMatchTier(last.rank);
     }
 
     function findNextMatch(from: number): number {
