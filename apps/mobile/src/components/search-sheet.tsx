@@ -149,7 +149,7 @@ function StationDistance({ station, from }: { station: Station; from: UserLocati
   );
 }
 
-/** How far the line's closest stop is. */
+/** How far the line's closest stop is, said so: a station's distance is to the station itself. */
 function LineDistance({
   line,
   stationsById,
@@ -162,9 +162,13 @@ function LineDistance({
   const distance = getLineDistanceKm(line, stationsById, from);
   if (distance === null) return null;
   return (
-    <Text className="text-sm text-muted" style={styles.tabularNums}>
-      {formatDistance(distance)}
-    </Text>
+    // Stacked, so the line's name keeps its room, and the distance lines up with the stations'.
+    <View accessible accessibilityLabel={`Nearest stop ${formatDistance(distance)}`}>
+      <Text className="text-right text-sm text-muted" style={styles.tabularNums}>
+        {formatDistance(distance)}
+      </Text>
+      <Text className="text-right text-xs text-muted">nearest stop</Text>
+    </View>
   );
 }
 
@@ -183,6 +187,8 @@ interface SearchSection {
   icon: SectionIcon;
   data: SearchItem[];
   renderSuffix?: (station: Station) => ReactNode;
+  /** The query to show in the names. */
+  highlight?: string;
   fullCount?: number;
   isExpanded?: boolean;
 }
@@ -352,20 +358,10 @@ const SearchSheetContent = memo(function SearchSheetContent({
         icon: List,
         data: search.results,
         renderSuffix: renderDistance,
+        highlight: search.resultsQuery,
       });
     }
     if (showDefaultLists) {
-      if (unsavedRecentStations.length > 0) {
-        result.push({
-          key: "recent",
-          title: "Recent stations",
-          icon: History,
-          data: recentExpanded ? unsavedRecentStations : unsavedRecentStations.slice(0, 3),
-          fullCount: unsavedRecentStations.length,
-          isExpanded: recentExpanded,
-          renderSuffix: renderDistance,
-        });
-      }
       if (savedStations.length > 0) {
         result.push({
           key: "saved",
@@ -386,6 +382,18 @@ const SearchSheetContent = memo(function SearchSheetContent({
           isExpanded: savedLinesExpanded,
         });
       }
+      // The user's own lists first, then what they opened lately, then what others did.
+      if (unsavedRecentStations.length > 0) {
+        result.push({
+          key: "recent",
+          title: "Recent stations",
+          icon: History,
+          data: recentExpanded ? unsavedRecentStations : unsavedRecentStations.slice(0, 3),
+          fullCount: unsavedRecentStations.length,
+          isExpanded: recentExpanded,
+          renderSuffix: renderDistance,
+        });
+      }
       if (!isTrendingLoading && trendingStations.length > 0) {
         result.push({
           key: "trending",
@@ -401,6 +409,7 @@ const SearchSheetContent = memo(function SearchSheetContent({
     search.isActive,
     search.error,
     search.results,
+    search.resultsQuery,
     renderDistance,
     showDefaultLists,
     unsavedRecentStations,
@@ -432,11 +441,17 @@ const SearchSheetContent = memo(function SearchSheetContent({
         >
           {index > 0 ? <RowSeparator /> : null}
           {isLine(item) ? (
-            <LineRow line={item} suffix={renderLineDistance?.(item)} onSelect={selectLine} />
+            <LineRow
+              line={item}
+              suffix={renderLineDistance?.(item)}
+              highlight={section.highlight}
+              onSelect={selectLine}
+            />
           ) : (
             <StationRow
               station={item}
               renderSuffix={section.renderSuffix}
+              highlight={section.highlight}
               onSelect={selectStation}
             />
           )}
@@ -575,8 +590,8 @@ const SearchSheetContent = memo(function SearchSheetContent({
                 <StatusMessage
                   className="mt-5"
                   icon={SearchX}
-                  title="No stations or lines found"
-                  description="Try a different search term."
+                  title={`No stations or lines for “${search.resultsQuery}”`}
+                  description="Check the spelling, or try part of the name."
                 />
               ) : (
                 <StationSectionSkeleton title={searchResultsTitle} icon={List} />

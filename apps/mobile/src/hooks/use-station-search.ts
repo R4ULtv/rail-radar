@@ -90,6 +90,8 @@ export function useStationSearch(
   return {
     /** Stations and lines, best match first. */
     results: (isActive && results) || noResults,
+    /** The query `results` are for, which lags behind the typed one while they render. */
+    resultsQuery: deferredQuery,
     error: isActive ? error : null,
     isActive,
     location: searchLocation,
