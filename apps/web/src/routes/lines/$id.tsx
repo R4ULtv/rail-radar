@@ -230,7 +230,7 @@ function Service({ data }: { data: LinePageData }) {
         ))}
       </dl>
       <p className="px-4 pt-2 pb-4 text-xs text-muted-foreground">
-        First and last departures from the termini, local time. Public holidays run as Sunday.
+        First and last departures from the termini, local time. Holiday schedules may differ.
       </p>
     </Card>
   );

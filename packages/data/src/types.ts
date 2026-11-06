@@ -42,7 +42,7 @@ export type Weekday = "mon" | "tue" | "wed" | "thu" | "fri" | "sat" | "sun";
 
 /** When a line runs on some days of the week, and how often, from the operator's timetable. */
 export interface LineServicePeriod {
-  /** One day or a range of days within a week: "mon-fri", "sat". Public holidays run as Sunday. */
+  /** One day or a range of days within a regular week: "mon-fri", "sat". Excludes holiday exceptions. */
   days: Weekday | `${Weekday}-${Weekday}`;
   /** First departure from a terminus, local "HH:MM"; null when service carries on from the night before. */
   from: string | null;
