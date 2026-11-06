@@ -11,6 +11,8 @@
     "./lines.json": "./src/lines.json",
     "./lines/*": "./src/lines/*",
     "./operators": "./src/operators.ts",
+    "./providers": "./src/providers.ts",
+    "./status": "./src/status.ts",
     "./stations": "./src/stations.ts",
     "./transfers": "./src/transfers.ts",
     "./transfers.json": "./src/transfers.json",

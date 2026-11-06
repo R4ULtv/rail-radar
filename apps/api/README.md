@@ -222,7 +222,7 @@ src/
 │   ├── ireland.ts     # Irish Rail API scraper
 │   ├── france.ts      # French SNCF (Navitia) API scraper
 │   ├── luxembourg.ts  # Mobiliteit.lu departures (CFL rail)
-│   └── hungary.ts     # MÁVPlusz (OTP2 GraphQL) arrivals and departures
+│   └── hungary.ts     # MÁV ticketing timetable (jegy.mav.hu) arrivals and departures
 ├── analytics.ts   # Cloudflare Analytics Engine integration for visits and provider metrics
 ├── search.ts      # Deterministic station search
 └── constants.ts   # Shared constants (cache TTL, timeouts, validation)

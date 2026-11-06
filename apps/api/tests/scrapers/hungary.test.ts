@@ -5,91 +5,96 @@ import { scrapeHungaryTrains } from "../../src/scrapers/hungary";
 import { freezeTime, jsonResponse, mockFetch, textResponse, type FetchMock } from "../helpers";
 
 const NOW = "2026-03-10T09:00:00.000Z"; // 10:00 in Budapest (CET)
-// Unix time of 2026-03-10 00:00 Budapest, which OTP reports as the service day.
-const SERVICE_DAY = Date.parse("2026-03-09T23:00:00Z") / 1000;
-const STATION = "HU5510017"; // Budapest-Keleti, importance 1
+const STATION = "HU5510017"; // Budapest-Keleti
+const HOST = "jegy-a.mav.hu";
+const ROW_LIMIT = 80;
 
-/** Seconds after local midnight for "HH:MM". */
-function at(time: string): number {
-  const [hours, minutes] = time.split(":").map(Number);
-  return hours! * 3600 + minutes! * 60;
+/** "HH:MM" on the frozen day in Budapest winter time. */
+function at(time: string, date = "2026-03-10"): string {
+  return `${date}T${time}:00+01:00`;
 }
 
-type Stoptime = Record<string, any>;
+type Row = Record<string, any>;
 
-type StoptimeOptions = {
-  departure?: string;
-  arrival?: string;
-  realtimeDeparture?: string;
-  realtimeArrival?: string;
+type RowOptions = {
   number?: string;
-  shortName?: string | null;
-  route?: string | null;
-  agency?: string | null;
-  headsign?: string | null;
-  origin?: string | null;
-  platform?: string | null;
-  alerts?: unknown[];
-  extra?: Stoptime;
+  departure?: string | null;
+  arrival?: string | null;
+  liveDeparture?: string;
+  liveArrival?: string;
+  date?: string;
+  kind?: string;
+  line?: string;
+  from?: string;
+  fromCode?: string;
+  to?: string;
+  toCode?: string;
+  startTrack?: string | null;
+  endTrack?: string | null;
+  notices?: string[] | null;
+  delayReason?: string | null;
 };
 
-function stoptime(options: StoptimeOptions = {}): Stoptime {
-  const departure = options.departure ?? "10:20";
-  const number = options.number ?? "706";
+function row(options: RowOptions = {}): Row {
+  const date = options.date ?? "2026-03-10";
+  const time = (value: string | null | undefined) => (value ? at(value, date) : null);
+  const departure = options.departure === undefined ? "10:20" : options.departure;
   return {
-    scheduledArrival: at(options.arrival ?? departure),
-    realtimeArrival: at(options.realtimeArrival ?? options.arrival ?? departure),
-    arrivalDelay: 0,
-    scheduledDeparture: at(departure),
-    realtimeDeparture: at(options.realtimeDeparture ?? departure),
-    departureDelay: 0,
-    realtime: false,
-    realtimeState: "SCHEDULED",
-    serviceDay: SERVICE_DAY,
-    pickupType: "SCHEDULED",
-    dropoffType: "SCHEDULED",
-    headsign: options.headsign === undefined ? "Szeged" : options.headsign,
-    stop: { platformCode: options.platform === undefined ? "5" : options.platform },
-    trip: {
-      gtfsId: `1:${number}`,
-      tripShortName: options.shortName === undefined ? `${number} gyorsvonat` : options.shortName,
-      route: {
-        longName: options.route === undefined ? "Ex" : options.route,
-        mode: "RAIL",
-        agency: options.agency === null ? null : { gtfsId: options.agency ?? "1:198" },
-      },
-      departureStoptime: {
-        stop: { name: options.origin === undefined ? "Budapest-Nyugati" : options.origin },
-      },
-      alerts: options.alerts ?? [],
+    code: options.number ?? "706",
+    start: time(departure),
+    arrive: time(options.arrival),
+    actualOrEstimatedStart: time(options.liveDeparture),
+    actualOrEstimatedArrive: time(options.liveArrival),
+    startTrack: options.startTrack === undefined ? "5" : options.startTrack,
+    endTrack: options.endTrack === undefined ? null : options.endTrack,
+    startStation: {
+      name: options.from ?? "Budapest-Keleti",
+      code: options.fromCode ?? "005510017",
     },
-    ...options.extra,
+    endStation: { name: options.to ?? "Szeged", code: options.toCode ?? "005517228" },
+    kind: { name: options.kind ?? "InterCity" },
+    viszonylatiJel: options.line ? { jel: options.line } : null,
+    havarianInfok: {
+      aktualisKeses: 0,
+      havariaInfo: options.notices ?? null,
+      kesesiOk: options.delayReason ?? null,
+      kesesInfo: "",
+    },
   };
 }
 
-/** A stoptime with live data: realtime departure at `live` and the matching delay. */
-function live(options: StoptimeOptions & { live: string }): Stoptime {
-  const delay = at(options.live) - at(options.departure ?? "10:20");
-  return stoptime({
-    ...options,
-    realtimeDeparture: options.live,
-    extra: { realtime: true, departureDelay: delay, arrivalDelay: delay, ...options.extra },
-  });
+/** An arriving train: listed by arrival time, with its platform in endTrack. */
+function arrival(options: RowOptions & { arrival: string }): Row {
+  return row({ departure: null, startTrack: null, endTrack: "5", from: "Szeged", ...options });
+}
+
+function payload(departures: Row[], arrivals: Row[] = []) {
+  return {
+    stationSchedulerDetails: { departureScheduler: departures, arrivalScheduler: arrivals },
+  };
+}
+
+/** Pads a board to the row limit so it reads as cut off, not as the end of the day. */
+function fullBoard(departures: Row[]) {
+  const filler = Array.from({ length: ROW_LIMIT - departures.length }, (_, index) =>
+    arrival({ number: `9${index}`, arrival: "23:00" }),
+  );
+  return payload(departures, filler);
 }
 
 describe("scrapeHungaryTrains", () => {
   let fetchMock: FetchMock;
 
-  const respond = (stoptimes: Stoptime[] | null) =>
-    fetchMock.on(
-      "mavplusz.hu",
-      jsonResponse({ data: { stop: { stoptimesWithoutPatterns: stoptimes } } }),
-    );
-
-  const board = (stoptimes: Stoptime[], type: "arrivals" | "departures" = "departures") => {
-    respond(stoptimes);
+  // A short board reads as the end of the day, so an empty next day follows it.
+  const board = (departures: Row[], arrivals: Row[] = [], type?: "arrivals" | "departures") => {
+    fetchMock
+      .once(HOST, jsonResponse(payload(departures, arrivals)))
+      .once(HOST, jsonResponse(payload([])));
     return scrapeHungaryTrains(STATION, type);
   };
+  const departures = (rows: Row[]) => board(rows);
+  const arrivals = (rows: Row[]) => board([], rows, "arrivals");
+  const requestBody = (n = 0) => JSON.parse(fetchMock.requests[n]!.body!);
 
   beforeEach(() => {
     freezeTime(NOW);
@@ -101,781 +106,350 @@ describe("scrapeHungaryTrains", () => {
   });
 
   describe("request building", () => {
-    it("posts a GraphQL query for the converted stop id", async () => {
-      await board([]);
+    it("asks for the station board from half an hour ago", async () => {
+      fetchMock.on(HOST, jsonResponse(fullBoard([])));
+
+      await scrapeHungaryTrains(STATION);
 
       expect(fetchMock.requests).toHaveLength(1);
       const request = fetchMock.requests[0]!;
-      const url = fetchMock.url();
-      expect(url.origin + url.pathname).toBe(
-        "https://mavplusz.hu/otp2-backend/otp/routers/default/index/graphql",
-      );
+      expect(request.url).toBe("https://jegy-a.mav.hu/IK_API_PROD/api/InformationApi/GetTimetable");
       expect(request.method).toBe("POST");
-      expect(request.headers.get("content-type")).toBe("application/json");
-      expect(request.headers.get("accept")).toBe("application/json");
-
-      const body = JSON.parse(request.body!);
-      expect(body.query).toContain("stoptimesWithoutPatterns");
-      expect(body.variables).toEqual({
-        id: "1:005510017_0",
-        // Five minutes before now, in Unix seconds.
-        start: Date.parse(NOW) / 1000 - 300,
-        range: 3 * 3600,
-        n: 24,
+      expect(request.headers.get("Content-Type")).toBe("application/json");
+      expect(request.headers.get("Language")).toBe("hu");
+      expect(requestBody()).toEqual({
+        type: "StationInfo",
+        travelDate: "2026-03-10T08:30:00.000Z",
+        stationNumberCode: "005510017",
+        minCount: "0",
+        maxCount: "80",
       });
     });
 
-    it("uses the same query for arrivals", async () => {
-      await board([], "arrivals");
+    it("converts GYSEV station IDs too", async () => {
+      fetchMock.on(HOST, jsonResponse(fullBoard([])));
 
-      expect(JSON.parse(fetchMock.requests[0]!.body!).variables.id).toBe("1:005510017_0");
-    });
+      await scrapeHungaryTrains("HU4302725", "arrivals");
 
-    it.each([
-      ["HU5510017", 3 * 3600], // importance 1
-      ["HU4302246", 4 * 3600], // importance 2 (Szombathely)
-      ["HU5501131", 8 * 3600], // importance 3 (Tatabánya)
-      ["HU4301974", 12 * 3600], // importance 4 (Rajka)
-      ["HU9999999", 12 * 3600], // unknown station defaults to the widest range
-    ])("scales the time range by station importance (%s)", async (stationId, range) => {
-      respond([]);
-
-      await scrapeHungaryTrains(stationId);
-
-      expect(JSON.parse(fetchMock.requests[0]!.body!).variables).toMatchObject({
-        id: `1:00${stationId.slice(2)}_0`,
-        range,
-      });
+      expect(requestBody().stationNumberCode).toBe("004302725");
     });
   });
 
   describe("response mapping", () => {
     it("maps a departure to a train", async () => {
-      const result = await board([
-        live({
-          departure: "10:20",
-          live: "10:25",
-          shortName: "706 NAPFÉNY InterCity",
-          route: "IC",
-          headsign: "Siófok",
-          platform: "7",
-        }),
-      ]);
+      const result = await departures([row()]);
 
       expect(result.info).toBeNull();
-      expect(result.timing.fetchMs).toBeGreaterThanOrEqual(0);
+      expect(result.timing.fetchMs).toEqual(expect.any(Number));
       expect(result.trains).toEqual([
         {
           brand: "MÁV",
           category: "IC",
           trainNumber: "706",
-          destination: "Siófok",
+          destination: "Szeged",
           scheduledTime: "10:20",
-          delay: 5,
-          platform: "7",
+          delay: null,
+          platform: "5",
           status: null,
           info: null,
         },
       ]);
     });
 
-    it("uses the first stop of the trip as the origin for arrivals", async () => {
-      const { trains } = await board(
-        [stoptime({ arrival: "10:15", departure: "10:20", origin: "Győr", headsign: "Szeged" })],
+    it("maps an arrival from the arrival list, with its origin and arrival platform", async () => {
+      const result = await board(
+        [row({ number: "1" })],
+        [arrival({ number: "2", arrival: "10:15", liveArrival: "10:18" })],
         "arrivals",
       );
 
-      expect(trains).toHaveLength(1);
-      expect(trains[0]).toMatchObject({ origin: "Győr", scheduledTime: "10:15" });
-      expect(trains[0]).not.toHaveProperty("destination", "Szeged");
+      expect(result.trains).toEqual([
+        {
+          brand: "MÁV",
+          category: "IC",
+          trainNumber: "2",
+          origin: "Szeged",
+          scheduledTime: "10:15",
+          delay: 3,
+          platform: "5",
+          status: null,
+          info: null,
+        },
+      ]);
     });
 
-    it("omits the place when the label is empty", async () => {
-      const { trains } = await board([stoptime({ headsign: "<i></i>" })]);
+    it("lists a through train by its arrival or departure time", async () => {
+      const through = { arrival: "10:20", departure: "10:25", endTrack: "4", startTrack: "4" };
 
-      expect(trains[0]?.destination).toBeUndefined();
+      expect((await board([row(through)], [row(through)])).trains[0]).toMatchObject({
+        scheduledTime: "10:25",
+      });
+      expect((await board([row(through)], [row(through)], "arrivals")).trains[0]).toMatchObject({
+        scheduledTime: "10:20",
+        platform: "4",
+      });
     });
 
     it("formats the scheduled time in Budapest summer time", async () => {
-      freezeTime("2026-07-10T09:00:00.000Z"); // 11:00 CEST
-      const summerDay = Date.parse("2026-07-09T22:00:00Z") / 1000;
-
-      const { trains } = await board([
-        stoptime({ departure: "11:30", extra: { serviceDay: summerDay } }),
+      freezeTime("2026-07-10T08:00:00.000Z");
+      const result = await departures([
+        { ...row(), start: "2026-07-10T08:20:00.000Z" }, // 10:20 CEST
       ]);
 
-      expect(trains[0]?.scheduledTime).toBe("11:30");
+      expect(result.trains[0]?.scheduledTime).toBe("10:20");
     });
 
-    it("supports after-midnight offsets of the previous service day", async () => {
-      // 34:20 after midnight on 9 March is 10:20 on 10 March.
-      const previousDay = Date.parse("2026-03-08T23:00:00Z") / 1000;
-      const { trains } = await board([
-        stoptime({ extra: { serviceDay: previousDay, scheduledDeparture: 34 * 3600 + 20 * 60 } }),
-      ]);
-
-      expect(trains[0]?.scheduledTime).toBe("10:20");
-    });
-
-    it("limits the board to 24 trains in chronological order", async () => {
-      const stoptimes = Array.from({ length: 30 }, (_, index) =>
-        stoptime({
-          number: String(1000 + index),
-          departure: `${String(23 - Math.floor(index / 2)).padStart(2, "0")}:${index % 2 ? "30" : "00"}`,
+    it("limits the board to 24 trains in scheduled order", async () => {
+      const rows = Array.from({ length: 30 }, (_, index) =>
+        row({
+          number: String(index),
+          departure: `${String(10 + Math.floor(index / 6))}:${String((index % 6) * 10).padStart(2, "0")}`,
         }),
+      ).reverse();
+
+      const result = await departures(rows);
+
+      expect(result.trains).toHaveLength(24);
+      expect(result.trains.map((train) => train.trainNumber)).toEqual(
+        Array.from({ length: 24 }, (_, index) => String(index)),
       );
-
-      const { trains } = await board(stoptimes);
-
-      expect(trains).toHaveLength(24);
-      const times = trains.map((train) => train.scheduledTime);
-      expect(times).toEqual(times.toSorted());
-      expect(trains[0]?.scheduledTime).toBe("10:00");
     });
 
-    it("returns an empty board when there are no stoptimes", async () => {
-      await expect(board([])).resolves.toMatchObject({ trains: [], info: null });
+    it("returns an empty board when nothing runs", async () => {
+      fetchMock.on(HOST, jsonResponse(fullBoard([])));
+      expect((await scrapeHungaryTrains(STATION)).trains).toEqual([]);
     });
   });
 
   describe("filtering", () => {
-    it("keeps rail trips only", async () => {
-      const bus = stoptime({ number: "1" });
-      bus.trip.route.mode = "BUS";
-      const noTrip = stoptime({ number: "2" });
-      noTrip.trip = null;
-      const noRoute = stoptime({ number: "3" });
-      noRoute.trip.route = null;
-
-      const { trains } = await board([bus, noTrip, noRoute, stoptime({ number: "4" })]);
-
-      expect(trains.map((train) => train.trainNumber)).toEqual(["4"]);
-    });
-
-    it("hides departures that do not pick up passengers", async () => {
-      const { trains } = await board([
-        stoptime({ number: "1", extra: { pickupType: "NONE" } }),
-        stoptime({ number: "2", extra: { pickupType: "CALL_AGENCY" } }),
-        stoptime({ number: "3", extra: { pickupType: "COORDINATE_WITH_DRIVER" } }),
-        stoptime({ number: "4", extra: { pickupType: null } }),
-        stoptime({ number: "5", extra: { dropoffType: "NONE" } }),
+    it("skips rail replacement buses", async () => {
+      const result = await departures([
+        row({ number: "1", kind: "vonatpótló autóbusz" }),
+        row({ number: "2" }),
       ]);
 
-      expect(trains.map((train) => train.trainNumber)).toEqual(["2", "3", "4", "5"]);
+      expect(result.trains.map((train) => train.trainNumber)).toEqual(["2"]);
     });
 
-    it("hides arrivals that do not drop passengers off", async () => {
-      const { trains } = await board(
-        [
-          stoptime({ number: "1", extra: { dropoffType: "NONE" } }),
-          stoptime({ number: "2", extra: { pickupType: "NONE" } }),
-        ],
-        "arrivals",
-      );
-
-      expect(trains.map((train) => train.trainNumber)).toEqual(["2"]);
-    });
-
-    it("skips stoptimes without a service day or scheduled time", async () => {
-      const { trains } = await board([
-        stoptime({ number: "1", extra: { serviceDay: null } }),
-        stoptime({ number: "2", extra: { scheduledDeparture: null } }),
-        stoptime({ number: "3" }),
+    it("skips rows without a time for the requested direction", async () => {
+      const result = await departures([
+        row({ number: "1", departure: null }),
+        row({ number: "2" }),
       ]);
 
-      expect(trains.map((train) => train.trainNumber)).toEqual(["3"]);
+      expect(result.trains.map((train) => train.trainNumber)).toEqual(["2"]);
     });
 
-    it("drops trains more than five minutes in the past", async () => {
-      const { trains } = await board([
-        stoptime({ number: "1", departure: "09:54" }),
-        stoptime({ number: "2", departure: "09:55" }),
+    it("drops trains that left more than five minutes ago", async () => {
+      const result = await departures([
+        row({ number: "1", departure: "09:50" }),
+        row({ number: "2", departure: "09:56" }),
       ]);
 
-      expect(trains.map((train) => train.trainNumber)).toEqual(["2"]);
+      expect(result.trains.map((train) => train.trainNumber)).toEqual(["2"]);
     });
 
     it("keeps a delayed train that has not left yet", async () => {
-      const { trains } = await board([
-        live({ number: "1", departure: "09:50", live: "10:02" }),
-        live({ number: "2", departure: "09:40", live: "09:50" }),
-      ]);
+      const result = await departures([row({ departure: "09:40", liveDeparture: "10:02" })]);
 
-      expect(trains).toHaveLength(1);
-      expect(trains[0]).toMatchObject({
-        trainNumber: "1",
-        scheduledTime: "09:50",
-        delay: 12,
-        status: "departing",
-      });
+      expect(result.trains[0]).toMatchObject({ scheduledTime: "09:40", delay: 22 });
     });
   });
 
   describe("status and delay", () => {
     it("marks trains within five minutes of now as departing (arrivals as incoming)", async () => {
-      const stoptimes = [
-        stoptime({ number: "1", departure: "09:55" }),
-        stoptime({ number: "2", departure: "10:05" }),
-        stoptime({ number: "3", departure: "10:06" }),
+      const rows = [
+        row({ number: "1", departure: "10:04" }),
+        row({ number: "2", departure: "10:06" }),
       ];
 
-      const departures = await board(stoptimes);
-      expect(departures.trains.map((train) => train.status)).toEqual([
-        "departing",
+      expect((await departures(rows)).trains.map((train) => train.status)).toEqual([
         "departing",
         null,
       ]);
-
-      fetchMock = mockFetch();
-      const arrivals = await board(stoptimes, "arrivals");
-      expect(arrivals.trains.map((train) => train.status)).toEqual(["incoming", "incoming", null]);
+      expect(
+        (await arrivals([arrival({ arrival: "09:58" })])).trains.map((train) => train.status),
+      ).toEqual(["incoming"]);
     });
 
-    it("bases status on the realtime time when live data exists", async () => {
-      const { trains } = await board([live({ departure: "10:02", live: "10:30" })]);
+    it("bases the delay and status on the live estimate", async () => {
+      const result = await departures([row({ departure: "09:50", liveDeparture: "10:03" })]);
 
-      expect(trains[0]).toMatchObject({ delay: 28, status: null });
+      expect(result.trains[0]).toMatchObject({ delay: 13, status: "departing" });
     });
 
-    it("ignores realtime offsets when the stoptime has no live data", async () => {
-      const { trains } = await board([
-        stoptime({
-          departure: "10:02",
-          realtimeDeparture: "10:30",
-          extra: { realtime: false, departureDelay: 1680 },
+    it("reports an on-time live estimate as no delay", async () => {
+      const result = await departures([row({ liveDeparture: "10:20" })]);
+
+      expect(result.trains[0]?.delay).toBe(0);
+    });
+
+    it("reads the arrival estimate for arrivals, not the departure one", async () => {
+      const result = await arrivals([
+        arrival({
+          arrival: "10:20",
+          liveArrival: "10:29",
+          departure: "10:25",
+          liveDeparture: "10:30",
         }),
       ]);
 
-      expect(trains[0]).toMatchObject({ delay: null, status: "departing" });
-    });
-
-    it("reports a null delay when live data has no delay value", async () => {
-      const { trains } = await board([
-        stoptime({ extra: { realtime: true, departureDelay: null } }),
-      ]);
-
-      expect(trains[0]?.delay).toBeNull();
-    });
-
-    it("falls back to the scheduled time when live data lacks a realtime offset", async () => {
-      const { trains } = await board([
-        stoptime({
-          departure: "10:02",
-          extra: { realtime: true, realtimeDeparture: null, departureDelay: 120 },
-        }),
-      ]);
-
-      expect(trains[0]).toMatchObject({ delay: 2, status: "departing" });
-    });
-
-    it("rounds the delay to whole minutes", async () => {
-      const { trains } = await board([
-        stoptime({ extra: { realtime: true, departureDelay: 150 } }),
-        stoptime({ number: "2", extra: { realtime: true, departureDelay: 89 } }),
-      ]);
-
-      expect(trains.map((train) => train.delay)).toEqual([3, 1]);
-    });
-
-    it("reads the arrival delay for arrivals", async () => {
-      const { trains } = await board(
-        [
-          stoptime({
-            arrival: "10:15",
-            departure: "10:20",
-            extra: { realtime: true, arrivalDelay: 240, departureDelay: 600 },
-          }),
-        ],
-        "arrivals",
-      );
-
-      expect(trains[0]).toMatchObject({ delay: 4 });
-    });
-
-    it("marks canceled trips as cancelled, even in the past, without a delay", async () => {
-      const { trains } = await board([
-        stoptime({
-          departure: "08:00",
-          extra: { realtimeState: "CANCELED", realtime: true, departureDelay: 600 },
-        }),
-      ]);
-
-      expect(trains).toHaveLength(1);
-      expect(trains[0]).toMatchObject({ status: "cancelled", delay: null });
+      expect(result.trains[0]?.delay).toBe(9);
     });
   });
 
   describe("labels", () => {
-    it("maps known agencies to brands and leaves others unbranded", async () => {
-      const agencies = [
-        "1:198",
-        "1:1164",
-        "1:1663",
-        "1:134",
-        "1:204",
-        "1:209",
-        "1:197",
-        "1:196",
-        "1:120",
-      ];
-      const stoptimes = [
-        ...agencies.map((agency, index) =>
-          stoptime({ number: String(100 + index), agency, departure: `10:${10 + index}` }),
-        ),
-        stoptime({ number: "200", agency: "1:9999", departure: "10:30" }),
-        stoptime({ number: "201", agency: null, departure: "10:31" }),
-      ];
-
-      const { trains } = await board(stoptimes);
-
-      expect(trains.map((train) => train.brand)).toEqual([
-        "MÁV",
-        "MÁV",
-        "MÁV",
-        "GYSEV",
-        "OBB",
-        "PKP Intercity",
-        "ČD",
-        "CFR Călători",
-        "UZ",
-        null,
-        null,
+    it("prefers the suburban or regional line code as the category", async () => {
+      const result = await departures([
+        row({ number: "1", kind: "személyvonat", line: "S70" }),
+        row({ number: "2", kind: "InterRégió", line: "IR85" }),
+        row({ number: "3", kind: "InterRégió" }),
       ]);
+
+      expect(result.trains.map((train) => train.category)).toEqual(["S70", "IR85", "IR"]);
     });
 
-    it("takes the category from the first word of the route name", async () => {
-      const { trains } = await board([
-        stoptime({ number: "1", route: "IC Intercity", departure: "10:10" }),
-        stoptime({ number: "2", route: "rjx", departure: "10:11" }),
-        stoptime({ number: "3", route: "Rj", departure: "10:12" }),
-        stoptime({ number: "4", route: null, departure: "10:13" }),
-        stoptime({ number: "5", route: "  ", departure: "10:14" }),
-        stoptime({
-          number: "6",
-          route: '<span class="MNR2007">&#473;</span> Sz személyvonat',
-          departure: "10:15",
-        }),
-      ]);
+    it.each([
+      ["railjet xpress", "RJX"],
+      ["railjet", "RJ"],
+      ["EuroNight", "EN"],
+      ["EuroCity", "EC"],
+      ["InterCity", "IC"],
+      ["EuroRegio", "ER"],
+      ["Expresszvonat", "Ex"],
+      ["gyorsvonat", "Gy"],
+      ["sebesvonat", "Sebes"],
+      ["személyvonat", "Sz"],
+      ["Nosztalgiavonat", "Nosztalgiavonat"],
+    ])("maps the %s kind to %s", async (kind, category) => {
+      const result = await departures([row({ kind })]);
 
-      expect(trains.map((train) => train.category)).toEqual(["IC", "RJX", "RJ", null, null, "Sz"]);
+      expect(result.trains[0]?.category).toBe(category);
     });
 
-    it("parses the train number from the trip short name", async () => {
-      const { trains } = await board([
-        stoptime({ number: "1", shortName: "706 NAPFÉNY gyorsvonat", departure: "10:10" }),
-        stoptime({ number: "2", shortName: "S70", departure: "10:11" }),
-        stoptime({ number: "3", shortName: null, departure: "10:12" }),
-        stoptime({ number: "4", shortName: "  ", departure: "10:13" }),
+    it("brands GYSEV's regional trains by their stations, and everything else MÁV", async () => {
+      const result = await departures([
+        row({ number: "9933", kind: "személyvonat", fromCode: "004302725", to: "Győr" }),
+        row({ number: "9846", kind: "személyvonat", toCode: "004302246" }),
+        row({ number: "981", kind: "InterCity", toCode: "004302725" }),
+        row({ number: "6636", kind: "személyvonat" }),
       ]);
 
-      expect(trains.map((train) => train.trainNumber)).toEqual(["706", "S70", "3", "4"]);
+      expect(result.trains.map((train) => train.brand)).toEqual(["GYSEV", "GYSEV", "MÁV", "MÁV"]);
     });
 
-    it("strips markup and decodes entities in labels", async () => {
-      const { trains } = await board([
-        stoptime({
-          headsign: "Győr&nbsp;&amp;&nbsp;Sopron <b>(&#x151;&#337;)</b>",
-          platform: "<b>3</b>",
-        }),
+    it("trims labels and nulls missing platforms", async () => {
+      const result = await departures([
+        row({ number: " 706 ", to: "  Wien   Hbf ", startTrack: " 4a " }),
+        row({ number: "707", startTrack: null }),
+        row({ number: "708", startTrack: "" }),
       ]);
 
-      expect(trains[0]).toMatchObject({ destination: "Győr & Sopron (őő)", platform: "3" });
-    });
-
-    it("nulls missing and empty platforms", async () => {
-      const noStop = stoptime({ number: "2", departure: "10:21" });
-      noStop.stop = null;
-
-      const { trains } = await board([
-        stoptime({ number: "1", platform: null }),
-        noStop,
-        stoptime({ number: "3", platform: " ", departure: "10:22" }),
+      expect(
+        result.trains.map((train) => [train.trainNumber, train.destination, train.platform]),
+      ).toEqual([
+        ["706", "Wien Hbf", "4a"],
+        ["707", "Szeged", null],
+        ["708", "Szeged", null],
       ]);
-
-      expect(trains.map((train) => train.platform)).toEqual([null, null, null]);
     });
   });
 
-  describe("alerts", () => {
-    const alert = (overrides: Record<string, unknown>) => ({
-      alertHeaderText: null,
-      alertDescriptionText: null,
-      effectiveEndDate: null,
-      ...overrides,
-    });
-
-    it("reports active alerts, preferring the description over the header", async () => {
-      const future = Date.parse(NOW) / 1000 + 3600;
-      const { trains } = await board([
-        stoptime({
-          alerts: [
-            alert({ alertHeaderText: "Header", alertDescriptionText: "Pótlóbusz közlekedik;" }),
-            alert({ alertHeaderText: "Only header:", effectiveEndDate: future }),
-            alert({ alertDescriptionText: "Pótlóbusz közlekedik" }),
-            alert({ alertDescriptionText: "<b>   </b>" }),
+  describe("info", () => {
+    it("joins the disruption notices without repeats", async () => {
+      const result = await departures([
+        row({
+          notices: [
+            "Étkezőkocsi nélkül közlekedik.",
+            "Várhatóan 10-15 perces késéssel indul.\t",
+            "Étkezőkocsi nélkül közlekedik.",
           ],
         }),
       ]);
 
-      expect(trains[0]?.info).toBe("Pótlóbusz közlekedik · Only header");
+      expect(result.trains[0]?.info).toBe(
+        "Étkezőkocsi nélkül közlekedik. · Várhatóan 10-15 perces késéssel indul.",
+      );
     });
 
-    it("drops expired alerts", async () => {
-      const past = Date.parse(NOW) / 1000 - 60;
-      const { trains } = await board([
-        stoptime({
-          alerts: [alert({ alertHeaderText: "Old", effectiveEndDate: past })],
-        }),
-        stoptime({
-          number: "2",
-          departure: "10:21",
-          extra: { trip: { ...stoptime().trip, alerts: null } },
-        }),
+    it("adds the delay reason only when the train is late here", async () => {
+      const reason = "Pálya állapota miatti késés";
+      const result = await departures([
+        row({ number: "1", liveDeparture: "10:31", delayReason: reason }),
+        // Late on the way in, but the stop absorbs it.
+        row({ number: "2", liveDeparture: "10:20", delayReason: reason }),
+        row({ number: "3", delayReason: reason }),
       ]);
 
-      expect(trains.map((train) => train.info)).toEqual([null, null]);
+      expect(result.trains.map((train) => train.info)).toEqual([reason, null, null]);
     });
   });
 
-  describe("merging", () => {
-    it("keeps the most specific product when one train appears under several", async () => {
-      const { trains } = await board([
-        stoptime({ number: "706", route: "Ex", shortName: "706 NAPFÉNY gyorsvonat" }),
-        stoptime({ number: "706", route: "IC", shortName: "706 NAPFÉNY InterCity" }),
-      ]);
-
-      expect(trains).toHaveLength(1);
-      expect(trains[0]).toMatchObject({ trainNumber: "706", category: "IC" });
-    });
-
-    it.each([
-      ["RJX", "EC"],
-      ["EC", "IC"],
-      ["IC", "IR"],
-      ["IR", "Gy"],
-      ["Gy", "S"],
-      ["S", "Sz"],
-      ["Sz", null],
-    ])("ranks %s above %s", async (better, worse) => {
-      const { trains } = await board([
-        stoptime({ number: "1", route: worse }),
-        stoptime({ number: "1", route: better }),
-      ]);
-
-      expect(trains).toHaveLength(1);
-      expect(trains[0]?.category).toBe(better);
-    });
-
-    it("ranks suburban numbered lines with plain stopping trains", async () => {
-      const { trains } = await board([
-        stoptime({ number: "10", route: "S70" }),
-        stoptime({ number: "20", route: "Sz" }),
-        stoptime({ number: "30", route: "G43" }),
-      ]);
-
-      // Equal time: higher rank first. S70 and G43 (rank 1) before Sz (rank 0).
-      expect(trains.map((train) => train.category)).toEqual(["S70", "G43", "Sz"]);
-    });
-
-    it("keeps different trains at the same minute, most specific first", async () => {
-      const { trains } = await board([
-        stoptime({ number: "3001", route: "Sz", headsign: "Kelenföld" }),
-        stoptime({ number: "706", route: "IC", headsign: "Siófok" }),
-        stoptime({ number: "811", route: "Ex", headsign: "Pécs" }),
-      ]);
-
-      expect(trains.map((train) => train.trainNumber)).toEqual(["706", "811", "3001"]);
-    });
-
-    it("does not merge the same number at different times", async () => {
-      const { trains } = await board([
-        stoptime({ number: "706", departure: "10:20" }),
-        stoptime({ number: "706", departure: "11:20" }),
-      ]);
-
-      expect(trains.map((train) => train.scheduledTime)).toEqual(["10:20", "11:20"]);
-    });
-
-    it("sorts the merged board by time", async () => {
-      const { trains } = await board([
-        stoptime({ number: "3", departure: "10:40" }),
-        stoptime({ number: "1", departure: "10:10" }),
-        stoptime({ number: "2", departure: "10:25" }),
-      ]);
-
-      expect(trains.map((train) => train.trainNumber)).toEqual(["1", "2", "3"]);
-    });
-
-    it("takes the delay and status from the live row and the first known platform", async () => {
-      const { trains } = await board([
-        stoptime({ number: "706", route: "IC", platform: null, departure: "10:03" }),
-        live({ number: "706", route: "Ex", platform: "9", departure: "10:03", live: "10:30" }),
-      ]);
-
-      expect(trains).toHaveLength(1);
-      expect(trains[0]).toMatchObject({ category: "IC", platform: "9", delay: 27, status: null });
-    });
-
-    it("keeps the primary row's live data when it has some", async () => {
-      const { trains } = await board([
-        live({ number: "706", route: "IC", departure: "10:03", live: "10:04" }),
-        live({ number: "706", route: "Ex", departure: "10:03", live: "10:30" }),
-      ]);
-
-      expect(trains[0]).toMatchObject({ category: "IC", delay: 1, status: "departing" });
-    });
-
-    it("keeps cancelled and running rows of one number separate", async () => {
-      const { trains } = await board([
-        stoptime({ number: "706", headsign: "Siófok" }),
-        stoptime({ number: "706", headsign: "Siófok", extra: { realtimeState: "CANCELED" } }),
-      ]);
-
-      expect(trains.map((train) => train.status)).toEqual(
-        expect.arrayContaining(["cancelled", null]),
-      );
-      expect(trains).toHaveLength(2);
-    });
-
-    it("merges rows of one number under the same cancellation state", async () => {
-      const cancelled = { realtimeState: "CANCELED" };
-      const { trains } = await board([
-        stoptime({ number: "706", route: "Ex", extra: cancelled }),
-        stoptime({ number: "706", route: "IC", extra: cancelled }),
-      ]);
-
-      expect(trains).toHaveLength(1);
-      expect(trains[0]).toMatchObject({ category: "IC", status: "cancelled", delay: null });
-    });
-
-    it("does not add 'Also to' for the same number from the same agency", async () => {
-      const { trains } = await board([
-        stoptime({ number: "706", route: "IC", headsign: "Hegyeshalom" }),
-        stoptime({ number: "706", route: "Ex", headsign: "Wien Hbf" }),
-      ]);
-
-      expect(trains).toHaveLength(1);
-      expect(trains[0]?.info).toBeNull();
-    });
-
-    it("merges through-car portions of a named train and lists the other destinations", async () => {
-      const { trains } = await board([
-        stoptime({
-          number: "476",
-          shortName: "476 METROPOL EuroNight",
-          route: "EN",
-          agency: "1:198",
-          headsign: "Praha hl.n.",
-          origin: "Budapest-Keleti",
-          platform: "6",
-        }),
-        stoptime({
-          number: "40476",
-          shortName: "40476 METROPOL EuroNight",
-          route: "EN",
-          agency: "1:204",
-          headsign: "Berlin Hbf",
-          origin: "Budapest-Keleti",
-          platform: null,
-        }),
-        stoptime({
-          number: "10476",
-          shortName: "10476 METROPOL EuroNight",
-          route: "EN",
-          agency: "1:197",
-          headsign: "Berlin Hbf",
-          origin: "Budapest-Keleti",
-          platform: null,
-        }),
-      ]);
-
-      expect(trains).toEqual([
-        {
-          brand: "MÁV",
-          category: "EN",
-          trainNumber: "476",
-          destination: "Praha hl.n.",
-          scheduledTime: "10:20",
-          delay: null,
-          platform: "6",
-          status: null,
-          info: "Also to Berlin Hbf",
-        },
-      ]);
-    });
-
-    it("lists the other origins for arrivals", async () => {
-      const { trains } = await board(
-        [
-          stoptime({
-            number: "476",
-            shortName: "476 METROPOL EuroNight",
-            route: "EN",
-            origin: "Praha hl.n.",
-          }),
-          stoptime({
-            number: "40476",
-            shortName: "40476 METROPOL EuroNight",
-            route: "EN",
-            agency: "1:204",
-            origin: "Berlin Hbf",
-          }),
-          stoptime({
-            number: "10476",
-            shortName: "10476 METROPOL EuroNight",
-            route: "EN",
-            agency: "1:204",
-            // Same origin as 476, so the named train is one service.
-            origin: "Praha hl.n.",
-          }),
-        ],
-        "arrivals",
+  describe("next service day", () => {
+    it("carries on with the next day when the board ends early", async () => {
+      fetchMock.once(HOST, jsonResponse(payload([row({ number: "1", departure: "23:50" })]))).once(
+        HOST,
+        jsonResponse(
+          payload([
+            // Listed on both days' boards.
+            row({ number: "1", departure: "23:50" }),
+            row({ number: "2", departure: "00:30", date: "2026-03-11" }),
+          ]),
+        ),
       );
 
-      // All three share the name; 40476 joins the others through the common destination.
-      // The merged board lists the origins of the portions that differ.
-      expect(trains).toHaveLength(1);
-      expect(trains[0]).toMatchObject({
-        trainNumber: "476",
-        origin: "Praha hl.n.",
-        info: "Also from Berlin Hbf",
-      });
+      const result = await scrapeHungaryTrains(STATION);
+
+      expect(requestBody(1).travelDate).toBe("2026-03-11");
+      expect(result.trains.map((train) => [train.trainNumber, train.scheduledTime])).toEqual([
+        ["1", "23:50"],
+        ["2", "00:30"],
+      ]);
     });
 
-    it("prefers the main train over prefixed portions and home agencies over foreign ones", async () => {
-      const { trains } = await board([
-        stoptime({
-          number: "40347",
-          shortName: "40347 DACIA gyorsvonat",
-          route: "Ex",
-          agency: "1:196",
-          headsign: "Bucuresti Nord",
-        }),
-        stoptime({
-          number: "10347",
-          shortName: "10347 DACIA gyorsvonat",
-          route: "Ex",
-          agency: "1:198",
-          headsign: "Bucuresti Nord",
-        }),
-      ]);
+    it("takes the next day after the board's start, just after midnight", async () => {
+      freezeTime("2026-03-09T23:10:00.000Z"); // 00:10 on 10 March in Budapest
+      fetchMock.on(HOST, jsonResponse(payload([])));
 
-      expect(trains).toHaveLength(1);
-      expect(trains[0]).toMatchObject({ trainNumber: "10347", brand: "MÁV" });
+      await scrapeHungaryTrains(STATION);
+
+      expect(requestBody(0).travelDate).toBe("2026-03-09T22:40:00.000Z");
+      expect(requestBody(1).travelDate).toBe("2026-03-10");
     });
 
-    it("keeps named trains with a different origin and destination separate", async () => {
-      const { trains } = await board([
-        stoptime({
-          number: "100",
-          shortName: "100 DACIA gyorsvonat",
-          headsign: "Brasov",
-          origin: "Budapest-Keleti",
-        }),
-        stoptime({
-          number: "200",
-          shortName: "200 DACIA gyorsvonat",
-          headsign: "Budapest-Keleti",
-          origin: "Brasov",
-        }),
-      ]);
+    it("adds both fetch times", async () => {
+      fetchMock.on(HOST, jsonResponse(payload([])));
 
-      expect(trains.map((train) => train.trainNumber)).toEqual(["100", "200"]);
+      const result = await scrapeHungaryTrains(STATION);
+
+      expect(fetchMock.requests).toHaveLength(2);
+      expect(result.timing.fetchMs).toEqual(expect.any(Number));
     });
 
-    it("does not merge different numbers that share only an origin", async () => {
-      const { trains } = await board([
-        stoptime({ number: "100", shortName: "100 DACIA gyorsvonat", headsign: "Brasov" }),
-        stoptime({ number: "200", shortName: "200 RUTHENIA gyorsvonat", headsign: "Kyiv" }),
-      ]);
+    it("stops at one request when the board was cut off by the row limit", async () => {
+      fetchMock.on(HOST, jsonResponse(fullBoard([row()])));
 
-      expect(trains).toHaveLength(2);
+      await scrapeHungaryTrains(STATION);
+
+      expect(fetchMock.requests).toHaveLength(1);
     });
 
-    it("bridges separate services connected by a joined-train row", async () => {
-      const { trains } = await board([
-        stoptime({
-          number: "100",
-          shortName: "100 DACIA gyorsvonat",
-          route: "EN",
-          origin: "Budapest-Keleti",
-          headsign: "Brasov",
-        }),
-        stoptime({
-          number: "200",
-          shortName: "200 RUTHENIA gyorsvonat",
-          route: "EN",
-          origin: "Kyiv",
-          headsign: "Bucuresti",
-        }),
-        stoptime({
-          number: "300",
-          shortName: "300 DACIA - RUTHENIA gyorsvonat",
-          route: "EN",
-          origin: "Budapest-Keleti",
-          headsign: "Bucuresti",
-        }),
-      ]);
+    it("stops at one request when the board is already full", async () => {
+      const rows = Array.from({ length: 24 }, (_, index) => row({ number: String(index) }));
+      fetchMock.on(HOST, jsonResponse(payload(rows)));
 
-      expect(trains).toHaveLength(1);
-      expect(trains[0]).toMatchObject({
-        trainNumber: "100",
-        destination: "Brasov",
-        info: "Also to Bucuresti",
-      });
-    });
+      await scrapeHungaryTrains(STATION);
 
-    it("splits slash-separated names", async () => {
-      const { trains } = await board([
-        stoptime({
-          number: "100",
-          shortName: "100 DACIA/RUTHENIA gyorsvonat",
-          headsign: "Brasov",
-        }),
-        stoptime({
-          number: "200",
-          shortName: "200 RUTHENIA gyorsvonat",
-          headsign: "Brasov",
-        }),
-      ]);
-
-      expect(trains).toHaveLength(1);
-      expect(trains[0]?.trainNumber).toBe("100");
-    });
-
-    it("combines alerts from all merged rows ahead of the 'Also to' note", async () => {
-      const alert = (text: string) => ({
-        alertHeaderText: null,
-        alertDescriptionText: text,
-        effectiveEndDate: null,
-      });
-      const { trains } = await board([
-        stoptime({
-          number: "476",
-          shortName: "476 METROPOL EuroNight",
-          route: "EN",
-          headsign: "Praha hl.n.",
-          alerts: [alert("Delay expected"), alert("Seat reservation")],
-        }),
-        stoptime({
-          number: "40476",
-          shortName: "40476 METROPOL EuroNight",
-          route: "EN",
-          agency: "1:204",
-          headsign: "Berlin Hbf",
-          alerts: [alert("Seat reservation"), alert("Restaurant car missing")],
-        }),
-      ]);
-
-      expect(trains[0]?.info).toBe(
-        "Delay expected · Seat reservation · Restaurant car missing · Also to Berlin Hbf",
-      );
+      expect(fetchMock.requests).toHaveLength(1);
     });
   });
 
   describe("errors", () => {
     it("wraps upstream HTTP errors in a ScraperError", async () => {
-      fetchMock.on("mavplusz.hu", textResponse("down", { status: 500 }));
+      fetchMock.on(
+        HOST,
+        jsonResponse({ message: "Nincs érvényes állomás részlet" }, { status: 500 }),
+      );
 
       const error = await scrapeHungaryTrains(STATION).catch((error: unknown) => error);
 
@@ -883,20 +457,7 @@ describe("scrapeHungaryTrains", () => {
       expect(error).toMatchObject({
         statusCode: 500,
         message: expect.stringContaining("Hungarian"),
-        upstream: { host: "mavplusz.hu", status: 500 },
-      });
-    });
-
-    it("reports the per-IP burst limit (403) as a temporary 503", async () => {
-      fetchMock.on("mavplusz.hu", textResponse("host limit achived", { status: 403 }));
-
-      const error = await scrapeHungaryTrains(STATION).catch((error: unknown) => error);
-
-      expect(error).toBeInstanceOf(ScraperError);
-      expect(error).toMatchObject({
-        statusCode: 503,
-        message: expect.stringContaining("temporarily limiting"),
-        upstream: { host: "mavplusz.hu", status: 403 },
+        upstream: { host: HOST, status: 500 },
       });
     });
 
@@ -910,52 +471,30 @@ describe("scrapeHungaryTrains", () => {
     });
 
     it("rejects invalid JSON with 502", async () => {
-      fetchMock.on("mavplusz.hu", textResponse("<html>gateway</html>"));
+      fetchMock.on(HOST, textResponse("<html>gateway</html>"));
 
       await expect(scrapeHungaryTrains(STATION)).rejects.toMatchObject({
         statusCode: 502,
         message: expect.stringContaining("invalid response"),
-      });
-    });
-
-    it("surfaces GraphQL errors returned with HTTP 200", async () => {
-      fetchMock.on(
-        "mavplusz.hu",
-        jsonResponse({ errors: [{ message: "Validation error" }, { message: "Other" }] }),
-      );
-
-      const error = await scrapeHungaryTrains(STATION).catch((error: unknown) => error);
-
-      expect(error).toBeInstanceOf(ScraperError);
-      expect(error).toMatchObject({
-        statusCode: 502,
-        message: "The Hungarian train data source returned an error. Please try again.",
-        timing: { fetchMs: expect.any(Number) },
-      });
-      expect((error as ScraperError).cause).toEqual(new Error("Validation error; Other"));
-    });
-
-    it("returns 404 for an unknown stop", async () => {
-      fetchMock.on("mavplusz.hu", jsonResponse({ data: { stop: null } }));
-
-      await expect(scrapeHungaryTrains(STATION)).rejects.toMatchObject({
-        statusCode: 404,
-        message: expect.stringContaining("does not know this station"),
       });
     });
 
     it.each([
-      ["no data", {}],
-      ["null data", { data: null }],
-      ["missing stoptimes", { data: { stop: {} } }],
-      ["null stoptimes", { data: { stop: { stoptimesWithoutPatterns: null } } }],
-      ["non-array stoptimes", { data: { stop: { stoptimesWithoutPatterns: {} } } }],
-    ])("rejects an invalid response shape (%s)", async (_label, payload) => {
-      fetchMock.on("mavplusz.hu", jsonResponse(payload));
+      ["null body", null],
+      ["no details", {}],
+      ["null details", { stationSchedulerDetails: null }],
+      ["missing arrivals", { stationSchedulerDetails: { departureScheduler: [] } }],
+      [
+        "non-array departures",
+        { stationSchedulerDetails: { departureScheduler: {}, arrivalScheduler: [] } },
+      ],
+    ])("rejects an invalid response shape (%s)", async (_label, body) => {
+      fetchMock.on(HOST, jsonResponse(body));
 
       await expect(scrapeHungaryTrains(STATION)).rejects.toMatchObject({
         statusCode: 502,
         message: expect.stringContaining("invalid response"),
+        timing: { fetchMs: expect.any(Number) },
       });
     });
   });

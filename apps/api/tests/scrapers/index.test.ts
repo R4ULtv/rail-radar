@@ -28,7 +28,9 @@ describe("scraper registry", () => {
     expect(getScraperForStation("BE14001")).toBe(scrapeBelgiumTrains);
     expect(getScraperForStation("IT1728")).toBe(scrapeItalyTrains);
     expect(getScraperForStation("UK123")).toBe(scrapeUKTrains);
-    expect(getScraperForStation("HU1")).toBe(scrapeHungaryTrains);
+    expect(getScraperForStation("HU1")).toBe(
+      COUNTRY_CODES.includes("hu") ? scrapeHungaryTrains : null,
+    );
   });
 
   it("returns null for unknown regions", () => {

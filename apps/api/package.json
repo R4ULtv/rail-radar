@@ -15,10 +15,10 @@
     "hono": "^4.13.16"
   },
   "devDependencies": {
-    "@cloudflare/vitest-plugin": "^1.5.1",
+    "@cloudflare/vitest-plugin": "^1.6.0",
     "@repo/typescript-config": "workspace:*",
     "typescript": "^7.0.2",
     "vitest": "^5.1.0",
-    "wrangler": "^4.157.0"
+    "wrangler": "^4.158.0"
   }
 }

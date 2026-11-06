@@ -1,4 +1,4 @@
-import { getCountry, type CountryCode } from "@repo/data/countries";
+import { COUNTRY_CODES, getCountry, type CountryCode } from "@repo/data/countries";
 
 import type { ScrapeResult } from "./core";
 
@@ -44,9 +44,12 @@ const scrapers: Partial<Record<CountryCode, ScrapeFn>> = {
   hu: scrapeHungaryTrains,
 };
 
-export const SCRAPER_COUNTRIES = Object.freeze(Object.keys(scrapers) as CountryCode[]);
+// Hidden countries (see HIDDEN_COUNTRIES) keep their scraper here but are not served.
+export const SCRAPER_COUNTRIES = Object.freeze(
+  (Object.keys(scrapers) as CountryCode[]).filter((country) => COUNTRY_CODES.includes(country)),
+);
 
 export function getScraperForStation(stationId: string): ScrapeFn | null {
   const country = getCountry(stationId);
-  return country ? (scrapers[country] ?? null) : null;
+  return country && SCRAPER_COUNTRIES.includes(country) ? (scrapers[country] ?? null) : null;
 }
