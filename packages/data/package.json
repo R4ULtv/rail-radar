@@ -24,6 +24,6 @@
     "@repo/typescript-config": "workspace:*",
     "@types/geojson": "^7946.0.16",
     "@types/node": "^22.20.5",
-    "typescript": "^6.0.3"
+    "typescript": "^7.0.2"
   }
 }
