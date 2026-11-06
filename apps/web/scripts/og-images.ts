@@ -26,8 +26,7 @@ const exec = promisify(execFile);
 const { values, positionals } = parseArgs({
   allowPositionals: true,
   options: {
-    level: { type: "string", default: "1" },
-    all: { type: "boolean", default: false },
+    level: { type: "string" },
     id: { type: "string", multiple: true },
     force: { type: "boolean", default: false },
     "dry-run": { type: "boolean", default: false },
@@ -38,9 +37,8 @@ const { values, positionals } = parseArgs({
   },
 });
 const [command = "status"] = positionals;
-const usage = `Usage: pnpm og <status|sync|generate|upload> [options]
-  --level 1              Exact station importance (default: 1)
-  --all                  Select every station, instead of one importance level
+const usage = `Usage: pnpm --filter web og <status|sync|generate|upload> [options]
+  --level 1              Only one station importance (default: every rail station)
   --id IT1728            Select station ID(s), independent of importance; repeat or comma-separate
   --force                Refresh selected images and their maps, even if inputs match
   --dry-run              Show the plan without generating images or changing R2
@@ -59,13 +57,17 @@ if (values.help) {
 if (!["status", "sync", "generate", "upload"].includes(command) || positionals.length > 1) {
   throw new Error(usage);
 }
-if (!["1", "2", "3", "4"].includes(values.level!)) throw new Error("--level must be 1, 2, 3 or 4");
+if (values.level !== undefined && !["1", "2", "3", "4"].includes(values.level))
+  throw new Error("--level must be 1, 2, 3 or 4");
 const concurrency = Number(values.concurrency);
 if (!Number.isInteger(concurrency) || concurrency < 1 || concurrency > 8)
   throw new Error("--concurrency must be 1–8");
 if (values.force && command === "upload")
   throw new Error("Use sync --force to refresh images, or upload without --force");
-if (values.all && values.id?.length) throw new Error("Choose --all or --id");
+if (values.level !== undefined && values.id?.length) throw new Error("Choose --level or --id");
+// --force re-downloads every selected map; never let it default to the whole catalog.
+if (values.force && values.level === undefined && !values.id?.length)
+  throw new Error("--force refetches maps from Mapbox; narrow it with --id or --level");
 if (existsSync(join(web, ".env"))) loadEnvFile(join(web, ".env"));
 
 const catalog = JSON.parse(
@@ -78,10 +80,19 @@ const stations: (Station & { geo: { lat: number; lng: number } })[] = catalog.fe
   }),
 );
 const ids = new Set(values.id?.flatMap((id) => id.split(",")) ?? []);
-for (const id of ids)
-  if (!stations.some((station) => station.id === id)) throw new Error(`Unknown station: ${id}`);
-const selected = stations.filter((station) =>
-  ids.size ? ids.has(station.id) : values.all || station.importance === Number(values.level),
+for (const id of ids) {
+  const station = stations.find((station) => station.id === id);
+  if (!station) throw new Error(`Unknown station: ${id}`);
+  // Only rail stations have pages that reference /media/og (see getRailStation).
+  if (station.type !== "rail")
+    throw new Error(`${id} is a ${station.type} station; OG images are rail-only`);
+}
+const selected = stations.filter(
+  (station) =>
+    station.type === "rail" &&
+    (ids.size
+      ? ids.has(station.id)
+      : values.level === undefined || station.importance === Number(values.level)),
 );
 if (!selected.length) throw new Error("No stations selected");
 const takumiPackage = JSON.parse(
@@ -291,11 +302,19 @@ async function main() {
   };
   if (command !== "generate") console.log(JSON.stringify(summary));
   if (command === "status" || values["dry-run"]) {
-    console.table(rows.slice(0, 100).map(({ version: _version, key: _key, ...row }) => row));
-    if (rows.length > 100)
-      console.log(
-        `Showing 100 of ${rows.length} stations; status writes the full report to CSV/JSON.`,
-      );
+    // Recap per importance level; the per-station report lives in inventory.csv/status.json.
+    const recap = new Map<number, Record<string, number>>();
+    for (const { importance, status } of rows) {
+      const counts = recap.get(importance) ?? { current: 0, missing: 0, outdated: 0, total: 0 };
+      counts[status]!++;
+      counts.total!++;
+      recap.set(importance, counts);
+    }
+    console.table(
+      Object.fromEntries(
+        [...recap].sort(([a], [b]) => a - b).map(([level, counts]) => [`level ${level}`, counts]),
+      ),
+    );
   }
   if (command === "status") {
     await atomicJson(join(cacheDirectory, "inventory.json"), inventory, false);

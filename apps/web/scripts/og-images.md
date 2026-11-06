@@ -21,25 +21,24 @@ A changed station overwrites its existing image. There are no image generations,
 
 ## Commands
 
-Run from the repository root. The default selection is **importance 1 only** (currently 49 stations):
+Run from the repository root. Only `rail` stations are selected, because only they have station pages that reference `/media/og`. By default every importance level is selected; `--level` narrows it to one:
 
 ```sh
-pnpm og status                         # See current, missing and outdated images
-pnpm og sync                           # Generate/upload only missing or changed level 1 images
-pnpm og sync --id IT1728                # Add/update one station, regardless of importance
-pnpm og sync --id IT1728 --force        # Refresh its map and render even if inputs are unchanged
-pnpm og sync --level 2                  # Explicitly select importance 2
-pnpm og sync --all --dry-run            # Preview the full-catalog plan without any writes
-pnpm og sync --all                      # Explicitly expand to all stations
+pnpm --filter web og status                    # Recap of current, missing and outdated images per level
+pnpm --filter web og sync                      # Generate/upload only missing or changed images
+pnpm --filter web og sync --id IT1728          # Add/update one station, regardless of importance
+pnpm --filter web og sync --id IT1728 --force  # Refresh its map and render even if inputs are unchanged
+pnpm --filter web og sync --level 2            # Only importance 2
+pnpm --filter web og sync --dry-run            # Preview the plan without any writes
 ```
 
-`--id` can be repeated or comma-separated. `--concurrency` defaults to 3 (maximum 8). `--force` applies only to the selection; include `--id` to refresh one station.
+`--id` can be repeated or comma-separated. `--concurrency` defaults to 3 (maximum 8). `--force` re-downloads the selected maps, so it requires `--id` or `--level`.
 
 For a separate local review step:
 
 ```sh
-pnpm og generate                       # Render locally, without accessing R2
-pnpm og upload                         # Upload matching local files; no rendering or Mapbox calls
+pnpm --filter web og generate                  # Render locally, without accessing R2
+pnpm --filter web og upload                    # Upload matching local files; no rendering or Mapbox calls
 ```
 
 `upload` compares validated local image bytes with R2, so `generate --id IT1728 --force` followed by `upload --id IT1728` publishes a reviewed map refresh even when the input hash is unchanged. Identical bytes are skipped.
