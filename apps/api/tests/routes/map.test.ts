@@ -1,6 +1,5 @@
 import { beforeEach, describe, expect, it } from "vitest";
 
-import { STATION_ICON_BYTES } from "../../src/assets/station-icon";
 import { CACHE_TTL } from "../../src/constants";
 import {
   captureLogs,
@@ -22,20 +21,6 @@ beforeEach(() => {
   fetchMock = mockFetch();
 });
 
-describe("GET /map/station-icon.png", () => {
-  it("serves the marker icon as an immutable PNG", async () => {
-    const { response } = await request("/map/station-icon.png");
-
-    expect(response.status).toBe(200);
-    expect(response.headers.get("Content-Type")).toBe("image/png");
-    expect(response.headers.get("Cache-Control")).toBe("public, max-age=31536000, immutable");
-    const bytes = new Uint8Array(await response.arrayBuffer());
-    expect(bytes.byteLength).toBe(STATION_ICON_BYTES.byteLength);
-    // PNG signature
-    expect(Array.from(bytes.subarray(0, 4))).toEqual([0x89, 0x50, 0x4e, 0x47]);
-  });
-});
-
 describe("GET /map/static", () => {
   it("renders a point map with the station marker", async () => {
     fetchMock.on("api.mapbox.com", imageResponse());
@@ -49,7 +34,7 @@ describe("GET /map/static", () => {
 
     const url = fetchMock.url();
     expect(url.origin).toBe("https://api.mapbox.com");
-    const marker = encodeURIComponent("https://api.railradar24.com/map/station-icon.png");
+    const marker = encodeURIComponent("https://www.railradar24.com/assets/maps/station-icon.png");
     expect(decodeURIComponent(url.pathname)).toBe(
       decodeURIComponent(
         `/styles/v1/mapbox/dark-v11/static/url-${marker}(9.2045,45.4864)/9.2045,45.4864,14,0/600x300@2x.webp`,
@@ -72,7 +57,7 @@ describe("GET /map/static", () => {
     );
 
     expect(decodeURIComponent(fetchMock.url().pathname)).toContain(
-      "url-https://preview.railradar24.com/assets/maps/station-icon.png(2,1)",
+      "url-https://www.railradar24.com/assets/maps/station-icon.png(2,1)",
     );
   });
 
