@@ -156,8 +156,8 @@ export default defineConfig(({ command, mode }) => {
         ...(isPrerenderPreview && { persistState: false, inspectorPort: false }),
         config: (config) => {
           config.r2_buckets?.forEach((bucket) => {
-            // Development can show the real station photos. Production builds use local R2 so
-            // prerendering never creates a remote connection or reads a manifest.
+            // Only image bytes use R2. Photo metadata comes from the checked-in catalog;
+            // prerendering stays offline while development can serve the real images.
             bucket.remote = command === "serve";
           });
         },

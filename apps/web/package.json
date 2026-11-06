@@ -5,8 +5,9 @@
   "type": "module",
   "scripts": {
     "og": "tsx scripts/og-images.ts",
+    "photos": "tsx scripts/station-photos.ts",
     "dev": "vite dev --port 3000",
-    "build": "vite build",
+    "build": "tsx scripts/station-photos.ts check && vite build",
     "start": "vite preview --port 3000",
     "deploy": "wrangler deploy --minify",
     "deploy:preview": "if [ \"${WORKERS_CI_BRANCH:-$(git branch --show-current)}\" = preview ]; then wrangler preview --name preview; else wrangler deploy --dry-run; fi",

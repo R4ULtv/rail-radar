@@ -1,0 +1,2020 @@
+{
+  "BE14001": [
+    {
+      "key": "outside.webp",
+      "width": 1920,
+      "height": 1080,
+      "alt": "Exterior building view of Brussels-South railway station",
+      "attribution": {
+        "author": "Japplemedia",
+        "license": "CC BY-SA 4.0",
+        "origin": "Wikimedia Commons",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Station_Brussel-Zuid_Gebouw.jpg"
+      }
+    },
+    {
+      "key": "platform.webp",
+      "width": 1920,
+      "height": 1080,
+      "alt": "Platform 6 at Brussels-South railway station",
+      "attribution": {
+        "author": "Japplemedia",
+        "license": "CC BY-SA 4.0",
+        "origin": "Wikimedia Commons",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Station_Brussel-Zuid_Perron_6.jpg"
+      }
+    },
+    {
+      "key": "hall.webp",
+      "width": 1920,
+      "height": 1080,
+      "alt": "Main concourse hall of Brussels-South railway station",
+      "attribution": {
+        "author": "Japplemedia",
+        "license": "CC BY-SA 4.0",
+        "origin": "Wikimedia Commons",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Station_Brussel-Zuid_Hoofdgang.jpg"
+      }
+    }
+  ],
+  "BE21006": [
+    {
+      "key": "front.webp",
+      "width": 1920,
+      "height": 1080,
+      "alt": "Exterior facade of Antwerpen-Centraal railway station from Koningin Astridplein",
+      "attribution": {
+        "author": "Fred Romero",
+        "license": "CC BY 2.0",
+        "origin": "Wikimedia Commons",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Antwerpen_-_Station_Antwerpen-Centraal_(11).jpg"
+      }
+    },
+    {
+      "key": "hall.webp",
+      "width": 1920,
+      "height": 1080,
+      "alt": "Central hall of Antwerpen-Centraal railway station",
+      "attribution": {
+        "author": "T meltzer",
+        "license": "CC BY-SA 4.0",
+        "origin": "Wikimedia Commons",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Central_Hall_of_Antwerp_Central_Station,_Belgium,_July_2022.jpg"
+      }
+    },
+    {
+      "key": "ceiling.webp",
+      "width": 1920,
+      "height": 1080,
+      "alt": "Dome ceiling of the main hall at Antwerpen-Centraal railway station",
+      "attribution": {
+        "author": "T meltzer",
+        "license": "CC BY-SA 4.0",
+        "origin": "Wikimedia Commons",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Belgien_7525.jpg"
+      }
+    },
+    {
+      "key": "clock.webp",
+      "width": 1920,
+      "height": 1080,
+      "alt": "Interior view of Antwerpen-Centraal railway station showing the clock",
+      "attribution": {
+        "author": "Alvesgaspar",
+        "license": "CC BY-SA 4.0",
+        "origin": "Wikimedia Commons",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Antwerp_July_2015-2.jpg"
+      }
+    }
+  ],
+  "CH03000": [
+    {
+      "key": "station.webp",
+      "width": 1920,
+      "height": 1080,
+      "alt": "Exterior view of Zürich Hauptbahnhof through the entrance archway",
+      "attribution": {
+        "author": "Ikiwaner",
+        "license": "CC BY-SA 3.0",
+        "origin": "Wikimedia Commons",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Zuerich_Hauptbahnhof.jpg"
+      }
+    },
+    {
+      "key": "fountain.webp",
+      "width": 1920,
+      "height": 1080,
+      "alt": "Alfred Escher memorial fountain on Bahnhofplatz in front of Zürich Hauptbahnhof",
+      "attribution": {
+        "author": "Roland zh",
+        "license": "CC BY-SA 3.0",
+        "origin": "Wikimedia Commons",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Bahnhofplatz_-_Hauptbahnhof_-_Bahnhofstrasse_Z%C3%BCrich_2010-09-21_14-34-44_ShiftN.jpg"
+      }
+    },
+    {
+      "key": "platform.webp",
+      "width": 1920,
+      "height": 1080,
+      "alt": "Platform level at Löwenstrasse station, part of Zürich Hauptbahnhof",
+      "attribution": {
+        "author": "Hoff1980",
+        "license": "CC BY-SA 3.0",
+        "origin": "Wikimedia Commons",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Bf_L%C3%B6wenstrasse_Z%C3%BCrich_2.JPG"
+      }
+    }
+  ],
+  "DE00096": [
+    {
+      "key": "front.webp",
+      "width": 1920,
+      "height": 1080,
+      "alt": "Limestone facade and clock tower of Stuttgart Hauptbahnhof",
+      "attribution": {
+        "author": "Dining Car from Wien",
+        "license": "CC BY-SA 2.0",
+        "origin": "Wikimedia Commons",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:2018-08-30_EC_218_%22Chiemgau%22_Salzburg_-_Stuttgart_(42581205930).jpg"
+      }
+    },
+    {
+      "key": "hall.webp",
+      "width": 1920,
+      "height": 1080,
+      "alt": "Escalators to the platforms in the main hall of Stuttgart Hauptbahnhof",
+      "attribution": {
+        "author": "Payton Chung",
+        "license": "CC BY 2.0",
+        "origin": "Wikimedia Commons",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Grosse_Schalterhalle_Stuttgart_Hbf.jpg"
+      }
+    },
+    {
+      "key": "platforms.webp",
+      "width": 1920,
+      "height": 1080,
+      "alt": "Passengers waiting on the underground S-Bahn platform at Stuttgart Hauptbahnhof",
+      "attribution": {
+        "author": "SPORTHEFT.DE Marco Cinquemani",
+        "license": "CC BY 4.0",
+        "origin": "Wikimedia Commons",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Stuttgart_Hauptbahnhof_(S-Bahn).jpg"
+      }
+    }
+  ],
+  "DE00105": [
+    {
+      "key": "entrance.webp",
+      "width": 1920,
+      "height": 1080,
+      "alt": "Façade of Frankfurt (Main) Hauptbahnhof",
+      "attribution": {
+        "author": "Geographer",
+        "license": "CC BY 4.0",
+        "origin": "Wikimedia Commons",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Fa%C3%A7ade_of_Frankfurt_(Main)_Hauptbahnhof.jpg"
+      }
+    },
+    {
+      "key": "platforms.webp",
+      "width": 1920,
+      "height": 1080,
+      "alt": "Frankfurt Central Station platforms seen from above",
+      "attribution": {
+        "author": "Thomas Wolf",
+        "license": "CC BY-SA 3.0 DE",
+        "origin": "Wikimedia Commons",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Hauptbahnhof_Frankfurt.jpg"
+      }
+    },
+    {
+      "key": "trains.webp",
+      "width": 1920,
+      "height": 1080,
+      "alt": "Platform hall of Frankfurt am Main Hauptbahnhof with trains",
+      "attribution": {
+        "author": "L.Willms",
+        "license": "CC BY-SA 3.0",
+        "origin": "Wikimedia Commons",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Frankfurt_Hbf_Halle_0491.jpg"
+      }
+    },
+    {
+      "key": "platforms-2.webp",
+      "width": 1920,
+      "height": 1080,
+      "alt": "Aerial view of rail traffic at Frankfurt Hauptbahnhof",
+      "attribution": {
+        "author": "Dontworry",
+        "license": "CC BY-SA 3.0",
+        "origin": "Wikimedia Commons",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Bahnverkehr-hauptbahnhof-ffm002.jpg"
+      }
+    }
+  ],
+  "DE00152": [
+    {
+      "key": "entrance.webp",
+      "width": 1920,
+      "height": 1080,
+      "alt": "Illuminated entrance facade of Hannover Hauptbahnhof on Ernst-August-Platz at dusk",
+      "attribution": {
+        "author": "Christian A. Schröder ( ChristianSchd )",
+        "license": "CC BY-SA 4.0",
+        "origin": "Wikimedia Commons",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Hannover_main_station_Ernst-August-Platz_Mitte_Hannover_Germany_01.jpg"
+      }
+    },
+    {
+      "key": "concourse.webp",
+      "width": 1920,
+      "height": 1080,
+      "alt": "Travellers on the stairs and escalators to platforms 7 and 8 at Hannover Hauptbahnhof",
+      "attribution": {
+        "author": "L.Willms",
+        "license": "CC BY-SA 3.0",
+        "origin": "Wikimedia Commons",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Hannover-Hbf_Aufgang-zu-Gleisen-7-und-8_LWS95.JPG"
+      }
+    },
+    {
+      "key": "platforms.webp",
+      "width": 1920,
+      "height": 1080,
+      "alt": "Intercity train waiting at a platform of Hannover Hauptbahnhof",
+      "attribution": {
+        "author": "Clic",
+        "license": "CC BY-SA 4.0",
+        "origin": "Wikimedia Commons",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:IC_Steuerwagen_Hannover_Hauptbahnhof.jpg"
+      }
+    }
+  ],
+  "DE00207": [
+    {
+      "key": "entrance.webp",
+      "width": 1920,
+      "height": 1080,
+      "alt": "Glass entrance facade of Köln Hauptbahnhof illuminated at night",
+      "attribution": {
+        "author": "Raimond Spekking",
+        "license": "CC BY-SA 4.0",
+        "origin": "Wikimedia Commons",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:K%C3%B6ln_Hauptbahnhof_-_Empfangsgeb%C3%A4ude_bei_Nacht_(8132-34).jpg"
+      }
+    },
+    {
+      "key": "hall.webp",
+      "width": 1920,
+      "height": 1080,
+      "alt": "ICE 4 train under the arched train hall roof of Köln Hauptbahnhof",
+      "attribution": {
+        "author": "Rob Dammers",
+        "license": "CC BY 2.0",
+        "origin": "Wikimedia Commons",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:K%C3%B6ln_Hbf_ICE-4_9013_rijdt_het_station_binnen_-_Flickr_-_Rob_Dammers.jpg"
+      }
+    },
+    {
+      "key": "platforms.webp",
+      "width": 1920,
+      "height": 1080,
+      "alt": "Passengers in carnival costume boarding a regional train at Köln Hauptbahnhof",
+      "attribution": {
+        "author": "Smiley.toerist",
+        "license": "CC BY-SA 4.0",
+        "origin": "Wikimedia Commons",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:K%C3%B6ln_Hbf_2025_1.jpg"
+      }
+    },
+    {
+      "key": "tracks.webp",
+      "width": 1920,
+      "height": 1080,
+      "alt": "High-speed, regional and S-Bahn trains on the approach tracks of Köln Hauptbahnhof",
+      "attribution": {
+        "author": "Rolf Heinrich, Köln",
+        "license": "CC BY 3.0",
+        "origin": "Wikimedia Commons",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Railway_traffic_K%C3%B6ln_Hauptbahnhof_2015-12-17-01.JPG"
+      }
+    }
+  ],
+  "DE00261": [
+    {
+      "key": "hall.webp",
+      "width": 1920,
+      "height": 1080,
+      "alt": "Travellers crossing the main concourse of München Hauptbahnhof",
+      "attribution": {
+        "author": "-wuppertaler",
+        "license": "CC BY 4.0",
+        "origin": "Wikimedia Commons",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:GER_M%C3%BCnchen,_Hauptbahnhof_0015.jpg"
+      }
+    },
+    {
+      "key": "platforms.webp",
+      "width": 1920,
+      "height": 1080,
+      "alt": "ICE trains waiting at the platforms of München Hauptbahnhof",
+      "attribution": {
+        "author": "Håkan Dahlström",
+        "license": "CC BY 2.0",
+        "origin": "Wikimedia Commons",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:M%C3%BCnchen_Hauptbahnhof_-_53459594196.jpg"
+      }
+    },
+    {
+      "key": "night.webp",
+      "width": 1920,
+      "height": 1080,
+      "alt": "München Hauptbahnhof train hall at night with the Frauenkirche towers behind",
+      "attribution": {
+        "author": "Schlaier",
+        "license": "Public domain",
+        "origin": "Wikimedia Commons",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Hauptbahnhof_M%C3%BCnchen_1.jpg"
+      }
+    }
+  ],
+  "DE02549": [
+    {
+      "key": "entrance.webp",
+      "width": 1920,
+      "height": 1080,
+      "alt": "Platform entrances on Steintordamm at Hamburg Hauptbahnhof",
+      "attribution": {
+        "author": "UweRohwedder",
+        "license": "CC BY-SA 4.0",
+        "origin": "Wikimedia Commons",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Hamburg_Hbf_neue_Zug%C3%A4nge_Steintordamm.jpg"
+      }
+    },
+    {
+      "key": "hall.webp",
+      "width": 1920,
+      "height": 1080,
+      "alt": "Platforms and tracks under the arched roof of Hamburg Hauptbahnhof",
+      "attribution": {
+        "author": "Tobiasi0",
+        "license": "CC BY-SA 4.0",
+        "origin": "Wikimedia Commons",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Bahnhofshalle_Hamburg_2025.jpg"
+      }
+    },
+    {
+      "key": "platforms.webp",
+      "width": 1920,
+      "height": 1080,
+      "alt": "ICE train arriving at platform 8 below the Wandelhalle at Hamburg Hauptbahnhof",
+      "attribution": {
+        "author": "Wikiolo",
+        "license": "CC BY-SA 4.0",
+        "origin": "Wikimedia Commons",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:ICE_1007_von_Hamburg_Altona_nach_M%C3%BCnchen_Hbf._%C3%BCber_Berlin_Hbf._f%C3%A4hrt_in_Hamburg_Hbf._ein.jpg"
+      }
+    },
+    {
+      "key": "aerial.webp",
+      "width": 1920,
+      "height": 1080,
+      "alt": "Aerial view of Hamburg Hauptbahnhof and the city centre between the Alster lakes",
+      "attribution": {
+        "author": "Wolfgang Pehlemann",
+        "license": "CC BY-SA 3.0 de",
+        "origin": "Wikimedia Commons",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Luftbild_Hamburger_Hauptbahnhof_mit_Gleisbild_-_Nordseite_-_Bj_1906_-_Innenstadt_Hamburg_Germany_-_Foto_Wolfgang_Pehlemann_DSC07955.jpg"
+      }
+    }
+  ],
+  "DE11160": [
+    {
+      "key": "front.webp",
+      "width": 1920,
+      "height": 1080,
+      "alt": "Southern entrance of Berlin Hauptbahnhof",
+      "attribution": {
+        "author": "A. Leschek",
+        "license": "CC BY-SA 3.0",
+        "origin": "Wikimedia Commons",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Berlinhbf.jpg"
+      }
+    },
+    {
+      "key": "front-2.webp",
+      "width": 1920,
+      "height": 1080,
+      "alt": "East facade of Berlin Hauptbahnhof at dawn, reflecting in Humboldthafen",
+      "attribution": {
+        "author": "Ansgar Koreng",
+        "license": "CC BY 3.0 DE",
+        "origin": "Wikimedia Commons",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Berlin_Hauptbahnhof_Ostseite_HDR.jpg"
+      }
+    },
+    {
+      "key": "platform.webp",
+      "width": 1920,
+      "height": 1080,
+      "alt": "Upper level platforms with east-west running tracks at Berlin Hauptbahnhof",
+      "attribution": {
+        "author": "Daniel Schwen",
+        "license": "CC BY-SA 2.5",
+        "origin": "Wikimedia Commons",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Berlin_Hauptbahnhof_pano_06.jpg"
+      }
+    }
+  ],
+  "DK00626": [
+    {
+      "key": "station.webp",
+      "width": 1920,
+      "height": 1080,
+      "alt": "Exterior view of Copenhagen Central Station (Københavns Hovedbanegård)",
+      "attribution": {
+        "author": "Thue C. Leibrandt",
+        "license": "CC BY-SA 3.0",
+        "origin": "Wikimedia Commons",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:K%C3%B8benhavn_H_1.JPG"
+      }
+    },
+    {
+      "key": "entrance.webp",
+      "width": 1920,
+      "height": 1080,
+      "alt": "Illuminated entrance facade of Copenhagen Central Station at night",
+      "attribution": {
+        "author": "Jorge Láscar",
+        "license": "CC BY 2.0",
+        "origin": "Wikimedia Commons",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:K%C3%B8benhavns_Hovedbaneg%C3%A5rd_-_Copenhagen_Central_Station_(37896979131).jpg"
+      }
+    },
+    {
+      "key": "hall.webp",
+      "width": 1920,
+      "height": 1080,
+      "alt": "Main hall of Copenhagen Central Station",
+      "attribution": {
+        "author": "Liberaler Humanist",
+        "license": "CC BY-SA 3.0",
+        "origin": "Wikimedia Commons",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:The_hall_of_the_Copenhagen_Central_Station.jpg"
+      }
+    }
+  ],
+  "FI001": [
+    {
+      "key": "front.webp",
+      "width": 1920,
+      "height": 1080,
+      "alt": "Main entrance and facade of Helsinki Central railway station with the Lantern Bearers statues",
+      "attribution": {
+        "author": "Aaaatu",
+        "license": "CC BY-SA 4.0",
+        "origin": "Wikimedia Commons",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Helsingin_p%C3%A4%C3%A4rautatieaseman_p%C3%A4%C3%A4sis%C3%A4%C3%A4nk%C3%A4ynti.jpg"
+      }
+    },
+    {
+      "key": "platforms.webp",
+      "width": 1920,
+      "height": 1080,
+      "alt": "Platforms at Helsinki Central Station",
+      "attribution": {
+        "author": "HartOve",
+        "license": "CC BY 4.0",
+        "origin": "Wikimedia Commons",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Helsinki_train_station_platforms.jpg"
+      }
+    },
+    {
+      "key": "entrance.webp",
+      "width": 1920,
+      "height": 1080,
+      "alt": "Aerial view of Helsinki Central railway station",
+      "attribution": {
+        "author": "Paasikivi",
+        "license": "CC BY-SA 4.0",
+        "origin": "Wikimedia Commons",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:HelsinkiCentralRailwaystationaerialview2013.jpg"
+      }
+    },
+    {
+      "key": "departures.webp",
+      "width": 1920,
+      "height": 1080,
+      "alt": "Departure board of the Santa Express sleeper train to Rovaniemi at Helsinki Central Station",
+      "attribution": {
+        "author": "FrogsLegs71",
+        "license": "CC BY-SA 3.0",
+        "origin": "Wikimedia Commons",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Departure_board_of_the_Santa_Express_sleeper_train_to_Rovaniemi.jpg"
+      }
+    }
+  ],
+  "FI130": [
+    {
+      "key": "front.webp",
+      "width": 1920,
+      "height": 1080,
+      "alt": "Main entrance facade of Turku asema with its station clock",
+      "attribution": {
+        "author": "Abc10",
+        "license": "CC BY-SA 3.0",
+        "origin": "Wikimedia Commons",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Turku,_rautatieasema.JPG"
+      }
+    },
+    {
+      "key": "platforms.webp",
+      "width": 1920,
+      "height": 1080,
+      "alt": "VR Pendolino high-speed train at a platform in Turku asema",
+      "attribution": {
+        "author": "Vihermarja",
+        "license": "Public domain",
+        "origin": "Wikimedia Commons",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Pendolino_Turun_rautatieasemalla.JPG"
+      }
+    },
+    {
+      "key": "platforms-2.webp",
+      "width": 1920,
+      "height": 1080,
+      "alt": "VR Sr2 electric locomotive with double-deck coaches at Turku asema",
+      "attribution": {
+        "author": "Falk2",
+        "license": "CC BY-SA 3.0",
+        "origin": "Wikimedia Commons",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:I11_604_Bf_Turku,_Sr2_3203.jpg"
+      }
+    },
+    {
+      "key": "platforms-3.webp",
+      "width": 1920,
+      "height": 1080,
+      "alt": "Snow-covered platforms and tracks at Turku asema at night",
+      "attribution": {
+        "author": "Ciacho5",
+        "license": "CC BY-SA 4.0",
+        "origin": "Wikimedia Commons",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:TurkuCentralStation67.JPG"
+      }
+    }
+  ],
+  "FI160": [
+    {
+      "key": "front.webp",
+      "width": 1920,
+      "height": 1080,
+      "alt": "Brick facade and clock tower of Tampere asema",
+      "attribution": {
+        "author": "Tiia Monto",
+        "license": "CC BY-SA 3.0",
+        "origin": "Wikimedia Commons",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Tampere_Station_2021.jpg"
+      }
+    },
+    {
+      "key": "platforms.webp",
+      "width": 1920,
+      "height": 1080,
+      "alt": "Passengers waiting on the platforms at Tampere asema",
+      "attribution": {
+        "author": "kallerna",
+        "license": "CC BY-SA 4.0",
+        "origin": "Wikimedia Commons",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Tampereen_juna-asema_1.jpg"
+      }
+    },
+    {
+      "key": "platforms-2.webp",
+      "width": 1920,
+      "height": 1080,
+      "alt": "VR locomotives at the snow-covered platforms of Tampere asema at night",
+      "attribution": {
+        "author": "kallerna",
+        "license": "CC BY-SA 3.0",
+        "origin": "Wikimedia Commons",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Junia_Tampereen_rautatieasemalla.JPG"
+      }
+    },
+    {
+      "key": "platforms-3.webp",
+      "width": 1920,
+      "height": 1080,
+      "alt": "VR Sr2 locomotive with a double-deck train at a snowy platform in Tampere asema",
+      "attribution": {
+        "author": "MOs810",
+        "license": "CC BY-SA 4.0",
+        "origin": "Wikimedia Commons",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Train_station_in_Tampere_(2).jpg"
+      }
+    }
+  ],
+  "FR212027": [
+    {
+      "key": "concourse.webp",
+      "width": 1920,
+      "height": 1080,
+      "alt": "Glass shell enclosing the historic facade above the concourse of Strasbourg station",
+      "attribution": {
+        "author": "Smiley.toerist",
+        "license": "CC BY-SA 4.0",
+        "origin": "Wikimedia Commons",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Strasbourg_station_2024_6.jpg"
+      }
+    },
+    {
+      "key": "platforms.webp",
+      "width": 1920,
+      "height": 1080,
+      "alt": "Deutsche Bahn ICE train under the train shed at Strasbourg station",
+      "attribution": {
+        "author": "Smiley.toerist",
+        "license": "CC BY-SA 4.0",
+        "origin": "Wikimedia Commons",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Strasbourg_station_2024_5.jpg"
+      }
+    },
+    {
+      "key": "platforms-2.webp",
+      "width": 1920,
+      "height": 1080,
+      "alt": "TGV high-speed train at a platform in Strasbourg station",
+      "attribution": {
+        "author": "Smiley.toerist",
+        "license": "CC BY-SA 4.0",
+        "origin": "Wikimedia Commons",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Strasbourg_station_2025_4.jpg"
+      }
+    },
+    {
+      "key": "platforms-3.webp",
+      "width": 1920,
+      "height": 1080,
+      "alt": "SNCF Régiolis regional train at a platform in Strasbourg station",
+      "attribution": {
+        "author": "Smiley.toerist",
+        "license": "CC BY-SA 4.0",
+        "origin": "Wikimedia Commons",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Strasbourg_station_2024_2.jpg"
+      }
+    }
+  ],
+  "FR271007": [
+    {
+      "key": "entrance.webp",
+      "width": 1920,
+      "height": 1080,
+      "alt": "Façade of the Gare du Nord, Paris",
+      "attribution": {
+        "author": "Chabe01",
+        "license": "CC BY-SA 4.0",
+        "origin": "Wikimedia Commons",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Gare_Nord_-_Paris_X_(FR75)_-_2022-01-30_-_3.jpg"
+      }
+    },
+    {
+      "key": "platforms.webp",
+      "width": 1920,
+      "height": 1080,
+      "alt": "Interior of Gare du Nord from the balcony level, Paris",
+      "attribution": {
+        "author": "David Iliff (Diliff)",
+        "license": "CC BY-SA 3.0",
+        "origin": "Wikimedia Commons",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Gare_Du_Nord_Interior,_Paris,_France_-_Diliff.jpg"
+      }
+    },
+    {
+      "key": "departures.webp",
+      "width": 1920,
+      "height": 1080,
+      "alt": "Split-flap departure board at Gare du Nord, Paris",
+      "attribution": {
+        "author": "L.Willms",
+        "license": "CC BY-SA 3.0",
+        "origin": "Wikimedia Commons",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Gare_du_Nord_Fallblattanzeiger_Departure-board.JPG"
+      }
+    }
+  ],
+  "FR286005": [
+    {
+      "key": "front.webp",
+      "width": 1920,
+      "height": 1080,
+      "alt": "Stone facade of Lille Flandres station with its clock tower",
+      "attribution": {
+        "author": "Velvet",
+        "license": "CC BY-SA 3.0",
+        "origin": "Wikimedia Commons",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Lille_gare_flandres.jpg"
+      }
+    },
+    {
+      "key": "concourse.webp",
+      "width": 1920,
+      "height": 1080,
+      "alt": "Arched glass roof over the main concourse and departure board of Lille Flandres station",
+      "attribution": {
+        "author": "Diliff",
+        "license": "CC BY-SA 3.0",
+        "origin": "Wikimedia Commons",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Gare_de_Lille_Flandres,_France_-_July_2011.jpg"
+      }
+    },
+    {
+      "key": "platforms.webp",
+      "width": 1920,
+      "height": 1080,
+      "alt": "TER regional trains under the arched train shed of Lille Flandres station",
+      "attribution": {
+        "author": "kallerna",
+        "license": "CC BY-SA 4.0",
+        "origin": "Wikimedia Commons",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Lille-Flandres_station_2.jpg"
+      }
+    },
+    {
+      "key": "platforms-2.webp",
+      "width": 1920,
+      "height": 1080,
+      "alt": "SNCB train on the approach tracks at Lille Flandres station",
+      "attribution": {
+        "author": "rail fox ( flufftech.net )",
+        "license": "CC BY-SA 4.0",
+        "origin": "Wikimedia Commons",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:SNCB_Class_96,_Lille-Flandres_(1).jpg"
+      }
+    }
+  ],
+  "FR581009": [
+    {
+      "key": "front.webp",
+      "width": 1920,
+      "height": 1080,
+      "alt": "Facade and station clock of Bordeaux Saint-Jean station",
+      "attribution": {
+        "author": "Marc Ryckaert ( MJJR )",
+        "license": "CC BY-SA 3.0",
+        "origin": "Wikimedia Commons",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Bordeaux_Gare_StJean_R01.jpg"
+      }
+    },
+    {
+      "key": "platforms.webp",
+      "width": 1920,
+      "height": 1080,
+      "alt": "Trains under the arched hall of Bordeaux Saint-Jean station at night",
+      "attribution": {
+        "author": "Christophe.Finot",
+        "license": "CC BY-SA 2.5",
+        "origin": "Wikimedia Commons",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Bordeaux_-_Gare_Saint-Jean_1.jpg"
+      }
+    },
+    {
+      "key": "platforms-2.webp",
+      "width": 1920,
+      "height": 1080,
+      "alt": "SNCF Regio 2N double-deck regional train at a platform in Bordeaux Saint-Jean station",
+      "attribution": {
+        "author": "Smiley.toerist",
+        "license": "CC BY-SA 4.0",
+        "origin": "Wikimedia Commons",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Bordeaux_Saint-Jean_station_2023_2.jpg"
+      }
+    },
+    {
+      "key": "platforms-3.webp",
+      "width": 1920,
+      "height": 1080,
+      "alt": "Passengers boarding a OUIGO high-speed train at Bordeaux Saint-Jean station",
+      "attribution": {
+        "author": "Smiley.toerist",
+        "license": "CC BY-SA 4.0",
+        "origin": "Wikimedia Commons",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Bordeaux_Saint-Jean_station_2022_2.jpg"
+      }
+    }
+  ],
+  "FR723197": [
+    {
+      "key": "front.webp",
+      "width": 1920,
+      "height": 1080,
+      "alt": "Main entrance of Gare de Lyon-Part-Dieu in 2025",
+      "attribution": {
+        "author": "Corentin Eustacchi",
+        "license": "CC BY-SA 4.0",
+        "origin": "Wikimedia Commons",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Gare_Part-Dieu_(Lyon,_2025).jpg"
+      }
+    },
+    {
+      "key": "hall.webp",
+      "width": 1920,
+      "height": 1080,
+      "alt": "Interior hall of Gare de Lyon-Part-Dieu",
+      "attribution": {
+        "author": "Chabe01",
+        "license": "CC BY-SA 4.0",
+        "origin": "Wikimedia Commons",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Gare_Lyon_Part_Dieu_-_Lyon_III_(FR69)_-_2024-12-21_-_1.jpg"
+      }
+    },
+    {
+      "key": "departures.webp",
+      "width": 1920,
+      "height": 1080,
+      "alt": "Departure board at Gare de Lyon-Part-Dieu",
+      "attribution": {
+        "author": "Micka13",
+        "license": "CC BY-SA 4.0",
+        "origin": "Wikimedia Commons",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:D%C3%A9parts_SNCF_Lyon_Part_Dieu.jpg"
+      }
+    }
+  ],
+  "FR751008": [
+    {
+      "key": "front.webp",
+      "width": 1920,
+      "height": 1080,
+      "alt": "Facade and forecourt of Marseille Saint-Charles station",
+      "attribution": {
+        "author": "Falk2",
+        "license": "CC BY-SA 4.0",
+        "origin": "Wikimedia Commons",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:L04_176_Bf_Marseille_Saint-Charles,_Kopfbau.jpg"
+      }
+    },
+    {
+      "key": "front-2.webp",
+      "width": 1920,
+      "height": 1080,
+      "alt": "Carved coats of arms and station lettering on the facade of Marseille Saint-Charles station",
+      "attribution": {
+        "author": "FrogsLegs71",
+        "license": "CC BY-SA 3.0",
+        "origin": "Wikimedia Commons",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Gare_du_Marseille_St_Charles_station_in_France.jpg"
+      }
+    },
+    {
+      "key": "platforms.webp",
+      "width": 1920,
+      "height": 1080,
+      "alt": "A TGV and a regional train side by side under the train shed at Marseille Saint-Charles station",
+      "attribution": {
+        "author": "Florian Pépellin",
+        "license": "CC BY-SA 4.0",
+        "origin": "Wikimedia Commons",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Arriv%C3%A9e_TGV_Sud-Est_et_AGC_%C3%A0_Marseille-St-Charles_(octobre_2009).JPG"
+      }
+    },
+    {
+      "key": "platforms-2.webp",
+      "width": 1920,
+      "height": 1080,
+      "alt": "OUIGO double-deck high-speed train at a platform in Marseille Saint-Charles station",
+      "attribution": {
+        "author": "Réda TP",
+        "license": "CC BY-SA 4.0",
+        "origin": "Wikimedia Commons",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Ouigo_Marseille.jpg"
+      }
+    }
+  ],
+  "HU5510017": [
+    {
+      "key": "front.webp",
+      "width": 1920,
+      "height": 1080,
+      "alt": "Front facade of Budapest-Keleti station viewed from Baross Square",
+      "attribution": {
+        "author": "Tom Corser",
+        "license": "CC BY-SA 3.0",
+        "origin": "Wikimedia Commons (cropped and resized)",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File%3ABudapest_Keleti_Station.jpg"
+      }
+    },
+    {
+      "key": "train-hall.webp",
+      "width": 1920,
+      "height": 1080,
+      "alt": "Interior of Budapest-Keleti station beneath the glass and steel train-hall roof",
+      "attribution": {
+        "author": "Slyronit",
+        "license": "CC BY-SA 4.0",
+        "origin": "Wikimedia Commons (cropped and resized)",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File%3ABudapest_Keleti_Station_Interior.jpg"
+      }
+    },
+    {
+      "key": "lotz-hall.webp",
+      "width": 1920,
+      "height": 1080,
+      "alt": "Murals and ornate doorways in the Lotz Hall at Budapest-Keleti station",
+      "attribution": {
+        "author": "Zátonyi Sándor (ifj.) / Fizped",
+        "license": "CC BY 3.0",
+        "origin": "Wikimedia Commons (cropped and resized)",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File%3AKeleti_indulasi_csarnok.jpg"
+      }
+    }
+  ],
+  "IE100": [
+    {
+      "key": "front.webp",
+      "width": 1920,
+      "height": 1080,
+      "alt": "Exterior facade of Dublin Connolly railway station with its Italianate tower",
+      "attribution": {
+        "author": "William Murphy",
+        "license": "CC BY-SA 2.0",
+        "origin": "Wikimedia Commons",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:CONNOLLY_RAILWAY_STATION_(AMIENS_STREET)-111215.jpg"
+      }
+    },
+    {
+      "key": "departures.webp",
+      "width": 1920,
+      "height": 1080,
+      "alt": "Interior of Dublin Connolly railway station with departure boards",
+      "attribution": {
+        "author": "Kenneth C. Zirkel",
+        "license": "CC BY 4.0",
+        "origin": "Wikimedia Commons",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Dublin_Connolly_railway_station_interior.jpg"
+      }
+    },
+    {
+      "key": "platforms.webp",
+      "width": 1920,
+      "height": 1080,
+      "alt": "Platforms at Dublin Connolly railway station with intercity trains",
+      "attribution": {
+        "author": "Manfred Kopka",
+        "license": "CC BY-SA 4.0",
+        "origin": "Wikimedia Commons",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Dublin_Connolly_(8208).jpg"
+      }
+    }
+  ],
+  "IT1325": [
+    {
+      "key": "platform.webp",
+      "width": 1920,
+      "height": 1080,
+      "alt": "Platform 5 at Firenze Santa Maria Novella railway station",
+      "attribution": {
+        "author": "Tubantia",
+        "license": "CC BY-SA 3.0",
+        "origin": "Wikimedia Commons",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Stazione_Santa_Maria_Novella_Firenze_Binario_5.JPG"
+      }
+    },
+    {
+      "key": "front.webp",
+      "width": 1920,
+      "height": 1080,
+      "alt": "Front exterior view of Firenze Santa Maria Novella railway station",
+      "attribution": {
+        "author": "Sailko",
+        "license": "CC BY 3.0",
+        "origin": "Wikimedia Commons",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Stazione_di_santa_maria_novella_vista_dal_convento_di_santa_maria_novella.jpg"
+      }
+    }
+  ],
+  "IT1728": [
+    {
+      "key": "front.webp",
+      "width": 1920,
+      "height": 1080,
+      "alt": "Front exterior view of Milano Centrale station",
+      "attribution": {
+        "author": "Daniel Case",
+        "license": "CC BY-SA 3.0",
+        "origin": "Wikimedia Commons",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Front_portico_of_Stazione_Centrale,_Milan.jpg"
+      }
+    },
+    {
+      "key": "drone.webp",
+      "width": 1920,
+      "height": 1080,
+      "alt": "Aerial view of Milano Centrale station",
+      "attribution": {
+        "author": "Kiban",
+        "license": "Public domain",
+        "origin": "Wikimedia Commons",
+        "sourceUrl": "https://it.wikipedia.org/wiki/File:Stazione_Centrale_Milano.JPG"
+      }
+    },
+    {
+      "key": "front-2.webp",
+      "width": 1920,
+      "height": 1080,
+      "alt": "Second exterior view of Milano Centrale station",
+      "attribution": {
+        "author": "l0da_ralta",
+        "license": "CC BY 2.0",
+        "origin": "Wikimedia Commons",
+        "sourceUrl": "https://it.wikipedia.org/wiki/File:Stazione_Centrale_front_view,_Milan,_Italy_%289474185594%29.jpg"
+      }
+    }
+  ],
+  "IT1888": [
+    {
+      "key": "front.webp",
+      "width": 1920,
+      "height": 1080,
+      "alt": "View of Napoli Centrale railway station exterior",
+      "attribution": {
+        "author": "CAPTAIN RAJU",
+        "license": "CC BY-SA 4.0",
+        "origin": "Wikimedia Commons",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Napoli_Centrale_railway_station_in_2018.10.jpg"
+      }
+    },
+    {
+      "key": "platform.webp",
+      "width": 1920,
+      "height": 1080,
+      "alt": "Platform view at Napoli Centrale railway station",
+      "attribution": {
+        "author": "Falk2",
+        "license": "CC BY-SA 4.0",
+        "origin": "Wikimedia Commons",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:I08_489_Bf_Napoli_C.jpg"
+      }
+    }
+  ],
+  "IT2416": [
+    {
+      "key": "entrance.webp",
+      "width": 1920,
+      "height": 1080,
+      "alt": "Roma Termini railway station entrance at night",
+      "attribution": {
+        "author": "KGGucwa",
+        "license": "CC BY-SA 3.0",
+        "origin": "Wikimedia Commons",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Roma-Termini--Italy--at-night.JPG"
+      }
+    },
+    {
+      "key": "square.webp",
+      "width": 1920,
+      "height": 1080,
+      "alt": "Piazza dei Cinquecento in front of Roma Termini station",
+      "attribution": {
+        "author": "Markos90",
+        "license": "CC BY-SA 3.0",
+        "origin": "Wikimedia Commons",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Piazzadeicinquecento.jpg"
+      }
+    }
+  ],
+  "IT2876": [
+    {
+      "key": "front.webp",
+      "width": 1920,
+      "height": 1080,
+      "alt": "Torino Porta Nuova railway station building exterior",
+      "attribution": {
+        "author": "Remontees",
+        "license": "CC BY-SA 4.0",
+        "origin": "Wikimedia Commons",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Bv-torino-porta-nuova2.jpg"
+      }
+    },
+    {
+      "key": "platforms.webp",
+      "width": 1920,
+      "height": 1080,
+      "alt": "Platform view at Torino Porta Nuova railway station",
+      "attribution": {
+        "author": "Incola",
+        "license": "CC BY-SA 3.0",
+        "origin": "Wikimedia Commons",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Torino_Porta_Nuova_04.jpg"
+      }
+    }
+  ],
+  "IT3009": [
+    {
+      "key": "canal-grande.webp",
+      "width": 1920,
+      "height": 1080,
+      "alt": "Vaporetti at Venezia Santa Lucia railway station on the Grand Canal",
+      "attribution": {
+        "author": "Abxbay",
+        "license": "CC BY-SA 3.0",
+        "origin": "Wikimedia Commons",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Vaporetti_at_santa_lucia_ferrovia.JPG"
+      }
+    },
+    {
+      "key": "front.webp",
+      "width": 1920,
+      "height": 1080,
+      "alt": "Venezia Santa Lucia railway station exterior",
+      "attribution": {
+        "author": "Jcornelius",
+        "license": "CC BY-SA 4.0",
+        "origin": "Wikimedia Commons",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Venezia_Santa_Lucia_train_station_station,_July_2019_02.jpg"
+      }
+    }
+  ],
+  "IT683": [
+    {
+      "key": "italo.webp",
+      "width": 1920,
+      "height": 1080,
+      "alt": "Italo high-speed train (ETR 575) at Bologna Centrale railway station",
+      "attribution": {
+        "author": "Petar Milošević",
+        "license": "CC BY-SA 4.0",
+        "origin": "Wikimedia Commons",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Italo_train_at_Bologna_railway_station.jpg"
+      }
+    },
+    {
+      "key": "front-2.webp",
+      "width": 1920,
+      "height": 1080,
+      "alt": "Exterior view of Bologna Centrale railway station",
+      "attribution": {
+        "author": "Dimitris Kamaras",
+        "license": "CC BY 2.0",
+        "origin": "Wikimedia Commons",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Bologna_Centrale_(26070305273).jpg"
+      }
+    },
+    {
+      "key": "front.webp",
+      "width": 1920,
+      "height": 1080,
+      "alt": "Front exterior view of Bologna Centrale railway station",
+      "attribution": {
+        "author": "Robot8A",
+        "license": "CC BY-SA 4.0",
+        "origin": "Wikimedia Commons",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Bologna_Jun_2023.jpeg"
+      }
+    }
+  ],
+  "LU200405060": [
+    {
+      "key": "front.webp",
+      "width": 1920,
+      "height": 1080,
+      "alt": "Exterior view of Luxembourg Central Station and its main entrance",
+      "attribution": {
+        "author": "Flocci Nivis",
+        "license": "CC BY 4.0",
+        "origin": "Wikimedia Commons",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:20180901_Luxembourg_railway_station.jpg"
+      }
+    },
+    {
+      "key": "dusk.webp",
+      "width": 1920,
+      "height": 1080,
+      "alt": "Luxembourg Central Station illuminated at dusk",
+      "attribution": {
+        "author": "Celeda",
+        "license": "CC BY-SA 4.0",
+        "origin": "Wikimedia Commons",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Gare_de_Luxembourg_au_cr%C3%A9puscule.jpg"
+      }
+    },
+    {
+      "key": "hall.webp",
+      "width": 1920,
+      "height": 1080,
+      "alt": "Main hall inside Luxembourg Central Station",
+      "attribution": {
+        "author": "GilPe",
+        "license": "CC BY-SA 4.0",
+        "origin": "Wikimedia Commons",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Luxembourg,_Hall_Gare_centrale_(101).jpg"
+      }
+    },
+    {
+      "key": "platforms.webp",
+      "width": 1920,
+      "height": 1080,
+      "alt": "Passenger trains at the platforms of Luxembourg Central Station",
+      "attribution": {
+        "author": "Mmkay",
+        "license": "CC BY-SA 4.0",
+        "origin": "Wikimedia Commons",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Belgium_Railways_train_at_Luxembourg_station.JPG"
+      }
+    }
+  ],
+  "NL058": [
+    {
+      "key": "front.webp",
+      "width": 1920,
+      "height": 1080,
+      "alt": "Panoramic view of the Amsterdam Centraal station facade",
+      "attribution": {
+        "author": "Slaunger",
+        "license": "CC BY-SA 4.0",
+        "origin": "Wikimedia Commons",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Amsterdam_Centraal_2016-09-13.jpg"
+      }
+    },
+    {
+      "key": "platforms.webp",
+      "width": 1920,
+      "height": 1080,
+      "alt": "Side view of Amsterdam Centraal station with a sprinter train at the platform",
+      "attribution": {
+        "author": "S Sepp",
+        "license": "CC BY-SA 3.0",
+        "origin": "Wikimedia Commons",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Amsterdam_centraal_side.jpg"
+      }
+    },
+    {
+      "key": "tickets.webp",
+      "width": 1920,
+      "height": 1080,
+      "alt": "The Cuypers hall ticket hall of Amsterdam Centraal station",
+      "attribution": {
+        "author": "Mojito",
+        "license": "CC BY-SA 3.0",
+        "origin": "Wikimedia Commons",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:2011-11-25_AMS_C_03.jpg"
+      }
+    }
+  ],
+  "NL530": [
+    {
+      "key": "front.webp",
+      "width": 1920,
+      "height": 1080,
+      "alt": "The new station building of Rotterdam Centraal",
+      "attribution": {
+        "author": "Spoorjan",
+        "license": "CC BY-SA 3.0",
+        "origin": "Wikimedia Commons",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Rtd_CS-III.JPG"
+      }
+    },
+    {
+      "key": "platforms.webp",
+      "width": 1920,
+      "height": 1080,
+      "alt": "Platforms at Rotterdam Centraal station with multiple trains",
+      "attribution": {
+        "author": "Rob Dammers",
+        "license": "CC BY 2.0",
+        "origin": "Wikimedia Commons",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Rotterdam_Centraal,_27-9-2012_(48652291623).jpg"
+      }
+    },
+    {
+      "key": "metro.webp",
+      "width": 1920,
+      "height": 1080,
+      "alt": "Metrostation Rotterdam Centraal",
+      "attribution": {
+        "author": "Mauritsvink",
+        "license": "Public Domain",
+        "origin": "Wikimedia Commons",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Metrostation_Rotterdam_Centraal.jpg"
+      }
+    },
+    {
+      "key": "front-2.webp",
+      "width": 1920,
+      "height": 1080,
+      "alt": "Stationsplein and entrance of Rotterdam Centraal station",
+      "attribution": {
+        "author": "Fred Romero",
+        "license": "CC BY 2.0",
+        "origin": "Wikimedia Commons",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Rotterdam_-_Centraal_Station_(5).jpg"
+      }
+    }
+  ],
+  "NO59872": [
+    {
+      "key": "front.webp",
+      "width": 1920,
+      "height": 1080,
+      "alt": "Oslo Sentralstasjon station building",
+      "attribution": {
+        "author": "J. P. Fagerback",
+        "license": "BSD 3-clause",
+        "origin": "Wikimedia Commons",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Oslo_Sentralstasjon_18jun2005.jpg"
+      }
+    },
+    {
+      "key": "departures.webp",
+      "width": 1920,
+      "height": 1080,
+      "alt": "Departures board inside Oslo Central Station",
+      "attribution": {
+        "author": "Ahnjo",
+        "license": "CC0 1.0 (Public Domain)",
+        "origin": "Wikimedia Commons",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Oslo_Central_Station.jpg"
+      }
+    },
+    {
+      "key": "platforms.webp",
+      "width": 1920,
+      "height": 1080,
+      "alt": "Aerial view of Oslo Central Station and the Bjørvika area from Ekeberg",
+      "attribution": {
+        "author": "Trond Strandsberg",
+        "license": "CC BY-SA 3.0",
+        "origin": "Wikimedia Commons",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Bj%C3%B8rvika_TRS_060605.jpg"
+      }
+    }
+  ],
+  "NO59983": [
+    {
+      "key": "front.webp",
+      "width": 1920,
+      "height": 1080,
+      "alt": "Stone facade of Bergen stasjon with its NSB logo and clock",
+      "attribution": {
+        "author": "Balou46",
+        "license": "CC BY-SA 4.0",
+        "origin": "Wikimedia Commons",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:NO-bergen-bahnhof-aussen.jpg"
+      }
+    },
+    {
+      "key": "platforms.webp",
+      "width": 1920,
+      "height": 1080,
+      "alt": "Trains and departure screens under the glazed roof of Bergen stasjon",
+      "attribution": {
+        "author": "Bahnfrend",
+        "license": "CC BY-SA 4.0",
+        "origin": "Wikimedia Commons",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Interior_of_Bergen_stasjon,_2019_(01).jpg"
+      }
+    },
+    {
+      "key": "platforms-2.webp",
+      "width": 1920,
+      "height": 1080,
+      "alt": "An NSB El 18 locomotive arriving at Bergen stasjon under the platform canopy",
+      "attribution": {
+        "author": "JoachimKohler-HB",
+        "license": "CC BY-SA 4.0",
+        "origin": "Wikimedia Commons",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:NSB_El_18_2262_p%C3%BCnktlich_in_Bergen_S_(2015).jpg"
+      }
+    },
+    {
+      "key": "drone.webp",
+      "width": 1920,
+      "height": 1080,
+      "alt": "Aerial view of the freight terminal beside Bergen stasjon",
+      "attribution": {
+        "author": "Marius Vassnes",
+        "license": "CC BY-SA 4.0",
+        "origin": "Wikimedia Commons",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Bergen_train_station_(cargo_terminal)_02.jpg"
+      }
+    }
+  ],
+  "PL30601": [
+    {
+      "key": "front.webp",
+      "width": 1920,
+      "height": 1080,
+      "alt": "Curved glass facade of the Poznań Główny station building above its entrance",
+      "attribution": {
+        "author": "Borzpoz",
+        "license": "CC0",
+        "origin": "Wikimedia Commons",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Dworzec_G%C5%82%C3%B3wny_Pozna%C5%84_1.jpg"
+      }
+    },
+    {
+      "key": "platforms.webp",
+      "width": 1920,
+      "height": 1080,
+      "alt": "PKP Intercity train beside the Poznań Główny nameboard, with the glazed station building behind",
+      "attribution": {
+        "author": "Bärbel Miemietz",
+        "license": "CC BY-SA 4.0",
+        "origin": "Wikimedia Commons",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:2023-06-19_Pozna%C5%84_Central_Station_03.jpg"
+      }
+    },
+    {
+      "key": "platforms-2.webp",
+      "width": 1920,
+      "height": 1080,
+      "alt": "Polregio EN57 units at a platform in Poznań Główny at night",
+      "attribution": {
+        "author": "Koefbac",
+        "license": "CC BY-SA 4.0",
+        "origin": "Wikimedia Commons",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:EN57AKW_-_1025_obok_EN57AL_-_943_na_dworcu_Pozna%C5%84_G%C5%82%C3%B3wny_-_stycze%C5%84_2021.jpg"
+      }
+    }
+  ],
+  "PL33605": [
+    {
+      "key": "front.webp",
+      "width": 1920,
+      "height": 1080,
+      "alt": "Main hall of Warszawa Centralna railway station in Warsaw",
+      "attribution": {
+        "author": "Adrian Grycuk",
+        "license": "CC BY 3.0 PL",
+        "origin": "Wikimedia Commons",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Dworzec_Centralny_w_Warszawie_2025.jpg"
+      }
+    },
+    {
+      "key": "platform.webp",
+      "width": 1920,
+      "height": 1080,
+      "alt": "Platforms and escalators at Warszawa Centralna railway station",
+      "attribution": {
+        "author": "Kgbo",
+        "license": "CC BY-SA 4.0",
+        "origin": "Wikimedia Commons",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Platforms_at_Warszawa_Centralna_railway_station,_Warsaw,_2022.jpg"
+      }
+    }
+  ],
+  "PL60103": [
+    {
+      "key": "front.webp",
+      "width": 1920,
+      "height": 1080,
+      "alt": "Neo-Gothic facade and forecourt of Wrocław Główny station",
+      "attribution": {
+        "author": "Lichen99",
+        "license": "CC BY-SA 4.0",
+        "origin": "Wikimedia Commons",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:WK14_Panorama_dzienna_dworca_Wroc%C5%82aw_G%C5%82%C3%B3wny.JPG"
+      }
+    },
+    {
+      "key": "concourse.webp",
+      "width": 1920,
+      "height": 1080,
+      "alt": "Vaulted timber ceiling and information boards in the main hall of Wrocław Główny station",
+      "attribution": {
+        "author": "Marek Śliwecki",
+        "license": "CC BY-SA 4.0",
+        "origin": "Wikimedia Commons",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Wroc%C5%82aw_-_Wroc%C5%82aw_G%C5%82%C3%B3wny4.jpg"
+      }
+    },
+    {
+      "key": "platforms.webp",
+      "width": 1920,
+      "height": 1080,
+      "alt": "PKP Intercity SU42 diesel locomotive with a train for Kudowa-Zdrój under the train shed of Wrocław Główny station",
+      "attribution": {
+        "author": "Phil Richards from London, UK",
+        "license": "CC BY-SA 2.0",
+        "origin": "Wikimedia Commons",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:SU42-1004,_Wroc%C5%82aw_G%C5%82%C3%B3wny,_2016-05-03.jpg"
+      }
+    }
+  ],
+  "PL73312": [
+    {
+      "key": "front.webp",
+      "width": 1920,
+      "height": 1080,
+      "alt": "Katowice railway station at night",
+      "attribution": {
+        "author": "Lichen99",
+        "license": "CC BY-SA 4.0",
+        "origin": "Wikimedia Commons",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:WK14_Katowice_noc%C4%85.JPG"
+      }
+    },
+    {
+      "key": "hall.webp",
+      "width": 1920,
+      "height": 1080,
+      "alt": "Interior of Katowice railway station",
+      "attribution": {
+        "author": "Andrzej Otrębski",
+        "license": "CC BY-SA 3.0",
+        "origin": "Wikimedia Commons",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Katowice_dworzec_1.jpg"
+      }
+    }
+  ],
+  "PL80416": [
+    {
+      "key": "front.webp",
+      "width": 1920,
+      "height": 1080,
+      "alt": "Neoclassical former station building of Kraków Główny on Jan Nowak-Jeziorański square",
+      "attribution": {
+        "author": "Zygmunt Put",
+        "license": "CC BY-SA 4.0",
+        "origin": "Wikimedia Commons",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Former_Krak%C3%B3w_G%C5%82%C3%B3wny_railway_station,_1844_design._Peter_Rosenbaum,_1-3_Jan_Nowak-Jeziora%C5%84ski_square,_Krak%C3%B3w,_Poland.jpg"
+      }
+    },
+    {
+      "key": "platforms.webp",
+      "width": 1920,
+      "height": 1080,
+      "alt": "PKP Intercity ED250 Pendolino at a platform in Kraków Główny station",
+      "attribution": {
+        "author": "Bahnfrend",
+        "license": "CC BY-SA 4.0",
+        "origin": "Wikimedia Commons",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:PKP_Intercity_ED250-007,_Krak%C3%B3w_G%C5%82%C3%B3wny,_2024_(03).jpg"
+      }
+    },
+    {
+      "key": "platforms-2.webp",
+      "width": 1920,
+      "height": 1080,
+      "alt": "Passengers on the platform beside a Koleje Małopolskie train for Kraków Lotnisko at Kraków Główny station",
+      "attribution": {
+        "author": "Bahnfrend",
+        "license": "CC BY-SA 4.0",
+        "origin": "Wikimedia Commons",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Koleje_Ma%C5%82opolskie_EN78A-006,_Krak%C3%B3w_G%C5%82%C3%B3wny,_2024_(01).jpg"
+      }
+    },
+    {
+      "key": "platforms-3.webp",
+      "width": 1920,
+      "height": 1080,
+      "alt": "Tracks and overhead line gantries alongside Kraków Główny station",
+      "attribution": {
+        "author": "Zygmunt Put",
+        "license": "CC BY-SA 4.0",
+        "origin": "Wikimedia Commons",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:DSC_1234_Dworzec_Krak%C3%B3w_G%C5%82%C3%B3wny.jpg"
+      }
+    }
+  ],
+  "SE000001": [
+    {
+      "key": "entrance.webp",
+      "width": 1920,
+      "height": 1080,
+      "alt": "Stockholm Centralstation station building",
+      "attribution": {
+        "author": "Andrzej Otrębski",
+        "license": "CC BY-SA 4.0",
+        "origin": "Wikimedia Commons",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Stockholm_dworzec_2.jpg"
+      }
+    },
+    {
+      "key": "hall.webp",
+      "width": 1920,
+      "height": 1080,
+      "alt": "Interior hall of Stockholm Central Station",
+      "attribution": {
+        "author": "Arild Vågen",
+        "license": "CC BY-SA 3.0",
+        "origin": "Wikimedia Commons",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Stockholm_Central_Station_September_2013.jpg"
+      }
+    },
+    {
+      "key": "platforms.webp",
+      "width": 1920,
+      "height": 1080,
+      "alt": "Stockholm Central Station platforms viewed from the bridge",
+      "attribution": {
+        "author": "Andrijko Z.",
+        "license": "CC BY-SA 4.0",
+        "origin": "Wikimedia Commons",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Stockhom_Railway_Station,_view_from_the_bridge.jpg"
+      }
+    },
+    {
+      "key": "platforms-2.webp",
+      "width": 1920,
+      "height": 1080,
+      "alt": "Stockholm Central Station with its open platforms",
+      "attribution": {
+        "author": "Kalle1",
+        "license": "Public Domain",
+        "origin": "Wikimedia Commons",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Stockholm_Central_2006.jpg"
+      }
+    }
+  ],
+  "SE000002": [
+    {
+      "key": "front.webp",
+      "width": 1920,
+      "height": 1080,
+      "alt": "Floodlit facade and neon station sign of Göteborg Centralstation at night",
+      "attribution": {
+        "author": "Maria Eklind",
+        "license": "CC BY-SA 2.0",
+        "origin": "Wikimedia Commons",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:G%C3%B6teborgs_Centralstation.jpg"
+      }
+    },
+    {
+      "key": "platforms.webp",
+      "width": 1920,
+      "height": 1080,
+      "alt": "MTR Express train bound for Stockholm at a platform in Göteborg Centralstation",
+      "attribution": {
+        "author": "Smiley.toerist",
+        "license": "CC BY-SA 4.0",
+        "origin": "Wikimedia Commons",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:G%C3%B6teborg_Central_station_2024_4.jpg"
+      }
+    },
+    {
+      "key": "platforms-2.webp",
+      "width": 1920,
+      "height": 1080,
+      "alt": "Västtrafik commuter trains at the platforms of Göteborg Centralstation",
+      "attribution": {
+        "author": "Bahnfrend",
+        "license": "CC BY-SA 4.0",
+        "origin": "Wikimedia Commons",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Trains,_G%C3%B6teborg_C,_2019_(02).jpg"
+      }
+    },
+    {
+      "key": "platforms-3.webp",
+      "width": 1920,
+      "height": 1080,
+      "alt": "Overhead wires and a Västtrafik commuter train on the approach tracks to Göteborg Centralstation",
+      "attribution": {
+        "author": "Smiley.toerist",
+        "license": "CC BY-SA 4.0",
+        "origin": "Wikimedia Commons",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:G%C3%B6teborg_centraal_station_2018_04.jpg"
+      }
+    }
+  ],
+  "SE000003": [
+    {
+      "key": "front.webp",
+      "width": 1920,
+      "height": 1080,
+      "alt": "Clock tower and entrance of Malmö Centralstation seen across the canal at dusk",
+      "attribution": {
+        "author": "Maria Eklind",
+        "license": "CC BY-SA 2.0",
+        "origin": "Wikimedia Commons",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Malm%C3%B6_Central_Station,_front_entrance,_2023_Nov_15.jpg"
+      }
+    },
+    {
+      "key": "concourse.webp",
+      "width": 1920,
+      "height": 1080,
+      "alt": "Departure and arrival boards above the concourse of Malmö Centralstation",
+      "attribution": {
+        "author": "AleWi",
+        "license": "CC BY-SA 4.0",
+        "origin": "Wikimedia Commons",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Malm%C3%B6_Centralstation,_20240604_-_05.jpg"
+      }
+    },
+    {
+      "key": "platforms.webp",
+      "width": 1920,
+      "height": 1080,
+      "alt": "Skånetrafiken X61 and SJ X55 trains under the arched roof of the platform hall at Malmö Centralstation",
+      "attribution": {
+        "author": "Bahnfrend",
+        "license": "CC BY-SA 4.0",
+        "origin": "Wikimedia Commons",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Sk%C3%A5netrafiken_X61_065,_SJ_X55_3347,_Malm%C3%B6_C,_2019_(01).jpg"
+      }
+    },
+    {
+      "key": "drone.webp",
+      "width": 1920,
+      "height": 1080,
+      "alt": "Aerial view of the railway yard and depot beside Malmö Centralstation",
+      "attribution": {
+        "author": "David Castor",
+        "license": "CC0",
+        "origin": "Wikimedia Commons",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Malm%C3%B6_bang%C3%A5rd%E2%80%93flygbild_06_september_2014.jpg"
+      }
+    }
+  ],
+  "UK1127": [
+    {
+      "key": "concourse.webp",
+      "width": 1920,
+      "height": 1080,
+      "alt": "Passengers below the shell roof of the Grand Central concourse at Birmingham New Street station",
+      "attribution": {
+        "author": "Bs0u10e01",
+        "license": "CC BY-SA 4.0",
+        "origin": "Wikimedia Commons",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:2015-09-26_Birmingham_New_Street.jpg"
+      }
+    },
+    {
+      "key": "platforms.webp",
+      "width": 1920,
+      "height": 1080,
+      "alt": "A CrossCountry Voyager, a Virgin Pendolino and other trains at the platforms of Birmingham New Street station",
+      "attribution": {
+        "author": "mattbuck ( category )",
+        "license": "CC BY-SA 3.0",
+        "origin": "Wikimedia Commons",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Birmingham_New_Street_railway_station_MMB_11_390016_220014_221133.jpg"
+      }
+    },
+    {
+      "key": "platforms-2.webp",
+      "width": 1920,
+      "height": 1080,
+      "alt": "CrossCountry Voyager coming out of the tunnel on the approach to Birmingham New Street station",
+      "attribution": {
+        "author": "mattbuck ( category )",
+        "license": "CC BY-SA 3.0",
+        "origin": "Wikimedia Commons",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Birmingham_New_Street_railway_station_MMB_17_221133.jpg"
+      }
+    },
+    {
+      "key": "platforms-3.webp",
+      "width": 1920,
+      "height": 1080,
+      "alt": "London Midland Class 323 unit leaving the tunnel on the approach to Birmingham New Street station",
+      "attribution": {
+        "author": "mattbuck ( category )",
+        "license": "CC BY-SA 3.0",
+        "origin": "Wikimedia Commons",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Birmingham_New_Street_railway_station_MMB_20_323214.jpg"
+      }
+    }
+  ],
+  "UK1444": [
+    {
+      "key": "front.webp",
+      "width": 1920,
+      "height": 1080,
+      "alt": "Front of London Euston Station",
+      "attribution": {
+        "author": "HRowntree",
+        "license": "CC0 1.0 (Public Domain)",
+        "origin": "Wikimedia Commons",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:London_Euston_Station_Front.jpg"
+      }
+    },
+    {
+      "key": "trains.webp",
+      "width": 1920,
+      "height": 1080,
+      "alt": "British Rail Class 390 and Class 92 at London Euston",
+      "attribution": {
+        "author": "train_photos",
+        "license": "CC BY-SA 2.0",
+        "origin": "Wikimedia Commons (via Flickr)",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:390046_and_92023_London_Euston_to_Inverness,_Fort_William_and_Aberdeen_1S25.jpg"
+      }
+    },
+    {
+      "key": "departures.webp",
+      "width": 1920,
+      "height": 1080,
+      "alt": "Departures and arrivals board at London Euston Station",
+      "attribution": {
+        "author": "HRowntree",
+        "license": "CC0 1.0 (Public Domain)",
+        "origin": "Wikimedia Commons",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:London_Euston_Departure_Board.jpg"
+      }
+    },
+    {
+      "key": "platforms.webp",
+      "width": 1920,
+      "height": 1080,
+      "alt": "Platforms at Euston railway station, London",
+      "attribution": {
+        "author": "Rept0n1x",
+        "license": "CC BY-SA 3.0",
+        "origin": "Wikimedia Commons",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Euston_railway_station_-_IMG_0793.JPG"
+      }
+    }
+  ],
+  "UK2968": [
+    {
+      "key": "platforms.webp",
+      "width": 1920,
+      "height": 1080,
+      "alt": "Panorama of Manchester Piccadilly station platforms",
+      "attribution": {
+        "author": "Nikthestoned",
+        "license": "CC BY-SA 3.0",
+        "origin": "Wikimedia Commons",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Manchester_Picadilly_Station_Panorama.jpg"
+      }
+    },
+    {
+      "key": "departures.webp",
+      "width": 1920,
+      "height": 1080,
+      "alt": "Manchester Piccadilly station viewed from the footbridge",
+      "attribution": {
+        "author": "Richard Kelly",
+        "license": "CC BY 2.0",
+        "origin": "Wikimedia Commons (via Flickr)",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Manchester_Piccadilly_railway_station_from_the_footbridge.jpg"
+      }
+    },
+    {
+      "key": "platforms-2.webp",
+      "width": 1920,
+      "height": 1080,
+      "alt": "Departure time screen at Manchester Piccadilly station in 2023",
+      "attribution": {
+        "author": "Jonathan Dann",
+        "license": "CC BY-SA 4.0",
+        "origin": "Wikimedia Commons",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Manchester_Piccadilly_staion_train_departure_time_screen_2023.jpg"
+      }
+    }
+  ],
+  "UK3899": [
+    {
+      "key": "front.webp",
+      "width": 1920,
+      "height": 1080,
+      "alt": "Portland stone facade with Great Western Railway lettering and clock tower at Cardiff Central station",
+      "attribution": {
+        "author": "Jeremy Segrott from Cardiff, Wales, UK",
+        "license": "CC BY 2.0",
+        "origin": "Wikimedia Commons",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Cardiff_Central_station_(26526139271).jpg"
+      }
+    },
+    {
+      "key": "platforms.webp",
+      "width": 1920,
+      "height": 1080,
+      "alt": "Arriva Trains Wales Class 150 for Aberdare leaving the platforms of Cardiff Central station",
+      "attribution": {
+        "author": "Jeremy Segrott from Cardiff, Wales, UK",
+        "license": "CC BY 2.0",
+        "origin": "Wikimedia Commons",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:150251_at_Cardiff_Central_(30954620912).jpg"
+      }
+    },
+    {
+      "key": "platforms-2.webp",
+      "width": 1920,
+      "height": 1080,
+      "alt": "First Great Western High Speed Train at a platform in Cardiff Central station",
+      "attribution": {
+        "author": "mattbuck ( category )",
+        "license": "CC BY-SA 3.0",
+        "origin": "Wikimedia Commons",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Cardiff_Central_railway_station_MMB_35_43017.jpg"
+      }
+    }
+  ],
+  "UK8487": [
+    {
+      "key": "platforms.webp",
+      "width": 1920,
+      "height": 1080,
+      "alt": "Platforms and tracks under the train shed roof of Leeds station",
+      "attribution": {
+        "author": "Martyn Glover",
+        "license": "CC BY-SA 2.0",
+        "origin": "Wikimedia Commons",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Leeds_Railway_Station_-_geograph.org.uk_-_3708498.jpg"
+      }
+    },
+    {
+      "key": "platforms-2.webp",
+      "width": 1920,
+      "height": 1080,
+      "alt": "Class 91 locomotive at an open-air platform at Leeds station",
+      "attribution": {
+        "author": "mattbuck ( category )",
+        "license": "CC BY-SA 3.0",
+        "origin": "Wikimedia Commons",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Leeds_railway_station_MMB_32.jpg"
+      }
+    },
+    {
+      "key": "platforms-3.webp",
+      "width": 1920,
+      "height": 1080,
+      "alt": "Northern Class 158 unit at a platform in Leeds station",
+      "attribution": {
+        "author": "mattbuck ( category )",
+        "license": "CC BY-SA 4.0",
+        "origin": "Wikimedia Commons",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Leeds_railway_station_MMB_52_158793.jpg"
+      }
+    }
+  ],
+  "UK9328": [
+    {
+      "key": "station.webp",
+      "width": 1920,
+      "height": 1080,
+      "alt": "Edinburgh Waverley railway station",
+      "attribution": {
+        "author": "Gillfoto",
+        "license": "CC BY-SA 4.0",
+        "origin": "Wikimedia Commons",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:City_of_Edinburgh_-_Edinburgh_Waverley_railway_station_-_20240529001627.jpg"
+      }
+    },
+    {
+      "key": "trains.webp",
+      "width": 1920,
+      "height": 1080,
+      "alt": "Trains at Edinburgh Waverley station",
+      "attribution": {
+        "author": "Geof Sheppard",
+        "license": "CC BY-SA 4.0",
+        "origin": "Wikimedia Commons",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Edinburgh_-_TPE_350405_and_Abellio_380105.JPG"
+      }
+    },
+    {
+      "key": "departures.webp",
+      "width": 1920,
+      "height": 1080,
+      "alt": "Main concourse of Edinburgh Waverley station, June 2024",
+      "attribution": {
+        "author": "PEPSI697",
+        "license": "CC BY-SA 4.0",
+        "origin": "Wikimedia Commons",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Edinburgh_Waverley_station_main_concourse,_June_2024.jpg"
+      }
+    }
+  ],
+  "UK9813": [
+    {
+      "key": "front.webp",
+      "width": 1920,
+      "height": 1080,
+      "alt": "Sandstone frontage and cast-iron canopy of Glasgow Central station on Gordon Street",
+      "attribution": {
+        "author": "Stacey Harris",
+        "license": "CC BY-SA 2.0",
+        "origin": "Wikimedia Commons",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Glasgow_Central_railway_station_-_geograph.org.uk_-_2916974.jpg"
+      }
+    },
+    {
+      "key": "platforms.webp",
+      "width": 1920,
+      "height": 1080,
+      "alt": "ScotRail Class 380 unit at a platform under the train shed of Glasgow Central station",
+      "attribution": {
+        "author": "Pencefn",
+        "license": "CC BY-SA 3.0",
+        "origin": "Wikimedia Commons",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:380101_at_Glasgow_Central.jpg"
+      }
+    },
+    {
+      "key": "drone.webp",
+      "width": 1920,
+      "height": 1080,
+      "alt": "Aerial view of the glazed train shed of Glasgow Central station in the city centre",
+      "attribution": {
+        "author": "瑞丽江的河水",
+        "license": "CC BY-SA 4.0",
+        "origin": "Wikimedia Commons",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Glasgow_Central_railway_station_-_aerial_-_2025-04-17_04.jpg"
+      }
+    }
+  ]
+}

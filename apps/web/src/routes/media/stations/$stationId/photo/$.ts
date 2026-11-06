@@ -1,11 +1,7 @@
 import { env, waitUntil } from "cloudflare:workers";
 import { createFileRoute } from "@tanstack/react-router";
-import {
-  SAFE_KEY_SEGMENT,
-  canonicalMediaCacheKey,
-  getStationPhotoManifest,
-  isSafeRelativeKey,
-} from "@/lib/station-photo-manifest.server";
+import { SAFE_KEY_SEGMENT, canonicalMediaCacheKey, isSafeRelativeKey } from "@/lib/station-photos";
+import { getStationPhotoManifest } from "@/lib/station-photo-manifest.server";
 
 const IMAGE_CACHE = "public, max-age=31536000, immutable";
 const IMAGE_CONTENT_TYPES = {
@@ -99,7 +95,7 @@ async function getStationPhotoResponse(
       cache = undefined;
     }
 
-    const { manifest } = await getStationPhotoManifest(request, stationId);
+    const manifest = getStationPhotoManifest(stationId);
     const image = manifest?.images.find((photo) => photo.key === photoKey);
     if (!image) {
       return new Response("Station photo not found", { status: 404 });

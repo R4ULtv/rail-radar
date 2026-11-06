@@ -1,5 +1,10 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { SAFE_KEY_SEGMENT, getStationPhotoManifest } from "@/lib/station-photo-manifest.server";
+import {
+  MANIFEST_CACHE,
+  MISSING_MANIFEST_CACHE,
+  getStationPhotoManifest,
+} from "@/lib/station-photo-manifest.server";
+import { SAFE_KEY_SEGMENT } from "@/lib/station-photos";
 
 export const Route = createFileRoute("/media/stations/$stationId/photos")({
   server: {
@@ -34,16 +39,19 @@ function internalError(request: Request, error: unknown): Response {
   return new Response("Internal server error", { status: 500 });
 }
 
-async function getStationPhotosResponse(request: Request, stationId: string): Promise<Response> {
+function getStationPhotosResponse(request: Request, stationId: string): Response {
   if (!SAFE_KEY_SEGMENT.test(stationId)) {
     return Response.json({ error: "Invalid station id" }, { status: 400 });
   }
 
   try {
-    const { response } = await getStationPhotoManifest(request, stationId);
-    // Cache API responses have immutable headers. Clone the response so the app-wide security
-    // middleware can attach its headers before sending it to the browser.
-    return new Response(response.body, response);
+    // Retain the endpoint for older clients, serving the same bundled catalog as the pages.
+    const manifest = getStationPhotoManifest(stationId);
+    const response = Response.json(manifest ?? { stationId, images: [] }, {
+      status: manifest ? 200 : 404,
+      headers: { "Cache-Control": manifest ? MANIFEST_CACHE : MISSING_MANIFEST_CACHE },
+    });
+    return request.method === "HEAD" ? new Response(null, response) : response;
   } catch (error) {
     return internalError(request, error);
   }
