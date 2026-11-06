@@ -31,8 +31,6 @@ export interface StatusSummary {
   policy: StatusPolicy;
   overall: ProviderHealth;
   counts: Record<ProviderHealth, number>;
-  /** Null if API analytics could not be read; an empty dataset instead has unknown health. */
-  api: ApiSummary | null;
   providers: (Provider & ProviderObservations & { lastSeen: string | null })[];
 }
 
@@ -46,37 +44,6 @@ export interface LatencyDay {
 
 export interface ProviderDay extends ProviderObservations, LatencyDay {}
 
-export interface ApiObservations {
-  requests: number;
-  successes: number;
-  clientErrors: number;
-  /** A subset of clientErrors, rather than an additional outcome. */
-  rateLimited: number;
-  serverErrors: number;
-  samples: number;
-  /** Actual observations excluding 4xx, used for the minimum-data policy. */
-  healthSamples: number;
-  /** 2xx/3xx divided by 2xx/3xx/5xx; client errors are reported separately. */
-  successRate: number | null;
-  status: ProviderHealth;
-}
-
-export interface ApiSummary extends ApiObservations {
-  id: "rail-radar-api";
-  name: "Rail Radar API";
-  scope: "api-requests";
-  lastSeen: string | null;
-}
-
-export interface ApiDay extends ApiObservations, LatencyDay {}
-
-export interface ApiLatency {
-  id: "rail-radar-api";
-  name: "Rail Radar API";
-  scope: "api-requests";
-  days: ApiDay[];
-}
-
 export interface StatusLatency {
   generatedAt: string;
   source: "live";
@@ -84,6 +51,5 @@ export interface StatusLatency {
   unit: "ms";
   window: { from: string; to: string; days: number };
   policy: StatusPolicy;
-  api: ApiLatency | null;
   providers: (Provider & { days: ProviderDay[] })[];
 }

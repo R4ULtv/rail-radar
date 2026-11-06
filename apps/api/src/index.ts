@@ -10,6 +10,7 @@ import { operatorsRoutes } from "./routes/operators";
 import { rootRoutes } from "./routes/root";
 import { stationsGeoJsonRoutes } from "./routes/stations-geojson";
 import { stationsRoutes } from "./routes/stations";
+import { statusRoutes } from "./routes/status";
 
 export function createApp() {
   const app = factory.createApp();
@@ -37,6 +38,7 @@ export function createApp() {
       origin: [
         "http://localhost:3000",
         "http://127.0.0.1:3000",
+        "https://status.railradar24.com",
         "https://www.railradar24.com",
         "https://preview.railradar24.com",
       ],
@@ -52,7 +54,8 @@ export function createApp() {
     .route("/stations.geojson", stationsGeoJsonRoutes)
     .route("/stations", stationsRoutes)
     .route("/stations", stationLinesRoutes)
-    .route("/analytics", analyticsRoutes);
+    .route("/analytics", analyticsRoutes)
+    .route("/status", statusRoutes);
 }
 
 const app = createApp();

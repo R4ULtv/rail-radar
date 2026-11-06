@@ -1,9 +1,9 @@
 import { createHash, createHmac } from "node:crypto";
 
 import { afterEach, describe, expect, it, vi } from "vitest";
+import { PROVIDER_IDS } from "@repo/data/providers";
 
 import {
-  PROVIDER_IDS,
   getAnalyticsOverview,
   getProviderByStationId,
   getStationStats,
