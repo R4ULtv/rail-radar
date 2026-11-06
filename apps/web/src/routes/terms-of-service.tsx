@@ -225,12 +225,12 @@ function TermsOfServicePage() {
             <li>
               <strong className="text-foreground">Hungary</strong> &mdash;{" "}
               <a
-                href="https://mavplusz.hu"
+                href="https://jegy.mav.hu"
                 className="text-foreground underline"
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                MÁVPlusz
+                MÁV
               </a>
             </li>
           </ul>

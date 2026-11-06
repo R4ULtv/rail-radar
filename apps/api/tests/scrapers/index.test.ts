@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { COUNTRY_CODES } from "@repo/data/countries";
+import { COUNTRY_CODES, HIDDEN_COUNTRIES } from "@repo/data/countries";
 
 import { getProviderByStationId } from "../../src/analytics";
 import { scrapeBelgiumTrains } from "../../src/scrapers/belgium";
@@ -28,7 +28,15 @@ describe("scraper registry", () => {
     expect(getScraperForStation("BE14001")).toBe(scrapeBelgiumTrains);
     expect(getScraperForStation("IT1728")).toBe(scrapeItalyTrains);
     expect(getScraperForStation("UK123")).toBe(scrapeUKTrains);
-    expect(getScraperForStation("HU1")).toBe(scrapeHungaryTrains);
+    if (!HIDDEN_COUNTRIES.includes("hu")) {
+      expect(getScraperForStation("HU1")).toBe(scrapeHungaryTrains);
+    }
+  });
+
+  it("serves no scraper for hidden countries", () => {
+    for (const country of HIDDEN_COUNTRIES) {
+      expect(getScraperForStation(`${country.toUpperCase()}1`), country).toBeNull();
+    }
   });
 
   it("returns null for unknown regions", () => {
