@@ -18,6 +18,9 @@
 /assets/flags/*
   Cache-Control: public, max-age=1209600
 
+/assets/providers/*
+  Cache-Control: public, max-age=1209600
+
 /assets/screenshots/*
   Cache-Control: public, max-age=1209600
 
