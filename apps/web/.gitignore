@@ -16,6 +16,7 @@
 # build output
 /.output/
 /.vinxi/
+/.og-cache/
 /dist/
 
 # production

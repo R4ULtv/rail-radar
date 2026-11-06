@@ -8,6 +8,15 @@ import { ArrowLeftIcon, ChevronRightIcon, ExpandIcon } from "lucide-react";
 import { LineBadge } from "@/components/line-badge";
 import { env } from "@/lib/env";
 import { loadLinePage } from "@/lib/line-data.functions";
+import {
+  formatDays,
+  formatEvery,
+  formatHours,
+  formatStatus,
+  getServiceStatus,
+  getTodayPeriodIndex,
+  useNow,
+} from "@/lib/line-service";
 import type { DirectoryLine, LinePageData } from "@/lib/line-data.server";
 import { metadataToHead } from "@/lib/metadata";
 import { operatorTypeColors, operatorTypeLabels, OperatorTypeMarker } from "@/lib/operator-types";
@@ -52,6 +61,7 @@ function LineRoute() {
         <div className="space-y-6 md:sticky md:top-6 md:col-start-2 md:row-start-1 md:self-start">
           <LineMap data={data} route={route.stations} hovered={hovered} />
           <Stats data={data} />
+          <Service data={data} />
           <div className="hidden space-y-6 md:block">
             <OperatorCard data={data} />
             <NetworkLines lines={data.network} />
@@ -158,6 +168,71 @@ function Stats({ data, className }: { data: LinePageData; className?: string }) 
         </Card>
       ))}
     </div>
+  );
+}
+
+/**
+ * The week's first and last departures and how often trains run. Today's row and the
+ * live status only appear once the page reads the clock, since the HTML is prerendered.
+ */
+function Service({ data }: { data: LinePageData }) {
+  const { service, line } = data;
+  const now = useNow();
+  if (!service) return null;
+  const status = now && getServiceStatus(service, line.country, now);
+  const today = now ? getTodayPeriodIndex(service, line.country, now) : -1;
+  const shown = status && formatStatus(status);
+
+  return (
+    <Card size="sm" className="gap-0 py-0">
+      <div className="flex items-baseline justify-between gap-3 px-4 pt-4 pb-1">
+        <SectionTitle>Service</SectionTitle>
+        {shown && status && (
+          <span className="flex min-w-0 items-center gap-1.5 text-xs text-muted-foreground">
+            <span
+              aria-hidden
+              className={cn(
+                "size-1.5 shrink-0 self-center rounded-full",
+                status.running ? "bg-green-500" : "bg-muted-foreground/50",
+              )}
+            />
+            <span className="truncate">
+              <span
+                className={cn(
+                  "font-medium",
+                  status.running && "text-green-600 dark:text-green-400",
+                )}
+              >
+                {shown.label}
+              </span>
+              {shown.detail && ` · ${shown.detail}`}
+            </span>
+          </span>
+        )}
+      </div>
+      <dl className="px-1.5">
+        {service.map((period, index) => (
+          <div
+            key={period.days}
+            className={cn(
+              "grid grid-cols-[4.5rem_minmax(0,1fr)_auto] items-baseline gap-3 rounded-xl px-2.5 py-1.5 text-sm",
+              index === today && "bg-muted/60",
+            )}
+          >
+            <dt className={cn("text-muted-foreground", index === today && "text-foreground")}>
+              {formatDays(period.days)}
+            </dt>
+            <dd className="tabular-nums">{formatHours(period)}</dd>
+            <dd className="text-xs text-muted-foreground tabular-nums">
+              {formatEvery(period.every)}
+            </dd>
+          </div>
+        ))}
+      </dl>
+      <p className="px-4 pt-2 pb-4 text-xs text-muted-foreground">
+        First and last departures from the termini, local time. Holiday schedules may differ.
+      </p>
+    </Card>
   );
 }
 

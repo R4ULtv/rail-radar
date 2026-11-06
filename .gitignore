@@ -36,3 +36,10 @@ yarn-error.log*
 # Misc
 .DS_Store
 *.pem
+
+.claude
+.zed
+.agents
+agents.md
+claude.md
+plans

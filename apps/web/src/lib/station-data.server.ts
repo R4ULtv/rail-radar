@@ -16,6 +16,7 @@ import { resolveNearbyStations } from "@/lib/nearby-stations";
 import type { NearbyStation, StationWithGeo } from "@/lib/nearby-stations";
 import type { Metadata } from "@/lib/metadata";
 import { isStationPagePrerendered } from "@/lib/station-prerender";
+import { getStationPhotoManifest } from "@/lib/station-photo-manifest.server";
 
 export type { NearbyStation, StationWithGeo } from "@/lib/nearby-stations";
 /**
@@ -94,6 +95,7 @@ export function getStationPageData(id: string) {
   const code = getCountry(station.id);
   return {
     station,
+    photos: getStationPhotoManifest(station.id)?.images ?? [],
     nearbyStations: getNearbyStations(station),
     code,
     countryCode: code?.toUpperCase() ?? null,

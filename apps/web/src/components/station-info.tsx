@@ -51,6 +51,7 @@ import {
   LineInfo,
   LinePageLink,
   LinePicker,
+  LineServiceInfo,
   StationLinesSummary,
 } from "@/components/station-lines/line-pickers";
 import { StationLinesMap } from "@/components/station-lines/station-lines-map";
@@ -324,6 +325,7 @@ export default function StationInfo() {
                       <div className="col-span-2 mt-3 flex flex-col gap-2.5">
                         <LinePicker view={lineView} />
                         <LineInfo view={lineView} />
+                        <LineServiceInfo view={lineView} />
                         <BranchPicker view={lineView} />
                       </div>
                     ) : (
@@ -430,6 +432,7 @@ export default function StationInfo() {
                 ) : (
                   <LineInfo view={lineView} />
                 )}
+                <LineServiceInfo view={lineView} />
                 <BranchPicker view={lineView} />
               </div>
             ) : (

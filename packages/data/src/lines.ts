@@ -1,7 +1,7 @@
 import data from "./lines.json" with { type: "json" };
 // Self-reference resolves to the .ts file, so Node can load this from vite.config without a bundler.
 import { COUNTRY_CODES, type CountryCode } from "@repo/data/countries";
-import type { Line, LineGeometry, LineRoute } from "./types";
+import type { Line, LineGeometry, LineRoute, LineServicePeriod, Weekday } from "./types";
 
 /** Neutral gray for lines with no official color; readable on light and dark backgrounds. */
 export const DEFAULT_LINE_COLOR = "#8E8E93";
@@ -79,6 +79,67 @@ function fields(value: Record<string, unknown>, keys: string[], label: string) {
   }
 }
 
+const WEEKDAYS: readonly Weekday[] = ["mon", "tue", "wed", "thu", "fri", "sat", "sun"];
+const DAYS_PATTERN = new RegExp(`^(${WEEKDAYS.join("|")})(?:-(${WEEKDAYS.join("|")}))?$`);
+
+function serviceTime(value: unknown, label: string): string | null {
+  if (value === null) return null;
+  if (typeof value !== "string" || !/^(?:[01]\d|2[0-3]):[0-5]\d$/.test(value)) {
+    throw new Error(`${label} must be a "HH:MM" time or null`);
+  }
+  return value;
+}
+
+/** Day-range rules ordered from Monday; a night service must carry on into the next day. */
+function validateService(value: unknown, id: string): LineServicePeriod[] {
+  if (!Array.isArray(value) || !value.length) {
+    throw new Error(`${id}: service must be a non-empty array of periods`);
+  }
+  const byDay: (LineServicePeriod | undefined)[] = [];
+  const periods = value.map((entry, index) => {
+    const label = `${id} service ${index + 1}`;
+    const period = object(entry, label);
+    fields(period, ["days", "from", "to", "every"], label);
+    const days = text(period.days, `${label}: days`);
+    const match = DAYS_PATTERN.exec(days);
+    if (!match) throw new Error(`${label}: days must be a day or a range of days, e.g. mon-fri`);
+    const first = WEEKDAYS.indexOf(match[1] as Weekday);
+    const last = match[2] ? WEEKDAYS.indexOf(match[2] as Weekday) : first;
+    if (match[2] && last <= first) {
+      throw new Error(`${label}: a day range must run forward within the week, e.g. mon-fri`);
+    }
+    if (byDay.length > first) {
+      throw new Error(`${label}: periods must be ordered from Monday, with no day in two periods`);
+    }
+    const every = period.every;
+    if (
+      !Array.isArray(every) ||
+      every.length !== 2 ||
+      !every.every((minutes) => Number.isInteger(minutes) && minutes > 0 && minutes <= 180) ||
+      every[0] > every[1]
+    ) {
+      throw new Error(`${label}: every must be [shortest, longest] whole minutes, up to 180`);
+    }
+    const result: LineServicePeriod = {
+      days: days as LineServicePeriod["days"],
+      from: serviceTime(period.from, `${label}: from`),
+      to: serviceTime(period.to, `${label}: to`),
+      every: [every[0], every[1]],
+    };
+    for (let day = first; day <= last; day++) byDay[day] = result;
+    return result;
+  });
+  for (const [day, name] of WEEKDAYS.entries()) {
+    const next = (day + 1) % WEEKDAYS.length;
+    if ((byDay[day]?.to === null) !== (byDay[next]?.from === null)) {
+      throw new Error(
+        `${id}: ${name} runs through the night only if ${WEEKDAYS[next]} carries on with "from": null`,
+      );
+    }
+  }
+  return periods;
+}
+
 /** Validate edits/imports against the canonical station registry and keep the compact schema. */
 export function validateLines(value: unknown, stationIds: ReadonlySet<string>): Line[] {
   if (!Array.isArray(value)) throw new Error("Lines must be a JSON array");
@@ -87,7 +148,7 @@ export function validateLines(value: unknown, stationIds: ReadonlySet<string>): 
     const line = object(entry, `Line ${index + 1}`);
     fields(
       line,
-      ["id", "name", "description", "code", "type", "color", "operator", "routes"],
+      ["id", "name", "description", "code", "type", "color", "operator", "routes", "service"],
       "Line",
     );
     const id = text(line.id, "Line ID");
@@ -139,6 +200,7 @@ export function validateLines(value: unknown, stationIds: ReadonlySet<string>): 
         }
       }
     }
+    const service = line.service === undefined ? undefined : validateService(line.service, id);
     return {
       id,
       code: optionalText(line.code, `${id}: code`),
@@ -148,6 +210,7 @@ export function validateLines(value: unknown, stationIds: ReadonlySet<string>): 
       color: color?.toUpperCase() ?? null,
       operator,
       routes,
+      ...(service && { service }),
     };
   });
 }
