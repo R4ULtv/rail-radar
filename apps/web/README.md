@@ -71,10 +71,16 @@ included in the JavaScript bundle. Their browser cache policies are defined in `
 Only browser-native files remain at the public root: the favicon and app icons, web manifest, and
 robots file.
 
-Curated station photos live in the EU R2 bucket named `rail-radar`. The web Worker validates each
-station manifest, rate-limits generated and R2-backed image delivery, streams image objects without
-buffering them, and caches responses at the edge. Generated images and R2-backed files use the
-`/media/*` namespace.
+Curated station photos live in the EU R2 bucket named `rail-radar`. Their metadata lives in one
+central `stations/inventory.json`, keyed by station ID. Each value is an ordered array of photo
+keys, dimensions, alt text, and attribution. The checked-in snapshot is
+[`src/data/station-photos.json`](./src/data/station-photos.json).
+
+Station loaders include only that station's photos, so prerendered HTML and hydration data already
+contain the gallery. The browser does not fetch a manifest after hydration. The complete catalog
+stays in the server bundle, where it also validates allowed image keys. Image bytes still stream
+from R2 through the rate-limited, edge-cached media route.
+
 The same-origin endpoints are:
 
 ```text
@@ -83,24 +89,52 @@ GET /media/stations/{stationId}/photos
 GET /media/stations/{stationId}/photo/{image-key}.webp
 ```
 
-Open Graph images use an explicit Worker cache with a 30-day browser and shared-cache lifetime.
-Cache keys keep only the station ID, so tracking parameters and parameter order do not trigger
-additional Mapbox requests or image rendering. HEAD requests reuse cached headers and never
-generate an image. Cards generated without a Mapbox background have a five-minute lifetime so
-they can recover after an upstream outage. Worker caches are local to each data center and may
-evict images before their lifetime ends.
+For generated station Open Graph cards and their separate inventory, see
+[`scripts/og-images.md`](./scripts/og-images.md).
 
-Station manifests are requested by the browser after hydration and are never read while station
-pages are prerendered. The Vite development server connects to the real bucket so photos remain
-testable locally; production builds keep the R2 binding local, and deployed Workers use the bound
-`rail-radar` bucket.
+The `/photos` endpoint remains available to older clients and serves the bundled catalog without
+accessing R2. Successful responses are cached for 12 hours; missing entries for up to five minutes
+at the edge. GET and HEAD are supported. Photo URLs are immutable for one year.
 
-R2 object keys must use this layout:
+### Catalog workflow
+
+From the repository root:
+
+```bash
+pnpm --filter web photos check          # Validate the local snapshot; no Cloudflare access
+pnpm --filter web photos sync           # Download and validate the central R2 catalog once
+pnpm --filter web photos upload         # Publish the local snapshot to R2 and verify its checksum
+```
+
+Pass `--account <account-id>` when Wrangler can access multiple accounts. The commands use the
+installed Wrangler and default to bucket `rail-radar`, jurisdiction `eu`. `--bucket` and
+`--jurisdiction` override those defaults. Invalid downloads never replace the local snapshot.
+
+Every web build validates the checked-in snapshot, then prerenders from it without remote manifest
+reads or Cloudflare credentials. Catalog edits and syncs are explicit: commit the updated snapshot
+and rebuild/deploy to change gallery metadata on the website. The snapshot is a normal Turbo build
+input, so changing it invalidates the web build cache. R2 is the shared catalog; the committed copy
+pins each deployment to the reviewed metadata.
+
+To add or change photos:
+
+1. Prepare and review the images and their attribution.
+2. Upload image objects first, using new filenames when replacing cached photos.
+3. Update `src/data/station-photos.json` and run `photos check`, then `photos upload`.
+4. Commit the snapshot, build, and deploy. Other checkouts can use `photos sync` to get the catalog.
+
+The R2 layout is:
 
 ```text
-stations/{stationId}/manifest.json
+stations/inventory.json
 stations/{stationId}/{image-key}.webp
+stations/{stationId}/manifest.json      # Legacy: retain for the currently deployed Worker
 ```
+
+**Compatible rollout:** the existing per-station R2 manifests and image objects remain untouched.
+The catalog commands never modify or delete them. Until the catalog-based Worker is deployed,
+production continues to read those legacy manifests; maintain them too if publishing another photo
+change during that interval. Keep them available for rollback after deployment.
 
 ### Station photo requirements
 
@@ -111,12 +145,12 @@ stations/{stationId}/{image-key}.webp
 - Only upload images with a known license or permission suitable for Rail Radar.
 - Image keys may contain letters, numbers, `/`, `_`, and `-`, must include a supported image
   extension, and must not contain `..` or `//`.
+- Include alt text, positive integer dimensions, author, license, and any source/credit details.
+  Source URLs must use HTTPS.
 
-Copy [station-photo-manifest.template.json](./station-photo-manifest.template.json) and replace its
-station id, image metadata, alt text, and attribution. Images are displayed in manifest order after
-the generated Mapbox image.
-
-Upload images first, followed by the manifest:
+The existing [station-photo-manifest.template.json](./station-photo-manifest.template.json) shows
+photo metadata fields; copy its `images` array under the station ID in the central catalog. Images
+are displayed in catalog order after the generated Mapbox image.
 
 ```bash
 pnpm --filter=web exec wrangler r2 object put rail-radar/stations/IT1728/front.webp \
@@ -125,19 +159,11 @@ pnpm --filter=web exec wrangler r2 object put rail-radar/stations/IT1728/front.w
   --cache-control "public, max-age=31536000, immutable" \
   --remote \
   --jurisdiction eu
-
-pnpm --filter=web exec wrangler r2 object put rail-radar/stations/IT1728/manifest.json \
-  --file /absolute/path/to/manifest.json \
-  --content-type application/json \
-  --cache-control "public, max-age=43200" \
-  --remote \
-  --jurisdiction eu
 ```
 
-Manifest responses are cached for 12 hours and reused to validate newly requested images. Image
-responses are immutable for one year. This means newly requested images trust the cached manifest
-until its 12-hour expiry; urgent removals require purging the canonical station manifest cache key
-as well as any immutable image cache entries.
+Urgent removals require a catalog update and deployment, plus purging the affected static page,
+`/photos` response, and immutable image cache entries. Changing the catalog alone does not evict
+previously cached image bytes.
 
 ## Validation
 

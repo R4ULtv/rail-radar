@@ -11,8 +11,12 @@
     "./lines.json": "./src/lines.json",
     "./lines/*": "./src/lines/*",
     "./operators": "./src/operators.ts",
+    "./providers": "./src/providers.ts",
+    "./status": "./src/status.ts",
     "./stations": "./src/stations.ts",
     "./stations.geojson": "./src/stations.geojson",
+    "./transfers": "./src/transfers.ts",
+    "./transfers.json": "./src/transfers.json",
     "./types": "./src/types.ts"
   },
   "scripts": {
@@ -23,6 +27,6 @@
     "@repo/typescript-config": "workspace:*",
     "@types/geojson": "^7946.0.16",
     "@types/node": "^22.20.5",
-    "typescript": "^6.0.3"
+    "typescript": "^7.0.2"
   }
 }

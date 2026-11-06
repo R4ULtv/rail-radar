@@ -1,9 +1,9 @@
 import { createHash, createHmac } from "node:crypto";
 
 import { afterEach, describe, expect, it, vi } from "vitest";
+import { PROVIDER_IDS } from "@repo/data/providers";
 
 import {
-  PROVIDER_IDS,
   getAnalyticsOverview,
   getProviderByStationId,
   getStationStats,
@@ -127,7 +127,7 @@ describe("provider mapping", () => {
     expect(getProviderByStationId("IT1728")).toBe("rfi");
     expect(getProviderByStationId("CH03000")).toBe("opendata-ch");
     expect(getProviderByStationId("UK1")).toBe("nationalrail");
-    expect(getProviderByStationId("HU1")).toBe("mavplusz");
+    expect(getProviderByStationId("HU1")).toBe("mav");
     expect(getProviderByStationId("XX1")).toBeNull();
   });
 

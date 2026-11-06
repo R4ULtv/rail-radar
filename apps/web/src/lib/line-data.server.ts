@@ -296,6 +296,7 @@ export async function getLinePageData(id: string) {
   return {
     line: summary,
     description: line.description ?? null,
+    service: line.service ?? null,
     routes: line.routes.map((route) => ({
       code: route.code ?? null,
       from: displayName(route.stations[0]),

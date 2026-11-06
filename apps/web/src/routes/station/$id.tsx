@@ -5,7 +5,6 @@ import { Button } from "@repo/ui/components/button";
 import { Card, CardContent } from "@repo/ui/components/card";
 import { ArrowLeftIcon, ArrowRightIcon, MapIcon, SearchIcon } from "lucide-react";
 import { staticAssetUrl } from "@/lib/static-assets";
-import { useStationPhotos } from "@/hooks/use-station-photos";
 import { StationGallery } from "@/components/station-page/station-gallery";
 import { StationHeader } from "@/components/station-page/station-header";
 import { StationActions } from "@/components/station-page/station-actions";
@@ -37,13 +36,13 @@ type StationPageData = NonNullable<Awaited<ReturnType<typeof loadStationPage>>>;
 
 function StationPage({
   station,
+  photos,
   nearbyStations,
   code,
   countryCode,
   country,
   countrySlug,
 }: StationPageData) {
-  const stationPhotos = useStationPhotos(station.id, station.importance === 1);
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "TrainStation",
@@ -75,7 +74,7 @@ function StationPage({
           stationName={station.name}
           lat={station.geo.lat}
           lng={station.geo.lng}
-          photos={stationPhotos}
+          photos={photos}
         />
         <Button
           variant="outline"

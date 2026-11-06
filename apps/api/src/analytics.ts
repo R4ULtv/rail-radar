@@ -6,6 +6,7 @@ import {
 } from "./lib/top-station-cache";
 
 import { COUNTRY_CODES, getCountry, type CountryCode } from "@repo/data/countries";
+import { PROVIDER_IDS, type ProviderId } from "@repo/data/providers";
 
 interface TopStation {
   stationId: string;
@@ -62,25 +63,6 @@ interface CountryBreakdownQueryResult {
   }>;
 }
 
-export const PROVIDER_IDS = [
-  "digitraffic",
-  "entur",
-  "irail",
-  "irishrail",
-  "ns",
-  "opendata-ch",
-  "rfi",
-  "nationalrail",
-  "sncf",
-  "db",
-  "rejseplanen",
-  "plk",
-  "trafiklab",
-  "mobiliteit",
-  "mavplusz",
-] as const;
-
-export type ProviderId = (typeof PROVIDER_IDS)[number];
 export type ProviderMetricSource = "live" | "synthetic";
 export type ProviderMetricResult = "success" | "error" | "timeout";
 
@@ -99,7 +81,7 @@ const COUNTRY_TO_PROVIDER: Partial<Record<CountryCode, ProviderId>> = {
   uk: "nationalrail",
   fr: "sncf",
   lu: "mobiliteit",
-  hu: "mavplusz",
+  hu: "mav",
 };
 
 async function hashIP(ip: string, pepper: string): Promise<string> {
@@ -126,11 +108,12 @@ async function hashIP(ip: string, pepper: string): Promise<string> {
     .join("");
 }
 
-async function queryAnalytics<T>(
+export async function queryAnalytics<T>(
   accountId: string,
   apiToken: string,
   query: string,
   operation: string,
+  signal?: AbortSignal,
 ): Promise<T> {
   let response: Response;
   try {
@@ -143,6 +126,7 @@ async function queryAnalytics<T>(
           "Content-Type": "text/plain",
         },
         body: query,
+        signal,
       },
     );
   } catch (cause) {

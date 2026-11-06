@@ -15,13 +15,13 @@
     "eslint-plugin-turbo": "^2.11.10",
     "oxfmt": "^0.75.0",
     "oxlint": "^1.91.0",
-    "oxlint-tsgolint": "^7.0.2005",
+    "oxlint-tsgolint": "^7.0.2006",
     "svgo": "^4.1.0",
     "turbo": "^2.11.10",
-    "typescript": "^6.0.3"
+    "typescript": "^7.0.2"
   },
   "engines": {
     "node": ">=22"
   },
-  "packageManager": "pnpm@12.17.0"
+  "packageManager": "pnpm@12.18.0"
 }

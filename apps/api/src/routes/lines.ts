@@ -95,7 +95,7 @@ export const stationLinesRoutes = factory
 
     return linesJson(c, getStationLines(c.req.param("id")), true);
   })
-  .get("/:id/lines.geojson", linesCache(), rateLimit, (c) => {
+  .get("/:id/lines.geojson", linesCache(), rateLimit, async (c) => {
     if (!stationById.has(c.req.param("id"))) return stationNotFound(c);
 
     return linesGeoJson(c, getStationLines(c.req.param("id")), true);

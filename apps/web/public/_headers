@@ -18,6 +18,9 @@
 /assets/flags/*
   Cache-Control: public, max-age=1209600
 
+/assets/providers/*
+  Cache-Control: public, max-age=1209600
+
 /assets/screenshots/*
   Cache-Control: public, max-age=1209600
 
@@ -33,6 +36,9 @@
 /icon*
   Cache-Control: public, max-age=1209600
 
+/apple-touch-icon*.png
+  Cache-Control: public, max-age=1209600
+
 /manifest.webmanifest
   Cache-Control: public, max-age=86400
 
@@ -43,5 +49,10 @@
   Cache-Control: public, max-age=3600, s-maxage=86400
 
 /.well-known/*
-  Content-Type: application/json
   Cache-Control: public, max-age=3600
+
+/.well-known/assetlinks.json
+  Content-Type: application/json
+
+/.well-known/traffic-advice
+  Content-Type: application/trafficadvice+json

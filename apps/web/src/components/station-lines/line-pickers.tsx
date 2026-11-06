@@ -10,6 +10,15 @@ import { useEffect, useMemo, useRef } from "react";
 
 import { LineBadge } from "@/components/line-badge";
 import { getLineBadgeCode, getLineColor } from "@/lib/line-colors";
+import {
+  formatDays,
+  formatEvery,
+  formatHours,
+  formatStatus,
+  getLineCountry,
+  getServiceStatus,
+  useNow,
+} from "@/lib/line-service";
 import { OperatorTypeMarker } from "@/lib/operator-types";
 import { prerenderedPageLinkProps } from "@/lib/station-prerender";
 import { badgeLine, stopName, type StationLineView } from "./use-station-line-view";
@@ -169,6 +178,60 @@ export function LineInfo({ view, className }: { view: StationLineView; className
         )}
       </div>
       <LinePageLink view={view} />
+    </div>
+  );
+}
+
+/**
+ * Whether the shown line runs now on its own clock, "Running · last train 00:40 · every
+ * 2–5 min", with the week's hours on hover.
+ */
+export function LineServiceInfo({
+  view,
+  className,
+}: {
+  view: StationLineView;
+  className?: string;
+}) {
+  const now = useNow();
+  const service = view.line?.service;
+  if (!view.line || !service) return null;
+  // Keeps the row's height until the clock is read, so the strip below doesn't jump.
+  if (!now) return <div className={cn("h-4", className)} aria-hidden />;
+
+  const status = getServiceStatus(service, getLineCountry(view.line.id), now);
+  const { label, detail } = formatStatus(status);
+  const every = status.running ? formatEvery(status.period.every) : null;
+  const week = service
+    .map(
+      (period) => `${formatDays(period.days)} ${formatHours(period)}, ${formatEvery(period.every)}`,
+    )
+    .join("\n");
+
+  return (
+    <div
+      title={week}
+      className={cn(
+        "flex h-4 min-w-0 items-center gap-1.5 text-xs text-muted-foreground",
+        className,
+      )}
+    >
+      <span
+        aria-hidden
+        className={cn(
+          "size-1.5 shrink-0 rounded-full",
+          status.running ? "bg-green-500" : "bg-muted-foreground/50",
+        )}
+      />
+      <span className="truncate">
+        <span className={cn("font-medium", status.running && "text-green-600 dark:text-green-400")}>
+          {label}
+        </span>
+        {[detail, every]
+          .filter(Boolean)
+          .map((part) => ` · ${part}`)
+          .join("")}
+      </span>
     </div>
   );
 }
