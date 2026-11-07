@@ -245,7 +245,8 @@ pnpm --filter=api dev
 pnpm --filter=api deploy
 ```
 
-Requires a Cloudflare account with Workers enabled. Configuration is in `wrangler.jsonc`.
+Authenticate with `pnpm --filter=api exec cf auth login` before deploying, or set
+`CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID` in CI. Requires a Cloudflare account with Workers enabled. Configuration is in `cloudflare.config.ts`; `wrangler.config.ts` holds bundler settings.
 
 Provider-backed scrapers require these Worker secrets:
 
@@ -264,10 +265,12 @@ Provider-backed scrapers require these Worker secrets:
 - `MOBILITEIT_API_KEY`
 
 The Luxembourg key is issued free under CC BY 4.0 after registration with the Administration des
-transports publics. For production, save it as a Worker secret (never in `wrangler.jsonc`):
+transports publics. For production, export it as `MOBILITEIT_API_KEY` in your shell, then save it as a Worker secret
+(never in `cloudflare.config.ts`):
 
 ```bash
-pnpm --filter=api exec wrangler secret put MOBILITEIT_API_KEY
+pnpm --filter=api exec cf workers secrets update MOBILITEIT_API_KEY \
+  --worker rail-radar-api --type secret_text --text "$MOBILITEIT_API_KEY"
 ```
 
 For local development, use `MOBILITEIT_API_KEY=...` in `apps/api/.env`, which is ignored by Git.
@@ -280,10 +283,11 @@ Generate `IP_HASH_PEPPER` as a high-entropy random secret. The Worker uses it to
 openssl rand -base64 32
 ```
 
-Set the generated value for the deployed API:
+Export the generated value as `IP_HASH_PEPPER`, then update the deployed API:
 
 ```bash
-pnpm --filter=api exec wrangler secret put IP_HASH_PEPPER
+pnpm --filter=api exec cf workers secrets update IP_HASH_PEPPER \
+  --worker rail-radar-api --type secret_text --text "$IP_HASH_PEPPER"
 ```
 
 For local development, put the generated value in `apps/api/.env` as `IP_HASH_PEPPER=...` and do not commit it. If the pepper is absent, the Worker warns and falls back to legacy unkeyed SHA-256. Setting or rotating the pepper resets unique-visitor continuity.
@@ -295,3 +299,7 @@ To generate/synchronize types based on your Worker configuration:
 ```bash
 pnpm --filter=api cf-typegen
 ```
+
+Generated declarations are written to `.cloudflare/types/index.d.ts`. The API retains Wrangler
+as the bundler used by `cf`; development, builds, deployments, versions, and type generation use `cf`.
+Export secret values in your shell before running the update commands.

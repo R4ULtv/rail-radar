@@ -4,7 +4,7 @@
     "noEmit": true,
     "declaration": false,
     "declarationMap": false,
-    "types": ["../worker-configuration.d.ts"]
+    "types": ["../.cloudflare/types/index.d.ts"]
   },
-  "include": ["../src", "../worker-configuration.d.ts", ".", "../vitest.config.ts"]
+  "include": ["../src", "../.cloudflare/types/index.d.ts", ".", "../vitest.config.ts"]
 }
