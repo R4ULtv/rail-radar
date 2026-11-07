@@ -1,4 +1,4 @@
-import { bindings, defineConfig } from "cf/config";
+import { bindings, defineConfig, triggers } from "cf/config";
 
 export default defineConfig({
   worker: {
@@ -23,6 +23,11 @@ export default defineConfig({
       runWorkerFirst: true,
     },
     domains: ["api.railradar24.com"],
+    triggers: [
+      // One synthetic departures request per provider (see src/provider-probes.ts). Every 30
+      // minutes gives 6 per 3 hours, enough for the status page's 3-hour window on its own.
+      triggers.scheduled({ schedule: "*/30 * * * *" }),
+    ],
     env: {
       CLOUDFLARE_ACCOUNT_ID: bindings.secret(),
       CLOUDFLARE_API_TOKEN: bindings.secret(),

@@ -10,11 +10,15 @@ export const statusRoutes = factory
   .get(
     "/summary",
     rateLimit,
-    cache({ cacheName: "provider-summary", cacheControl: "public, max-age=60" }),
+    cache({ cacheName: "status-summary-v4", cacheControl: "public, max-age=60" }),
     async (c) => {
       try {
         return c.json(
-          await getProviderSummary(c.env.CLOUDFLARE_ACCOUNT_ID, c.env.CLOUDFLARE_API_TOKEN),
+          await getProviderSummary(
+            c.env.CLOUDFLARE_ACCOUNT_ID,
+            c.env.CLOUDFLARE_API_TOKEN,
+            new Date(),
+          ),
         );
       } catch (error) {
         logRequestError(c, error, "Provider status summary query failed");
@@ -30,11 +34,15 @@ export const statusRoutes = factory
   .get(
     "/latency",
     rateLimit,
-    cache({ cacheName: "provider-latency", cacheControl: "public, max-age=300" }),
+    cache({ cacheName: "status-latency-v3", cacheControl: "public, max-age=300" }),
     async (c) => {
       try {
         return c.json(
-          await getProviderLatency(c.env.CLOUDFLARE_ACCOUNT_ID, c.env.CLOUDFLARE_API_TOKEN),
+          await getProviderLatency(
+            c.env.CLOUDFLARE_ACCOUNT_ID,
+            c.env.CLOUDFLARE_API_TOKEN,
+            new Date(),
+          ),
         );
       } catch (error) {
         logRequestError(c, error, "Provider latency query failed");
