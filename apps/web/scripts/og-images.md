@@ -75,7 +75,7 @@ The serving code needs one deployment to replace the previous dynamic route. Sub
 
 ## Setup and checks
 
-Generation uses `MAPBOX_SERVER_TOKEN` from `apps/web/.env` or the environment. Status/upload do not use Mapbox. Both Cloudflare CLIs need access to the target bucket: listings/uploads use `cf`; the installed cf beta.18 drops the EU jurisdiction header on raw object downloads, so the installed Wrangler downloads the inventory. `--bucket` and `--jurisdiction` override the defaults.
+Generation uses `MAPBOX_SERVER_TOKEN` from `apps/web/.env` or the environment. Status/upload do not use Mapbox. The project-local `cf` CLI handles listings, downloads, and uploads, including the EU jurisdiction header. `--bucket` and `--jurisdiction` override the defaults.
 
 ```sh
 pnpm --filter web test:og

@@ -9,7 +9,7 @@ TanStack Start frontend for real-time train tracking across Europe, deployed as 
 - React 19
 - Mapbox GL through `react-map-gl`
 - Tailwind CSS v4, self-hosted Geist WOFF2 fonts, and the shared `@repo/ui` component library
-- Wrangler, Cloudflare Workers Static Assets, and R2 station photos
+- Cloudflare CLI (`cf`), Workers Static Assets, and R2 station photos
 
 ## Features
 
@@ -106,8 +106,8 @@ pnpm --filter web photos sync           # Download and validate the central R2 c
 pnpm --filter web photos upload         # Publish the local snapshot to R2 and verify its checksum
 ```
 
-Pass `--account <account-id>` when Wrangler can access multiple accounts. The commands use the
-installed Wrangler and default to bucket `rail-radar`, jurisdiction `eu`. `--bucket` and
+Pass `--account <account-id>` when cf can access multiple accounts. The commands use the
+project-local cf CLI and default to bucket `rail-radar`, jurisdiction `eu`. `--bucket` and
 `--jurisdiction` override those defaults. Invalid downloads never replace the local snapshot.
 
 Every web build validates the checked-in snapshot, then prerenders from it without remote manifest
@@ -153,12 +153,11 @@ photo metadata fields; copy its `images` array under the station ID in the centr
 are displayed in catalog order after the generated Mapbox image.
 
 ```bash
-pnpm --filter=web exec wrangler r2 object put rail-radar/stations/IT1728/front.webp \
+pnpm --filter=web exec cf r2 objects put stations/IT1728/front.webp \
+  --bucket-name rail-radar \
   --file /absolute/path/to/front.webp \
   --content-type image/webp \
-  --cache-control "public, max-age=31536000, immutable" \
-  --remote \
-  --jurisdiction eu
+  --cf-r2-jurisdiction eu
 ```
 
 Urgent removals require a catalog update and deployment, plus purging the affected static page,
@@ -172,42 +171,48 @@ pnpm --filter=web check-types
 pnpm --filter=web lint
 pnpm --filter=web build
 pnpm --filter=web cf-typegen
-pnpm --filter=web exec wrangler deploy --dry-run
+pnpm --filter=web exec cf deploy --prebuilt --mode production --dry-run
 ```
 
 ## Cloudflare deployment
 
-Authenticate Wrangler, configure the public build variables in the Cloudflare build environment, and store the map token as a Worker secret:
+Authenticate cf with `pnpm --filter=web exec cf auth login`, configure the public build variables in the Cloudflare build environment, and store the map token as a Worker secret:
 
 ```bash
-pnpm --filter=web exec wrangler secret put MAPBOX_SERVER_TOKEN
+pnpm --filter=web exec cf workers secrets update MAPBOX_SERVER_TOKEN \
+  --worker rail-radar-web --type secret_text --text "$MAPBOX_SERVER_TOKEN"
 pnpm --filter=web deploy
 ```
 
+`cf` uses its own login, separate from Wrangler. CI can set `CLOUDFLARE_API_TOKEN` and
+`CLOUDFLARE_ACCOUNT_ID`. Export `MAPBOX_SERVER_TOKEN` in your shell before running the secret update command.
+
 The Cloudflare Vite plugin builds the TanStack Start SSR handler and deploys the client output as
-Worker static assets. `wrangler.jsonc` also binds the R2 bucket and media rate limiter.
-Regenerate `worker-configuration.d.ts` with `pnpm --filter=web cf-typegen` whenever those bindings
+Worker static assets in `.cloudflare/output/v0/`. `deploy` and `versions` run the build
+(including photo validation) before deploying the resulting artifact. `cloudflare.config.ts` also binds the R2 bucket and media rate limiter.
+Regenerate `.cloudflare/types/index.d.ts` with `pnpm --filter=web cf-typegen` whenever those bindings
 change.
 
 ## Preview deployment
 
 Worker Previews use the production custom domain as their base and do not expose `workers.dev`
 URLs. Workers Builds deploys the `preview` branch automatically. To deploy by hand from the
-`preview` branch, build first, because `deploy:preview` only deploys the existing `dist`:
+`preview` branch, run the preview script; it validates the photo catalog and builds with
+`isPreview: true` before uploading:
 
 ```bash
-pnpm --filter=web build
 pnpm --filter=web deploy:preview
 ```
 
-Wrangler defaults the Preview name to the current Git branch, so the `preview` branch is always
+cf defaults the Preview name to the current Git branch, so the `preview` branch is always
 available at `https://preview.railradar24.com`; other branches are served at
 `https://<branch>.railradar24.com`. Previews do not inherit production bindings or secrets: the
-`previews` block shares the read-only station-photo R2 bucket with production and uses its own
-rate-limit namespace. Store the map token for all Previews once with:
+`isPreview` branch in `cloudflare.config.ts` shares the read-only station-photo R2 bucket with production and uses its own
+rate-limit namespace. Preview base-config secret updates still use Wrangler; store the map
+token for all Previews once with:
 
 ```bash
-pnpm --filter=web exec wrangler preview base-config secret put MAPBOX_SERVER_TOKEN
+npx wrangler preview base-config secret put MAPBOX_SERVER_TOKEN --name rail-radar-web
 ```
 
 The custom-domain Preview setting must first be applied by a production deployment from a clean

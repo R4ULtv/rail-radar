@@ -150,16 +150,18 @@ export default defineConfig(({ command, mode }) => {
     plugins: [
       cloudflare({
         viteEnvironment: { name: "ssr" },
-        // Prerender workers run side by side. Sharing .wrangler/state makes their SQLite
+        // Prerender workers run side by side. Sharing .cloudflare/state makes their SQLite
         // files collide (SQLITE_BUSY), and they would all claim the same inspector port.
         // Prerendered pages read no local bindings, so in-memory state is enough.
         ...(isPrerenderPreview && { persistState: false, inspectorPort: false }),
         config: (config) => {
-          config.r2_buckets?.forEach((bucket) => {
+          Object.values(config.worker.env ?? {}).forEach((binding) => {
+            if (binding.type !== "r2") return;
             // Only image bytes use R2. Photo metadata comes from the checked-in catalog;
             // prerendering stays offline while development can serve the real images.
-            bucket.remote = command === "serve";
+            binding.dev = { ...binding.dev, remote: command === "serve" };
           });
+          return config;
         },
       }),
       geojsonPlugin,
