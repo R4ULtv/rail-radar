@@ -100,7 +100,7 @@ describe("scheduled probes", () => {
     const env = createEnv();
     const ctx = createExecutionCtx();
     worker.scheduled(
-      { cron: "*/30 * * * *", scheduledTime: Date.now(), noRetry() {} } as ScheduledController,
+      { cron: "0 * * * *", scheduledTime: Date.now(), noRetry() {} } as ScheduledController,
       bindings(env),
       ctx,
     );

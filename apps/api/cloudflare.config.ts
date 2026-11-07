@@ -24,9 +24,9 @@ export default defineConfig({
     },
     domains: ["api.railradar24.com"],
     triggers: [
-      // One synthetic departures request per provider (see src/provider-probes.ts). Every 30
-      // minutes gives 6 per 3 hours, enough for the status page's 3-hour window on its own.
-      triggers.scheduled({ schedule: "*/30 * * * *" }),
+      // One synthetic departures request per provider (see src/provider-probes.ts). Hourly gives
+      // 24 a day, so a provider with no visitor traffic still has health in the 24-hour window.
+      triggers.scheduled({ schedule: "0 * * * *" }),
     ],
     env: {
       CLOUDFLARE_ACCOUNT_ID: bindings.secret(),
