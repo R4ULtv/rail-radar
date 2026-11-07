@@ -1873,10 +1873,10 @@
     "slug": "arriva",
     "name": "Arriva",
     "logoPath": "arriva",
-    "countries": ["international", "uk", "nl", "de", "pl", "be"],
+    "countries": ["international", "uk", "nl", "de", "pl", "be", "cz"],
     "operatorTypes": ["passenger"],
     "bounds": [-5.7, 47.3, 24.2, 57.9],
-    "description": "Arriva is a European public transport group owned by I Squared Capital. Its rail businesses include Arriva Nederland, Arriva RP in Poland and UK operating companies. The former Arriva Denmark business was sold and renamed GoCollective; its railway services transferred to DSB Vores Tog on 1 September 2026 and are not part of Arriva’s current Danish rail operations.",
+    "description": "Arriva is a European public transport group owned by I Squared Capital. Its rail businesses include Arriva Nederland, Arriva RP in Poland, Arriva vlaky in Czechia and UK operating companies. The former Arriva Denmark business was sold and renamed GoCollective; its railway services transferred to DSB Vores Tog on 1 September 2026 and are not part of Arriva’s current Danish rail operations.",
     "website": "https://www.arriva.co.uk",
     "founded": 1938,
     "headquarters": "Sunderland, United Kingdom",
@@ -1901,7 +1901,7 @@
     "slug": "leo-express",
     "name": "Leo Express",
     "logoPath": "cz/leo-express",
-    "countries": ["international", "pl"],
+    "countries": ["cz", "international", "pl"],
     "operatorTypes": ["passenger"],
     "bounds": [14.1, 49, 24.2, 52.5],
     "description": "Leo Express is a Czech private rail and bus operator focused on modern intercity travel across Central Europe. Its black-and-gold brand is associated with open-access services from Prague toward Ostrava, Slovakia, and Poland, alongside regional public-service operations and connecting coach routes.",
@@ -1929,7 +1929,7 @@
     "slug": "regiojet",
     "name": "RegioJet",
     "logoPath": "cz/regiojet",
-    "countries": ["international", "pl"],
+    "countries": ["cz", "international", "pl"],
     "operatorTypes": ["passenger"],
     "bounds": [14.1, 48.5, 24.2, 52.5],
     "description": "RegioJet is a Czech private rail and coach operator owned by Student Agency. The yellow RegioJet brand is known for open-access long-distance trains in Czechia and Slovakia, with international services linking Central European cities such as Prague, Brno, Vienna, Bratislava, and Polish destinations.",
@@ -6421,7 +6421,7 @@
     "slug": "cd",
     "name": "České dráhy",
     "logoPath": "cz/cd",
-    "countries": ["international", "de", "pl", "dk", "hu"],
+    "countries": ["cz", "international", "de", "pl", "dk", "hu"],
     "operatorTypes": ["passenger"],
     "bounds": [9.9, 46.6, 21.3, 55.7],
     "description": "České dráhy (ČD) is the Czech state-owned national railway operator and the country's largest passenger train operator. It runs long-distance and regional services across Czechia under public-service contracts, and international trains to Germany, Poland, Austria, Slovakia, Hungary and Denmark. ČD is also the parent of freight operator ČD Cargo.",
@@ -6447,6 +6447,105 @@
         "label": "Wikipedia",
         "url": "https://en.wikipedia.org/wiki/%C4%8Cesk%C3%A9_dr%C3%A1hy",
         "type": "wikipedia"
+      }
+    ]
+  },
+  {
+    "slug": "gw-train-regio",
+    "name": "GW Train Regio",
+    "logoPath": "cz/gw-train-regio",
+    "countries": ["cz", "de", "pl"],
+    "operatorTypes": ["passenger"],
+    "bounds": [12.2, 48.7, 17.7, 50.9],
+    "description": "GW Train Regio is a Czech passenger railway operator based in Ústí nad Labem. It operates regional services in Šumava, Karlovy Vary, Ústí nad Labem, Hradec Králové and Moravia-Silesia, as well as the R25 Plzeň–Most route and cross-border connections into Germany and Poland. The company was established as VIAMONT Regio in 2008 and adopted its current name in 2011.",
+    "website": "https://www.gwtr.cz/",
+    "founded": 2008,
+    "headquarters": "Ústí nad Labem, Czechia",
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["regional", "intercity", "international"],
+    "parentCompany": "GW JIHOTRANS",
+    "links": [
+      {
+        "label": "Official Site",
+        "url": "https://www.gwtr.cz/",
+        "type": "website"
+      },
+      {
+        "label": "History",
+        "url": "https://www.gwtr.cz/cs/o-spolecnosti/historie",
+        "type": "website"
+      },
+      {
+        "label": "Timetables",
+        "url": "https://www.gwtr.cz/cs/",
+        "type": "timetables"
+      }
+    ]
+  },
+  {
+    "slug": "azd",
+    "name": "AŽD Praha",
+    "logoPath": "cz/azd",
+    "countries": ["cz"],
+    "operatorTypes": ["passenger"],
+    "bounds": [13.6, 50.3, 15.3, 50.6],
+    "description": "AŽD Praha is a Czech railway signalling and automation company that also operates passenger trains through AŽD Vlaky. Its services include the U10 Švestková dráha between Litoměřice and Most and the seasonal Oparenský expres. The company also owns the Kopidlnka railway, using its lines to develop and test railway technology alongside passenger operations.",
+    "website": "https://www.azdvlaky.cz/",
+    "founded": 1954,
+    "headquarters": "Prague, Czechia",
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["regional", "scenic"],
+    "parentCompany": null,
+    "links": [
+      {
+        "label": "Passenger Services",
+        "url": "https://www.azdvlaky.cz/",
+        "type": "website"
+      },
+      {
+        "label": "Corporate Site",
+        "url": "https://www.azd.cz/",
+        "type": "website"
+      },
+      {
+        "label": "Švestková dráha Timetables",
+        "url": "https://svestkovadraha.cz/",
+        "type": "timetables"
+      }
+    ]
+  },
+  {
+    "slug": "die-laenderbahn-cz",
+    "name": "Die Länderbahn CZ",
+    "logoPath": "cz/die-laenderbahn-cz",
+    "countries": ["cz", "de"],
+    "operatorTypes": ["passenger"],
+    "bounds": [12.9, 49.9, 14.8, 51],
+    "description": "Die Länderbahn CZ is a regional passenger railway operator established in 2019 and based in Ústí nad Labem. Part of the Die Länderbahn and NETINERA groups, it operates services in northern and western Czechia, including the U12 and U14 routes around Rakovník, Žatec and Chomutov, and the seasonal T7 connection through Vejprty to Cranzahl in Germany.",
+    "website": "https://www.laenderbahn.com/cs/",
+    "founded": 2019,
+    "headquarters": "Ústí nad Labem, Czechia",
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["regional", "international"],
+    "parentCompany": "Die Länderbahn GmbH (NETINERA)",
+    "links": [
+      {
+        "label": "Official Site",
+        "url": "https://www.laenderbahn.com/cs/",
+        "type": "website"
+      },
+      {
+        "label": "About the Operator",
+        "url": "https://www.laenderbahn.com/cs/onas/die-landerbahn-cz/",
+        "type": "website"
+      },
+      {
+        "label": "Passenger Information",
+        "url": "https://www.laenderbahn.com/cs/kontakt/caste-dotazy/",
+        "type": "website"
       }
     ]
   },

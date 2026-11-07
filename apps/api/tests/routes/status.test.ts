@@ -98,7 +98,7 @@ describe("GET /status/summary", () => {
       source: "live",
       scope: "provider-fetches",
       overall: "degraded",
-      counts: { operational: 1, degraded: 1, outage: 0, unknown: 13 },
+      counts: { operational: 1, degraded: 1, outage: 0, unknown: PROVIDERS.length - 2 },
       window: { from: "2026-03-09T09:00:00.000Z", to: "2026-03-10T09:00:00.000Z", minutes: 1440 },
     });
     const sql = analyticsQueries(fetchMock)[0]!;

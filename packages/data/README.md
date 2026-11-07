@@ -68,6 +68,33 @@ import { countryStationBounds, stationsByCountry } from "@repo/data/directory";
 
 ## Data
 
+### Czech stations
+
+Czech station coordinates and GRAPP internal IDs come from [GRAPP / Správa železnic](https://grapp.spravazeleznic.cz/).
+The importer matches names and nearby coordinates against the official [SR70 directory](https://provoz.spravazeleznic.cz/portal/ViewArticle.aspx?oid=34462)
+and the [CIS passenger-station list](https://portal.cisjr.cz/pub/seznamy/stanice.csv).
+Rail Radar IDs use the seven-digit CIS code: `CZ5453613` is Pardubice hlavní nádraží,
+and `CZ5457076` is Praha hlavní nádraží. CIS codes are `54` plus the five national
+SR70 digits, excluding SR70's final check digit.
+
+```bash
+python3 scripts/import-czech-stations.py
+python3 scripts/import-czech-stations.py --check
+```
+
+The default SR70 workbook is effective 15 October–12 December 2026. For a later
+import, select the applicable workbook from the official directory and pass its
+download URL with `--sr70-url`. Run the repository formatter after importing.
+The importer excludes `STI === "33"`, operational names, non-passenger points,
+and ambiguous matches. It checks unique IDs, a plausible station count, Czech
+coordinate bounds and parity with `apps/api/src/scrapers/codes/cz-codes.json`.
+
+The live scraper obtains a token and `ASP.NET_SessionId` from the same homepage
+request and sends both to StationInfo. It parses arrivals and departures separately.
+No secrets or bindings are required. GRAPP is undocumented and its boards cover
+roughly the next hour. Its response includes a notice requiring the owner's consent
+for data reuse; public availability does not establish an open-data license.
+
 ### `stationsGeoJSON`
 
 A typed GeoJSON `FeatureCollection<Point, StationProperties>` containing all stations. Each feature has:

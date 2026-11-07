@@ -233,6 +233,17 @@ function TermsOfServicePage() {
                 MÁV
               </a>
             </li>
+            <li>
+              <strong className="text-foreground">Czech Republic</strong> &mdash;{" "}
+              <a
+                href="https://grapp.spravazeleznic.cz/"
+                className="text-foreground underline"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                GRAPP / Správa železnic
+              </a>
+            </li>
           </ul>
           <p className="mt-3">
             Metro and light rail line data, including stop sequences and track geometry, is derived

@@ -161,6 +161,10 @@ const brandPaths: Record<string, string> = {
   ht: "uk/ht",
   // Irish brands
   ir: "ie/ir",
+  // Czech brands
+  "gw train regio": "cz/gw-train-regio",
+  ažd: "cz/azd",
+  "die länderbahn cz": "cz/die-laenderbahn-cz",
   // Hungarian brands
   máv: "hu/mav",
   gysev: "hu/gysev",
@@ -266,6 +270,17 @@ const brandAliases: Record<string, string> = {
   cfr: "cfr călători",
   "cfr calatori": "cfr călători",
   ukrzaliznytsia: "uz",
+  // GRAPP carrier abbreviations.
+  arr: "arriva",
+  leo: "leo express",
+  rjet: "regiojet",
+  rjúk: "regiojet",
+  gwtr: "gw train regio",
+  "gw train": "gw train regio",
+  "ažd praha": "ažd",
+  azd: "ažd",
+  dlb: "die länderbahn cz",
+  "die laenderbahn cz": "die länderbahn cz",
 };
 
 function normalizeBrandName(brand: string): string {
@@ -279,6 +294,9 @@ function getBrandPath(brand: string): string | null {
 
 // Maps raw brand names (lowercased) to brand slugs
 const brandSlugMap: Record<string, string> = {
+  "gw train regio": "gw-train-regio",
+  ažd: "azd",
+  "die länderbahn cz": "die-laenderbahn-cz",
   // Additional regional operators.
   cj: "cj",
   nstcm: "nstcm",
