@@ -1,0 +1,50 @@
+---
+import { ArrowLeft } from "lucide-react";
+import StatusDashboard from "../dashboard";
+import { MAIN_WEBSITE } from "../site-links";
+import "../styles.css";
+
+const links = [
+  { name: "Main site", href: MAIN_WEBSITE },
+  { name: "Reports", href: `${MAIN_WEBSITE}/reports` },
+];
+---
+
+<!doctype html>
+<html lang="en" class="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#0c0a09" />
+    <meta name="color-scheme" content="dark" />
+    <meta name="description" content="Rail Radar API reachability, provider health, and 30-day response times from real station requests and scheduled checks." />
+    <title>Rail Radar status</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preload" href="/fonts/Geist-web.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/GeistMono-core.woff2" as="font" type="font/woff2" crossorigin />
+  </head>
+  <body>
+    <a class="skip-link" href="#providers">Skip to providers</a>
+    <main class="site-width">
+      <a class="back-link" href={MAIN_WEBSITE}><ArrowLeft aria-hidden="true" />Back to Rail Radar</a>
+      <div class="page-intro">
+        <h1>Rail Radar status</h1>
+        <p>Our API and the data providers behind your next departure.</p>
+      </div>
+      <StatusDashboard client:load />
+      <noscript><p class="no-script">Enable JavaScript to load current status and explore provider history.</p></noscript>
+      <section class="methodology" aria-label="About these observations">
+        <div><h2>Real requests, plus regular checks</h2><p>Recorded when visitors request station boards, and every hour Rail Radar requests departures at each provider's busiest station. Cached responses add no observations.</p></div>
+        <div><h2>As fresh as traffic allows</h2><p>Provider health needs at least 5 observations. It uses the last hour when there are enough, otherwise the last 3 or 24 hours. Errors and timeouts are failures: 5% is degraded, 50% is a major disruption.</p></div>
+        <div><h2>Latency, without the guesswork</h2><p>Daily p50, p99 and p99.9 over 30 UTC days. Missing timings stay empty. Today is partial; tail percentiles need larger samples.</p></div>
+      </section>
+    </main>
+    <footer class="site-footer">
+      <div class="site-width footer-inner">
+        <a class="brand" href="/" aria-label="Rail Radar status"><span class="status-mark"><img src="/favicon.svg" alt="" width="30" height="30" /></span><span>Rail Radar <span class="brand-section">Status</span></span></a>
+        <span class="footer-tagline">NO TICKET REQUIRED.</span>
+        <nav aria-label="More from Rail Radar">{links.map((link) => <a href={link.href}>{link.name}</a>)}</nav>
+      </div>
+    </footer>
+  </body>
+</html>
