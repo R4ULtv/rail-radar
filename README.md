@@ -24,7 +24,7 @@
 ## Quick Start
 
 ```bash
-# Requires Node.js >=22.18
+# Requires Node.js >=24
 # Install dependencies
 pnpm install
 

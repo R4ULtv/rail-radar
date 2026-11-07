@@ -24,7 +24,7 @@ Please read and follow the [Code of Conduct](./CODE_OF_CONDUCT.md) before contri
 
 ### Prerequisites
 
-- Node.js `22.18` or newer
+- Node.js `24` or newer
 - `pnpm` `11`
 
 If you use Corepack:

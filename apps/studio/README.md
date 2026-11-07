@@ -12,7 +12,7 @@ Admin tool for managing railway stations, transit lines and railway operators ac
 
 ## Getting Started
 
-Requires Node.js >=22.18. SvelteKit configuration lives in `vite.config.ts`; local library imports use `#lib/*` with explicit file extensions.
+Requires Node.js >=24. SvelteKit configuration lives in `vite.config.ts`; local library imports use `#lib/*` with explicit file extensions.
 
 For development with hot-reload:
 
