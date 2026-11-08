@@ -14,7 +14,7 @@ import {
 import { Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 
-import { hasStationWarning, StationWarning } from "@/components/station-warning";
+import { StationWarning, useHasStationWarning } from "@/components/station-warning";
 import { SaveButton } from "@/components/save-button";
 import { TrainRow, TrainRowSkeleton } from "@/components/train-row";
 import { TrainBoardNotice } from "@/components/train-board-notice";
@@ -216,6 +216,7 @@ export default function StationInfo() {
     selectedStation != null &&
     (selectedStation.type === "metro" || selectedStation.type === "light");
   const lineView = useStationLineView(selectedStation);
+  const hasWarning = useHasStationWarning(selectedStation);
   const arrivalsSupported = selectedStation ? getCountry(selectedStation.id) !== "lu" : true;
   const activeType = arrivalsSupported ? type : "departures";
   useEffect(() => {
@@ -350,7 +351,7 @@ export default function StationInfo() {
                         onRetry={retry}
                         type={activeType}
                         scrollable
-                        hasWarning={selectedStation != null && hasStationWarning(selectedStation)}
+                        hasWarning={hasWarning}
                       />
                     )}
                   </CardContent>

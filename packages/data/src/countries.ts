@@ -20,6 +20,41 @@ export type CountryCode = keyof typeof COUNTRY_MAP;
 export type CountryName = (typeof COUNTRY_MAP)[CountryCode];
 export const COUNTRY_CODES = Object.keys(COUNTRY_MAP) as CountryCode[];
 
+/**
+ * Known rail data-quality issues per country, shown on rail station pages and on the status
+ * page for the country's provider. Remove an entry once the issue is resolved.
+ */
+export const RAIL_DATA_WARNINGS: Partial<Record<CountryCode, string>> = {
+  pl: "Live data for stations in Poland may be unstable or incomplete right now. We are working to improve it.",
+  ie: "Platform information is currently unavailable for stations in Ireland. We are working to improve it.",
+  fr: "Platform and origin information may be missing for stations in France. We are working to improve it.",
+  lu: "Live arrivals are not available yet for train stations in Luxembourg. We are working to add them.",
+};
+
+/**
+ * Countries whose rail data source went live recently, by go-live date (UTC). Rail station pages
+ * and the status page flag these as new for NEW_RAIL_DATA_DAYS, then the flag lapses on its own;
+ * remove the entry afterwards.
+ */
+export const NEW_RAIL_DATA: Partial<Record<CountryCode, string>> = {
+  hu: "2026-11-06",
+};
+export const NEW_RAIL_DATA_DAYS = 30;
+
+/**
+ * Whether a country's rail data is still flagged as new at `now` (epoch ms). Pass 0 before
+ * hydration so prerendered HTML matches the first client render; listed countries count as new.
+ */
+export function isNewRailData(country: CountryCode, now: number): boolean {
+  const since = NEW_RAIL_DATA[country];
+  if (since === undefined) return false;
+  return now < Date.parse(`${since}T00:00:00Z`) + NEW_RAIL_DATA_DAYS * 86_400_000;
+}
+
+export function newRailDataNotice(country: CountryCode): string {
+  return `Live data for stations in ${COUNTRY_MAP[country]} is new and may be incomplete or inaccurate while we improve it.`;
+}
+
 /** URL-friendly full-name slug per country, derived from COUNTRY_MAP (e.g. "United Kingdom" -> "united-kingdom") */
 export const COUNTRY_SLUG = Object.fromEntries(
   (Object.entries(COUNTRY_MAP) as [CountryCode, CountryName][]).map(([code, name]) => [

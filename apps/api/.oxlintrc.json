@@ -1,4 +1,4 @@
 {
   "extends": ["../../.oxlintrc.json"],
-  "ignorePatterns": ["worker-configuration.d.ts", ".wrangler/**"]
+  "ignorePatterns": [".wrangler/**", ".cloudflare/**"]
 }

@@ -2,7 +2,14 @@
   "extends": ["//"],
   "tasks": {
     "check-types": {
-      "outputs": []
+      "outputs": [],
+      "dependsOn": ["$TURBO_EXTENDS$", "cf-typegen"]
+    },
+    "cf-typegen": {
+      "outputs": [".cloudflare/types/**"]
+    },
+    "lint": {
+      "dependsOn": ["$TURBO_EXTENDS$", "cf-typegen"]
     }
   }
 }

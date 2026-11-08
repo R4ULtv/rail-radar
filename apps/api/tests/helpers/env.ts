@@ -68,7 +68,7 @@ export function createExecutionCtx() {
   return ctx as typeof ctx & ExecutionContext;
 }
 
-/** The real ASSETS binding from wrangler.jsonc, serving packages/data/src/lines. */
+/** The real ASSETS binding from cloudflare.config.ts, serving packages/data/src/lines. */
 export function createLineAssets() {
   const assets = (workerEnv as unknown as Bindings).ASSETS;
   return { fetch: vi.fn((input: RequestInfo | URL) => assets.fetch(input)) };

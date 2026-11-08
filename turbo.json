@@ -11,18 +11,22 @@
     "build": {
       "dependsOn": ["^build", "transit"],
       "inputs": ["$TURBO_DEFAULT$", ".env*"],
-      "outputs": [".output/**", "dist/**"]
+      "outputs": [".output/**", "dist/**", ".cloudflare/output/**"]
     },
     "web#build": {
       "dependsOn": ["^build", "transit"],
       "inputs": ["$TURBO_DEFAULT$", ".env*"],
-      "outputs": ["dist/**", "!dist/server/.dev.vars"],
+      "outputs": [
+        ".cloudflare/output/**",
+        "!.cloudflare/output/**/.dev.vars",
+        ".cloudflare/types/**"
+      ],
       "env": ["MAPBOX_SERVER_TOKEN", "RESEND_API_KEY", "VITE_POSTHOG_KEY"]
     },
     "studio#build": {
       "dependsOn": ["^build", "transit"],
       "inputs": ["$TURBO_DEFAULT$", ".env*"],
-      "outputs": [".svelte-kit/**", "!.svelte-kit/cache/**"],
+      "outputs": [".svelte-kit/**", "!.svelte-kit/cache/**", "build/**", ".cloudflare/output/**"],
       "env": ["PUBLIC_POSTHOG_KEY"]
     },
     "transit": {

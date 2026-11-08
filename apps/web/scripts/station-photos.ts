@@ -28,7 +28,7 @@ check   Validate the checked-in catalog; runs before every build without accessi
 sync    Download stations/inventory.json from R2 into the checked-in snapshot
 upload  Publish the checked-in catalog to R2, then verify its checksum
 
-  --account ID       Cloudflare account ID, if Wrangler has access to multiple accounts
+  --account ID       Cloudflare account ID, if cf has access to multiple accounts
   --bucket NAME      R2 bucket (default: rail-radar)
   --jurisdiction EU  R2 jurisdiction (default: eu)
 
@@ -62,10 +62,10 @@ function validate(value: unknown): StationPhotoInventory {
   return inventory;
 }
 
-async function wrangler(args: string[]): Promise<Buffer> {
+async function cf(args: string[]): Promise<Buffer> {
   const { stdout } = await exec(
     process.execPath,
-    [join(web, "node_modules/wrangler/bin/wrangler.js"), "r2", "object", ...args],
+    [join(web, "node_modules/cf/bin/cf"), "r2", "objects", ...args],
     {
       cwd: web,
       encoding: "buffer",
@@ -76,9 +76,9 @@ async function wrangler(args: string[]): Promise<Buffer> {
   return stdout;
 }
 
-const objectPath = `${values.bucket}/${PHOTO_INVENTORY_KEY}`;
-const remoteArgs = ["--remote", "--jurisdiction", values.jurisdiction!];
-const download = () => wrangler(["get", objectPath, ...remoteArgs, "--pipe"]);
+const objectPath = PHOTO_INVENTORY_KEY;
+const remoteArgs = ["--bucket-name", values.bucket!, "--cf-r2-jurisdiction", values.jurisdiction!];
+const download = () => cf(["get", objectPath, ...remoteArgs]);
 
 const input = command === "sync" ? await download() : await readFile(snapshot);
 const inventory = validate(JSON.parse(input.toString("utf8")));
@@ -98,7 +98,7 @@ if (command === "sync") {
   try {
     const file = join(temporary, "inventory.json");
     await writeFile(file, json);
-    await wrangler([
+    await cf([
       "put",
       objectPath,
       ...remoteArgs,
@@ -106,8 +106,6 @@ if (command === "sync") {
       file,
       "--content-type",
       "application/json",
-      "--cache-control",
-      "no-cache",
     ]);
     const remote = await download();
     const checksum = (bytes: string | Uint8Array) =>
