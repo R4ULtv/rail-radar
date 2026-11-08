@@ -280,9 +280,9 @@ export function MapScreen() {
   // The step the station sheet opens at, and the one it's resting at.
   const [stationOpenStep, setStationOpenStep] = useState<StationSheetStep>("peek");
   const stationStep = useRef<StationSheetStep>("peek");
-  // The open line, the station it was opened from, which its sheet goes back to at the step it
-  // was left at, and the way along it the sheet shows. Each opening has its own key, so its sheet
-  // starts over.
+  // The open line, the stop it's shown from, which closing it opens (at the step it was left at
+  // when the line was opened from it), and the way along it the sheet shows. Each opening has its
+  // own key, so its sheet starts over.
   const [selectedLine, setSelectedLine] = useState<{
     line: Line;
     fromStation: Station | null;
@@ -292,8 +292,6 @@ export function MapScreen() {
   } | null>(null);
   const lineOpenCount = useRef(0);
   const [lineSheetOpen, setLineSheetOpen] = useState(false);
-  // A stop opened from the line's sheet, which goes back to the line when it's closed.
-  const [stopFromLineId, setStopFromLineId] = useState<string | null>(null);
   const linesUrl = useLinesUrl();
   // The closest train stations, while the station sheet was opened from the nearby button.
   const [nearbyStations, setNearbyStations] = useState<NearbyStation[]>([]);
@@ -412,7 +410,6 @@ export function MapScreen() {
       // Opened in the same update, so the first station sheet mounts already open.
       setSheetOpen(hasSheet);
       setLineSheetOpen(false);
-      setStopFromLineId(null);
       // Let the camera move start before updating the search sheet's recent list.
       setTimeout(() => addRecentStation(station), 0);
       centerOnStation(station);
@@ -466,7 +463,6 @@ export function MapScreen() {
       });
       setLineSheetOpen(true);
       setSheetOpen(false);
-      setStopFromLineId(null);
       fitLine(line);
     },
     [stopFollowing, fitLine],
@@ -478,13 +474,14 @@ export function MapScreen() {
     [selectLine, selectedStation],
   );
 
-  // A stop opened from the line goes back to it, as the line goes back to its station.
-  const selectStopFromLine = useCallback(
-    (station: Station) => {
-      selectStation(station);
-      setStopFromLineId(station.id);
-    },
-    [selectStation],
+  // A stop picked in the line's list becomes the one it's shown from, without leaving the line.
+  const focusLineStop = useCallback(
+    (station: Station, direction: LineDirection) =>
+      setSelectedLine(
+        (current) =>
+          current && { ...current, fromStation: station, fromStationStep: "peek", direction },
+      ),
+    [],
   );
 
   const setStationStep = useCallback((step: StationSheetStep) => {
@@ -495,7 +492,7 @@ export function MapScreen() {
     (action: SheetCloseAction) => {
       setLineSheetOpen(false);
       if (action !== "back" || !selectedLine?.fromStation) return;
-      // Even after one of its stops was opened in between.
+      // Swiping it away goes back to the map; closing it opens the stop it's shown from.
       const { fromStation, fromStationStep } = selectedLine;
       setSelectedStation(fromStation);
       setStationOpenStep(fromStationStep);
@@ -505,19 +502,10 @@ export function MapScreen() {
     [selectedLine, centerOnStation],
   );
 
-  const closeStationSheet = useCallback(
-    (action: SheetCloseAction) => {
-      setNearbyStations([]);
-      setSheetOpen(false);
-      if (!stopFromLineId) return;
-      setStopFromLineId(null);
-      if (action === "back" && selectedLine && stopFromLineId === selectedStation?.id) {
-        setLineSheetOpen(true);
-        fitLine(selectedLine.line);
-      }
-    },
-    [stopFromLineId, selectedLine, selectedStation, fitLine],
-  );
+  const closeStationSheet = useCallback(() => {
+    setNearbyStations([]);
+    setSheetOpen(false);
+  }, []);
 
   const changeLineDirection = useCallback(
     (direction: LineDirection) =>
@@ -871,7 +859,7 @@ export function MapScreen() {
           isOpen={lineSheetOpen}
           stationsUrl={stationsUrl}
           onClose={closeLineSheet}
-          onSelectStation={selectStopFromLine}
+          onFocusStop={focusLineStop}
           position={lineSheetPosition}
         />
       ) : null}

@@ -413,7 +413,7 @@ function StripDots({ color, style }: { color: string; style: object }) {
 
 /**
  * The strip in the line's color down the side of the stops, with each stop's ring on it: bigger
- * at the ends, and with a dot in it at the stop the line was opened from. It turns to dots next to
+ * at the ends, and with a dot in it at the stop the line is shown from. It turns to dots next to
  * stops that are left out.
  */
 function StopStrip({
@@ -526,9 +526,10 @@ const LineStop = memo(function LineStop({
     <Pressable
       accessibilityRole="button"
       accessibilityState={{ selected: isHighlighted }}
+      accessibilityHint={isHighlighted ? undefined : "Shows the line from this stop"}
       className="flex-row px-4 active:bg-surface-tertiary"
       style={{ height: rowHeight }}
-      accessibilityLabel={`${shortStationName(station.name)}${isHighlighted ? ", opened from this stop" : ""}${isEnd ? ", end of line" : ""}${isRail ? ", train station" : ""}`}
+      accessibilityLabel={`${shortStationName(station.name)}${isHighlighted ? ", shown from this stop" : ""}${isEnd ? ", end of line" : ""}${isRail ? ", train station" : ""}`}
       onPress={() => onSelect(station)}
     >
       <StopStrip
@@ -703,13 +704,14 @@ function itemKey(item: ListItem) {
 interface LineSheetContentProps {
   line: Line;
   stationsUrl: string | null;
-  /** The stop the line was opened from, highlighted among the others. */
+  /** The stop the line is shown from, highlighted among the others. */
   fromStationId: string | null;
   /** Which way along the line the stops are listed. */
   direction: LineDirection;
   onDirectionChange: (direction: LineDirection) => void;
   onClose: () => void;
-  onSelectStation: (station: Station) => void;
+  /** A stop picked in the list, to show the line from, and the way to go from it. */
+  onFocusStop: (station: Station, direction: LineDirection) => void;
   onContentHeightChange: (height: number) => void;
 }
 
@@ -720,7 +722,7 @@ function LineSheetContent({
   direction,
   onDirectionChange,
   onClose,
-  onSelectStation,
+  onFocusStop,
   onContentHeightChange,
 }: LineSheetContentProps) {
   const bottomInset = useSheetBottomInset();
@@ -729,7 +731,7 @@ function LineSheetContent({
   const color = getLineColor(line);
   // The stops' strip, which a line as dark as the sheet would leave out.
   const trackColor = getLineColorOnSheet(color, theme);
-  // Starts with the termini and the stops around the one the line was opened from. Each run of
+  // Starts with the termini and the stops around the one the line is shown from. Each run of
   // dots expands on its own, so the stops around that one stay where they are.
   const [expandedGaps, setExpandedGaps] = useState<ReadonlySet<string>>(() => new Set());
   const [isDirectionsOpen, setIsDirectionsOpen] = useState(false);
@@ -919,6 +921,24 @@ function LineSheetContent({
     return () => cancelAnimationFrame(frame);
   }, [isExtended, pendingOffset, items, scrollRef]);
 
+  // A stop picked in the list becomes the one the line is shown from, as if opened from it,
+  // keeping the way chosen unless there's nowhere left to go that way.
+  const focusStop = useCallback(
+    (station: Station) => {
+      if (!routes || station.id === fromStationId) return;
+      haptics.selection();
+      const stopIndex = (routes[direction.route] ?? []).indexOf(station.id);
+      const next = getDirectionTo(routes, direction.route, stopIndex, station.id, direction);
+      setExpandedGaps(new Set());
+      setIsDirectionsOpen(false);
+      setPendingStop(null);
+      setPendingOffset(null);
+      scrollRef.current?.scrollToOffset({ offset: 0, animated: true });
+      onFocusStop(station, next);
+    },
+    [routes, fromStationId, direction, scrollRef, onFocusStop],
+  );
+
   const toggleDirections = useCallback(() => setIsDirectionsOpen((open) => !open), []);
 
   const changeDirection = useCallback(
@@ -1004,12 +1024,12 @@ function LineSheetContent({
               line={line}
               color={trackColor}
               isHighlighted={item.station.id === fromStationId}
-              onSelect={onSelectStation}
+              onSelect={focusStop}
             />
           );
       }
     },
-    [intro, line, trackColor, fromStationId, onSelectStation, expandGap, rowHeight],
+    [intro, line, trackColor, fromStationId, focusStop, expandGap, rowHeight],
   );
 
   return (
@@ -1077,10 +1097,7 @@ function LineError({
 
 interface LineSheetProps {
   line: Line;
-  /**
-   * Changes each time the line is opened afresh, which starts its sheet over. The same key when
-   * it's opened again shows it as it was left, e.g. coming back from one of its stops.
-   */
+  /** Changes each time the line is opened, which starts its sheet over. */
   openKey: number;
   isOpen: boolean;
   /** The station GeoJSON the map shows, which names the line's stops. */
@@ -1089,7 +1106,7 @@ interface LineSheetProps {
   direction: LineDirection;
   onDirectionChange: (direction: LineDirection) => void;
   onClose: (action: SheetCloseAction) => void;
-  onSelectStation: (station: Station) => void;
+  onFocusStop: (station: Station, direction: LineDirection) => void;
   /** Where the sheet is, for the map controls that sit above it. */
   position: SheetPosition;
 }
@@ -1104,7 +1121,7 @@ export function LineSheet({
   direction,
   onDirectionChange,
   onClose,
-  onSelectStation,
+  onFocusStop,
   position,
 }: LineSheetProps) {
   const topInset = useSheetTopInset();
@@ -1121,11 +1138,8 @@ export function LineSheet({
   // The sheet mounts open, since calls made before it has measured itself are dropped.
   const [initialIndex] = useState(isOpen ? 0 : -1);
   const isMounted = useRef(false);
-  // The step it was last open at, and for which opening.
-  const lastStep = useRef({ openKey, index: 0 });
 
-  // A fresh opening starts at the middle step; coming back goes to the step it was left at, since
-  // its list keeps its scroll and only scrolls at the top step.
+  // Each opening starts at the middle step.
   useEffect(() => {
     if (!isMounted.current) {
       isMounted.current = true;
@@ -1135,8 +1149,7 @@ export function LineSheet({
       sheetRef.current?.close();
       return;
     }
-    const isReturning = lastStep.current.openKey === openKey;
-    sheetRef.current?.snapToIndex(isReturning ? lastStep.current.index : 0);
+    sheetRef.current?.snapToIndex(0);
   }, [isOpen, openKey]);
 
   // Android back shrinks the sheet back to its middle step, then closes it.
@@ -1166,7 +1179,6 @@ export function LineSheet({
       handleIndicatorStyle={{ backgroundColor: mutedColor }}
       onChange={(next) => {
         setIndex(next);
-        if (next >= 0) lastStep.current = { openKey, index: next };
         if (next === -1 && isOpen) onClose("dismiss");
       }}
     >
@@ -1183,7 +1195,7 @@ export function LineSheet({
           direction={direction}
           onDirectionChange={onDirectionChange}
           onClose={() => onClose("back")}
-          onSelectStation={onSelectStation}
+          onFocusStop={onFocusStop}
           onContentHeightChange={setContentHeight}
         />
       </ErrorBoundary>
