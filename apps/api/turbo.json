@@ -2,7 +2,7 @@
   "extends": ["//"],
   "tasks": {
     "cf-typegen": {
-      "outputs": ["worker-configuration.d.ts"]
+      "outputs": [".cloudflare/types/**"]
     },
     "lint": {
       "dependsOn": ["$TURBO_EXTENDS$", "cf-typegen"]

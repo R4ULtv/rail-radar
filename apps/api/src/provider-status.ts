@@ -8,7 +8,7 @@ import type {
   StatusSummary,
 } from "@repo/data/status";
 import { queryAnalytics } from "./analytics";
-import { STATUS_SUMMARY_WINDOW_MINUTES } from "@repo/data/status";
+import { STATUS_SUMMARY_WINDOW_MINUTES, STATUS_SUMMARY_WINDOWS_MINUTES } from "@repo/data/status";
 
 const DAY_MS = 86_400_000;
 const DAYS = 30;
@@ -28,9 +28,8 @@ interface CountsRow {
   timeouts: Numeric;
   samples: Numeric;
 }
-interface SummaryRow extends CountsRow {
-  lastSeen: Numeric;
-}
+// One row per provider, with counts suffixed by window length, e.g. `requests60`.
+type SummaryRow = { provider: string; lastSeen: Numeric } & Record<string, Numeric>;
 interface DayRow extends CountsRow {
   date: string;
 }
@@ -73,11 +72,39 @@ export function observations(row?: CountsRow): ProviderObservations {
   return { requests, successes, errors, timeouts, samples, successRate, status };
 }
 
-// All query bounds originate from the clock, never from request parameters.
+function windowCountsSql(minutes: number, since: number) {
+  const inWindow = `timestamp >= toDateTime(${Math.floor(since / 1000)})`;
+  return `sumIf(_sample_interval, ${inWindow}) AS requests${minutes},
+    sumIf(_sample_interval, blob3 = 'success' AND ${inWindow}) AS successes${minutes},
+    sumIf(_sample_interval, blob3 = 'error' AND ${inWindow}) AS errors${minutes},
+    sumIf(_sample_interval, blob3 = 'timeout' AND ${inWindow}) AS timeouts${minutes},
+    countIf(${inWindow}) AS samples${minutes}`;
+}
+
+/** The shortest window with enough observations, or the longest window if none has. */
+function adaptiveObservations(row: SummaryRow | undefined) {
+  const windows = STATUS_SUMMARY_WINDOWS_MINUTES.map((minutes) => ({
+    windowMinutes: minutes as number,
+    ...observations(
+      row && {
+        provider: row.provider,
+        requests: row[`requests${minutes}`] ?? 0,
+        successes: row[`successes${minutes}`] ?? 0,
+        errors: row[`errors${minutes}`] ?? 0,
+        timeouts: row[`timeouts${minutes}`] ?? 0,
+        samples: row[`samples${minutes}`] ?? 0,
+      },
+    ),
+  }));
+  return windows.find((window) => window.status !== "unknown") ?? windows.at(-1)!;
+}
+
+// All query bounds originate from the clock, never from request parameters. Scheduled probes
+// ("synthetic") count alongside visitor traffic ("live"); both exercise the same scrapers.
 function bounds(from: number, to: number) {
   return `timestamp >= toDateTime(${Math.floor(from / 1000)})
     AND timestamp < toDateTime(${Math.floor(to / 1000)})
-    AND blob2 = 'live'
+    AND blob2 IN ('live', 'synthetic')
     AND blob3 IN ('success', 'error', 'timeout')`;
 }
 
@@ -91,7 +118,8 @@ export async function getProviderSummary(
   const result = await queryAnalytics<QueryResult<SummaryRow>>(
     accountId,
     apiToken,
-    `SELECT index1 AS provider, ${COUNTS_SQL},
+    `SELECT index1 AS provider,
+      ${STATUS_SUMMARY_WINDOWS_MINUTES.map((minutes) => windowCountsSql(minutes, to - minutes * 60_000)).join(",\n")},
       max(toUnixTimestamp(timestamp)) AS lastSeen
     FROM provider_metrics
     WHERE ${bounds(from, to)}
@@ -104,7 +132,7 @@ export async function getProviderSummary(
     const row = byProvider.get(provider.id);
     return {
       ...provider,
-      ...observations(row),
+      ...adaptiveObservations(row),
       lastSeen: row ? new Date(Number(row.lastSeen) * 1000).toISOString() : null,
     };
   });

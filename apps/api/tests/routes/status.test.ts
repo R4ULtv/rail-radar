@@ -7,11 +7,15 @@ import {
   createEnv,
   createRateLimiter,
   freezeTime,
-  mockAnalytics,
+  mockAnalytics as mockAnalyticsQueries,
   mockFetch,
   type FetchMock,
 } from "../helpers";
 import { request } from "../helpers/app";
+
+function mockAnalytics(fetchMock: FetchMock, routes: [string, unknown[]][]) {
+  mockAnalyticsQueries(fetchMock, routes);
+}
 
 let fetchMock: FetchMock;
 beforeEach(() => {
@@ -31,14 +35,36 @@ const counts = (provider: string, overrides = {}) => ({
   ...overrides,
 });
 
+type Counts = Partial<
+  Record<"requests" | "successes" | "errors" | "timeouts" | "samples", unknown>
+>;
+
+/** A summary row with the same counts in every window unless a window is overridden. */
+const windowed = (
+  provider: string,
+  overrides: Counts & { lastSeen?: unknown } = {},
+  byWindow: Record<number, Counts> = {},
+) => {
+  const base = counts(provider, overrides);
+  const row: Record<string, unknown> = { provider, lastSeen: base.lastSeen };
+  for (const minutes of [60, 180, 1440]) {
+    const window = { ...base, ...byWindow[minutes] };
+    for (const key of ["requests", "successes", "errors", "timeouts", "samples"] as const) {
+      row[`${key}${minutes}`] = window[key];
+    }
+  }
+  return row;
+};
+const empty = { requests: 0, successes: 0, errors: 0, timeouts: 0, samples: 0 };
+
 describe("GET /status/summary", () => {
   it("includes every configured provider, normalizes counts, and leaves quiet providers unknown", async () => {
     mockAnalytics(fetchMock, [
       [
         "FROM provider_metrics",
         [
-          counts("rfi"),
-          counts("db", { requests: "20", successes: "19", errors: "1", samples: "20" }),
+          windowed("rfi"),
+          windowed("db", { requests: "20", successes: "19", errors: "1", samples: "20" }),
         ],
       ],
     ]);
@@ -76,11 +102,54 @@ describe("GET /status/summary", () => {
       window: { from: "2026-03-09T09:00:00.000Z", to: "2026-03-10T09:00:00.000Z", minutes: 1440 },
     });
     const sql = analyticsQueries(fetchMock)[0]!;
-    expect(sql).toContain("blob2 = 'live'");
-    expect(sql).toContain("sum(_sample_interval)");
-    expect(sql).toContain("count() AS samples");
+    expect(sql).toContain("blob2 IN ('live', 'synthetic')");
+    expect(sql).toContain("sumIf(_sample_interval, timestamp >= toDateTime(1773046800))");
+    expect(sql).toContain("countIf(timestamp >= toDateTime(1773046800)) AS samples1440");
     expect(sql).toContain("timestamp >= toDateTime(1773046800)");
     expect(sql).toContain("timestamp < toDateTime(1773133200)");
+  });
+
+  it("uses each provider's shortest window with enough observations", async () => {
+    mockAnalytics(fetchMock, [
+      [
+        "FROM provider_metrics",
+        [
+          // Failing within the last hour, after a healthy day.
+          windowed(
+            "db",
+            { requests: 500, successes: 495, errors: 5, samples: 500 },
+            { 60: { requests: 20, successes: 8, errors: 12, samples: 20 } },
+          ),
+          // Too few observations in the last hour, enough in the last 3 hours.
+          windowed("entur", {}, { 60: { ...empty, requests: 2, successes: 2, samples: 2 } }),
+          // Quiet: only the full day has enough observations.
+          windowed(
+            "ns",
+            {},
+            { 60: empty, 180: { ...empty, requests: 4, successes: 4, samples: 4 } },
+          ),
+          // Not enough anywhere: reports the full day's observations as unknown.
+          windowed("digitraffic", { requests: 3, successes: 3, samples: 3 }, { 60: empty }),
+        ],
+      ],
+    ]);
+    const { response } = await request("/status/summary");
+    const body = (await response.json()) as StatusSummary;
+    const provider = (id: string) => body.providers.find((item) => item.id === id);
+    expect(provider("db")).toMatchObject({ windowMinutes: 60, requests: 20, status: "outage" });
+    expect(provider("entur")).toMatchObject({ windowMinutes: 180, requests: 100 });
+    expect(provider("ns")).toMatchObject({ windowMinutes: 1440, status: "operational" });
+    expect(provider("digitraffic")).toMatchObject({
+      windowMinutes: 1440,
+      requests: 3,
+      status: "unknown",
+    });
+    expect(provider("rfi")).toMatchObject({ windowMinutes: 1440, requests: 0, lastSeen: null });
+    expect(body.window.minutes).toBe(1440);
+    const sql = analyticsQueries(fetchMock)[0]!;
+    // Last hour and last 3 hours, ending at the frozen clock.
+    expect(sql).toContain("timestamp >= toDateTime(1773129600)) AS requests60");
+    expect(sql).toContain("timestamp >= toDateTime(1773122400)) AS requests180");
   });
 
   it("keeps a quiet provider's observations from earlier in the day with their original freshness", async () => {
@@ -89,12 +158,11 @@ describe("GET /status/summary", () => {
       [
         "FROM provider_metrics",
         [
-          counts("rfi", {
-            requests: 5,
-            successes: 5,
-            samples: 5,
-            lastSeen,
-          }),
+          windowed(
+            "rfi",
+            { requests: 5, successes: 5, samples: 5, lastSeen },
+            { 60: empty, 180: empty },
+          ),
         ],
       ],
     ]);
@@ -104,6 +172,7 @@ describe("GET /status/summary", () => {
       status: "operational",
       requests: 5,
       samples: 5,
+      windowMinutes: 1440,
       lastSeen: "2026-03-09T15:00:00.000Z",
     });
     expect(body.window).toEqual({
@@ -117,7 +186,7 @@ describe("GET /status/summary", () => {
     mockAnalytics(fetchMock, [
       [
         "FROM provider_metrics",
-        [counts("rfi", { requests: 10_000, successes: 0, errors: 10_000, samples: 4 })],
+        [windowed("rfi", { requests: 10_000, successes: 0, errors: 10_000, samples: 4 })],
       ],
     ]);
     const { response } = await request("/status/summary");
@@ -135,7 +204,7 @@ describe("GET /status/summary", () => {
       [
         "FROM provider_metrics",
         PROVIDERS.map((provider) =>
-          counts(provider.id, { requests: 10, successes: 5, timeouts: 5, samples: 5 }),
+          windowed(provider.id, { requests: 10, successes: 5, timeouts: 5, samples: 5 }),
         ),
       ],
     ]);
@@ -148,7 +217,7 @@ describe("GET /status/summary", () => {
 
   it("only reports operational overall when every provider has enough healthy observations", async () => {
     mockAnalytics(fetchMock, [
-      ["FROM provider_metrics", PROVIDERS.map((provider) => counts(provider.id))],
+      ["FROM provider_metrics", PROVIDERS.map((provider) => windowed(provider.id))],
     ]);
     const { response } = await request("/status/summary");
     expect(((await response.json()) as StatusSummary).overall).toBe("operational");
@@ -234,7 +303,7 @@ describe("GET /status/latency", () => {
     expect(sql).toContain("quantileExactWeighted(0.99)(double1, _sample_interval)");
     expect(sql).toContain("quantileExactWeighted(0.999)(double1, _sample_interval)");
     expect(sql).toContain("AND double1 >= 0");
-    expect(sql).toContain("blob2 = 'live'");
+    expect(sql).toContain("blob2 IN ('live', 'synthetic')");
     expect(sql).toContain("'Etc/UTC'");
     const healthSql = analyticsQueries(fetchMock).find(
       (query) => !query.includes("quantileExactWeighted"),

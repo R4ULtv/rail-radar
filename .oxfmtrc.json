@@ -3,9 +3,9 @@
   "ignorePatterns": [
     "**/codes/*.json",
     "**/routeTree.gen.ts",
-    "**/worker-configuration.d.ts",
     "**/data/src/lines.json",
-    "**/data/src/lines/*.json"
+    "**/data/src/lines/*.json",
+    "**/.cloudflare/**"
   ],
   "svelte": true
 }

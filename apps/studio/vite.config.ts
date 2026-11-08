@@ -1,5 +1,5 @@
 import tailwindcss from "@tailwindcss/vite";
-import adapter from "@sveltejs/adapter-static";
+import { cloudflareStaticAdapter } from "./vite-plugins/cloudflare-static-adapter.ts";
 import { sveltekit } from "@sveltejs/kit/vite";
 import { vitePreprocess } from "@sveltejs/vite-plugin-svelte";
 import { defineConfig } from "vite";
@@ -8,8 +8,9 @@ import { localStationApi } from "./vite-plugins/local-station-api.ts";
 import { localLineApi } from "./vite-plugins/local-line-api.ts";
 import { localOperatorApi } from "./vite-plugins/local-operator-api.ts";
 
-export default defineConfig({
+export default defineConfig(({ mode }) => ({
   server: {
+    port: 3001,
     fs: { allow: ["../..", realpathSync("../../node_modules")] },
   },
   plugins: [
@@ -29,13 +30,10 @@ export default defineConfig({
     tailwindcss(),
     sveltekit({
       preprocess: vitePreprocess(),
-      adapter: adapter({
-        pages: "build",
-        assets: "build",
-      }),
+      adapter: cloudflareStaticAdapter(mode),
     }),
   ],
   build: {
     chunkSizeWarningLimit: 1500,
   },
-});
+}));

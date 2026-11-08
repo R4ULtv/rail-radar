@@ -47,7 +47,7 @@ describe("GET /map/static", () => {
 
   it("uses a public icon URL when running locally", async () => {
     fetchMock.on("api.mapbox.com", imageResponse());
-    const { default: app } = await import("../../src/index");
+    const { app } = await import("../../src/index");
 
     await app.request(
       "http://localhost:8787/map/static?lat=1&lng=2",

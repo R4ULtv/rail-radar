@@ -9,8 +9,10 @@
     "lib": ["ESNext"],
     "jsx": "react-jsx",
     "jsxImportSource": "hono/jsx",
-    "types": ["./worker-configuration.d.ts"]
+    "types": ["./.cloudflare/types/index.d.ts"],
+    "allowImportingTsExtensions": true,
+    "noEmit": true
   },
-  "include": ["src", "worker-configuration.d.ts"],
+  "include": ["src", ".cloudflare/types/index.d.ts", "cloudflare.config.ts", "wrangler.config.ts"],
   "exclude": ["node_modules", "dist"]
 }

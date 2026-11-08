@@ -151,7 +151,12 @@ const r2Args = ["--bucket-name", values.bucket!, "--cf-r2-jurisdiction", values.
 async function cf(args: string[]): Promise<string> {
   for (let attempt = 0; ; attempt++) {
     try {
-      return (await exec("cf", args, { cwd: web, maxBuffer: 32 * 1024 * 1024 })).stdout;
+      return (
+        await exec(process.execPath, [join(web, "node_modules/cf/bin/cf"), ...args], {
+          cwd: web,
+          maxBuffer: 32 * 1024 * 1024,
+        })
+      ).stdout;
     } catch (error) {
       const message = (error as { stderr?: string }).stderr ?? String(error);
       if (attempt < 3 && /429|rate.?limit|50[0234]|timed?\s*out|ECONNRESET/i.test(message)) {
@@ -193,22 +198,9 @@ async function listRemote(): Promise<ListedOgObject[]> {
 }
 
 async function readRemoteObject(key: string): Promise<Uint8Array> {
-  // cf beta.18 drops the jurisdiction header on raw object downloads. Keep cf
-  // for listings/uploads and use the installed Wrangler only for this EU read.
-  const wrangler = join(web, "node_modules/wrangler/bin/wrangler.js");
   const { stdout } = await exec(
     process.execPath,
-    [
-      wrangler,
-      "r2",
-      "object",
-      "get",
-      `${values.bucket}/${key}`,
-      "--remote",
-      "--jurisdiction",
-      values.jurisdiction!,
-      "--pipe",
-    ],
+    [join(web, "node_modules/cf/bin/cf"), "r2", "objects", "get", key, ...r2Args],
     { cwd: web, maxBuffer: 32 * 1024 * 1024, encoding: "buffer" },
   );
   return stdout;

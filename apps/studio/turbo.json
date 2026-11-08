@@ -8,7 +8,10 @@
       "dependsOn": ["$TURBO_EXTENDS$", "sync"]
     },
     "check-types": {
-      "dependsOn": ["$TURBO_EXTENDS$", "sync"]
+      "dependsOn": ["$TURBO_EXTENDS$", "sync", "cf-typegen"]
+    },
+    "cf-typegen": {
+      "outputs": [".cloudflare/types/**"]
     }
   }
 }

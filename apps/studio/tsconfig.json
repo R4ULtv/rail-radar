@@ -1,6 +1,13 @@
 {
   "extends": "$app/tsconfig",
-  "include": ["src", "tests", "vite-plugins", "vite.config.ts"],
+  "include": [
+    "src",
+    "tests",
+    "vite-plugins",
+    "vite.config.ts",
+    "cloudflare.config.ts",
+    ".cloudflare/types"
+  ],
   "exclude": ["src/service-worker", "node_modules", "build"],
   "compilerOptions": {
     "allowImportingTsExtensions": true,

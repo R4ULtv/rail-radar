@@ -1,8 +1,9 @@
 import { cors } from "hono/cors";
 import { secureHeaders } from "hono/secure-headers";
-import { factory } from "./lib/env";
+import { factory, type Bindings } from "./lib/env";
 import { logRequestError } from "./lib/error-logging";
 import { jsonError } from "./lib/http";
+import { runProviderProbes } from "./provider-probes";
 import { analyticsRoutes } from "./routes/analytics";
 import { linesGeoJsonRoutes, linesRoutes, stationLinesRoutes } from "./routes/lines";
 import { mapRoutes } from "./routes/map";
@@ -38,6 +39,8 @@ export function createApp() {
       origin: [
         "http://localhost:3000",
         "http://127.0.0.1:3000",
+        "http://localhost:3002",
+        "http://127.0.0.1:3002",
         "https://status.railradar24.com",
         "https://www.railradar24.com",
         "https://preview.railradar24.com",
@@ -58,8 +61,14 @@ export function createApp() {
     .route("/status", statusRoutes);
 }
 
-const app = createApp();
+export const app = createApp();
 
 export type AppType = typeof app;
 
-export default app;
+export default {
+  fetch: app.fetch,
+  // Cron: one synthetic request per provider, so quiet providers still have status data.
+  scheduled(_controller, env, ctx) {
+    ctx.waitUntil(runProviderProbes(env));
+  },
+} satisfies ExportedHandler<Bindings>;

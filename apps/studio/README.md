@@ -12,7 +12,7 @@ Admin tool for managing railway stations, transit lines and railway operators ac
 
 ## Getting Started
 
-Requires Node.js >=22.17. SvelteKit configuration lives in `vite.config.ts`; local library imports use `#lib/*` with explicit file extensions.
+Requires Node.js >=24. SvelteKit configuration lives in `vite.config.ts`; local library imports use `#lib/*` with explicit file extensions.
 
 For development with hot-reload:
 
@@ -30,6 +30,28 @@ For a production build:
 pnpm --filter=studio build
 pnpm --filter=studio preview
 ```
+
+## Cloudflare deployment
+
+`cloudflare.config.ts` defines the `rail-radar-studio` Worker and its custom domain.
+`cf dev` starts Vite on port 3001 with the local editing middleware. `cf build` uses a
+small wrapper around the static SvelteKit adapter to write `build/` and package it as
+an assets-only Worker in `.cloudflare/output/v0/`.
+
+```bash
+pnpm --filter=studio exec cf auth login
+pnpm --filter=studio deploy
+```
+
+`deploy` builds before uploading. To deploy an existing build without rebuilding:
+
+```bash
+pnpm --filter=studio exec cf deploy --prebuilt --mode production
+```
+
+For CI, set `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID`. Run
+`pnpm --filter=studio cf-typegen` after config changes; studio omits Worker runtime
+types because its application code runs in the browser.
 
 ## Environment variables
 

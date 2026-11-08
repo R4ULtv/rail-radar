@@ -43,3 +43,6 @@ yarn-error.log*
 agents.md
 claude.md
 plans
+
+# Cloudflare build output, local state, and generated types
+.cloudflare/

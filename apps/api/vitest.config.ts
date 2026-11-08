@@ -1,4 +1,5 @@
 import { readFileSync } from "node:fs";
+import { assetsDirectory } from "./wrangler.config.ts";
 import { cloudflareTest } from "@cloudflare/vitest-plugin";
 import { defineConfig, type Plugin } from "vitest/config";
 
@@ -19,8 +20,12 @@ const geojson: Plugin = {
 export default defineConfig({
   plugins: [
     geojson,
-    // Run every test inside workerd with the bindings declared in wrangler.jsonc.
-    cloudflareTest({ wrangler: { configPath: "./wrangler.jsonc" } }),
+    // Run every test inside workerd with the bindings declared in cloudflare.config.ts.
+    cloudflareTest({
+      config: "./cloudflare.config.ts",
+      // The cf config declares ASSETS; the bundler config supplies its files.
+      miniflare: { assets: { directory: assetsDirectory, binding: "ASSETS" } },
+    }),
   ],
   test: {
     include: ["tests/**/*.test.ts"],
