@@ -3,6 +3,7 @@ import { DEFAULT_LINE_COLOR, getLineStationIds, getStationLines, lineById } from
 import type { Line, LineRoute, Station } from "@repo/data/types";
 
 import { distanceKm } from "@/lib/distance";
+import { getInitialDirection, orientRoutes, type LineDirection } from "@/lib/line-directions";
 import type { UserLocation } from "@/lib/user-location";
 
 // Lines ship with the app and never update on their own, so they work offline. Their tracks are
@@ -15,7 +16,7 @@ const operatorNames = require("../../assets/generated/line-operators.json") as R
   string
 >;
 
-export type { Line, LineRoute };
+export type { Line, LineDirection, LineRoute };
 
 /** Whether a search result is a line rather than a station. */
 export function isLine(item: Station | Line): item is Line {
@@ -66,6 +67,42 @@ export function getLineTextColor(color: string): string {
   return contrast(color, LIGHT_TEXT) < 4.5 && contrast(color, DARK_TEXT) >= 4.5
     ? DARK_TEXT
     : LIGHT_TEXT;
+}
+
+/**
+ * A mark on a line color, like the arrowhead on the line sheet's diagram: white, which reads at a
+ * glance as icons do on line signs, unless it falls below WCAG's 3:1 for graphics, as on a yellow.
+ */
+export function getLineIconColor(color: string): string {
+  if (!/^#[\da-f]{6}$/i.test(color)) return LIGHT_TEXT;
+  return contrast(color, LIGHT_TEXT) >= 3 ? LIGHT_TEXT : DARK_TEXT;
+}
+
+// The cards the line sheet draws line colors on, stone-100 and stone-800 as in global.css, and
+// the text on them.
+const cardColors = { light: "#f5f5f4", dark: "#292524" };
+const cardTextColors = { light: "#1c1917", dark: "#fafaf9" };
+
+/**
+ * A line color to draw a mark on a card with, or the card's text color where it would barely show
+ * (below WCAG's 3:1 for graphics), like the Northern line's black in dark mode or a yellow in light.
+ */
+export function getLineColorOnCard(color: string, theme: "light" | "dark"): string {
+  if (!/^#[\da-f]{6}$/i.test(color)) return color;
+  return contrast(color, cardColors[theme]) >= 3 ? color : cardTextColors[theme];
+}
+
+// The sheets a line is drawn on, white and stone-900 as in global.css.
+const sheetColors = { light: "#ffffff", dark: "#1c1917" };
+
+/**
+ * A line color to draw the line itself with on a sheet, or the sheet's text color where it would
+ * all but vanish: the Northern line's black in dark mode, or Amsterdam's 54 yellow in light. Kept
+ * low so that a pale yellow or a navy still shows as itself.
+ */
+export function getLineColorOnSheet(color: string, theme: "light" | "dark"): string {
+  if (!/^#[\da-f]{6}$/i.test(color)) return color;
+  return contrast(color, sheetColors[theme]) >= 1.3 ? color : cardTextColors[theme];
 }
 
 export function getLineCountry(line: Line): CountryCode | null {
@@ -142,11 +179,6 @@ export function getLineTermini(
   return `${shortStationName(first.name)} – ${shortStationName(last.name)}`;
 }
 
-/** A route that comes back to the stop it starts from. */
-export function isLoopRoute(route: LineRoute): boolean {
-  return route.stations.length > 2 && route.stations[0] === route.stations.at(-1);
-}
-
 /** How many of a route's stops the stations know, counting a loop's first stop once. */
 export function getRouteStopCount(
   route: LineRoute,
@@ -175,39 +207,6 @@ export function getViaStation(
     }
   }
   return best;
-}
-
-export interface RouteLabel {
-  /** "Abbiategrasso → Gessate", or "Full loop". */
-  title: string;
-  /** Where it goes that another route with the same title doesn't, "Bank". */
-  via: string | null;
-}
-
-/** Each route named after its ends, and a stop it takes when another route has the same ends. */
-export function getRouteLabels(
-  routes: readonly LineRoute[],
-  stationsById: ReadonlyMap<string, Station>,
-): RouteLabel[] {
-  const name = (id: string | undefined) => {
-    const station = id ? stationsById.get(id) : undefined;
-    return station ? shortStationName(station.name) : "";
-  };
-  const titles = routes.map((route) =>
-    isLoopRoute(route)
-      ? "Full loop"
-      : `${name(route.stations[0])} → ${name(route.stations.at(-1))}`,
-  );
-  return routes.map((route, index) => {
-    const twins = routes.filter((_, other) => other !== index && titles[other] === titles[index]);
-    if (twins.length === 0) return { title: titles[index]!, via: null };
-    const elsewhere = new Set(twins.flatMap((twin) => twin.stations));
-    const via = getViaStation(
-      route.stations.filter((id) => !elsewhere.has(id)),
-      stationsById,
-    );
-    return { title: titles[index]!, via: via ? shortStationName(via.name) : null };
-  });
 }
 
 /** [west, south, east, north] around the line's stops, to fit the map to it. */
@@ -249,50 +248,24 @@ export function getLineDistanceKm(
   return closest;
 }
 
-/** The first branch through the stop a line was opened from, or the first branch. */
-export function getInitialBranch(line: Line, stationId: string | null): number {
-  if (!stationId) return 0;
-  return Math.max(
-    0,
-    line.routes.findIndex((route) => route.stations.includes(stationId)),
-  );
+const orientedRoutes = new WeakMap<Line, string[][]>();
+
+/** The line's routes' stops, all listed the same way round (see orientRoutes). */
+export function getOrientedRoutes(line: Line): string[][] {
+  let routes = orientedRoutes.get(line);
+  if (!routes) {
+    routes = orientRoutes(line.routes.map((route) => route.stations));
+    orientedRoutes.set(line, routes);
+  }
+  return routes;
 }
 
-/** A run of stops left out of a short list of them, shown as dots to expand. */
-export interface HiddenStops {
-  /** Where the run starts among all the stops. */
-  from: number;
-  count: number;
+/** The oriented routes' stops that the stations know, like the stop list and diagram show. */
+export function getKnownRoutes(line: Line, stationsById: ReadonlyMap<string, Station>): string[][] {
+  return getOrientedRoutes(line).map((stations) => stations.filter((id) => stationsById.has(id)));
 }
 
-// A list this short shows every stop.
-const maxCollapsedStops = 7;
-const stopsAroundFocus = 2;
-
-/**
- * Which of a route's stops to show before the rest are expanded: the termini, and the stop the
- * line was opened from with the two either side of it. A line opened from elsewhere shows all its
- * stops. Hiding a single stop saves no room, so only runs of two or more are hidden.
- */
-export function collapseStops(stopCount: number, focusIndex: number): (number | HiddenStops)[] {
-  const all = Array.from({ length: stopCount }, (_, index) => index);
-  if (focusIndex < 0 || stopCount <= maxCollapsedStops) return all;
-
-  const shown = new Set([0, stopCount - 1]);
-  for (let index = focusIndex - stopsAroundFocus; index <= focusIndex + stopsAroundFocus; index++) {
-    if (index >= 0 && index < stopCount) shown.add(index);
-  }
-  const kept = [...shown].sort((a, b) => a - b);
-
-  const items: (number | HiddenStops)[] = [];
-  for (const [position, index] of kept.entries()) {
-    const previous = kept[position - 1];
-    if (previous !== undefined) {
-      const count = index - previous - 1;
-      if (count === 1) items.push(previous + 1);
-      else if (count > 1) items.push({ from: previous + 1, count });
-    }
-    items.push(index);
-  }
-  return items;
+/** Where to go along the line at first, from the stop it was opened from. */
+export function getLineInitialDirection(line: Line, stationId: string | null): LineDirection {
+  return getInitialDirection(getOrientedRoutes(line), stationId);
 }

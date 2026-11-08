@@ -15,8 +15,6 @@
     "./status": "./src/status.ts",
     "./stations": "./src/stations.ts",
     "./stations.geojson": "./src/stations.geojson",
-    "./transfers": "./src/transfers.ts",
-    "./transfers.json": "./src/transfers.json",
     "./types": "./src/types.ts"
   },
   "scripts": {

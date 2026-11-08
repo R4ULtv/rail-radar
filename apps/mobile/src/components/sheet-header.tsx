@@ -28,6 +28,7 @@ export function SheetHeader({
   closeLabel,
   onClose,
   leading,
+  actions,
   children,
 }: {
   title: string;
@@ -37,6 +38,8 @@ export function SheetHeader({
   onClose: () => void;
   /** Before the title, e.g. a line's badge. */
   leading?: ReactNode;
+  /** Small buttons before the close button, e.g. to save or share. */
+  actions?: ReactNode;
   /** Shown below the title, e.g. a subtitle. */
   children?: ReactNode;
 }) {
@@ -53,7 +56,14 @@ export function SheetHeader({
         </Text>
         {children}
       </View>
-      <CloseButton accessibilityLabel={closeLabel} onPress={onClose} />
+      {actions ? (
+        <View className="flex-row items-center gap-2">
+          {actions}
+          <CloseButton accessibilityLabel={closeLabel} onPress={onClose} />
+        </View>
+      ) : (
+        <CloseButton accessibilityLabel={closeLabel} onPress={onClose} />
+      )}
     </View>
   );
 }

@@ -59,11 +59,12 @@ import { addRecentStation } from "@/hooks/use-stored-stations";
 import { useUserLocation } from "@/hooks/use-user-location";
 import { haptics } from "@/lib/haptics";
 import {
-  getInitialBranch,
   getLineBounds,
   getLineColor,
+  getLineInitialDirection,
   getRouteStops,
   type Line,
+  type LineDirection,
 } from "@/lib/lines";
 import { mapFeedbackUrl, type MapPosition } from "@/lib/links";
 import type { LocationFix } from "@/lib/location-tracking";
@@ -280,12 +281,13 @@ export function MapScreen() {
   const [stationOpenStep, setStationOpenStep] = useState<StationSheetStep>("peek");
   const stationStep = useRef<StationSheetStep>("peek");
   // The open line, the station it was opened from, which its sheet goes back to at the step it
-  // was left at, and the branch it shows. Each opening has its own key, so its sheet starts over.
+  // was left at, and the way along it the sheet shows. Each opening has its own key, so its sheet
+  // starts over.
   const [selectedLine, setSelectedLine] = useState<{
     line: Line;
     fromStation: Station | null;
     fromStationStep: StationSheetStep;
-    branch: number;
+    direction: LineDirection;
     openKey: number;
   } | null>(null);
   const lineOpenCount = useRef(0);
@@ -459,7 +461,7 @@ export function MapScreen() {
         line,
         fromStation,
         fromStationStep,
-        branch: getInitialBranch(line, fromStation?.id ?? null),
+        direction: getLineInitialDirection(line, fromStation?.id ?? null),
         openKey: ++lineOpenCount.current,
       });
       setLineSheetOpen(true);
@@ -517,18 +519,20 @@ export function MapScreen() {
     [stopFromLineId, selectedLine, selectedStation, fitLine],
   );
 
-  const changeLineBranch = useCallback(
-    (branch: number) => setSelectedLine((current) => current && { ...current, branch }),
+  const changeLineDirection = useCallback(
+    (direction: LineDirection) =>
+      setSelectedLine((current) => current && { ...current, direction }),
     [],
   );
 
-  // The open branch's stops are marked on its line, so it's clear which one the sheet lists.
+  // The chosen route's stops are marked on its line, so it's clear which one the sheet lists.
   const stationsById = useStationsById(stationsUrl);
+  const openLine = lineSheetOpen ? selectedLine?.line : undefined;
+  const openRoute = selectedLine?.direction.route;
   const lineStops = useMemo(() => {
-    if (!lineSheetOpen || !selectedLine || !stationsById) return noStops;
-    const route = selectedLine.line.routes[selectedLine.branch];
-    return route ? getRouteStops(route, stationsById) : noStops;
-  }, [lineSheetOpen, selectedLine, stationsById]);
+    const route = openRoute === undefined ? undefined : openLine?.routes[openRoute];
+    return route && stationsById ? getRouteStops(route, stationsById) : noStops;
+  }, [openLine, openRoute, stationsById]);
 
   // The open line's track is drawn, or those of the open station's lines, over the rest if the map
   // shows every line.
@@ -862,8 +866,8 @@ export function MapScreen() {
           line={selectedLine.line}
           openKey={selectedLine.openKey}
           fromStationId={selectedLine.fromStation?.id ?? null}
-          branch={selectedLine.branch}
-          onBranchChange={changeLineBranch}
+          direction={selectedLine.direction}
+          onDirectionChange={changeLineDirection}
           isOpen={lineSheetOpen}
           stationsUrl={stationsUrl}
           onClose={closeLineSheet}
