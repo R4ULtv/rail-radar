@@ -1,6 +1,6 @@
 import { lines } from "@repo/data/lines";
 import type { Station } from "@repo/data/types";
-import { File } from "expo-file-system";
+import { readAsStringAsync } from "expo-file-system/legacy";
 
 import { distanceKm } from "@/lib/distance";
 import { parseStations } from "@/lib/parse-stations";
@@ -19,7 +19,9 @@ interface LoadedStations {
 let loaded: LoadedStations | null = null;
 
 async function readStations(url: string): Promise<Station[]> {
-  return parseStations(await new File(url).text());
+  // SDK 55's File.text() incorrectly requires write permission on iOS. Bundled
+  // assets are read-only; the legacy async reader correctly requires only read.
+  return parseStations(await readAsStringAsync(url));
 }
 
 function load(url: string): LoadedStations {

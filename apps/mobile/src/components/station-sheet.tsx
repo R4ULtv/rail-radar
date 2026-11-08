@@ -1051,6 +1051,7 @@ export function StationSheet({
 
   return (
     <BottomSheet
+      accessible={false}
       ref={sheetRef}
       index={initialIndex}
       snapPoints={hasMiddleStep ? [peekHeight, `${middleStep * 100}%`] : [peekHeight]}

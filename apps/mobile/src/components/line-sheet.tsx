@@ -1165,6 +1165,7 @@ export function LineSheet({
 
   return (
     <BottomSheet
+      accessible={false}
       ref={sheetRef}
       index={initialIndex}
       // No smaller step: the stops are what the sheet is for. A short line opens as tall as its

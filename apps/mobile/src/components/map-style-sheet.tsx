@@ -154,6 +154,7 @@ export function MapStyleSheet({
 
   return (
     <BottomSheet
+      accessible={false}
       ref={sheetRef}
       // Mounted open, since calls made before the sheet has measured itself are dropped.
       index={0}

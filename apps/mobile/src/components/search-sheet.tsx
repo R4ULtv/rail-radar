@@ -670,6 +670,7 @@ export function SearchSheet({
 
   return (
     <BottomSheet
+      accessible={false}
       ref={sheetRef}
       index={0}
       // Collapsed to the search bar, or open as tall as the lists, up to the top of the screen.
