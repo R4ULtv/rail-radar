@@ -686,7 +686,7 @@ function LineAbout({ line }: { line: Line }) {
           ) : null}
         </View>
       ) : null}
-      <ReportLinks mutedColor={mutedColor} />
+      <ReportLinks />
     </View>
   );
 }

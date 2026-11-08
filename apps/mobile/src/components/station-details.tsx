@@ -7,10 +7,8 @@ import { Separator } from "heroui-native/separator";
 import { Surface } from "heroui-native/surface";
 import BarChart from "lucide-react-native/icons/chart-no-axes-column";
 import ChevronDown from "lucide-react-native/icons/chevron-down";
-import Bug from "lucide-react-native/icons/bug";
 import Images from "lucide-react-native/icons/images";
 import Info from "lucide-react-native/icons/info";
-import Lightbulb from "lucide-react-native/icons/lightbulb";
 import MapPin from "lucide-react-native/icons/map-pin";
 import TrendingUp from "lucide-react-native/icons/trending-up";
 import { memo, useState, type ReactNode } from "react";
@@ -299,25 +297,23 @@ function StationAbout({ station, mutedColor }: { station: Station; mutedColor: s
   );
 }
 
-export function ReportLinks({ mutedColor }: { mutedColor: string }) {
+export function ReportLinks() {
   const links = [
-    { label: "Report a problem", icon: Bug, url: bugReportUrl },
-    { label: "Request a feature", icon: Lightbulb, url: featureRequestUrl },
+    { label: "Report a problem", url: bugReportUrl },
+    { label: "Request a feature", url: featureRequestUrl },
   ];
 
   return (
     <View className="mt-8 items-center gap-2 px-4">
       <View className="flex-row items-center">
-        {links.map(({ label, icon: Icon, url }, index) => (
+        {links.map(({ label, url }, index) => (
           <View key={url} className="flex-row items-center">
             {index > 0 ? <Text className="mx-1.5 text-xs text-muted">·</Text> : null}
             <Pressable
               accessibilityRole="link"
               hitSlop={8}
-              className="flex-row items-center gap-1.5"
               onPress={() => void Linking.openURL(url)}
             >
-              <Icon size={12} color={mutedColor} />
               <Text className="text-xs text-muted">{label}</Text>
             </Pressable>
           </View>
@@ -401,7 +397,7 @@ export const StationDetails = memo(function StationDetails({
         />
       )}
       <StationAbout station={station} mutedColor={mutedColor} />
-      <ReportLinks mutedColor={mutedColor} />
+      <ReportLinks />
     </View>
   );
 });

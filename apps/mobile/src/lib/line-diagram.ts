@@ -95,6 +95,9 @@ const CHEVRON_RADIUS = 9;
 const DROP = 30;
 // Between the main line and the first branch, and between branches.
 const LANE = 36;
+// Added between branches stacked over each other, so the lower one's name clears the line and end
+// dot of the one above.
+const STACK_GAP = 8;
 // Between a dot and its label.
 const LABEL_GAP = 4;
 // Kept between branches in the same lane.
@@ -234,7 +237,8 @@ function layoutLine(input: DiagramInput, main: readonly string[]): LineDiagram {
   // The diagram shows how the line branches, not how far apart its stops are: the stops where
   // other routes leave it split it into stretches of equal width, and the stops along each are
   // spread evenly over it. Where branches leave from stops too close together for their slopes to
-  // fit that way, the stretches are sized more and more by their stops instead.
+  // fit that way, the stretches are sized more and more by their stops instead, and as a last
+  // resort, the branches are stacked closer.
   const keys = [
     ...new Set([
       0,
@@ -244,7 +248,15 @@ function layoutLine(input: DiagramInput, main: readonly string[]): LineDiagram {
       ),
     ]),
   ].sort((a, b) => a - b);
-  const layouts = [1, 0.5, 0].map((evenness) => {
+  const tries = [
+    [1, STACK_GAP],
+    [0.5, STACK_GAP],
+    [0, STACK_GAP],
+    [0, 0],
+  ] as const;
+  const layouts = tries.map(([evenness, stackGap]) => {
+    /** How far above the line a branch runs in a lane, counted from 1. */
+    const riseOf = (lane: number) => lane * LANE + (lane - 1) * stackGap;
     /** How far along the line a stop is drawn, from 0 at its first to 1 at its last. */
     const share = (index: number) => {
       const next = Math.max(
@@ -294,7 +306,7 @@ function layoutLine(input: DiagramInput, main: readonly string[]): LineDiagram {
       const span = width - 2 * EDGE - insetLeft - insetRight;
       branches.forEach((branch, index) => {
         if (branch.type !== "end") return;
-        const slope = laneOf[index]! * LANE;
+        const slope = riseOf(laneOf[index]!);
         const x = EDGE + insetLeft + share(branch.anchor) * span;
         if (branch.side === "left") insetLeft = Math.max(insetLeft, slope + EDGE - x);
         else insetRight = Math.max(insetRight, x + slope + EDGE - width);
@@ -305,12 +317,13 @@ function layoutLine(input: DiagramInput, main: readonly string[]): LineDiagram {
     const xOf = (index: number) => left + share(index) * (right - left);
     const fits = branches.every((branch, index) => {
       if (branch.type !== "end") return true;
-      const bend = xOf(branch.anchor) + (branch.side === "left" ? -1 : 1) * laneOf[index]! * LANE;
+      const bend = xOf(branch.anchor) + (branch.side === "left" ? -1 : 1) * riseOf(laneOf[index]!);
       return bend >= EDGE - 0.5 && bend <= width - EDGE + 0.5;
     });
-    return { laneOf, left, right, xOf, fits };
+    return { laneOf, riseOf, left, right, xOf, fits };
   });
-  const { laneOf, left, right, xOf } = layouts.find((layout) => layout.fits) ?? layouts.at(-1)!;
+  const { laneOf, riseOf, left, right, xOf } =
+    layouts.find((layout) => layout.fits) ?? layouts.at(-1)!;
 
   // Laid out around the line at y 0, and moved down to fit at the end. Where another route forks
   // off near an end, the chosen one drops below the line to that end as the other rises above it.
@@ -400,7 +413,7 @@ function layoutLine(input: DiagramInput, main: readonly string[]): LineDiagram {
 
   branches.forEach((branch, index) => {
     const lane = laneOf[index]!;
-    const rise = lane * LANE;
+    const rise = riseOf(lane);
 
     if (branch.type === "end") {
       const anchorX = xOf(branch.anchor);
@@ -511,14 +524,35 @@ function layoutLine(input: DiagramInput, main: readonly string[]): LineDiagram {
     }
   }
 
-  // An arrowhead just past the stop it was opened from, or midway along without one, when it fits.
+  // An arrowhead just past the stop it was opened from, or midway along without one, when it fits:
+  // on a straight stretch, clear of the bends and of where other routes leave, moved along a little
+  // if it has to be. Failing that, anywhere clear of them, and failing that, where it would be.
   let chevron: LineDiagram["chevron"] = null;
   const sign = input.reversed ? -1 : 1;
-  const chevronX = focus >= 0 ? xOf(focus) + sign * CHEVRON_OFFSET : (left + right) / 2;
-  if (
-    chevronX - CHEVRON_RADIUS - BIG_DOT >= first[0] &&
-    chevronX + CHEVRON_RADIUS + BIG_DOT <= end[0]
-  ) {
+  const start = focus >= 0 ? xOf(focus) + sign * CHEVRON_OFFSET : (left + right) / 2;
+  const corners = [
+    ...points.slice(1, -1).map(([x]) => x),
+    ...branches.flatMap((branch) =>
+      branch.type === "end" ? [xOf(branch.anchor)] : [xOf(branch.from), xOf(branch.to)],
+    ),
+  ];
+  const fits = (x: number) =>
+    x - CHEVRON_RADIUS - BIG_DOT >= first[0] &&
+    x + CHEVRON_RADIUS + BIG_DOT <= end[0] &&
+    (focus < 0 || sign * (x - xOf(focus)) >= FOCUS_DOT + CHEVRON_RADIUS + LABEL_GAP);
+  const isClear = (x: number) =>
+    corners.every((corner) => Math.abs(corner - x) >= CHEVRON_RADIUS * 2 + LABEL_GAP);
+  const candidates = Array.from({ length: Math.ceil(width / 4) }, (_, step) => [
+    start + sign * step * 4,
+    start - sign * step * 4,
+  ])
+    .flat()
+    .filter(fits);
+  const chevronX =
+    candidates.find((x) => isClear(x) && along(x).angle === 0) ??
+    candidates.find(isClear) ??
+    (fits(start) ? start : null);
+  if (chevronX !== null) {
     const { y, angle } = along(chevronX);
     chevron = { x: chevronX, y, angle: input.reversed ? angle + 180 : angle };
   }
