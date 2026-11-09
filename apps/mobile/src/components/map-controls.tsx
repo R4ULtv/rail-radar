@@ -464,10 +464,12 @@ export function LocateButton({
       <View
         style={{
           opacity: status === "locating" ? 0.5 : 1,
-          transform:
-            status === "off"
-              ? undefined
-              : [{ translateX: -arrowOffset }, { translateY: arrowOffset }],
+          // The same shape when off: changing it to undefined on a mounted view passes a null
+          // transform, which development builds throw on.
+          transform: [
+            { translateX: status === "off" ? 0 : -arrowOffset },
+            { translateY: status === "off" ? 0 : arrowOffset },
+          ],
         }}
       >
         <Icon size={iconSize} color={color} fill={isFilled ? color : "none"} />
