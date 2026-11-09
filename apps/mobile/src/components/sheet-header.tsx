@@ -1,5 +1,6 @@
 import { CloseButton } from "heroui-native/close-button";
 import { useThemeColor } from "heroui-native/hooks";
+import { LinearGradient } from "expo-linear-gradient";
 import type { Component, ReactNode } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import Animated, {
@@ -9,7 +10,6 @@ import Animated, {
   useScrollOffset,
   type SharedValue,
 } from "react-native-reanimated";
-import Svg, { Defs, LinearGradient, Rect, Stop } from "react-native-svg";
 
 /** The map sheets' rounded background, with a shadow that sets it apart from a light map. */
 export const sheetBackgroundStyle = {
@@ -156,15 +156,7 @@ export function SheetHeaderFade({
     <Animated.View pointerEvents="none" style={[styles.fade, shiftStyle]}>
       <View style={[styles.fadeGap, { backgroundColor: color }]} />
       <Animated.View style={[styles.fadeGradient, fadeStyle]}>
-        <Svg width="100%" height="100%">
-          <Defs>
-            <LinearGradient id="fade" x1="0" y1="0" x2="0" y2="1">
-              <Stop offset="0" stopColor={color} />
-              <Stop offset="1" stopColor={color} stopOpacity={0} />
-            </LinearGradient>
-          </Defs>
-          <Rect width="100%" height="100%" fill="url(#fade)" />
-        </Svg>
+        <LinearGradient colors={[color, transparent(color)]} style={StyleSheet.absoluteFill} />
       </Animated.View>
     </Animated.View>
   );
