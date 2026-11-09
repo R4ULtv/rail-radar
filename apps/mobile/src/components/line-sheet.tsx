@@ -66,6 +66,7 @@ import { middleStep } from "@/components/station-sheet";
 import { StatusMessage } from "@/components/status-message";
 import { useMinuteClock } from "@/hooks/use-minute-clock";
 import { useSavedLines } from "@/hooks/use-saved-lines";
+import { useSheetContent } from "@/hooks/use-sheet-content";
 import { useStationsById } from "@/hooks/use-stations-by-id";
 import { haptics } from "@/lib/haptics";
 import type { DiagramStop } from "@/lib/line-diagram";
@@ -1147,6 +1148,7 @@ export function LineSheet({
   const sheetRef = useRef<BottomSheet>(null);
   const [index, setIndex] = useState(-1);
   const [contentHeight, setContentHeight] = useState(0);
+  const { renderContent, onClosed } = useSheetContent(isOpen);
   // Like the station sheet: as tall as its content, with a step in between for long lines.
   const hasMiddleStep =
     contentHeight === 0 ||
@@ -1196,28 +1198,33 @@ export function LineSheet({
       enablePanDownToClose
       backgroundStyle={[sheetBackgroundStyle, { backgroundColor: surfaceColor }]}
       handleIndicatorStyle={{ backgroundColor: mutedColor }}
+      onClose={onClosed}
       onChange={(next) => {
         setIndex(next);
         if (next === -1 && isOpen) onClose("dismiss");
       }}
     >
-      <ErrorBoundary
-        key={openKey}
-        fallback={(reset) => (
-          <LineError line={line} onRetry={reset} onClose={() => onClose("back")} />
-        )}
-      >
-        <LineSheetContent
-          line={line}
-          stationsUrl={stationsUrl}
-          fromStationId={fromStationId}
-          direction={direction}
-          onDirectionChange={onDirectionChange}
-          onClose={() => onClose("back")}
-          onFocusStop={onFocusStop}
-          onContentHeightChange={setContentHeight}
-        />
-      </ErrorBoundary>
+      {renderContent ? (
+        <ErrorBoundary
+          key={openKey}
+          fallback={(reset) => (
+            <LineError line={line} onRetry={reset} onClose={() => onClose("back")} />
+          )}
+        >
+          <LineSheetContent
+            line={line}
+            stationsUrl={stationsUrl}
+            fromStationId={fromStationId}
+            direction={direction}
+            onDirectionChange={onDirectionChange}
+            onClose={() => onClose("back")}
+            onFocusStop={onFocusStop}
+            onContentHeightChange={setContentHeight}
+          />
+        </ErrorBoundary>
+      ) : (
+        <BottomSheetView style={{ height: contentHeight }}>{null}</BottomSheetView>
+      )}
     </BottomSheet>
   );
 }
