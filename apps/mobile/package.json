@@ -12,6 +12,7 @@
     "bump-version": "node scripts/bump-version.mjs",
     "generate:app-icon": "node scripts/generate-app-icon.mjs",
     "generate:brand-logos": "node scripts/generate-brand-logos.mjs",
+    "generate:country-flags": "node scripts/generate-country-flags.mjs",
     "generate:location-puck": "node scripts/generate-location-puck.mjs",
     "generate:station-icons": "node scripts/generate-station-icons.mjs"
   },
