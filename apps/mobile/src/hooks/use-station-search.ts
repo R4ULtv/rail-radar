@@ -10,6 +10,10 @@ import type { UserLocation } from "@/lib/user-location";
 // Searching runs on the device, so it can start from the first character.
 const minQueryLength = 1;
 const resultLimit = 20;
+// The text field updates immediately. Coalesce a burst of edits before mounting
+// another results tree: deferred rendering alone still commits each fast edit
+// when the JS search is cheap but native row creation is expensive.
+const querySettleMs = 64;
 const noStations: Station[] = [];
 const noLines: Line[] = [];
 const noResults: SearchItem[] = [];
@@ -44,9 +48,14 @@ export function useStationSearch(
 ) {
   const query = input.trim();
   const isActive = query.length >= minQueryLength;
-  // Typing stays smooth: the results for a new query render in the background, and a render
-  // that's still going when the next key is typed is dropped for the newer query.
-  const deferredQuery = useDeferredValue(query);
+  const [settledQuery, setSettledQuery] = useState(query);
+  useEffect(() => {
+    const timeout = setTimeout(() => setSettledQuery(query), querySettleMs);
+    return () => clearTimeout(timeout);
+  }, [query]);
+  // Previous results stay visible during a burst. Clearing hides them immediately,
+  // and an explicit submit flushes the delay. The eventual render stays interruptible.
+  const deferredQuery = useDeferredValue(isActive ? settledQuery : "");
   const searchLocation = useSearchLocation(userLocation, deferredQuery, visible);
   const [retryCount, setRetryCount] = useState(0);
   const [loadedSearch, setSearch] = useState<{ url: string; search: StationSearch } | null>(null);
@@ -98,5 +107,6 @@ export function useStationSearch(
     /** Whether `results` holds results, possibly for the previous query while this one renders. */
     hasResult: isActive && results !== null,
     retry: () => setRetryCount((count) => count + 1),
+    submit: () => setSettledQuery(query),
   };
 }

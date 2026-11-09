@@ -505,7 +505,10 @@ const SearchSheetContent = memo(function SearchSheetContent({
                 placeholder="Search stations and lines"
                 autoCorrect={false}
                 returnKeyType="search"
-                onSubmitEditing={() => Keyboard.dismiss()}
+                onSubmitEditing={() => {
+                  search.submit();
+                  Keyboard.dismiss();
+                }}
                 onFocus={(event) => {
                   onFocus(event);
                   setIsFocused(true);
