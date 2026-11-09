@@ -727,7 +727,11 @@ export function MapScreen() {
       >
         <Mapbox.Camera
           ref={camera}
-          defaultSettings={initialCamera}
+          // A native default stop can arrive after the camera is attached on Android.
+          // An explicit, stable stop also applies then; later moves remain imperative.
+          centerCoordinate={initialCamera.centerCoordinate}
+          zoomLevel={initialCamera.zoomLevel}
+          animationDuration={0}
           minZoomLevel={3}
           maxZoomLevel={18}
         />
