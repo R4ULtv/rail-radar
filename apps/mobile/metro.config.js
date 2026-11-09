@@ -6,7 +6,11 @@ const { withUniwindConfig } = require("uniwind/metro");
 const { writeLineAssets } = require("./scripts/line-assets.cjs");
 
 // Refresh bundled artwork before Metro builds its graph, including native release builds.
-for (const script of ["generate-brand-logos.mjs", "generate-station-icons.mjs"]) {
+for (const script of [
+  "generate-brand-logos.mjs",
+  "generate-station-icons.mjs",
+  "generate-country-flags.mjs",
+]) {
   execFileSync(process.execPath, [path.join(__dirname, "scripts", script)], {
     stdio: "inherit",
   });

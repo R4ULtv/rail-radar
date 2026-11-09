@@ -1,41 +1,24 @@
 import { COUNTRY_MAP, getCountry, type CountryCode } from "@repo/data/countries";
-import type { FC } from "react";
-import { View } from "react-native";
-import type { SvgProps } from "react-native-svg";
+import { Image, type ImageSourcePropType } from "react-native";
 
-// The web app's flags, compiled into native SVG components at build time.
-import be from "../../../web/public/assets/flags/be.svg";
-import ch from "../../../web/public/assets/flags/ch.svg";
-import de from "../../../web/public/assets/flags/de.svg";
-import dk from "../../../web/public/assets/flags/dk.svg";
-import fi from "../../../web/public/assets/flags/fi.svg";
-import fr from "../../../web/public/assets/flags/fr.svg";
-import hu from "../../../web/public/assets/flags/hu.svg";
-import ie from "../../../web/public/assets/flags/ie.svg";
-import it from "../../../web/public/assets/flags/it.svg";
-import lu from "../../../web/public/assets/flags/lu.svg";
-import nl from "../../../web/public/assets/flags/nl.svg";
-import no from "../../../web/public/assets/flags/no.svg";
-import pl from "../../../web/public/assets/flags/pl.svg";
-import se from "../../../web/public/assets/flags/se.svg";
-import uk from "../../../web/public/assets/flags/uk.svg";
-
-const flags: Record<CountryCode, FC<SvgProps>> = {
-  be,
-  ch,
-  de,
-  dk,
-  fi,
-  fr,
-  hu,
-  ie,
-  it,
-  lu,
-  nl,
-  no,
-  pl,
-  se,
-  uk,
+// Generated from the web SVGs when Metro starts. One image replaces the SVG root,
+// groups, paths and clipping view for every flag in the search and live boards.
+const flags: Record<CountryCode, ImageSourcePropType> = {
+  be: require("../../assets/generated/flags/be.png"),
+  ch: require("../../assets/generated/flags/ch.png"),
+  de: require("../../assets/generated/flags/de.png"),
+  dk: require("../../assets/generated/flags/dk.png"),
+  fi: require("../../assets/generated/flags/fi.png"),
+  fr: require("../../assets/generated/flags/fr.png"),
+  hu: require("../../assets/generated/flags/hu.png"),
+  ie: require("../../assets/generated/flags/ie.png"),
+  it: require("../../assets/generated/flags/it.png"),
+  lu: require("../../assets/generated/flags/lu.png"),
+  nl: require("../../assets/generated/flags/nl.png"),
+  no: require("../../assets/generated/flags/no.png"),
+  pl: require("../../assets/generated/flags/pl.png"),
+  se: require("../../assets/generated/flags/se.png"),
+  uk: require("../../assets/generated/flags/uk.png"),
 };
 
 /** A station's country flag, or a country's by its code. */
@@ -51,13 +34,12 @@ export function CountryFlag({
   const code = country ?? (stationId ? getCountry(stationId) : null);
   if (!code) return null;
 
-  const Flag = flags[code];
   return (
-    <View
+    <Image
+      source={flags[code]}
       accessibilityLabel={COUNTRY_MAP[code]}
-      style={{ width: size, height: size, borderRadius: size / 2, overflow: "hidden" }}
-    >
-      <Flag width={size} height={size} />
-    </View>
+      fadeDuration={0}
+      style={{ width: size, height: size }}
+    />
   );
 }
