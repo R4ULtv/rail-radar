@@ -6,6 +6,41 @@ the commit they were built from.
 
 ## [Unreleased]
 
+## [0.7.0] (13) – 2026-11-09
+
+### Added
+
+- Interactive line diagrams with branches, your current stop and direction of travel. Choose a
+  destination to see the next stop and stops remaining, or tap the diagram to explore a branch.
+- Typical service hours and frequency for supported lines, with a status showing whether the
+  line is scheduled to run now or when it opens next. These are timetables, not live departures.
+- An optional metro and light rail map layer. Turn it on in the map style sheet to see the whole
+  network when zoomed in.
+- Freight yards, terminals and ports on the map and in search, with distinct icons.
+
+### Changed
+
+- Line sheets list stops in travel order. Tap a stop to view the line from there, with nearby
+  stops expanded and the rest available on tap. Diagrams stay consistent when switching routes
+  and remain readable in light and dark themes.
+- Search highlights matching text, handles accents and gives nearby name matches priority over
+  distant exact matches. Saved stations and lines come before recent stations.
+- Station sheets show line badges for nearby stops, clearer city names and sharing for all
+  stops. Coordinates and station IDs are tucked into an expandable About row.
+- Station boards make more room for trains as you scroll, keeping tabs pinned. Notices and
+  expandable train details are clearer, and boards without platform data hide that column.
+- Updated bundled stations and operator branding, including Hungarian rail data. Unknown
+  operators still show their names when no bundled logo is available.
+
+### Fixed
+
+- Bundled stations load correctly on iOS without requiring write access to app assets.
+- Screen readers can reach controls and content inside bottom sheets.
+- Line sheets no longer cut off their last rows on first opening, and hidden stops expand
+  reliably while keeping the selected stop in view.
+- Turning off location access while the map is open no longer crashes the locate button in
+  development builds.
+
 ## [0.6.0] (12) – 2026-10-22
 
 ### Added

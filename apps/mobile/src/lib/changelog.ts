@@ -1,5 +1,6 @@
 import ArrowUpDown from "lucide-react-native/icons/arrow-up-down";
 import Bookmark from "lucide-react-native/icons/bookmark";
+import Clock from "lucide-react-native/icons/clock";
 import Compass from "lucide-react-native/icons/compass";
 import LocateFixed from "lucide-react-native/icons/locate-fixed";
 import Map from "lucide-react-native/icons/map";
@@ -28,6 +29,35 @@ export type Release = { version: string; features: Feature[] };
  * notice; a version without an entry shows nothing.
  */
 export const releases: Release[] = [
+  {
+    version: "0.7.0",
+    features: [
+      {
+        icon: Waypoints,
+        title: "Choose your direction",
+        description:
+          "Line diagrams show branches and your stop. Choose a destination to see what's next, or tap a stop to explore the line from there.",
+      },
+      {
+        icon: Clock,
+        title: "Check service hours",
+        description:
+          "Supported lines show typical hours and frequency, plus whether they're scheduled to run now or when they open next.",
+      },
+      {
+        icon: Map,
+        title: "See the whole metro network",
+        description:
+          "Turn on Metro & light rail in the map style sheet to see every line when zoomed in.",
+      },
+      {
+        icon: MapPin,
+        title: "Find your stop more easily",
+        description:
+          "Search highlights matching names and favors nearby stops. Station sheets show clearer city names and the lines at nearby stops.",
+      },
+    ],
+  },
   {
     version: "0.6.0",
     features: [
