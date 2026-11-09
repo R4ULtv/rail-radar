@@ -434,17 +434,31 @@ function StopStrip({
   const surfaceColor = useThemeColor("surface");
   const above = { top: 0, bottom: "50%" } as const;
   const below = { top: "50%", bottom: 0 } as const;
+  const hasGap = (!isFirst && dottedAbove) || (!isLast && dottedBelow);
   return (
     <View className="w-7 items-center justify-center" importantForAccessibility="no">
-      {isFirst ? null : dottedAbove ? (
-        <StripDots color={color} style={above} />
-      ) : (
-        <View style={[styles.stripBar, above, { backgroundColor: color }]} />
-      )}
-      {isLast ? null : dottedBelow ? (
-        <StripDots color={color} style={below} />
-      ) : (
-        <View style={[styles.stripBar, below, { backgroundColor: color }]} />
+      {/* The dot covers the middle of a continuous strip. Only split it when a
+          hidden-stop gap needs different decoration on either side. */}
+      {hasGap ? (
+        <>
+          {isFirst ? null : dottedAbove ? (
+            <StripDots color={color} style={above} />
+          ) : (
+            <View style={[styles.stripBar, above, { backgroundColor: color }]} />
+          )}
+          {isLast ? null : dottedBelow ? (
+            <StripDots color={color} style={below} />
+          ) : (
+            <View style={[styles.stripBar, below, { backgroundColor: color }]} />
+          )}
+        </>
+      ) : isFirst && isLast ? null : (
+        <View
+          style={[
+            styles.stripBar,
+            { top: isFirst ? "50%" : 0, bottom: isLast ? "50%" : 0, backgroundColor: color },
+          ]}
+        />
       )}
       <View
         style={[
@@ -1058,7 +1072,11 @@ function LineSheetContent({
         data={items}
         keyExtractor={itemKey}
         renderItem={renderItem}
-        initialNumToRender={16}
+        // The diagram fills much of the first screen. Keep a small buffer around
+        // the visible stops instead of mounting most of a long route at once.
+        initialNumToRender={8}
+        maxToRenderPerBatch={6}
+        windowSize={3}
         getItemLayout={getItemLayout}
         removeClippedSubviews={false}
         contentContainerStyle={{ paddingTop: headerHeight, paddingBottom: bottomInset }}
