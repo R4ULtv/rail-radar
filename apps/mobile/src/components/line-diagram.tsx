@@ -49,9 +49,9 @@ function DiagramText({ label, width }: { label: DiagramLabel; width: number }) {
 }
 
 /**
- * The chosen route as a line in the line's color, with the stop the line was opened from on it, an
- * arrowhead the way it's taken and a filled dot where it ends, and where the other routes go in
- * gray. Each dot heads towards its stop.
+ * The line in the same shape whichever route is chosen: the chosen route in the line's color, with
+ * the stop the line was opened from on it, an arrowhead the way it's taken and a filled dot where
+ * it ends, and where it doesn't go in gray. Each dot heads towards its stop.
  */
 export const LineDiagram = memo(function LineDiagram({
   line,
@@ -117,14 +117,16 @@ export const LineDiagram = memo(function LineDiagram({
             />
           ))}
           {main.type === "path" ? (
-            <Path
-              d={main.d}
-              stroke={color}
-              strokeWidth={5}
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              fill="none"
-            />
+            main.d !== "" && (
+              <Path
+                d={main.d}
+                stroke={color}
+                strokeWidth={5}
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                fill="none"
+              />
+            )
           ) : (
             <Ellipse
               cx={main.cx}
@@ -185,13 +187,14 @@ export const LineDiagram = memo(function LineDiagram({
                 />
               );
             case "bypass":
+            case "via":
             case "named":
               return (
                 <Circle
                   key={index}
                   cx={x}
                   cy={y}
-                  r={kind === "bypass" ? 5 : 3.5}
+                  r={kind === "named" ? 3.5 : 5}
                   fill={surfaceColor}
                   stroke={kind === "bypass" ? branchColor : color}
                   strokeWidth={3}

@@ -1,6 +1,7 @@
-// The schematic at the top of the line sheet: the chosen route as a straight line in the line's
-// color, named at its ends below it, and where the other routes leave it in gray above, spaced
-// to show how it branches rather than where its stops are. Only the shape is laid out here, in
+// The schematic at the top of the line sheet: the line's main route as a straight line, named at
+// its ends below it, and where the other routes leave it above, spaced to show how it branches
+// rather than where its stops are. The shape stays the same whichever route is chosen; the chosen
+// one is drawn in the line's color and the rest in gray. Only the shape is laid out here, in
 // points, so it can be checked without React; the sheet draws it.
 
 /** The parts of a route the diagram needs: its stops' IDs, in order. */
@@ -31,10 +32,10 @@ export interface DiagramStop {
   y: number;
   /**
    * Where the chosen way starts or ends, the stop the line was opened from, another stop on it
-   * (not drawn, but tappable), a named stop on a loop, the end of another route, or the middle of
-   * a stretch some trains take instead (not drawn either).
+   * (not drawn, but tappable), a named stop on a loop, the end of another route, the middle of
+   * a stretch some trains take instead, or of one the chosen route takes.
    */
-  kind: "terminus" | "destination" | "focus" | "stop" | "named" | "branch" | "bypass";
+  kind: "terminus" | "destination" | "focus" | "stop" | "named" | "branch" | "bypass" | "via";
 }
 
 export interface LineDiagram {
@@ -45,9 +46,9 @@ export interface LineDiagram {
    * that other routes fork off near drop below it.
    */
   shift: number;
-  /** The chosen route as an SVG path, or an ellipse for a loop. */
+  /** The chosen route as an SVG path, in pieces where it leaves the main one, or a loop. */
   main: { type: "path"; d: string } | LoopShape;
-  /** SVG paths of the other routes, under the main line, drawn around y 0 like it. */
+  /** SVG paths of where the chosen route doesn't go, under it, drawn around y 0 like it. */
   branches: string[];
   stops: DiagramStop[];
   labels: DiagramLabel[];
@@ -116,96 +117,153 @@ function textWidth(text: string) {
 /** A run of the other route that leaves the chosen one. */
 type BranchTarget = { stationId: string; routeIndex: number; stopIndex: number };
 
-type Branch = BranchTarget &
-  (
+type Branch = BranchTarget & {
+  /** The stops of the route it's taken from that make it up, first and last. */
+  run: [number, number];
+} & (
     | { type: "end"; anchor: number; side: "left" | "right"; label: string }
     | { type: "bypass"; from: number; to: number; label: string }
   );
 
+/** Routes taking the same detour, or going to the same end on the same side, share a branch. */
+function branchKey(branch: Branch): string {
+  return branch.type === "end"
+    ? `end:${branch.side}:${branch.label}`
+    : `bypass:${branch.from}:${branch.to}`;
+}
+
+function firstIndexes(stations: readonly string[]): Map<string, number> {
+  const indexOf = new Map<string, number>();
+  stations.forEach((id, index) => {
+    if (!indexOf.has(id)) indexOf.set(id, index);
+  });
+  return indexOf;
+}
+
 /**
- * Where every other route leaves the chosen one: off one of its ends (a branch to another
- * terminus) or between two of its stops (a stretch some trains take instead). Each is listed once,
- * however many routes share it.
+ * The route the diagram is laid out along, whichever is chosen, so the line keeps its shape: the
+ * longest, as the sheet starts out on, the one sharing the most stops with the others of those,
+ * and the first of those. Loops are left out; they're drawn on their own.
  */
-function findBranches(input: DiagramInput, main: readonly string[]): Branch[] {
-  const indexOf = new Map(main.map((id, index) => [id, index]));
-  const branches = new Map<string, Branch>();
-
-  input.routes.forEach((route, routeIndex) => {
-    if (routeIndex === input.selected) return;
-    const positions = route.stations.map((id) => indexOf.get(id) ?? -1);
-    const shared = positions.filter((position) => position >= 0);
-    if (shared.length === 0) return;
-    // Whether the route runs the same way as the chosen one.
-    const forward = shared.length < 2 || shared[0]! <= shared.at(-1)!;
-
-    // Runs of the route off the chosen one. Detours only a stop or two apart are one, so a
-    // stretch that touches the chosen route on the way reads as one; the ends stay apart, or a
-    // branch would leave from the wrong stop.
-    const runs: [number, number][] = [];
-    const last = positions.length - 1;
-    positions.forEach((position, index) => {
-      if (position >= 0) return;
-      const previous = runs.at(-1);
-      if (previous?.[1] === index - 1) previous[1] = index;
-      else runs.push([index, index]);
+export function pickMainRoute(routes: readonly DiagramRoute[]): number {
+  const sets = routes.map((route) => new Set(route.stations));
+  let best = -1;
+  let bestScore = -1;
+  let bestLength = -1;
+  routes.forEach(({ stations }, index) => {
+    if (stations.length < 2 || stations[0] === stations.at(-1)) return;
+    let score = 0;
+    sets.forEach((other, otherIndex) => {
+      if (otherIndex === index) return;
+      for (const id of sets[index]!) if (other.has(id)) score++;
     });
-    for (let index = runs.length - 1; index > 0; index--) {
-      const [previous, next] = [runs[index - 1]!, runs[index]!];
-      if (previous[0] > 0 && next[1] < last && next[0] - previous[1] - 1 <= mergeGap) {
-        previous[1] = next[1];
-        runs.splice(index, 1);
-      }
+    if (stations.length > bestLength || (stations.length === bestLength && score > bestScore)) {
+      [best, bestScore, bestLength] = [index, score, stations.length];
     }
+  });
+  return best;
+}
 
-    for (const [start, end] of runs) {
-      const before = start > 0 ? positions[start - 1]! : -1;
-      const after = end + 1 < positions.length ? positions[end + 1]! : -1;
+/**
+ * Where a route leaves the main one: off one of its ends (a branch to another terminus) or between
+ * two of its stops (a stretch some trains take instead).
+ */
+function routeBranches(
+  input: DiagramInput,
+  indexOf: ReadonlyMap<string, number>,
+  route: DiagramRoute,
+  routeIndex: number,
+): Branch[] {
+  const found: Branch[] = [];
+  const positions = route.stations.map((id) => indexOf.get(id) ?? -1);
+  const shared = positions.filter((position) => position >= 0);
+  if (shared.length === 0) return found;
+  // Whether the route runs the same way as the main one.
+  const forward = shared.length < 2 || shared[0]! <= shared.at(-1)!;
 
-      let branch: Branch | null = null;
-      if (before < 0 && after >= 0) {
-        const label = input.nameOf(route.stations[0]!);
-        branch = {
-          type: "end",
-          anchor: after,
-          side: forward ? "left" : "right",
-          label,
-          stationId: route.stations[0]!,
-          routeIndex,
-          stopIndex: 0,
-        };
-      } else if (before >= 0 && after < 0) {
-        const label = input.nameOf(route.stations.at(-1)!);
-        branch = {
-          type: "end",
-          anchor: before,
-          side: forward ? "right" : "left",
-          label,
-          stationId: route.stations.at(-1)!,
-          routeIndex,
-          stopIndex: last,
-        };
-      } else if (before >= 0 && after >= 0 && before !== after) {
-        const off = route.stations.slice(start, end + 1).filter((id) => !indexOf.has(id));
-        const label = input.viaOf(off) ?? "";
-        const stationId = off.find((id) => input.nameOf(id) === label) ?? off[0]!;
-        branch = {
-          stationId,
-          routeIndex,
-          stopIndex: route.stations.indexOf(stationId),
-          type: "bypass",
-          from: Math.min(before, after),
-          to: Math.max(before, after),
-          label,
-        };
-      }
-      if (!branch) continue;
+  // Runs of the route off the main one. Detours only a stop or two apart are one, so a
+  // stretch that touches the main route on the way reads as one; the ends stay apart, or a
+  // branch would leave from the wrong stop.
+  const runs: [number, number][] = [];
+  const last = positions.length - 1;
+  positions.forEach((position, index) => {
+    if (position >= 0) return;
+    const previous = runs.at(-1);
+    if (previous?.[1] === index - 1) previous[1] = index;
+    else runs.push([index, index]);
+  });
+  for (let index = runs.length - 1; index > 0; index--) {
+    const [previous, next] = [runs[index - 1]!, runs[index]!];
+    if (previous[0] > 0 && next[1] < last && next[0] - previous[1] - 1 <= mergeGap) {
+      previous[1] = next[1];
+      runs.splice(index, 1);
+    }
+  }
+
+  for (const [start, end] of runs) {
+    const before = start > 0 ? positions[start - 1]! : -1;
+    const after = end + 1 < positions.length ? positions[end + 1]! : -1;
+
+    let branch: Branch | null = null;
+    if (before < 0 && after >= 0) {
+      const label = input.nameOf(route.stations[0]!);
+      branch = {
+        type: "end",
+        anchor: after,
+        side: forward ? "left" : "right",
+        label,
+        stationId: route.stations[0]!,
+        routeIndex,
+        stopIndex: 0,
+        run: [start, end],
+      };
+    } else if (before >= 0 && after < 0) {
+      const label = input.nameOf(route.stations.at(-1)!);
+      branch = {
+        type: "end",
+        anchor: before,
+        side: forward ? "right" : "left",
+        label,
+        stationId: route.stations.at(-1)!,
+        routeIndex,
+        stopIndex: last,
+        run: [start, end],
+      };
+    } else if (before >= 0 && after >= 0 && before !== after) {
+      const off = route.stations.slice(start, end + 1).filter((id) => !indexOf.has(id));
+      const label = input.viaOf(off) ?? "";
+      const stationId = off.find((id) => input.nameOf(id) === label) ?? off[0]!;
+      branch = {
+        stationId,
+        routeIndex,
+        stopIndex: route.stations.indexOf(stationId),
+        type: "bypass",
+        from: Math.min(before, after),
+        to: Math.max(before, after),
+        label,
+        run: [start, end],
+      };
+    }
+    if (branch) found.push(branch);
+  }
+  return found;
+}
+
+/**
+ * Where every other route leaves the main one. Each is listed once, however many routes share it.
+ */
+function findBranches(
+  input: DiagramInput,
+  indexOf: ReadonlyMap<string, number>,
+  mainIndex: number,
+): Branch[] {
+  const branches = new Map<string, Branch>();
+  input.routes.forEach((route, routeIndex) => {
+    if (routeIndex === mainIndex) return;
+    for (const branch of routeBranches(input, indexOf, route, routeIndex)) {
       // Routes taking the same detour may name it after different stops; the first one wins. A
       // terminus is shown once, from the stop nearest its end of the line.
-      const key =
-        branch.type === "end"
-          ? `end:${branch.side}:${branch.label}`
-          : `bypass:${branch.from}:${branch.to}`;
+      const key = branchKey(branch);
       const existing = branches.get(key);
       const isCloser =
         existing?.type === "end" &&
@@ -220,19 +278,88 @@ function findBranches(input: DiagramInput, main: readonly string[]): Branch[] {
 }
 
 export function layoutLineDiagram(input: DiagramInput): LineDiagram | null {
-  const route = input.routes[input.selected] ?? input.routes[0];
+  const selected = input.routes[input.selected] ? input.selected : 0;
+  const route = input.routes[selected];
   if (!route || route.stations.length < 2) return null;
   const isLoop = route.stations[0] === route.stations.at(-1);
-  return isLoop
-    ? layoutLoop(input, route.stations.slice(0, -1))
-    : layoutLine(input, route.stations);
+  if (isLoop) return layoutLoop({ ...input, selected }, route.stations.slice(0, -1));
+  // Along the line's main route, unless the chosen one barely touches it; then along its own.
+  const mainIndex = pickMainRoute(input.routes);
+  const main = new Set(input.routes[mainIndex]?.stations);
+  const shared = route.stations.filter((id) => main.has(id)).length;
+  return layoutLine({ ...input, selected }, shared >= 2 ? mainIndex : selected);
 }
 
-function layoutLine(input: DiagramInput, main: readonly string[]): LineDiagram {
+/** An SVG path through points. */
+function toPath(points: readonly (readonly [number, number])[]): string {
+  return points.map(([x, y], index) => `${index ? "L" : "M"}${x} ${y}`).join("");
+}
+
+/** The point a share of the way along a path through points. */
+function pointAlong(points: readonly (readonly [number, number])[], share: number) {
+  const lengths = points
+    .slice(1)
+    .map(([x, y], index) => Math.hypot(x - points[index]![0], y - points[index]![1]));
+  let remaining = share * lengths.reduce((sum, length) => sum + length, 0);
+  for (const [index, length] of lengths.entries()) {
+    if (remaining <= length || index === lengths.length - 1) {
+      const t = length ? Math.min(remaining / length, 1) : 0;
+      const [ax, ay] = points[index]!;
+      const [bx, by] = points[index + 1]!;
+      return { x: ax + t * (bx - ax), y: ay + t * (by - ay) };
+    }
+    remaining -= length;
+  }
+  const [x, y] = points[0]!;
+  return { x, y };
+}
+
+/** The point a share of the way along a cubic Bézier curve. */
+function pointOnCurve(curve: readonly (readonly [number, number])[], t: number) {
+  const u = 1 - t;
+  const weights = [u * u * u, 3 * u * u * t, 3 * u * t * t, t * t * t];
+  return {
+    x: weights.reduce((sum, weight, index) => sum + weight * curve[index]![0], 0),
+    y: weights.reduce((sum, weight, index) => sum + weight * curve[index]![1], 0),
+  };
+}
+
+function labelSpan(label: DiagramLabel): [number, number] {
+  const labelWidth = Math.min(textWidth(label.text), label.maxWidth);
+  const from =
+    label.align === "left"
+      ? label.x
+      : label.align === "right"
+        ? label.x - labelWidth
+        : label.x - labelWidth / 2;
+  return [from, from + labelWidth];
+}
+
+function labelsOverlap(a: DiagramLabel, b: DiagramLabel): boolean {
+  const [a1, a2] = labelSpan(a);
+  const [b1, b2] = labelSpan(b);
+  return a1 < b2 && b1 < a2 && a.y < b.y + LABEL_HEIGHT && b.y < a.y + LABEL_HEIGHT;
+}
+
+function layoutLine(input: DiagramInput, mainIndex: number): LineDiagram {
   const { width } = input;
+  const main = input.routes[mainIndex]!.stations;
+  const chosen = input.routes[input.selected]!.stations;
+  const isMain = mainIndex === input.selected;
   const last = main.length - 1;
-  const focus = input.focusId ? main.indexOf(input.focusId) : -1;
-  const branches = findBranches(input, main);
+  const indexOf = firstIndexes(main);
+  const chosenAt = firstIndexes(chosen);
+  const focusId = input.focusId !== null && chosenAt.has(input.focusId) ? input.focusId : null;
+  const focus = focusId === null ? -1 : (indexOf.get(focusId) ?? -1);
+  const branches = findBranches(input, indexOf, mainIndex);
+  // The branches the chosen route takes, by the one drawn for them.
+  const taken = new Map(
+    isMain
+      ? []
+      : routeBranches(input, indexOf, input.routes[input.selected]!, input.selected).map(
+          (branch) => [branchKey(branch), branch] as const,
+        ),
+  );
 
   // The diagram shows how the line branches, not how far apart its stops are: the stops where
   // other routes leave it split it into stretches of equal width, and the stops along each are
@@ -364,41 +491,122 @@ function layoutLine(input: DiagramInput, main: readonly string[]): LineDiagram {
     return { y: ay + t * (by - ay), angle: (Math.atan2(by - ay, bx - ax) * 180) / Math.PI };
   };
 
-  const firstName = input.nameOf(main[0]!);
-  const lastName = input.nameOf(main[last]!);
+  /** Where a stop of the main route is drawn: its ends where the line ends, which may drop. */
+  const xAt = (index: number) => (index === 0 ? first[0] : index === last ? end[0] : xOf(index));
+
+  // The stretches of the main route the chosen one runs along, by stop. A branch drawn from nearer
+  // the end than the chosen route leaves at is reached along the main line.
+  let spans: [number, number][] = [];
+  if (isMain) spans = [[0, last]];
+  else {
+    for (let index = 1; index < chosen.length; index++) {
+      const a = indexOf.get(chosen[index - 1]!);
+      const b = indexOf.get(chosen[index]!);
+      if (a !== undefined && b !== undefined && a !== b) {
+        spans.push([Math.min(a, b), Math.max(a, b)]);
+      }
+    }
+    for (const branch of branches) {
+      const own = taken.get(branchKey(branch));
+      if (own?.type === "end" && branch.type === "end" && own.anchor !== branch.anchor) {
+        spans.push([Math.min(own.anchor, branch.anchor), Math.max(own.anchor, branch.anchor)]);
+      }
+    }
+    spans.sort((a, b) => a[0] - b[0]);
+    spans = spans.reduce<[number, number][]>((merged, span) => {
+      const previous = merged.at(-1);
+      if (previous && span[0] <= previous[1]) previous[1] = Math.max(previous[1], span[1]);
+      else merged.push([...span]);
+      return merged;
+    }, []);
+  }
+  const isWhole = spans.length === 1 && spans[0]![0] === 0 && spans[0]![1] === last;
+  const ranges = spans.map(([a, b]) => [xAt(a), xAt(b)] as const);
+
+  // The chosen route in the line's color over the main one in gray, where it doesn't run along all
+  // of it.
+  const paths: string[] = [];
+  const chosenPaths: string[] = [];
+  if (isWhole) chosenPaths.push(toPath(points));
+  else {
+    paths.push(toPath(points));
+    for (const [from, to] of ranges) {
+      chosenPaths.push(
+        toPath([
+          [from, along(from).y],
+          ...points.filter(([x]) => x > from && x < to),
+          [to, along(to).y],
+        ]),
+      );
+    }
+  }
+
   const half = width / 2 - LABEL_GAP;
-  const destination = input.reversed ? 0 : last;
+  const destinationId = input.reversed ? chosen[0]! : chosen.at(-1)!;
+  const kindOf = (id: string) =>
+    id === focusId ? "focus" : id === destinationId ? "destination" : "terminus";
+  const isChosenEnd = (id: string) => id === chosen[0] || id === chosen.at(-1);
   const stops: DiagramStop[] = [];
   const labels: DiagramLabel[] = [];
-  const target = (index: number) => ({
-    stationId: main[index]!,
-    routeIndex: input.selected,
-    stopIndex: index,
+  /** A stop of the main route, on the chosen one where that stops there too. */
+  const target = (index: number) => {
+    const stationId = main[index]!;
+    const at = chosenAt.get(stationId);
+    return at === undefined
+      ? { stationId, routeIndex: mainIndex, stopIndex: index }
+      : { stationId, routeIndex: input.selected, stopIndex: at };
+  };
+  // Where the chosen route ends partway along the main one.
+  const chosenEnds = [...new Set([chosen[0]!, chosen.at(-1)!])].flatMap((id) => {
+    const index = indexOf.get(id);
+    return index !== undefined && index > 0 && index < last ? [index] : [];
   });
 
   // The other stops aren't drawn, but each can be tapped where it would be, if it isn't crowded.
   for (let index = 1; index < last; index++) {
     const x = xOf(index);
     const room = Math.min(x - xOf(index - 1), xOf(index + 1) - x);
-    if (index !== focus && room >= MIN_STOP_SPACING) {
+    if (index !== focus && !chosenEnds.includes(index) && room >= MIN_STOP_SPACING) {
       stops.push({ ...target(index), x, y: along(x).y, kind: "stop" });
     }
   }
-  const endKind = (index: number) =>
-    focus === index ? "focus" : index === destination ? "destination" : "terminus";
+  // The main route's ends, gray where the chosen route doesn't reach.
+  const endKind = (index: number) => {
+    const id = main[index]!;
+    if (!chosenAt.has(id)) return "branch";
+    return id === focusId || isChosenEnd(id) ? kindOf(id) : "terminus";
+  };
+  // Named strongly where the chosen route starts or ends, not where it only passes.
+  const isStrongEnd = (index: number) => {
+    const id = main[index]!;
+    return chosenAt.has(id) && (id === focusId || isChosenEnd(id));
+  };
   stops.push({ ...target(0), x: first[0], y: first[1], kind: endKind(0) });
   stops.push({ ...target(last), x: end[0], y: end[1], kind: endKind(last) });
   // The termini are named under their dots.
+  const firstName = input.nameOf(main[0]!);
+  const lastName = input.nameOf(main[last]!);
   const endLabel = (index: number, [x, y]: [number, number]) => ({
     x: index === 0 ? x - EDGE : x + EDGE,
     y: y + (focus === index ? FOCUS_DOT : BIG_DOT) + LABEL_GAP,
   });
   labels.push(
-    { text: firstName, ...endLabel(0, first), align: "left", maxWidth: half, isStrong: true },
-    { text: lastName, ...endLabel(last, end), align: "right", maxWidth: half, isStrong: true },
+    {
+      text: firstName,
+      ...endLabel(0, first),
+      align: "left",
+      maxWidth: half,
+      isStrong: isStrongEnd(0),
+    },
+    {
+      text: lastName,
+      ...endLabel(last, end),
+      align: "right",
+      maxWidth: half,
+      isStrong: isStrongEnd(last),
+    },
   );
 
-  const paths: string[] = [];
   // What the origin's name has to keep clear of, next to the line above it and below it.
   const band = FOCUS_DOT + LABEL_GAP + LABEL_HEIGHT;
   const above: [number, number][] = [];
@@ -411,25 +619,122 @@ function layoutLine(input: DiagramInput, main: readonly string[]): LineDiagram {
     end[1] > 0 ? [xOf(forkRight), end[0] + BIG_DOT] : endNames[1]!,
   ];
 
+  // Where the chosen route ends partway, named under its dot when there's room.
+  for (const index of chosenEnds) {
+    if (index === focus) continue;
+    const x = xOf(index);
+    const { y } = along(x);
+    stops.push({ ...target(index), x, y, kind: kindOf(main[index]!) });
+    const text = input.nameOf(main[index]!);
+    const labelWidth = Math.min(textWidth(text), half);
+    const label: DiagramLabel = {
+      text,
+      x: Math.min(Math.max(x, labelWidth / 2), width - labelWidth / 2),
+      y: y + BIG_DOT + LABEL_GAP,
+      align: "center",
+      maxWidth: labelWidth,
+      isStrong: true,
+    };
+    if (labels.every((other) => !labelsOverlap(label, other))) {
+      labels.push(label);
+      below.push(labelSpan(label));
+    }
+  }
+
+  /**
+   * The chosen route's stops along a branch it takes, a share of the way along it each, the
+   * stop the line was opened from among them.
+   */
+  type Point = { x: number; y: number };
+  // Where an arrowhead could go along the branches the chosen route takes, pointing the way it's
+  // taken there, for when there's no room for it on the main line.
+  // Each branch's spots come best first.
+  const branchArrows: (Point & { angle: number })[][] = [];
+  type BranchFocus = Point & {
+    share: number;
+    length: number;
+    branch: Branch;
+    at: (share: number) => Point;
+  };
+  let branchFocus: BranchFocus | null = null;
+  const placeAlong = (branch: Branch, skip: number, at: (share: number) => Point, length = 0) => {
+    const [start, stop] = branch.run;
+    // Off an end, the stops are counted out from where it leaves the main route.
+    const fromStart = start === 0 && branch.type === "end";
+    const count = stop - start + (branch.type === "end" ? 1 : 2);
+    for (let index = start; index <= stop; index++) {
+      const id = chosen[index]!;
+      if (index === skip || indexOf.has(id)) continue;
+      const rank = fromStart ? stop - index + 1 : index - start + 1;
+      const point = at(rank / count);
+      const isFocus = id === focusId;
+      if (isFocus) branchFocus = { ...point, share: rank / count, length, branch, at };
+      stops.push({
+        stationId: id,
+        routeIndex: input.selected,
+        stopIndex: index,
+        ...point,
+        kind: isFocus ? "focus" : "stop",
+      });
+    }
+  };
+
   branches.forEach((branch, index) => {
     const lane = laneOf[index]!;
     const rise = riseOf(lane);
+    const own = taken.get(branchKey(branch));
 
     if (branch.type === "end") {
       const anchorX = xOf(branch.anchor);
       const direction = branch.side === "left" ? -1 : 1;
       const bendX = anchorX + direction * rise;
       const endX = branch.side === "left" ? Math.min(left, bendX) : Math.max(right, bendX);
-      paths.push(`M${anchorX} 0L${bendX} ${-rise}L${endX} ${-rise}`);
+      const corners: [number, number][] = [
+        [anchorX, 0],
+        [bendX, -rise],
+        [endX, -rise],
+      ];
+      (own ? chosenPaths : paths).push(toPath(corners));
       above.push(direction < 0 ? [anchorX - band, anchorX] : [anchorX, anchorX + band]);
-      stops.push({ ...branch, x: endX, y: -rise, kind: "branch" });
+      let dot = BRANCH_DOT;
+      if (own?.type === "end") {
+        const kind = kindOf(own.stationId);
+        dot = kind === "focus" ? FOCUS_DOT : BIG_DOT;
+        stops.push({
+          stationId: own.stationId,
+          routeIndex: input.selected,
+          stopIndex: own.stopIndex,
+          x: endX,
+          y: -rise,
+          kind,
+        });
+        placeAlong(
+          own,
+          own.stopIndex,
+          (share) => pointAlong(corners, share),
+          rise * Math.SQRT2 + Math.abs(endX - bendX),
+        );
+        // Midway along its level stretch, unless that's too short, then along its slope.
+        const turn = own.stationId === destinationId ? 0 : 180;
+        const segment = ([ax, ay]: [number, number], [bx, by]: [number, number], t: number) => ({
+          x: ax + t * (bx - ax),
+          y: ay + t * (by - ay),
+          angle: (Math.atan2(by - ay, bx - ax) * 180) / Math.PI + turn,
+        });
+        // Room for the arrowhead midway with a clear gap to the bend and to the end's dot.
+        const isLong = Math.abs(endX - bendX) >= 2 * (2 * CHEVRON_RADIUS + BIG_DOT + LABEL_GAP * 2);
+        branchArrows.push([
+          ...(isLong ? [segment(corners[1], corners[2], 0.5)] : []),
+          ...[0.5, 0.35, 0.65].map((t) => segment(corners[0], corners[1], t)),
+        ]);
+      } else stops.push({ ...branch, x: endX, y: -rise, kind: "branch" });
       labels.push({
         text: branch.label,
         x: branch.side === "left" ? endX - EDGE : endX + EDGE,
-        y: -rise - BRANCH_DOT - LABEL_GAP - LABEL_HEIGHT,
+        y: -rise - dot - LABEL_GAP - LABEL_HEIGHT,
         align: branch.side,
         maxWidth: half,
-        isStrong: false,
+        isStrong: own !== undefined,
       });
       return;
     }
@@ -438,12 +743,42 @@ function layoutLine(input: DiagramInput, main: readonly string[]): LineDiagram {
     const fromX = xOf(branch.from);
     const toX = xOf(branch.to);
     const pull = Math.min(rise * 0.7, (toX - fromX) / 3);
-    paths.push(`M${fromX} 0C${fromX + pull} ${-rise} ${toX - pull} ${-rise} ${toX} 0`);
+    const curve: [number, number][] = [
+      [fromX, 0],
+      [fromX + pull, -rise],
+      [toX - pull, -rise],
+      [toX, 0],
+    ];
+    (own ? chosenPaths : paths).push(
+      `M${fromX} 0C${fromX + pull} ${-rise} ${toX - pull} ${-rise} ${toX} 0`,
+    );
     const top = -rise * 0.75;
     if (-top - BRANCH_DOT < band) above.push([fromX, toX]);
     else above.push([fromX, fromX + pull], [toX - pull, toX]);
     const middle = (fromX + toX) / 2;
-    stops.push({ ...branch, x: middle, y: top, kind: "bypass" });
+    if (own?.type === "bypass") {
+      const via = own.stationId === focusId ? -1 : own.stopIndex;
+      if (via >= 0) {
+        stops.push({
+          stationId: own.stationId,
+          routeIndex: input.selected,
+          stopIndex: via,
+          x: middle,
+          y: top,
+          kind: "via",
+        });
+      }
+      placeAlong(own, via, (share) => pointOnCurve(curve, share));
+      // Partway up the arc from where it's taken from, clear of the dot at its top.
+      branchArrows.push(
+        [0.25, 0.2, 0.3].map((share) => {
+          const t = input.reversed ? 1 - share : share;
+          const [a, b] = [pointOnCurve(curve, t - 0.01), pointOnCurve(curve, t + 0.01)];
+          const angle = (Math.atan2(b.y - a.y, b.x - a.x) * 180) / Math.PI;
+          return { ...pointOnCurve(curve, t), angle: input.reversed ? angle + 180 : angle };
+        }),
+      );
+    } else stops.push({ ...branch, x: middle, y: top, kind: "bypass" });
     if (branch.label) {
       const labelWidth = Math.min(textWidth(branch.label), width);
       labels.push({
@@ -452,10 +787,11 @@ function layoutLine(input: DiagramInput, main: readonly string[]): LineDiagram {
         y: top - BRANCH_DOT - LABEL_GAP - LABEL_HEIGHT,
         align: "center",
         maxWidth: width,
-        isStrong: false,
+        isStrong: own !== undefined,
       });
     }
   });
+  const chosenEnd = (id: string) => isChosenEnd(id) && !indexOf.has(id);
 
   // The stop it was opened from, named over its dot or under it, where nothing else is, and a
   // little to one side when it sits where another route leaves.
@@ -504,7 +840,7 @@ function layoutLine(input: DiagramInput, main: readonly string[]): LineDiagram {
     let best = pick({ over, under });
     // Hemmed in by the name of the end it's leaving from, it takes that name's place. The stops
     // below still start there.
-    const behind = destination === last ? 0 : 1;
+    const behind = input.reversed ? 1 : 0;
     if (!best && (dropped || (behind === 0 ? first : end)[1] === 0)) {
       best = pick({ over, under: under.filter((_, index) => index !== behind) });
       if (best) labels.splice(behind, 1);
@@ -523,38 +859,123 @@ function layoutLine(input: DiagramInput, main: readonly string[]): LineDiagram {
       });
     }
   }
+  // Opened from a stop along a branch the chosen route takes, it's named under its dot or over it,
+  // where nothing else is. At the branch's end, the end's name already is it.
+  // Set while placing the branches, which TypeScript can't follow.
+  const onBranch = branchFocus as BranchFocus | null;
+  if (focusId !== null && onBranch && !chosenEnd(focusId)) {
+    const text = input.nameOf(focusId);
+    const labelWidth = Math.min(textWidth(text) * 1.1 + 8, width * 0.6);
+    const x = Math.min(Math.max(onBranch.x, labelWidth / 2), width - labelWidth / 2);
+    for (const y of [
+      onBranch.y + FOCUS_DOT + LABEL_GAP,
+      onBranch.y - FOCUS_DOT - LABEL_GAP - LABEL_HEIGHT,
+    ]) {
+      const label: DiagramLabel = {
+        text,
+        x,
+        y,
+        align: "center",
+        maxWidth: labelWidth,
+        isStrong: true,
+      };
+      if (labels.every((other) => !labelsOverlap(label, other))) {
+        labels.push(label);
+        break;
+      }
+    }
+  }
 
   // An arrowhead just past the stop it was opened from, or midway along without one, when it fits:
-  // on a straight stretch, clear of the bends and of where other routes leave, moved along a little
-  // if it has to be. Failing that, anywhere clear of them, and failing that, where it would be.
+  // on a straight stretch of the chosen route along the main one, clear of the bends and of where
+  // other routes leave, moved along a little if it has to be. Failing that, anywhere clear of them,
+  // and failing that, where it would be. Opened from along a branch, it's past where the chosen
+  // route next meets the main one, if it does.
   let chevron: LineDiagram["chevron"] = null;
   const sign = input.reversed ? -1 : 1;
-  const start = focus >= 0 ? xOf(focus) + sign * CHEVRON_OFFSET : (left + right) / 2;
-  const corners = [
-    ...points.slice(1, -1).map(([x]) => x),
-    ...branches.flatMap((branch) =>
-      branch.type === "end" ? [xOf(branch.anchor)] : [xOf(branch.from), xOf(branch.to)],
-    ),
-  ];
-  const fits = (x: number) =>
-    x - CHEVRON_RADIUS - BIG_DOT >= first[0] &&
-    x + CHEVRON_RADIUS + BIG_DOT <= end[0] &&
-    (focus < 0 || sign * (x - xOf(focus)) >= FOCUS_DOT + CHEVRON_RADIUS + LABEL_GAP);
-  const isClear = (x: number) =>
-    corners.every((corner) => Math.abs(corner - x) >= CHEVRON_RADIUS * 2 + LABEL_GAP);
-  const candidates = Array.from({ length: Math.ceil(width / 4) }, (_, step) => [
-    start + sign * step * 4,
-    start - sign * step * 4,
-  ])
-    .flat()
-    .filter(fits);
-  const chevronX =
-    candidates.find((x) => isClear(x) && along(x).angle === 0) ??
-    candidates.find(isClear) ??
-    (fits(start) ? start : null);
-  if (chevronX !== null) {
-    const { y, angle } = along(chevronX);
-    chevron = { x: chevronX, y, angle: input.reversed ? angle + 180 : angle };
+  let start: number | null = null;
+  if (focus >= 0) start = xOf(focus) + sign * CHEVRON_OFFSET;
+  else if (focusId !== null) {
+    const at = chosenAt.get(focusId)!;
+    const ahead = input.reversed ? chosen.slice(0, at).reverse() : chosen.slice(at + 1);
+    const next = ahead.find((id) => indexOf.has(id));
+    if (next !== undefined) start = xAt(indexOf.get(next)!);
+  } else if (isWhole) start = (left + right) / 2;
+  else {
+    const [a, b] = ranges.reduce(
+      (longest, range) => (range[1] - range[0] > longest[1] - longest[0] ? range : longest),
+      [0, 0] as const,
+    );
+    start = (a + b) / 2;
+  }
+  if (start !== null && ranges.length > 0) {
+    const from = start;
+    const corners = [
+      ...points.slice(1, -1).map(([x]) => x),
+      ...branches.flatMap((branch) =>
+        branch.type === "end" ? [xOf(branch.anchor)] : [xOf(branch.from), xOf(branch.to)],
+      ),
+    ];
+    const fits = (x: number) =>
+      ranges.some(
+        ([a, b]) => x - CHEVRON_RADIUS - BIG_DOT >= a && x + CHEVRON_RADIUS + BIG_DOT <= b,
+      ) &&
+      (focus >= 0
+        ? sign * (x - xOf(focus)) >= FOCUS_DOT + CHEVRON_RADIUS + LABEL_GAP
+        : focusId === null || sign * (x - from) >= 0);
+    const isClear = (x: number) =>
+      corners.every((corner) => Math.abs(corner - x) >= CHEVRON_RADIUS * 2 + LABEL_GAP);
+    const candidates = Array.from({ length: Math.ceil(width / 4) }, (_, step) => [
+      from + sign * step * 4,
+      from - sign * step * 4,
+    ])
+      .flat()
+      .filter(fits);
+    const chevronX =
+      candidates.find((x) => isClear(x) && along(x).angle === 0) ??
+      candidates.find(isClear) ??
+      (fits(from) ? from : null);
+    if (chevronX !== null) {
+      const { y, angle } = along(chevronX);
+      chevron = { x: chevronX, y, angle: input.reversed ? angle + 180 : angle };
+    }
+  } else if (onBranch?.branch.type === "end" && onBranch.branch.stationId === destinationId) {
+    // Out along a branch to its end, it's midway between the two, where there's room.
+    const { length } = onBranch;
+    const room = (1 - onBranch.share) * length;
+    if (room >= FOCUS_DOT + BIG_DOT + 2 * (CHEVRON_RADIUS + LABEL_GAP)) {
+      const share = (onBranch.share + 1) / 2;
+      const nudge = 1 / length;
+      const [a, b] = [onBranch.at(share - nudge), onBranch.at(share + nudge)];
+      chevron = {
+        ...onBranch.at(share),
+        angle: (Math.atan2(b.y - a.y, b.x - a.x) * 180) / Math.PI,
+      };
+    }
+  }
+  // Without room on the main line, on the nearest branch the chosen route takes next, where it's
+  // clear of the names.
+  const fromX = focus >= 0 ? xOf(focus) : onBranch ? onBranch.x : null;
+  if (!chevron && fromX !== null) {
+    const isAhead = (arrow: Point) =>
+      sign * (arrow.x - fromX) >= FOCUS_DOT + CHEVRON_RADIUS + LABEL_GAP;
+    const isClear = (arrow: Point) =>
+      labels.every((label) => {
+        const [a, b] = labelSpan(label);
+        return (
+          arrow.x + CHEVRON_RADIUS <= a ||
+          arrow.x - CHEVRON_RADIUS >= b ||
+          arrow.y + CHEVRON_RADIUS <= label.y ||
+          arrow.y - CHEVRON_RADIUS >= label.y + LABEL_HEIGHT
+        );
+      });
+    const nearest = branchArrows
+      .filter((spots) => isAhead(spots[0]!))
+      .sort((a, b) => sign * (a[0]!.x - b[0]!.x));
+    for (const spots of nearest) {
+      chevron = spots.find((spot) => isAhead(spot) && isClear(spot)) ?? null;
+      if (chevron) break;
+    }
   }
 
   // Moved down so the highest name starts at the top.
@@ -568,10 +989,7 @@ function layoutLine(input: DiagramInput, main: readonly string[]): LineDiagram {
     width,
     height: Math.max(...bottoms) + shift + 2,
     shift,
-    main: {
-      type: "path",
-      d: points.map(([x, y], index) => `${index ? "L" : "M"}${x} ${y}`).join(""),
-    },
+    main: { type: "path", d: chosenPaths.join("") },
     branches: paths,
     stops: stops.map((stop) => ({ ...stop, y: stop.y + shift })),
     labels: labels.map((label) => ({ ...label, y: label.y + shift })),
