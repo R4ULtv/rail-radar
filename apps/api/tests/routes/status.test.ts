@@ -294,7 +294,7 @@ describe("GET /status/latency", () => {
     const { response } = await request("/status/latency");
     const body = (await response.json()) as StatusLatency;
     expect(response.status).toBe(200);
-    expect(response.headers.get("Cache-Control")).toBe("public, max-age=300");
+    expect(response.headers.get("Cache-Control")).toBe("public, max-age=900");
     expect(body).toMatchObject({
       source: "live",
       unit: "ms",
@@ -412,6 +412,26 @@ describe.each(["summary", "latency"])("status/%s resilience", (endpoint) => {
     expect(body).toContain("temporarily unavailable");
     expect(body).not.toContain("test-token");
     expect(logs.errors()).toHaveLength(1);
+  });
+
+  it("reuses the cached response when only the query string differs", async () => {
+    mockAnalytics(fetchMock, [["FROM provider_metrics", []]]);
+    expect((await request(`/status/${endpoint}`)).response.status).toBe(200);
+    const queries = analyticsQueries(fetchMock).length;
+    expect(queries).toBeGreaterThan(0);
+    expect((await request(`/status/${endpoint}?bust=1`)).response.status).toBe(200);
+    expect(analyticsQueries(fetchMock)).toHaveLength(queries);
+  });
+
+  it("does not retry Analytics Engine while a failure is cooling down", async () => {
+    captureLogs();
+    fetchMock.fail();
+    expect((await request(`/status/${endpoint}`)).response.status).toBe(503);
+    const attempts = fetchMock.fetch.mock.calls.length;
+    const { response } = await request(`/status/${endpoint}`);
+    expect(response.status).toBe(503);
+    expect(response.headers.get("Cache-Control")).toBe("no-store");
+    expect(fetchMock.fetch.mock.calls).toHaveLength(attempts);
   });
 
   it("applies the existing API rate limiter", async () => {

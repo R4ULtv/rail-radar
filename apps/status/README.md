@@ -51,7 +51,7 @@ Provider rows are collapsed initially. A collapsed row shows status, success rat
 
 ## API contract
 
-Both routes always return every configured provider, including those without data. Provider IDs, display names, and countries live in `@repo/data/providers`; response types live in `@repo/data/status`. Both routes count `blob2 IN ('live', 'synthetic')` (visitor requests and scheduled probes), combine arrivals/departures, use the API's existing rate limiter, and return a non-cacheable 503 if provider analytics fails or exceeds the 10-second query timeout. Unknown data is distinct from a failed query. The top-level `overall`, `counts`, and `scope` describe providers only.
+Both routes always return every configured provider, including those without data. Provider IDs, display names, and countries live in `@repo/data/providers`; response types live in `@repo/data/status`. Both routes count `blob2 IN ('live', 'synthetic')` (visitor requests and scheduled probes), combine arrivals/departures, use the API's existing rate limiter, and return a non-cacheable 503 if provider analytics fails or exceeds the 10-second query timeout. To limit Analytics Engine read queries (metered per account), the edge cache key ignores query strings, and after a failed read the route answers 503 from the edge for 30 seconds instead of querying again. Unknown data is distinct from a failed query. The top-level `overall`, `counts`, and `scope` describe providers only.
 
 ### `GET /status/summary`
 
@@ -97,7 +97,7 @@ The example abbreviates the provider array. `windowMinutes` is `60`, `180`, or `
 
 ### `GET /status/latency`
 
-The current UTC day and the preceding 29 days, cached for 5 minutes. The response contains `generatedAt`, `source: "live"`, `timezone: "UTC"`, `unit: "ms"`, `window: { from, to, days: 30 }`, `policy`, and `providers: [{ id, name, country, days }]`.
+The current UTC day and the preceding 29 days, cached for 15 minutes (daily buckets change slowly, and each refresh costs two Analytics Engine queries). The response contains `generatedAt`, `source: "live"`, `timezone: "UTC"`, `unit: "ms"`, `window: { from, to, days: 30 }`, `policy`, and `providers: [{ id, name, country, days }]`.
 
 Each provider has exactly 30 chronological daily buckets:
 
@@ -138,7 +138,7 @@ Trigger a run locally with `curl "http://localhost:8787/cdn-cgi/handler/schedule
 - The API's `overall` field is stricter: it is `outage` only when every provider is in outage, `degraded` if any provider has a known issue, `unknown` if any provider lacks enough data and none has a known issue, and `operational` only when every provider is operational.
 - Requests and outcome counts use `sum(_sample_interval)`. Percentiles use `quantileExactWeighted` on recorded fetch durations, weighted by `_sample_interval`. `syntheticRequests` and `syntheticSuccesses` are the part of `requests` and `successes` from scheduled checks (`blob2 = 'synthetic'`); the rest came from visitors. The page shows this split in each provider's “Traffic sources” and stripes days observed only through checks. `samples` and `latencySamples` are actual stored row counts; `latencyRequests` is the estimated request count with valid timings. High tail percentiles on small samples are descriptive, not reliable tail estimates.
 - Health describes **requests observed through Rail Radar**, not guaranteed provider availability. Cache hits, API errors before a provider fetch, and API outages do not produce provider observations; scheduled probes keep quiet providers from going without any. Rail Radar's “Responding” state only confirms a recent successful API-root response; it is not a historical API uptime claim.
-- API reachability, summary, and history refresh independently. Reachability and summary refresh each minute; history refreshes every five minutes. On summary refresh failure, current health becomes unverified while history stays visible. Failed history refreshes preserve available history with a warning. The page rejects reachability and summary observations older than two minutes, including while polling is paused offline.
+- API reachability, summary, and history refresh independently. Reachability and summary refresh each minute; history refreshes every 15 minutes. On summary refresh failure, current health becomes unverified while history stays visible. Failed history refreshes preserve available history with a warning. The page rejects reachability and summary observations older than two minutes, including while polling is paused offline.
 
 ## Build and hosting
 

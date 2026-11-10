@@ -28,8 +28,9 @@ export const summaryQuery = {
 export const latencyQuery = {
   queryKey: ["status", "latency"],
   queryFn: ({ signal }: { signal: AbortSignal }) => read<StatusLatency>("latency", signal),
-  staleTime: 300_000,
-  refetchInterval: 300_000,
+  // History is daily buckets and the API caches it for 15 minutes.
+  staleTime: 900_000,
+  refetchInterval: 900_000,
 };
 
 /** A visitor's current request, independent of the Analytics Engine read endpoints. */
