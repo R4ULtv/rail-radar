@@ -1,6 +1,6 @@
 import type { LatencyDay } from "@repo/data/status";
 import { ChartContainer, ChartTooltip, type ChartConfig } from "@repo/ui/components/chart";
-import { CartesianGrid, Line, LineChart, XAxis, YAxis } from "recharts";
+import { CartesianGrid, Line, LineChart, XAxis, YAxis, type TooltipContentProps } from "recharts";
 import { dayLabel, integer, milliseconds } from "./format";
 
 const config = {
@@ -70,7 +70,7 @@ export default function LatencyChart({ days, name }: { days: LatencyDay[]; name:
           tickFormatter={tickLabel}
         />
         <ChartTooltip
-          content={({ active, payload }) => {
+          content={({ active, payload }: TooltipContentProps) => {
             const date = payload?.[0]?.payload?.date as string | undefined;
             const day = days.find((item) => item.date === date);
             if (!active || !day) return null;
