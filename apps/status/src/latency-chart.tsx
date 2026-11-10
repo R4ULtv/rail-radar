@@ -99,10 +99,11 @@ export default function LatencyChart({ days, name }: { days: LatencyDay[]; name:
             dataKey={key}
             name={config[key].label}
             stroke={`var(--color-${key})`}
-            strokeWidth={2}
-            strokeDasharray={key === "p999" ? "5 4" : undefined}
-            dot={key === "p999" ? false : { r: 2, strokeWidth: 0 }}
-            activeDot={{ r: 4 }}
+            strokeWidth={key === "p50" ? 2 : 1.5}
+            strokeDasharray={key === "p999" ? "4 4" : undefined}
+            // Small dots in the line's own color keep a lone day between gaps visible.
+            dot={key === "p999" ? false : { r: 1.5, strokeWidth: 0, fill: `var(--color-${key})` }}
+            activeDot={{ r: 3.5, strokeWidth: 0 }}
             connectNulls={false}
             isAnimationActive={false}
           />

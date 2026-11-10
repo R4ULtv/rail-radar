@@ -2,11 +2,24 @@ import type { ProviderDay } from "@repo/data/status";
 import { useRef, useState, type PointerEvent } from "react";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@repo/ui/components/tooltip";
 import { dayLabel, integer, percent, STATUS_LABELS } from "./format";
+import { trafficSources } from "./traffic-sources";
 
 type HistoryDay = Pick<
   ProviderDay,
-  "date" | "partial" | "status" | "requests" | "successRate" | "samples"
+  | "date"
+  | "partial"
+  | "status"
+  | "requests"
+  | "successes"
+  | "syntheticRequests"
+  | "syntheticSuccesses"
+  | "successRate"
+  | "samples"
 >;
+
+/** A day whose only observations came from scheduled checks, with no visitor requests. */
+export const checksOnly = (day: HistoryDay) =>
+  day.requests > 0 && day.syntheticRequests >= day.requests;
 
 export function ProviderHistory({
   days,
@@ -33,8 +46,14 @@ export function ProviderHistory({
     setSelected(days[clamped]);
     setActiveIndex(clamped);
   };
-  const detail = (day: HistoryDay) =>
-    `${dayLabel(day.date)}${day.partial ? " · so far today" : ""}: ${STATUS_LABELS[day.status]}. ${integer.format(day.requests)} requests · ${percent(day.successRate)} ${successLabel} · ${integer.format(day.samples)} observations.`;
+  const detail = (day: HistoryDay) => {
+    const { visitors, checks } = trafficSources(day);
+    const sources =
+      day.requests > 0
+        ? ` (${integer.format(visitors.requests)} from visitors, ${integer.format(checks.requests)} ${checks.requests === 1 ? "check" : "checks"})`
+        : "";
+    return `${dayLabel(day.date)}${day.partial ? " · so far today" : ""}: ${STATUS_LABELS[day.status]}. ${integer.format(day.requests)} requests${sources} · ${percent(day.successRate)} ${successLabel} · ${integer.format(day.samples)} observations.`;
+  };
 
   return (
     <div className="history">
@@ -51,6 +70,7 @@ export function ProviderHistory({
               className="history-day"
               data-health={day.status}
               data-partial={day.partial || undefined}
+              data-checks-only={checksOnly(day) || undefined}
               aria-label={detail(day)}
               aria-pressed={selected?.date === day.date}
               ref={(button) => {

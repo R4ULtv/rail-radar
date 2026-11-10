@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Info, RefreshCw } from "lucide-react";
 import { PROVIDERS } from "@repo/data/providers";
-import { STATUS_SUMMARY_WINDOW_MINUTES } from "@repo/data/status";
 import { Accordion } from "@repo/ui/components/accordion";
 import { Alert, AlertDescription, AlertTitle } from "@repo/ui/components/alert";
 import { Button } from "@repo/ui/components/button";
@@ -11,7 +10,7 @@ import { ToggleGroup, ToggleGroupItem } from "@repo/ui/components/toggle-group";
 import { cn } from "@repo/ui/lib/utils";
 import { latencyQuery, reachabilityQuery, summaryQuery } from "./api";
 import { ApiService } from "./api-service";
-import { observationLabel, STATUS_LABELS, windowLabel } from "./format";
+import { observationLabel } from "./format";
 import { healthCounts, isCurrent, needsAttention } from "./presentation";
 import { ProviderRow } from "./provider-row";
 
@@ -42,7 +41,6 @@ export function App() {
     needsAttention(current.get(provider.id)?.status ?? "unknown"),
   );
   const providers = filter === "attention" ? attention : PROVIDERS;
-  const windowMinutes = summary.data?.window.minutes ?? STATUS_SUMMARY_WINDOW_MINUTES;
   const refreshing = api.isFetching || summary.isFetching || latency.isFetching;
   const stale = summary.data && !verified && !summary.isPending;
   const hasIssues = counts.degraded + counts.outage;
@@ -56,42 +54,59 @@ export function App() {
         <div className="section-heading">
           <div>
             <h2 id="providers-title">Data providers</h2>
-            <p>
-              Upstream station boards · health from the last hour, or up to the{" "}
-              {windowLabel(windowMinutes)} for quieter providers
+            <p className="network-headline" aria-live="polite">
+              <span
+                className="status-dot"
+                data-health={
+                  hasIssues ? "degraded" : allObservedHealthy ? "operational" : "unknown"
+                }
+              />
+              {summary.isPending
+                ? "Reading provider observations…"
+                : !verified
+                  ? "Provider health is unverified"
+                  : hasIssues
+                    ? `${hasIssues} ${hasIssues === 1 ? "provider had" : "providers had"} elevated failures`
+                    : allObservedHealthy
+                      ? `All observed providers are healthy${
+                          counts.unknown
+                            ? ` · ${counts.unknown} with too little recent traffic`
+                            : ""
+                        }`
+                      : "Waiting for more observations"}
             </p>
           </div>
-          <span className="eyebrow">{PROVIDERS.length} providers</span>
-        </div>
-        <div className="network-summary" aria-live="polite">
-          <p>
-            <span
-              className="status-dot"
-              data-health={hasIssues ? "degraded" : allObservedHealthy ? "operational" : "unknown"}
-            />
-            {summary.isPending
-              ? "Reading provider observations…"
-              : !verified
-                ? "Provider health is unverified"
-                : hasIssues
-                  ? `${hasIssues} ${hasIssues === 1 ? "provider had" : "providers had"} elevated failures`
-                  : allObservedHealthy
-                    ? `All observed providers are healthy${
-                        counts.unknown ? ` · ${counts.unknown} with too little recent traffic` : ""
-                      }`
-                    : "Waiting for more observations"}
-          </p>
-          <dl className="network-counts">
-            {(["operational", "degraded", "outage", "unknown"] as const).map((status) => (
-              <div key={status} data-health={status}>
-                <dt>
-                  <span className="status-dot" />
-                  {STATUS_LABELS[status]}
-                </dt>
-                <dd>{summary.isPending ? "—" : counts[status]}</dd>
-              </div>
-            ))}
-          </dl>
+          <div className="provider-controls">
+            <ToggleGroup
+              variant="outline"
+              size="sm"
+              value={[filter]}
+              onValueChange={(values) => {
+                if (values[0]) setFilter(String(values[0]));
+              }}
+              aria-label="Filter providers"
+            >
+              <ToggleGroupItem value="all">
+                All <span>{PROVIDERS.length}</span>
+              </ToggleGroupItem>
+              <ToggleGroupItem value="attention">
+                Needs attention <span>{attention.length}</span>
+              </ToggleGroupItem>
+            </ToggleGroup>
+            <Button
+              variant="outline"
+              size="sm"
+              disabled={refreshing}
+              onClick={() => {
+                void api.refetch();
+                void summary.refetch();
+                void latency.refetch();
+              }}
+            >
+              <RefreshCw data-icon="inline-start" className={cn(refreshing && "refreshing")} />
+              {refreshing ? "Refreshing" : "Refresh"}
+            </Button>
+          </div>
         </div>
         {(summary.isError || latency.isError || stale) && (
           <Alert variant="destructive">
@@ -109,45 +124,11 @@ export function App() {
             </AlertDescription>
           </Alert>
         )}
-        <div className="provider-controls">
-          <ToggleGroup
-            variant="outline"
-            size="sm"
-            value={[filter]}
-            onValueChange={(values) => {
-              if (values[0]) setFilter(String(values[0]));
-            }}
-            aria-label="Filter providers"
-          >
-            <ToggleGroupItem value="all">
-              All providers <span>{PROVIDERS.length}</span>
-            </ToggleGroupItem>
-            <ToggleGroupItem value="attention">
-              Needs attention <span>{attention.length}</span>
-            </ToggleGroupItem>
-          </ToggleGroup>
-          <div className="refresh-controls">
-            <span className="expand-hint">Expand a provider for history and latency</span>
-            <Button
-              variant="outline"
-              size="sm"
-              disabled={refreshing}
-              onClick={() => {
-                void api.refetch();
-                void summary.refetch();
-                void latency.refetch();
-              }}
-            >
-              <RefreshCw data-icon="inline-start" className={cn(refreshing && "refreshing")} />
-              {refreshing ? "Refreshing" : "Refresh"}
-            </Button>
-          </div>
-        </div>
         <div className="provider-column-head row-grid" aria-hidden="true">
           <span>Provider</span>
-          <span>Observed health</span>
-          <span>Requests</span>
-          <span>p50 · latest day</span>
+          <span>Status</span>
+          <span>Success rate</span>
+          <span>Median response</span>
           <span>Last observed</span>
         </div>
         <Accordion
@@ -165,7 +146,6 @@ export function App() {
               expanded={expanded.includes(provider.id)}
               loading={latency.isPending}
               historyError={latency.isError}
-              windowMinutes={windowMinutes}
               now={now}
             />
           ))}
@@ -180,18 +160,11 @@ export function App() {
             </EmptyHeader>
           </Empty>
         )}
-        <div className="data-timestamps">
-          <span>
-            {summary.data
-              ? `Summary: ${observationLabel(summary.data.generatedAt)}`
-              : "Waiting for the first summary"}
-          </span>
-          <span>
-            {latency.data
-              ? `History: ${observationLabel(latency.data.generatedAt)}`
-              : "Waiting for provider history"}
-          </span>
-        </div>
+        <p className="data-timestamps">
+          {summary.data
+            ? `Updated ${observationLabel(summary.data.generatedAt)}`
+            : "Waiting for the first summary"}
+        </p>
       </section>
     </>
   );

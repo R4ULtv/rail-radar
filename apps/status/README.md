@@ -41,13 +41,13 @@ The 10 new provider assets must be published with the main website before their 
 
 Rail Radar API is the first service, followed by the 15 upstream data providers. While the page is open, it requests the API root independently of analytics and verifies the expected Rail Radar response. A successful recent response displays “Responding”; a failed or stale observation displays “Unverified”. The response time includes the visitor's network. No API uptime percentage or history is inferred from provider fetches.
 
-This is a visitor-triggered reachability read, not a scheduled synthetic check. An Analytics Engine failure can leave the API reachable while provider health is unverified. The page keeps Rail Radar’s own section compact: only the latest reachability status and response time, with no expandable API report, request counters, historical status, or API latency graph. Provider history and latency are the focus.
+This is a visitor-triggered reachability read, not a scheduled synthetic check. An Analytics Engine failure can leave the API reachable while provider health is unverified. The page keeps Rail Radar’s own section to a single row: only the latest reachability status and response time, with no expandable API report, request counters, historical status, or API latency graph. Provider history and latency are the focus.
 
 Provider descriptions and website links live in `PROVIDER_DETAILS` (`@repo/data/providers`), which is kept out of API responses. Known issues come from `RAIL_DATA_WARNINGS` (`@repo/data/countries`), the same list the main website shows on rail station pages, so adding or removing a country's warning updates both. A provider with a known issue has a warning mark in its collapsed row (also announced in its accessible name) and a "Known issue" notice when expanded. Known issues do not affect observed health or the "Needs attention" filter.
 
 Recently added data sources are listed in `NEW_RAIL_DATA` (`@repo/data/countries`) with their go-live date. For `NEW_RAIL_DATA_DAYS` (30) days the provider row shows a "New" pill and an expanded "New data source" notice, and the main website shows the same notice on that country's rail station pages (a known issue takes precedence there). The flag lapses on its own; delete the entry afterwards. Prerendered HTML includes listed countries, and the client drops the flag after mount once it has lapsed, so hydration always matches.
 
-Provider rows are collapsed initially. Expanding a row shows its description and links, any known issue, its country coverage, current request outcomes and observation counts, 30 daily health buckets (today, still partial, is drawn as a lighter outlined bar), and a larger p50/p99/p99.9 chart. The chart uses a log scale with 1-3-10 ticks fitted to the data: medians sit around 40 ms to 2 s while failed requests record timings at the timeout (about 12 s), and a linear axis would flatten p50 against those spikes. p99.9 is dashed and drawn over p99, which it often equals on small samples. On phones the expanded row is compacted and its two footnotes are hidden, since the methodology section covers them. “Needs attention” includes both known failures and insufficient data. The collapsed median includes the date of the latest timed day, so an older observation is not presented as today's timing.
+Provider rows are collapsed initially. A collapsed row shows status, success rate (with the request count and window), median response, and the last observation. Expanding a row shows its description and links, any known issue, three current figures (success rate, failed requests, last observed), the traffic-source split, 30 daily health buckets (today, still partial, is drawn as a lighter outlined bar), and a p50/p99/p99.9 chart. The chart uses a log scale with 1-3-10 ticks fitted to the data: medians sit around 40 ms to 2 s while failed requests record timings at the timeout (about 12 s), and a linear axis would flatten p50 against those spikes. p99.9 is dashed and drawn over p99, which it often equals on small samples. The methodology section at the foot of the page carries the measurement notes, so expanded rows have no footnotes. The provider headline sits under the section title beside the filter and Refresh; there is no separate per-status count strip. “Needs attention” includes both known failures and insufficient data. The collapsed median is dated only when its latest timed day is not today, so an older observation is not presented as today's timing.
 
 ## API contract
 
@@ -82,6 +82,8 @@ With the traffic observed in early November 2026, the last hour has enough obser
       "errors": 0,
       "timeouts": 1,
       "samples": 100,
+      "syntheticRequests": 1,
+      "syntheticSuccesses": 1,
       "successRate": 0.99,
       "status": "operational",
       "windowMinutes": 60,
@@ -108,6 +110,8 @@ Each provider has exactly 30 chronological daily buckets:
   "errors": 0,
   "timeouts": 1,
   "samples": 100,
+  "syntheticRequests": 24,
+  "syntheticSuccesses": 24,
   "successRate": 0.99,
   "status": "operational",
   "latency": { "p50": 180, "p99": 900, "p999": 1200 },
@@ -132,7 +136,7 @@ Trigger a run locally with `curl "http://localhost:8787/cdn-cgi/handler/schedule
 - Failures include both errors and timeouts. A failure rate below 5% is `operational`, at least 5% is `degraded`, and at least 50% is `outage` (displayed as “Major disruption”). Fewer than 5 observations is `unknown`, even if the weighted request count is large.
 - The page headline gives an all-clear (“All observed providers are healthy”) when no provider is degraded or in outage and at least one is operational, noting how many providers had too little recent traffic. Quiet providers lack data rather than failing, so they no longer hold back the headline; it waits only when no provider has enough observations.
 - The API's `overall` field is stricter: it is `outage` only when every provider is in outage, `degraded` if any provider has a known issue, `unknown` if any provider lacks enough data and none has a known issue, and `operational` only when every provider is operational.
-- Requests and outcome counts use `sum(_sample_interval)`. Percentiles use `quantileExactWeighted` on recorded fetch durations, weighted by `_sample_interval`. `samples` and `latencySamples` are actual stored row counts; `latencyRequests` is the estimated request count with valid timings. High tail percentiles on small samples are descriptive, not reliable tail estimates.
+- Requests and outcome counts use `sum(_sample_interval)`. Percentiles use `quantileExactWeighted` on recorded fetch durations, weighted by `_sample_interval`. `syntheticRequests` and `syntheticSuccesses` are the part of `requests` and `successes` from scheduled checks (`blob2 = 'synthetic'`); the rest came from visitors. The page shows this split in each provider's “Traffic sources” and stripes days observed only through checks. `samples` and `latencySamples` are actual stored row counts; `latencyRequests` is the estimated request count with valid timings. High tail percentiles on small samples are descriptive, not reliable tail estimates.
 - Health describes **requests observed through Rail Radar**, not guaranteed provider availability. Cache hits, API errors before a provider fetch, and API outages do not produce provider observations; scheduled probes keep quiet providers from going without any. Rail Radar's “Responding” state only confirms a recent successful API-root response; it is not a historical API uptime claim.
 - API reachability, summary, and history refresh independently. Reachability and summary refresh each minute; history refreshes every five minutes. On summary refresh failure, current health becomes unverified while history stays visible. Failed history refreshes preserve available history with a warning. The page rejects reachability and summary observations older than two minutes, including while polling is paused offline.
 

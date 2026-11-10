@@ -61,7 +61,7 @@ function mount() {
 describe("live status dashboard", () => {
   it("shows only the API's current status and response time, without an expandable report", async () => {
     mount();
-    const service = within(screen.getByRole("region", { name: "Rail Radar" }));
+    const service = within(screen.getByRole("region", { name: "Rail Radar API" }));
     expect(await service.findByText("Responding")).toBeDefined();
     expect(service.getByText("Response time")).toBeDefined();
     expect(service.getByText(/Response time includes your network connection/)).toBeDefined();
@@ -198,6 +198,31 @@ describe("live status dashboard", () => {
       mount();
       expect(await screen.findByText("Waiting for more observations")).toBeDefined();
     });
+  });
+
+  it("splits a provider's traffic into visitor requests and scheduled checks", async () => {
+    mount();
+    fireEvent.click(await screen.findByRole("button", { name: /^RFI.*Operational/ }));
+    const sources = within(await screen.findByRole("region", { name: "RFI traffic sources" }));
+    expect(sources.getByText("last hour")).toBeDefined();
+    const visitors = sources.getByText("Visitor requests").closest("div")!;
+    const checks = sources.getByText("Scheduled checks").closest("div")!;
+    expect(visitors.textContent).toContain("990.0%");
+    expect(checks.textContent).toContain("110.0%");
+    expect(checks.textContent).toContain("100.0% successful");
+  });
+
+  it("stripes days observed only through scheduled checks and explains them", async () => {
+    mount();
+    fireEvent.click(await screen.findByRole("button", { name: /^RFI.*Operational/ }));
+    const bars = (
+      await screen.findByRole("toolbar", { name: /^RFI: daily status/ })
+    ).querySelectorAll("button");
+    expect(bars[27]!.hasAttribute("data-checks-only")).toBe(true);
+    expect(bars[27]!.getAttribute("aria-label")).toContain("(0 from visitors, 10 checks)");
+    expect(bars[26]!.hasAttribute("data-checks-only")).toBe(false);
+    expect(bars[26]!.getAttribute("aria-label")).toContain("(8 from visitors, 2 checks)");
+    expect(screen.getByText("Scheduled checks only")).toBeDefined();
   });
 
   it("marks today's bar as a partial day", async () => {

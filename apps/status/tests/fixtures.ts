@@ -24,6 +24,8 @@ export function summaryFixture(): StatusSummary {
       errors: provider.id === "sncf" ? 1 : 0,
       timeouts: 0,
       samples: provider.id === "digitraffic" ? 2 : 10,
+      syntheticRequests: provider.id === "digitraffic" ? 2 : 1,
+      syntheticSuccesses: provider.id === "digitraffic" ? 2 : 1,
       successRate: provider.id === "sncf" ? 0.9 : 1,
       status:
         provider.id === "sncf"
@@ -58,6 +60,9 @@ export function latencyFixture(): StatusLatency {
         errors: 0,
         timeouts: 0,
         samples: provider.id === "rfi" ? 10 : 0,
+        // RFI's day 27 has only scheduled checks; its other days are mostly visitors.
+        syntheticRequests: provider.id === "rfi" ? (i === 27 ? 10 : 2) : 0,
+        syntheticSuccesses: provider.id === "rfi" ? (i === 27 ? 10 : 2) : 0,
         successRate: provider.id === "rfi" ? 1 : null,
         status: provider.id === "rfi" ? "operational" : "unknown",
         latency:

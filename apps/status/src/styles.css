@@ -39,8 +39,9 @@
   --degraded: #fbbf24;
   --outage: var(--destructive);
   --unknown: var(--muted-foreground);
+  /* One hue for the chart, so green/amber/red keep meaning health only. */
   --latency-median: #a5a5ff;
-  --latency-tail: var(--operational);
+  --latency-tail: color-mix(in oklab, var(--color-brand) 78%, var(--background));
   --latency-extreme: var(--muted-foreground);
 }
 
@@ -172,31 +173,25 @@ h1 {
   display: flex;
   align-items: flex-end;
   justify-content: space-between;
-  gap: 18px;
-  margin-bottom: 16px;
+  flex-wrap: wrap;
+  gap: 16px 18px;
+  margin-bottom: 20px;
 }
 .section-heading h2 {
   font-size: 20px;
   font-weight: 600;
   letter-spacing: -0.025em;
 }
-.section-heading p {
+.network-headline {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  margin-top: 8px;
+  font-size: 13px;
   color: var(--muted-foreground);
-  font-size: 12px;
-  margin-top: 7px;
-}
-.eyebrow {
-  color: var(--muted-foreground);
-  font: 10px/18px var(--font-mono);
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-  flex-shrink: 0;
 }
 .primary-service {
   padding-bottom: 36px;
-}
-.primary-service .section-heading h2 {
-  font-size: 18px;
 }
 .api-overview {
   display: flex;
@@ -204,41 +199,38 @@ h1 {
   justify-content: space-between;
   flex-wrap: wrap;
   gap: 20px 32px;
-  padding: 20px 8px;
+  padding: 18px 17px;
   border-block: 1px solid var(--border);
 }
 .api-current {
   display: flex;
   align-items: center;
-  gap: 36px;
+  flex-wrap: wrap;
+  gap: 10px 24px;
 }
 .api-current > div {
   display: flex;
-  flex-direction: column;
-  gap: 6px;
-  min-width: 95px;
+  align-items: baseline;
+  gap: 8px;
 }
 .api-current dt {
-  font-size: 11px;
-  line-height: 18px;
+  font-size: 12px;
   color: var(--muted-foreground);
 }
 .api-current dd {
-  font-size: 14px;
-  line-height: 20px;
+  font-size: 13px;
 }
 .service-note {
   font-size: 11px;
   line-height: 18px;
   color: var(--muted-foreground);
-  margin-top: 14px;
+  margin-top: 12px;
 }
 .row-grid {
   display: grid;
-  grid-template-columns: minmax(190px, 1.5fr) minmax(150px, 1.1fr) minmax(80px, 0.65fr) minmax(
-      108px,
-      0.85fr
-    ) minmax(165px, 1.2fr);
+  grid-template-columns:
+    minmax(190px, 1.5fr) minmax(130px, 0.9fr) minmax(180px, 1.1fr) minmax(90px, 0.7fr)
+    minmax(150px, 1fr);
   align-items: center;
   gap: 16px;
   min-width: 0;
@@ -329,6 +321,7 @@ h1 {
   font-weight: 400;
 }
 .row-secondary {
+  white-space: nowrap;
   font-size: 12px;
   line-height: 18px;
   font-weight: 400;
@@ -344,68 +337,19 @@ h1 {
 [data-slot="badge"][data-health] {
   color: var(--health-color);
 }
-.network-summary {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 16px;
-  padding-block: 20px;
-  border-block: 1px solid var(--border);
-  margin-bottom: 24px;
-}
-.network-summary > p {
-  display: flex;
-  align-items: center;
-  gap: 9px;
-  font-size: 13px;
-  font-weight: 500;
-}
-.network-counts {
-  display: flex;
-  align-items: center;
-  gap: 20px;
-  flex-wrap: wrap;
-}
-.network-counts > div {
-  display: flex;
-  flex-direction: row-reverse;
-  align-items: baseline;
-  gap: 7px;
-}
-.network-counts dt {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  color: var(--muted-foreground);
-  font-size: 11px;
-}
-.network-counts dd {
-  font: 17px var(--font-mono);
-}
 .provider-controls {
   display: flex;
   align-items: center;
   justify-content: space-between;
   flex-wrap: wrap;
-  gap: 16px;
-  padding-bottom: 18px;
+  gap: 10px;
 }
 .provider-controls [data-slot="toggle-group"] {
   max-width: 100%;
   flex-wrap: wrap;
 }
-.refresh-controls {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-}
-.expand-hint {
-  font-size: 12px;
-  color: var(--muted-foreground);
-}
 .provider-column-head {
-  padding: 14px 58px 14px 17px;
+  padding: 10px 58px 10px 17px;
   color: var(--muted-foreground);
   background: transparent;
   font-size: 11px;
@@ -492,7 +436,7 @@ h1 {
 }
 .detail-stats {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   border-block: 1px solid var(--border);
   padding-block: 18px;
 }
@@ -501,6 +445,7 @@ h1 {
   flex-direction: column;
   gap: 6px;
   padding-inline: 20px;
+  min-width: 0;
   border-right: 1px solid var(--border);
 }
 .detail-stats > div:last-child {
@@ -521,11 +466,125 @@ h1 {
   line-height: 26px;
   letter-spacing: -0.035em;
 }
+/* Healthy days are quiet so a degraded or disrupted day is what stands out. */
+.history-day,
+.history-key > span {
+  --day-fill: var(--health-color, var(--operational));
+  /* Scheduled checks are drawn striped wherever traffic is split by source. */
+  --checks-fill: repeating-linear-gradient(
+    -45deg,
+    var(--day-fill) 0 2px,
+    color-mix(in oklab, var(--day-fill) 35%, transparent) 2px 5px
+  );
+}
+.history-day[data-health="operational"],
+.history-key > span {
+  --day-fill: color-mix(in oklab, var(--operational) 82%, var(--background));
+}
+[data-source="visitors"] {
+  --source-fill: var(--color-brand);
+}
+[data-source="checks"] {
+  --source-fill: repeating-linear-gradient(
+    -45deg,
+    var(--color-brand) 0 2px,
+    color-mix(in oklab, var(--color-brand) 35%, transparent) 2px 5px
+  );
+}
+.traffic-sources {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.traffic-heading,
+.history-heading {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+}
+.traffic-heading > span,
+.history-key {
+  font: 11px/18px var(--font-mono);
+  color: var(--muted-foreground);
+}
+.source-bar {
+  display: flex;
+  gap: 2px;
+  height: 8px;
+  border-radius: 2px;
+  overflow: hidden;
+}
+.source-bar > span {
+  min-width: 3px;
+  background: var(--source-fill);
+}
+.source-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 40px;
+}
+.source-list > div {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 2px 10px;
+}
+.source-list dt {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  line-height: 18px;
+  color: var(--muted-foreground);
+}
+.source-swatch {
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+  background: var(--source-fill);
+}
+.source-list dt .source-swatch {
+  align-self: center;
+}
+.source-count {
+  font: 13px/18px var(--font-mono);
+}
+.source-count small {
+  margin-left: 6px;
+  font-size: 12px;
+  color: var(--muted-foreground);
+}
+.source-list .stat-note {
+  font-size: 11px;
+  line-height: 18px;
+  color: var(--muted-foreground);
+}
+.history-heading {
+  margin-bottom: 12px;
+}
+.history-key {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.history-key > span {
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+  background: var(--checks-fill);
+}
+.history-heading h4,
+.traffic-heading h4,
 .detail-history > h4,
 .chart-heading h4 {
   font-size: 14px;
   font-weight: 500;
   margin-bottom: 12px;
+}
+.history-heading h4,
+.traffic-heading h4 {
+  margin-bottom: 0;
 }
 .history-bars {
   display: flex;
@@ -536,29 +595,28 @@ h1 {
 .history-day {
   min-width: 0;
   flex: 1;
-  height: 28px;
+  height: 24px;
   border: 0;
-  border-radius: 2px;
-  background: var(--health-color);
+  border-radius: 4px;
+  background: var(--day-fill);
   cursor: pointer;
+  transition: filter 120ms ease-out;
 }
 .history-day[data-health="unknown"] {
-  background: repeating-linear-gradient(
-    -45deg,
-    var(--border),
-    var(--border) 3px,
-    var(--muted) 3px,
-    var(--muted) 6px
-  );
+  background: var(--muted);
 }
-/* Today is still filling in: a lighter fill outlined in its health color. */
+/* Days observed only through scheduled checks: striped, so visitor traffic stays solid. */
+.history-day[data-checks-only]:not([data-health="unknown"]) {
+  background: var(--checks-fill);
+}
+/* Today is still filling in: an outline in its health color. */
 .history-day[data-partial] {
-  background: color-mix(in oklab, var(--health-color) 40%, transparent);
-  box-shadow: inset 0 0 0 1px var(--health-color);
+  background: color-mix(in oklab, var(--day-fill) 30%, transparent);
+  box-shadow: inset 0 0 0 1px var(--day-fill);
 }
 .history-day:hover,
 .history-day[aria-pressed="true"] {
-  opacity: 0.7;
+  filter: brightness(1.35);
 }
 .history-axis {
   display: flex;
@@ -580,21 +638,16 @@ h1 {
 .latency-panel {
   display: flex;
   flex-direction: column;
-  gap: 20px;
-  padding: 24px;
-  border: 1px solid var(--border);
-  border-radius: 18px;
-  background: var(--background);
+  gap: 16px;
 }
 .chart-heading {
   display: flex;
-  align-items: center;
+  align-items: baseline;
   justify-content: space-between;
   gap: 18px;
 }
 .chart-heading h4 {
-  font-size: 16px;
-  margin-bottom: 5px;
+  margin-bottom: 4px;
 }
 .chart-heading p {
   font-size: 12px;
@@ -625,13 +678,13 @@ h1 {
 }
 .latency-chart {
   width: 100%;
-  height: 290px;
+  height: 240px;
   aspect-ratio: auto;
   font: 11px var(--font-mono);
 }
 .chart-skeleton {
   width: 100%;
-  height: 290px;
+  height: 240px;
 }
 .latency-tooltip {
   display: flex;
@@ -654,51 +707,8 @@ h1 {
 .latency-tooltip small {
   color: var(--muted-foreground);
 }
-.chart-latest {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 20px;
-  border-top: 1px solid var(--border);
-  padding-top: 18px;
-}
-.chart-latest dl {
-  display: flex;
-  gap: 30px;
-}
-.chart-latest dl > div {
-  display: flex;
-  align-items: baseline;
-  gap: 9px;
-}
-.chart-latest dt {
-  font: 12px var(--font-mono);
-  color: var(--muted-foreground);
-}
-.chart-latest dd {
-  font: 18px var(--font-mono);
-}
-.chart-latest > span {
-  font: 11px/18px var(--font-mono);
-  color: var(--muted-foreground);
-}
-.detail-notes {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 28px;
-}
-.detail-notes p {
-  font-size: 11px;
-  line-height: 18px;
-  color: var(--muted-foreground);
-}
 
 .data-timestamps {
-  display: flex;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 10px;
   margin-top: 18px;
   font: 10px/18px var(--font-mono);
   color: var(--muted-foreground);
@@ -769,26 +779,6 @@ h1 {
   .row-grid > :nth-child(4) {
     display: none;
   }
-  .expand-hint {
-    display: none;
-  }
-  .network-summary {
-    align-items: flex-start;
-  }
-  .network-counts {
-    gap: 14px;
-  }
-  .detail-stats {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 20px 0;
-  }
-  .detail-stats > div:nth-child(2) {
-    border-right: 0;
-  }
-  .chart-latest {
-    align-items: flex-start;
-    flex-direction: column;
-  }
 }
 @media (max-width: 740px) {
   .site-width {
@@ -830,17 +820,9 @@ h1 {
   .cell-stack > .row-caption.mono {
     display: none;
   }
-  .network-counts {
-    gap: 12px 18px;
-  }
   .section-heading {
     align-items: flex-start;
-  }
-  .section-heading p {
-    line-height: 20px;
-  }
-  .section-heading .eyebrow {
-    font-size: 9px;
+    flex-direction: column;
   }
   .detail-intro {
     align-items: flex-start;
@@ -852,8 +834,15 @@ h1 {
     gap: 16px;
   }
   .detail-stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 14px 0;
     padding-block: 12px;
+  }
+  .detail-stats > div:nth-child(2) {
+    border-right: 0;
+  }
+  .detail-stats > div:nth-child(3) {
+    grid-column: 1 / -1;
   }
   .detail-stats > div {
     padding-inline: 12px;
@@ -866,10 +855,6 @@ h1 {
   .detail-stats .observation-stat {
     font-size: 14px;
     line-height: 23px;
-  }
-  .latency-panel {
-    padding: 14px 10px;
-    gap: 14px;
   }
   .chart-heading {
     align-items: flex-start;
@@ -884,18 +869,8 @@ h1 {
     gap: 2px;
   }
   .history-day {
-    height: 36px;
-  }
-  .chart-latest dl {
-    flex-wrap: wrap;
-    gap: 14px;
-  }
-  .chart-latest dd {
-    font-size: 15px;
-  }
-  /* The methodology section below already covers these notes. */
-  .detail-notes {
-    display: none;
+    height: 32px;
+    border-radius: 2px;
   }
   .methodology {
     grid-template-columns: 1fr;

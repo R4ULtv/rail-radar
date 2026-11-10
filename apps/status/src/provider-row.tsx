@@ -21,12 +21,13 @@ import {
   windowLabel,
 } from "./format";
 import { HealthLabel } from "./health-label";
-import { ProviderHistory } from "./history";
+import { checksOnly, ProviderHistory } from "./history";
 import { latestTimedDay } from "./presentation";
 import { countryStationsUrl, sharedAssetUrl } from "./site-links";
 import { ProviderLogo } from "./provider-logo";
 
 import { LatencyPanel } from "./latency-panel";
+import { TrafficSources } from "./traffic-sources";
 
 interface Props {
   provider: Provider;
@@ -35,8 +36,6 @@ interface Props {
   expanded: boolean;
   loading: boolean;
   historyError: boolean;
-  /** The outer summary window, which bounds the last observation. */
-  windowMinutes: number;
   /** Epoch ms, or 0 before hydration so prerendered rows match the first client render. */
   now: number;
 }
@@ -48,12 +47,11 @@ export function ProviderRow({
   expanded,
   loading,
   historyError,
-  windowMinutes,
   now,
 }: Props) {
   const status = current?.status ?? "unknown";
   const latest = latestTimedDay(history?.days);
-  const timedSamples = history?.days.reduce((sum, day) => sum + day.latencySamples, 0);
+  const failures = current ? current.errors + current.timeouts : 0;
   const country = COUNTRY_MAP[provider.country];
   const details = PROVIDER_DETAILS[provider.id];
   const knownIssue = RAIL_DATA_WARNINGS[provider.country];
@@ -94,39 +92,28 @@ export function ProviderRow({
               </span>
             </span>
           </span>
-          <span className="cell-stack">
+          <span>
             <HealthLabel status={status} />
-            <span className="row-caption mono">
-              {current
-                ? current.samples < 5
-                  ? "Needs more observations"
-                  : `${percent(current.successRate)} successful`
-                : "Health unverified"}
-            </span>
-          </span>
-          <span className="cell-stack row-secondary">
-            <span className="mono">{current ? integer.format(current.requests) : "—"}</span>
-            <span className="row-caption">{current ? windowLabel(current.windowMinutes) : ""}</span>
-          </span>
-          <span className="cell-stack row-secondary">
-            <span className="mono">{milliseconds(latest?.latency.p50 ?? null)}</span>
-            <span className="row-caption mono">
-              {latest
-                ? `${dayLabel(latest.date)}${latest.partial ? " · partial" : ""}`
-                : "No timed observations"}
-            </span>
           </span>
           <span className="cell-stack row-secondary">
             <span className="mono">
-              {current?.lastSeen ? observationLabel(current.lastSeen) : "—"}
+              {current && current.samples >= 5 ? percent(current.successRate) : "—"}
             </span>
             <span className="row-caption">
               {current
-                ? current.lastSeen
-                  ? "Latest provider request"
-                  : `None in the ${windowLabel(windowMinutes)}`
-                : "Current health unverified"}
+                ? `${integer.format(current.requests)} ${current.requests === 1 ? "request" : "requests"} · ${windowLabel(current.windowMinutes)}`
+                : "Unverified"}
             </span>
+          </span>
+          <span className="cell-stack row-secondary">
+            <span className="mono">{milliseconds(latest?.latency.p50 ?? null)}</span>
+            {/* Dated only when it isn't today's, so an older timing isn't read as current. */}
+            {latest && !latest.partial && (
+              <span className="row-caption">{dayLabel(latest.date)}</span>
+            )}
+          </span>
+          <span className="row-secondary mono">
+            {current?.lastSeen ? observationLabel(current.lastSeen) : "—"}
           </span>
         </span>
       </AccordionTrigger>
@@ -181,42 +168,46 @@ export function ProviderRow({
               <div>
                 <dt>Success rate · {current ? windowLabel(current.windowMinutes) : "current"}</dt>
                 <dd>{percent(current?.successRate ?? null)}</dd>
-                <dd className="stat-note">Observed provider requests</dd>
               </div>
               <div>
-                <dt>
-                  Failed requests · {current ? windowLabel(current.windowMinutes) : "current"}
-                </dt>
+                <dt>Failed requests</dt>
                 <dd>
                   {current
-                    ? `${integer.format(current.errors + current.timeouts)} / ${integer.format(current.requests)}`
+                    ? `${integer.format(failures)} / ${integer.format(current.requests)}`
                     : "—"}
                 </dd>
-                <dd className="stat-note">
-                  {current
-                    ? `${integer.format(current.errors)} errors · ${integer.format(current.timeouts)} timeouts`
-                    : "Awaiting current observations"}
-                </dd>
+                {current && failures > 0 && (
+                  <dd className="stat-note">
+                    {integer.format(current.errors)} {current.errors === 1 ? "error" : "errors"} ·{" "}
+                    {integer.format(current.timeouts)}{" "}
+                    {current.timeouts === 1 ? "timeout" : "timeouts"}
+                  </dd>
+                )}
               </div>
               <div>
                 <dt>Last observed</dt>
                 <dd className="observation-stat">
                   {current?.lastSeen ? observationLabel(current.lastSeen) : "—"}
                 </dd>
-                <dd className="stat-note">
-                  {current?.lastSeen
-                    ? `Latest request in the ${windowLabel(windowMinutes)}`
-                    : "No verified recent observation"}
-                </dd>
-              </div>
-              <div>
-                <dt>Timed observations</dt>
-                <dd>{timedSamples === undefined ? "—" : integer.format(timedSamples)}</dd>
-                <dd className="stat-note">Over the last 30 days</dd>
               </div>
             </dl>
+            {current && (
+              <TrafficSources
+                current={current}
+                name={provider.name}
+                windowMinutes={current.windowMinutes}
+              />
+            )}
             <div className="detail-history">
-              <h4>Daily status</h4>
+              <div className="history-heading">
+                <h4>Daily status</h4>
+                {history?.days.some(checksOnly) && (
+                  <span className="history-key">
+                    <span aria-hidden="true" />
+                    Scheduled checks only
+                  </span>
+                )}
+              </div>
               {history ? (
                 <ProviderHistory days={history.days} name={provider.name} />
               ) : loading ? (
@@ -235,10 +226,6 @@ export function ProviderRow({
               loading={loading}
               error={historyError}
             />
-            <div className="detail-notes">
-              <p>Measured from visitor requests and an hourly check. No traffic is not an outage.</p>
-              <p>Small samples make p99 and p99.9 less reliable.</p>
-            </div>
           </div>
         )}
       </AccordionContent>
