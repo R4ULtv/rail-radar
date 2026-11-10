@@ -3,7 +3,7 @@ import { Text, View } from "react-native";
 import { getLineBadgeCode, getLineColor, getLineTextColor, type Line } from "@/lib/lines";
 
 // Mirrors apps/web/src/components/line-badge.tsx. `icon` fills the place of a station's icon in
-// lists, and `lg` leads the line sheet's title. With no code to show, the small ones are a narrow
+// lists. With no code to show, the small ones are a narrow
 // bar of the color, so a row of them takes little room.
 const sizes = {
   xs: {

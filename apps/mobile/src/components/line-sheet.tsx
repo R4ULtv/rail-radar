@@ -88,7 +88,6 @@ import {
 } from "@/lib/line-service";
 import {
   getKnownRoutes,
-  getLineBadgeCode,
   getLineColor,
   getLineColorOnCard,
   getLineColorOnSheet,
@@ -160,7 +159,7 @@ function LiveService({ line }: { line: Line }) {
   );
 }
 
-/** Small buttons next to the close button, to save or share the line. */
+/** Match the close button's 32-point circle and 18-point icon. */
 const HeaderActions = memo(function HeaderActions({ line }: { line: Line }) {
   const [mutedColor, accentColor] = useThemeColor(["muted", "accent"]);
   const { isLineSaved, toggleSavedLine } = useSavedLines();
@@ -192,6 +191,7 @@ const HeaderActions = memo(function HeaderActions({ line }: { line: Line }) {
         size="sm"
         variant="tertiary"
         isIconOnly
+        className="size-8"
         hitSlop={6}
         onPress={toggleSaved}
       >
@@ -206,6 +206,7 @@ const HeaderActions = memo(function HeaderActions({ line }: { line: Line }) {
         size="sm"
         variant="tertiary"
         isIconOnly
+        className="size-8"
         hitSlop={6}
         onPress={share}
       >
@@ -1056,9 +1057,6 @@ function LineSheetContent({
             titleLines={2}
             closeLabel="Close line"
             onClose={onClose}
-            // Like a station's icon: only lines with a code get a badge, since a plain square of
-            // color says nothing the stops' strip doesn't.
-            leading={getLineBadgeCode(line) ? <LineBadge line={line} size="lg" /> : undefined}
             actions={<HeaderActions line={line} />}
           >
             <LineSubtitle line={line} />
