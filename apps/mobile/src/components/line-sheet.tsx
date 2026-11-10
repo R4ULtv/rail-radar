@@ -69,6 +69,7 @@ import { useSavedLines } from "@/hooks/use-saved-lines";
 import { useSheetContent } from "@/hooks/use-sheet-content";
 import { useStationsById } from "@/hooks/use-stations-by-id";
 import { haptics } from "@/lib/haptics";
+import { getOperatorLogo } from "@/lib/brands";
 import type { DiagramStop } from "@/lib/line-diagram";
 import {
   collapseStops,
@@ -109,16 +110,30 @@ const minStepGap = 80;
 const skeletonStopCount = 6;
 
 function LineSubtitle({ line }: { line: Line }) {
-  const subtitle = [lineTypeLabels[line.type], getLineOperatorName(line)]
-    .filter(Boolean)
-    .join(" · ");
+  const operator = getLineOperatorName(line);
+  const operatorLogo = getOperatorLogo(line.operator);
 
   return (
     <View className="mt-1 flex-row items-center gap-1.5">
       <CountryFlag country={getLineCountry(line)} />
-      <Text className="shrink text-sm text-muted" numberOfLines={1}>
-        {subtitle}
-      </Text>
+      <Text className="text-sm text-muted">{lineTypeLabels[line.type]}</Text>
+      {operator ? (
+        <>
+          <Text className="text-sm text-muted">·</Text>
+          {operatorLogo ? (
+            <Image
+              source={operatorLogo}
+              resizeMode="contain"
+              className="size-4 shrink-0 overflow-hidden rounded"
+              accessibilityElementsHidden
+              importantForAccessibility="no-hide-descendants"
+            />
+          ) : null}
+          <Text className="shrink text-sm text-muted" numberOfLines={1}>
+            {operator}
+          </Text>
+        </>
+      ) : null}
     </View>
   );
 }
