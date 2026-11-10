@@ -1080,8 +1080,10 @@ export function StationSheet({
           isOpen={isOpen}
           stationsUrl={stationsUrl}
           userLocation={userLocation}
-          // Kept while it's left for a while to come back taller, so its steps stay the same.
-          showDetails={index >= 0 || openStep !== "peek"}
+          // Stops peek down to their bundled lines. Measure them during opening instead of
+          // waiting for onChange, which fires only after the opening animation finishes.
+          // Keep details when returning to a taller step so its height stays available.
+          showDetails={(isOpen && station.type !== "rail") || index >= 0 || openStep !== "peek"}
           onClose={() => onClose("back")}
           onSelectStation={onSelectStation}
           onSelectLine={onSelectLine}
