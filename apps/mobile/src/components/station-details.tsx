@@ -1,18 +1,18 @@
 import { getCountry } from "@repo/data/countries";
 import type { Station } from "@repo/data/types";
+import * as Clipboard from "expo-clipboard";
 import { Image } from "expo-image";
 import { useThemeColor } from "heroui-native/hooks";
 import { ListGroup } from "heroui-native/list-group";
 import { Separator } from "heroui-native/separator";
 import { Surface } from "heroui-native/surface";
 import BarChart from "lucide-react-native/icons/chart-no-axes-column";
-import ChevronDown from "lucide-react-native/icons/chevron-down";
 import Images from "lucide-react-native/icons/images";
 import Info from "lucide-react-native/icons/info";
 import MapPin from "lucide-react-native/icons/map-pin";
 import TrendingUp from "lucide-react-native/icons/trending-up";
-import { memo, useState, type ReactNode } from "react";
-import { Linking, Pressable, StyleSheet, Text, View } from "react-native";
+import { memo, type ReactNode } from "react";
+import { AccessibilityInfo, Alert, Linking, Pressable, StyleSheet, Text, View } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import { withUniwind } from "uniwind";
 
@@ -211,17 +211,6 @@ function StationPopularity({
   );
 }
 
-function formatDms(value: number, type: "lat" | "lng") {
-  const abs = Math.abs(value);
-  const degrees = Math.floor(abs);
-  const minutesFloat = (abs - degrees) * 60;
-  const minutes = Math.floor(minutesFloat);
-  const seconds = (minutesFloat - minutes) * 60;
-  const hemisphere = type === "lat" ? (value >= 0 ? "N" : "S") : value >= 0 ? "E" : "W";
-
-  return `${degrees}°${String(minutes).padStart(2, "0")}'${seconds.toFixed(1).padStart(4, "0")}"${hemisphere}`;
-}
-
 export function AboutRow({ label, children }: { label: string; children: ReactNode }) {
   return (
     <ListGroup.Item>
@@ -233,10 +222,47 @@ export function AboutRow({ label, children }: { label: string; children: ReactNo
   );
 }
 
+/** Hold anywhere on the row to copy, with haptic feedback and an accessible activation action. */
+function CopyAboutRow({ label, value }: { label: string; value: string }) {
+  async function copy() {
+    try {
+      await Clipboard.setStringAsync(value);
+      haptics.tap();
+      AccessibilityInfo.announceForAccessibility(`${label} copied`);
+    } catch {
+      haptics.error();
+      Alert.alert("Couldn't copy", "Please try again.");
+    }
+  }
+
+  return (
+    <ListGroup.Item
+      accessibilityRole="button"
+      accessibilityLabel={`Copy ${label.toLowerCase()}`}
+      accessibilityValue={{ text: value }}
+      accessibilityHint="Copies to the clipboard."
+      accessibilityActions={[{ name: "activate" }]}
+      onAccessibilityAction={(event) => {
+        if (event.nativeEvent.actionName === "activate") void copy();
+      }}
+      className="active:bg-surface-tertiary"
+      delayLongPress={500}
+      onLongPress={() => void copy()}
+    >
+      <ListGroup.ItemContent>
+        <ListGroup.ItemDescription>{label}</ListGroup.ItemDescription>
+      </ListGroup.ItemContent>
+      <ListGroup.ItemSuffix>
+        <Text className="text-sm text-foreground" style={styles.tabularNums}>
+          {value}
+        </Text>
+      </ListGroup.ItemSuffix>
+    </ListGroup.Item>
+  );
+}
+
 function StationAbout({ station, mutedColor }: { station: Station; mutedColor: string }) {
   const country = getCountry(station.id, { format: "name" });
-  // Coordinates and the ID are for reports and developers, so they wait behind a row.
-  const [showIdentifiers, setShowIdentifiers] = useState(false);
 
   return (
     <View className="mt-5">
@@ -252,46 +278,16 @@ function StationAbout({ station, mutedColor }: { station: Station; mutedColor: s
           </AboutRow>
         ) : null}
         {country ? <Separator className="mx-4" /> : null}
-        <ListGroup.Item
-          accessibilityRole="button"
-          accessibilityState={{ expanded: showIdentifiers }}
-          className="active:bg-surface-tertiary"
-          onPress={() => {
-            haptics.selection();
-            setShowIdentifiers((shown) => !shown);
-          }}
-        >
-          <ListGroup.ItemContent>
-            <ListGroup.ItemDescription>
-              {station.geo ? "Coordinates and station ID" : "Station ID"}
-            </ListGroup.ItemDescription>
-          </ListGroup.ItemContent>
-          <ListGroup.ItemSuffix>
-            <View style={showIdentifiers ? styles.chevronUp : undefined}>
-              <ChevronDown size={16} color={mutedColor} />
-            </View>
-          </ListGroup.ItemSuffix>
-        </ListGroup.Item>
-        {showIdentifiers && station.geo ? (
+        {station.geo ? (
           <>
+            <CopyAboutRow
+              label="Coordinates"
+              value={`${station.geo.lat.toFixed(6)}, ${station.geo.lng.toFixed(6)}`}
+            />
             <Separator className="mx-4" />
-            <AboutRow label="Coordinates">
-              <Text selectable className="text-sm text-foreground" style={styles.tabularNums}>
-                {formatDms(station.geo.lat, "lat")} {formatDms(station.geo.lng, "lng")}
-              </Text>
-            </AboutRow>
           </>
         ) : null}
-        {showIdentifiers ? (
-          <>
-            <Separator className="mx-4" />
-            <AboutRow label="Station ID">
-              <Text selectable className="text-sm text-foreground" style={styles.tabularNums}>
-                {station.id}
-              </Text>
-            </AboutRow>
-          </>
-        ) : null}
+        <CopyAboutRow label="Station ID" value={station.id} />
       </ListGroup>
     </View>
   );
@@ -407,5 +403,4 @@ const styles = StyleSheet.create({
   photoRow: { gap: 10, paddingHorizontal: 16 },
   photo: { width: photoWidth, height: photoHeight },
   tabularNums: { fontVariant: ["tabular-nums"] },
-  chevronUp: { transform: [{ rotate: "180deg" }] },
 });

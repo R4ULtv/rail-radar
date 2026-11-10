@@ -4,6 +4,7 @@ import type { Station, Train } from "@repo/data/types";
 import BottomSheet, {
   BottomSheetFlatList,
   BottomSheetView,
+  useBottomSheetInternal,
   type BottomSheetFlatListMethods,
 } from "@gorhom/bottom-sheet";
 import { LinearGradient } from "expo-linear-gradient";
@@ -789,6 +790,14 @@ function StationSheetContent({
   const insets = useSafeAreaInsets();
   const bottomInset = useSheetBottomInset();
   const [type, setType] = useBoardType(nearbyStations.length > 0);
+  const { animatedSheetHeight, animatedLayoutState } = useBottomSheetInternal();
+  // As in the line sheet, constrain the list on first opening so its last rows (including
+  // About) scroll into view instead of extending below the visible sheet.
+  const fillStyle = useAnimatedStyle(() => {
+    const sheetHeight = animatedSheetHeight.get();
+    const { handleHeight: measuredHandle } = animatedLayoutState.get();
+    return sheetHeight > 0 && measuredHandle > 0 ? { maxHeight: sheetHeight - measuredHandle } : {};
+  });
   const isRail = station.type === "rail";
   const arrivalsSupported = getCountry(station.id) !== "lu";
   const board = useStationBoard(station.id, type, isOpen && isRail);
@@ -866,7 +875,7 @@ function StationSheetContent({
   );
 
   return (
-    <View style={styles.fill}>
+    <Animated.View style={[styles.fill, fillStyle]}>
       <PinnedSheetHeader onHeightChange={setHeaderHeight} collapsedBy={collapsedBy}>
         <View className="px-4" pointerEvents="box-none">
           <SheetHeader title={name} titleLines={2} closeLabel="Close station" onClose={onClose}>
@@ -930,7 +939,7 @@ function StationSheetContent({
           />
         ) : null}
       </LiveBoard>
-    </View>
+    </Animated.View>
   );
 }
 
