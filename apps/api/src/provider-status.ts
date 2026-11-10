@@ -27,6 +27,8 @@ interface CountsRow {
   errors: Numeric;
   timeouts: Numeric;
   samples: Numeric;
+  syntheticRequests: Numeric;
+  syntheticSuccesses: Numeric;
 }
 // One row per provider, with counts suffixed by window length, e.g. `requests60`.
 type SummaryRow = { provider: string; lastSeen: Numeric } & Record<string, Numeric>;
@@ -51,7 +53,9 @@ const COUNTS_SQL = `
   sumIf(_sample_interval, blob3 = 'success') AS successes,
   sumIf(_sample_interval, blob3 = 'error') AS errors,
   sumIf(_sample_interval, blob3 = 'timeout') AS timeouts,
-  count() AS samples`;
+  count() AS samples,
+  sumIf(_sample_interval, blob2 = 'synthetic') AS syntheticRequests,
+  sumIf(_sample_interval, blob2 = 'synthetic' AND blob3 = 'success') AS syntheticSuccesses`;
 
 export function observations(row?: CountsRow): ProviderObservations {
   const requests = Number(row?.requests ?? 0);
@@ -59,6 +63,8 @@ export function observations(row?: CountsRow): ProviderObservations {
   const errors = Number(row?.errors ?? 0);
   const timeouts = Number(row?.timeouts ?? 0);
   const samples = Number(row?.samples ?? 0);
+  const syntheticRequests = Number(row?.syntheticRequests ?? 0);
+  const syntheticSuccesses = Number(row?.syntheticSuccesses ?? 0);
   const successRate = requests > 0 ? successes / requests : null;
   const failureRate = requests > 0 ? (errors + timeouts) / requests : 0;
   const status: ProviderHealth =
@@ -69,7 +75,17 @@ export function observations(row?: CountsRow): ProviderObservations {
         : failureRate >= STATUS_POLICY.degradedFailureRate
           ? "degraded"
           : "operational";
-  return { requests, successes, errors, timeouts, samples, successRate, status };
+  return {
+    requests,
+    successes,
+    errors,
+    timeouts,
+    samples,
+    syntheticRequests,
+    syntheticSuccesses,
+    successRate,
+    status,
+  };
 }
 
 function windowCountsSql(minutes: number, since: number) {
@@ -78,7 +94,9 @@ function windowCountsSql(minutes: number, since: number) {
     sumIf(_sample_interval, blob3 = 'success' AND ${inWindow}) AS successes${minutes},
     sumIf(_sample_interval, blob3 = 'error' AND ${inWindow}) AS errors${minutes},
     sumIf(_sample_interval, blob3 = 'timeout' AND ${inWindow}) AS timeouts${minutes},
-    countIf(${inWindow}) AS samples${minutes}`;
+    countIf(${inWindow}) AS samples${minutes},
+    sumIf(_sample_interval, blob2 = 'synthetic' AND ${inWindow}) AS syntheticRequests${minutes},
+    sumIf(_sample_interval, blob2 = 'synthetic' AND blob3 = 'success' AND ${inWindow}) AS syntheticSuccesses${minutes}`;
 }
 
 /** The shortest window with enough observations, or the longest window if none has. */
@@ -93,6 +111,8 @@ function adaptiveObservations(row: SummaryRow | undefined) {
         errors: row[`errors${minutes}`] ?? 0,
         timeouts: row[`timeouts${minutes}`] ?? 0,
         samples: row[`samples${minutes}`] ?? 0,
+        syntheticRequests: row[`syntheticRequests${minutes}`] ?? 0,
+        syntheticSuccesses: row[`syntheticSuccesses${minutes}`] ?? 0,
       },
     ),
   }));

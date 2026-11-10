@@ -18,6 +18,9 @@ export interface ProviderObservations {
   timeouts: number;
   /** Actual stored observations, before weighting. Used for the minimum-data policy. */
   samples: number;
+  /** The part of `requests` and `successes` from scheduled checks; the rest are visitors'. */
+  syntheticRequests: number;
+  syntheticSuccesses: number;
   successRate: number | null;
   status: ProviderHealth;
 }

@@ -13,3 +13,8 @@ allowBuilds:
   workerd: true
 patchedDependencies:
   "@tanstack/start-plugin-core@1.171.55": patches/@tanstack__start-plugin-core@1.171.55.patch
+minimumReleaseAgeExclude:
+  - "@astrojs/internal-helpers@0.13.1"
+  - "@astrojs/markdown-satteri@0.4.7"
+  - "@astrojs/react@7.1.4"
+  - astro@7.4.7
