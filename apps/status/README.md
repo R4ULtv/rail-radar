@@ -85,9 +85,9 @@ The thresholds live in `STATUS_POLICY` (`apps/api/src/provider-status.ts`) and t
 
 The page reads two API routes; response types are in `@repo/data/status`. Both always return every configured provider, use the API's rate limiter, and return `503` if Analytics Engine fails or takes longer than 10 seconds.
 
-| Route                 | Returns                                                           | Cache  | Page refresh |
-| --------------------- | ----------------------------------------------------------------- | ------ | ------------ |
-| `GET /status/summary` | Current health per provider from the adaptive window              | 60s    | 60s          |
+| Route                 | Returns                                                         | Cache  | Page refresh |
+| --------------------- | --------------------------------------------------------------- | ------ | ------------ |
+| `GET /status/summary` | Current health per provider from the adaptive window            | 60s    | 60s          |
 | `GET /status/latency` | 30 UTC days per provider: counts, status and p50 / p90 / p99 ms | 15 min | 15 min       |
 
 To limit Analytics Engine read queries, the cache ignores query strings, and after a failed read the route answers `503` from the edge for 30 seconds instead of querying again.
