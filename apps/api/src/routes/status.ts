@@ -81,7 +81,7 @@ export const statusRoutes = factory
     "/latency",
     rateLimit,
     cache({
-      cacheName: "status-latency-v3",
+      cacheName: "status-latency-v4",
       cacheControl: `public, max-age=${LATENCY_CACHE_SECONDS}`,
       keyGenerator: pathOnly,
     }),

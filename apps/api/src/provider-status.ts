@@ -39,8 +39,8 @@ interface LatencyRow {
   provider: string;
   date: string;
   p50: Numeric | null;
+  p90: Numeric | null;
   p99: Numeric | null;
-  p999: Numeric | null;
   latencySamples: Numeric;
   latencyRequests: Numeric;
 }
@@ -208,8 +208,8 @@ export async function getProviderLatency(
       apiToken,
       `SELECT ${grouping},
         quantileExactWeighted(0.5)(double1, _sample_interval) AS p50,
+        quantileExactWeighted(0.9)(double1, _sample_interval) AS p90,
         quantileExactWeighted(0.99)(double1, _sample_interval) AS p99,
-        quantileExactWeighted(0.999)(double1, _sample_interval) AS p999,
         count() AS latencySamples, sum(_sample_interval) AS latencyRequests
       FROM provider_metrics WHERE ${bounds(from, to)} AND double1 >= 0
       GROUP BY provider, date ORDER BY provider, date`,
@@ -246,8 +246,8 @@ export async function getProviderLatency(
           ...observations(healthByDay.get(key)),
           latency: {
             p50: percentile(row?.p50),
+            p90: percentile(row?.p90),
             p99: percentile(row?.p99),
-            p999: percentile(row?.p999),
           },
           latencySamples,
           latencyRequests: Number(row?.latencyRequests ?? 0),

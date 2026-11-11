@@ -274,8 +274,8 @@ describe("GET /status/latency", () => {
             provider: "rfi",
             date: "2026-03-09",
             p50: "100",
+            p90: "180",
             p99: "250",
-            p999: "400",
             latencySamples: "6",
             latencyRequests: "60",
           },
@@ -311,7 +311,7 @@ describe("GET /status/latency", () => {
       successRate: null,
       partial: false,
       status: "unknown",
-      latency: { p50: null, p99: null, p999: null },
+      latency: { p50: null, p90: null, p99: null },
     });
     expect(days[28]).toMatchObject({
       date: "2026-03-09",
@@ -323,7 +323,7 @@ describe("GET /status/latency", () => {
       status: "degraded",
       latencySamples: 6,
       latencyRequests: 60,
-      latency: { p50: 100, p99: 250, p999: 400 },
+      latency: { p50: 100, p90: 180, p99: 250 },
     });
     expect(days[29]).toMatchObject({ date: "2026-03-10", partial: true });
     expect(
@@ -336,7 +336,7 @@ describe("GET /status/latency", () => {
     )!;
     expect(sql).toContain("quantileExactWeighted(0.5)(double1, _sample_interval)");
     expect(sql).toContain("quantileExactWeighted(0.99)(double1, _sample_interval)");
-    expect(sql).toContain("quantileExactWeighted(0.999)(double1, _sample_interval)");
+    expect(sql).toContain("quantileExactWeighted(0.9)(double1, _sample_interval)");
     expect(sql).toContain("AND double1 >= 0");
     expect(sql).toContain("blob2 IN ('live', 'synthetic')");
     expect(sql).toContain("'Etc/UTC'");
@@ -355,8 +355,8 @@ describe("GET /status/latency", () => {
             provider: "db",
             date: "2026-03-10",
             p50: -1,
+            p90: "nan",
             p99: null,
-            p999: "nan",
             latencySamples: 1,
             latencyRequests: 1,
           },
@@ -377,12 +377,12 @@ describe("GET /status/latency", () => {
     expect(body.providers.find((provider) => provider.id === "rfi")!.days[29]).toMatchObject({
       requests: 5,
       status: "outage",
-      latency: { p50: null, p99: null, p999: null },
+      latency: { p50: null, p90: null, p99: null },
     });
     expect(body.providers.find((provider) => provider.id === "db")!.days[29]!.latency).toEqual({
       p50: null,
+      p90: null,
       p99: null,
-      p999: null,
     });
   });
 
