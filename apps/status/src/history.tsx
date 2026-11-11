@@ -54,6 +54,29 @@ export function ProviderHistory({
         : "";
     return `${dayLabel(day.date)}${day.partial ? " · so far today" : ""}: ${STATUS_LABELS[day.status]}. ${integer.format(day.requests)} requests${sources} · ${percent(day.successRate)} ${successLabel} · ${integer.format(day.samples)} observations.`;
   };
+  // What sighted users see: date, status, then volume and success. The visitor/check split
+  // lives in the traffic panel and the striped bars; screen readers still get it in `detail`.
+  const traffic = (day: HistoryDay) => {
+    if (day.requests === 0) return "No requests";
+    const noun = checksOnly(day)
+      ? day.requests === 1
+        ? "scheduled check"
+        : "scheduled checks"
+      : day.requests === 1
+        ? "request"
+        : "requests";
+    return `${integer.format(day.requests)} ${noun} · ${percent(day.successRate)} ${successLabel}`;
+  };
+  const summary = (day: HistoryDay) => (
+    <span className="day-summary" data-health={day.status}>
+      <span className="day-summary-date">
+        {dayLabel(day.date)}
+        {day.partial ? <span> · so far today</span> : null}
+      </span>
+      <span className="day-summary-status">{STATUS_LABELS[day.status]}</span>
+      <span className="day-summary-traffic">{traffic(day)}</span>
+    </span>
+  );
 
   return (
     <div className="history">
@@ -97,7 +120,7 @@ export function ProviderHistory({
                 }
               }}
             />
-            <TooltipContent>{detail(day)}</TooltipContent>
+            <TooltipContent>{summary(day)}</TooltipContent>
           </Tooltip>
         ))}
       </div>
@@ -107,7 +130,7 @@ export function ProviderHistory({
       </div>
       {selected && (
         <p className="history-detail" role="status">
-          {detail(selected)}
+          {summary(selected)}
         </p>
       )}
     </div>

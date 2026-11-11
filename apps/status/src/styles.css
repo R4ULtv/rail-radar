@@ -628,10 +628,35 @@ h1 {
   color: var(--muted-foreground);
 }
 .history-detail {
-  font-size: 12px;
-  line-height: 20px;
-  color: var(--muted-foreground);
   margin-top: 12px;
+}
+/* One day, read top to bottom: when, how it went, how much traffic backed it. */
+.day-summary {
+  display: grid;
+  gap: 3px;
+  padding: 2px 0;
+  font-size: 12px;
+  line-height: 16px;
+}
+.day-summary-date {
+  font-weight: 500;
+}
+.day-summary-date span,
+.day-summary-traffic {
+  font-weight: 400;
+  opacity: 0.65;
+}
+.day-summary-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.day-summary-status::before {
+  content: "";
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--health-color);
 }
 .history-skeleton {
   height: 50px;
