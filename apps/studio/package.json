@@ -22,16 +22,16 @@
   "dependencies": {
     "@sveltejs/kit": "^3.1.1",
     "maplibre-gl": "^6.17.0",
-    "posthog-js": "^1.447.3",
+    "posthog-js": "^1.447.7",
     "svelte": "^5.57.3",
-    "vite": "^8.3.6"
+    "vite": "^8.3.7"
   },
   "devDependencies": {
     "@cloudflare/build-output-utils": "0.9.10",
     "@cloudflare/config": "0.30.2",
     "@fontsource-variable/geist": "^5.3.0",
     "@internationalized/date": "^3.12.4",
-    "@lucide/svelte": "^1.70.0",
+    "@lucide/svelte": "^1.71.0",
     "@repo/data": "workspace:*",
     "@repo/typescript-config": "workspace:*",
     "@sveltejs/adapter-static": "^4.0.1",
