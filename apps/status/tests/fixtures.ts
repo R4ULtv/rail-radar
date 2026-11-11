@@ -67,8 +67,8 @@ export function latencyFixture(): StatusLatency {
         status: provider.id === "rfi" ? "operational" : "unknown",
         latency:
           provider.id === "rfi" && i === 28
-            ? { p50: 120, p99: 800, p999: 1400 }
-            : { p50: null, p99: null, p999: null },
+            ? { p50: 120, p90: 400, p99: 800 }
+            : { p50: null, p90: null, p99: null },
         latencySamples: provider.id === "rfi" && i === 28 ? 10 : 0,
         latencyRequests: provider.id === "rfi" && i === 28 ? 10 : 0,
       })),

@@ -39,10 +39,12 @@
   --degraded: #fbbf24;
   --outage: var(--destructive);
   --unknown: var(--muted-foreground);
-  /* One hue for the chart, so green/amber/red keep meaning health only. */
-  --latency-median: #a5a5ff;
-  --latency-tail: color-mix(in oklab, var(--color-brand) 78%, var(--background));
-  --latency-extreme: var(--muted-foreground);
+  --brand-text: #a5a5ff;
+  /* Cyan/violet/magenta: CVD-validated on the dark surface and clear of the
+     green/amber/red that mean health. */
+  --latency-p50: #2fa3c9;
+  --latency-p90: #8b7cf0;
+  --latency-p99: #d55181;
 }
 
 body {
@@ -397,7 +399,7 @@ h1 {
 }
 .new-data {
   background: color-mix(in oklab, var(--color-brand) 14%, transparent);
-  color: var(--latency-median);
+  color: var(--brand-text);
 }
 .data-notice > svg {
   flex-shrink: 0;
@@ -420,7 +422,7 @@ h1 {
   padding: 0 6px;
   border-radius: 999px;
   background: color-mix(in oklab, var(--color-brand) 22%, transparent);
-  color: var(--latency-median);
+  color: var(--brand-text);
   font-size: 10px;
   font-weight: 500;
   line-height: 16px;
@@ -655,26 +657,61 @@ h1 {
 }
 .chart-key {
   display: flex;
-  gap: 18px;
+  gap: 4px;
+  margin-right: -8px;
+}
+.chart-key button,
+.tooltip-value > span:first-child {
+  --series-color: var(--latency-p50);
+}
+.chart-key [data-series="p90"],
+.tooltip-value[data-series="p90"] > span:first-child {
+  --series-color: var(--latency-p90);
+}
+.chart-key [data-series="p99"],
+.tooltip-value[data-series="p99"] > span:first-child {
+  --series-color: var(--latency-p99);
+}
+.chart-key button {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 8px;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
   color: var(--muted-foreground);
   font: 11px var(--font-mono);
-}
-.chart-key span {
   white-space: nowrap;
+  cursor: pointer;
+  transition:
+    opacity 120ms,
+    color 120ms,
+    background-color 120ms;
 }
-.chart-key span::before {
+.chart-key button:hover,
+.chart-key button[aria-pressed="true"] {
+  background: var(--muted);
+  color: var(--foreground);
+}
+.chart-key button::before,
+.tooltip-value > span:first-child::before {
   content: "";
   display: inline-block;
-  width: 13px;
-  height: 2px;
-  background: var(--latency-median);
-  margin: 0 6px 3px 0;
+  flex-shrink: 0;
+  width: 14px;
+  height: 3px;
+  border-radius: 2px;
+  background: var(--series-color);
 }
-.chart-key [data-series="p99"]::before {
-  background: var(--latency-tail);
-}
-.chart-key [data-series="p999"]::before {
-  background: repeating-linear-gradient(90deg, var(--latency-extreme) 0 5px, transparent 5px 8px);
+/* While one series is focused, the others step back in the key and tooltip. */
+.chart-key[data-focused="p50"] button:not([data-series="p50"]),
+.chart-key[data-focused="p90"] button:not([data-series="p90"]),
+.chart-key[data-focused="p99"] button:not([data-series="p99"]),
+.latency-tooltip[data-focused="p50"] .tooltip-value:not([data-series="p50"]),
+.latency-tooltip[data-focused="p90"] .tooltip-value:not([data-series="p90"]),
+.latency-tooltip[data-focused="p99"] .tooltip-value:not([data-series="p99"]) {
+  opacity: 0.4;
 }
 .latency-chart {
   width: 100%;
@@ -703,6 +740,17 @@ h1 {
   display: flex;
   justify-content: space-between;
   gap: 20px;
+}
+.tooltip-value > span:first-child {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--muted-foreground);
+}
+.tooltip-value b {
+  font-family: var(--font-mono);
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
 }
 .latency-tooltip small {
   color: var(--muted-foreground);
@@ -860,6 +908,9 @@ h1 {
     align-items: flex-start;
     flex-direction: column;
     gap: 8px;
+  }
+  .chart-key {
+    margin: 0 0 0 -8px;
   }
   .latency-chart,
   .chart-skeleton {

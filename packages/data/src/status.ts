@@ -50,7 +50,7 @@ export interface StatusSummary {
 export interface LatencyDay {
   date: string;
   partial: boolean;
-  latency: { p50: number | null; p99: number | null; p999: number | null };
+  latency: { p50: number | null; p90: number | null; p99: number | null };
   latencySamples: number;
   latencyRequests: number;
 }

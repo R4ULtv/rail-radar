@@ -52,7 +52,7 @@ For CI, set `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID`. The API only all
 
 - **Rail Radar API** — one row with the result of a request to the API root from the visitor's browser: "Responding" or "Unverified", plus the response time (which includes the visitor's network). It is not a history or an uptime figure.
 - **Data providers** — a headline, an "All / Needs attention" filter, and one row per provider with status, success rate, median response and last observation. "Needs attention" covers both failures and insufficient data.
-- **Expanded provider** — description and links, any known issue or "new data source" notice, current figures, the split between visitor requests and scheduled checks, 30 daily status bars, and a p50 / p99 / p99.9 chart on a log scale.
+- **Expanded provider** — description and links, any known issue or "new data source" notice, current figures, the split between visitor requests and scheduled checks, 30 daily status bars, and a p50 / p90 / p99 chart on a log scale.
 
 Provider names, countries, descriptions and links live in `@repo/data/providers`. Known issues (`RAIL_DATA_WARNINGS`) and new data sources (`NEW_RAIL_DATA`, shown for 30 days) live in `@repo/data/countries` and are shared with the main website's station pages.
 
@@ -88,7 +88,7 @@ The page reads two API routes; response types are in `@repo/data/status`. Both a
 | Route                 | Returns                                                           | Cache  | Page refresh |
 | --------------------- | ----------------------------------------------------------------- | ------ | ------------ |
 | `GET /status/summary` | Current health per provider from the adaptive window              | 60s    | 60s          |
-| `GET /status/latency` | 30 UTC days per provider: counts, status and p50 / p99 / p99.9 ms | 15 min | 15 min       |
+| `GET /status/latency` | 30 UTC days per provider: counts, status and p50 / p90 / p99 ms | 15 min | 15 min       |
 
 To limit Analytics Engine read queries, the cache ignores query strings, and after a failed read the route answers `503` from the edge for 30 seconds instead of querying again.
 
