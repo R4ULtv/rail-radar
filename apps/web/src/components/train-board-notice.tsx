@@ -12,7 +12,15 @@ export function TrainBoardNotice({ hasSnapshot, isValidating, onRetry }: TrainBo
       <p className="text-muted-foreground" role="status">
         {hasSnapshot
           ? "Live updates are unavailable. Showing the last received data."
-          : "Unable to load live trains. Please try again."}
+          : "Unable to load live trains. Please try again."}{" "}
+        <a
+          href="https://status.railradar24.com"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="rounded-sm underline underline-offset-4 hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+        >
+          Check service status<span className="sr-only"> (opens in a new tab)</span>
+        </a>
       </p>
       <Button
         variant="outline"

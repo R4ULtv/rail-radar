@@ -122,6 +122,9 @@ export function SiteFooter() {
             <a href="mailto:contact@railradar24.com" className={utilityLinkClassName}>
               Contact
             </a>
+            <a href="https://status.railradar24.com" className={utilityLinkClassName}>
+              Service status
+            </a>
             <Link to="/privacy-policy" className={utilityLinkClassName}>
               Privacy
             </Link>

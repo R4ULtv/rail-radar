@@ -1,0 +1,7 @@
+{
+  "extends": ["//"],
+  "tasks": {
+    "build": { "env": ["PUBLIC_API_URL"] },
+    "dev": { "env": ["PUBLIC_API_URL"] }
+  }
+}
