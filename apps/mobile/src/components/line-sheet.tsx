@@ -17,6 +17,7 @@ import ArrowRight from "lucide-react-native/icons/arrow-right";
 import Bookmark from "lucide-react-native/icons/bookmark";
 import Check from "lucide-react-native/icons/check";
 import ChevronDown from "lucide-react-native/icons/chevron-down";
+import ChevronRight from "lucide-react-native/icons/chevron-right";
 import ChevronsUpDown from "lucide-react-native/icons/chevrons-up-down";
 import CircleAlert from "lucide-react-native/icons/circle-alert";
 import Info from "lucide-react-native/icons/info";
@@ -534,6 +535,12 @@ function StopLines({ station, line }: { station: Station; line: Line }) {
   );
 }
 
+/** On the stop the line is shown from: pressing it again opens the station. */
+function OpenStopChevron() {
+  const mutedColor = useThemeColor("muted");
+  return <ChevronRight size={16} color={mutedColor} />;
+}
+
 const LineStop = memo(function LineStop({
   item,
   line,
@@ -557,7 +564,7 @@ const LineStop = memo(function LineStop({
     <Pressable
       accessibilityRole="button"
       accessibilityState={{ selected: isHighlighted }}
-      accessibilityHint={isHighlighted ? undefined : "Shows the line from this stop"}
+      accessibilityHint={isHighlighted ? "Opens the station" : "Shows the line from this stop"}
       className="flex-row px-4 active:bg-surface-tertiary"
       style={{ height: rowHeight }}
       accessibilityLabel={`${shortStationName(station.name)}${isHighlighted ? ", shown from this stop" : ""}${isEnd ? ", end of line" : ""}${isRail ? ", train station" : ""}`}
@@ -591,6 +598,7 @@ const LineStop = memo(function LineStop({
         </View>
         {isEnd ? <Text className="text-xs font-semibold text-muted">End of line</Text> : null}
         <StopLines station={station} line={line} />
+        {isHighlighted ? <OpenStopChevron /> : null}
       </View>
     </Pressable>
   );
@@ -743,6 +751,8 @@ interface LineSheetContentProps {
   onClose: () => void;
   /** A stop picked in the list, to show the line from, and the way to go from it. */
   onFocusStop: (station: Station, direction: LineDirection) => void;
+  /** The stop the line is shown from, picked again to open it. */
+  onOpenStop: (station: Station) => void;
   onContentHeightChange: (height: number) => void;
 }
 
@@ -754,6 +764,7 @@ function LineSheetContent({
   onDirectionChange,
   onClose,
   onFocusStop,
+  onOpenStop,
   onContentHeightChange,
 }: LineSheetContentProps) {
   const bottomInset = useSheetBottomInset();
@@ -953,10 +964,15 @@ function LineSheetContent({
   }, [isExtended, pendingOffset, items, scrollRef]);
 
   // A stop picked in the list becomes the one the line is shown from, as if opened from it,
-  // keeping the way chosen unless there's nowhere left to go that way.
+  // keeping the way chosen unless there's nowhere left to go that way. Picking that stop again
+  // opens it.
   const focusStop = useCallback(
     (station: Station) => {
-      if (!routes || station.id === fromStationId) return;
+      if (station.id === fromStationId) {
+        onOpenStop(station);
+        return;
+      }
+      if (!routes) return;
       haptics.selection();
       const stopIndex = (routes[direction.route] ?? []).indexOf(station.id);
       const next = getDirectionTo(routes, direction.route, stopIndex, station.id, direction);
@@ -967,7 +983,7 @@ function LineSheetContent({
       scrollRef.current?.scrollToOffset({ offset: 0, animated: true });
       onFocusStop(station, next);
     },
-    [routes, fromStationId, direction, scrollRef, onFocusStop],
+    [routes, fromStationId, direction, scrollRef, onFocusStop, onOpenStop],
   );
 
   const toggleDirections = useCallback(() => setIsDirectionsOpen((open) => !open), []);
@@ -1139,6 +1155,7 @@ interface LineSheetProps {
   onDirectionChange: (direction: LineDirection) => void;
   onClose: (action: SheetCloseAction) => void;
   onFocusStop: (station: Station, direction: LineDirection) => void;
+  onOpenStop: (station: Station) => void;
   /** Where the sheet is, for the map controls that sit above it. */
   position: SheetPosition;
 }
@@ -1154,6 +1171,7 @@ export function LineSheet({
   onDirectionChange,
   onClose,
   onFocusStop,
+  onOpenStop,
   position,
 }: LineSheetProps) {
   const topInset = useSheetTopInset();
@@ -1232,6 +1250,7 @@ export function LineSheet({
             onDirectionChange={onDirectionChange}
             onClose={() => onClose("back")}
             onFocusStop={onFocusStop}
+            onOpenStop={onOpenStop}
             onContentHeightChange={setContentHeight}
           />
         </ErrorBoundary>

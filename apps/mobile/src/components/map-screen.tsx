@@ -280,13 +280,14 @@ export function MapScreen() {
   // The step the station sheet opens at, and the one it's resting at.
   const [stationOpenStep, setStationOpenStep] = useState<StationSheetStep>("peek");
   const stationStep = useRef<StationSheetStep>("peek");
-  // The open line, the stop it's shown from, which closing it opens (at the step it was left at
-  // when the line was opened from it), and the way along it the sheet shows. Each opening has its
-  // own key, so its sheet starts over.
+  // The open line, the stop it's shown from, the station it was opened from (which closing it goes
+  // back to, at the step it was left at), and the way along it the sheet shows. Each opening has
+  // its own key, so its sheet starts over.
   const [selectedLine, setSelectedLine] = useState<{
     line: Line;
     fromStation: Station | null;
-    fromStationStep: StationSheetStep;
+    originStation: Station | null;
+    originStep: StationSheetStep;
     direction: LineDirection;
     openKey: number;
   } | null>(null);
@@ -452,12 +453,13 @@ export function MapScreen() {
       hasMovedMap.current = true;
       stopFollowing();
       // Its station comes back at the step it was left at.
-      const fromStationStep = fromStation ? stationStep.current : "peek";
-      if (fromStation) setStationOpenStep(fromStationStep);
+      const originStep = fromStation ? stationStep.current : "peek";
+      if (fromStation) setStationOpenStep(originStep);
       setSelectedLine({
         line,
         fromStation,
-        fromStationStep,
+        originStation: fromStation,
+        originStep,
         direction: getLineInitialDirection(line, fromStation?.id ?? null),
         openKey: ++lineOpenCount.current,
       });
@@ -477,11 +479,17 @@ export function MapScreen() {
   // A stop picked in the line's list becomes the one it's shown from, without leaving the line.
   const focusLineStop = useCallback(
     (station: Station, direction: LineDirection) =>
-      setSelectedLine(
-        (current) =>
-          current && { ...current, fromStation: station, fromStationStep: "peek", direction },
-      ),
+      setSelectedLine((current) => current && { ...current, fromStation: station, direction }),
     [],
+  );
+
+  // Picked again, it opens at the line sheet's height, so its departures are in view.
+  const openLineStop = useCallback(
+    (station: Station) => {
+      selectStation(station);
+      setStationOpenStep("middle");
+    },
+    [selectStation],
   );
 
   const setStationStep = useCallback((step: StationSheetStep) => {
@@ -491,13 +499,14 @@ export function MapScreen() {
   const closeLineSheet = useCallback(
     (action: SheetCloseAction) => {
       setLineSheetOpen(false);
-      if (action !== "back" || !selectedLine?.fromStation) return;
-      // Swiping it away goes back to the map; closing it opens the stop it's shown from.
-      const { fromStation, fromStationStep } = selectedLine;
-      setSelectedStation(fromStation);
-      setStationOpenStep(fromStationStep);
+      if (action !== "back" || !selectedLine?.originStation) return;
+      // Swiping it away goes back to the map; closing it goes back to the station it was opened
+      // from, whichever stop it's shown from now.
+      const { originStation, originStep } = selectedLine;
+      setSelectedStation(originStation);
+      setStationOpenStep(originStep);
       setSheetOpen(true);
-      centerOnStation(fromStation);
+      centerOnStation(originStation);
     },
     [selectedLine, centerOnStation],
   );
@@ -864,6 +873,7 @@ export function MapScreen() {
           stationsUrl={stationsUrl}
           onClose={closeLineSheet}
           onFocusStop={focusLineStop}
+          onOpenStop={openLineStop}
           position={lineSheetPosition}
         />
       ) : null}
