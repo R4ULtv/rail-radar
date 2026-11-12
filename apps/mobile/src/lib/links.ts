@@ -2,6 +2,8 @@ export const websiteUrl = "https://www.railradar24.com";
 export const privacyPolicyUrl = `${websiteUrl}/privacy-policy`;
 export const termsOfServiceUrl = `${websiteUrl}/terms-of-service`;
 export const contactUrl = "mailto:contact@railradar24.com";
+/** Whether each country's train data provider is up, for when live trains won't load. */
+export const serviceStatusUrl = "https://status.railradar24.com";
 
 /** A station's page on the website, which also opens the station in the app if it's installed. */
 export function stationUrl(id: string) {

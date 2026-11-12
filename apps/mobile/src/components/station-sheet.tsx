@@ -86,7 +86,7 @@ import { useBoardType } from "@/hooks/use-board-type";
 import { useSavedStations } from "@/hooks/use-stored-stations";
 import { distanceKm, formatDistance } from "@/lib/distance";
 import { haptics } from "@/lib/haptics";
-import { stationUrl } from "@/lib/links";
+import { serviceStatusUrl, stationUrl } from "@/lib/links";
 import { splitStationName, type Line } from "@/lib/lines";
 import type { NearbyStation } from "@/lib/stations";
 import { getStationWarning } from "@/lib/station-warnings";
@@ -371,10 +371,20 @@ function StaleBoardNotice({ isOnline, onRetry }: { isOnline: boolean; onRetry: (
       </Notice>
     );
   }
+  const openServiceStatus = () => void Linking.openURL(serviceStatusUrl);
+  // Screen readers treat the notice as one button, so the link is offered as an action on it.
   return (
     <PressableFeedback
       accessibilityRole="button"
       accessibilityHint="Loads the live trains again"
+      accessibilityActions={[
+        { name: "activate" },
+        { name: "serviceStatus", label: "Check service status" },
+      ]}
+      onAccessibilityAction={(event) => {
+        if (event.nativeEvent.actionName === "serviceStatus") openServiceStatus();
+        else onRetry();
+      }}
       className="mx-4 mb-2 flex-row items-start gap-2 rounded-2xl bg-default px-3 py-2.5"
       onPress={onRetry}
     >
@@ -382,7 +392,10 @@ function StaleBoardNotice({ isOnline, onRetry }: { isOnline: boolean; onRetry: (
         <CircleAlert size={16} color={mutedColor} />
       </View>
       <Text className="flex-1 text-sm leading-5 text-muted">
-        Live updates are unavailable. Showing the last received data.
+        Live updates are unavailable. Showing the last received data.{" "}
+        <Text className="text-foreground underline" onPress={openServiceStatus}>
+          Check service status
+        </Text>
       </Text>
       <View style={styles.noticeIcon}>
         <RefreshCw size={16} color={foregroundColor} />
@@ -540,6 +553,7 @@ const LiveBoard = memo(function LiveBoard({
           title="Unable to load live trains"
           description={error.message ?? "Check your connection and try again."}
           onRetry={retry}
+          showServiceStatus
           onLayout={onFirstItemLayout}
         />
       ) : (

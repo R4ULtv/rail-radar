@@ -4,6 +4,7 @@ import { useThemeColor } from "heroui-native/hooks";
 import { ListGroup } from "heroui-native/list-group";
 import { PortalHost } from "heroui-native/portal";
 import { Tabs } from "heroui-native/tabs";
+import Activity from "lucide-react-native/icons/activity";
 import ArrowUpRight from "lucide-react-native/icons/arrow-up-right";
 import Bookmark from "lucide-react-native/icons/bookmark";
 import BrushCleaning from "lucide-react-native/icons/brush-cleaning";
@@ -61,6 +62,7 @@ import {
   mapboxUrl,
   openStreetMapUrl,
   privacyPolicyUrl,
+  serviceStatusUrl,
   sourceCodeUrl,
   termsOfServiceUrl,
   websiteUrl,
@@ -439,6 +441,7 @@ const SettingsContent = memo(function SettingsContent({
               { icon: Bug, title: "Report a problem", url: bugReportUrl },
               { icon: Lightbulb, title: "Request a feature", url: featureRequestUrl },
               { icon: Mail, title: "Contact us", url: contactUrl },
+              { icon: Activity, title: "Service status", url: serviceStatusUrl },
             ]}
           />
         </Section>
