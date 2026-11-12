@@ -6,6 +6,38 @@ the commit they were built from.
 
 ## [Unreleased]
 
+## [0.7.1] (14) – 2026-11-12
+
+### Added
+
+- When live trains can't be loaded, station sheets link to the service status page, which shows
+  whether a country's train data provider is down. Settings lists it under Support too.
+
+### Changed
+
+- In line sheets, the stop the line is shown from has a chevron; tap it again to open that
+  station. Tapping other stops still explores the line from them, and Close now returns to the
+  station the line was opened from rather than the last stop tapped.
+- Line subtitles show a small operator logo beside the operator name when artwork is available.
+- Line sheet titles have no large badge, and Save and Share match the Close button's size.
+- Station About sections show coordinates and the station ID directly. Hold either row to copy
+  it, with coordinates formatted as latitude and longitude for use in maps.
+- Line sheets do less rendering work: each stop draws its track as one piece, and long routes
+  mount only the stops near the screen instead of most of the line at once.
+- Animations and list scrolling apply on the UI thread directly, for slightly smoother
+  scrolling on Android and lower CPU use in lists.
+- Line sheets release their stops and diagram once they finish closing, so a closed line no
+  longer keeps its views in memory.
+
+### Fixed
+
+- On Android, the map no longer stays grey after starting offline without location access; it
+  opens at the last known position once the connection is back.
+- Station sheets keep their lists within the visible sheet so the About rows remain reachable
+  when a station has many lines.
+- Metro and light rail station sheets show their bundled lines during opening, removing the
+  pause before the line list appears.
+
 ## [0.7.0] (13) – 2026-11-09
 
 ### Added
