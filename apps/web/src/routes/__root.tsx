@@ -16,6 +16,7 @@ import appCss from "../styles.css?url";
 import geistFont from "../assets/fonts/Geist/Geist-web.woff2?url";
 import geistMonoFont from "../assets/fonts/Geist/GeistMono-core.woff2?url";
 import { prerenderedPageLinkProps } from "@/lib/station-prerender";
+import { viewTransitionSkipScript } from "@/lib/view-transitions";
 
 const DEFAULT_TITLE = "Rail Radar | Live Train Tracker Across Europe";
 const DEFAULT_DESCRIPTION =
@@ -148,6 +149,7 @@ function RootDocument() {
     >
       <head>
         <script dangerouslySetInnerHTML={{ __html: appTicketDismissedScript }} />
+        <script dangerouslySetInnerHTML={{ __html: viewTransitionSkipScript }} />
         <HeadContent />
       </head>
       <body className="antialiased">
