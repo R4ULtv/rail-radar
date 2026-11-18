@@ -13,10 +13,10 @@
   },
   "devDependencies": {
     "eslint-plugin-turbo": "^2.11.11",
-    "oxfmt": "^0.78.0",
-    "oxlint": "^1.93.0",
-    "oxlint-tsgolint": "^7.0.2007",
+    "oxfmt": "^0.79.0",
+    "oxlint": "^1.94.0",
     "svgo": "^4.1.0",
+    "tsrs": "0.25.0-ts7.1.0-beta",
     "turbo": "^2.11.11",
     "typescript": "^7.0.2"
   },
