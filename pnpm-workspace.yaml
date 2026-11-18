@@ -2,6 +2,8 @@ packages:
   - apps/*
   - packages/*
 overrides:
+  # Astro's checker uses emnapi core 1.11.3, which needs the matching v1 runtime.
+  "@napi-rs/wasm-runtime@1.2.4>@emnapi/runtime": "1.11.3"
   # These UI packages still request runed 0.35; 0.38 supports SvelteKit 3.
   "bits-ui>runed": "0.38.0"
   minimatch@>=7.0.0 <11.0.1: ^11.0.1
@@ -12,4 +14,9 @@ allowBuilds:
   sharp: true
   workerd: true
 patchedDependencies:
-  "@tanstack/start-plugin-core@1.171.55": patches/@tanstack__start-plugin-core@1.171.55.patch
+  "@tanstack/start-plugin-core@^1.171.55": patches/@tanstack__start-plugin-core@1.171.55.patch
+minimumReleaseAgeExclude:
+  - "@astrojs/internal-helpers@0.13.1"
+  - "@astrojs/markdown-satteri@0.4.7"
+  - "@astrojs/react@7.1.4"
+  - astro@7.4.7

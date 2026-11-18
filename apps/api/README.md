@@ -27,6 +27,8 @@ Cloudflare Workers API that provides real-time European train data from official
 | `GET`  | `/stations/:id/lines.geojson` | Lines serving a station as GeoJSON with full track                                                                                                      |
 | `GET`  | `/stations/:id/stats`         | Get station visit stats (`?period=hour\|day\|week\|month`, default: `day`)                                                                              |
 | `GET`  | `/analytics/overview`         | Get global analytics (total visits, unique visitors, country breakdown)                                                                                 |
+| `GET`  | `/status/summary`             | Current health of each upstream data provider (see the [status app](../status/README.md))                                                               |
+| `GET`  | `/status/latency`             | 30 days of daily provider health and response-time percentiles                                                                                          |
 
 ### `GET /operators`
 
@@ -141,6 +143,8 @@ share-alike for derived databases.
 | `/stations/:id/stats`  | 150s cache                              |
 | `/stations/trending`   | 5min cache, 1min stale-while-revalidate |
 | `/analytics/overview`  | 5min cache, 1min stale-while-revalidate |
+| `/status/summary`      | 60s cache                               |
+| `/status/latency`      | 15min cache                             |
 
 Static map generation has a separate allowance of five Mapbox requests per minute per client IP.
 All map parameters share that allowance. Static maps request WebP directly from Mapbox without
@@ -204,6 +208,7 @@ src/
 │   ├── operators.ts        # Operator list and detail endpoints
 │   ├── root.ts             # API index and robots.txt
 │   ├── stations.ts         # Search, live trains, stats, trending
+│   ├── status.ts           # Provider health summary and 30-day history
 │   └── stations-geojson.ts # Stations GeoJSON endpoint
 ├── scrapers/
 │   ├── index.ts       # Scraper router (selects by country prefix)
@@ -224,6 +229,8 @@ src/
 │   ├── luxembourg.ts  # Mobiliteit.lu departures (CFL rail)
 │   └── hungary.ts     # MÁV ticketing timetable (jegy.mav.hu) arrivals and departures
 ├── analytics.ts   # Cloudflare Analytics Engine integration for visits and provider metrics
+├── provider-probes.ts # Hourly scheduled check of every provider
+├── provider-status.ts # Provider health and latency queries
 ├── search.ts      # Deterministic station search
 └── constants.ts   # Shared constants (cache TTL, timeouts, validation)
 ```

@@ -39,25 +39,26 @@ pnpm --filter=studio dev # Admin tool at localhost:3001
 
 ## Scripts
 
-| Command                        | Description                                   |
-| ------------------------------ | --------------------------------------------- |
-| `pnpm dev`                     | Start all development servers                 |
-| `pnpm --filter=studio dev`     | Start the admin tool at localhost:3001        |
-| `pnpm build`                   | Build all packages                            |
-| `pnpm lint --force`            | Lint all packages                             |
-| `pnpm format`                  | Format code with oxfmt                        |
-| `pnpm check-types --force`     | Run TypeScript type checking                  |
-| `pnpm --filter=api cf-typegen` | Generate API Worker types                     |
-| `pnpm --filter=web cf-typegen` | Generate web Worker types                     |
-| `pnpm --filter=api deploy`     | Deploy the API Worker to Cloudflare           |
-| `pnpm --filter=web deploy`     | Build and deploy the web Worker to Cloudflare |
+| Command                        | Description                                    |
+| ------------------------------ | ---------------------------------------------- |
+| `pnpm dev`                     | Start all development servers                  |
+| `pnpm --filter=studio dev`     | Start the admin tool at localhost:3001         |
+| `pnpm build`                   | Build all packages                             |
+| `pnpm lint --force`            | Lint all packages                              |
+| `pnpm format`                  | Format code with oxfmt                         |
+| `pnpm check-types --force`     | Run TypeScript type checking                   |
+| `pnpm --filter=api cf-typegen` | Generate API Worker types                      |
+| `pnpm --filter=web cf-typegen` | Generate web Worker types                      |
+| `pnpm --filter=api deploy`     | Deploy the API Worker to Cloudflare            |
+| `pnpm --filter=web deploy`     | Build and deploy the web Worker to Cloudflare  |
+| `pnpm --filter=status deploy`  | Build and deploy the status site to Cloudflare |
 
-All three apps use the Cloudflare CLI (`cf`) with typed `cloudflare.config.ts` files.
+All four apps use the Cloudflare CLI (`cf`) with typed `cloudflare.config.ts` files.
 Run `pnpm --filter=<app> exec cf auth login` before deploying, or configure
 `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID` in CI. Builds produce deployable
 artifacts in each app's `.cloudflare/output/v0/`; generated Worker types live in
 `.cloudflare/types/`. The API keeps Wrangler as cf's bundler; web uses the Cloudflare
-Vite plugin, and studio packages its static SvelteKit output for cf.
+Vite plugin, studio packages its static SvelteKit output for cf, and status uses the Astro Cloudflare adapter.
 
 ## Deployment Architecture
 

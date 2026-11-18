@@ -12,16 +12,16 @@
     "optimize-svgs": "node scripts/optimize-svgs.mjs"
   },
   "devDependencies": {
-    "eslint-plugin-turbo": "^2.11.10",
-    "oxfmt": "^0.77.0",
-    "oxlint": "^1.92.0",
-    "oxlint-tsgolint": "^7.0.2006",
+    "eslint-plugin-turbo": "^2.11.11",
+    "oxfmt": "^0.79.0",
+    "oxlint": "^1.94.0",
     "svgo": "^4.1.0",
-    "turbo": "^2.11.10",
+    "tsrs": "0.25.0-ts7.1.0-beta",
+    "turbo": "^2.11.11",
     "typescript": "^7.0.2"
   },
   "engines": {
     "node": ">=24"
   },
-  "packageManager": "pnpm@12.18.0"
+  "packageManager": "pnpm@12.21.0"
 }

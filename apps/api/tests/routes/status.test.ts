@@ -31,12 +31,23 @@ const counts = (provider: string, overrides = {}) => ({
   errors: "0",
   timeouts: "0",
   samples: "100",
+  syntheticRequests: "24",
+  syntheticSuccesses: "24",
   lastSeen: "1773133140",
   ...overrides,
 });
 
 type Counts = Partial<
-  Record<"requests" | "successes" | "errors" | "timeouts" | "samples", unknown>
+  Record<
+    | "requests"
+    | "successes"
+    | "errors"
+    | "timeouts"
+    | "samples"
+    | "syntheticRequests"
+    | "syntheticSuccesses",
+    unknown
+  >
 >;
 
 /** A summary row with the same counts in every window unless a window is overridden. */
@@ -49,13 +60,29 @@ const windowed = (
   const row: Record<string, unknown> = { provider, lastSeen: base.lastSeen };
   for (const minutes of [60, 180, 1440]) {
     const window = { ...base, ...byWindow[minutes] };
-    for (const key of ["requests", "successes", "errors", "timeouts", "samples"] as const) {
+    for (const key of [
+      "requests",
+      "successes",
+      "errors",
+      "timeouts",
+      "samples",
+      "syntheticRequests",
+      "syntheticSuccesses",
+    ] as const) {
       row[`${key}${minutes}`] = window[key];
     }
   }
   return row;
 };
-const empty = { requests: 0, successes: 0, errors: 0, timeouts: 0, samples: 0 };
+const empty = {
+  requests: 0,
+  successes: 0,
+  errors: 0,
+  timeouts: 0,
+  samples: 0,
+  syntheticRequests: 0,
+  syntheticSuccesses: 0,
+};
 
 describe("GET /status/summary", () => {
   it("includes every configured provider, normalizes counts, and leaves quiet providers unknown", async () => {
@@ -81,6 +108,8 @@ describe("GET /status/summary", () => {
     expect(body.providers.find((provider) => provider.id === "rfi")).toMatchObject({
       status: "operational",
       requests: 100,
+      syntheticRequests: 24,
+      syntheticSuccesses: 24,
       successRate: 1,
       lastSeen: "2026-03-10T08:59:00.000Z",
     });
@@ -105,6 +134,9 @@ describe("GET /status/summary", () => {
     expect(sql).toContain("blob2 IN ('live', 'synthetic')");
     expect(sql).toContain("sumIf(_sample_interval, timestamp >= toDateTime(1773046800))");
     expect(sql).toContain("countIf(timestamp >= toDateTime(1773046800)) AS samples1440");
+    expect(sql).toContain(
+      "sumIf(_sample_interval, blob2 = 'synthetic' AND timestamp >= toDateTime(1773129600)) AS syntheticRequests60",
+    );
     expect(sql).toContain("timestamp >= toDateTime(1773046800)");
     expect(sql).toContain("timestamp < toDateTime(1773133200)");
   });
@@ -242,8 +274,8 @@ describe("GET /status/latency", () => {
             provider: "rfi",
             date: "2026-03-09",
             p50: "100",
+            p90: "180",
             p99: "250",
-            p999: "400",
             latencySamples: "6",
             latencyRequests: "60",
           },
@@ -262,7 +294,7 @@ describe("GET /status/latency", () => {
     const { response } = await request("/status/latency");
     const body = (await response.json()) as StatusLatency;
     expect(response.status).toBe(200);
-    expect(response.headers.get("Cache-Control")).toBe("public, max-age=300");
+    expect(response.headers.get("Cache-Control")).toBe("public, max-age=900");
     expect(body).toMatchObject({
       source: "live",
       unit: "ms",
@@ -275,20 +307,23 @@ describe("GET /status/latency", () => {
     expect(days[0]).toMatchObject({
       date: "2026-02-09",
       requests: 0,
+      syntheticRequests: 0,
       successRate: null,
       partial: false,
       status: "unknown",
-      latency: { p50: null, p99: null, p999: null },
+      latency: { p50: null, p90: null, p99: null },
     });
     expect(days[28]).toMatchObject({
       date: "2026-03-09",
       requests: 70,
       timeouts: 10,
       samples: 7,
+      syntheticRequests: 24,
+      syntheticSuccesses: 24,
       status: "degraded",
       latencySamples: 6,
       latencyRequests: 60,
-      latency: { p50: 100, p99: 250, p999: 400 },
+      latency: { p50: 100, p90: 180, p99: 250 },
     });
     expect(days[29]).toMatchObject({ date: "2026-03-10", partial: true });
     expect(
@@ -301,7 +336,7 @@ describe("GET /status/latency", () => {
     )!;
     expect(sql).toContain("quantileExactWeighted(0.5)(double1, _sample_interval)");
     expect(sql).toContain("quantileExactWeighted(0.99)(double1, _sample_interval)");
-    expect(sql).toContain("quantileExactWeighted(0.999)(double1, _sample_interval)");
+    expect(sql).toContain("quantileExactWeighted(0.9)(double1, _sample_interval)");
     expect(sql).toContain("AND double1 >= 0");
     expect(sql).toContain("blob2 IN ('live', 'synthetic')");
     expect(sql).toContain("'Etc/UTC'");
@@ -320,8 +355,8 @@ describe("GET /status/latency", () => {
             provider: "db",
             date: "2026-03-10",
             p50: -1,
+            p90: "nan",
             p99: null,
-            p999: "nan",
             latencySamples: 1,
             latencyRequests: 1,
           },
@@ -342,12 +377,12 @@ describe("GET /status/latency", () => {
     expect(body.providers.find((provider) => provider.id === "rfi")!.days[29]).toMatchObject({
       requests: 5,
       status: "outage",
-      latency: { p50: null, p99: null, p999: null },
+      latency: { p50: null, p90: null, p99: null },
     });
     expect(body.providers.find((provider) => provider.id === "db")!.days[29]!.latency).toEqual({
       p50: null,
+      p90: null,
       p99: null,
-      p999: null,
     });
   });
 
@@ -377,6 +412,26 @@ describe.each(["summary", "latency"])("status/%s resilience", (endpoint) => {
     expect(body).toContain("temporarily unavailable");
     expect(body).not.toContain("test-token");
     expect(logs.errors()).toHaveLength(1);
+  });
+
+  it("reuses the cached response when only the query string differs", async () => {
+    mockAnalytics(fetchMock, [["FROM provider_metrics", []]]);
+    expect((await request(`/status/${endpoint}`)).response.status).toBe(200);
+    const queries = analyticsQueries(fetchMock).length;
+    expect(queries).toBeGreaterThan(0);
+    expect((await request(`/status/${endpoint}?bust=1`)).response.status).toBe(200);
+    expect(analyticsQueries(fetchMock)).toHaveLength(queries);
+  });
+
+  it("does not retry Analytics Engine while a failure is cooling down", async () => {
+    captureLogs();
+    fetchMock.fail();
+    expect((await request(`/status/${endpoint}`)).response.status).toBe(503);
+    const attempts = fetchMock.fetch.mock.calls.length;
+    const { response } = await request(`/status/${endpoint}`);
+    expect(response.status).toBe(503);
+    expect(response.headers.get("Cache-Control")).toBe("no-store");
+    expect(fetchMock.fetch.mock.calls).toHaveLength(attempts);
   });
 
   it("applies the existing API rate limiter", async () => {
