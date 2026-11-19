@@ -1,17 +1,35 @@
 # Czech support verification
 
-Verified 7 November 2026 on `feat/czech-support`.
+Verified 18 November 2026 in the local `feat/czech-support` worktree after merging `preview` at `b47df7d9`. The checks below include the working-tree change to Infotabule.
 
-## Integration
+## Coverage
 
-- 2,593 passenger stations from GRAPP, matched against official CIS passenger-station names and the SR70 directory.
-- Seven-digit CIS identifiers, including `CZ5453613` (Pardubice hlavní nádraží), `CZ5457076` (Praha hlavní nádraží), and `CZ5433295` (Brno hlavní nádraží).
-- Separate arrivals/departures parsing, same-request token/cookie pairing, midnight delays, and disruption notices attached to their train.
-- Eight observed carrier codes resolve to operator entries and existing or new SVG assets: `ČD`, `RJET`, `RJÚK`, `ARR`, `LEO`, `GWTR`, `AŽD`, `DLB`.
-- Czech coverage added to ČD, Arriva, Leo Express, and RegioJet; native Czech origin added for ČD, Leo Express, and RegioJet.
-- The prior local workerd and temporary Cloudflare Worker checks returned live train arrays for Pardubice, Praha, Brno and Blatec. The test Worker was deleted after verification. Production was not deployed.
+- **Stations.** The station GeoJSON endpoint returned 2,641 Czech rail stations. Regenerating the dataset from GRAPP, CIS and SR70 in a separate directory reproduced the same features, IDs, coordinates and importance values. The web build prerendered all 2,641 station pages and the Czech country directory. [Station import and source limitations](../packages/data/README.md#czech-stations)
+- **Operators.** The country filter returns 16 operators. Eleven run domestic or regional trains: České dráhy, Arriva, Leo Express, RegioJet, GW Train Regio, AŽD Praha, Die Länderbahn CZ, KŽC Doprava and Gepard Express, plus DPP for the Prague metro and DPMLJ for the Liberec–Jablonec tram. European Sleeper, ÖBB, DB, PKP Intercity and Koleje Dolnośląskie were extended to Czechia for their cross-border trains. Osoblažská úzkorozchodná dráha (`OÚD`), which took over the Třemešná–Osoblaha line from ČD on 14 December 2025, is still missing because it publishes no vector logo. [OÚD operator page](https://www.osoblazsko.com/oud/)
+- **Lines.** Four lines are mapped. Prague metro A, B and C have 58 metro stations (`CZM001`–`CZM058`), one route each, PID colors and weekday and weekend service from the [PID GTFS feed](https://data.pid.cz/PID_GTFS.zip). Tram line 11 between Liberec and Jablonec nad Nisou is the only light line, with 23 stops (`CZL001`–`CZL023`) and no service hours yet. Stops and track come from OpenStreetMap. Flora on line A is included although it is closed for renovation until about December 2026. City tram networks in Prague, Brno, Ostrava and elsewhere stay out of scope, as in other countries. Infotabule service labels such as Ex3, S2 and U10 remain train attributes, not catalog lines. [Line data sources](../packages/data/README.md#czech-stations)
 
-Station regeneration and source limitations are documented in the [data README](../packages/data/README.md#czech-stations).
+## Live board checks
+
+The local API Worker fetched both directions from Infotabule with the scraper's normal request headers. The table records a point-in-time sample. Counts can change with the timetable.
+
+| Station                       | Departures | Arrivals |
+| ----------------------------- | ---------: | -------: |
+| Praha hlavní nádraží          |         24 |       24 |
+| Pardubice hlavní nádraží      |         30 |       30 |
+| Brno hlavní nádraží           |         22 |       22 |
+| Ostrava hlavní nádraží        |         18 |       18 |
+| Liberec                       |         10 |       10 |
+| Louny                         |         10 |        9 |
+| Rakovník                      |         18 |       18 |
+| Blatec                        |          6 |        6 |
+| Blíževedly                    |          4 |        4 |
+| Most                          |         10 |       10 |
+| Čížkovice                     |         10 |       10 |
+| Sedlec u Mikulova             |         10 |       10 |
+| Ústí nad Labem hlavní nádraží |         20 |       20 |
+| Třebívlice                    |   HTTP 502 | HTTP 502 |
+
+The successful responses included all eight observed carrier codes across the seven directory entries (`ČD`, `ARR`, `LEO`, `RJET`, `RJÚK`, `GWTR`, `AŽD` and `DLB`). For Třebívlice (`CZ5455369`), Infotabule returned its station picker without a train table or an explicit no-board notice. The scraper treated that response as an upstream error. [Třebívlice source response](https://www.spravazeleznic.cz/cestujici/infotabule?station=5455369)
 
 ## Official logo sources
 
@@ -38,6 +56,28 @@ All three tiles use a white background, a 64 × 64 canvas, original vector conto
 - Retained the complete striped symbol, including its white region and original outline; omitted the long company wordmark. Original blue: `#214e8b`. Expanded the source viewBox during extraction to preserve the thin outline at the original artboard edge.
 - Operator metadata: [company profile](https://www.laenderbahn.com/cs/onas/die-landerbahn-cz/), [registered address](https://www.laenderbahn.com/cs/pravni-informace/identifikacni-udaje-2/), [current service information](https://www.laenderbahn.com/cs/), and the infrastructure manager's [T7 timetable](https://www.spravazeleznic.cz/documents/50004227/191473899/k137.pdf/50c0af37-a83b-4038-be13-562e981a727e).
 
+### KŽC Doprava
+
+- Asset: [kzc-doprava.svg](../apps/web/public/assets/operators/cz/kzc-doprava.svg).
+- Vector from page 1 of KŽC's own [2026 calendar PDF](https://kzc.cz/download/kalendar_2026.pdf); the site header logo is PNG only. Kept the full lockup with its white inner area and omitted the ® mark. Color `#231f20`.
+- Operator metadata: [regular public trains](https://kzc.cz/?sekce=pravidelne_verejne_vlaky) and [company information](https://kzc.cz/?sekce=o_nas_kontakty).
+
+### Gepard Express
+
+- Asset: [gepard-express.svg](../apps/web/public/assets/operators/cz/gepard-express.svg).
+- The `#G` symbol from the inline SVG in [gepard.com](https://www.gepard.com/)'s own site code; the full wordmark exists only as PNG. Color `#eee300`, which has low contrast on the white tile.
+- Operator metadata: [Jindřichův Hradec narrow-gauge contracts](https://zdopravy.cz/podepsano-jindrichohradecke-uzkokolejky-uz-maji-smlouvy-s-kraji-na-letosni-rok-ceny-za-km-se-lisi-279058/). Its Infotabule carrier code is not confirmed, because its season ended on 17 November.
+
+### Dopravní podnik hl. m. Prahy
+
+- Asset: [dpp.svg](../apps/web/public/assets/operators/cz/dpp.svg).
+- [DP_logo_horiz_CMYK.svg](https://www.dpp.cz/cs/data/2019/Loga%20DP/Horizont%C3%A1ln%C3%AD%20barevn%C3%A1%20varianta/DP_logo_horiz_CMYK.svg) from the [official logo downloads](https://www.dpp.cz/spolecnost/pro-media/loga-ke-stazeni). Kept the symbol and omitted the wordmark. Red `#d92420`.
+
+### Dopravní podnik měst Liberce a Jablonce nad Nisou
+
+- Asset: [dpmlj.svg](../apps/web/public/assets/operators/cz/dpmlj.svg).
+- Vector from DPMLJ's own [network map PDF](https://web.archive.org/web/20240506140718/http://www.dpmlj.cz/images/Obrazky/01DPMLJ/PLANY/2024-01-29%20plan%20site.pdf) (Wayback copy, because dpmlj.cz refused connections). Kept the triangle-arrow symbol and omitted the wordmark. Color `#2b2a29`.
+
 Operator map bounds are conservative coverage envelopes around the published routes, rather than precise track geometries. Unknown network lengths and passenger totals remain null.
 
 ## Geometry and rendering
@@ -54,12 +94,6 @@ All artwork fits below the 51-unit cap with margin for raster uncertainty. The L
 
 ## Checks
 
-- API: **1,118 tests pass across 34 files**, including Czech boards, search, scraper/provider registration and Czech operator directory filtering.
-- Typechecks: API source and tests, web, and shared data pass.
-- Lint: API, web, and shared data pass with warnings denied.
-- Formatter: all changed supported source/data/documentation files pass.
-- Data importer: `python3 scripts/import-czech-stations.py --check` validates count, unique IDs, code map parity and Czech coordinate bounds.
-- SVG optimizer: explicit targets with `--multipass --check` report **0/3 would change**.
-- All eight observed GRAPP carrier codes resolve to existing logo files and Czech-tagged directory entries.
-
-The feature is isolated from the separate Cloudflare configuration migration in the original checkout. Its worktree uses the declared stable Vite plugin version and ignored, locally generated API binding types; dependency setup did not change package manifests or the lockfile.
+- The API passed 1,145 tests across 35 files. The status dashboard passed all 27 tests, including the fallback icon for a provider without artwork.
+- Workspace type checks and lint passed. The SVG optimizer reported zero changes for the three new operator logos.
+- Web, Studio and the status dashboard built locally. The API production build failed in both the merged worktree and a clean copy of local `preview` at `b47df7d9`. Wrangler 4.163.0 produced `.cloudflare/output/v1/config.json` while `cf build` expected `.cloudflare/output/v0/config.json`. Live API checks used the local development Worker.

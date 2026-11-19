@@ -2,8 +2,8 @@
 
 ## Features
 
-- Interactive map with 25,000+ railway stations across Italy, Switzerland, Germany, Finland, Belgium, Denmark, the Netherlands, Norway, Sweden, Poland, the United Kingdom, Ireland, France, Luxembourg, Hungary, and the Czech Republic
-- Real-time arrivals and departures, where supported by each official source (RFI, SBB, DB, Digitraffic, iRail, Rejseplanen, NS, Entur, Trafiklab, PLK, LDBWS, Irish Rail, SNCF, Mobiliteit.lu, MÁV, GRAPP)
+- Interactive map with 26,000+ railway stations across Italy, Switzerland, Germany, Finland, Belgium, Denmark, the Netherlands, Norway, Sweden, Poland, the United Kingdom, Ireland, France, Luxembourg, Hungary, and the Czech Republic
+- Real-time arrivals and departures, where supported by each official source (RFI, SBB, DB, Digitraffic, iRail, Rejseplanen, NS, Entur, Trafiklab, PLK, LDBWS, Irish Rail, SNCF, Mobiliteit.lu, MÁV, Správa železnic)
 - Station search with fuzzy matching
 - Operator directory with network metadata and static coverage maps
 - Trending stations ranked by unique visitors, with both unique and total visit counts available
@@ -115,5 +115,5 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - 🇫🇷 French train data from [SNCF (Navitia)](https://numerique.sncf.com/startup/api/)
 - 🇱🇺 Luxembourg train data from [Mobiliteit.lu](https://data.public.lu/en/datasets/api-mobiliteit-lu/)
 - 🇭🇺 Hungarian train data from [MÁV](https://jegy.mav.hu)
-- 🇨🇿 Czech station and live train data from [GRAPP / Správa železnic](https://grapp.spravazeleznic.cz/), with official CIS/SR70 station identities. Live boards cover roughly the next hour; short lists are expected. See [Czech data generation](./packages/data/README.md#czech-stations).
+- 🇨🇿 Czech live train data from [Správa železnic's Infotabule](https://www.spravazeleznic.cz/cestujici/infotabule) and station data from [GRAPP](https://grapp.spravazeleznic.cz/), with official CIS/SR70 station identities. See [Czech data generation](./packages/data/README.md#czech-stations).
 - Map rendering by [Mapbox](https://www.mapbox.com/)

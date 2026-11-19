@@ -70,7 +70,7 @@ import { countryStationBounds, stationsByCountry } from "@repo/data/directory";
 
 ### Czech stations
 
-Czech station coordinates and GRAPP internal IDs come from [GRAPP / Správa železnic](https://grapp.spravazeleznic.cz/).
+Czech station coordinates come from [GRAPP / Správa železnic](https://grapp.spravazeleznic.cz/).
 The importer matches names and nearby coordinates against the official [SR70 directory](https://provoz.spravazeleznic.cz/portal/ViewArticle.aspx?oid=34462)
 and the [CIS passenger-station list](https://portal.cisjr.cz/pub/seznamy/stanice.csv).
 Rail Radar IDs use the seven-digit CIS code: `CZ5453613` is Pardubice hlavní nádraží,
@@ -86,14 +86,29 @@ The default SR70 workbook is effective 15 October–12 December 2026. For a late
 import, select the applicable workbook from the official directory and pass its
 download URL with `--sr70-url`. Run the repository formatter after importing.
 The importer excludes `STI === "33"`, operational names, non-passenger points,
-and ambiguous matches. It checks unique IDs, a plausible station count, Czech
-coordinate bounds and parity with `apps/api/src/scrapers/codes/cz-codes.json`.
+and ambiguous matches. Importance is 1 for the Praha, Brno and Ostrava main
+stations, 2 for GRAPP's major nodes (`STI === "11"`), 3 for SR70 transport nodes
+and 4 otherwise. It checks unique IDs, a plausible station count, Czech
+coordinate bounds and that known passenger stations are present.
 
-The live scraper obtains a token and `ASP.NET_SessionId` from the same homepage
-request and sends both to StationInfo. It parses arrivals and departures separately.
-No secrets or bindings are required. GRAPP is undocumented and its boards cover
-roughly the next hour. Its response includes a notice requiring the owner's consent
-for data reuse; public availability does not establish an open-data license.
+The live scraper reads Správa železnic's public station board,
+[Infotabule](https://www.spravazeleznic.cz/cestujici/infotabule), with one request
+per board using the CIS code (`?station=5457076`). The page carries arrivals and
+departures together and omits its board when the request has no `User-Agent`.
+Stations without electronic passenger information return an empty board. No
+secrets or bindings are required. The page is undocumented. GRAPP's responses
+include a notice requiring the owner's consent for data reuse; public availability
+does not establish an open-data license.
+
+Czech metro (`CZM`) and light (`CZL`) stops are curated separately, and the rail
+importer leaves them in place. Prague metro stations, stop order and track come
+from OpenStreetMap; the three interchanges (Muzeum, Můstek and Florenc) have one
+ID each, placed between their two OSM station nodes. Line colors and service hours
+come from the [PID GTFS feed](https://data.pid.cz/PID_GTFS.zip). Flora on line A
+is included although it is closed for renovation until about December 2026. The
+Liberec–Jablonec tram stops and track come from OpenStreetMap. The OSM route omits
+Sídliště Nové Vratislavice and Fügnerova, so the stop order follows Moovit's
+timetable listing; the operator's timetable site was unreachable when checked.
 
 ### `stationsGeoJSON`
 
