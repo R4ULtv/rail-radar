@@ -41,7 +41,7 @@ describe("GET /operators", () => {
     for (const operator of body.operators) expect(operator.countries[0]).toBe("international");
   });
 
-  it("includes the Czech carriers used by GRAPP in the Czech directory", async () => {
+  it("includes the Czech carriers shown on Czech boards in the Czech directory", async () => {
     const { response, body } = await list("?country=cz");
     expect(response.status).toBe(200);
     expect(body.operators.map((operator) => operator.slug)).toEqual(
@@ -53,6 +53,11 @@ describe("GET /operators", () => {
         "gw-train-regio",
         "azd",
         "die-laenderbahn-cz",
+        "european-sleeper",
+        "obb",
+        "db",
+        "pkp-intercity",
+        "kd",
       ]),
     );
     const { body: native } = await list("?origin=cz");
