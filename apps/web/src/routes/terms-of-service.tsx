@@ -236,12 +236,12 @@ function TermsOfServicePage() {
             <li>
               <strong className="text-foreground">Czech Republic</strong> &mdash;{" "}
               <a
-                href="https://grapp.spravazeleznic.cz/"
+                href="https://www.spravazeleznic.cz/cestujici/infotabule"
                 className="text-foreground underline"
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                GRAPP / Správa železnic
+                Správa železnic
               </a>
             </li>
           </ul>

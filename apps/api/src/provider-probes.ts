@@ -25,7 +25,7 @@ export const PROBE_STATIONS: Record<ProviderId, string> = {
   sncf: "FR271007", // Paris Gare du Nord
   mobiliteit: "LU200405060", // Luxembourg, Gare Centrale
   mav: "HU5510017", // Budapest-Keleti
-  grapp: "CZ5457076", // Praha hlavní nádraží
+  spravazeleznic: "CZ5457076", // Praha hlavní nádraží
 };
 
 /** Fetch the provider's hub departures and record the outcome as a synthetic observation. */

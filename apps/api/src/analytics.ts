@@ -82,7 +82,7 @@ const COUNTRY_TO_PROVIDER: Partial<Record<CountryCode, ProviderId>> = {
   fr: "sncf",
   lu: "mobiliteit",
   hu: "mav",
-  cz: "grapp",
+  cz: "spravazeleznic",
 };
 
 async function hashIP(ip: string, pepper: string): Promise<string> {

@@ -20,7 +20,7 @@ export const PROVIDERS = [
   { id: "sncf", name: "SNCF", country: "fr" },
   { id: "mobiliteit", name: "Mobiliteit", country: "lu" },
   { id: "mav", name: "MÁV", country: "hu" },
-  { id: "grapp", name: "GRAPP / Správa železnic", country: "cz" },
+  { id: "spravazeleznic", name: "Správa železnic", country: "cz" },
 ] as const satisfies readonly { id: string; name: string; country: CountryCode }[];
 
 export type Provider = (typeof PROVIDERS)[number];
@@ -89,8 +89,8 @@ export const PROVIDER_DETAILS: Record<ProviderId, { description: string; url: st
     description: "MÁV's timetable and live train information.",
     url: "https://jegy.mav.hu",
   },
-  grapp: {
-    description: "Správa železnic's live train positions and station boards.",
-    url: "https://grapp.spravazeleznic.cz",
+  spravazeleznic: {
+    description: "Správa železnic's station information boards (Infotabule).",
+    url: "https://www.spravazeleznic.cz/cestujici/infotabule",
   },
 };

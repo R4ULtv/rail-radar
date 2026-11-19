@@ -152,7 +152,7 @@ export async function fetchTextWithTimeout(
   regionLabel: string,
   options?: RequestInit,
   timeoutMs: number = FETCH_TIMEOUT_MS,
-): Promise<{ text: string; fetchMs: number; headers: Headers }> {
+): Promise<{ text: string; fetchMs: number }> {
   const { response, startTime, timeoutId, upstream } = await fetchResponseWithTimeout(
     url,
     regionLabel,
@@ -166,5 +166,5 @@ export async function fetchTextWithTimeout(
     timeoutId,
     upstream,
   );
-  return { text: value, fetchMs, headers: response.headers };
+  return { text: value, fetchMs };
 }
