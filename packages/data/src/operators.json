@@ -6644,6 +6644,39 @@
     ]
   },
   {
+    "slug": "dpmlj",
+    "name": "DPMLJ",
+    "logoPath": "cz/dpmlj",
+    "countries": ["cz"],
+    "operatorTypes": ["light-rail"],
+    "bounds": [15.03, 50.7, 15.19, 50.79],
+    "description": "Dopravní podnik měst Liberce a Jablonce nad Nisou (DPMLJ) runs public transport in Liberec and Jablonec nad Nisou, including the Liberec tram network and city buses. Its interurban tram line 11 links Liberec Viadukt with Jablonec nad Nisou over about 13 km of largely wooded track, and returned to full regular service in 2024 after the line was rebuilt and converted from metre gauge to standard gauge. The company is owned by the two cities.",
+    "website": "https://www.dpmlj.cz/",
+    "founded": 1993,
+    "headquarters": "Liberec, Czechia",
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["commuter"],
+    "parentCompany": "Cities of Liberec and Jablonec nad Nisou",
+    "links": [
+      {
+        "label": "Official Site",
+        "url": "https://www.dpmlj.cz/",
+        "type": "website"
+      },
+      {
+        "label": "IDOL Timetables",
+        "url": "https://www.iidol.cz/",
+        "type": "timetables"
+      },
+      {
+        "label": "Wikipedia",
+        "url": "https://en.wikipedia.org/wiki/Trams_in_Liberec_and_Jablonec_nad_Nisou",
+        "type": "wikipedia"
+      }
+    ]
+  },
+  {
     "slug": "cfr-calatori",
     "name": "CFR Călători",
     "logoPath": "ro/cfr-calatori",

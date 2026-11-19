@@ -67305,6 +67305,305 @@
     {
       "type": "Feature",
       "properties": {
+        "id": "CZL001",
+        "name": "Jablonec nad Nisou, Tyršovy sady",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [15.16405, 50.72296]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CZL002",
+        "name": "Jablonec nad Nisou, Liberecká",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [15.16024, 50.7257]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CZL003",
+        "name": "Jablonec nad Nisou, Brandl",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [15.15183, 50.7282]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CZL004",
+        "name": "Jablonec nad Nisou, Měnírna",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [15.14778, 50.72173]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CZL005",
+        "name": "Jablonec nad Nisou, Zelené Údolí",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [15.14467, 50.72115]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CZL006",
+        "name": "Proseč nad Nisou, Nový Svět",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [15.13056, 50.72236]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CZL007",
+        "name": "Proseč nad Nisou, U Šamotky",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [15.12544, 50.72428]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CZL008",
+        "name": "Proseč nad Nisou, pošta",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [15.11622, 50.72803]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CZL009",
+        "name": "Proseč nad Nisou, Za Tratí",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [15.11123, 50.73099]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CZL010",
+        "name": "Vratislavice nad Nisou, Vratislavická Kyselka",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [15.10605, 50.7348]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CZL011",
+        "name": "Vratislavice nad Nisou, výhybna",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [15.10216, 50.74096]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CZL012",
+        "name": "Vratislavice nad Nisou, kostel",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [15.0933, 50.74288]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CZL013",
+        "name": "Vratislavice nad Nisou, Lékárna",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [15.08526, 50.74587]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CZL014",
+        "name": "Vratislavice nad Nisou, Pivovarská",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [15.08293, 50.74847]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CZL015",
+        "name": "Liberec, Sídliště Nové Vratislavice",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [15.07911, 50.75277]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CZL016",
+        "name": "Liberec, Nová Ruda",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [15.07995, 50.75664]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CZL017",
+        "name": "Liberec, U Lomu",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [15.07461, 50.76288]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CZL018",
+        "name": "Liberec, Textilana",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [15.06768, 50.76498]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CZL019",
+        "name": "Liberec, Mlýnská",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [15.06276, 50.76431]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CZL020",
+        "name": "Liberec, Fügnerova",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [15.05704, 50.76547]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CZL021",
+        "name": "Liberec, Rybníček",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [15.05176, 50.76448]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CZL022",
+        "name": "Liberec, Nádraží",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [15.0465, 50.76237]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CZL023",
+        "name": "Liberec, Viadukt",
+        "type": "light",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [15.04305, 50.76477]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
         "id": "CZM001",
         "name": "Nemocnice Motol",
         "type": "metro",

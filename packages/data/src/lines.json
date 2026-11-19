@@ -2064,6 +2064,44 @@
     ]
   },
   {
+    "id": "cz-liberec-11",
+    "code": "11",
+    "name": "Tramvaj Liberec–Jablonec",
+    "description": "Tram line 11 is the interurban tram between Liberec and Jablonec nad Nisou, a 13 km journey of about half an hour. From the Viadukt loop near Liberec station it runs through the centre at Fügnerova, then out through Vratislavice nad Nisou and wooded hills to Tyršovy sady in central Jablonec. The line was converted from metre to standard gauge and reopened throughout in May 2024.",
+    "type": "light",
+    "color": null,
+    "operator": "dpmlj",
+    "routes": [
+      {
+        "stations": [
+          "CZL023",
+          "CZL022",
+          "CZL021",
+          "CZL020",
+          "CZL019",
+          "CZL018",
+          "CZL017",
+          "CZL016",
+          "CZL015",
+          "CZL014",
+          "CZL013",
+          "CZL012",
+          "CZL011",
+          "CZL010",
+          "CZL009",
+          "CZL008",
+          "CZL007",
+          "CZL006",
+          "CZL005",
+          "CZL004",
+          "CZL003",
+          "CZL002",
+          "CZL001"
+        ]
+      }
+    ]
+  },
+  {
     "id": "de-berlin-u1",
     "code": "U1",
     "name": "U-Bahn U1",

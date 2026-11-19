@@ -56,6 +56,7 @@ describe("GET /operators", () => {
         "kzc-doprava",
         "gepard-express",
         "dpp",
+        "dpmlj",
         "european-sleeper",
         "obb",
         "db",
@@ -75,6 +76,7 @@ describe("GET /operators", () => {
         "kzc-doprava",
         "gepard-express",
         "dpp",
+        "dpmlj",
       ]),
     );
   });
