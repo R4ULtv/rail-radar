@@ -55,6 +55,7 @@ describe("GET /operators", () => {
         "die-laenderbahn-cz",
         "kzc-doprava",
         "gepard-express",
+        "dpp",
         "european-sleeper",
         "obb",
         "db",
@@ -73,6 +74,7 @@ describe("GET /operators", () => {
         "die-laenderbahn-cz",
         "kzc-doprava",
         "gepard-express",
+        "dpp",
       ]),
     );
   });

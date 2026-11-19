@@ -67305,6 +67305,760 @@
     {
       "type": "Feature",
       "properties": {
+        "id": "CZM001",
+        "name": "Nemocnice Motol",
+        "type": "metro",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [14.3413, 50.07531]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CZM002",
+        "name": "Petřiny",
+        "type": "metro",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [14.34506, 50.08664]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CZM003",
+        "name": "Nádraží Veleslavín",
+        "type": "metro",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [14.34849, 50.09592]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CZM004",
+        "name": "Bořislavka",
+        "type": "metro",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [14.36288, 50.09838]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CZM005",
+        "name": "Dejvická",
+        "type": "metro",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [14.39306, 50.10046]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CZM006",
+        "name": "Hradčanská",
+        "type": "metro",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [14.40318, 50.09744]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CZM007",
+        "name": "Malostranská",
+        "type": "metro",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [14.40932, 50.09152]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CZM008",
+        "name": "Staroměstská",
+        "type": "metro",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [14.41763, 50.08822]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CZM009",
+        "name": "Můstek",
+        "type": "metro",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [14.42385, 50.08355]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CZM010",
+        "name": "Muzeum",
+        "type": "metro",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [14.4314, 50.07988]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CZM011",
+        "name": "Náměstí Míru",
+        "type": "metro",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [14.43908, 50.0753]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CZM012",
+        "name": "Jiřího z Poděbrad",
+        "type": "metro",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [14.45073, 50.07771]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CZM013",
+        "name": "Flora",
+        "type": "metro",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [14.4622, 50.07814]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CZM014",
+        "name": "Želivského",
+        "type": "metro",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [14.47594, 50.07817]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CZM015",
+        "name": "Strašnická",
+        "type": "metro",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [14.49075, 50.07297]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CZM016",
+        "name": "Skalka",
+        "type": "metro",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [14.50797, 50.06846]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CZM017",
+        "name": "Depo Hostivař",
+        "type": "metro",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [14.51515, 50.07504]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CZM018",
+        "name": "Černý Most",
+        "type": "metro",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [14.57678, 50.10893]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CZM019",
+        "name": "Rajská zahrada",
+        "type": "metro",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [14.5605, 50.10684]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CZM020",
+        "name": "Hloubětín",
+        "type": "metro",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [14.53665, 50.10665]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CZM021",
+        "name": "Kolbenova",
+        "type": "metro",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [14.51658, 50.11038]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CZM022",
+        "name": "Vysočanská",
+        "type": "metro",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [14.50127, 50.11012]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CZM023",
+        "name": "Českomoravská",
+        "type": "metro",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [14.49163, 50.10608]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CZM024",
+        "name": "Palmovka",
+        "type": "metro",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [14.47434, 50.10392]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CZM025",
+        "name": "Invalidovna",
+        "type": "metro",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [14.46353, 50.09695]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CZM026",
+        "name": "Křižíkova",
+        "type": "metro",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [14.45179, 50.09339]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CZM027",
+        "name": "Florenc",
+        "type": "metro",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [14.4384, 50.09035]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CZM028",
+        "name": "Náměstí Republiky",
+        "type": "metro",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [14.43064, 50.0888]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CZM029",
+        "name": "Národní třída",
+        "type": "metro",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [14.42029, 50.07995]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CZM030",
+        "name": "Karlovo náměstí",
+        "type": "metro",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [14.41693, 50.07458]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CZM031",
+        "name": "Anděl",
+        "type": "metro",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [14.40392, 50.07025]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CZM032",
+        "name": "Smíchovské nádraží",
+        "type": "metro",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [14.40909, 50.0612]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CZM033",
+        "name": "Radlická",
+        "type": "metro",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [14.38775, 50.05811]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CZM034",
+        "name": "Jinonice",
+        "type": "metro",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [14.36977, 50.05418]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CZM035",
+        "name": "Nové Butovice",
+        "type": "metro",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [14.35213, 50.05085]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CZM036",
+        "name": "Hůrka",
+        "type": "metro",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [14.34279, 50.05001]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CZM037",
+        "name": "Lužiny",
+        "type": "metro",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [14.33048, 50.0445]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CZM038",
+        "name": "Luka",
+        "type": "metro",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [14.32138, 50.04567]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CZM039",
+        "name": "Stodůlky",
+        "type": "metro",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [14.30622, 50.04668]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CZM040",
+        "name": "Zličín",
+        "type": "metro",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [14.29116, 50.05324]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CZM041",
+        "name": "Letňany",
+        "type": "metro",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [14.51622, 50.12473]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CZM042",
+        "name": "Prosek",
+        "type": "metro",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [14.4985, 50.11933]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CZM043",
+        "name": "Střížkov",
+        "type": "metro",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [14.48959, 50.12617]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CZM044",
+        "name": "Ládví",
+        "type": "metro",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [14.46958, 50.12664]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CZM045",
+        "name": "Kobylisy",
+        "type": "metro",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [14.45423, 50.12414]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CZM046",
+        "name": "Nádraží Holešovice",
+        "type": "metro",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [14.44013, 50.10901]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CZM047",
+        "name": "Vltavská",
+        "type": "metro",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [14.43855, 50.10016]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CZM048",
+        "name": "Hlavní nádraží",
+        "type": "metro",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [14.43413, 50.0835]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CZM049",
+        "name": "I. P. Pavlova",
+        "type": "metro",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [14.43031, 50.07433]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CZM050",
+        "name": "Vyšehrad",
+        "type": "metro",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [14.43052, 50.06317]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CZM051",
+        "name": "Pražského povstání",
+        "type": "metro",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [14.43336, 50.05683]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CZM052",
+        "name": "Pankrác",
+        "type": "metro",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [14.43963, 50.05108]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CZM053",
+        "name": "Budějovická",
+        "type": "metro",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [14.44876, 50.04442]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CZM054",
+        "name": "Kačerov",
+        "type": "metro",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [14.45929, 50.04184]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CZM055",
+        "name": "Roztyly",
+        "type": "metro",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [14.47709, 50.03756]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CZM056",
+        "name": "Chodov",
+        "type": "metro",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [14.49114, 50.03158]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CZM057",
+        "name": "Opatov",
+        "type": "metro",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [14.50921, 50.0279]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CZM058",
+        "name": "Háje",
+        "type": "metro",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [14.52724, 50.03087]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
         "id": "DE00001",
         "name": "Aachen Hbf",
         "type": "rail",

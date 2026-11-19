@@ -6611,6 +6611,39 @@
     ]
   },
   {
+    "slug": "dpp",
+    "name": "Dopravní podnik hl. m. Prahy",
+    "logoPath": "cz/dpp",
+    "countries": ["cz"],
+    "operatorTypes": ["metro"],
+    "bounds": [14.28, 50.02, 14.6, 50.14],
+    "description": "Dopravní podnik hlavního města Prahy (DPP) operates the Prague metro within the PID integrated transport system, alongside the city’s trams, buses and the Petřín funicular. The metro has three lines, A, B and C, which meet in the city centre at Muzeum, Můstek and Florenc, while a fourth line, D, is under construction. The company is owned by the City of Prague.",
+    "website": "https://www.dpp.cz/",
+    "founded": 1991,
+    "headquarters": "Prague, Czechia",
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["commuter"],
+    "parentCompany": "City of Prague",
+    "links": [
+      {
+        "label": "Official Site",
+        "url": "https://www.dpp.cz/",
+        "type": "website"
+      },
+      {
+        "label": "Journey planner",
+        "url": "https://pid.cz/",
+        "type": "timetables"
+      },
+      {
+        "label": "Wikipedia",
+        "url": "https://en.wikipedia.org/wiki/Prague_Metro",
+        "type": "wikipedia"
+      }
+    ]
+  },
+  {
     "slug": "cfr-calatori",
     "name": "CFR Călători",
     "logoPath": "ro/cfr-calatori",
