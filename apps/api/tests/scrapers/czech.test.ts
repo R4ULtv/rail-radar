@@ -276,5 +276,9 @@ describe("Czech station boards", () => {
       ]),
     );
     expect(stationById.get("CZ5457076")?.geo).toEqual({ lat: 50.08309, lng: 14.435978 });
+    // Stations an earlier import dropped: bilingual CIS name, "Hranice" and a track group.
+    for (const id of ["CZ5433234", "CZ5433722", "CZ5457261"]) {
+      expect(stationById.get(id)?.type).toBe("rail");
+    }
   });
 });
