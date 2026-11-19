@@ -53,6 +53,8 @@ describe("GET /operators", () => {
         "gw-train-regio",
         "azd",
         "die-laenderbahn-cz",
+        "kzc-doprava",
+        "gepard-express",
         "european-sleeper",
         "obb",
         "db",
@@ -69,6 +71,8 @@ describe("GET /operators", () => {
         "gw-train-regio",
         "azd",
         "die-laenderbahn-cz",
+        "kzc-doprava",
+        "gepard-express",
       ]),
     );
   });

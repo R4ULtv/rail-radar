@@ -6550,6 +6550,67 @@
     ]
   },
   {
+    "slug": "kzc-doprava",
+    "name": "KŽC Doprava",
+    "logoPath": "cz/kzc-doprava",
+    "countries": ["cz"],
+    "operatorTypes": ["passenger"],
+    "bounds": [13.5, 49.6, 15.5, 51.0],
+    "description": "KŽC Doprava is a Prague-based railway undertaking associated with the Klub železničních cestovatelů, a railway enthusiasts’ club founded in 1985. It runs regular public trains with heritage rolling stock, including the PID lines S34 and S43 and weekend excursion services such as the Pražský motoráček, Posázavský motoráček and the Lužickohorský rychlík from Prague to Mikulášovice. The company also operates the regional railway between Česká Kamenice and Kamenický Šenov.",
+    "website": "https://kzc.cz/",
+    "founded": 2006,
+    "headquarters": "Prague, Czechia",
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["regional", "scenic"],
+    "parentCompany": null,
+    "links": [
+      {
+        "label": "Official Site",
+        "url": "https://kzc.cz/",
+        "type": "website"
+      },
+      {
+        "label": "Regular Public Trains",
+        "url": "https://kzc.cz/?sekce=pravidelne_verejne_vlaky",
+        "type": "timetables"
+      },
+      {
+        "label": "Company Information",
+        "url": "https://kzc.cz/?sekce=o_nas_kontakty",
+        "type": "website"
+      }
+    ]
+  },
+  {
+    "slug": "gepard-express",
+    "name": "Gepard Express",
+    "logoPath": "cz/gepard-express",
+    "countries": ["cz"],
+    "operatorTypes": ["passenger"],
+    "bounds": [14.85, 48.95, 15.25, 49.5],
+    "description": "Gepard Express is a Brno-based private transport company founded in 2019. After buying the insolvent Jindřichohradecké místní dráhy in 2025, it restored regular passenger trains on the 760 mm narrow-gauge lines from Jindřichův Hradec to Nová Bystřice and to Obrataň in April 2026, under contracts with the South Bohemian Region and the Vysočina Region. Its earlier train service between Brno and Vienna Airport ended in 2025.",
+    "website": "https://www.gepard.com/",
+    "founded": 2019,
+    "headquarters": "Brno, Czechia",
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["regional", "scenic"],
+    "parentCompany": null,
+    "links": [
+      {
+        "label": "Official Site",
+        "url": "https://www.gepard.com/",
+        "type": "website"
+      },
+      {
+        "label": "Wikipedia",
+        "url": "https://en.wikipedia.org/wiki/Jind%C5%99ich%C5%AFv_Hradec_narrow-gauge_railway",
+        "type": "wikipedia"
+      }
+    ]
+  },
+  {
     "slug": "cfr-calatori",
     "name": "CFR Călători",
     "logoPath": "ro/cfr-calatori",
