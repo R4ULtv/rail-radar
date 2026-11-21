@@ -39,7 +39,7 @@ export const RAIL_DATA_WARNINGS: Partial<Record<CountryCode, string>> = {
  */
 export const NEW_RAIL_DATA: Partial<Record<CountryCode, string>> = {
   hu: "2026-11-06",
-  cz: "2026-11-10",
+  cz: "2026-11-21",
 };
 export const NEW_RAIL_DATA_DAYS = 30;
 
