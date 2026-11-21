@@ -343117,6 +343117,244 @@
     {
       "type": "Feature",
       "properties": {
+        "id": "CZF00001",
+        "name": "Česká Třebová seřaďovací nádraží",
+        "type": "freight",
+        "importance": 3,
+        "kind": "marshalling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [16.4716, 49.8742]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CZF00002",
+        "name": "Kolín seřaďovací nádraží",
+        "type": "freight",
+        "importance": 3,
+        "kind": "marshalling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [15.22423, 50.01911]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CZF00003",
+        "name": "METRANS Praha-Uhříněves",
+        "type": "freight",
+        "importance": 3,
+        "kind": "intermodal"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [14.57411, 50.04162]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CZF00004",
+        "name": "Ostrava pravé nádraží",
+        "type": "freight",
+        "importance": 3,
+        "kind": "marshalling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [18.25346, 49.84452]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CZF00005",
+        "name": "Přerov přednádraží",
+        "type": "freight",
+        "importance": 3,
+        "kind": "marshalling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [17.45179, 49.43368]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CZF00006",
+        "name": "Přístav Mělník",
+        "type": "freight",
+        "importance": 3,
+        "kind": "port"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [14.46976, 50.35898]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CZF00007",
+        "name": "Ústí nad Labem západ seřaďovací nádraží",
+        "type": "freight",
+        "importance": 3,
+        "kind": "marshalling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [14.02202, 50.65312]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CZF00008",
+        "name": "Bohumín-Vrbice",
+        "type": "freight",
+        "importance": 4,
+        "kind": "marshalling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [18.32345, 49.88162]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CZF00009",
+        "name": "Brno-Maloměřice",
+        "type": "freight",
+        "importance": 4,
+        "kind": "marshalling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [16.64763, 49.21686]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CZF00010",
+        "name": "České Budějovice seřaďovací nádraží",
+        "type": "freight",
+        "importance": 4,
+        "kind": "marshalling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [14.49222, 48.96754]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CZF00011",
+        "name": "METRANS Česká Třebová",
+        "type": "freight",
+        "importance": 4,
+        "kind": "intermodal"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [16.45969, 49.88335]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CZF00012",
+        "name": "METRANS Zlín",
+        "type": "freight",
+        "importance": 4,
+        "kind": "intermodal"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [17.76638, 49.2166]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CZF00013",
+        "name": "Nymburk seřaďovací nádraží",
+        "type": "freight",
+        "importance": 4,
+        "kind": "marshalling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [15.07129, 50.19006]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CZF00014",
+        "name": "Plzeň seřaďovací nádraží",
+        "type": "freight",
+        "importance": 4,
+        "kind": "marshalling"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [13.40277, 49.757]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CZF00015",
+        "name": "Přístav Děčín-Loubí",
+        "type": "freight",
+        "importance": 4,
+        "kind": "port"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [14.22513, 50.78712]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CZF00016",
+        "name": "Terminal Brno",
+        "type": "freight",
+        "importance": 4,
+        "kind": "intermodal"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [16.60938, 49.16159]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CZF00017",
+        "name": "Terminál Ostrava-Paskov",
+        "type": "freight",
+        "importance": 4,
+        "kind": "intermodal"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [18.28706, 49.74091]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
         "id": "DEF00001",
         "name": "DIT Duisburg Intermodal Terminal (Logport I)",
         "type": "freight",

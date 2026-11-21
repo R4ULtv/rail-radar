@@ -6677,6 +6677,90 @@
     ]
   },
   {
+    "slug": "cd-cargo",
+    "name": "ČD Cargo",
+    "logoPath": "cz/cd-cargo",
+    "countries": ["cz"],
+    "operatorTypes": ["freight"],
+    "bounds": [12.09, 48.55, 18.86, 51.06],
+    "description": "ČD Cargo is the freight subsidiary of České dráhy and the largest rail freight carrier in Czechia. It runs wagonload, block-train and intermodal services across the Czech network and, through subsidiaries, in Germany, Poland, Slovakia, Austria and Hungary. The group moves tens of millions of tonnes of freight a year.",
+    "website": "https://www.cdcargo.cz/",
+    "founded": 2007,
+    "headquarters": "Prague, Czechia",
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["wagonload", "block-train", "intermodal", "international"],
+    "parentCompany": "České dráhy",
+    "links": [
+      {
+        "label": "Official Site",
+        "url": "https://www.cdcargo.cz/",
+        "type": "website"
+      },
+      {
+        "label": "Wikipedia",
+        "url": "https://en.wikipedia.org/wiki/%C4%8CD_Cargo",
+        "type": "wikipedia"
+      }
+    ]
+  },
+  {
+    "slug": "metrans",
+    "name": "METRANS",
+    "logoPath": "cz/metrans",
+    "countries": ["cz"],
+    "operatorTypes": ["freight"],
+    "bounds": [12.09, 48.55, 18.86, 51.06],
+    "description": "METRANS is an intermodal operator owned by the Hamburg port group HHLA. Its container shuttle trains link the seaports of Hamburg, Bremerhaven, Rotterdam and Koper with a network of inland terminals in Central Europe. Its Czech hub is the Praha-Uhříněves terminal, with further terminals at Česká Třebová, Zlín, Plzeň and Ostrava, and its own locomotives run under METRANS Rail.",
+    "website": "https://metrans.eu",
+    "founded": null,
+    "headquarters": "Prague, Czechia",
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["intermodal", "international"],
+    "parentCompany": "HHLA",
+    "links": [
+      {
+        "label": "Official Site",
+        "url": "https://metrans.eu",
+        "type": "website"
+      },
+      {
+        "label": "Wikipedia",
+        "url": "https://en.wikipedia.org/wiki/Metrans_Rail",
+        "type": "wikipedia"
+      }
+    ]
+  },
+  {
+    "slug": "orlen-unipetrol-doprava",
+    "name": "ORLEN Unipetrol Doprava",
+    "logoPath": "pl/orlen-kolej",
+    "countries": ["cz"],
+    "operatorTypes": ["freight"],
+    "bounds": [12.09, 48.55, 18.86, 51.06],
+    "description": "ORLEN Unipetrol Doprava is one of the largest rail freight carriers in Czechia. It began in 1995 running the sidings of the Litvínov chemical works and grew with the Unipetrol plants at Kralupy, Neratovice, Pardubice and Kolín. It mainly carries fuels and chemicals in block trains and also leases tank wagons. Since 2025 it has been owned by Orlen Kolej.",
+    "website": "https://www.orlenunipetroldoprava.cz",
+    "founded": 1995,
+    "headquarters": "Litvínov, Czechia",
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["block-train", "international"],
+    "parentCompany": "Orlen Kolej",
+    "links": [
+      {
+        "label": "Official Site",
+        "url": "https://www.orlenunipetroldoprava.cz",
+        "type": "website"
+      },
+      {
+        "label": "Wikipedia",
+        "url": "https://cs.wikipedia.org/wiki/Orlen_Unipetrol_Doprava",
+        "type": "wikipedia"
+      }
+    ]
+  },
+  {
     "slug": "cfr-calatori",
     "name": "CFR Călători",
     "logoPath": "ro/cfr-calatori",
