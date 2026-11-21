@@ -34168,6 +34168,19 @@
     {
       "type": "Feature",
       "properties": {
+        "id": "CZ5433395",
+        "name": "Brno-Židenice",
+        "type": "rail",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [16.636144, 49.204689]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
         "id": "CZ5433404",
         "name": "Fulnek",
         "type": "rail",
@@ -34688,6 +34701,19 @@
     {
       "type": "Feature",
       "properties": {
+        "id": "CZ5433524",
+        "name": "Střítež u Českého Těšína",
+        "type": "rail",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [18.568834, 49.678458]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
         "id": "CZ5433525",
         "name": "Nevojice",
         "type": "rail",
@@ -35177,6 +35203,19 @@
       "geometry": {
         "type": "Point",
         "coordinates": [18.068074, 49.528789]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CZ5433672",
+        "name": "Lidečko",
+        "type": "rail",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [18.043542, 49.230012]
       }
     },
     {
@@ -36087,6 +36126,19 @@
       "geometry": {
         "type": "Point",
         "coordinates": [17.934771, 49.929246]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CZ5434015",
+        "name": "Hustopeče u Brna",
+        "type": "rail",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [16.736953, 48.936773]
       }
     },
     {
@@ -37600,6 +37652,19 @@
     {
       "type": "Feature",
       "properties": {
+        "id": "CZ5434532",
+        "name": "Rapotín",
+        "type": "rail",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [17.032882, 50.014756]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
         "id": "CZ5434534",
         "name": "Závada",
         "type": "rail",
@@ -37803,6 +37868,19 @@
       "geometry": {
         "type": "Point",
         "coordinates": [17.273887, 50.286463]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CZ5434584",
+        "name": "Ropice",
+        "type": "rail",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [18.616456, 49.712472]
       }
     },
     {
@@ -42261,7 +42339,7 @@
       },
       "geometry": {
         "type": "Point",
-        "coordinates": [14.614058, 50.084067]
+        "coordinates": [14.614573, 50.083523]
       }
     },
     {
@@ -44399,6 +44477,19 @@
     {
       "type": "Feature",
       "properties": {
+        "id": "CZ5453533",
+        "name": "Valy u Přelouče",
+        "type": "rail",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [15.613737, 50.032091]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
         "id": "CZ5453536",
         "name": "Kačice",
         "type": "rail",
@@ -44991,7 +45082,7 @@
       },
       "geometry": {
         "type": "Point",
-        "coordinates": [13.622961, 50.542455]
+        "coordinates": [13.621938, 50.543469]
       }
     },
     {
@@ -46044,7 +46135,7 @@
       },
       "geometry": {
         "type": "Point",
-        "coordinates": [16.766154, 49.872497]
+        "coordinates": [16.77384, 49.872911]
       }
     },
     {
@@ -46591,6 +46682,19 @@
       "geometry": {
         "type": "Point",
         "coordinates": [14.275949, 50.359915]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CZ5454109",
+        "name": "Lom u Mostu",
+        "type": "rail",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [13.661343, 50.593309]
       }
     },
     {
@@ -48333,6 +48437,19 @@
       "geometry": {
         "type": "Point",
         "coordinates": [14.604301, 50.918539]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CZ5454536",
+        "name": "Zákolany",
+        "type": "rail",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [14.251649, 50.199734]
       }
     },
     {
@@ -50483,6 +50600,19 @@
     {
       "type": "Feature",
       "properties": {
+        "id": "CZ5455043",
+        "name": "Krouna",
+        "type": "rail",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [16.036857, 49.77844]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
         "id": "CZ5455046",
         "name": "Čerčany",
         "type": "rail",
@@ -50517,6 +50647,19 @@
       "geometry": {
         "type": "Point",
         "coordinates": [15.263806, 50.756906]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CZ5455053",
+        "name": "Pustá Kamenice",
+        "type": "rail",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [16.081389, 49.754546]
       }
     },
     {
@@ -50938,19 +51081,6 @@
     {
       "type": "Feature",
       "properties": {
-        "id": "CZ5455143",
-        "name": "Vendolí",
-        "type": "rail",
-        "importance": 4
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [16.412502, 49.745368]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
         "id": "CZ5455146",
         "name": "Vrchotovy Janovice",
         "type": "rail",
@@ -51302,6 +51432,19 @@
     {
       "type": "Feature",
       "properties": {
+        "id": "CZ5455219",
+        "name": "Chotiměř",
+        "type": "rail",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [13.989148, 50.547225]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
         "id": "CZ5455222",
         "name": "Rynoltice",
         "type": "rail",
@@ -51388,6 +51531,19 @@
       "geometry": {
         "type": "Point",
         "coordinates": [14.596678, 49.577761]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CZ5455239",
+        "name": "Oparno",
+        "type": "rail",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [14.013041, 50.542438]
       }
     },
     {
@@ -53376,7 +53532,7 @@
       },
       "geometry": {
         "type": "Point",
-        "coordinates": [14.183686, 50.686735]
+        "coordinates": [14.186676, 50.687303]
       }
     },
     {
@@ -53715,6 +53871,19 @@
       "geometry": {
         "type": "Point",
         "coordinates": [15.167656, 50.465702]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CZ5455889",
+        "name": "Lovosice zastávka",
+        "type": "rail",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [14.042431, 50.519488]
       }
     },
     {
@@ -54786,19 +54955,6 @@
     {
       "type": "Feature",
       "properties": {
-        "id": "CZ5456221",
-        "name": "Luštěnice-Újezd",
-        "type": "rail",
-        "importance": 3
-      },
-      "geometry": {
-        "type": "Point",
-        "coordinates": [14.946718, 50.317566]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
         "id": "CZ5456225",
         "name": "Horní Ledeč",
         "type": "rail",
@@ -55483,6 +55639,19 @@
       "geometry": {
         "type": "Point",
         "coordinates": [15.233013, 50.243762]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CZ5456396",
+        "name": "Rataje nad Sázavou",
+        "type": "rail",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [14.950816, 49.843713]
       }
     },
     {
@@ -56263,6 +56432,19 @@
       "geometry": {
         "type": "Point",
         "coordinates": [14.997336, 50.064892]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CZ5456630",
+        "name": "Bělá u Staré Paky",
+        "type": "rail",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [15.442466, 50.532621]
       }
     },
     {
@@ -57939,7 +58121,7 @@
       },
       "geometry": {
         "type": "Point",
-        "coordinates": [14.461428, 50.041816]
+        "coordinates": [14.463045, 50.042254]
       }
     },
     {
@@ -58044,6 +58226,32 @@
       "geometry": {
         "type": "Point",
         "coordinates": [14.519434, 50.14891]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CZ5457338",
+        "name": "Praha-Čakovice severní nástupiště",
+        "type": "rail",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [14.519732, 50.149261]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CZ5457339",
+        "name": "Praha-Čakovice zámecký park",
+        "type": "rail",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [14.520765, 50.15541]
       }
     },
     {
@@ -58296,6 +58504,19 @@
     {
       "type": "Feature",
       "properties": {
+        "id": "CZ5457490",
+        "name": "Řešetova Lhota",
+        "type": "rail",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [16.102773, 50.430591]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
         "id": "CZ5457500",
         "name": "Česká Skalice",
         "type": "rail",
@@ -58421,6 +58642,32 @@
       "geometry": {
         "type": "Point",
         "coordinates": [13.414912, 50.47033]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CZ5458316",
+        "name": "Skochovice",
+        "type": "rail",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [14.376329, 49.924415]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CZ5458377",
+        "name": "Praha-Michle autovlak",
+        "type": "rail",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [14.469673, 50.052957]
       }
     },
     {
@@ -59135,7 +59382,7 @@
       },
       "geometry": {
         "type": "Point",
-        "coordinates": [14.488736, 48.974331]
+        "coordinates": [14.488809, 48.974436]
       }
     },
     {
@@ -60610,6 +60857,19 @@
     {
       "type": "Feature",
       "properties": {
+        "id": "CZ5473842",
+        "name": "Prachatice lázně",
+        "type": "rail",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [13.997648, 49.005723]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
         "id": "CZ5473845",
         "name": "Kout na Šumavě",
         "type": "rail",
@@ -61917,7 +62177,7 @@
       },
       "geometry": {
         "type": "Point",
-        "coordinates": [15.004572, 49.155078]
+        "coordinates": [15.004447, 49.155159]
       }
     },
     {
@@ -61936,6 +62196,32 @@
     {
       "type": "Feature",
       "properties": {
+        "id": "CZ5474372",
+        "name": "Jindřiš",
+        "type": "rail",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [15.058958, 49.146277]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CZ5474373",
+        "name": "Jindřiš zastávka",
+        "type": "rail",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [15.066946, 49.14592]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
         "id": "CZ5474375",
         "name": "Loučky",
         "type": "rail",
@@ -61944,6 +62230,32 @@
       "geometry": {
         "type": "Point",
         "coordinates": [12.751816, 50.20376]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CZ5474382",
+        "name": "Blažejov",
+        "type": "rail",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [15.092184, 49.139906]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CZ5474392",
+        "name": "Malý Ratmírov",
+        "type": "rail",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [15.113032, 49.138181]
       }
     },
     {
@@ -61962,6 +62274,19 @@
     {
       "type": "Feature",
       "properties": {
+        "id": "CZ5474402",
+        "name": "Střížovice",
+        "type": "rail",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [15.134883, 49.134117]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
         "id": "CZ5474405",
         "name": "Mariánské Lázně",
         "type": "rail",
@@ -61970,6 +62295,19 @@
       "geometry": {
         "type": "Point",
         "coordinates": [12.693645, 49.957138]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CZ5474412",
+        "name": "Kunžak-Lomy",
+        "type": "rail",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [15.16274, 49.111541]
       }
     },
     {
@@ -61988,6 +62326,19 @@
     {
       "type": "Feature",
       "properties": {
+        "id": "CZ5474422",
+        "name": "Kaproun",
+        "type": "rail",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [15.162192, 49.093143]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
         "id": "CZ5474425",
         "name": "Vlkovice",
         "type": "rail",
@@ -61996,6 +62347,19 @@
       "geometry": {
         "type": "Point",
         "coordinates": [12.742655, 49.946754]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CZ5474432",
+        "name": "Senotín",
+        "type": "rail",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [15.157531, 49.065768]
       }
     },
     {
@@ -62014,6 +62378,19 @@
     {
       "type": "Feature",
       "properties": {
+        "id": "CZ5474442",
+        "name": "Hůrky",
+        "type": "rail",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [15.15818, 49.045454]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
         "id": "CZ5474445",
         "name": "Ovesné Kladruby",
         "type": "rail",
@@ -62022,6 +62399,19 @@
       "geometry": {
         "type": "Point",
         "coordinates": [12.784849, 49.956644]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CZ5474452",
+        "name": "Albeř",
+        "type": "rail",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [15.140942, 49.033425]
       }
     },
     {
@@ -62040,6 +62430,19 @@
     {
       "type": "Feature",
       "properties": {
+        "id": "CZ5474462",
+        "name": "Nová Bystřice",
+        "type": "rail",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [15.110984, 49.019549]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
         "id": "CZ5474465",
         "name": "Teplá",
         "type": "rail",
@@ -62048,6 +62451,19 @@
       "geometry": {
         "type": "Point",
         "coordinates": [12.860061, 49.975562]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CZ5474472",
+        "name": "Horní Skrýchov",
+        "type": "rail",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [15.031642, 49.170725]
       }
     },
     {
@@ -62066,6 +62482,19 @@
     {
       "type": "Feature",
       "properties": {
+        "id": "CZ5474482",
+        "name": "Dolní Radouň",
+        "type": "rail",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [15.031038, 49.18395]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
         "id": "CZ5474485",
         "name": "Poutnov",
         "type": "rail",
@@ -62074,6 +62503,19 @@
       "geometry": {
         "type": "Point",
         "coordinates": [12.821991, 50.018276]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CZ5474492",
+        "name": "Lovětín",
+        "type": "rail",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [15.050657, 49.201099]
       }
     },
     {
@@ -62092,6 +62534,19 @@
     {
       "type": "Feature",
       "properties": {
+        "id": "CZ5474502",
+        "name": "Lovětín obec",
+        "type": "rail",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [15.058118, 49.20996]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
         "id": "CZ5474505",
         "name": "Bečov nad Teplou",
         "type": "rail",
@@ -62105,6 +62560,19 @@
     {
       "type": "Feature",
       "properties": {
+        "id": "CZ5474512",
+        "name": "Nekrasín",
+        "type": "rail",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [15.060086, 49.221002]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
         "id": "CZ5474515",
         "name": "Vodná",
         "type": "rail",
@@ -62113,6 +62581,19 @@
       "geometry": {
         "type": "Point",
         "coordinates": [12.845526, 50.103042]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CZ5474522",
+        "name": "Nová Včelnice",
+        "type": "rail",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [15.066358, 49.237442]
       }
     },
     {
@@ -62144,6 +62625,19 @@
     {
       "type": "Feature",
       "properties": {
+        "id": "CZ5474532",
+        "name": "Žďár u Kamenice nad Lipou",
+        "type": "rail",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [15.070921, 49.254526]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
         "id": "CZ5474536",
         "name": "Teplička",
         "type": "rail",
@@ -62152,6 +62646,19 @@
       "geometry": {
         "type": "Point",
         "coordinates": [12.852709, 50.149171]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CZ5474542",
+        "name": "Rodinov",
+        "type": "rail",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [15.080054, 49.275722]
       }
     },
     {
@@ -62170,6 +62677,19 @@
     {
       "type": "Feature",
       "properties": {
+        "id": "CZ5474552",
+        "name": "Kamenice nad Lipou",
+        "type": "rail",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [15.074336, 49.295096]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
         "id": "CZ5474555",
         "name": "Cihelny",
         "type": "rail",
@@ -62178,6 +62698,19 @@
       "geometry": {
         "type": "Point",
         "coordinates": [12.841526, 50.179011]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CZ5474562",
+        "name": "Včelnička",
+        "type": "rail",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [15.043899, 49.304089]
       }
     },
     {
@@ -62209,6 +62742,19 @@
     {
       "type": "Feature",
       "properties": {
+        "id": "CZ5474572",
+        "name": "Benešov nad Lipou",
+        "type": "rail",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [15.018893, 49.324005]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
         "id": "CZ5474575",
         "name": "Doubí u Karlových Varů",
         "type": "rail",
@@ -62217,6 +62763,19 @@
       "geometry": {
         "type": "Point",
         "coordinates": [12.831907, 50.211696]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CZ5474582",
+        "name": "Chválkov",
+        "type": "rail",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [14.984336, 49.341699]
       }
     },
     {
@@ -62235,6 +62794,19 @@
     {
       "type": "Feature",
       "properties": {
+        "id": "CZ5474592",
+        "name": "Dobešov",
+        "type": "rail",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [14.97078, 49.358714]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
         "id": "CZ5474595",
         "name": "Nýřany",
         "type": "rail",
@@ -62243,6 +62815,32 @@
       "geometry": {
         "type": "Point",
         "coordinates": [13.209483, 49.714929]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CZ5474602",
+        "name": "Černovice u Tábora",
+        "type": "rail",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [14.965396, 49.374006]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CZ5474603",
+        "name": "Střítež u Černovic",
+        "type": "rail",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [14.946542, 49.383258]
       }
     },
     {
@@ -62261,6 +62859,19 @@
     {
       "type": "Feature",
       "properties": {
+        "id": "CZ5474612",
+        "name": "Křeč",
+        "type": "rail",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [14.941779, 49.385589]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
         "id": "CZ5474615",
         "name": "Blatnice u Nýřan",
         "type": "rail",
@@ -62274,6 +62885,19 @@
     {
       "type": "Feature",
       "properties": {
+        "id": "CZ5474622",
+        "name": "Sudkův Důl",
+        "type": "rail",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [14.953156, 49.413589]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
         "id": "CZ5474625",
         "name": "Rochlov",
         "type": "rail",
@@ -62282,6 +62906,19 @@
       "geometry": {
         "type": "Point",
         "coordinates": [13.141703, 49.724146]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CZ5474632",
+        "name": "Obrataň",
+        "type": "rail",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [14.953393, 49.428911]
       }
     },
     {
@@ -62334,6 +62971,19 @@
       "geometry": {
         "type": "Point",
         "coordinates": [13.087551, 49.710516]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "CZ5474652",
+        "name": "Obrataň zastávka",
+        "type": "rail",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [14.948472, 49.424455]
       }
     },
     {
@@ -65368,6 +66018,19 @@
     {
       "type": "Feature",
       "properties": {
+        "id": "CZ5475885",
+        "name": "Karlovy Vary-Dvory",
+        "type": "rail",
+        "importance": 4
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [12.831322, 50.228762]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
         "id": "CZ5475892",
         "name": "Nová Pec",
         "type": "rail",
@@ -67345,7 +68008,7 @@
       "type": "Feature",
       "properties": {
         "id": "CZL004",
-        "name": "Jablonec nad Nisou, Měnírna",
+        "name": "Jablonec nad Nisou, měnírna",
         "type": "light",
         "importance": 4
       },
@@ -67462,7 +68125,7 @@
       "type": "Feature",
       "properties": {
         "id": "CZL013",
-        "name": "Vratislavice nad Nisou, Lékárna",
+        "name": "Vratislavice nad Nisou, lékárna",
         "type": "light",
         "importance": 4
       },
@@ -67579,7 +68242,7 @@
       "type": "Feature",
       "properties": {
         "id": "CZL022",
-        "name": "Liberec, Nádraží",
+        "name": "Liberec, nádraží",
         "type": "light",
         "importance": 4
       },
@@ -67936,7 +68599,7 @@
       },
       "geometry": {
         "type": "Point",
-        "coordinates": [14.45179, 50.09339]
+        "coordinates": [14.45147, 50.09258]
       }
     },
     {
@@ -68131,7 +68794,7 @@
       },
       "geometry": {
         "type": "Point",
-        "coordinates": [14.51622, 50.12473]
+        "coordinates": [14.51617, 50.12416]
       }
     },
     {
@@ -343153,7 +343816,7 @@
       },
       "geometry": {
         "type": "Point",
-        "coordinates": [14.57411, 50.04162]
+        "coordinates": [14.577359, 50.038789]
       }
     },
     {
@@ -343265,7 +343928,7 @@
       },
       "geometry": {
         "type": "Point",
-        "coordinates": [16.45969, 49.88335]
+        "coordinates": [16.45861, 49.883851]
       }
     },
     {
@@ -343279,7 +343942,7 @@
       },
       "geometry": {
         "type": "Point",
-        "coordinates": [17.76638, 49.2166]
+        "coordinates": [17.759486, 49.218095]
       }
     },
     {

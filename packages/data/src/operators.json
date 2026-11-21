@@ -1344,6 +1344,11 @@
         "type": "timetables"
       },
       {
+        "label": "Trains to Prague",
+        "url": "https://www.oebb.at/en/reiseplanung-services/oebb-zugverbindungen/zugverbindungen-europa/prag",
+        "type": "website"
+      },
+      {
         "label": "Wikipedia",
         "url": "https://en.wikipedia.org/wiki/%C3%96BB",
         "type": "wikipedia"
@@ -1825,14 +1830,19 @@
         "type": "website"
       },
       {
-        "label": "Timetables",
-        "url": "https://int.bahn.de/en/timetable",
+        "label": "Journey Planner",
+        "url": "https://int.bahn.de/en",
         "type": "timetables"
       },
       {
         "label": "Open API",
-        "url": "https://developers.deutschebahn.com/",
+        "url": "https://developers.deutschebahn.com/db-api-marketplace/apis/",
         "type": "api"
+      },
+      {
+        "label": "Trains to Czechia",
+        "url": "https://int.bahn.de/en/offers/saver-fare-flexible-fare/super-saver-fare-europe-czechia",
+        "type": "website"
       },
       {
         "label": "Wikipedia",
@@ -1877,7 +1887,7 @@
     "operatorTypes": ["passenger"],
     "bounds": [-5.7, 47.3, 24.2, 57.9],
     "description": "Arriva is a European public transport group owned by I Squared Capital. Its rail businesses include Arriva Nederland, Arriva RP in Poland, Arriva vlaky in Czechia and UK operating companies. The former Arriva Denmark business was sold and renamed GoCollective; its railway services transferred to DSB Vores Tog on 1 September 2026 and are not part of Arriva’s current Danish rail operations.",
-    "website": "https://www.arriva.co.uk",
+    "website": "https://www.arrivagroup.com/",
     "founded": 1938,
     "headquarters": "Sunderland, United Kingdom",
     "networkKm": null,
@@ -1887,8 +1897,13 @@
     "links": [
       {
         "label": "Official Site",
-        "url": "https://www.arriva.co.uk",
+        "url": "https://www.arrivagroup.com/",
         "type": "website"
+      },
+      {
+        "label": "Arriva Czech Train Routes",
+        "url": "https://www.arriva.cz/cs/vlaky",
+        "type": "timetables"
       },
       {
         "label": "Wikipedia",
@@ -1903,8 +1918,8 @@
     "logoPath": "cz/leo-express",
     "countries": ["cz", "international", "pl"],
     "operatorTypes": ["passenger"],
-    "bounds": [14.1, 49, 24.2, 52.5],
-    "description": "Leo Express is a Czech private rail and bus operator focused on modern intercity travel across Central Europe. Its black-and-gold brand is associated with open-access services from Prague toward Ostrava, Slovakia, and Poland, alongside regional public-service operations and connecting coach routes.",
+    "bounds": [14.1, 47.7, 22.2, 52.4],
+    "description": "Leo Express operates long-distance trains from Prague to Ostrava, eastern Slovakia and Poland, including Kraków and Warsaw. Its regional trains serve the Ústí nad Orlicí area and the Bratislava–Komárno line in Slovakia. Spain’s Renfe holds a 50% stake in the group.",
     "website": "https://www.leoexpress.com",
     "founded": 2010,
     "headquarters": "Prague, Czechia",
@@ -1919,6 +1934,11 @@
         "type": "website"
       },
       {
+        "label": "Train Timetables",
+        "url": "https://www.leoexpress.com/en/where-we-go/timetables/train",
+        "type": "timetables"
+      },
+      {
         "label": "Wikipedia",
         "url": "https://en.wikipedia.org/wiki/Leo_Express",
         "type": "wikipedia"
@@ -1929,21 +1949,26 @@
     "slug": "regiojet",
     "name": "RegioJet",
     "logoPath": "cz/regiojet",
-    "countries": ["cz", "international", "pl"],
+    "countries": ["cz", "international", "pl", "hu"],
     "operatorTypes": ["passenger"],
-    "bounds": [14.1, 48.5, 24.2, 52.5],
-    "description": "RegioJet is a Czech private rail and coach operator owned by Student Agency. The yellow RegioJet brand is known for open-access long-distance trains in Czechia and Slovakia, with international services linking Central European cities such as Prague, Brno, Vienna, Bratislava, and Polish destinations.",
+    "bounds": [13.2, 47.4, 22.9, 50.9],
+    "description": "RegioJet, part of Student Agency, operates long-distance trains from Czechia to Slovakia, Austria, Hungary and Poland, including overnight trains to Przemyśl. In Czechia it also operates regional services and Prague commuter lines S49 and S61.",
     "website": "https://regiojet.com",
     "founded": 2009,
     "headquarters": "Brno, Czechia",
     "networkKm": null,
     "annualPassengers": null,
-    "serviceTypes": ["intercity", "international"],
+    "serviceTypes": ["intercity", "regional", "commuter", "night-train", "international"],
     "parentCompany": "Student Agency",
     "links": [
       {
         "label": "Official Site",
         "url": "https://regiojet.com",
+        "type": "website"
+      },
+      {
+        "label": "Prague Regional Services",
+        "url": "https://pid.cz/dopravci-a-partneri/regiojet/",
         "type": "website"
       },
       {
@@ -1957,10 +1982,10 @@
     "slug": "dsb",
     "name": "DSB",
     "logoPath": "dk/dsb",
-    "countries": ["dk"],
+    "countries": ["dk", "de", "cz"],
     "operatorTypes": ["passenger"],
-    "bounds": [8, 54.5, 15.3, 57.9],
-    "description": "DSB is Denmark's state-owned national rail operator and the backbone of passenger rail in the country. It runs the main long-distance and regional network together with Copenhagen's S-train system, carrying roughly 195 million passengers a year across Denmark and key cross-border corridors.",
+    "bounds": [8, 50.0, 15.3, 57.9],
+    "description": "DSB is Denmark's state-owned national rail operator and the backbone of passenger rail in the country. It runs the main long-distance and regional network together with Copenhagen's S-train system, carrying roughly 195 million passengers a year across Denmark and key cross-border corridors. DSB, Deutsche Bahn and České dráhy jointly offer direct ComfortJet services from Copenhagen via Berlin to Prague.",
     "website": "https://www.dsb.dk",
     "founded": 1885,
     "headquarters": "Copenhagen, Denmark",
@@ -1976,8 +2001,13 @@
       },
       {
         "label": "Timetables",
-        "url": "https://www.dsb.dk/en/traffic-information/timetables/",
+        "url": "https://www.dsb.dk/en/timetables",
         "type": "timetables"
+      },
+      {
+        "label": "Trains to Czechia",
+        "url": "https://www.dsb.dk/en/dsb-international/czech-republic",
+        "type": "website"
       },
       {
         "label": "Wikipedia",
@@ -2313,22 +2343,27 @@
     "slug": "vogtlandbahn",
     "name": "Vogtlandbahn",
     "logoPath": "de/vogtlandbahn",
-    "countries": ["de"],
+    "countries": ["de", "cz"],
     "operatorTypes": ["passenger"],
     "bounds": [11.5, 50, 13, 51.2],
-    "description": "Vogtlandbahn, operating under the Trilex and Die Länderbahn brands, is a regional rail operator in Saxony and Thuringia. It runs cross-border services into the Czech Republic and connects cities like Zwickau, Plauen, Hof, and Dresden with surrounding regions.",
-    "website": "https://www.laenderbahn.com",
-    "founded": 1998,
+    "description": "Vogtlandbahn is a regional passenger brand of Die Länderbahn. Its routes link Saxony, Thuringia and Bavaria with western Czechia, including Cheb and Kraslice.",
+    "website": "https://www.laenderbahn.com/vogtlandbahn/",
+    "founded": 1996,
     "headquarters": "Viechtach, Germany",
     "networkKm": null,
     "annualPassengers": null,
-    "serviceTypes": ["regional"],
-    "parentCompany": "Netinera",
+    "serviceTypes": ["regional", "international"],
+    "parentCompany": "Die Länderbahn GmbH DLB",
     "links": [
       {
         "label": "Official Site",
-        "url": "https://www.laenderbahn.com",
+        "url": "https://www.laenderbahn.com/vogtlandbahn/",
         "type": "website"
+      },
+      {
+        "label": "Timetables",
+        "url": "https://www.laenderbahn.com/vogtlandbahn/reiseinformationen/fahrplan/",
+        "type": "timetables"
       },
       {
         "label": "Wikipedia",
@@ -3518,6 +3553,11 @@
         "type": "website"
       },
       {
+        "label": "Timetables",
+        "url": "https://kolejedolnoslaskie.pl/en/timetable/",
+        "type": "timetables"
+      },
+      {
         "label": "Wikipedia",
         "url": "https://en.wikipedia.org/wiki/Koleje_Dolno%C5%9Bl%C4%85skie",
         "type": "wikipedia"
@@ -3556,22 +3596,27 @@
     "slug": "ks",
     "name": "Koleje Śląskie",
     "logoPath": "pl/ks",
-    "countries": ["pl"],
+    "countries": ["pl", "cz"],
     "operatorTypes": ["passenger"],
     "bounds": [18, 49.3, 19.8, 51.2],
-    "description": "Koleje Śląskie is the regional passenger rail operator for Poland's Silesian Voivodeship. Its KS brand serves the dense urban and industrial region around Katowice, Gliwice, Częstochowa, Bielsko-Biała, Rybnik, and nearby cross-regional routes.",
+    "description": "Koleje Śląskie is the regional passenger rail operator for Poland's Silesian Voivodeship. Its KS brand serves the dense urban and industrial region around Katowice, Gliwice, Częstochowa, Bielsko-Biała, Rybnik, and nearby cross-regional routes. Line S71 runs from Katowice via Rybnik and Chałupki to Bohumín in Czechia.",
     "website": "https://www.kolejeslaskie.pl",
     "founded": 2010,
     "headquarters": "Katowice, Poland",
     "networkKm": null,
     "annualPassengers": null,
-    "serviceTypes": ["regional", "commuter"],
+    "serviceTypes": ["regional", "commuter", "international"],
     "parentCompany": "Silesian Voivodeship",
     "links": [
       {
         "label": "Official Site",
         "url": "https://www.kolejeslaskie.pl",
         "type": "website"
+      },
+      {
+        "label": "Line Timetables",
+        "url": "https://www.kolejeslaskie.pl/rozklad_jazdy/liniowy-rozklad-jazdy/",
+        "type": "timetables"
       },
       {
         "label": "Wikipedia",
@@ -5204,10 +5249,10 @@
     "slug": "pkp-cargo",
     "name": "PKP Cargo",
     "logoPath": "pl/pkp-cargo",
-    "countries": ["pl"],
+    "countries": ["pl", "cz"],
     "operatorTypes": ["freight"],
-    "bounds": [14.2, 49.2, 24, 54.8],
-    "description": "PKP Cargo is Poland's largest rail freight operator, created in 2001 from the freight division of Polish State Railways. It hauls coal, aggregates, metals and other bulk goods as well as intermodal containers, plus cross-border traffic with neighbouring countries. It is listed on the Warsaw Stock Exchange with PKP S.A. as its largest shareholder, and has been in court-supervised restructuring since 2024.",
+    "bounds": [12.09, 48.55, 24, 54.8],
+    "description": "PKP Cargo is Poland's largest rail freight operator, created in 2001 from the freight division of Polish State Railways. It hauls coal, aggregates, metals and other bulk goods as well as intermodal containers, plus cross-border traffic with neighbouring countries. It is listed on the Warsaw Stock Exchange with PKP S.A. as its largest shareholder, and has been in court-supervised restructuring since 2024. Its Ostrava-based subsidiary PKP CARGO INTERNATIONAL operates rail freight in Czechia.",
     "website": "https://www.pkpcargo.com",
     "founded": 2001,
     "headquarters": "Warsaw, Poland",
@@ -5219,6 +5264,11 @@
       {
         "label": "Official Site",
         "url": "https://www.pkpcargo.com",
+        "type": "website"
+      },
+      {
+        "label": "Czech Operations",
+        "url": "https://www.pkpcargointernational.com/en/about-us/about-us",
         "type": "website"
       },
       {
@@ -5736,7 +5786,7 @@
     "bounds": [2.2, 45.4, 14.6, 53.7],
     "description": "European Sleeper provides overnight passenger trains across Europe. Its services connect Belgium and the Netherlands with Berlin and Prague, Paris with Berlin, and Brussels with Milan via Germany and Switzerland.",
     "website": "https://europeansleeper.eu",
-    "founded": null,
+    "founded": 2021,
     "headquarters": null,
     "networkKm": null,
     "annualPassengers": null,
@@ -6243,10 +6293,10 @@
     "slug": "mav",
     "name": "MÁV",
     "logoPath": "hu/mav",
-    "countries": ["hu"],
+    "countries": ["hu", "cz"],
     "operatorTypes": ["passenger", "light-rail"],
-    "bounds": [16.21, 45.78, 22.85, 48.61],
-    "description": "MÁV, the Hungarian State Railways, runs most passenger trains in Hungary, from Budapest suburban services to InterCity and international EuroCity trains. Its network radiates from the three Budapest terminals – Keleti, Nyugati and Déli – to every region of the country. MÁV also operates the Szeged–Hódmezővásárhely tram-train, and its subsidiary MÁV-HÉV runs the Budapest suburban HÉV lines.",
+    "bounds": [14.3, 45.78, 22.85, 50.2],
+    "description": "MÁV, the Hungarian State Railways, runs most passenger trains in Hungary, from Budapest suburban services to InterCity and international EuroCity trains. Its network radiates from the three Budapest terminals – Keleti, Nyugati and Déli – to every region of the country. MÁV also operates the Szeged–Hódmezővásárhely tram-train, and its subsidiary MÁV-HÉV runs the Budapest suburban HÉV lines. MÁV works with partner railways on the Budapest–Bratislava–Prague corridor.",
     "website": "https://www.mavcsoport.hu",
     "founded": 1868,
     "headquarters": "Budapest, Hungary",
@@ -6264,6 +6314,11 @@
         "label": "Journey planner",
         "url": "https://mavplusz.hu",
         "type": "timetables"
+      },
+      {
+        "label": "Trains to Czechia",
+        "url": "https://www.mavcsoport.hu/mav-szemelyszallitas/nemzetkozi-utazas/csehorszag",
+        "type": "website"
       },
       {
         "label": "Wikipedia",
@@ -6477,8 +6532,8 @@
         "type": "website"
       },
       {
-        "label": "Timetables",
-        "url": "https://www.gwtr.cz/cs/",
+        "label": "Plzeň–Most Timetables",
+        "url": "https://www.gwtr.cz/cs/r25-plzen-most/jizdni-rady/jizdni-rad",
         "type": "timetables"
       }
     ]
@@ -6511,7 +6566,7 @@
       },
       {
         "label": "Švestková dráha Timetables",
-        "url": "https://svestkovadraha.cz/",
+        "url": "https://www.svestkovadraha.cz/jizdni-rad",
         "type": "timetables"
       }
     ]
@@ -6522,8 +6577,8 @@
     "logoPath": "cz/die-laenderbahn-cz",
     "countries": ["cz", "de"],
     "operatorTypes": ["passenger"],
-    "bounds": [12.9, 49.9, 14.8, 51],
-    "description": "Die Länderbahn CZ is a regional passenger railway operator established in 2019 and based in Ústí nad Labem. Part of the Die Länderbahn and NETINERA groups, it operates services in northern and western Czechia, including the U12 and U14 routes around Rakovník, Žatec and Chomutov, and the seasonal T7 connection through Vejprty to Cranzahl in Germany.",
+    "bounds": [12.9, 49.9, 15.1, 51.0],
+    "description": "Die Länderbahn CZ operates regional and cross-border trains from its base in Ústí nad Labem. Services include U12, U14 and S58 around Rakovník, seasonal T7 to Cranzahl in Germany, and trilex lines L2 Liberec–Děčín, L4 Mladá Boleslav–Rumburk and seasonal L24 Liberec–Doksy.",
     "website": "https://www.laenderbahn.com/cs/",
     "founded": 2019,
     "headquarters": "Ústí nad Labem, Czechia",
@@ -6546,6 +6601,16 @@
         "label": "Passenger Information",
         "url": "https://www.laenderbahn.com/cs/kontakt/caste-dotazy/",
         "type": "website"
+      },
+      {
+        "label": "Timetables",
+        "url": "https://www.laenderbahn.com/cs/jizdnirady-2/jizdnirad/",
+        "type": "timetables"
+      },
+      {
+        "label": "Trilex Timetables",
+        "url": "https://www.laenderbahn.com/trilex/cs/jizdnirady/jizdnirad/",
+        "type": "timetables"
       }
     ]
   },
@@ -6556,13 +6621,13 @@
     "countries": ["cz"],
     "operatorTypes": ["passenger"],
     "bounds": [13.5, 49.6, 15.5, 51.0],
-    "description": "KŽC Doprava is a Prague-based railway undertaking associated with the Klub železničních cestovatelů, a railway enthusiasts’ club founded in 1985. It runs regular public trains with heritage rolling stock, including the PID lines S34 and S43 and weekend excursion services such as the Pražský motoráček, Posázavský motoráček and the Lužickohorský rychlík from Prague to Mikulášovice. The company also operates the regional railway between Česká Kamenice and Kamenický Šenov.",
+    "description": "KŽC Doprava is a Prague-based railway undertaking associated with Klub železničních cestovatelů. Its public trains include Prague commuter line S34, the weekend Pražský motoráček (S43) and seasonal excursion services such as the Posázavský motoráček and Lužickohorský rychlík. It also operates the railway between Česká Kamenice and Kamenický Šenov.",
     "website": "https://kzc.cz/",
     "founded": 2006,
     "headquarters": "Prague, Czechia",
     "networkKm": null,
     "annualPassengers": null,
-    "serviceTypes": ["regional", "scenic"],
+    "serviceTypes": ["regional", "scenic", "commuter"],
     "parentCompany": null,
     "links": [
       {
@@ -6571,8 +6636,8 @@
         "type": "website"
       },
       {
-        "label": "Regular Public Trains",
-        "url": "https://kzc.cz/?sekce=pravidelne_verejne_vlaky",
+        "label": "S34 Passenger Timetable",
+        "url": "https://kzc.cz/?sekce=pravidelne_verejne_vlaky&stranka=mestska_linka_s34",
         "type": "timetables"
       },
       {
@@ -6588,8 +6653,8 @@
     "logoPath": "cz/gepard-express",
     "countries": ["cz"],
     "operatorTypes": ["passenger"],
-    "bounds": [14.85, 48.95, 15.25, 49.5],
-    "description": "Gepard Express is a Brno-based private transport company founded in 2019. After buying the insolvent Jindřichohradecké místní dráhy in 2025, it restored regular passenger trains on the 760 mm narrow-gauge lines from Jindřichův Hradec to Nová Bystřice and to Obrataň in April 2026, under contracts with the South Bohemian Region and the Vysočina Region. Its earlier train service between Brno and Vienna Airport ended in 2025.",
+    "bounds": [14.85, 48.95, 17.93, 49.96],
+    "description": "Gepard Express is a Brno-based private carrier. In April 2026 it restored seasonal passenger service on the 760 mm narrow-gauge railways from Jindřichův Hradec to Nová Bystřice and Obrataň. It also operates the seasonal Hvozdnický expres between Opava and Svobodné Heřmanice.",
     "website": "https://www.gepard.com/",
     "founded": 2019,
     "headquarters": "Brno, Czechia",
@@ -6604,9 +6669,14 @@
         "type": "website"
       },
       {
-        "label": "Wikipedia",
-        "url": "https://en.wikipedia.org/wiki/Jind%C5%99ich%C5%AFv_Hradec_narrow-gauge_railway",
-        "type": "wikipedia"
+        "label": "Narrow-Gauge Passenger Services",
+        "url": "https://uzkokolejky.cz/",
+        "type": "website"
+      },
+      {
+        "label": "Seasonal Timetables",
+        "url": "https://uzkokolejky.cz/kalendar/",
+        "type": "timetables"
       }
     ]
   },
@@ -6617,9 +6687,9 @@
     "countries": ["cz"],
     "operatorTypes": ["metro"],
     "bounds": [14.28, 50.02, 14.6, 50.14],
-    "description": "Dopravní podnik hlavního města Prahy (DPP) operates the Prague metro within the PID integrated transport system, alongside the city’s trams, buses and the Petřín funicular. The metro has three lines, A, B and C, which meet in the city centre at Muzeum, Můstek and Florenc, while a fourth line, D, is under construction. The company is owned by the City of Prague.",
+    "description": "Dopravní podnik hlavního města Prahy (DPP) operates the Prague metro within the PID integrated transport system. Lines A, B and C connect at Muzeum, Můstek and Florenc. Founded in 1897, the operator became a joint-stock company owned by the City of Prague in 1991.",
     "website": "https://www.dpp.cz/",
-    "founded": 1991,
+    "founded": 1897,
     "headquarters": "Prague, Czechia",
     "networkKm": null,
     "annualPassengers": null,
@@ -6632,14 +6702,14 @@
         "type": "website"
       },
       {
-        "label": "Journey planner",
-        "url": "https://pid.cz/",
+        "label": "Metro Timetables",
+        "url": "https://www.dpp.cz/en/timetables?modal=metro",
         "type": "timetables"
       },
       {
-        "label": "Wikipedia",
-        "url": "https://en.wikipedia.org/wiki/Prague_Metro",
-        "type": "wikipedia"
+        "label": "Company Profile",
+        "url": "https://www.dpp.cz/en/company/about-the-company/company-profile",
+        "type": "website"
       }
     ]
   },
@@ -6650,7 +6720,7 @@
     "countries": ["cz"],
     "operatorTypes": ["light-rail"],
     "bounds": [15.03, 50.7, 15.19, 50.79],
-    "description": "Dopravní podnik měst Liberce a Jablonce nad Nisou (DPMLJ) runs public transport in Liberec and Jablonec nad Nisou, including the Liberec tram network and city buses. Its interurban tram line 11 links Liberec Viadukt with Jablonec nad Nisou over about 13 km of largely wooded track, and returned to full regular service in 2024 after the line was rebuilt and converted from metre gauge to standard gauge. The company is owned by the two cities.",
+    "description": "Dopravní podnik měst Liberce a Jablonce nad Nisou (DPMLJ) operates the Liberec tram network and city buses in Liberec. Its interurban tram line 11 runs from Liberec Viadukt to Tyršovy sady in Jablonec nad Nisou. The line reopened in 2024 after conversion from metre gauge to standard gauge. The cities of Liberec and Jablonec nad Nisou own the company.",
     "website": "https://www.dpmlj.cz/",
     "founded": 1993,
     "headquarters": "Liberec, Czechia",
@@ -6666,13 +6736,13 @@
       },
       {
         "label": "IDOL Timetables",
-        "url": "https://www.iidol.cz/",
+        "url": "https://www.iidol.cz/jizdni-rady/linkove-ke-stazeni/",
         "type": "timetables"
       },
       {
-        "label": "Wikipedia",
-        "url": "https://en.wikipedia.org/wiki/Trams_in_Liberec_and_Jablonec_nad_Nisou",
-        "type": "wikipedia"
+        "label": "IDOL Carrier Directory",
+        "url": "https://www.iidol.cz/o-nas/primestska-doprava/",
+        "type": "website"
       }
     ]
   },
@@ -6680,10 +6750,10 @@
     "slug": "cd-cargo",
     "name": "ČD Cargo",
     "logoPath": "cz/cd-cargo",
-    "countries": ["cz"],
+    "countries": ["cz", "de", "pl", "hu"],
     "operatorTypes": ["freight"],
-    "bounds": [12.09, 48.55, 18.86, 51.06],
-    "description": "ČD Cargo is the freight subsidiary of České dráhy and the largest rail freight carrier in Czechia. It runs wagonload, block-train and intermodal services across the Czech network and, through subsidiaries, in Germany, Poland, Slovakia, Austria and Hungary. The group moves tens of millions of tonnes of freight a year.",
+    "bounds": [5.8, 45.7, 24.2, 54.9],
+    "description": "ČD Cargo is the rail freight subsidiary of České dráhy. It provides wagonload, block-train and intermodal transport. The group holds rail operating licences in Czechia, Germany and Austria, and operates through subsidiaries in Poland, Slovakia and Hungary.",
     "website": "https://www.cdcargo.cz/",
     "founded": 2007,
     "headquarters": "Prague, Czechia",
@@ -6698,6 +6768,11 @@
         "type": "website"
       },
       {
+        "label": "International Operations",
+        "url": "https://www.cdcargo.cz/en/cd-cargo-abroad/",
+        "type": "website"
+      },
+      {
         "label": "Wikipedia",
         "url": "https://en.wikipedia.org/wiki/%C4%8CD_Cargo",
         "type": "wikipedia"
@@ -6708,16 +6783,16 @@
     "slug": "metrans",
     "name": "METRANS",
     "logoPath": "cz/metrans",
-    "countries": ["cz"],
-    "operatorTypes": ["freight"],
-    "bounds": [12.09, 48.55, 18.86, 51.06],
-    "description": "METRANS is an intermodal operator owned by the Hamburg port group HHLA. Its container shuttle trains link the seaports of Hamburg, Bremerhaven, Rotterdam and Koper with a network of inland terminals in Central Europe. Its Czech hub is the Praha-Uhříněves terminal, with further terminals at Česká Třebová, Zlín, Plzeň and Ostrava, and its own locomotives run under METRANS Rail.",
+    "countries": ["cz", "de", "pl", "hu", "nl", "it"],
+    "operatorTypes": ["freight", "passenger"],
+    "bounds": [3.9, 44.8, 22.5, 54.5],
+    "description": "METRANS is an intermodal operator owned by the Hamburg port group HHLA. Its container shuttle trains link the seaports of Hamburg, Bremerhaven, Rotterdam and Koper with a network of inland terminals in Central Europe. Its Czech hub is the Praha-Uhříněves terminal, with further terminals at Česká Třebová, Zlín, Plzeň and Ostrava, and its own locomotives run under METRANS Rail. Its Czech subsidiary METRANS Rail also operates selected seasonal heritage passenger trains on the Tanvald–Harrachov line.",
     "website": "https://metrans.eu",
-    "founded": null,
+    "founded": 1991,
     "headquarters": "Prague, Czechia",
     "networkKm": null,
     "annualPassengers": null,
-    "serviceTypes": ["intermodal", "international"],
+    "serviceTypes": ["intermodal", "international", "scenic"],
     "parentCompany": "HHLA",
     "links": [
       {
@@ -6726,9 +6801,14 @@
         "type": "website"
       },
       {
-        "label": "Wikipedia",
-        "url": "https://en.wikipedia.org/wiki/Metrans_Rail",
-        "type": "wikipedia"
+        "label": "Rail Services",
+        "url": "https://metrans.eu/solutions/metrans-rail-solutions/",
+        "type": "website"
+      },
+      {
+        "label": "Container Train Timetables",
+        "url": "https://metrans.eu/solutions/metrans-rail-solutions/timetable/",
+        "type": "timetables"
       }
     ]
   },
@@ -6739,24 +6819,230 @@
     "countries": ["cz"],
     "operatorTypes": ["freight"],
     "bounds": [12.09, 48.55, 18.86, 51.06],
-    "description": "ORLEN Unipetrol Doprava is one of the largest rail freight carriers in Czechia. It began in 1995 running the sidings of the Litvínov chemical works and grew with the Unipetrol plants at Kralupy, Neratovice, Pardubice and Kolín. It mainly carries fuels and chemicals in block trains and also leases tank wagons. Since 2025 it has been owned by Orlen Kolej.",
-    "website": "https://www.orlenunipetroldoprava.cz",
+    "description": "ORLEN Unipetrol Doprava is one of the largest rail freight carriers in Czechia. It began in 1995 running the sidings of the Litvínov chemical works and grew with the Unipetrol plants at Kralupy, Neratovice, Pardubice and Kolín. It mainly carries fuels and chemicals in block trains and also leases tank wagons. Since 2025 it has been owned by ORLEN Kolej.",
+    "website": "https://www.orlenunipetroldoprava.cz/cs/Stranky/default.aspx",
     "founded": 1995,
     "headquarters": "Litvínov, Czechia",
     "networkKm": null,
     "annualPassengers": null,
     "serviceTypes": ["block-train", "international"],
-    "parentCompany": "Orlen Kolej",
+    "parentCompany": "ORLEN Kolej",
     "links": [
       {
         "label": "Official Site",
-        "url": "https://www.orlenunipetroldoprava.cz",
+        "url": "https://www.orlenunipetroldoprava.cz/cs/Stranky/default.aspx",
+        "type": "website"
+      },
+      {
+        "label": "Rail Freight Services",
+        "url": "https://www.orlenunipetroldoprava.cz/EN/services/transportation/Pages/default.aspx",
         "type": "website"
       },
       {
         "label": "Wikipedia",
         "url": "https://cs.wikipedia.org/wiki/Orlen_Unipetrol_Doprava",
         "type": "wikipedia"
+      }
+    ]
+  },
+  {
+    "slug": "zubacka",
+    "name": "Zubačka provoz",
+    "logoPath": "cz/zubacka",
+    "countries": ["cz"],
+    "operatorTypes": ["passenger"],
+    "bounds": [15.3, 50.72, 15.45, 50.8],
+    "description": "Zubačka provoz operates selected heritage passenger trains on the Tanvald–Kořenov–Harrachov railway in northern Czechia. The line includes the rack section between Tanvald and Kořenov. The operator is a subsidiary of Železniční společnost Tanvald.",
+    "website": "https://zubacka.cz/",
+    "founded": 2022,
+    "headquarters": "Kořenov, Czechia",
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["scenic"],
+    "parentCompany": "Železniční společnost Tanvald",
+    "links": [
+      {
+        "label": "Official Site",
+        "url": "https://zubacka.cz/",
+        "type": "website"
+      },
+      {
+        "label": "Heritage Train Calendar",
+        "url": "https://zubacka.cz/kalendar-jizd",
+        "type": "timetables"
+      },
+      {
+        "label": "Operator Information",
+        "url": "https://zubacka.cz/kontakty",
+        "type": "website"
+      }
+    ]
+  },
+  {
+    "slug": "slezske-zemske-drahy",
+    "name": "Slezské zemské dráhy",
+    "logoPath": "cz/slezske-zemske-drahy",
+    "countries": ["cz"],
+    "operatorTypes": ["passenger"],
+    "bounds": [17.57, 50.19, 17.73, 50.28],
+    "description": "Slezské zemské dráhy (SZD) operates seasonal heritage steam trains on the 760 mm railway between Třemešná ve Slezsku and Osoblaha. The same line also carries regular regional trains operated by Osoblažská úzkorozchodná dráha.",
+    "website": "https://www.osoblazsko.com/szd/",
+    "founded": 2003,
+    "headquarters": "Třemešná, Czechia",
+    "networkKm": 20.2,
+    "annualPassengers": null,
+    "serviceTypes": ["scenic"],
+    "parentCompany": null,
+    "links": [
+      {
+        "label": "Operator Information",
+        "url": "https://www.osoblazsko.com/szd/",
+        "type": "website"
+      },
+      {
+        "label": "Steam Train Timetables",
+        "url": "https://www.osoblazsko.com/parni-vlaky-szd/",
+        "type": "timetables"
+      }
+    ]
+  },
+  {
+    "slug": "mbm-rail",
+    "name": "MBM rail",
+    "logoPath": "cz/mbm-rail",
+    "countries": ["cz"],
+    "operatorTypes": ["passenger", "freight"],
+    "bounds": [12.09, 48.55, 18.86, 51.06],
+    "description": "MBM rail is a Czech passenger and freight carrier based in Jaroměř. Founded to preserve the Mladá Boleslav–Mělník railway, it also restores historic rolling stock. Its seasonal passenger services include excursion trains on the former mining railway in Ostrava.",
+    "website": "https://www.mbmr.cz/",
+    "founded": 1997,
+    "headquarters": "Jaroměř, Czechia",
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["scenic"],
+    "parentCompany": null,
+    "links": [
+      {
+        "label": "Operator Information",
+        "url": "https://www.mbmr.cz/",
+        "type": "website"
+      },
+      {
+        "label": "Passenger Information",
+        "url": "https://www.mbmr.cz/povinne-info.html",
+        "type": "website"
+      }
+    ]
+  },
+  {
+    "slug": "railway-capital",
+    "name": "Railway Capital",
+    "logoPath": "cz/railway-capital",
+    "countries": ["cz"],
+    "operatorTypes": ["passenger", "freight"],
+    "bounds": [13.15, 48.98, 17.6, 50.73],
+    "description": "Railway Capital operates regional passenger and freight services on Czech local railways. Its timetabled trains include the Most–Moldava mountain railway and seasonal services on the Doupov, Vlašim and Jemnice lines. It also provides last-mile freight transport.",
+    "website": "https://railwaycapital.cz/",
+    "founded": 2011,
+    "headquarters": "Prague, Czechia",
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["regional", "scenic"],
+    "parentCompany": null,
+    "links": [
+      {
+        "label": "Operator Information",
+        "url": "https://railwaycapital.cz/",
+        "type": "website"
+      },
+      {
+        "label": "Passenger Timetables",
+        "url": "https://railwaycapital.cz/jizdni-rady/",
+        "type": "timetables"
+      }
+    ]
+  },
+  {
+    "slug": "oud",
+    "name": "Osoblažská úzkorozchodná dráha",
+    "logoPath": "cz/oud",
+    "countries": ["cz"],
+    "operatorTypes": ["passenger"],
+    "bounds": [17.57, 50.19, 17.73, 50.28],
+    "description": "Osoblažská úzkorozchodná dráha (OÚD) operates the scheduled passenger trains on the 760 mm railway between Třemešná ve Slezsku and Osoblaha. Founded by municipalities along the line, it took over the service from České dráhy in December 2025.",
+    "website": "https://www.osoblazsko.com/oud/",
+    "founded": 2014,
+    "headquarters": "Slezské Rudoltice, Czechia",
+    "networkKm": 20.2,
+    "annualPassengers": null,
+    "serviceTypes": ["regional"],
+    "parentCompany": null,
+    "links": [
+      {
+        "label": "Operator Information",
+        "url": "https://www.osoblazsko.com/oud/",
+        "type": "website"
+      },
+      {
+        "label": "Passenger Timetables",
+        "url": "https://www.osoblazsko.com/osobni-vlaky/",
+        "type": "timetables"
+      }
+    ]
+  },
+  {
+    "slug": "cityrail",
+    "name": "CityRail",
+    "logoPath": "cz/cityrail",
+    "countries": ["cz"],
+    "operatorTypes": ["passenger", "freight"],
+    "bounds": [12.09, 47.72, 22.57, 51.06],
+    "description": "CityRail is a Prague-based freight and passenger carrier operating in Czechia and Slovakia. It provides locomotives for freight transport and is the Czech carrier for European Sleeper’s Brussels–Prague night train.",
+    "website": "https://www.cityrail.cz/",
+    "founded": 2011,
+    "headquarters": "Prague, Czechia",
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["night-train", "international"],
+    "parentCompany": null,
+    "links": [
+      {
+        "label": "Operator Information",
+        "url": "https://www.cityrail.cz/",
+        "type": "website"
+      },
+      {
+        "label": "Rail Services",
+        "url": "https://www.cityrail.cz/sluzby",
+        "type": "website"
+      }
+    ]
+  },
+  {
+    "slug": "db-cargo-czechia",
+    "name": "DB Cargo Czechia",
+    "logoPath": "de/db",
+    "countries": ["cz"],
+    "operatorTypes": ["freight"],
+    "bounds": [12.09, 48.55, 18.86, 51.06],
+    "description": "DB Cargo Czechia is the Ostrava-based freight subsidiary of DB Cargo AG. It operates trains on Czech transit corridors connecting Germany and Poland with Austria and Slovakia.",
+    "website": "https://cz.dbcargo.com/rail-cz-en/about-the-company/db-cargo-czechia-s-r-o",
+    "founded": 2015,
+    "headquarters": "Ostrava, Czechia",
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["block-train", "international"],
+    "parentCompany": "DB Cargo AG",
+    "links": [
+      {
+        "label": "Operator Information",
+        "url": "https://cz.dbcargo.com/rail-cz-en/about-the-company/db-cargo-czechia-s-r-o",
+        "type": "website"
+      },
+      {
+        "label": "Freight Services",
+        "url": "https://cz.dbcargo.com/rail-cz-en/branches",
+        "type": "website"
       }
     ]
   },

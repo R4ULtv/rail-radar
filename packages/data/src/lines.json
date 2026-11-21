@@ -1901,7 +1901,7 @@
     "id": "cz-praha-a",
     "code": "A",
     "name": "Linka metra A",
-    "description": "Prague metro line A runs from Nemocnice Motol in the west to Depo Hostivař in the east. It crosses under the Vltava to Malostranská, below Prague Castle, then serves the Old Town at Staroměstská and Wenceslas Square at Můstek and Muzeum, where it meets lines B and C. Nádraží Veleslavín, on the western extension opened in 2015, is the main bus link to Václav Havel Airport.",
+    "description": "Prague metro line A runs from Nemocnice Motol to Depo Hostivař. It passes beneath the Vltava between Malostranská and Staroměstská and connects with lines B and C at Můstek and Muzeum. At Nádraží Veleslavín, trolleybus 59 serves Václav Havel Airport. Trains pass through Flora during renovation. DPP expects the station to remain closed through February 2027.",
     "type": "metro",
     "color": "#00A562",
     "operator": "dpp",
@@ -1931,19 +1931,19 @@
     "service": [
       {
         "days": "mon-fri",
-        "from": "04:39",
+        "from": "04:41",
         "to": "23:53",
         "every": [
-          3,
+          2,
           10
         ]
       },
       {
         "days": "sat-sun",
-        "from": "04:39",
+        "from": "04:41",
         "to": "23:53",
         "every": [
-          7,
+          8,
           10
         ]
       }
@@ -1990,7 +1990,7 @@
     "service": [
       {
         "days": "mon-fri",
-        "from": "04:44",
+        "from": "04:45",
         "to": "23:45",
         "every": [
           2,
@@ -1999,7 +1999,7 @@
       },
       {
         "days": "sat-sun",
-        "from": "04:44",
+        "from": "04:45",
         "to": "23:45",
         "every": [
           6,
@@ -2045,7 +2045,7 @@
     "service": [
       {
         "days": "mon-fri",
-        "from": "04:32",
+        "from": "04:34",
         "to": "23:44",
         "every": [
           2,
@@ -2054,7 +2054,7 @@
       },
       {
         "days": "sat-sun",
-        "from": "04:32",
+        "from": "04:34",
         "to": "23:44",
         "every": [
           5,
@@ -2097,6 +2097,26 @@
           "CZL003",
           "CZL002",
           "CZL001"
+        ]
+      }
+    ],
+    "service": [
+      {
+        "days": "mon-fri",
+        "from": "04:28",
+        "to": "23:39",
+        "every": [
+          13,
+          43
+        ]
+      },
+      {
+        "days": "sat-sun",
+        "from": "04:32",
+        "to": "23:39",
+        "every": [
+          15,
+          47
         ]
       }
     ]
