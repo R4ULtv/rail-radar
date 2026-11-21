@@ -27,8 +27,8 @@
     "vite": "^8.3.8"
   },
   "devDependencies": {
-    "@cloudflare/build-output-utils": "0.9.10",
-    "@cloudflare/config": "0.30.2",
+    "@cloudflare/build-output-utils": "1.0.0-rc.2",
+    "@cloudflare/config": "1.0.0-rc.2",
     "@fontsource-variable/geist": "^5.3.0",
     "@internationalized/date": "^3.12.4",
     "@lucide/svelte": "^1.77.0",
