@@ -19,17 +19,17 @@
   "dependencies": {
     "@repo/data": "workspace:*",
     "@repo/ui": "workspace:*",
-    "@tanstack/react-query": "^5.107.1",
+    "@tanstack/react-query": "^5.108.1",
     "@tanstack/react-router": "^1.170.46",
-    "@tanstack/react-start": "^1.169.5",
-    "lucide-react": "^1.74.0",
-    "mapbox-gl": "^3.35.0",
+    "@tanstack/react-start": "^1.169.7",
+    "lucide-react": "^1.77.0",
+    "mapbox-gl": "^3.35.1",
     "motion": "^14.14.0",
-    "posthog-js": "^1.450.0",
+    "posthog-js": "^1.453.0",
     "react": "^19.3.1",
     "react-dom": "^19.3.1",
     "react-map-gl": "^8.1.3",
-    "takumi-js": "^2.20.0"
+    "takumi-js": "^2.22.0"
   },
   "devDependencies": {
     "@cloudflare/vite-plugin": "2.0.0-beta.v.12",
