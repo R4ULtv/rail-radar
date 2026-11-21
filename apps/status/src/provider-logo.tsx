@@ -19,6 +19,7 @@ const providerArtwork: Partial<Record<ProviderId, SharedAssetPath>> = {
   trafiklab: "/providers/trafiklab.png",
   mobiliteit: "/providers/mobiliteit.svg",
   mav: "/operators/hu/mav.svg",
+  spravazeleznic: "/providers/spravazeleznic.svg",
 };
 
 export function ProviderLogo({ id }: { id: ProviderId }) {
