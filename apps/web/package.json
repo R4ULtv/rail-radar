@@ -10,7 +10,7 @@
     "build": "tsx scripts/station-photos.ts check && cf build",
     "start": "vite preview --port 3000",
     "deploy": "pnpm run build && cf deploy --prebuilt --mode production",
-    "deploy:preview": "if [ \"${WORKERS_CI_BRANCH:-$(git branch --show-current)}\" = preview ]; then pnpm run photos check && cf previews deploy preview; else pnpm run photos check && cf deploy --dry-run; fi",
+    "deploy:preview": "if [ \"${WORKERS_CI_BRANCH:-$(git branch --show-current)}\" = preview ]; then pnpm run photos check && cf previews deploy --preview-name preview; else pnpm run photos check && cf deploy --dry-run; fi",
     "versions": "pnpm run build && cf workers versions create --prebuilt --mode production",
     "cf-typegen": "cf workers types",
     "lint": "oxlint --deny warnings",
