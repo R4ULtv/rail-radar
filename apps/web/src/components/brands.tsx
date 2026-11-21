@@ -167,6 +167,13 @@ const brandPaths: Record<string, string> = {
   "die länderbahn cz": "cz/die-laenderbahn-cz",
   kžc: "cz/kzc-doprava",
   "gepard express": "cz/gepard-express",
+  cityrail: "cz/cityrail",
+  oúd: "cz/oud",
+  "railway capital": "cz/railway-capital",
+  "mbm rail": "cz/mbm-rail",
+  "metrans rail": "cz/metrans",
+  "slezské zemské dráhy": "cz/slezske-zemske-drahy",
+  zubačka: "cz/zubacka",
   // Hungarian brands
   máv: "hu/mav",
   gysev: "hu/gysev",
@@ -289,6 +296,14 @@ const brandAliases: Record<string, string> = {
   "kžc doprava": "kžc",
   kzc: "kžc",
   "kzc doprava": "kžc",
+  ge: "gepard express",
+  ctr: "cityrail",
+  oud: "oúd",
+  rcas: "railway capital",
+  mbm: "mbm rail",
+  "metr rail": "metrans rail",
+  szd: "slezské zemské dráhy",
+  zub: "zubačka",
 };
 
 function normalizeBrandName(brand: string): string {
@@ -307,6 +322,13 @@ const brandSlugMap: Record<string, string> = {
   "die länderbahn cz": "die-laenderbahn-cz",
   kžc: "kzc-doprava",
   "gepard express": "gepard-express",
+  cityrail: "cityrail",
+  oúd: "oud",
+  "railway capital": "railway-capital",
+  "mbm rail": "mbm-rail",
+  "metrans rail": "metrans",
+  "slezské zemské dráhy": "slezske-zemske-drahy",
+  zubačka: "zubacka",
   // Additional regional operators.
   cj: "cj",
   nstcm: "nstcm",
