@@ -1,0 +1,12 @@
+diff --git a/dist/index.js b/dist/index.js
+index d28a7ef310a42e63a7e3da4a1283ef7963338b98..6ff0a34a9c7cd4e23ef28f69fd4e5aff3d8b7518 100644
+--- a/dist/index.js
++++ b/dist/index.js
+@@ -252,7 +252,6 @@ export default function createIntegration({ imageService, sessionKVBindingName =
+ 											"astro > mrmime",
+ 											"astro > zod/v4",
+ 											"astro > zod/v4/core",
+-											"astro > clsx",
+ 											"astro > cookie",
+ 											"astro > devalue",
+ 											"astro > @oslojs/encoding",

@@ -14,6 +14,7 @@ allowBuilds:
   sharp: true
   workerd: true
 patchedDependencies:
+  "@astrojs/cloudflare@15.0.0-beta.6": patches/@astrojs__cloudflare@15.0.0-beta.6.patch
   "@tanstack/start-plugin-core@^1.172.0": patches/@tanstack__start-plugin-core@1.172.0.patch
 minimumReleaseAgeExclude:
   - "@astrojs/internal-helpers@0.13.1"

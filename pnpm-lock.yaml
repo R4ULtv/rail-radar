@@ -178,6 +178,7 @@ overrides:
   svelte-toolbelt>runed: 0.38.0
 
 patchedDependencies:
+  '@astrojs/cloudflare@15.0.0-beta.6': 9fba41a3dc735d25c541a86f4e58596757cf2797180b8c9e3b6aaa1045a45d9d
   '@tanstack/start-plugin-core@^1.172.0': 4f71cda5649820260354d6cbd39e340b96a5804f44751fe25bcb6ae886f226d4
 
 importers:
@@ -269,7 +270,7 @@ importers:
         version: 0.9.12(prettier@3.10.1)(typescript@6.0.3)
       '@astrojs/cloudflare':
         specifier: 15.0.0-beta.6
-        version: 15.0.0-beta.6(@types/node@22.20.5)(astro@7.4.13(@types/node@22.20.5)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15)(yaml@2.9.1))(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15)(workerd@1.20261118.1)(yaml@2.9.1)
+        version: 15.0.0-beta.6(patch_hash=9fba41a3dc735d25c541a86f4e58596757cf2797180b8c9e3b6aaa1045a45d9d)(@types/node@22.20.5)(astro@7.4.13(@types/node@22.20.5)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15)(yaml@2.9.1))(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15)(workerd@1.20261118.1)(yaml@2.9.1)
       '@repo/typescript-config':
         specifier: workspace:*
         version: link:../../packages/typescript-config
@@ -5985,7 +5986,7 @@ snapshots:
       - prettier
       - prettier-plugin-astro
 
-  '@astrojs/cloudflare@15.0.0-beta.6(@types/node@22.20.5)(astro@7.4.13(@types/node@22.20.5)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15)(yaml@2.9.1))(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15)(workerd@1.20261118.1)(yaml@2.9.1)':
+  '@astrojs/cloudflare@15.0.0-beta.6(patch_hash=9fba41a3dc735d25c541a86f4e58596757cf2797180b8c9e3b6aaa1045a45d9d)(@types/node@22.20.5)(astro@7.4.13(@types/node@22.20.5)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15)(yaml@2.9.1))(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15)(workerd@1.20261118.1)(yaml@2.9.1)':
     dependencies:
       '@astrojs/internal-helpers': 0.13.0
       '@astrojs/underscore-redirects': 1.0.4
