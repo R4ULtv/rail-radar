@@ -79,8 +79,9 @@ describe("live status dashboard", () => {
     expect(logo.getAttribute("src")).toBe("/__shared-assets/providers/rfi.svg");
     expect(flag.getAttribute("src")).toBe("/__shared-assets/flags/it.svg");
     const czech = screen.getByRole("button", { name: /Správa železnic/ });
-    expect(czech.querySelector(".provider-logo img")).toBeNull();
-    expect(czech.querySelector(".provider-logo svg")).not.toBeNull();
+    expect(czech.querySelector(".provider-logo img")?.getAttribute("src")).toBe(
+      "/__shared-assets/providers/spravazeleznic.svg",
+    );
     fireEvent.error(logo);
     fireEvent.error(flag);
     expect(rfi.querySelector(".provider-logo img")).toBeNull();
