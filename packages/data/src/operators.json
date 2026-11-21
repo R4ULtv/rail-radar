@@ -1321,7 +1321,7 @@
     "slug": "obb",
     "name": "ÖBB",
     "logoPath": "at/obb",
-    "countries": ["international", "it", "ch", "de", "nl", "hu"],
+    "countries": ["international", "it", "ch", "de", "nl", "hu", "cz"],
     "operatorTypes": ["passenger"],
     "bounds": [4.7, 41.8, 19.2, 53.7],
     "description": "The Austrian Federal Railways (ÖBB) operates a comprehensive domestic and international network. It is Europe's leading night train operator through its expansive Nightjet network, while its high-speed Railjet services provide premier daytime connections across Austria, Germany, Switzerland, and Italy.",
@@ -1807,7 +1807,7 @@
     "slug": "db",
     "name": "Deutsche Bahn",
     "logoPath": "de/db",
-    "countries": ["de", "ch", "it", "be", "nl"],
+    "countries": ["de", "ch", "it", "be", "nl", "cz"],
     "operatorTypes": ["passenger"],
     "bounds": [4.2, 44.4, 15, 55.1],
     "description": "Deutsche Bahn (DB) is Germany's national railway operator and a major force in European transit. Its ICE (Intercity-Express) network forms the high-speed backbone of Central Europe, deeply integrated with regular-interval timetables that connect major German hubs with Switzerland, Austria, and beyond.",
@@ -1873,10 +1873,10 @@
     "slug": "arriva",
     "name": "Arriva",
     "logoPath": "arriva",
-    "countries": ["international", "uk", "nl", "de", "pl", "be"],
+    "countries": ["international", "uk", "nl", "de", "pl", "be", "cz"],
     "operatorTypes": ["passenger"],
     "bounds": [-5.7, 47.3, 24.2, 57.9],
-    "description": "Arriva is a European public transport group owned by I Squared Capital. Its rail businesses include Arriva Nederland, Arriva RP in Poland and UK operating companies. The former Arriva Denmark business was sold and renamed GoCollective; its railway services transferred to DSB Vores Tog on 1 September 2026 and are not part of Arriva’s current Danish rail operations.",
+    "description": "Arriva is a European public transport group owned by I Squared Capital. Its rail businesses include Arriva Nederland, Arriva RP in Poland, Arriva vlaky in Czechia and UK operating companies. The former Arriva Denmark business was sold and renamed GoCollective; its railway services transferred to DSB Vores Tog on 1 September 2026 and are not part of Arriva’s current Danish rail operations.",
     "website": "https://www.arriva.co.uk",
     "founded": 1938,
     "headquarters": "Sunderland, United Kingdom",
@@ -1901,7 +1901,7 @@
     "slug": "leo-express",
     "name": "Leo Express",
     "logoPath": "cz/leo-express",
-    "countries": ["international", "pl"],
+    "countries": ["cz", "international", "pl"],
     "operatorTypes": ["passenger"],
     "bounds": [14.1, 49, 24.2, 52.5],
     "description": "Leo Express is a Czech private rail and bus operator focused on modern intercity travel across Central Europe. Its black-and-gold brand is associated with open-access services from Prague toward Ostrava, Slovakia, and Poland, alongside regional public-service operations and connecting coach routes.",
@@ -1929,7 +1929,7 @@
     "slug": "regiojet",
     "name": "RegioJet",
     "logoPath": "cz/regiojet",
-    "countries": ["international", "pl"],
+    "countries": ["cz", "international", "pl"],
     "operatorTypes": ["passenger"],
     "bounds": [14.1, 48.5, 24.2, 52.5],
     "description": "RegioJet is a Czech private rail and coach operator owned by Student Agency. The yellow RegioJet brand is known for open-access long-distance trains in Czechia and Slovakia, with international services linking Central European cities such as Prague, Brno, Vienna, Bratislava, and Polish destinations.",
@@ -3388,7 +3388,7 @@
     "slug": "pkp-intercity",
     "name": "PKP Intercity",
     "logoPath": "pl/pkp-intercity",
-    "countries": ["pl"],
+    "countries": ["pl", "cz"],
     "operatorTypes": ["passenger"],
     "bounds": [14.1, 49, 24.2, 54.9],
     "description": "PKP Intercity is Poland's national long-distance passenger railway operator and part of the PKP Group. It runs the country's main intercity network under brands such as TLK, IC, EIC, and Express InterCity Premium, connecting major Polish cities and operating many international services.",
@@ -3500,7 +3500,7 @@
     "slug": "kd",
     "name": "Koleje Dolnośląskie",
     "logoPath": "pl/kd",
-    "countries": ["pl"],
+    "countries": ["pl", "cz"],
     "operatorTypes": ["passenger"],
     "bounds": [14.8, 50, 17.9, 51.9],
     "description": "Koleje Dolnośląskie is the regional passenger rail operator for Poland's Lower Silesian Voivodeship. The KD brand is centered on Wrocław and Legnica, serving dense regional corridors across Dolny Śląsk and cross-border links toward Czechia and Germany.",
@@ -5731,7 +5731,7 @@
     "slug": "european-sleeper",
     "name": "European Sleeper",
     "logoPath": "european-sleeper",
-    "countries": ["international", "nl", "be", "de", "fr", "ch", "it"],
+    "countries": ["international", "nl", "be", "de", "fr", "ch", "it", "cz"],
     "operatorTypes": ["passenger"],
     "bounds": [2.2, 45.4, 14.6, 53.7],
     "description": "European Sleeper provides overnight passenger trains across Europe. Its services connect Belgium and the Netherlands with Berlin and Prague, Paris with Berlin, and Brussels with Milan via Germany and Switzerland.",
@@ -6421,7 +6421,7 @@
     "slug": "cd",
     "name": "České dráhy",
     "logoPath": "cz/cd",
-    "countries": ["international", "de", "pl", "dk", "hu"],
+    "countries": ["cz", "international", "de", "pl", "dk", "hu"],
     "operatorTypes": ["passenger"],
     "bounds": [9.9, 46.6, 21.3, 55.7],
     "description": "České dráhy (ČD) is the Czech state-owned national railway operator and the country's largest passenger train operator. It runs long-distance and regional services across Czechia under public-service contracts, and international trains to Germany, Poland, Austria, Slovakia, Hungary and Denmark. ČD is also the parent of freight operator ČD Cargo.",
@@ -6446,6 +6446,232 @@
       {
         "label": "Wikipedia",
         "url": "https://en.wikipedia.org/wiki/%C4%8Cesk%C3%A9_dr%C3%A1hy",
+        "type": "wikipedia"
+      }
+    ]
+  },
+  {
+    "slug": "gw-train-regio",
+    "name": "GW Train Regio",
+    "logoPath": "cz/gw-train-regio",
+    "countries": ["cz", "de", "pl"],
+    "operatorTypes": ["passenger"],
+    "bounds": [12.2, 48.7, 17.7, 50.9],
+    "description": "GW Train Regio is a Czech passenger railway operator based in Ústí nad Labem. It operates regional services in Šumava, Karlovy Vary, Ústí nad Labem, Hradec Králové and Moravia-Silesia, as well as the R25 Plzeň–Most route and cross-border connections into Germany and Poland. The company was established as VIAMONT Regio in 2008 and adopted its current name in 2011.",
+    "website": "https://www.gwtr.cz/",
+    "founded": 2008,
+    "headquarters": "Ústí nad Labem, Czechia",
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["regional", "intercity", "international"],
+    "parentCompany": "GW JIHOTRANS",
+    "links": [
+      {
+        "label": "Official Site",
+        "url": "https://www.gwtr.cz/",
+        "type": "website"
+      },
+      {
+        "label": "History",
+        "url": "https://www.gwtr.cz/cs/o-spolecnosti/historie",
+        "type": "website"
+      },
+      {
+        "label": "Timetables",
+        "url": "https://www.gwtr.cz/cs/",
+        "type": "timetables"
+      }
+    ]
+  },
+  {
+    "slug": "azd",
+    "name": "AŽD Praha",
+    "logoPath": "cz/azd",
+    "countries": ["cz"],
+    "operatorTypes": ["passenger"],
+    "bounds": [13.6, 50.3, 15.3, 50.6],
+    "description": "AŽD Praha is a Czech railway signalling and automation company that also operates passenger trains through AŽD Vlaky. Its services include the U10 Švestková dráha between Litoměřice and Most and the seasonal Oparenský expres. The company also owns the Kopidlnka railway, using its lines to develop and test railway technology alongside passenger operations.",
+    "website": "https://www.azdvlaky.cz/",
+    "founded": 1954,
+    "headquarters": "Prague, Czechia",
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["regional", "scenic"],
+    "parentCompany": null,
+    "links": [
+      {
+        "label": "Passenger Services",
+        "url": "https://www.azdvlaky.cz/",
+        "type": "website"
+      },
+      {
+        "label": "Corporate Site",
+        "url": "https://www.azd.cz/",
+        "type": "website"
+      },
+      {
+        "label": "Švestková dráha Timetables",
+        "url": "https://svestkovadraha.cz/",
+        "type": "timetables"
+      }
+    ]
+  },
+  {
+    "slug": "die-laenderbahn-cz",
+    "name": "Die Länderbahn CZ",
+    "logoPath": "cz/die-laenderbahn-cz",
+    "countries": ["cz", "de"],
+    "operatorTypes": ["passenger"],
+    "bounds": [12.9, 49.9, 14.8, 51],
+    "description": "Die Länderbahn CZ is a regional passenger railway operator established in 2019 and based in Ústí nad Labem. Part of the Die Länderbahn and NETINERA groups, it operates services in northern and western Czechia, including the U12 and U14 routes around Rakovník, Žatec and Chomutov, and the seasonal T7 connection through Vejprty to Cranzahl in Germany.",
+    "website": "https://www.laenderbahn.com/cs/",
+    "founded": 2019,
+    "headquarters": "Ústí nad Labem, Czechia",
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["regional", "international"],
+    "parentCompany": "Die Länderbahn GmbH (NETINERA)",
+    "links": [
+      {
+        "label": "Official Site",
+        "url": "https://www.laenderbahn.com/cs/",
+        "type": "website"
+      },
+      {
+        "label": "About the Operator",
+        "url": "https://www.laenderbahn.com/cs/onas/die-landerbahn-cz/",
+        "type": "website"
+      },
+      {
+        "label": "Passenger Information",
+        "url": "https://www.laenderbahn.com/cs/kontakt/caste-dotazy/",
+        "type": "website"
+      }
+    ]
+  },
+  {
+    "slug": "kzc-doprava",
+    "name": "KŽC Doprava",
+    "logoPath": "cz/kzc-doprava",
+    "countries": ["cz"],
+    "operatorTypes": ["passenger"],
+    "bounds": [13.5, 49.6, 15.5, 51.0],
+    "description": "KŽC Doprava is a Prague-based railway undertaking associated with the Klub železničních cestovatelů, a railway enthusiasts’ club founded in 1985. It runs regular public trains with heritage rolling stock, including the PID lines S34 and S43 and weekend excursion services such as the Pražský motoráček, Posázavský motoráček and the Lužickohorský rychlík from Prague to Mikulášovice. The company also operates the regional railway between Česká Kamenice and Kamenický Šenov.",
+    "website": "https://kzc.cz/",
+    "founded": 2006,
+    "headquarters": "Prague, Czechia",
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["regional", "scenic"],
+    "parentCompany": null,
+    "links": [
+      {
+        "label": "Official Site",
+        "url": "https://kzc.cz/",
+        "type": "website"
+      },
+      {
+        "label": "Regular Public Trains",
+        "url": "https://kzc.cz/?sekce=pravidelne_verejne_vlaky",
+        "type": "timetables"
+      },
+      {
+        "label": "Company Information",
+        "url": "https://kzc.cz/?sekce=o_nas_kontakty",
+        "type": "website"
+      }
+    ]
+  },
+  {
+    "slug": "gepard-express",
+    "name": "Gepard Express",
+    "logoPath": "cz/gepard-express",
+    "countries": ["cz"],
+    "operatorTypes": ["passenger"],
+    "bounds": [14.85, 48.95, 15.25, 49.5],
+    "description": "Gepard Express is a Brno-based private transport company founded in 2019. After buying the insolvent Jindřichohradecké místní dráhy in 2025, it restored regular passenger trains on the 760 mm narrow-gauge lines from Jindřichův Hradec to Nová Bystřice and to Obrataň in April 2026, under contracts with the South Bohemian Region and the Vysočina Region. Its earlier train service between Brno and Vienna Airport ended in 2025.",
+    "website": "https://www.gepard.com/",
+    "founded": 2019,
+    "headquarters": "Brno, Czechia",
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["regional", "scenic"],
+    "parentCompany": null,
+    "links": [
+      {
+        "label": "Official Site",
+        "url": "https://www.gepard.com/",
+        "type": "website"
+      },
+      {
+        "label": "Wikipedia",
+        "url": "https://en.wikipedia.org/wiki/Jind%C5%99ich%C5%AFv_Hradec_narrow-gauge_railway",
+        "type": "wikipedia"
+      }
+    ]
+  },
+  {
+    "slug": "dpp",
+    "name": "Dopravní podnik hl. m. Prahy",
+    "logoPath": "cz/dpp",
+    "countries": ["cz"],
+    "operatorTypes": ["metro"],
+    "bounds": [14.28, 50.02, 14.6, 50.14],
+    "description": "Dopravní podnik hlavního města Prahy (DPP) operates the Prague metro within the PID integrated transport system, alongside the city’s trams, buses and the Petřín funicular. The metro has three lines, A, B and C, which meet in the city centre at Muzeum, Můstek and Florenc, while a fourth line, D, is under construction. The company is owned by the City of Prague.",
+    "website": "https://www.dpp.cz/",
+    "founded": 1991,
+    "headquarters": "Prague, Czechia",
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["commuter"],
+    "parentCompany": "City of Prague",
+    "links": [
+      {
+        "label": "Official Site",
+        "url": "https://www.dpp.cz/",
+        "type": "website"
+      },
+      {
+        "label": "Journey planner",
+        "url": "https://pid.cz/",
+        "type": "timetables"
+      },
+      {
+        "label": "Wikipedia",
+        "url": "https://en.wikipedia.org/wiki/Prague_Metro",
+        "type": "wikipedia"
+      }
+    ]
+  },
+  {
+    "slug": "dpmlj",
+    "name": "DPMLJ",
+    "logoPath": "cz/dpmlj",
+    "countries": ["cz"],
+    "operatorTypes": ["light-rail"],
+    "bounds": [15.03, 50.7, 15.19, 50.79],
+    "description": "Dopravní podnik měst Liberce a Jablonce nad Nisou (DPMLJ) runs public transport in Liberec and Jablonec nad Nisou, including the Liberec tram network and city buses. Its interurban tram line 11 links Liberec Viadukt with Jablonec nad Nisou over about 13 km of largely wooded track, and returned to full regular service in 2024 after the line was rebuilt and converted from metre gauge to standard gauge. The company is owned by the two cities.",
+    "website": "https://www.dpmlj.cz/",
+    "founded": 1993,
+    "headquarters": "Liberec, Czechia",
+    "networkKm": null,
+    "annualPassengers": null,
+    "serviceTypes": ["commuter"],
+    "parentCompany": "Cities of Liberec and Jablonec nad Nisou",
+    "links": [
+      {
+        "label": "Official Site",
+        "url": "https://www.dpmlj.cz/",
+        "type": "website"
+      },
+      {
+        "label": "IDOL Timetables",
+        "url": "https://www.iidol.cz/",
+        "type": "timetables"
+      },
+      {
+        "label": "Wikipedia",
+        "url": "https://en.wikipedia.org/wiki/Trams_in_Liberec_and_Jablonec_nad_Nisou",
         "type": "wikipedia"
       }
     ]

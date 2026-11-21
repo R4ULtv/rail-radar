@@ -41,6 +41,46 @@ describe("GET /operators", () => {
     for (const operator of body.operators) expect(operator.countries[0]).toBe("international");
   });
 
+  it("includes the Czech carriers shown on Czech boards in the Czech directory", async () => {
+    const { response, body } = await list("?country=cz");
+    expect(response.status).toBe(200);
+    expect(body.operators.map((operator) => operator.slug)).toEqual(
+      expect.arrayContaining([
+        "cd",
+        "arriva",
+        "leo-express",
+        "regiojet",
+        "gw-train-regio",
+        "azd",
+        "die-laenderbahn-cz",
+        "kzc-doprava",
+        "gepard-express",
+        "dpp",
+        "dpmlj",
+        "european-sleeper",
+        "obb",
+        "db",
+        "pkp-intercity",
+        "kd",
+      ]),
+    );
+    const { body: native } = await list("?origin=cz");
+    expect(native.operators.map((operator) => operator.slug)).toEqual(
+      expect.arrayContaining([
+        "cd",
+        "leo-express",
+        "regiojet",
+        "gw-train-regio",
+        "azd",
+        "die-laenderbahn-cz",
+        "kzc-doprava",
+        "gepard-express",
+        "dpp",
+        "dpmlj",
+      ]),
+    );
+  });
+
   it("filters by operator type and service type", async () => {
     const { body } = await list("?type=metro&serviceType=commuter");
 

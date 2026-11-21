@@ -1898,6 +1898,210 @@
     ]
   },
   {
+    "id": "cz-praha-a",
+    "code": "A",
+    "name": "Linka metra A",
+    "description": "Prague metro line A runs from Nemocnice Motol in the west to Depo Hostivař in the east. It crosses under the Vltava to Malostranská, below Prague Castle, then serves the Old Town at Staroměstská and Wenceslas Square at Můstek and Muzeum, where it meets lines B and C. Nádraží Veleslavín, on the western extension opened in 2015, is the main bus link to Václav Havel Airport.",
+    "type": "metro",
+    "color": "#00A562",
+    "operator": "dpp",
+    "routes": [
+      {
+        "stations": [
+          "CZM001",
+          "CZM002",
+          "CZM003",
+          "CZM004",
+          "CZM005",
+          "CZM006",
+          "CZM007",
+          "CZM008",
+          "CZM009",
+          "CZM010",
+          "CZM011",
+          "CZM012",
+          "CZM013",
+          "CZM014",
+          "CZM015",
+          "CZM016",
+          "CZM017"
+        ]
+      }
+    ],
+    "service": [
+      {
+        "days": "mon-fri",
+        "from": "04:39",
+        "to": "23:53",
+        "every": [
+          3,
+          10
+        ]
+      },
+      {
+        "days": "sat-sun",
+        "from": "04:39",
+        "to": "23:53",
+        "every": [
+          7,
+          10
+        ]
+      }
+    ]
+  },
+  {
+    "id": "cz-praha-b",
+    "code": "B",
+    "name": "Linka metra B",
+    "description": "Line B is the longest line of the Prague metro, running from Zličín in the west to Černý Most in the north-east. It serves Smíchovské nádraží and Anděl on the left bank before crossing the city centre at Národní třída, Můstek and Náměstí Republiky. It meets line A at Můstek and line C at Florenc, next to the city's main coach station.",
+    "type": "metro",
+    "color": "#F8B322",
+    "operator": "dpp",
+    "routes": [
+      {
+        "stations": [
+          "CZM018",
+          "CZM019",
+          "CZM020",
+          "CZM021",
+          "CZM022",
+          "CZM023",
+          "CZM024",
+          "CZM025",
+          "CZM026",
+          "CZM027",
+          "CZM028",
+          "CZM009",
+          "CZM029",
+          "CZM030",
+          "CZM031",
+          "CZM032",
+          "CZM033",
+          "CZM034",
+          "CZM035",
+          "CZM036",
+          "CZM037",
+          "CZM038",
+          "CZM039",
+          "CZM040"
+        ]
+      }
+    ],
+    "service": [
+      {
+        "days": "mon-fri",
+        "from": "04:44",
+        "to": "23:45",
+        "every": [
+          2,
+          10
+        ]
+      },
+      {
+        "days": "sat-sun",
+        "from": "04:44",
+        "to": "23:45",
+        "every": [
+          6,
+          10
+        ]
+      }
+    ]
+  },
+  {
+    "id": "cz-praha-c",
+    "code": "C",
+    "name": "Linka metra C",
+    "description": "Line C, the first line of the Prague metro, opened in 1974 and now runs from Letňany in the north to Háje in the south-east. It serves Hlavní nádraží, the city's main railway station, and Nádraží Holešovice, and crosses the Nusle valley inside the Nusle Bridge between I. P. Pavlova and Vyšehrad. It meets line A at Muzeum and line B at Florenc.",
+    "type": "metro",
+    "color": "#CF003D",
+    "operator": "dpp",
+    "routes": [
+      {
+        "stations": [
+          "CZM041",
+          "CZM042",
+          "CZM043",
+          "CZM044",
+          "CZM045",
+          "CZM046",
+          "CZM047",
+          "CZM027",
+          "CZM048",
+          "CZM010",
+          "CZM049",
+          "CZM050",
+          "CZM051",
+          "CZM052",
+          "CZM053",
+          "CZM054",
+          "CZM055",
+          "CZM056",
+          "CZM057",
+          "CZM058"
+        ]
+      }
+    ],
+    "service": [
+      {
+        "days": "mon-fri",
+        "from": "04:32",
+        "to": "23:44",
+        "every": [
+          2,
+          10
+        ]
+      },
+      {
+        "days": "sat-sun",
+        "from": "04:32",
+        "to": "23:44",
+        "every": [
+          5,
+          10
+        ]
+      }
+    ]
+  },
+  {
+    "id": "cz-liberec-11",
+    "code": "11",
+    "name": "Tramvaj Liberec–Jablonec",
+    "description": "Tram line 11 is the interurban tram between Liberec and Jablonec nad Nisou, a 13 km journey of about half an hour. From the Viadukt loop near Liberec station it runs through the centre at Fügnerova, then out through Vratislavice nad Nisou and wooded hills to Tyršovy sady in central Jablonec. The line was converted from metre to standard gauge and reopened throughout in May 2024.",
+    "type": "light",
+    "color": null,
+    "operator": "dpmlj",
+    "routes": [
+      {
+        "stations": [
+          "CZL023",
+          "CZL022",
+          "CZL021",
+          "CZL020",
+          "CZL019",
+          "CZL018",
+          "CZL017",
+          "CZL016",
+          "CZL015",
+          "CZL014",
+          "CZL013",
+          "CZL012",
+          "CZL011",
+          "CZL010",
+          "CZL009",
+          "CZL008",
+          "CZL007",
+          "CZL006",
+          "CZL005",
+          "CZL004",
+          "CZL003",
+          "CZL002",
+          "CZL001"
+        ]
+      }
+    ]
+  },
+  {
     "id": "de-berlin-u1",
     "code": "U1",
     "name": "U-Bahn U1",

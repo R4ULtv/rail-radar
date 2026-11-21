@@ -1,15 +1,15 @@
 diff --git a/dist/esm/prerender.js b/dist/esm/prerender.js
-index 3dc4e19f221a2ed509bd2c710d5334157bb7ddfd..94e33d543be5e805c5890791ccff8b7b0d82e0b6 100644
+index 6ac9c0d..dcefcb6 100644
 --- a/dist/esm/prerender.js
 +++ b/dist/esm/prerender.js
 @@ -2,7 +2,7 @@ import { createLogger } from "./utils.js";
  import { Queue } from "./queue.js";
- import path from "pathe";
  import { promises } from "node:fs";
+ import path from "pathe";
 -import { joinURL, withBase, withTrailingSlash, withoutBase } from "ufo";
 +import { joinURL, withBase, withoutBase } from "ufo";
  import os from "node:os";
- //#region src/prerender.ts
+ // src/prerender.ts
  var DEFAULT_RETRY_DELAY = 500;
 @@ -73,7 +73,7 @@ async function prerender({ startConfig, handler }) {
  				logger.info(`Crawling: ${page.path}`);
@@ -21,10 +21,10 @@ index 3dc4e19f221a2ed509bd2c710d5334157bb7ddfd..94e33d543be5e805c5890791ccff8b7b
  						if (isRedirectResponse(res)) logger.warn(`Max redirects reached for ${page.path}`);
  						throw new Error(`Failed to fetch ${page.path}: ${res.statusText}`, { cause: res });
 diff --git a/dist/esm/rsbuild/schema.d.ts b/dist/esm/rsbuild/schema.d.ts
-index b169fbef11f5c166676ac813e3c2138fe5710706..27c3fd05adf0363d98c2d5f554ba2bfd743c8dc4 100644
+index aae5be8..3d56339 100644
 --- a/dist/esm/rsbuild/schema.d.ts
 +++ b/dist/esm/rsbuild/schema.d.ts
-@@ -162,6 +162,7 @@ export declare const tanstackStartRsbuildOptionsSchema: z.ZodPrefault<z.ZodOptio
+@@ -156,6 +156,7 @@ export declare const tanstackStartRsbuildOptionsSchema: z.ZodPrefault<z.ZodOptio
      prerender: z.ZodOptional<z.ZodIntersection<z.ZodObject<{
          enabled: z.ZodOptional<z.ZodBoolean>;
          concurrency: z.ZodOptional<z.ZodNumber>;
@@ -32,7 +32,7 @@ index b169fbef11f5c166676ac813e3c2138fe5710706..27c3fd05adf0363d98c2d5f554ba2bfd
          filter: z.ZodOptional<z.ZodCustom<(page: z.infer<z.ZodObject<{
              path: z.ZodString;
              sitemap: z.ZodOptional<z.ZodObject<{
-@@ -513,6 +514,7 @@ export declare function parseStartConfig(opts: z.input<typeof tanstackStartRsbui
+@@ -504,6 +505,7 @@ export declare function parseStartConfig(opts: z.input<typeof tanstackStartRsbui
      prerender?: ({
          enabled?: boolean | undefined;
          concurrency?: number | undefined;
@@ -41,10 +41,10 @@ index b169fbef11f5c166676ac813e3c2138fe5710706..27c3fd05adf0363d98c2d5f554ba2bfd
              path: z.ZodString;
              sitemap: z.ZodOptional<z.ZodObject<{
 diff --git a/dist/esm/schema.d.ts b/dist/esm/schema.d.ts
-index 7f0101c6a188dce07a6b96c0d2476062f85c484c..2c275baf2095bf624afa4c83b1fc863baf308a92 100644
+index 3d4528c..16cf630 100644
 --- a/dist/esm/schema.d.ts
 +++ b/dist/esm/schema.d.ts
-@@ -180,6 +180,7 @@ export declare function parseStartConfig(opts: z.input<typeof tanstackStartOptio
+@@ -177,6 +177,7 @@ export declare function parseStartConfig(opts: z.input<typeof tanstackStartOptio
      prerender?: ({
          enabled?: boolean | undefined;
          concurrency?: number | undefined;
@@ -52,7 +52,7 @@ index 7f0101c6a188dce07a6b96c0d2476062f85c484c..2c275baf2095bf624afa4c83b1fc863b
          filter?: ((page: z.infer<typeof pageSchema>) => unknown) | undefined;
          failOnError?: boolean | undefined;
          autoStaticPathsDiscovery?: boolean | undefined;
-@@ -493,6 +494,7 @@ export declare const tanstackStartOptionsObjectSchema: z.ZodObject<{
+@@ -484,6 +485,7 @@ export declare const tanstackStartOptionsObjectSchema: z.ZodObject<{
      prerender: z.ZodOptional<z.ZodIntersection<z.ZodObject<{
          enabled: z.ZodOptional<z.ZodBoolean>;
          concurrency: z.ZodOptional<z.ZodNumber>;
@@ -60,7 +60,7 @@ index 7f0101c6a188dce07a6b96c0d2476062f85c484c..2c275baf2095bf624afa4c83b1fc863b
          filter: z.ZodOptional<z.ZodCustom<(page: z.infer<typeof pageSchema>) => unknown, (page: z.infer<typeof pageSchema>) => unknown>>;
          failOnError: z.ZodOptional<z.ZodBoolean>;
          autoStaticPathsDiscovery: z.ZodOptional<z.ZodBoolean>;
-@@ -761,6 +763,7 @@ export declare const tanstackStartOptionsSchema: z.ZodPrefault<z.ZodOptional<z.Z
+@@ -746,6 +748,7 @@ export declare const tanstackStartOptionsSchema: z.ZodPrefault<z.ZodOptional<z.Z
      prerender: z.ZodOptional<z.ZodIntersection<z.ZodObject<{
          enabled: z.ZodOptional<z.ZodBoolean>;
          concurrency: z.ZodOptional<z.ZodNumber>;
@@ -69,7 +69,7 @@ index 7f0101c6a188dce07a6b96c0d2476062f85c484c..2c275baf2095bf624afa4c83b1fc863b
          failOnError: z.ZodOptional<z.ZodBoolean>;
          autoStaticPathsDiscovery: z.ZodOptional<z.ZodBoolean>;
 diff --git a/dist/esm/schema.js b/dist/esm/schema.js
-index 06a1ceaa7331d37725fe35e032730e1dca49b61b..dcfd447a722b072749772d449b6166fcd8cedae5 100644
+index 7d4ec4b..7e4a88e 100644
 --- a/dist/esm/schema.js
 +++ b/dist/esm/schema.js
 @@ -174,6 +174,7 @@ var tanstackStartOptionsObjectSchema = z.object({
@@ -82,7 +82,7 @@ index 06a1ceaa7331d37725fe35e032730e1dca49b61b..dcfd447a722b072749772d449b6166fc
  		autoStaticPathsDiscovery: z.boolean().optional(),
 diff --git a/dist/esm/vite/prerender-worker.js b/dist/esm/vite/prerender-worker.js
 new file mode 100644
-index 0000000000000000000000000000000000000000..fd689ebc078ef9ea6542c6a315829b2d907bb5fd
+index 0000000..fd689eb
 --- /dev/null
 +++ b/dist/esm/vite/prerender-worker.js
 @@ -0,0 +1,40 @@
@@ -127,7 +127,7 @@ index 0000000000000000000000000000000000000000..fd689ebc078ef9ea6542c6a315829b2d
 +// The build process exited or crashed: don't leave this server running.
 +process.on("disconnect", shutdown);
 diff --git a/dist/esm/vite/prerender.js b/dist/esm/vite/prerender.js
-index 3036f05ab112d16ed52e037a3ba9e2a6c21115b5..fadb4bb4ffcc05dd8fbec4d3f9ed2667fffb3c0c 100644
+index bf09158..7d318cf 100644
 --- a/dist/esm/vite/prerender.js
 +++ b/dist/esm/vite/prerender.js
 @@ -1,5 +1,7 @@
@@ -135,7 +135,7 @@ index 3036f05ab112d16ed52e037a3ba9e2a6c21115b5..fadb4bb4ffcc05dd8fbec4d3f9ed2667
  import { prerender } from "../prerender.js";
 +import { fork } from "node:child_process";
 +import { fileURLToPath } from "node:url";
- //#region src/vite/prerender.ts
+ // src/vite/prerender.ts
  async function prerenderWithVite({ startConfig, builder }) {
  	const serverEnv = builder.environments[VITE_ENVIRONMENT_NAMES.server];
 @@ -9,8 +11,9 @@ async function prerenderWithVite({ startConfig, builder }) {
@@ -280,10 +280,10 @@ index 3036f05ab112d16ed52e037a3ba9e2a6c21115b5..fadb4bb4ffcc05dd8fbec4d3f9ed2667
  	const vite = await import("vite");
  	try {
 diff --git a/dist/esm/vite/schema.d.ts b/dist/esm/vite/schema.d.ts
-index ef5e030f699a73621536ebf9ffeb480615651c31..6d51bfe33bf0c0d25c0f64ae0cd63605c6b87d7b 100644
+index 3891b5a..681fbe2 100644
 --- a/dist/esm/vite/schema.d.ts
 +++ b/dist/esm/vite/schema.d.ts
-@@ -158,6 +158,7 @@ export declare const tanstackStartViteOptionsSchema: z.ZodPrefault<z.ZodOptional
+@@ -152,6 +152,7 @@ export declare const tanstackStartViteOptionsSchema: z.ZodPrefault<z.ZodOptional
      prerender: z.ZodOptional<z.ZodIntersection<z.ZodObject<{
          enabled: z.ZodOptional<z.ZodBoolean>;
          concurrency: z.ZodOptional<z.ZodNumber>;
@@ -291,7 +291,7 @@ index ef5e030f699a73621536ebf9ffeb480615651c31..6d51bfe33bf0c0d25c0f64ae0cd63605
          filter: z.ZodOptional<z.ZodCustom<(page: z.infer<z.ZodObject<{
              path: z.ZodString;
              sitemap: z.ZodOptional<z.ZodObject<{
-@@ -503,6 +504,7 @@ export declare function parseStartConfig(opts: z.input<typeof tanstackStartViteO
+@@ -494,6 +495,7 @@ export declare function parseStartConfig(opts: z.input<typeof tanstackStartViteO
      prerender?: ({
          enabled?: boolean | undefined;
          concurrency?: number | undefined;

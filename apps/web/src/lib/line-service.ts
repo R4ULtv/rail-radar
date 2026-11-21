@@ -22,6 +22,7 @@ const TIME_ZONES: Record<CountryCode, string> = {
   pl: "Europe/Warsaw",
   fr: "Europe/Paris",
   hu: "Europe/Budapest",
+  cz: "Europe/Prague",
 };
 
 /** Indexes of the weekdays a period covers, Monday first. */
