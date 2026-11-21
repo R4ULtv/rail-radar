@@ -16,7 +16,7 @@ src/
 ├── lines.json          # Every line with its ordered stops (no track)
 ├── lines/              # One GeoJSON track file per line: <line-id>.json
 ├── types.ts            # TypeScript type definitions
-└── stations.geojson    # GeoJSON FeatureCollection (22,000+ stations)
+└── stations.geojson    # GeoJSON FeatureCollection (26,000+ stations)
 ```
 
 ## Exports

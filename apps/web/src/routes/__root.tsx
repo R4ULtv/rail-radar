@@ -20,7 +20,7 @@ import { viewTransitionSkipScript } from "@/lib/view-transitions";
 
 const DEFAULT_TITLE = "Rail Radar | Live Train Tracker Across Europe";
 const DEFAULT_DESCRIPTION =
-  "Track live train departures, delays, platforms, and arrivals across 18,000+ stations in 12 European countries.";
+  "Track live train departures, delays, platforms, and arrivals across 26,000+ stations in 16 European countries.";
 const DEFAULT_OG_IMAGE = new URL("/assets/social/og-image.webp", env.siteUrl).toString();
 const DEFAULT_OG_IMAGE_ALT =
   "Rail Radar live train tracking map for railway stations across Europe";
