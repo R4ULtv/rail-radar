@@ -49,7 +49,7 @@ const jsonLd = {
   name: "Rail Radar",
   url: "https://www.railradar24.com",
   description:
-    "Explore more than 26,000 stations and stops in 16 European countries, including the Czech Republic. View live railway boards where available.",
+    "Explore more than 26,000 stations and stops in 16 European countries, including France, Germany, and Italy. View live railway boards where available.",
   potentialAction: {
     "@type": "SearchAction",
     target: "https://www.railradar24.com/?q={search_term_string}",
