@@ -33001,7 +33001,7 @@
         "id": "CZ5433014",
         "name": "Albrechtice u Českého Těšína",
         "type": "rail",
-        "importance": 3
+        "importance": 4
       },
       "geometry": {
         "type": "Point",
@@ -33092,7 +33092,7 @@
         "id": "CZ5433042",
         "name": "Bludov",
         "type": "rail",
-        "importance": 3
+        "importance": 4
       },
       "geometry": {
         "type": "Point",
@@ -33508,7 +33508,7 @@
         "id": "CZ5433162",
         "name": "Bruntál",
         "type": "rail",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -33573,7 +33573,7 @@
         "id": "CZ5433185",
         "name": "Bojkovice",
         "type": "rail",
-        "importance": 3
+        "importance": 4
       },
       "geometry": {
         "type": "Point",
@@ -33690,7 +33690,7 @@
         "id": "CZ5433234",
         "name": "Český Těšín",
         "type": "rail",
-        "importance": 2
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -33781,7 +33781,7 @@
         "id": "CZ5433255",
         "name": "Bransouze",
         "type": "rail",
-        "importance": 3
+        "importance": 4
       },
       "geometry": {
         "type": "Point",
@@ -33846,7 +33846,7 @@
         "id": "CZ5433284",
         "name": "Dobrá u Frýdku-Místku",
         "type": "rail",
-        "importance": 3
+        "importance": 4
       },
       "geometry": {
         "type": "Point",
@@ -33898,7 +33898,7 @@
         "id": "CZ5433295",
         "name": "Brno hlavní nádraží",
         "type": "rail",
-        "importance": 1
+        "importance": 2
       },
       "geometry": {
         "type": "Point",
@@ -33937,7 +33937,7 @@
         "id": "CZ5433305",
         "name": "Brno-Horní Heršpice",
         "type": "rail",
-        "importance": 3
+        "importance": 4
       },
       "geometry": {
         "type": "Point",
@@ -34067,7 +34067,7 @@
         "id": "CZ5433344",
         "name": "Frýdek-Místek",
         "type": "rail",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -34080,7 +34080,7 @@
         "id": "CZ5433354",
         "name": "Frýdlant nad Ostravicí",
         "type": "rail",
-        "importance": 3
+        "importance": 4
       },
       "geometry": {
         "type": "Point",
@@ -34249,7 +34249,7 @@
         "id": "CZ5433422",
         "name": "Domašov nad Bystřicí",
         "type": "rail",
-        "importance": 3
+        "importance": 4
       },
       "geometry": {
         "type": "Point",
@@ -34769,7 +34769,7 @@
         "id": "CZ5433542",
         "name": "Hanušovice",
         "type": "rail",
-        "importance": 3
+        "importance": 4
       },
       "geometry": {
         "type": "Point",
@@ -35120,7 +35120,7 @@
         "id": "CZ5433635",
         "name": "Čejč",
         "type": "rail",
-        "importance": 3
+        "importance": 4
       },
       "geometry": {
         "type": "Point",
@@ -35224,7 +35224,7 @@
         "id": "CZ5433674",
         "name": "Karviná hlavní nádraží",
         "type": "rail",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -35341,7 +35341,7 @@
         "id": "CZ5433722",
         "name": "Hranice na Moravě",
         "type": "rail",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -35445,7 +35445,7 @@
         "id": "CZ5433755",
         "name": "Zlín střed",
         "type": "rail",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -35705,7 +35705,7 @@
         "id": "CZ5433845",
         "name": "Hodonín",
         "type": "rail",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -35809,7 +35809,7 @@
         "id": "CZ5433892",
         "name": "Jeseník",
         "type": "rail",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -36056,7 +36056,7 @@
         "id": "CZ5433984",
         "name": "Louky nad Olší",
         "type": "rail",
-        "importance": 3
+        "importance": 4
       },
       "geometry": {
         "type": "Point",
@@ -36069,7 +36069,7 @@
         "id": "CZ5433985",
         "name": "Hulín",
         "type": "rail",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -36576,7 +36576,7 @@
         "id": "CZ5434144",
         "name": "Nový Jičín město",
         "type": "rail",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -36758,7 +36758,7 @@
         "id": "CZ5434194",
         "name": "Opava východ",
         "type": "rail",
-        "importance": 2
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -36875,7 +36875,7 @@
         "id": "CZ5434234",
         "name": "Opava západ",
         "type": "rail",
-        "importance": 3
+        "importance": 4
       },
       "geometry": {
         "type": "Point",
@@ -36901,7 +36901,7 @@
         "id": "CZ5434252",
         "name": "Milotice nad Opavou",
         "type": "rail",
-        "importance": 3
+        "importance": 4
       },
       "geometry": {
         "type": "Point",
@@ -37226,7 +37226,7 @@
         "id": "CZ5434364",
         "name": "Ostrava hlavní nádraží",
         "type": "rail",
-        "importance": 1
+        "importance": 2
       },
       "geometry": {
         "type": "Point",
@@ -37317,7 +37317,7 @@
         "id": "CZ5434393",
         "name": "Ostrava-Stodolní",
         "type": "rail",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -37395,7 +37395,7 @@
         "id": "CZ5434414",
         "name": "Ostrava-Kunčice",
         "type": "rail",
-        "importance": 3
+        "importance": 4
       },
       "geometry": {
         "type": "Point",
@@ -37421,7 +37421,7 @@
         "id": "CZ5434434",
         "name": "Ostrava-Svinov",
         "type": "rail",
-        "importance": 4
+        "importance": 2
       },
       "geometry": {
         "type": "Point",
@@ -37512,7 +37512,7 @@
         "id": "CZ5434475",
         "name": "Kroměříž",
         "type": "rail",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -37603,7 +37603,7 @@
         "id": "CZ5434514",
         "name": "Paskov",
         "type": "rail",
-        "importance": 3
+        "importance": 4
       },
       "geometry": {
         "type": "Point",
@@ -37642,7 +37642,7 @@
         "id": "CZ5434524",
         "name": "Petrovice u Karviné",
         "type": "rail",
-        "importance": 3
+        "importance": 4
       },
       "geometry": {
         "type": "Point",
@@ -37707,7 +37707,7 @@
         "id": "CZ5434544",
         "name": "Polom",
         "type": "rail",
-        "importance": 3
+        "importance": 4
       },
       "geometry": {
         "type": "Point",
@@ -37928,7 +37928,7 @@
         "id": "CZ5434595",
         "name": "Kunovice",
         "type": "rail",
-        "importance": 3
+        "importance": 4
       },
       "geometry": {
         "type": "Point",
@@ -37967,7 +37967,7 @@
         "id": "CZ5434608",
         "name": "Sedlnice",
         "type": "rail",
-        "importance": 3
+        "importance": 4
       },
       "geometry": {
         "type": "Point",
@@ -38422,7 +38422,7 @@
         "id": "CZ5434804",
         "name": "Suchdol nad Odrou",
         "type": "rail",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -38877,7 +38877,7 @@
         "id": "CZ5434924",
         "name": "Třinec",
         "type": "rail",
-        "importance": 3
+        "importance": 4
       },
       "geometry": {
         "type": "Point",
@@ -38955,7 +38955,7 @@
         "id": "CZ5434944",
         "name": "Třinec centrum",
         "type": "rail",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -39254,7 +39254,7 @@
         "id": "CZ5435034",
         "name": "Vratimov",
         "type": "rail",
-        "importance": 3
+        "importance": 4
       },
       "geometry": {
         "type": "Point",
@@ -39267,7 +39267,7 @@
         "id": "CZ5435044",
         "name": "Ostrava-Vítkovice",
         "type": "rail",
-        "importance": 3
+        "importance": 4
       },
       "geometry": {
         "type": "Point",
@@ -39449,7 +39449,7 @@
         "id": "CZ5435145",
         "name": "Mutěnice",
         "type": "rail",
-        "importance": 3
+        "importance": 4
       },
       "geometry": {
         "type": "Point",
@@ -39488,7 +39488,7 @@
         "id": "CZ5435162",
         "name": "Valašské Meziříčí",
         "type": "rail",
-        "importance": 2
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -39774,7 +39774,7 @@
         "id": "CZ5435285",
         "name": "Nezamyslice",
         "type": "rail",
-        "importance": 3
+        "importance": 4
       },
       "geometry": {
         "type": "Point",
@@ -40216,7 +40216,7 @@
         "id": "CZ5435502",
         "name": "Zábřeh na Moravě",
         "type": "rail",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -40359,7 +40359,7 @@
         "id": "CZ5435575",
         "name": "Otrokovice",
         "type": "rail",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -40827,7 +40827,7 @@
         "id": "CZ5435956",
         "name": "Říkovice",
         "type": "rail",
-        "importance": 3
+        "importance": 4
       },
       "geometry": {
         "type": "Point",
@@ -41048,7 +41048,7 @@
         "id": "CZ5436145",
         "name": "Staré Město u Uherského Hradiště",
         "type": "rail",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -41555,7 +41555,7 @@
         "id": "CZ5436555",
         "name": "Třebíč",
         "type": "rail",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -41581,7 +41581,7 @@
         "id": "CZ5436575",
         "name": "Uherské Hradiště",
         "type": "rail",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -41958,7 +41958,7 @@
         "id": "CZ5436895",
         "name": "Vyškov na Moravě",
         "type": "rail",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -42036,7 +42036,7 @@
         "id": "CZ5436955",
         "name": "Znojmo",
         "type": "rail",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -42075,7 +42075,7 @@
         "id": "CZ5437015",
         "name": "Žďár nad Sázavou",
         "type": "rail",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -42127,7 +42127,7 @@
         "id": "CZ5437055",
         "name": "Lípa nad Dřevnicí",
         "type": "rail",
-        "importance": 3
+        "importance": 4
       },
       "geometry": {
         "type": "Point",
@@ -42374,7 +42374,7 @@
         "id": "CZ5453016",
         "name": "Praha-Běchovice",
         "type": "rail",
-        "importance": 3
+        "importance": 4
       },
       "geometry": {
         "type": "Point",
@@ -42387,7 +42387,7 @@
         "id": "CZ5453018",
         "name": "Mělník",
         "type": "rail",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -42816,7 +42816,7 @@
         "id": "CZ5453119",
         "name": "Litoměřice město",
         "type": "rail",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -43024,7 +43024,7 @@
         "id": "CZ5453159",
         "name": "Ústí nad Labem západ",
         "type": "rail",
-        "importance": 2
+        "importance": 4
       },
       "geometry": {
         "type": "Point",
@@ -43089,7 +43089,7 @@
         "id": "CZ5453179",
         "name": "Ústí nad Labem hlavní nádraží",
         "type": "rail",
-        "importance": 3
+        "importance": 2
       },
       "geometry": {
         "type": "Point",
@@ -43193,7 +43193,7 @@
         "id": "CZ5453209",
         "name": "Ústí nad Labem-Střekov",
         "type": "rail",
-        "importance": 3
+        "importance": 4
       },
       "geometry": {
         "type": "Point",
@@ -43219,7 +43219,7 @@
         "id": "CZ5453214",
         "name": "Nymburk hlavní nádraží",
         "type": "rail",
-        "importance": 2
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -43310,7 +43310,7 @@
         "id": "CZ5453234",
         "name": "Poděbrady",
         "type": "rail",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -43869,7 +43869,7 @@
         "id": "CZ5453399",
         "name": "Most",
         "type": "rail",
-        "importance": 2
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -43921,7 +43921,7 @@
         "id": "CZ5453409",
         "name": "Třebušice",
         "type": "rail",
-        "importance": 3
+        "importance": 4
       },
       "geometry": {
         "type": "Point",
@@ -44376,7 +44376,7 @@
         "id": "CZ5453516",
         "name": "Kladno",
         "type": "rail",
-        "importance": 2
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -44714,7 +44714,7 @@
         "id": "CZ5453616",
         "name": "Kladno-Ostrovec",
         "type": "rail",
-        "importance": 3
+        "importance": 4
       },
       "geometry": {
         "type": "Point",
@@ -45130,7 +45130,7 @@
         "id": "CZ5453710",
         "name": "Meziměstí",
         "type": "rail",
-        "importance": 3
+        "importance": 4
       },
       "geometry": {
         "type": "Point",
@@ -45338,7 +45338,7 @@
         "id": "CZ5453779",
         "name": "Žatec",
         "type": "rail",
-        "importance": 3
+        "importance": 4
       },
       "geometry": {
         "type": "Point",
@@ -45416,7 +45416,7 @@
         "id": "CZ5453799",
         "name": "Kadaň",
         "type": "rail",
-        "importance": 3
+        "importance": 4
       },
       "geometry": {
         "type": "Point",
@@ -45468,7 +45468,7 @@
         "id": "CZ5453813",
         "name": "Choceň",
         "type": "rail",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -45611,7 +45611,7 @@
         "id": "CZ5453843",
         "name": "Brandýs nad Orlicí",
         "type": "rail",
-        "importance": 3
+        "importance": 4
       },
       "geometry": {
         "type": "Point",
@@ -46079,7 +46079,7 @@
         "id": "CZ5453963",
         "name": "Krasíkov",
         "type": "rail",
-        "importance": 3
+        "importance": 4
       },
       "geometry": {
         "type": "Point",
@@ -46131,7 +46131,7 @@
         "id": "CZ5453983",
         "name": "Hoštejn",
         "type": "rail",
-        "importance": 3
+        "importance": 4
       },
       "geometry": {
         "type": "Point",
@@ -46417,7 +46417,7 @@
         "id": "CZ5454057",
         "name": "Straškov",
         "type": "rail",
-        "importance": 3
+        "importance": 4
       },
       "geometry": {
         "type": "Point",
@@ -46482,7 +46482,7 @@
         "id": "CZ5454070",
         "name": "Čermná nad Orlicí",
         "type": "rail",
-        "importance": 3
+        "importance": 4
       },
       "geometry": {
         "type": "Point",
@@ -46534,7 +46534,7 @@
         "id": "CZ5454083",
         "name": "Golčův Jeníkov",
         "type": "rail",
-        "importance": 3
+        "importance": 4
       },
       "geometry": {
         "type": "Point",
@@ -46612,7 +46612,7 @@
         "id": "CZ5454100",
         "name": "Solnice",
         "type": "rail",
-        "importance": 3
+        "importance": 4
       },
       "geometry": {
         "type": "Point",
@@ -46703,7 +46703,7 @@
         "id": "CZ5454110",
         "name": "Rychnov nad Kněžnou",
         "type": "rail",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -47210,7 +47210,7 @@
         "id": "CZ5454213",
         "name": "Havlíčkův Brod",
         "type": "rail",
-        "importance": 2
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -47431,7 +47431,7 @@
         "id": "CZ5454257",
         "name": "Roudnice nad Labem",
         "type": "rail",
-        "importance": 3
+        "importance": 4
       },
       "geometry": {
         "type": "Point",
@@ -47535,7 +47535,7 @@
         "id": "CZ5454287",
         "name": "Hněvice",
         "type": "rail",
-        "importance": 3
+        "importance": 4
       },
       "geometry": {
         "type": "Point",
@@ -47574,7 +47574,7 @@
         "id": "CZ5454300",
         "name": "Turnov",
         "type": "rail",
-        "importance": 2
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -47990,7 +47990,7 @@
         "id": "CZ5454396",
         "name": "Kralupy nad Vltavou",
         "type": "rail",
-        "importance": 2
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -48016,7 +48016,7 @@
         "id": "CZ5454406",
         "name": "Chvatěruby",
         "type": "rail",
-        "importance": 3
+        "importance": 4
       },
       "geometry": {
         "type": "Point",
@@ -48341,7 +48341,7 @@
         "id": "CZ5454509",
         "name": "Obrnice",
         "type": "rail",
-        "importance": 3
+        "importance": 4
       },
       "geometry": {
         "type": "Point",
@@ -48510,7 +48510,7 @@
         "id": "CZ5454554",
         "name": "Nymburk město",
         "type": "rail",
-        "importance": 3
+        "importance": 4
       },
       "geometry": {
         "type": "Point",
@@ -48731,7 +48731,7 @@
         "id": "CZ5454599",
         "name": "Louny",
         "type": "rail",
-        "importance": 2
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -48796,7 +48796,7 @@
         "id": "CZ5454613",
         "name": "Pardubice-Rosice nad Labem",
         "type": "rail",
-        "importance": 3
+        "importance": 4
       },
       "geometry": {
         "type": "Point",
@@ -49069,7 +49069,7 @@
         "id": "CZ5454686",
         "name": "Neratovice",
         "type": "rail",
-        "importance": 3
+        "importance": 4
       },
       "geometry": {
         "type": "Point",
@@ -49407,7 +49407,7 @@
         "id": "CZ5454776",
         "name": "Čelákovice",
         "type": "rail",
-        "importance": 3
+        "importance": 4
       },
       "geometry": {
         "type": "Point",
@@ -49433,7 +49433,7 @@
         "id": "CZ5454789",
         "name": "Světec",
         "type": "rail",
-        "importance": 3
+        "importance": 4
       },
       "geometry": {
         "type": "Point",
@@ -49719,7 +49719,7 @@
         "id": "CZ5454856",
         "name": "Nučice",
         "type": "rail",
-        "importance": 3
+        "importance": 4
       },
       "geometry": {
         "type": "Point",
@@ -50005,7 +50005,7 @@
         "id": "CZ5454916",
         "name": "Rudná u Prahy",
         "type": "rail",
-        "importance": 3
+        "importance": 4
       },
       "geometry": {
         "type": "Point",
@@ -50135,7 +50135,7 @@
         "id": "CZ5454943",
         "name": "Rozsochatec",
         "type": "rail",
-        "importance": 3
+        "importance": 4
       },
       "geometry": {
         "type": "Point",
@@ -50187,7 +50187,7 @@
         "id": "CZ5454956",
         "name": "Praha-Uhříněves",
         "type": "rail",
-        "importance": 3
+        "importance": 4
       },
       "geometry": {
         "type": "Point",
@@ -50616,7 +50616,7 @@
         "id": "CZ5455046",
         "name": "Čerčany",
         "type": "rail",
-        "importance": 3
+        "importance": 4
       },
       "geometry": {
         "type": "Point",
@@ -50824,7 +50824,7 @@
         "id": "CZ5455092",
         "name": "Jablonec nad Nisou",
         "type": "rail",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -50889,7 +50889,7 @@
         "id": "CZ5455106",
         "name": "Benešov u Prahy",
         "type": "rail",
-        "importance": 2
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -51045,7 +51045,7 @@
         "id": "CZ5455136",
         "name": "Olbramovice",
         "type": "rail",
-        "importance": 3
+        "importance": 4
       },
       "geometry": {
         "type": "Point",
@@ -51552,7 +51552,7 @@
         "id": "CZ5455242",
         "name": "Velké Hamry",
         "type": "rail",
-        "importance": 3
+        "importance": 4
       },
       "geometry": {
         "type": "Point",
@@ -51721,7 +51721,7 @@
         "id": "CZ5455283",
         "name": "Vysoké Mýto",
         "type": "rail",
-        "importance": 3
+        "importance": 4
       },
       "geometry": {
         "type": "Point",
@@ -52007,7 +52007,7 @@
         "id": "CZ5455356",
         "name": "Vlašim",
         "type": "rail",
-        "importance": 3
+        "importance": 4
       },
       "geometry": {
         "type": "Point",
@@ -52267,7 +52267,7 @@
         "id": "CZ5455420",
         "name": "Jičín",
         "type": "rail",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -52293,7 +52293,7 @@
         "id": "CZ5455429",
         "name": "Čížkovice",
         "type": "rail",
-        "importance": 3
+        "importance": 4
       },
       "geometry": {
         "type": "Point",
@@ -52358,7 +52358,7 @@
         "id": "CZ5455449",
         "name": "Libochovice",
         "type": "rail",
-        "importance": 3
+        "importance": 4
       },
       "geometry": {
         "type": "Point",
@@ -53164,7 +53164,7 @@
         "id": "CZ5455689",
         "name": "Děčín východ",
         "type": "rail",
-        "importance": 3
+        "importance": 4
       },
       "geometry": {
         "type": "Point",
@@ -53801,7 +53801,7 @@
         "id": "CZ5455859",
         "name": "Lovosice",
         "type": "rail",
-        "importance": 2
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -53970,7 +53970,7 @@
         "id": "CZ5455911",
         "name": "Dolní Bousov",
         "type": "rail",
-        "importance": 3
+        "importance": 4
       },
       "geometry": {
         "type": "Point",
@@ -54243,7 +54243,7 @@
         "id": "CZ5455991",
         "name": "Mladá Boleslav město",
         "type": "rail",
-        "importance": 3
+        "importance": 4
       },
       "geometry": {
         "type": "Point",
@@ -54256,7 +54256,7 @@
         "id": "CZ5456006",
         "name": "Ledečko",
         "type": "rail",
-        "importance": 3
+        "importance": 4
       },
       "geometry": {
         "type": "Point",
@@ -55296,7 +55296,7 @@
         "id": "CZ5456299",
         "name": "Česká Kamenice",
         "type": "rail",
-        "importance": 3
+        "importance": 4
       },
       "geometry": {
         "type": "Point",
@@ -55309,7 +55309,7 @@
         "id": "CZ5456300",
         "name": "Kopidlno",
         "type": "rail",
-        "importance": 3
+        "importance": 4
       },
       "geometry": {
         "type": "Point",
@@ -55829,7 +55829,7 @@
         "id": "CZ5456456",
         "name": "Bečváry",
         "type": "rail",
-        "importance": 3
+        "importance": 4
       },
       "geometry": {
         "type": "Point",
@@ -56297,7 +56297,7 @@
         "id": "CZ5456590",
         "name": "Semily",
         "type": "rail",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -56401,7 +56401,7 @@
         "id": "CZ5456619",
         "name": "Šluknov",
         "type": "rail",
-        "importance": 3
+        "importance": 4
       },
       "geometry": {
         "type": "Point",
@@ -56583,7 +56583,7 @@
         "id": "CZ5456689",
         "name": "Varnsdorf",
         "type": "rail",
-        "importance": 3
+        "importance": 4
       },
       "geometry": {
         "type": "Point",
@@ -56765,7 +56765,7 @@
         "id": "CZ5456759",
         "name": "Jedlová",
         "type": "rail",
-        "importance": 3
+        "importance": 4
       },
       "geometry": {
         "type": "Point",
@@ -56804,7 +56804,7 @@
         "id": "CZ5456770",
         "name": "Jaroměř",
         "type": "rail",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -57025,7 +57025,7 @@
         "id": "CZ5456880",
         "name": "Opatovice nad Labem-Pohřebačka",
         "type": "rail",
-        "importance": 3
+        "importance": 4
       },
       "geometry": {
         "type": "Point",
@@ -57038,7 +57038,7 @@
         "id": "CZ5456889",
         "name": "Bezděz",
         "type": "rail",
-        "importance": 3
+        "importance": 4
       },
       "geometry": {
         "type": "Point",
@@ -57051,7 +57051,7 @@
         "id": "CZ5456890",
         "name": "Stéblová",
         "type": "rail",
-        "importance": 3
+        "importance": 4
       },
       "geometry": {
         "type": "Point",
@@ -57350,7 +57350,7 @@
         "id": "CZ5457020",
         "name": "Trutnov hlavní nádraží",
         "type": "rail",
-        "importance": 2
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -57389,7 +57389,7 @@
         "id": "CZ5457036",
         "name": "Praha-Bubny",
         "type": "rail",
-        "importance": 3
+        "importance": 4
       },
       "geometry": {
         "type": "Point",
@@ -57428,7 +57428,7 @@
         "id": "CZ5457040",
         "name": "Trutnov střed",
         "type": "rail",
-        "importance": 3
+        "importance": 4
       },
       "geometry": {
         "type": "Point",
@@ -57753,7 +57753,7 @@
         "id": "CZ5457156",
         "name": "Praha-Krč",
         "type": "rail",
-        "importance": 3
+        "importance": 4
       },
       "geometry": {
         "type": "Point",
@@ -57792,7 +57792,7 @@
         "id": "CZ5457169",
         "name": "Mimoň",
         "type": "rail",
-        "importance": 3
+        "importance": 4
       },
       "geometry": {
         "type": "Point",
@@ -57818,7 +57818,7 @@
         "id": "CZ5457176",
         "name": "Praha-Libeň",
         "type": "rail",
-        "importance": 2
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -57909,7 +57909,7 @@
         "id": "CZ5457206",
         "name": "Praha-Ruzyně",
         "type": "rail",
-        "importance": 3
+        "importance": 4
       },
       "geometry": {
         "type": "Point",
@@ -57974,7 +57974,7 @@
         "id": "CZ5457226",
         "name": "Praha-Smíchov",
         "type": "rail",
-        "importance": 3
+        "importance": 2
       },
       "geometry": {
         "type": "Point",
@@ -58013,7 +58013,7 @@
         "id": "CZ5457236",
         "name": "Praha Masarykovo nádraží",
         "type": "rail",
-        "importance": 3
+        "importance": 2
       },
       "geometry": {
         "type": "Point",
@@ -58169,7 +58169,7 @@
         "id": "CZ5457316",
         "name": "Praha-Vysočany",
         "type": "rail",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -58858,7 +58858,7 @@
         "id": "CZ5473074",
         "name": "Beroun",
         "type": "rail",
-        "importance": 2
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -59001,7 +59001,7 @@
         "id": "CZ5473134",
         "name": "Hořovice",
         "type": "rail",
-        "importance": 3
+        "importance": 4
       },
       "geometry": {
         "type": "Point",
@@ -59235,7 +59235,7 @@
         "id": "CZ5473225",
         "name": "Ejpovice",
         "type": "rail",
-        "importance": 3
+        "importance": 4
       },
       "geometry": {
         "type": "Point",
@@ -60054,7 +60054,7 @@
         "id": "CZ5473552",
         "name": "Veselí nad Lužnicí",
         "type": "rail",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -60262,7 +60262,7 @@
         "id": "CZ5473622",
         "name": "Tábor",
         "type": "rail",
-        "importance": 2
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -60288,7 +60288,7 @@
         "id": "CZ5473632",
         "name": "České Velenice",
         "type": "rail",
-        "importance": 3
+        "importance": 4
       },
       "geometry": {
         "type": "Point",
@@ -60613,7 +60613,7 @@
         "id": "CZ5473745",
         "name": "Klatovy",
         "type": "rail",
-        "importance": 2
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -60665,7 +60665,7 @@
         "id": "CZ5473765",
         "name": "Janovice nad Úhlavou",
         "type": "rail",
-        "importance": 3
+        "importance": 4
       },
       "geometry": {
         "type": "Point",
@@ -60834,7 +60834,7 @@
         "id": "CZ5473832",
         "name": "Prachatice",
         "type": "rail",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -61159,7 +61159,7 @@
         "id": "CZ5473952",
         "name": "Nové Údolí",
         "type": "rail",
-        "importance": 3
+        "importance": 4
       },
       "geometry": {
         "type": "Point",
@@ -61341,7 +61341,7 @@
         "id": "CZ5474025",
         "name": "Vojtanov",
         "type": "rail",
-        "importance": 3
+        "importance": 4
       },
       "geometry": {
         "type": "Point",
@@ -61354,7 +61354,7 @@
         "id": "CZ5474032",
         "name": "Temelín",
         "type": "rail",
-        "importance": 3
+        "importance": 4
       },
       "geometry": {
         "type": "Point",
@@ -61406,7 +61406,7 @@
         "id": "CZ5474055",
         "name": "Chodov",
         "type": "rail",
-        "importance": 3
+        "importance": 4
       },
       "geometry": {
         "type": "Point",
@@ -62290,7 +62290,7 @@
         "id": "CZ5474405",
         "name": "Mariánské Lázně",
         "type": "rail",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -63785,7 +63785,7 @@
         "id": "CZ5474945",
         "name": "Planá u Mariánských Lázní",
         "type": "rail",
-        "importance": 3
+        "importance": 4
       },
       "geometry": {
         "type": "Point",
@@ -64149,7 +64149,7 @@
         "id": "CZ5475065",
         "name": "Třemošná u Plzně",
         "type": "rail",
-        "importance": 3
+        "importance": 4
       },
       "geometry": {
         "type": "Point",
@@ -64591,7 +64591,7 @@
         "id": "CZ5475246",
         "name": "Kaštice",
         "type": "rail",
-        "importance": 3
+        "importance": 4
       },
       "geometry": {
         "type": "Point",
@@ -64773,7 +64773,7 @@
         "id": "CZ5475335",
         "name": "Chlumčany u Dobřan",
         "type": "rail",
-        "importance": 3
+        "importance": 4
       },
       "geometry": {
         "type": "Point",
@@ -65592,7 +65592,7 @@
         "id": "CZ5475652",
         "name": "Písek",
         "type": "rail",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -65696,7 +65696,7 @@
         "id": "CZ5475685",
         "name": "Tachov",
         "type": "rail",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -66294,7 +66294,7 @@
         "id": "CZ5475992",
         "name": "Kájov",
         "type": "rail",
-        "importance": 3
+        "importance": 4
       },
       "geometry": {
         "type": "Point",
@@ -66320,7 +66320,7 @@
         "id": "CZ5476002",
         "name": "Český Krumlov",
         "type": "rail",
-        "importance": 4
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -66606,7 +66606,7 @@
         "id": "CZ5476102",
         "name": "Strakonice",
         "type": "rail",
-        "importance": 2
+        "importance": 3
       },
       "geometry": {
         "type": "Point",
@@ -66944,7 +66944,7 @@
         "id": "CZ5476315",
         "name": "Mirošov",
         "type": "rail",
-        "importance": 3
+        "importance": 4
       },
       "geometry": {
         "type": "Point",
@@ -66983,7 +66983,7 @@
         "id": "CZ5476345",
         "name": "Příkosice",
         "type": "rail",
-        "importance": 3
+        "importance": 4
       },
       "geometry": {
         "type": "Point",
@@ -67308,7 +67308,7 @@
         "id": "CZ5476585",
         "name": "Staňkov",
         "type": "rail",
-        "importance": 3
+        "importance": 4
       },
       "geometry": {
         "type": "Point",
@@ -67776,7 +67776,7 @@
         "id": "CZ5476924",
         "name": "Tochovice",
         "type": "rail",
-        "importance": 3
+        "importance": 4
       },
       "geometry": {
         "type": "Point",
@@ -67789,7 +67789,7 @@
         "id": "CZ5476934",
         "name": "Březnice",
         "type": "rail",
-        "importance": 3
+        "importance": 4
       },
       "geometry": {
         "type": "Point",
@@ -67906,7 +67906,7 @@
         "id": "CZ5477005",
         "name": "Špičák",
         "type": "rail",
-        "importance": 3
+        "importance": 4
       },
       "geometry": {
         "type": "Point",
@@ -67945,7 +67945,7 @@
         "id": "CZ5477025",
         "name": "Železná Ruda-Alžbětín",
         "type": "rail",
-        "importance": 3
+        "importance": 4
       },
       "geometry": {
         "type": "Point",
