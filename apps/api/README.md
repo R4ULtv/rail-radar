@@ -228,7 +228,7 @@ src/
 │   ├── france.ts      # French SNCF (Navitia) API scraper
 │   ├── luxembourg.ts  # Mobiliteit.lu departures (CFL rail)
 │   ├── hungary.ts     # MÁV ticketing timetable (jegy.mav.hu) arrivals and departures
-│   └── czech.ts       # Správa železnic Infotabule departures and arrivals
+│   └── czech.ts       # Czech Správa železnic scraper (HTML parsing)
 ├── analytics.ts   # Cloudflare Analytics Engine integration for visits and provider metrics
 ├── provider-probes.ts # Hourly scheduled check of every provider
 ├── provider-status.ts # Provider health and latency queries

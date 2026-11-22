@@ -115,5 +115,5 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - 🇫🇷 French train data from [SNCF (Navitia)](https://numerique.sncf.com/startup/api/)
 - 🇱🇺 Luxembourg train data from [Mobiliteit.lu](https://data.public.lu/en/datasets/api-mobiliteit-lu/)
 - 🇭🇺 Hungarian train data from [MÁV](https://jegy.mav.hu)
-- 🇨🇿 Czech live train data from [Správa železnic's Infotabule](https://www.spravazeleznic.cz/cestujici/infotabule) and station data from [GRAPP](https://grapp.spravazeleznic.cz/), with official CIS/SR70 station identities. See [Czech data generation](./packages/data/README.md#czech-stations).
+- 🇨🇿 Czech train data from [Správa železnic](https://www.spravazeleznic.cz/)
 - Map rendering by [Mapbox](https://www.mapbox.com/)

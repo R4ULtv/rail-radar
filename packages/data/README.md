@@ -68,64 +68,6 @@ import { countryStationBounds, stationsByCountry } from "@repo/data/directory";
 
 ## Data
 
-### Czech stations
-
-Passenger rail IDs, official names and coordinates come from Správa železnic's
-[SR70 directory](https://provoz.spravazeleznic.cz/portal/ViewArticle.aspx?oid=34462).
-Each record also matches a [GRAPP network point](https://grapp.spravazeleznic.cz/).
-The ID combines `CZ54` with the first five digits of the six-digit national SR70
-number, retaining leading zeros. For example, `CZ5453613` identifies Pardubice
-hlavní nádraží and `CZ5474632` identifies Obrataň.
-
-The importer confirms passenger use against the full station name in the
-[CIS station list](https://portal.cisjr.cz/pub/seznamy/stanice.csv). It supplements
-this list with national codes verified in [SŽ's published route timetables](https://provoz.spravazeleznic.cz/portal/ViewArticle.aspx?oid=2286145)
-and [Gepard Express's timetable for lines 228 and 229](https://uzkokolejky.cz/wp-content/uploads/2026/08/uzkokolejka_jizdni_rad_A3-01-web.pdf).
-These include seasonal services. Station inclusion does not establish that trains
-run on a particular date or that a live board is available.
-
-```bash
-python3 scripts/import-czech-stations.py
-python3 scripts/import-czech-stations.py --check
-```
-
-The default SR70 workbook is effective 15 October–12 December 2026. For a later
-import, select the applicable workbook with `--sr70-url` and review the supplemental
-codes against the corresponding timetables. Run the repository formatter after importing.
-The importer matches GRAPP aliases to eligible SR70 records at the exact coordinates.
-When the sources differ, it accepts a unique matching name within one kilometre for
-ordinary GRAPP points. Operational GRAPP points (`STI === "33"`) require an exact
-coordinate match. Importance is 1 for the Praha, Brno and Ostrava main stations,
-2 for GRAPP major nodes, 3 for SR70 transport nodes and 4 otherwise.
-The offline check covers unique IDs, coordinate bounds, importance tiers and
-known station identities.
-
-The live scraper reads Správa železnic's public station board,
-[Infotabule](https://www.spravazeleznic.cz/cestujici/infotabule), with one request
-per board using the CIS code (`?station=5457076`). The page carries arrivals and
-departures together and omits its board when the request has no `User-Agent`.
-Stations without electronic passenger information return an empty board. No
-secrets or bindings are required. The page is undocumented. GRAPP's responses
-include a notice requiring the owner's consent for data reuse; public availability
-does not establish an open-data license.
-
-Czech metro (`CZM`) and light (`CZL`) stops are curated separately from the rail
-import. Prague metro stop order and station locations were checked against the
-PID feed for 21 November–4 December 2026. Muzeum, Můstek and Florenc each have one
-ID shared by the two lines. Colors and service periods come from the same feed.
-Track follows the full-length passenger trip in catalog order on each line
-(`L991V2`, `L992V2`, `L993V2`), rounded to five decimal places from ROPID's
-published coordinates. [PID GTFS](https://data.pid.cz/PID_GTFS.zip) · [PID open data and attribution](https://pid.cz/en/opendata/)
-
-Flora remains on the permanent line A route. Trains pass through during renovation.
-DPP expects the station to remain closed through February 2027. [DPP renovation update](https://www.dpp.cz/spolecnost/pro-media/tiskove-zpravy/detail/278_3418-modernizace-stanic-metra-flora-a-hradcanska-ve-druhe-polovine-letosniho-roku)
-
-Liberec–Jablonec tram 11 follows OpenStreetMap's Viadukt–Tyršovy sady track.
-The regional authority IDOL confirms all 23 stops and their order. Service hours
-use the first and last departures from either outer terminus. Headways use gaps
-between successive trams in each direction at Vratislavická Kyselka during
-21–27 November 2026. The most common interval is 15 minutes. [OSM route](https://www.openstreetmap.org/relation/2468634) · [IDOL route and timetable](https://dopravnimapy.kraj-lbc.cz/app/idol/linka_detail.php?linka=545011) · [IDOL stop timetable](https://dopravnimapy.kraj-lbc.cz/app/idol/zastavka_prijezd_odjezd.php?datum=2026-11-23&id=51654)
-
 ### `stationsGeoJSON`
 
 A typed GeoJSON `FeatureCollection<Point, StationProperties>` containing all stations. Each feature has:
