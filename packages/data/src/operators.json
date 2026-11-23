@@ -1344,11 +1344,6 @@
         "type": "timetables"
       },
       {
-        "label": "Trains to Prague",
-        "url": "https://www.oebb.at/en/reiseplanung-services/oebb-zugverbindungen/zugverbindungen-europa/prag",
-        "type": "website"
-      },
-      {
         "label": "Wikipedia",
         "url": "https://en.wikipedia.org/wiki/%C3%96BB",
         "type": "wikipedia"
@@ -1840,11 +1835,6 @@
         "type": "api"
       },
       {
-        "label": "Trains to Czechia",
-        "url": "https://int.bahn.de/en/offers/saver-fare-flexible-fare/super-saver-fare-europe-czechia",
-        "type": "website"
-      },
-      {
         "label": "Wikipedia",
         "url": "https://en.wikipedia.org/wiki/Deutsche_Bahn",
         "type": "wikipedia"
@@ -1899,11 +1889,6 @@
         "label": "Official Site",
         "url": "https://www.arrivagroup.com/",
         "type": "website"
-      },
-      {
-        "label": "Arriva Czech Train Routes",
-        "url": "https://www.arriva.cz/cs/vlaky",
-        "type": "timetables"
       },
       {
         "label": "Wikipedia",
@@ -1985,7 +1970,7 @@
     "countries": ["dk", "de", "cz"],
     "operatorTypes": ["passenger"],
     "bounds": [8, 50.0, 15.3, 57.9],
-    "description": "DSB is Denmark's state-owned national rail operator and the backbone of passenger rail in the country. It runs the main long-distance and regional network together with Copenhagen's S-train system, carrying roughly 195 million passengers a year across Denmark and key cross-border corridors. DSB, Deutsche Bahn and České dráhy jointly offer direct ComfortJet services from Copenhagen via Berlin to Prague.",
+    "description": "DSB is Denmark's state-owned national rail operator and the backbone of passenger rail in the country. It runs the main long-distance and regional network together with Copenhagen's S-train system, carrying roughly 195 million passengers a year across Denmark and key cross-border corridors.",
     "website": "https://www.dsb.dk",
     "founded": 1885,
     "headquarters": "Copenhagen, Denmark",
@@ -2003,11 +1988,6 @@
         "label": "Timetables",
         "url": "https://www.dsb.dk/en/timetables",
         "type": "timetables"
-      },
-      {
-        "label": "Trains to Czechia",
-        "url": "https://www.dsb.dk/en/dsb-international/czech-republic",
-        "type": "website"
       },
       {
         "label": "Wikipedia",
@@ -3599,7 +3579,7 @@
     "countries": ["pl", "cz"],
     "operatorTypes": ["passenger"],
     "bounds": [18, 49.3, 19.8, 51.2],
-    "description": "Koleje Śląskie is the regional passenger rail operator for Poland's Silesian Voivodeship. Its KS brand serves the dense urban and industrial region around Katowice, Gliwice, Częstochowa, Bielsko-Biała, Rybnik, and nearby cross-regional routes. Line S71 runs from Katowice via Rybnik and Chałupki to Bohumín in Czechia.",
+    "description": "Koleje Śląskie is the regional passenger rail operator for Poland's Silesian Voivodeship. Its KS brand serves the dense urban and industrial region around Katowice, Gliwice, Częstochowa, Bielsko-Biała, Rybnik, and nearby cross-regional routes.",
     "website": "https://www.kolejeslaskie.pl",
     "founded": 2010,
     "headquarters": "Katowice, Poland",
@@ -5252,7 +5232,7 @@
     "countries": ["pl", "cz"],
     "operatorTypes": ["freight"],
     "bounds": [12.09, 48.55, 24, 54.8],
-    "description": "PKP Cargo is Poland's largest rail freight operator, created in 2001 from the freight division of Polish State Railways. It hauls coal, aggregates, metals and other bulk goods as well as intermodal containers, plus cross-border traffic with neighbouring countries. It is listed on the Warsaw Stock Exchange with PKP S.A. as its largest shareholder, and has been in court-supervised restructuring since 2024. Its Ostrava-based subsidiary PKP CARGO INTERNATIONAL operates rail freight in Czechia.",
+    "description": "PKP Cargo is Poland's largest rail freight operator, created in 2001 from the freight division of Polish State Railways. It hauls coal, aggregates, metals and other bulk goods as well as intermodal containers, plus cross-border traffic with neighbouring countries. It is listed on the Warsaw Stock Exchange with PKP S.A. as its largest shareholder, and has been in court-supervised restructuring since 2024.",
     "website": "https://www.pkpcargo.com",
     "founded": 2001,
     "headquarters": "Warsaw, Poland",
@@ -5264,11 +5244,6 @@
       {
         "label": "Official Site",
         "url": "https://www.pkpcargo.com",
-        "type": "website"
-      },
-      {
-        "label": "Czech Operations",
-        "url": "https://www.pkpcargointernational.com/en/about-us/about-us",
         "type": "website"
       },
       {
@@ -6296,7 +6271,7 @@
     "countries": ["hu", "cz"],
     "operatorTypes": ["passenger", "light-rail"],
     "bounds": [14.3, 45.78, 22.85, 50.2],
-    "description": "MÁV, the Hungarian State Railways, runs most passenger trains in Hungary, from Budapest suburban services to InterCity and international EuroCity trains. Its network radiates from the three Budapest terminals – Keleti, Nyugati and Déli – to every region of the country. MÁV also operates the Szeged–Hódmezővásárhely tram-train, and its subsidiary MÁV-HÉV runs the Budapest suburban HÉV lines. MÁV works with partner railways on the Budapest–Bratislava–Prague corridor.",
+    "description": "MÁV, the Hungarian State Railways, runs most passenger trains in Hungary, from Budapest suburban services to InterCity and international EuroCity trains. Its network radiates from the three Budapest terminals – Keleti, Nyugati and Déli – to every region of the country. MÁV also operates the Szeged–Hódmezővásárhely tram-train, and its subsidiary MÁV-HÉV runs the Budapest suburban HÉV lines.",
     "website": "https://www.mavcsoport.hu",
     "founded": 1868,
     "headquarters": "Budapest, Hungary",
@@ -6314,11 +6289,6 @@
         "label": "Journey planner",
         "url": "https://mavplusz.hu",
         "type": "timetables"
-      },
-      {
-        "label": "Trains to Czechia",
-        "url": "https://www.mavcsoport.hu/mav-szemelyszallitas/nemzetkozi-utazas/csehorszag",
-        "type": "website"
       },
       {
         "label": "Wikipedia",
