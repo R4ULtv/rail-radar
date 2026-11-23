@@ -10,6 +10,11 @@ import { request } from "../helpers/app";
 
 const BOARD = "/cestujici/infotabule?station=5453613";
 const ID = "_tabule_WAR_szdc_boards_web_:tabsForm:tabview";
+// Infotabule returns this single-tab view for catalogued stations such as Třebívlice.
+const picker = (extraTab = "") => `<div id="${ID}">
+  <ul role="tablist"><li role="tab" class="boards-search-tab-title" aria-selected="true">Výběr stanic</li>${extraTab}</ul>
+  <div id="${ID}:tab1"><input id="${ID}:filterInput_input" placeholder="Zadejte stanici"></div>
+</div>`;
 
 const cell = (content: string) =>
   `<td role="gridcell" class="table-row-odd"><span class="trainR">${content}</span></td>`;
@@ -233,12 +238,44 @@ describe("Czech station boards", () => {
     );
     const result = await scrapeCzechTrains("CZ5453613");
     expect(result.trains).toEqual([]);
-    expect(result.info).toContain("no live board");
+    expect(result.info).toContain("no live departures board");
+  });
+
+  it.each(["arrivals", "departures"] as const)(
+    "reports a picker-only %s response as unavailable and records a successful provider fetch",
+    async (type) => {
+      fetchMock.on("station=5455369", textResponse(picker()));
+      const { response, env } = await request(`/stations/CZ5455369?type=${type}`);
+      expect(response.status).toBe(200);
+      expect(await response.json()).toMatchObject({
+        trains: [],
+        info: expect.stringContaining(`no live ${type} board`),
+      });
+      expect(env.PROVIDER_ANALYTICS.writeDataPoint).toHaveBeenCalledWith({
+        blobs: ["spravazeleznic", "live", "success", type, "CZ5455369", "cz"],
+        doubles: [expect.any(Number), 200],
+        indexes: ["spravazeleznic"],
+      });
+    },
+  );
+
+  it("applies a no-board notice only to the tab that displayed it", async () => {
+    const tabs = picker('<li role="tab">Odjezdy</li><li role="tab">Příjezdy</li>');
+    const arrivalNotice = `<div id="${ID}:tab3"><span class="boards-datatable-no-data">Omlouváme se, v současné době nejsou v této stanici k dispozici elektronické informace pro cestující</span></div>`;
+    fetchMock.on(BOARD, textResponse(tabs + arrivalNotice));
+    await expect(scrapeCzechTrains("CZ5453613", "arrivals")).resolves.toMatchObject({
+      trains: [],
+      info: expect.stringContaining("no live arrivals board"),
+    });
+    await expect(scrapeCzechTrains("CZ5453613", "departures")).rejects.toMatchObject({
+      statusCode: 502,
+    });
   });
 
   it.each([
     // The page without its board, as served to requests with no User-Agent.
     "<html><title>Infotabule</title></html>",
+    picker('<li role="tab" class="boards-departures-tab-title">Odjezdy</li>'),
     board(tr(cell("Changed layout"))),
   ])("rejects an invalid board instead of returning a false empty result", async (html) => {
     fetchMock.on(BOARD, textResponse(html));

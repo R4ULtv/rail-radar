@@ -9,7 +9,6 @@ const BOARD_URL = "https://www.spravazeleznic.cz/cestujici/infotabule";
 const HEADERS = { "User-Agent": "RailRadar/1.0 (+https://railradar24.com)" };
 /** Shown by Infotabule for a known station that has no electronic passenger information. */
 const NO_BOARD = "nejsou v této stanici k dispozici";
-const NO_BOARD_NOTE = "Správa železnic has no live board for this station right now.";
 
 type BoardType = "arrivals" | "departures";
 
@@ -43,12 +42,17 @@ function minuteDifference(later: number, earlier: number): number {
   return ((later - earlier + 2160) % 1440) - 720;
 }
 
-/** Returns null when the page carries no board for the requested type. */
-async function parseBoard(html: string, type: BoardType): Promise<Train[] | null> {
+async function parseBoard(
+  html: string,
+  type: BoardType,
+): Promise<Pick<ScrapeResult, "trains" | "info">> {
   const arrival = type === "arrivals";
   // PrimeFaces prefixes generated IDs, so match the stable suffix.
   const table = `tbody[id$="${arrival ? "listArrivals" : "listDepartures"}_data"]`;
   let foundTable = false;
+  let tabCount = 0;
+  let hasVisiblePicker = false;
+  let unavailableNotice = "";
   let cells: string[] | undefined;
   let note = false;
   const trains: Train[] = [];
@@ -105,6 +109,24 @@ async function parseBoard(html: string, type: BoardType): Promise<Train[] | null
   }
 
   await new HTMLRewriter()
+    .on(`div[id$=":tabview:${arrival ? "tab3" : "tab2"}"] .boards-datatable-no-data`, {
+      text(chunk) {
+        unavailableNotice += chunk.text;
+      },
+    })
+    .on('div[id$=":tabsForm:tabview"] li[role="tab"]', {
+      element() {
+        tabCount++;
+      },
+    })
+    .on(
+      'div[id$=":tabsForm:tabview:tab1"]:not(.ui-helper-hidden) input[id$=":filterInput_input"]',
+      {
+        element() {
+          hasVisiblePicker = true;
+        },
+      },
+    )
     .on(table, {
       element() {
         foundTable = true;
@@ -131,15 +153,29 @@ async function parseBoard(html: string, type: BoardType): Promise<Train[] | null
     .transform(new Response(html))
     .text();
   finishRow();
-  if (!foundTable) return null;
+  if (!foundTable) {
+    // Some catalogued stops open only the station picker. A normal board also has a picker,
+    // but it has additional tabs even when one direction's table is missing or malformed.
+    const pickerOnly = hasVisiblePicker && tabCount === 1;
+    // A standalone notice covers the whole station. On a tabbed page it applies only to its tab.
+    const notice = tabCount === 0 ? html : unavailableNotice;
+    if (pickerOnly || notice.includes(NO_BOARD)) {
+      return {
+        trains: [],
+        info: `Správa železnic has no live ${type} board for this station right now.`,
+      };
+    }
+    throw new ScraperError("The Czech train data source returned an invalid station board.", 502);
+  }
   // Infotabule already orders each board chronologically, including across midnight.
   const seen = new Set<string>();
-  return trains.filter((train) => {
+  const uniqueTrains = trains.filter((train) => {
     const key = `${train.trainNumber}|${train.scheduledTime}|${train.origin ?? train.destination}`;
     if (seen.has(key)) return false;
     seen.add(key);
     return true;
   });
+  return { trains: uniqueTrains, info: null };
 }
 
 export async function scrapeCzechTrains(
@@ -154,11 +190,7 @@ export async function scrapeCzechTrains(
   });
   const timing = { fetchMs };
   try {
-    const trains = await parseBoard(text, type);
-    if (trains) return { trains, info: null, timing };
-    // Small stops without electronic information still render the page, just without a board.
-    if (text.includes(NO_BOARD)) return { trains: [], info: NO_BOARD_NOTE, timing };
-    throw new ScraperError("The Czech train data source returned an invalid station board.", 502);
+    return { ...(await parseBoard(text, type)), timing };
   } catch (error) {
     if (error instanceof ScraperError) {
       throw new ScraperError(error.message, error.statusCode, timing, { cause: error });
