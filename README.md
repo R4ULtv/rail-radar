@@ -55,8 +55,9 @@ pnpm --filter=studio dev # Admin tool at localhost:3001
 
 All four apps use the Cloudflare CLI (`cf`) with typed `cloudflare.config.ts` files.
 Run `pnpm --filter=<app> exec cf auth login` before deploying, or configure
-`CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID` in CI. Builds produce deployable
-artifacts in each app's `.cloudflare/output/v0/`; generated Worker types live in
+`CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID` in CI. Since the `cf` 1.0 release
+candidate, builds write deployable artifacts to each app's `.cloudflare/output/v1/`.
+Generated Worker types live in
 `.cloudflare/types/`. The API keeps Wrangler as cf's bundler; web uses the Cloudflare
 Vite plugin, studio packages its static SvelteKit output for cf, and status uses the Astro Cloudflare adapter.
 

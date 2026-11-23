@@ -36,7 +36,7 @@ pnpm --filter=studio preview
 `cloudflare.config.ts` defines the `rail-radar-studio` Worker and its custom domain.
 `cf dev` starts Vite on port 3001 with the local editing middleware. `cf build` uses a
 small wrapper around the static SvelteKit adapter to write `build/` and package it as
-an assets-only Worker in `.cloudflare/output/v0/`.
+an assets-only Worker in `.cloudflare/output/v1/`.
 
 ```bash
 pnpm --filter=studio exec cf auth login
