@@ -17,7 +17,7 @@ import { useEffect, useState } from "react";
 import { StationWarning, useHasStationWarning } from "@/components/station-warning";
 import { SaveButton } from "@/components/save-button";
 import { TrainRow, TrainRowSkeleton } from "@/components/train-row";
-import { TrainBoardNotice } from "@/components/train-board-notice";
+import { EmptyTrainBoard, TrainBoardNotice } from "@/components/train-board-notice";
 import { UpdatedStatus } from "@/components/updated-status";
 import {
   Card,
@@ -91,6 +91,7 @@ const REPORT_LINKS = (
 // Shared component for train list content (loading, error, empty, list states)
 function TrainListContent({
   trainData,
+  info,
   isLoading,
   isValidating,
   error,
@@ -100,6 +101,7 @@ function TrainListContent({
   hasWarning = false,
 }: {
   trainData: Train[] | null;
+  info: string | null;
   isLoading: boolean;
   isValidating: boolean;
   error: string | null;
@@ -137,9 +139,7 @@ function TrainListContent({
     <>
       {error && <TrainBoardNotice hasSnapshot isValidating={isValidating} onRetry={onRetry} />}
       {trainData.length === 0 ? (
-        <div className="px-4 py-8 text-center text-sm text-muted-foreground">
-          {error ? `No ${type} were listed in the last received update.` : `No ${type} scheduled`}
-        </div>
+        <EmptyTrainBoard type={type} info={info} hasError={Boolean(error)} />
       ) : (
         trainData.map((train) => (
           <TrainRow
@@ -345,6 +345,7 @@ export default function StationInfo() {
                     ) : (
                       <TrainListContent
                         trainData={trainData}
+                        info={info}
                         isLoading={isLoading}
                         isValidating={isValidating}
                         error={error}
@@ -415,7 +416,7 @@ export default function StationInfo() {
                 />
               )}
             </DrawerDescription>
-            {!isLines && info != null && snap === 1 && (
+            {!isLines && info != null && trainData?.length !== 0 && snap === 1 && (
               <div className="mt-2 rounded-2xl bg-muted px-3 py-2 text-sm text-muted-foreground">
                 <MegaphoneIcon className="size-4 inline mr-1" />
                 <span className="font-normal">{info}</span>
@@ -479,6 +480,7 @@ export default function StationInfo() {
             ) : (
               <TrainListContent
                 trainData={trainData}
+                info={info}
                 isLoading={isLoading}
                 isValidating={isValidating}
                 error={error}

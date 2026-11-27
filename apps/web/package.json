@@ -10,7 +10,7 @@
     "build": "tsx scripts/station-photos.ts check && cf build",
     "start": "vite preview --port 3000",
     "deploy": "pnpm run build && cf deploy --prebuilt --mode production",
-    "deploy:preview": "if [ \"${WORKERS_CI_BRANCH:-$(git branch --show-current)}\" = preview ]; then pnpm run photos check && cf previews deploy preview; else pnpm run photos check && cf deploy --dry-run; fi",
+    "deploy:preview": "if [ \"${WORKERS_CI_BRANCH:-$(git branch --show-current)}\" = preview ]; then pnpm run photos check && cf previews deploy --preview-name preview; else pnpm run photos check && cf deploy --dry-run; fi",
     "versions": "pnpm run build && cf workers versions create --prebuilt --mode production",
     "cf-typegen": "cf workers types",
     "lint": "oxlint --deny warnings",
@@ -19,31 +19,31 @@
   "dependencies": {
     "@repo/data": "workspace:*",
     "@repo/ui": "workspace:*",
-    "@tanstack/react-query": "^5.107.1",
+    "@tanstack/react-query": "^5.108.4",
     "@tanstack/react-router": "^1.170.46",
-    "@tanstack/react-start": "^1.169.5",
-    "lucide-react": "^1.71.0",
-    "mapbox-gl": "^3.34.2",
-    "motion": "^14.11.1",
-    "posthog-js": "^1.447.7",
+    "@tanstack/react-start": "^1.169.7",
+    "lucide-react": "^1.81.0",
+    "mapbox-gl": "^3.35.2",
+    "motion": "^14.14.0",
+    "posthog-js": "^1.455.2",
     "react": "^19.3.1",
     "react-dom": "^19.3.1",
     "react-map-gl": "^8.1.3",
-    "takumi-js": "^2.20.0"
+    "takumi-js": "^2.22.1"
   },
   "devDependencies": {
-    "@cloudflare/vite-plugin": "2.0.0-beta.v.12",
+    "@cloudflare/vite-plugin": "2.0.0-rc.2",
     "@repo/typescript-config": "workspace:*",
     "@tailwindcss/vite": "^4.3.5",
-    "@types/node": "^22.20.5",
-    "@types/react": "^19.3.0",
+    "@types/node": "^22.20.7",
+    "@types/react": "^19.3.3",
     "@types/react-dom": "^19.3.0",
     "@vitejs/plugin-react": "^6.3.0",
-    "cf": "1.0.0-beta.28",
+    "cf": "1.0.0-rc.2",
     "tailwindcss": "^4.3.5",
     "tsx": "^4.23.15",
     "typescript": "^7.0.2",
-    "vite": "^8.3.7"
+    "vite": "^8.3.8"
   },
   "engines": {
     "node": ">=24"

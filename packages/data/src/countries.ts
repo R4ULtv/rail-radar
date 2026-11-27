@@ -14,6 +14,7 @@ export const COUNTRY_MAP = {
   pl: "Poland",
   fr: "France",
   hu: "Hungary",
+  cz: "Czech Republic",
 } as const;
 
 export type CountryCode = keyof typeof COUNTRY_MAP;
@@ -27,7 +28,6 @@ export const COUNTRY_CODES = Object.keys(COUNTRY_MAP) as CountryCode[];
 export const RAIL_DATA_WARNINGS: Partial<Record<CountryCode, string>> = {
   pl: "Live data for stations in Poland may be unstable or incomplete right now. We are working to improve it.",
   ie: "Platform information is currently unavailable for stations in Ireland. We are working to improve it.",
-  fr: "Platform and origin information may be missing for stations in France. We are working to improve it.",
   lu: "Live arrivals are not available yet for train stations in Luxembourg. We are working to add them.",
 };
 
@@ -38,6 +38,7 @@ export const RAIL_DATA_WARNINGS: Partial<Record<CountryCode, string>> = {
  */
 export const NEW_RAIL_DATA: Partial<Record<CountryCode, string>> = {
   hu: "2026-11-06",
+  cz: "2026-11-21",
 };
 export const NEW_RAIL_DATA_DAYS = 30;
 

@@ -188,7 +188,7 @@ pnpm --filter=web deploy
 `CLOUDFLARE_ACCOUNT_ID`. Export `MAPBOX_SERVER_TOKEN` in your shell before running the secret update command.
 
 The Cloudflare Vite plugin builds the TanStack Start SSR handler and deploys the client output as
-Worker static assets in `.cloudflare/output/v0/`. `deploy` and `versions` run the build
+Worker static assets in `.cloudflare/output/v1/`. `deploy` and `versions` run the build
 (including photo validation) before deploying the resulting artifact. `cloudflare.config.ts` also binds the R2 bucket and media rate limiter.
 Regenerate `.cloudflare/types/index.d.ts` with `pnpm --filter=web cf-typegen` whenever those bindings
 change.

@@ -39,7 +39,7 @@ pnpm --filter=status test
 
 ## Cloudflare deployment
 
-`cloudflare.config.ts` defines the `rail-radar-status` Worker and its custom domain, `status.railradar24.com`. `cf build` runs `astro build`, and the `@astrojs/cloudflare` adapter packages the prerendered page as an assets-only Worker in `.cloudflare/output/v0/`. The adapter's Images and session KV bindings are switched off in `astro.config.mjs`, since nothing renders at request time.
+`cloudflare.config.ts` defines the `rail-radar-status` Worker and its custom domain, `status.railradar24.com`. `cf build` runs `astro build`, and the `@astrojs/cloudflare` adapter packages the prerendered page as an assets-only Worker in `.cloudflare/output/v1/`. The adapter's Images and session KV bindings are switched off in `astro.config.mjs`, since nothing renders at request time.
 
 ```bash
 pnpm --filter=status exec cf auth login

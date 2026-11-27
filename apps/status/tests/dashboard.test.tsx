@@ -2,7 +2,12 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { cleanup, fireEvent, render, screen, waitFor, within } from "@testing-library/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { TooltipProvider } from "@repo/ui/components/tooltip";
-import { NEW_RAIL_DATA, NEW_RAIL_DATA_DAYS, type CountryCode } from "@repo/data/countries";
+import {
+  NEW_RAIL_DATA,
+  NEW_RAIL_DATA_DAYS,
+  RAIL_DATA_WARNINGS,
+  type CountryCode,
+} from "@repo/data/countries";
 import { PROVIDERS } from "@repo/data/providers";
 import { App } from "../src/app";
 import { latencyFixture, summaryFixture } from "./fixtures";
@@ -78,6 +83,10 @@ describe("live status dashboard", () => {
     const flag = rfi.querySelector<HTMLImageElement>(".provider-country img")!;
     expect(logo.getAttribute("src")).toBe("/__shared-assets/providers/rfi.svg");
     expect(flag.getAttribute("src")).toBe("/__shared-assets/flags/it.svg");
+    const czech = screen.getByRole("button", { name: /Správa železnic/ });
+    expect(czech.querySelector(".provider-logo img")?.getAttribute("src")).toBe(
+      "/__shared-assets/providers/spravazeleznic.svg",
+    );
     fireEvent.error(logo);
     fireEvent.error(flag);
     expect(rfi.querySelector(".provider-logo img")).toBeNull();
@@ -118,12 +127,10 @@ describe("live status dashboard", () => {
 
   it("flags providers with a known data issue and explains it when expanded", async () => {
     mount();
-    const sncf = await screen.findByRole("button", {
-      name: "SNCF, France: Degraded, known issue",
-    });
-    fireEvent.click(sncf);
+    const plk = await screen.findByRole("button", { name: /^PKP PLK, Poland: .*, known issue$/ });
+    fireEvent.click(plk);
     expect(await screen.findByText("Known issue")).toBeDefined();
-    expect(screen.getByText(/Platform and origin information may be missing/)).toBeDefined();
+    expect(screen.getByText(RAIL_DATA_WARNINGS.pl!)).toBeDefined();
   });
 
   describe("new data source flag", () => {

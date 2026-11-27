@@ -47,6 +47,7 @@ export function TrainBoard({ stationId }: { stationId: string }) {
           title="Departures"
           type="departures"
           trainData={departures.data}
+          info={departures.info}
           isLoading={departures.isLoading}
           isValidating={departures.isValidating}
           error={departures.error}
@@ -57,6 +58,7 @@ export function TrainBoard({ stationId }: { stationId: string }) {
           title="Arrivals"
           type="arrivals"
           trainData={arrivals.data}
+          info={arrivals.info}
           isLoading={arrivals.isLoading}
           isValidating={arrivals.isValidating}
           error={arrivals.error}
@@ -78,6 +80,7 @@ export function TrainBoard({ stationId }: { stationId: string }) {
       title={activeType === "departures" ? "Departures" : "Arrivals"}
       type={activeType}
       trainData={currentData.data}
+      info={currentData.info}
       isLoading={currentData.isLoading}
       isValidating={currentData.isValidating}
       error={currentData.error}
@@ -92,6 +95,7 @@ export function TrainBoard({ stationId }: { stationId: string }) {
 
 const loadingColumn = {
   trainData: null,
+  info: null,
   isLoading: true,
   isValidating: false,
   error: null,

@@ -13,6 +13,7 @@ The canonical files live with the main website's other static assets. The status
 | National Rail       | `nationalrail.svg`         | Official [compact round double-arrow vector](https://www.nationalrail.co.uk/nrestatic/images/icon.svg), consistent with the identity on [National Rail](https://www.nationalrail.co.uk/). Original purple/white badge on white.                                                                                                                                                                                                                     |
 | PKP PLK             | `plk.svg`                  | Complete blue winged PLK symbol isolated from the [official website's vector](https://www.plk-sa.pl/assets/images/plk-logo.svg), excluding the name and slogan. Original `#004782` palette on white.                                                                                                                                                                                                                                                |
 | Mobiliteit          | `mobiliteit.svg`           | Complete magenta M symbol isolated from the [official website's vector](https://www.mobiliteit.lu/wp-content/themes/mobiliteit/assets/img/mobiliteit-logo.svg). Original `#ec008c` on white.                                                                                                                                                                                                                                                        |
+| Správa železnic     | `spravazeleznic.svg`       | Complete orange symbol isolated from the [official website's colour vector](https://www.spravazeleznic.cz/szdc-theme-web/images/szdc/szdc-logo-barevne.svg) on [spravazeleznic.cz](https://www.spravazeleznic.cz/), excluding the name. Original `#ff5200` on white. Checked 21 November 2026.                                                                                                                                                      |
 | Transport Open Data | `opendata-ch.png`          | Unmodified [official Opendata.ch compact icon](https://opendata.ch/wp-content/uploads/2021/03/cropped-cropped-opendata-logo-192x192-1-1-192x192.png). [The transport service](https://transport.opendata.ch/) credits Opendata.ch. This is the association’s genuine O/D icon; a dedicated Transport API logo has not been confirmed.                                                                                                               |
 | Rejseplanen         | `rejseplanen.png`          | Unmodified [current official web app icon](https://www.rejseplanen.dk/web/assets/icons/appicons/touch-icon-196x196.png), linked from [the web app](https://www.rejseplanen.dk/webapp/). Preserves the current blue/white symbol.                                                                                                                                                                                                                    |
 | Trafiklab           | `trafiklab.png`            | Unmodified [official compact TL icon](https://www.trafiklab.se/apple-touch-icon.png), linked from [Trafiklab](https://www.trafiklab.se/). Uses its authentic TL artwork; the full horizontal wordmark was too small for a provider tile.                                                                                                                                                                                                            |
@@ -24,16 +25,17 @@ The canonical files live with the main website's other static assets. The status
 
 ## Vector checks
 
-The seven new SVGs use a 64 × 64 canvas. Geometry and original colors are preserved; only complete symbols are isolated from longer lockups. No optical offsets were applied. Alpha bounds measured from 2048-pixel offline renders after optimization (in 64-unit canvas coordinates, excluding the CSS tile background):
+The eight new SVGs use a 64 × 64 canvas. Geometry and original colors are preserved; only complete symbols are isolated from longer lockups. No optical offsets were applied. Alpha bounds measured from 2048-pixel offline renders after optimization (in 64-unit canvas coordinates, excluding the CSS tile background):
 
-| Asset         | Width × height | Center (x, y) |
-| ------------- | -------------- | ------------- |
-| Digitraffic   | 50.81 × 32.56  | 32.00, 32.00  |
-| Entur         | 50.78 × 15.41  | 32.02, 31.98  |
-| iRail         | 50.78 × 40.94  | 31.98, 31.97  |
-| RFI           | 50.81 × 34.69  | 32.00, 32.00  |
-| National Rail | 50.81 × 50.81  | 32.00, 32.00  |
-| PKP PLK       | 50.75 × 13.38  | 31.94, 32.00  |
-| Mobiliteit    | 42.31 × 50.81  | 32.00, 32.00  |
+| Asset           | Width × height | Center (x, y) |
+| --------------- | -------------- | ------------- |
+| Digitraffic     | 50.81 × 32.56  | 32.00, 32.00  |
+| Entur           | 50.78 × 15.41  | 32.02, 31.98  |
+| iRail           | 50.78 × 40.94  | 31.98, 31.97  |
+| RFI             | 50.81 × 34.69  | 32.00, 32.00  |
+| National Rail   | 50.81 × 50.81  | 32.00, 32.00  |
+| PKP PLK         | 50.75 × 13.38  | 31.94, 32.00  |
+| Mobiliteit      | 42.31 × 50.81  | 32.00, 32.00  |
+| Správa železnic | 51.00 × 40.41  | 32.00, 32.00  |
 
 All fit the 51-unit maximum, centered within 0.07 units of (32, 32). Reviewed at 64 and 36 pixels with their declared background colors. The optimizer and its check ran against this directory explicitly, leaving existing operator assets untouched. The three PNGs preserve their official pixels and palette; they are authentic supplied compact icons, not traced or bitmap-wrapped SVGs. Existing reused operator assets were not re-authored or independently geometry-audited here.

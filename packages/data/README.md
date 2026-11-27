@@ -16,7 +16,7 @@ src/
 ├── lines.json          # Every line with its ordered stops (no track)
 ├── lines/              # One GeoJSON track file per line: <line-id>.json
 ├── types.ts            # TypeScript type definitions
-└── stations.geojson    # GeoJSON FeatureCollection (22,000+ stations)
+└── stations.geojson    # GeoJSON FeatureCollection (26,000+ stations)
 ```
 
 ## Exports
@@ -72,9 +72,10 @@ import { countryStationBounds, stationsByCountry } from "@repo/data/directory";
 
 A typed GeoJSON `FeatureCollection<Point, StationProperties>` containing all stations. Each feature has:
 
-- `properties.id` — station ID (e.g., `"IT01700"`), prefixed by country and optionally `M` for metro or `L` for light rail
+- `properties.id` — station ID (e.g., `"IT01700"`), prefixed by country and optionally `M` for metro, `L` for light rail or `F` for freight
 - `properties.name` — station name
-- `properties.type` — `"rail"`, `"metro"`, or `"light"` (light rail: trams and train-like services)
+- `properties.type` — `"rail"`, `"metro"`, `"light"`, or `"freight"`
+- `properties.kind` — freight facilities can be `"marshalling"`, `"intermodal"`, or `"port"`
 - `properties.importance` — `1`–`4`
 - `geometry.coordinates` — `[lng, lat]`
 
@@ -112,6 +113,7 @@ getCountry("IE360"); // "ie"
 getCountry("FR751008"); // "fr"
 getCountry("LU200405060"); // "lu"
 getCountry("HU5510033"); // "hu"
+getCountry("CZ5457076"); // "cz"
 getCountry("IT01700", { format: "name" }); // "Italy"
 ```
 
@@ -135,7 +137,8 @@ const operator = operatorBySlug.get("trenitalia"); // Trenitalia
 interface Station {
   id: string;
   name: string;
-  type: "rail" | "metro" | "light";
+  type: "rail" | "metro" | "light" | "freight";
+  kind?: FreightKind;
   importance: 1 | 2 | 3 | 4;
   geo?: { lat: number; lng: number };
 }
@@ -165,7 +168,8 @@ GeoJSON feature properties with required fields for map rendering:
 interface StationProperties {
   id: string;
   name: string;
-  type: "rail" | "metro" | "light";
+  type: "rail" | "metro" | "light" | "freight";
+  kind?: FreightKind;
   importance: 1 | 2 | 3 | 4;
 }
 ```

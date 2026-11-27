@@ -49,7 +49,7 @@ const jsonLd = {
   name: "Rail Radar",
   url: "https://www.railradar24.com",
   description:
-    "Track trains in real time across 12 European countries, including Poland, Denmark, and Germany. Get live delays, platform numbers, and departure info for over 18,000 train stations.",
+    "Explore more than 26,000 stations and stops in 16 European countries, including France, Germany, and Italy. View live railway boards where available.",
   potentialAction: {
     "@type": "SearchAction",
     target: "https://www.railradar24.com/?q={search_term_string}",
@@ -70,24 +70,25 @@ function Home() {
       />
       <h1 className="sr-only">
         Rail Radar - Live Train Tracker for Italy, Switzerland, Germany, Finland, Belgium, Denmark,
-        the Netherlands, Norway, Sweden, Poland, the UK, and Ireland
+        the Netherlands, Norway, Sweden, Poland, the UK, Ireland, France, Luxembourg, Hungary, and
+        the Czech Republic
       </h1>
       <div className="sr-only">
         <p>
           Rail Radar is a real-time train tracking application covering Italy, Switzerland, Germany,
           Finland, Belgium, Denmark, the Netherlands, Norway, Sweden, Poland, the United Kingdom,
-          and Ireland. Monitor live departures, arrivals, delays, and platform changes across more
-          than 18,000 train stations on an interactive map. Stay informed with up-to-date data from
-          RFI, Swiss public transport feeds, Deutsche Bahn (DB), Finnish Digitraffic, iRail,
-          Rejseplanen, NS, Entur, Trafiklab, PLK, LDBWS, and Irish Rail, whether you are commuting
-          daily or planning a trip across Europe.
+          Ireland, France, Luxembourg, Hungary, and the Czech Republic. Explore more than 26,000
+          stations and stops on the map. At stations with live boards you can check departures,
+          arrivals, delays, and platforms where reported. Data comes from RFI, Swiss public
+          transport feeds, Deutsche Bahn (DB), Finnish Digitraffic, iRail, Rejseplanen, NS, Entur,
+          Trafiklab, PLK, LDBWS, Irish Rail, SNCF, Mobiliteit.lu, MÁV, and Správa železnic.
         </p>
         <p>
-          Search any station to see upcoming trains, check real-time delay information, and explore
-          trending stations. Rail Radar supports major operators including DB, Trenitalia, Italo,
-          Trenord, SBB, VR, DSB, NMBS/SNCB, NS, Iarnród Éireann, and many regional services.
-          Bookmark your favorite stations for quick access and share live views with friends using
-          shareable map links.
+          Search for a station by name or explore trending stations. Rail Radar supports major
+          operators including DB, Trenitalia, Italo, Trenord, SBB, VR, DSB, NMBS/SNCB, NS, Iarnród
+          Éireann, SNCF, CFL, MÁV, České dráhy, RegioJet, and many regional services. Bookmark your
+          favorite stations for quick access and share live views with friends using shareable map
+          links.
         </p>
       </div>
       <Suspense fallback={<MapLoading />}>

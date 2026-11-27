@@ -1,4 +1,8 @@
+import { COUNTRY_CODES } from "@repo/data/countries";
+
 import { factory } from "../lib/env";
+
+const countries = COUNTRY_CODES.join("|");
 
 const API_ENDPOINTS = {
   "GET /": "API structure and documentation",
@@ -12,16 +16,14 @@ const API_ENDPOINTS = {
   "GET /map/static":
     "Get a static map image (optional: ?bbox=west,south,east,north&w=960&h=412 or ?lat=...&lng=...&zoom=...)",
   "GET /stations/search": "Search stations by plain text or exact station ID (optional: ?q=roma)",
-  "GET /stations.geojson":
-    "Get stations as GeoJSON (optional: ?type=rail|metro|light&country=it|ch|de|fi|be|dk|nl|no|se|pl|uk|ie|fr|lu|hu)",
+  "GET /stations.geojson": `Get stations as GeoJSON (optional: ?type=rail|metro|light|freight&country=${countries})`,
   "GET /stations/:id/lines":
     "List the lines serving a station, for rail, metro and light stations (same filters as /lines)",
   "GET /stations/:id/lines.geojson":
     "Get a station's serving lines as GeoJSON with each line's full track (same filters as /lines)",
   "GET /stations/trending":
     "Get trending stations ranked by unique visitors (optional: ?period=hour|day|week|month, default: day)",
-  "GET /stations/trending/:country":
-    "Get trending stations by country ranked by unique visitors (it|ch|de|fi|be|dk|nl|no|se|pl|uk|ie|fr|lu|hu, optional: ?period=hour|day|week|month)",
+  "GET /stations/trending/:country": `Get trending stations by country ranked by unique visitors (${countries}, optional: ?period=hour|day|week|month)`,
   "GET /stations/:id/stats":
     "Get station visit stats (optional: ?period=hour|day|week|month, default: day)",
   "GET /stations/:id": "Get station info with trains (optional: ?type=arrivals|departures)",

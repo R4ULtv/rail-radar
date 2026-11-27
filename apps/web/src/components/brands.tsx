@@ -161,6 +161,19 @@ const brandPaths: Record<string, string> = {
   ht: "uk/ht",
   // Irish brands
   ir: "ie/ir",
+  // Czech brands
+  "gw train regio": "cz/gw-train-regio",
+  ažd: "cz/azd",
+  "die länderbahn cz": "cz/die-laenderbahn-cz",
+  kžc: "cz/kzc-doprava",
+  "gepard express": "cz/gepard-express",
+  cityrail: "cz/cityrail",
+  oúd: "cz/oud",
+  "railway capital": "cz/railway-capital",
+  "mbm rail": "cz/mbm-rail",
+  "metrans rail": "cz/metrans",
+  "slezské zemské dráhy": "cz/slezske-zemske-drahy",
+  zubačka: "cz/zubacka",
   // Hungarian brands
   máv: "hu/mav",
   gysev: "hu/gysev",
@@ -266,6 +279,31 @@ const brandAliases: Record<string, string> = {
   cfr: "cfr călători",
   "cfr calatori": "cfr călători",
   ukrzaliznytsia: "uz",
+  // Carrier abbreviations on Správa železnic boards.
+  arr: "arriva",
+  leo: "leo express",
+  rjet: "regiojet",
+  rjúk: "regiojet",
+  "rj úk": "regiojet",
+  let: "leo express",
+  gwtr: "gw train regio",
+  "gw train": "gw train regio",
+  "ažd praha": "ažd",
+  azd: "ažd",
+  dlb: "die länderbahn cz",
+  "dlb cz": "die länderbahn cz",
+  "die laenderbahn cz": "die länderbahn cz",
+  "kžc doprava": "kžc",
+  kzc: "kžc",
+  "kzc doprava": "kžc",
+  ge: "gepard express",
+  ctr: "cityrail",
+  oud: "oúd",
+  rcas: "railway capital",
+  mbm: "mbm rail",
+  "metr rail": "metrans rail",
+  szd: "slezské zemské dráhy",
+  zub: "zubačka",
 };
 
 function normalizeBrandName(brand: string): string {
@@ -279,6 +317,18 @@ function getBrandPath(brand: string): string | null {
 
 // Maps raw brand names (lowercased) to brand slugs
 const brandSlugMap: Record<string, string> = {
+  "gw train regio": "gw-train-regio",
+  ažd: "azd",
+  "die länderbahn cz": "die-laenderbahn-cz",
+  kžc: "kzc-doprava",
+  "gepard express": "gepard-express",
+  cityrail: "cityrail",
+  oúd: "oud",
+  "railway capital": "railway-capital",
+  "mbm rail": "mbm-rail",
+  "metrans rail": "metrans",
+  "slezské zemské dráhy": "slezske-zemske-drahy",
+  zubačka: "zubacka",
   // Additional regional operators.
   cj: "cj",
   nstcm: "nstcm",
