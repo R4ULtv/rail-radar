@@ -19,7 +19,7 @@
     "@repo/ui": "workspace:*",
     "@tanstack/react-query": "^5.108.4",
     "astro": "^7.4.13",
-    "lucide-react": "^1.80.0",
+    "lucide-react": "^1.81.0",
     "react": "^19.3.1",
     "react-dom": "^19.3.1",
     "recharts": "3.8.0"
@@ -30,14 +30,14 @@
     "@repo/typescript-config": "workspace:*",
     "@tailwindcss/vite": "^4.3.5",
     "@testing-library/react": "^16.3.3",
-    "@types/node": "^22.20.6",
-    "@types/react": "^19.3.2",
+    "@types/node": "^22.20.7",
+    "@types/react": "^19.3.3",
     "@types/react-dom": "^19.3.0",
     "cf": "1.0.0-rc.2",
     "jsdom": "^31.0.1",
     "tailwindcss": "^4.3.5",
     "typescript": "^6.0.3",
-    "vitest": "^5.1.1"
+    "vitest": "^5.1.2"
   },
   "engines": {
     "node": ">=24"
