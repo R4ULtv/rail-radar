@@ -29,6 +29,7 @@ type Passage = {
     base_departure_date_time?: string;
     arrival_date_time?: string;
     base_arrival_date_time?: string;
+    links?: Link[];
   };
   stop_point?: { platform_code?: string | null };
   links?: Link[];
@@ -267,10 +268,15 @@ describe("scrapeFranceTrains", () => {
             ],
           },
         });
+      const arrivalWithStopTimeOrigin = passage({
+        stop_date_time: {
+          links: [{ type: "stop_area", rel: "origins", id: "amsterdam" }],
+        },
+      });
       fetchMock.on(
         HOST,
         jsonResponse({
-          arrivals: [arrival("london"), arrival("amsterdam"), arrival("missing")],
+          arrivals: [arrival("london"), arrivalWithStopTimeOrigin, arrival("missing")],
           origins: [
             { id: "amsterdam", name: "Amsterdam Centraal" },
             { id: "london", name: "London St Pancras" },
@@ -327,6 +333,33 @@ describe("scrapeFranceTrains", () => {
       ]);
 
       expect(trains.map((train) => train.brand)).toEqual(["Transilien", "TER", "SNCF"]);
+    });
+
+    it.each([
+      ["TER Nouvelle Aquitaine", "TER", "F41+", "TER Nouvelle-Aquitaine"],
+      ["TER Auvergne - Rhône-Alpes", "TER", "K1+", "TER Auvergne-Rhône-Alpes"],
+      ["TER Auvergne - Rhône-Alpes", "TER", "L6", "Léman Express"],
+      ["TER Grand-Est", "TER", "C20+", "Fluo Grand Est"],
+      ["TER Provence Alpes-Côte d’Azur", "TER", "C6", "ZOU !"],
+      ["TER Bretagne", "TER", "C1", "TER"],
+      ["Atlantique", "TGV", "421H", "TGV INOUI"],
+      ["Atlantique", "Train", "421C", "TGV INOUI"],
+      ["Est", "Intercités", "071B", "TGV INOUI"],
+      ["OUIGO", "Intercités", "434A", "OUIGO"],
+      ["Lyria", "Train", "622E", "TGV Lyria"],
+      ["ALLEO", "Train", "651A", "DB SNCF"],
+      ["Thalys", "Train", "850A", "Eurostar"],
+      ["Lignes d'aménagement du territoire", "Autocar", "591A", "Intercités"],
+      ["Transversale Sud", "Intercités", "180A", "Intercités"],
+      ["SNCF", "TGV INOUI", "", "TGV INOUI"],
+      ["RATP Cap Arc Sud et Ouest", "Tramway", "T12", "RATP"],
+      ["Example Rail", "Train", "A1", "Example Rail"],
+    ])("maps %s (%s, %s) to %s", async (network, commercial_mode, code, brand) => {
+      const [train] = await trainsFor([
+        passage({ info: { network, commercial_mode, code, physical_mode: "Train" } }),
+      ]);
+
+      expect(train?.brand).toBe(brand);
     });
 
     it("prefers the line code as category", async () => {
@@ -399,8 +432,10 @@ describe("scrapeFranceTrains", () => {
       const trains = await trainsFor([
         passage({ info: { ...info, trip_short_name: "9110" } }),
         passage({ info: { ...info, trip_short_name: null } }),
+        passage({ info: { ...info, headsign: info.direction, trip_short_name: "9112" } }),
+        passage({ info: { ...info, trip_short_name: info.direction } }),
       ]);
-      expect(trains.map((train) => train.trainNumber)).toEqual(["9110", ""]);
+      expect(trains.map((train) => train.trainNumber)).toEqual(["9110", "", "9112", ""]);
     });
 
     it("trims the platform and treats blanks as missing", async () => {
@@ -512,6 +547,14 @@ describe("scrapeFranceTrains", () => {
 
       expect(trains.map((train) => train.scheduledTime)).toEqual(["--:--", "--:--"]);
     });
+
+    it("shows the available time without computing a delay when the base time is absent", async () => {
+      const [train] = await trainsFor([
+        passage({ stop_date_time: { departure_date_time: "20260310T101000" } }),
+      ]);
+
+      expect(train).toMatchObject({ scheduledTime: "10:10", delay: null });
+    });
   });
 
   describe("status", () => {
@@ -612,6 +655,15 @@ describe("scrapeFranceTrains", () => {
 
       expect(train?.status).toBe("cancelled");
       expect(train?.info).toBe("Grève");
+    });
+
+    it("finds disruption links on the stop time", async () => {
+      const [train] = await trainsFor(
+        [passage({ stop_date_time: { links: [{ type: "disruption", id: "d1" }] } })],
+        [disruption("d1", "SIGNIFICANT_DELAYS", "Retard")],
+      );
+
+      expect(train?.info).toBe("Retard");
     });
 
     it("shows a disruption linked from both the passage and its informations once", async () => {

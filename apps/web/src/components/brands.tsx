@@ -73,6 +73,7 @@ const brandPaths: Record<string, string> = {
   ouigo: "fr/ouigo",
   lex: "fr/leman",
   rer: "fr/rer",
+  ratp: "fr/ratp",
   transilien: "fr/transilien",
   ter: "fr/ter",
   "tgv lyria": "fr/lyria",
@@ -247,7 +248,12 @@ const brandAliases: Record<string, string> = {
   intercités: "sncf",
   intercites: "sncf",
   // Regional TER networks with their own logos
+  "fluo grand est": "fluo",
   "ter fluo": "fluo",
+  "ter auvergne-rhône-alpes": "regionaura",
+  "ter nouvelle-aquitaine": "ter na",
+  "ter nouvelle aquitaine": "ter na",
+  "léman express": "lex",
   zou: "zou !",
   // Regional TER declensions without a dedicated logo share the unified TER logo
   "ter hdf": "ter",
@@ -405,6 +411,7 @@ const brandSlugMap: Record<string, string> = {
   ter: "ter",
   transilien: "transilien",
   rer: "rer",
+  ratp: "ratp",
   "tgv lyria": "tgv-lyria",
   fluo: "fluo",
   regionaura: "regionaura",

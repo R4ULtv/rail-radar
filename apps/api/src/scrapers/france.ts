@@ -45,6 +45,73 @@ interface DisplayInformations {
   links?: NavitiaLink[];
 }
 
+const SNCF_NETWORK_BRANDS = new Map([
+  ["atlantique", "TGV INOUI"],
+  ["est", "TGV INOUI"],
+  ["nord", "TGV INOUI"],
+  ["sud est", "TGV INOUI"],
+  ["france espagne", "TGV INOUI"],
+  ["tgv italie", "TGV INOUI"],
+  ["alleo", "DB SNCF"],
+  ["lyria", "TGV Lyria"],
+  ["thalys", "Eurostar"],
+  ["intercites nantes", "Intercités"],
+  ["lignes d'amenagement du territoire", "Intercités"],
+  ["lignes de nuit", "Intercités"],
+  ["palito", "Intercités"],
+  ["paris clermont", "Intercités"],
+  ["transversale sud", "Intercités"],
+  ["ter auvergne rhone alpes", "TER Auvergne-Rhône-Alpes"],
+  ["ter grand est", "Fluo Grand Est"],
+  ["ter nouvelle aquitaine", "TER Nouvelle-Aquitaine"],
+  ["ter provence alpes cote d'azur", "ZOU !"],
+  ["ratp cap arc sud et ouest", "RATP"],
+]);
+
+const SNCF_COMMERCIAL_BRANDS = new Map([
+  ["intercites", "Intercités"],
+  ["tgv inoui", "TGV INOUI"],
+  ["tgv lyria", "TGV Lyria"],
+  ["lyria", "TGV Lyria"],
+  ["ouigo", "OUIGO"],
+  ["ouigo train classique", "OUIGO"],
+  ["ter", "TER"],
+  ["rer", "RER"],
+  ["transilien", "Transilien"],
+  ["train transilien", "Transilien"],
+  ["eurostar", "Eurostar"],
+  ["thalys", "Eurostar"],
+]);
+
+function brandKey(name: string): string {
+  return name
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/\p{M}/gu, "")
+    .replace(/’/g, "'")
+    .replace(/[\s-]+/g, " ");
+}
+
+function getBrand(info: DisplayInformations): string {
+  const network = info.network?.trim() || "";
+  const key = brandKey(network);
+  const commercialMode = info.commercial_mode?.trim() || "";
+
+  // The NeTEx catalogue files the Léman Express lines under TER Auvergne-Rhône-Alpes.
+  if (key === "ter auvergne rhone alpes" && /^L[1-7]$/.test(info.code?.trim() ?? "")) {
+    return "Léman Express";
+  }
+
+  const brand = SNCF_NETWORK_BRANDS.get(key);
+  if (brand) return brand;
+  if (key.startsWith("ter ")) return "TER";
+  if (network && key !== "sncf") return network;
+
+  return (
+    SNCF_COMMERCIAL_BRANDS.get(brandKey(commercialMode)) ?? (network || commercialMode || "SNCF")
+  );
+}
+
 // Short category labels for trains with no line code (long-distance services).
 const PHYSICAL_MODE_LABELS: Record<string, string> = {
   "Train grande vitesse": "TGV",
@@ -57,8 +124,7 @@ const PHYSICAL_MODE_LABELS: Record<string, string> = {
 // SNCF's "sncf" coverage also serves replacement buses/coaches — keep rail only.
 const NON_RAIL_MODES = new Set(["Métro", "Bus", "Autocar", "Car", "Bike", "BikeSharingService"]);
 
-// brand = operator/network; category = the line of the train (RER B, Transilien
-// H, TER K13) when present, otherwise the service type (TGV, TER, …).
+// Use the line code when present and fall back to the physical mode.
 function getCategory(info: DisplayInformations): string | null {
   const line = info.code?.trim();
   if (line) return line;
@@ -71,6 +137,7 @@ interface StopDateTime {
   base_departure_date_time?: string;
   arrival_date_time?: string;
   base_arrival_date_time?: string;
+  links?: NavitiaLink[];
 }
 
 interface NavitiaLink {
@@ -195,6 +262,16 @@ function cleanPlace(name: string): string {
   return name.replace(/\s*\([^)]*\)\s*$/, "").trim();
 }
 
+function getTrainNumber(info: DisplayInformations, destination: string, category: string | null) {
+  // IDFM publishes mission codes in the headsign. NeTEx can repeat the destination there.
+  const rawHeadsign = info.headsign?.trim() ?? "";
+  const headsign = cleanPlace(rawHeadsign) === destination ? "" : rawHeadsign;
+  if (headsign && headsign !== category) return headsign;
+
+  const tripNumber = info.trip_short_name?.trim() ?? "";
+  return tripNumber && cleanPlace(tripNumber) !== destination ? tripNumber : headsign;
+}
+
 function stripHtml(text: string): string {
   return text
     .replace(/<[^>]*>/g, " ")
@@ -235,22 +312,16 @@ export async function scrapeFranceTrains(
 
   const trains: Train[] = passages.map((passage) => {
     const info = passage.display_informations;
+    const times = passage.stop_date_time;
     const category = getCategory(info);
     const destination = cleanPlace(info.direction ?? "");
-    // NeTEx often uses the destination as the headsign. IDFM also publishes mission codes here.
-    const headsign = info.headsign === destination ? "" : (info.headsign ?? "");
-    const trainNumber =
-      !headsign || headsign === category ? (info.trip_short_name ?? headsign) : headsign;
-    const scheduled = arrivals
-      ? passage.stop_date_time.base_arrival_date_time
-      : passage.stop_date_time.base_departure_date_time;
-    const realtime = arrivals
-      ? passage.stop_date_time.arrival_date_time
-      : passage.stop_date_time.departure_date_time;
+    const scheduled = arrivals ? times.base_arrival_date_time : times.base_departure_date_time;
+    const realtime = arrivals ? times.arrival_date_time : times.departure_date_time;
 
-    // The passage and its display informations often link the same disruption.
+    const stopLinks = [...(info.links ?? []), ...(times.links ?? [])];
+    // Navitia can link the same disruption in several places.
     const linkedIds = new Set(
-      [...(passage.links ?? []), ...(info.links ?? [])]
+      [...(passage.links ?? []), ...stopLinks]
         .filter((link) => link.type === "disruption")
         .map((link) => link.id),
     );
@@ -270,10 +341,10 @@ export async function scrapeFranceTrains(
     ];
 
     const train: Train = {
-      brand: info.network ?? info.commercial_mode ?? "SNCF",
+      brand: getBrand(info),
       category,
-      trainNumber,
-      scheduledTime: formatLocalTime(scheduled),
+      trainNumber: getTrainNumber(info, destination, category),
+      scheduledTime: formatLocalTime(scheduled ?? realtime),
       delay: cancelled ? null : calculateDelay(scheduled, realtime),
       platform: passage.stop_point?.platform_code?.trim() || null,
       status: cancelled ? "cancelled" : getStatus(realtime, nowMs, arrivals),
@@ -281,7 +352,7 @@ export async function scrapeFranceTrains(
     };
 
     if (arrivals) {
-      const originLink = info.links?.find(
+      const originLink = stopLinks.find(
         (link) => link.type === "stop_area" && link.rel === "origins",
       );
       const origin = originLink && originsById.get(originLink.id);
