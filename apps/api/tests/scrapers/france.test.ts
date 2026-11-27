@@ -9,7 +9,7 @@ const NOW = "2026-03-10T09:00:00.000Z";
 const ENV = { SNCF_API_KEY: "test-key" };
 const HOST = "api.navitia.io";
 
-type Link = { type: string; id: string };
+type Link = { type: string; id: string; rel?: string };
 
 type DisplayInformations = {
   direction: string;
@@ -95,10 +95,10 @@ describe("scrapeFranceTrains", () => {
 
       const url = fetchMock.url();
       expect(url.origin).toBe("https://api.navitia.io");
-      expect(url.pathname).toBe(
-        "/v1/coverage/sncf/stop_areas/stop_area%3ASNCF%3A87686006/departures",
+      expect(url.pathname).toBe("/v1/coverage/sncf/stop_areas/stop_area%3AIDFM%3A73626/departures");
+      expect(url.searchParams.getAll("forbidden_uris[]")).toEqual(
+        expect.arrayContaining(["physical_mode:Metro", "physical_mode:Coach", "physical_mode:Bus"]),
       );
-      expect(decodeURIComponent(url.pathname)).toContain("stop_area:SNCF:87686006");
       expect(url.searchParams.get("data_freshness")).toBe("realtime");
       expect(url.searchParams.get("count")).toBe("24");
       expect(url.searchParams.get("disable_geojson")).toBe("true");
@@ -107,12 +107,25 @@ describe("scrapeFranceTrains", () => {
       );
     });
 
-    it("uses the arrivals endpoint when asked", async () => {
+    it.each([
+      ["FR271007", "stop_area:SNC:FR::LMU:ab071640-cb0a-11e8-8bfa-f784c1c7c611:"],
+      ["FR223263", "stop_area:SNC:FR::LMO:e10cc9b0-84ed-11ec-a3ea-15fe8ae13b86:"],
+      ["FR113845", "stop_area:IDFM:72028"],
+    ])("requests arrivals for the published stop area of %s", async (stationId, stopArea) => {
       fetchMock.on(HOST, arrivals([]));
 
-      await scrapeFranceTrains("FR686006", "arrivals", ENV);
+      await scrapeFranceTrains(stationId, "arrivals", ENV);
 
-      expect(fetchMock.url().pathname).toMatch(/\/stop_area%3ASNCF%3A87686006\/arrivals$/);
+      expect(fetchMock.url().pathname).toBe(
+        `/v1/coverage/sncf/stop_areas/${encodeURIComponent(stopArea)}/arrivals`,
+      );
+    });
+
+    it("reports an unmapped station without requesting a neighbouring board", async () => {
+      await expect(scrapeFranceTrains("FR999999", "departures", ENV)).rejects.toMatchObject({
+        statusCode: 404,
+      });
+      expect(fetchMock.requests).toHaveLength(0);
     });
 
     it("defaults to departures", async () => {
@@ -244,6 +257,37 @@ describe("scrapeFranceTrains", () => {
       expect(result.trains[0]).not.toHaveProperty("destination");
     });
 
+    it("resolves each arrival's origin link against the board's origins", async () => {
+      const arrival = (id: string) =>
+        passage({
+          info: {
+            links: [
+              { type: "stop_area", rel: "terminus", id: "paris" },
+              { type: "stop_area", rel: "origins", id },
+            ],
+          },
+        });
+      fetchMock.on(
+        HOST,
+        jsonResponse({
+          arrivals: [arrival("london"), arrival("amsterdam"), arrival("missing")],
+          origins: [
+            { id: "amsterdam", name: "Amsterdam Centraal" },
+            { id: "london", name: "London St Pancras" },
+          ],
+        }),
+      );
+
+      const { trains } = await scrapeFranceTrains("FR223263", "arrivals", ENV);
+
+      expect(trains.map((train) => train.origin)).toEqual([
+        "London St Pancras",
+        "Amsterdam Centraal",
+        undefined,
+      ]);
+      expect(fetchMock.requests).toHaveLength(1);
+    });
+
     it("shows the scheduled time of the requested board type", async () => {
       const stop_date_time = {
         base_departure_date_time: "20260310T101000",
@@ -347,6 +391,18 @@ describe("scrapeFranceTrains", () => {
       ]);
     });
 
+    it("uses the trip number when a NeTEx headsign repeats the destination", async () => {
+      const info = {
+        direction: "Bruxelles Midi (Saint-Gilles - Sint-Gillis)",
+        headsign: "Bruxelles Midi",
+      };
+      const trains = await trainsFor([
+        passage({ info: { ...info, trip_short_name: "9110" } }),
+        passage({ info: { ...info, trip_short_name: null } }),
+      ]);
+      expect(trains.map((train) => train.trainNumber)).toEqual(["9110", ""]);
+    });
+
     it("trims the platform and treats blanks as missing", async () => {
       const trains = await trainsFor([
         passage({ stop_point: { platform_code: " 7 " } }),
@@ -388,7 +444,7 @@ describe("scrapeFranceTrains", () => {
   });
 
   describe("rail filter", () => {
-    it.each(["Bus", "Autocar", "Car", "Bike", "BikeSharingService"])(
+    it.each(["Métro", "Bus", "Autocar", "Car", "Bike", "BikeSharingService"])(
       "drops %s passages",
       async (physical_mode) => {
         const trains = await trainsFor([

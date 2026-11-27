@@ -1,12 +1,7 @@
 import type { Train } from "@repo/data";
 
-import {
-  STATUS_WINDOW_MS,
-  ScraperError,
-  type ScrapeResult,
-  statusFromWindow,
-  stripCountryPrefix,
-} from "./core";
+import frStationCodes from "./codes/fr-codes.json";
+import { STATUS_WINDOW_MS, ScraperError, type ScrapeResult, statusFromWindow } from "./core";
 import { fetchJsonWithTimeout } from "./fetch";
 
 const SNCF_BASE_URL = "https://api.navitia.io/v1/coverage/sncf";
@@ -14,25 +9,28 @@ const PARIS_TZ = "Europe/Paris";
 const RECENT_WINDOW_MS = STATUS_WINDOW_MS;
 const TRAIN_LIMIT = 24;
 
-// Convert FR station ID to its 8-digit UIC code (e.g. "FR686006" -> "87686006").
-function convertFranceStationId(stationId: string): string {
-  const numericPart = stripCountryPrefix(stationId);
-  return `87${numericPart}`;
-}
+// Navitia merges SNCF and Île-de-France Mobilités stop places under either namespace.
+const stopAreas: Readonly<Record<string, string>> = frStationCodes;
 
-// SNCF (Navitia) addresses stations as stop_area:SNCF:<UIC>. If SNCF changes
-// the prefix this is the only line that needs to move.
-function buildStopAreaId(stationId: string): string {
-  return `stop_area:SNCF:${convertFranceStationId(stationId)}`;
-}
+function buildSncfUrl(
+  stationId: string,
+  type: "arrivals" | "departures",
+  fromDatetime: string,
+): string {
+  const stopArea = stopAreas[stationId];
+  if (!stopArea) throw new ScraperError("SNCF has no board for this station.", 404);
 
-function buildSncfUrl(stationId: string, arrivals: boolean, fromDatetime: string): string {
-  const endpoint = arrivals ? "arrivals" : "departures";
-  const stopArea = encodeURIComponent(buildStopAreaId(stationId));
-  return (
-    `${SNCF_BASE_URL}/stop_areas/${stopArea}/${endpoint}` +
-    `?data_freshness=realtime&count=${TRAIN_LIMIT}&disable_geojson=true&from_datetime=${fromDatetime}`
-  );
+  const params = new URLSearchParams({
+    data_freshness: "realtime",
+    count: String(TRAIN_LIMIT),
+    disable_geojson: "true",
+    from_datetime: fromDatetime,
+  });
+  // Combined stop areas include Métro and bus platforms. Filter before Navitia limits the board.
+  for (const mode of ["Metro", "Bus", "Coach", "Car", "Bike", "BikeSharingService"]) {
+    params.append("forbidden_uris[]", `physical_mode:${mode}`);
+  }
+  return `${SNCF_BASE_URL}/stop_areas/${encodeURIComponent(stopArea)}/${type}?${params.toString()}`;
 }
 
 // Navitia response types (only the fields we use)
@@ -57,7 +55,7 @@ const PHYSICAL_MODE_LABELS: Record<string, string> = {
 };
 
 // SNCF's "sncf" coverage also serves replacement buses/coaches — keep rail only.
-const NON_RAIL_MODES = new Set(["Bus", "Autocar", "Car", "Bike", "BikeSharingService"]);
+const NON_RAIL_MODES = new Set(["Métro", "Bus", "Autocar", "Car", "Bike", "BikeSharingService"]);
 
 // brand = operator/network; category = the line of the train (RER B, Transilien
 // H, TER K13) when present, otherwise the service type (TGV, TER, …).
@@ -76,13 +74,13 @@ interface StopDateTime {
 }
 
 interface NavitiaLink {
+  rel?: string;
   type: string;
   id: string;
 }
 
 interface StopPoint {
-  // Static platform from the GTFS feed (stops.txt platform_code), not a live track
-  // assignment — populated only where SNCF models per-platform stop_points.
+  // Available when the source models individual platforms.
   platform_code?: string | null;
 }
 
@@ -104,6 +102,7 @@ interface Disruption {
 }
 
 interface SncfBoardResponse {
+  origins?: { id: string; name: string }[];
   departures?: Passage[];
   arrivals?: Passage[];
   disruptions?: Disruption[];
@@ -216,7 +215,7 @@ export async function scrapeFranceTrains(
   const arrivals = type === "arrivals";
   const nowMs = naiveMs(parisNaiveParts(new Date()));
   const fromDatetime = toNavitiaString(nowMs - RECENT_WINDOW_MS);
-  const url = buildSncfUrl(stationId, arrivals, fromDatetime);
+  const url = buildSncfUrl(stationId, type, fromDatetime);
 
   const { data, fetchMs } = await fetchJsonWithTimeout<SncfBoardResponse>(url, "French", {
     headers: {
@@ -232,13 +231,14 @@ export async function scrapeFranceTrains(
     (data.disruptions ?? []).map((d) => [d.id, d]),
   );
 
+  const originsById = new Map(arrivals ? data.origins?.map(({ id, name }) => [id, name]) : []);
+
   const trains: Train[] = passages.map((passage) => {
     const info = passage.display_informations;
     const category = getCategory(info);
-    // headsign is the passenger-facing mission code (RER/Transilien) or train
-    // number; for TER it duplicates the line code, so fall back to the real
-    // train number there.
-    const headsign = info.headsign ?? "";
+    const destination = cleanPlace(info.direction ?? "");
+    // NeTEx often uses the destination as the headsign. IDFM also publishes mission codes here.
+    const headsign = info.headsign === destination ? "" : (info.headsign ?? "");
     const trainNumber =
       !headsign || headsign === category ? (info.trip_short_name ?? headsign) : headsign;
     const scheduled = arrivals
@@ -281,12 +281,13 @@ export async function scrapeFranceTrains(
     };
 
     if (arrivals) {
-      // Navitia's `display_informations.direction` is the vehicle's terminus,
-      // not the true origin. The route name ("Paris Est - Strasbourg") is a
-      // line-pair, not trip-direction, so it's also unreliable. Leave origin
-      // unset rather than show a false origin.
+      const originLink = info.links?.find(
+        (link) => link.type === "stop_area" && link.rel === "origins",
+      );
+      const origin = originLink && originsById.get(originLink.id);
+      if (origin) train.origin = origin;
     } else {
-      train.destination = cleanPlace(info.direction);
+      train.destination = destination;
     }
 
     return train;

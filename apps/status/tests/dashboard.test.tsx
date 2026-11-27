@@ -127,7 +127,7 @@ describe("live status dashboard", () => {
     });
     fireEvent.click(sncf);
     expect(await screen.findByText("Known issue")).toBeDefined();
-    expect(screen.getByText(/Platform and origin information may be missing/)).toBeDefined();
+    expect(screen.getByText("SNCF provides platform numbers for some trains.")).toBeDefined();
   });
 
   describe("new data source flag", () => {

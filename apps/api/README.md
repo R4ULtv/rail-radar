@@ -55,6 +55,16 @@ Returns an `application/json` array of `Station` objects:
 - One-character non-ID queries return an empty array
 - Inline coordinate, country, and type parsing is not supported
 
+### French station boards
+
+Rail Radar keeps its UIC-based station IDs. The API maps them to the stop-area IDs published by
+Navitia's `sncf` coverage. Most matches come from NeTEx passenger stop assignments or UIC codes on
+Navitia stop points. The remaining matches were checked by station name and location.
+
+To refresh the mapping, download the [SNCF NeTEx timetable](https://transport.data.gouv.fr/resources/83195)
+and run `python3 scripts/update-sncf-stop-areas.py <archive.zip>` from this workspace with
+`SNCF_API_KEY` in the environment. Review the reported stations against the current catalogue.
+
 ### `GET /stations/trending`
 
 Returns a JSON object with `timestamp`, `period`, and `stations`.

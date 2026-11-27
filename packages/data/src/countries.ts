@@ -28,7 +28,7 @@ export const COUNTRY_CODES = Object.keys(COUNTRY_MAP) as CountryCode[];
 export const RAIL_DATA_WARNINGS: Partial<Record<CountryCode, string>> = {
   pl: "Live data for stations in Poland may be unstable or incomplete right now. We are working to improve it.",
   ie: "Platform information is currently unavailable for stations in Ireland. We are working to improve it.",
-  fr: "Platform and origin information may be missing for stations in France. We are working to improve it.",
+  fr: "SNCF provides platform numbers for some trains.",
   lu: "Live arrivals are not available yet for train stations in Luxembourg. We are working to add them.",
 };
 
