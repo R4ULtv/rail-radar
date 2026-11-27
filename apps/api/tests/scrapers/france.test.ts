@@ -8,6 +8,7 @@ import { freezeTime, jsonResponse, mockFetch, textResponse, type FetchMock } fro
 const NOW = "2026-03-10T09:00:00.000Z";
 const ENV = { SNCF_API_KEY: "test-key" };
 const HOST = "api.navitia.io";
+const SIRI_HOST = "proxy.transport.data.gouv.fr";
 
 type Link = { type: string; id: string; rel?: string };
 
@@ -29,6 +30,8 @@ type Passage = {
     base_departure_date_time?: string;
     arrival_date_time?: string;
     base_arrival_date_time?: string;
+    data_freshness?: string;
+    links?: Link[];
   };
   stop_point?: { platform_code?: string | null };
   links?: Link[];
@@ -53,23 +56,74 @@ function passage({ info, stop_date_time, stop_point, links }: PassageOverrides =
       trip_short_name: "6201",
       ...info,
     },
-    stop_date_time: stop_date_time ?? {
-      base_departure_date_time: "20260310T101000",
-      departure_date_time: "20260310T101000",
-      base_arrival_date_time: "20260310T101000",
-      arrival_date_time: "20260310T101000",
+    stop_date_time: {
+      data_freshness: "realtime",
+      ...(stop_date_time ?? {
+        base_departure_date_time: "20260310T101000",
+        departure_date_time: "20260310T101000",
+        base_arrival_date_time: "20260310T101000",
+        arrival_date_time: "20260310T101000",
+      }),
     },
     ...(stop_point ? { stop_point } : {}),
     ...(links ? { links } : {}),
   };
 }
 
+type SiriCall = {
+  trainNumbers?: string[];
+  stop?: string;
+  aimed?: string;
+  expected?: string;
+  platform?: string;
+  cancelled?: boolean;
+  kind?: "Departure" | "Arrival";
+};
+
+// One SNCF SIRI-Lite estimated timetable call at Paris Gare de Lyon (UIC 87686006).
+function siriJourney({
+  trainNumbers = ["6201"],
+  stop = "87686006",
+  aimed = "2026-03-10T10:10:00+01:00",
+  expected,
+  platform,
+  cancelled,
+  kind = "Departure",
+}: SiriCall = {}): string {
+  return (
+    "<EstimatedVehicleJourney><VehicleMode>rail</VehicleMode><Monitored>true</Monitored>" +
+    "<TrainNumbers>" +
+    trainNumbers.map((n) => `<TrainNumberRef>${n}</TrainNumberRef>`).join("") +
+    "</TrainNumbers><EstimatedCalls><EstimatedCall>" +
+    `<StopPointRef>FR:ScheduledStopPoint::${stop}</StopPointRef>` +
+    `<Aimed${kind}Time>${aimed}</Aimed${kind}Time>` +
+    (expected ? `<Expected${kind}Time>${expected}</Expected${kind}Time>` : "") +
+    (platform ? `<${kind}PlatformName>${platform}</${kind}PlatformName>` : "") +
+    (cancelled ? "<Cancellation>true</Cancellation>" : "") +
+    "</EstimatedCall></EstimatedCalls></EstimatedVehicleJourney>"
+  );
+}
+
+function siriFeed(journeys: string[], timestamp = NOW): string {
+  return (
+    '<?xml version="1.0" encoding="UTF-8"?><Siri><ServiceDelivery>' +
+    `<ResponseTimestamp>${timestamp}</ResponseTimestamp>` +
+    "<EstimatedTimetableDelivery><EstimatedJourneyVersionFrame>" +
+    journeys.join("") +
+    "</EstimatedJourneyVersionFrame></EstimatedTimetableDelivery></ServiceDelivery></Siri>"
+  );
+}
+
 describe("scrapeFranceTrains", () => {
   let fetchMock: FetchMock;
+  let siriResponse: Response;
 
   beforeEach(() => {
     freezeTime(NOW);
     fetchMock = mockFetch();
+    // Without a SIRI feed the board relies on Navitia alone.
+    siriResponse = textResponse("", { status: 503 });
+    fetchMock.on(SIRI_HOST, () => siriResponse);
   });
 
   afterEach(() => {
@@ -267,10 +321,15 @@ describe("scrapeFranceTrains", () => {
             ],
           },
         });
+      const arrivalWithStopTimeOrigin = passage({
+        stop_date_time: {
+          links: [{ type: "stop_area", rel: "origins", id: "amsterdam" }],
+        },
+      });
       fetchMock.on(
         HOST,
         jsonResponse({
-          arrivals: [arrival("london"), arrival("amsterdam"), arrival("missing")],
+          arrivals: [arrival("london"), arrivalWithStopTimeOrigin, arrival("missing")],
           origins: [
             { id: "amsterdam", name: "Amsterdam Centraal" },
             { id: "london", name: "London St Pancras" },
@@ -285,7 +344,7 @@ describe("scrapeFranceTrains", () => {
         "Amsterdam Centraal",
         undefined,
       ]);
-      expect(fetchMock.requests).toHaveLength(1);
+      expect(fetchMock.requests.filter((request) => request.url.includes(HOST))).toHaveLength(1);
     });
 
     it("shows the scheduled time of the requested board type", async () => {
@@ -329,6 +388,33 @@ describe("scrapeFranceTrains", () => {
       expect(trains.map((train) => train.brand)).toEqual(["Transilien", "TER", "SNCF"]);
     });
 
+    it.each([
+      ["TER Nouvelle Aquitaine", "TER", "F41+", "TER Nouvelle-Aquitaine"],
+      ["TER Auvergne - Rhône-Alpes", "TER", "K1+", "TER Auvergne-Rhône-Alpes"],
+      ["TER Auvergne - Rhône-Alpes", "TER", "L6", "Léman Express"],
+      ["TER Grand-Est", "TER", "C20+", "Fluo Grand Est"],
+      ["TER Provence Alpes-Côte d’Azur", "TER", "C6", "ZOU !"],
+      ["TER Bretagne", "TER", "C1", "TER"],
+      ["Atlantique", "TGV", "421H", "TGV INOUI"],
+      ["Atlantique", "Train", "421C", "TGV INOUI"],
+      ["Est", "Intercités", "071B", "TGV INOUI"],
+      ["OUIGO", "Intercités", "434A", "OUIGO"],
+      ["Lyria", "Train", "622E", "TGV Lyria"],
+      ["ALLEO", "Train", "651A", "DB SNCF"],
+      ["Thalys", "Train", "850A", "Eurostar"],
+      ["Lignes d'aménagement du territoire", "Autocar", "591A", "Intercités"],
+      ["Transversale Sud", "Intercités", "180A", "Intercités"],
+      ["SNCF", "TGV INOUI", "", "TGV INOUI"],
+      ["RATP Cap Arc Sud et Ouest", "Tramway", "T12", "RATP"],
+      ["Example Rail", "Train", "A1", "Example Rail"],
+    ])("maps %s (%s, %s) to %s", async (network, commercial_mode, code, brand) => {
+      const [train] = await trainsFor([
+        passage({ info: { network, commercial_mode, code, physical_mode: "Train" } }),
+      ]);
+
+      expect(train?.brand).toBe(brand);
+    });
+
     it("prefers the line code as category", async () => {
       const trains = await trainsFor([
         passage({
@@ -346,6 +432,25 @@ describe("scrapeFranceTrains", () => {
 
       expect(trains.map((train) => train.category)).toEqual(["B", "H"]);
     });
+
+    it.each([
+      ["Nord", "Train", "Train", "TGV"],
+      ["ALLEO", "Train", "Train", null],
+      ["Lignes d'aménagement du territoire", "Autocar", "Train", "IC"],
+      ["OUIGO", "TGV", "Train", "TGV"],
+      ["OUIGO", "TGV", "Train Transilien", null],
+      ["OUIGO", "Intercités", "Train", null],
+      ["Eurostar", "Train", "Train", null],
+    ])(
+      "replaces the internal line code of %s (%s, %s) with %s",
+      async (network, commercial_mode, physical_mode, category) => {
+        const [train] = await trainsFor([
+          passage({ info: { code: "001B", network, commercial_mode, physical_mode } }),
+        ]);
+
+        expect(train?.category).toBe(category);
+      },
+    );
 
     it.each([
       ["Train grande vitesse", "TGV"],
@@ -399,8 +504,10 @@ describe("scrapeFranceTrains", () => {
       const trains = await trainsFor([
         passage({ info: { ...info, trip_short_name: "9110" } }),
         passage({ info: { ...info, trip_short_name: null } }),
+        passage({ info: { ...info, headsign: info.direction, trip_short_name: "9112" } }),
+        passage({ info: { ...info, trip_short_name: info.direction } }),
       ]);
-      expect(trains.map((train) => train.trainNumber)).toEqual(["9110", ""]);
+      expect(trains.map((train) => train.trainNumber)).toEqual(["9110", "", "9112", ""]);
     });
 
     it("trims the platform and treats blanks as missing", async () => {
@@ -512,6 +619,14 @@ describe("scrapeFranceTrains", () => {
 
       expect(trains.map((train) => train.scheduledTime)).toEqual(["--:--", "--:--"]);
     });
+
+    it("shows the available time without computing a delay when the base time is absent", async () => {
+      const [train] = await trainsFor([
+        passage({ stop_date_time: { departure_date_time: "20260310T101000" } }),
+      ]);
+
+      expect(train).toMatchObject({ scheduledTime: "10:10", delay: null });
+    });
   });
 
   describe("status", () => {
@@ -580,6 +695,148 @@ describe("scrapeFranceTrains", () => {
     });
   });
 
+  describe("live data", () => {
+    const schedule = {
+      base_departure_date_time: "20260310T101000",
+      departure_date_time: "20260310T101000",
+      data_freshness: "base_schedule",
+    };
+
+    const boardWith = async (journeys: string[], stop_date_time = schedule, timestamp = NOW) => {
+      siriResponse = textResponse(siriFeed(journeys, timestamp));
+      return trainsFor([passage({ stop_date_time })]);
+    };
+
+    it("shows no delay or status for a timetable-only train", async () => {
+      const [train] = await trainsFor([
+        passage({
+          stop_date_time: {
+            base_departure_date_time: "20260310T100000",
+            departure_date_time: "20260310T101500",
+            data_freshness: "base_schedule",
+          },
+        }),
+      ]);
+
+      expect(train).toMatchObject({ delay: null, status: null });
+    });
+
+    it("requests the SNCF SIRI feed alongside Navitia", async () => {
+      await boardWith([]);
+
+      expect(fetchMock.requests.map((request) => new URL(request.url).host)).toEqual([
+        HOST,
+        SIRI_HOST,
+      ]);
+    });
+
+    it("takes the delay and platform of a timetable-only train from SIRI", async () => {
+      const [train] = await boardWith([
+        siriJourney({ expected: "2026-03-10T10:22:00+01:00", platform: "K" }),
+      ]);
+
+      expect(train).toMatchObject({ delay: 12, platform: "K", status: null });
+    });
+
+    it("marks a SIRI-predicted train inside the window as departing", async () => {
+      const [train] = await boardWith([siriJourney({ expected: "2026-03-10T10:03:00+01:00" })]);
+
+      expect(train?.status).toBe("departing");
+    });
+
+    it("prefers the SIRI prediction to a Navitia realtime time", async () => {
+      const [train] = await boardWith([siriJourney({ expected: "2026-03-10T10:30:00+01:00" })], {
+        ...schedule,
+        departure_date_time: "20260310T101500",
+        data_freshness: "realtime",
+      });
+
+      expect(train?.delay).toBe(20);
+    });
+
+    it("matches a coupled train by any of its numbers", async () => {
+      const [train] = await boardWith([
+        siriJourney({ trainNumbers: ["12510", "6201"], expected: "2026-03-10T10:15:00+01:00" }),
+      ]);
+
+      expect(train?.delay).toBe(5);
+    });
+
+    it("matches either half of a paired Transilien trip number", async () => {
+      siriResponse = textResponse(
+        siriFeed([
+          siriJourney({ trainNumbers: ["129603"], expected: "2026-03-10T10:14:00+01:00" }),
+        ]),
+      );
+      const [train] = await trainsFor([
+        passage({
+          info: { trip_short_name: "129602-129603" },
+          stop_date_time: schedule,
+        }),
+      ]);
+
+      expect(train?.delay).toBe(4);
+    });
+
+    it("cancels a train that SIRI cancels", async () => {
+      const [train] = await boardWith([
+        siriJourney({ expected: "2026-03-10T10:20:00+01:00", cancelled: true }),
+      ]);
+
+      expect(train).toMatchObject({ status: "cancelled", delay: null });
+    });
+
+    it("matches arrivals against SIRI arrival times", async () => {
+      siriResponse = textResponse(
+        siriFeed([siriJourney({ kind: "Arrival", expected: "2026-03-10T10:17:00+01:00" })]),
+      );
+      fetchMock.once(
+        HOST,
+        arrivals([
+          passage({
+            stop_date_time: {
+              base_arrival_date_time: "20260310T101000",
+              arrival_date_time: "20260310T101000",
+              data_freshness: "base_schedule",
+            },
+          }),
+        ]),
+      );
+
+      const { trains } = await scrapeFranceTrains("FR686006", "arrivals", ENV);
+
+      expect(trains[0]?.delay).toBe(7);
+    });
+
+    it.each([
+      ["another train number", { trainNumbers: ["6203"] }],
+      ["another aimed time", { aimed: "2026-03-10T11:10:00+01:00" }],
+      ["another stop", { stop: "87723197" }],
+    ])("ignores a SIRI call for %s", async (_, call) => {
+      const [train] = await boardWith([
+        siriJourney({ ...call, expected: "2026-03-10T10:22:00+01:00", platform: "K" }),
+      ]);
+
+      expect(train).toMatchObject({ delay: null, platform: null, status: null });
+    });
+
+    it("ignores a stale SIRI feed", async () => {
+      const [train] = await boardWith(
+        [siriJourney({ expected: "2026-03-10T10:22:00+01:00" })],
+        schedule,
+        "2026-03-10T08:50:00.000Z",
+      );
+
+      expect(train?.delay).toBeNull();
+    });
+
+    it("keeps the Navitia board when the SIRI feed fails", async () => {
+      const [train] = await trainsFor([passage()]);
+
+      expect(train).toMatchObject({ trainNumber: "6201", scheduledTime: "10:10" });
+    });
+  });
+
   describe("disruptions", () => {
     const disruption = (id: string, effect: string, ...texts: string[]) => ({
       id,
@@ -612,6 +869,15 @@ describe("scrapeFranceTrains", () => {
 
       expect(train?.status).toBe("cancelled");
       expect(train?.info).toBe("Grève");
+    });
+
+    it("finds disruption links on the stop time", async () => {
+      const [train] = await trainsFor(
+        [passage({ stop_date_time: { links: [{ type: "disruption", id: "d1" }] } })],
+        [disruption("d1", "SIGNIFICANT_DELAYS", "Retard")],
+      );
+
+      expect(train?.info).toBe("Retard");
     });
 
     it("shows a disruption linked from both the passage and its informations once", async () => {

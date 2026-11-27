@@ -61,6 +61,19 @@ Rail Radar keeps its UIC-based station IDs. The API maps them to the stop-area I
 Navitia's `sncf` coverage. Most matches come from NeTEx passenger stop assignments or UIC codes on
 Navitia stop points. The remaining matches were checked by station name and location.
 
+Boards use passenger-facing service brands in place of SNCF's internal network names. Long-distance
+lines carry internal NeTEx codes such as `001B`, so those trains show `TGV` or `IC` from their brand
+instead.
+
+Since the NeTEx/SIRI switch on 24 November 2026, Navitia applies live updates to only part of the
+board and returns the rest as `base_schedule`. The scraper therefore also reads SNCF's national
+[SIRI-Lite estimated timetable](https://transport.data.gouv.fr/datasets/horaires-sncf) (about 13 MB of
+XML). It streams the feed, keeps only the calls at the requested UIC stop, and caches them per station
+for 60 seconds. A call matches a Navitia passage by train number and aimed Paris time. SIRI supplies
+the expected time, platform, and cancellation. A train with no live data from either source shows no
+delay and no status. If the SIRI feed fails or is over five minutes old, the board uses Navitia alone.
+[Navitia documentation](https://doc.navitia.io/#realtime).
+
 To refresh the mapping, download the [SNCF NeTEx timetable](https://transport.data.gouv.fr/resources/83195)
 and run `python3 scripts/update-sncf-stop-areas.py <archive.zip>` from this workspace with
 `SNCF_API_KEY` in the environment. Review the reported stations against the current catalogue.
