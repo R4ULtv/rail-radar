@@ -1,5 +1,6 @@
 import type { Train } from "@repo/data";
 
+import { FETCH_TIMEOUT_MS } from "../constants";
 import { ScraperError, type ScrapeResult } from "./core";
 import { fetchTextWithTimeout } from "./fetch";
 
@@ -42,10 +43,11 @@ function minuteDifference(later: number, earlier: number): number {
   return ((later - earlier + 2160) % 1440) - 720;
 }
 
+/** Returns null when Infotabule explicitly reports a temporary board outage. */
 async function parseBoard(
   html: string,
   type: BoardType,
-): Promise<Pick<ScrapeResult, "trains" | "info">> {
+): Promise<Pick<ScrapeResult, "trains" | "info"> | null> {
   const arrival = type === "arrivals";
   // PrimeFaces prefixes generated IDs, so match the stable suffix.
   const table = `tbody[id$="${arrival ? "listArrivals" : "listDepartures"}_data"]`;
@@ -53,6 +55,7 @@ async function parseBoard(
   let tabCount = 0;
   let hasVisiblePicker = false;
   let unavailableNotice = "";
+  let portletError = "";
   let cells: string[] | undefined;
   let note = false;
   const trains: Train[] = [];
@@ -109,6 +112,11 @@ async function parseBoard(
   }
 
   await new HTMLRewriter()
+    .on("#p_p_id_tabule_WAR_szdc_boards_web_ .alert-error", {
+      text(chunk) {
+        portletError += chunk.text;
+      },
+    })
     .on(`div[id$=":tabview:${arrival ? "tab3" : "tab2"}"] .boards-datatable-no-data`, {
       text(chunk) {
         unavailableNotice += chunk.text;
@@ -154,6 +162,7 @@ async function parseBoard(
     .text();
   finishRow();
   if (!foundTable) {
+    if (cleanText(portletError).includes("Tabule je momentálně nedostupný")) return null;
     // Some catalogued stops open only the station picker. A normal board also has a picker,
     // but it has additional tabs even when one direction's table is missing or malformed.
     const pickerOnly = hasVisiblePicker && tabCount === 1;
@@ -185,16 +194,29 @@ export async function scrapeCzechTrains(
   const code = stationId.match(/^CZ(54\d{5})$/)?.[1];
   if (!code) throw new ScraperError("Unknown Czech station ID.", 404);
 
-  const { text, fetchMs } = await fetchTextWithTimeout(`${BOARD_URL}?station=${code}`, "Czech", {
-    headers: HEADERS,
-  });
-  const timing = { fetchMs };
+  const url = `${BOARD_URL}?station=${code}`;
+  let fetchMs = 0;
   try {
-    return { ...(await parseBoard(text, type)), timing };
+    for (let attempt = 0; attempt < 2; attempt++) {
+      const response = await fetchTextWithTimeout(
+        url,
+        "Czech",
+        { headers: HEADERS, ...(attempt > 0 && { cache: "no-store" }) },
+        Math.max(1, FETCH_TIMEOUT_MS - fetchMs),
+      );
+      fetchMs += response.fetchMs;
+      const board = await parseBoard(response.text, type);
+      if (board) return { ...board, timing: { fetchMs } };
+    }
   } catch (error) {
     if (error instanceof ScraperError) {
-      throw new ScraperError(error.message, error.statusCode, timing, { cause: error });
+      error.timing = { fetchMs: fetchMs + (error.timing?.fetchMs ?? 0) };
     }
     throw error;
   }
+  throw new ScraperError(
+    "The Czech station board is temporarily unavailable. Please try again.",
+    503,
+    { fetchMs },
+  );
 }
