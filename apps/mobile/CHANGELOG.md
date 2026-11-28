@@ -6,6 +6,8 @@ the commit they were built from.
 
 ## [Unreleased]
 
+## [0.7.2] (15) – 2026-11-28
+
 ### Added
 
 - Czech stations are available on the map and in offline search, with live arrivals and departures
