@@ -13,15 +13,15 @@
   },
   "dependencies": {
     "@repo/data": "workspace:*",
-    "hono": "^4.13.17"
+    "hono": "^4.13.23"
   },
   "devDependencies": {
-    "@cloudflare/vitest-plugin": "^1.6.1",
+    "@cloudflare/vitest-plugin": "^1.9.2",
     "@repo/typescript-config": "workspace:*",
-    "cf": "1.0.0-beta.28",
+    "cf": "1.0.0-rc.2",
     "typescript": "^7.0.2",
-    "vitest": "^5.1.0",
-    "wrangler": "^4.159.0"
+    "vitest": "^5.1.2",
+    "wrangler": "^4.168.0"
   },
   "engines": {
     "node": ">=24"

@@ -125,6 +125,56 @@
       }
     }
   ],
+  "CZ5457076": [
+    {
+      "key": "overview.webp",
+      "width": 1920,
+      "height": 1080,
+      "alt": "Elevated view of Praha hlavní nádraží with the Fanta building, the glass train hall, and the platform canopies",
+      "attribution": {
+        "author": "VitVit",
+        "license": "CC BY-SA 4.0",
+        "origin": "Wikimedia Commons (cropped and resized)",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File%3APraha_Hl.n._cel%C3%A9_1.jpg"
+      }
+    },
+    {
+      "key": "platforms.webp",
+      "width": 1920,
+      "height": 1080,
+      "alt": "Platforms beneath the arched glass train hall with the Praha hlavní nádraží sign",
+      "attribution": {
+        "author": "V0lkanic",
+        "license": "CC0",
+        "origin": "Wikimedia Commons (cropped and resized)",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File%3APraha_hl._n.jpg"
+      }
+    },
+    {
+      "key": "fanta-hall.webp",
+      "width": 1920,
+      "height": 1080,
+      "alt": "Art Nouveau domed hall of the historic Fanta building at Praha hlavní nádraží",
+      "attribution": {
+        "author": "Bahnfrend",
+        "license": "CC BY-SA 4.0",
+        "origin": "Wikimedia Commons (cropped and resized)",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File%3AFantova_kav%C3%A1rna%2C_2019_%2801%29.jpg"
+      }
+    },
+    {
+      "key": "concourse.webp",
+      "width": 1920,
+      "height": 1080,
+      "alt": "Modern underground concourse with red columns, the station clock, and České dráhy ticket offices",
+      "attribution": {
+        "author": "Dariusz Sieczkowski",
+        "license": "CC BY-SA 4.0",
+        "origin": "Wikimedia Commons (cropped and resized)",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File%3APraha_hlavni_nadrazi_-_interier_%281%29.jpg"
+      }
+    }
+  ],
   "DE00096": [
     {
       "key": "front.webp",

@@ -8,7 +8,7 @@ import { Button, buttonVariants } from "@repo/ui/components/button";
 import { cn } from "@repo/ui/lib/utils";
 import { prerenderedPageLinkProps } from "@/lib/station-prerender";
 
-const STORAGE_KEY = "banner-dismissed-v19";
+const STORAGE_KEY = "banner-dismissed-v20";
 
 const subscribe = () => () => {};
 const getSnapshot = () => !localStorage.getItem(STORAGE_KEY);
@@ -42,7 +42,7 @@ export function AnnouncementBanner() {
             >
               <img
                 aria-hidden="true"
-                src="/assets/flags/hu.svg"
+                src="/assets/flags/cz.svg"
                 alt=""
                 width={44}
                 height={44}
@@ -52,17 +52,17 @@ export function AnnouncementBanner() {
               <div className="min-w-0 flex-1">
                 <div className="mb-0.5 flex items-center gap-1.5">
                   <p className="truncate text-sm font-semibold tracking-tight">
-                    Hungary is now live
+                    Czech Republic is now live
                   </p>
                 </div>
                 <p className="truncate text-xs text-muted-foreground">
-                  Explore stations across Hungary
+                  Explore stations across the Czech Republic
                 </p>
               </div>
 
               <Link
                 to="/stations/$country"
-                params={{ country: "hungary" }}
+                params={{ country: "czech-republic" }}
                 {...prerenderedPageLinkProps}
                 onClick={dismiss}
                 className={cn(
@@ -86,13 +86,13 @@ export function AnnouncementBanner() {
 
               <Link
                 to="/stations/$country"
-                params={{ country: "hungary" }}
+                params={{ country: "czech-republic" }}
                 {...prerenderedPageLinkProps}
                 onClick={dismiss}
-                aria-label="Explore train stations in Hungary"
+                aria-label="Explore train stations in the Czech Republic"
                 className="absolute inset-0 rounded-3xl focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/30 focus-visible:ring-inset md:hidden"
               >
-                <span className="sr-only">Explore train stations in Hungary</span>
+                <span className="sr-only">Explore train stations in the Czech Republic</span>
               </Link>
             </div>
           </m.div>

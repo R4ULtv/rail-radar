@@ -2,8 +2,8 @@
 
 ## Features
 
-- Interactive map with 23,000+ railway stations across Italy, Switzerland, Germany, Finland, Belgium, Denmark, the Netherlands, Norway, Sweden, Poland, the United Kingdom, Ireland, France, Luxembourg, and Hungary
-- Real-time arrivals and departures, where supported by each official source (RFI, SBB, DB, Digitraffic, iRail, Rejseplanen, NS, Entur, Trafiklab, PLK, LDBWS, Irish Rail, SNCF, Mobiliteit.lu, MÁV)
+- Interactive map with 26,000+ railway stations across Italy, Switzerland, Germany, Finland, Belgium, Denmark, the Netherlands, Norway, Sweden, Poland, the United Kingdom, Ireland, France, Luxembourg, Hungary, and the Czech Republic
+- Real-time arrivals and departures, where supported by each official source (RFI, SBB, DB, Digitraffic, iRail, Rejseplanen, NS, Entur, Trafiklab, PLK, LDBWS, Irish Rail, SNCF, Mobiliteit.lu, MÁV, Správa železnic)
 - Station search with fuzzy matching
 - Operator directory with network metadata and static coverage maps
 - Trending stations ranked by unique visitors, with both unique and total visit counts available
@@ -55,8 +55,9 @@ pnpm --filter=studio dev # Admin tool at localhost:3001
 
 All four apps use the Cloudflare CLI (`cf`) with typed `cloudflare.config.ts` files.
 Run `pnpm --filter=<app> exec cf auth login` before deploying, or configure
-`CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID` in CI. Builds produce deployable
-artifacts in each app's `.cloudflare/output/v0/`; generated Worker types live in
+`CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID` in CI. Since the `cf` 1.0 release
+candidate, builds write deployable artifacts to each app's `.cloudflare/output/v1/`.
+Generated Worker types live in
 `.cloudflare/types/`. The API keeps Wrangler as cf's bundler; web uses the Cloudflare
 Vite plugin, studio packages its static SvelteKit output for cf, and status uses the Astro Cloudflare adapter.
 
@@ -115,4 +116,5 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - 🇫🇷 French train data from [SNCF (Navitia)](https://numerique.sncf.com/startup/api/)
 - 🇱🇺 Luxembourg train data from [Mobiliteit.lu](https://data.public.lu/en/datasets/api-mobiliteit-lu/)
 - 🇭🇺 Hungarian train data from [MÁV](https://jegy.mav.hu)
+- 🇨🇿 Czech train data from [Správa železnic](https://www.spravazeleznic.cz/)
 - Map rendering by [Mapbox](https://www.mapbox.com/)

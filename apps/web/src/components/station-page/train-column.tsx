@@ -10,7 +10,7 @@ import {
 } from "@repo/ui/components/card";
 import { ToggleGroup, ToggleGroupItem } from "@repo/ui/components/toggle-group";
 import { TrainRow, TrainRowSkeleton } from "@/components/train-row";
-import { TrainBoardNotice } from "@/components/train-board-notice";
+import { EmptyTrainBoard, TrainBoardNotice } from "@/components/train-board-notice";
 import { ArrowDownLeftIcon, ArrowUpRightIcon } from "lucide-react";
 
 import { UpdatedStatus } from "@/components/updated-status";
@@ -19,6 +19,7 @@ interface TrainColumnProps {
   title: string;
   type: "arrivals" | "departures";
   trainData: Train[] | null;
+  info: string | null;
   isLoading: boolean;
   isValidating: boolean;
   error: string | null;
@@ -34,6 +35,7 @@ export function TrainColumn({
   title,
   type,
   trainData,
+  info,
   isLoading,
   isValidating,
   error,
@@ -113,11 +115,7 @@ export function TrainColumn({
               <TrainBoardNotice hasSnapshot isValidating={isValidating} onRetry={onRetry} />
             )}
             {trainData.length === 0 ? (
-              <div className="px-4 py-8 text-center text-sm text-muted-foreground">
-                {error
-                  ? `No ${type} were listed in the last received update.`
-                  : `No ${type} scheduled`}
-              </div>
+              <EmptyTrainBoard type={type} info={info} hasError={Boolean(error)} />
             ) : (
               <div>
                 {trainData.map((train) => (

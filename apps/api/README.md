@@ -9,26 +9,26 @@ Cloudflare Workers API that provides real-time European train data from official
 
 ## Endpoints
 
-| Method | Path                          | Description                                                                                                                                             |
-| ------ | ----------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `GET`  | `/`                           | API info and endpoint documentation                                                                                                                     |
-| `GET`  | `/robots.txt`                 | Blocks crawlers from indexing the API                                                                                                                   |
-| `GET`  | `/operators`                  | List train operators with optional filtering                                                                                                            |
-| `GET`  | `/operators/:slug`            | Get a single train operator by slug                                                                                                                     |
-| `GET`  | `/lines`                      | Metro and light rail lines with ordered routes, without track (see below)                                                                               |
-| `GET`  | `/lines.geojson`              | The same lines as GeoJSON with full track (see below)                                                                                                   |
-| `GET`  | `/map/static`                 | Static map image via Mapbox                                                                                                                             |
-| `GET`  | `/stations/search`            | Station search endpoint returning JSON arrays                                                                                                           |
-| `GET`  | `/stations.geojson`           | GeoJSON FeatureCollection of all stations (see below)                                                                                                   |
-| `GET`  | `/stations/trending`          | Get trending stations ranked by unique visitors (`?period=hour\|day\|week\|month`, default: `day`)                                                      |
-| `GET`  | `/stations/trending/:country` | Get country-filtered trending stations ranked by unique visitors (`it\|ch\|de\|fi\|be\|dk\|nl\|no\|se\|pl\|uk\|ie\|fr\|lu\|hu`, same `?period` options) |
-| `GET`  | `/stations/:id`               | Get station with trains (`?type=arrivals\|departures`)                                                                                                  |
-| `GET`  | `/stations/:id/lines`         | Lines serving a station, without track                                                                                                                  |
-| `GET`  | `/stations/:id/lines.geojson` | Lines serving a station as GeoJSON with full track                                                                                                      |
-| `GET`  | `/stations/:id/stats`         | Get station visit stats (`?period=hour\|day\|week\|month`, default: `day`)                                                                              |
-| `GET`  | `/analytics/overview`         | Get global analytics (total visits, unique visitors, country breakdown)                                                                                 |
-| `GET`  | `/status/summary`             | Current health of each upstream data provider (see the [status app](../status/README.md))                                                               |
-| `GET`  | `/status/latency`             | 30 days of daily provider health and response-time percentiles                                                                                          |
+| Method | Path                          | Description                                                                                                                                                 |
+| ------ | ----------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `GET`  | `/`                           | API info and endpoint documentation                                                                                                                         |
+| `GET`  | `/robots.txt`                 | Blocks crawlers from indexing the API                                                                                                                       |
+| `GET`  | `/operators`                  | List train operators with optional filtering                                                                                                                |
+| `GET`  | `/operators/:slug`            | Get a single train operator by slug                                                                                                                         |
+| `GET`  | `/lines`                      | Metro and light rail lines with ordered routes, without track (see below)                                                                                   |
+| `GET`  | `/lines.geojson`              | The same lines as GeoJSON with full track (see below)                                                                                                       |
+| `GET`  | `/map/static`                 | Static map image via Mapbox                                                                                                                                 |
+| `GET`  | `/stations/search`            | Station search endpoint returning JSON arrays                                                                                                               |
+| `GET`  | `/stations.geojson`           | GeoJSON FeatureCollection of all stations (see below)                                                                                                       |
+| `GET`  | `/stations/trending`          | Get trending stations ranked by unique visitors (`?period=hour\|day\|week\|month`, default: `day`)                                                          |
+| `GET`  | `/stations/trending/:country` | Get country-filtered trending stations ranked by unique visitors (`it\|ch\|de\|fi\|be\|dk\|nl\|no\|se\|pl\|uk\|ie\|fr\|lu\|hu\|cz`, same `?period` options) |
+| `GET`  | `/stations/:id`               | Get station with trains (`?type=arrivals\|departures`)                                                                                                      |
+| `GET`  | `/stations/:id/lines`         | Lines serving a station, without track                                                                                                                      |
+| `GET`  | `/stations/:id/lines.geojson` | Lines serving a station as GeoJSON with full track                                                                                                          |
+| `GET`  | `/stations/:id/stats`         | Get station visit stats (`?period=hour\|day\|week\|month`, default: `day`)                                                                                  |
+| `GET`  | `/analytics/overview`         | Get global analytics (total visits, unique visitors, country breakdown)                                                                                     |
+| `GET`  | `/status/summary`             | Current health of each upstream data provider (see the [status app](../status/README.md))                                                                   |
+| `GET`  | `/status/latency`             | 30 days of daily provider health and response-time percentiles                                                                                              |
 
 ### `GET /operators`
 
@@ -55,6 +55,29 @@ Returns an `application/json` array of `Station` objects:
 - One-character non-ID queries return an empty array
 - Inline coordinate, country, and type parsing is not supported
 
+### French station boards
+
+Rail Radar keeps its UIC-based station IDs. The API maps them to the stop-area IDs published by
+Navitia's `sncf` coverage. Most matches come from NeTEx passenger stop assignments or UIC codes on
+Navitia stop points. The remaining matches were checked by station name and location.
+
+Boards use passenger-facing service brands in place of SNCF's internal network names. Long-distance
+lines carry internal NeTEx codes such as `001B`, so those trains show `TGV` or `IC` from their brand
+instead.
+
+Since the NeTEx/SIRI switch on 24 November 2026, Navitia applies live updates to only part of the
+board and returns the rest as `base_schedule`. The scraper therefore also reads SNCF's national
+[SIRI-Lite estimated timetable](https://transport.data.gouv.fr/datasets/horaires-sncf) (about 13 MB of
+XML). It streams the feed, keeps only the calls at the requested UIC stop, and caches them per station
+for 60 seconds. A call matches a Navitia passage by train number and aimed Paris time. SIRI supplies
+the expected time, platform, and cancellation. A train with no live data from either source shows no
+delay and no status. If the SIRI feed fails or is over five minutes old, the board uses Navitia alone.
+[Navitia documentation](https://doc.navitia.io/#realtime).
+
+To refresh the mapping, download the [SNCF NeTEx timetable](https://transport.data.gouv.fr/resources/83195)
+and run `python3 scripts/update-sncf-stop-areas.py <archive.zip>` from this workspace with
+`SNCF_API_KEY` in the environment. Review the reported stations against the current catalogue.
+
 ### `GET /stations/trending`
 
 Returns a JSON object with `timestamp`, `period`, and `stations`.
@@ -69,8 +92,8 @@ Returns a JSON object with `timestamp`, `period`, and `stations`.
 Returns `application/geo+json` FeatureCollection consumed directly by Mapbox GL JS:
 
 - No params: all stations (pre-serialized for performance)
-- `?type=rail|metro|light`: filter by station type
-- `?country=it|ch|de|fi|be|dk|nl|no|se|pl|uk|ie|fr|lu|hu`: filter by country
+- `?type=rail|metro|light|freight`: filter by station type
+- `?country=it|ch|de|fi|be|dk|nl|no|se|pl|uk|ie|fr|lu|hu|cz`: filter by country
 - Filters can be combined: `?type=rail&country=it`
 
 ### Lines
@@ -94,7 +117,7 @@ them, and empty values mean no filter:
 
 - `?id=it-milano-m1,it-milano-m2`: line IDs
 - `?q=m3`: case- and diacritic-insensitive text match on line ID, code, name and route codes
-- `?country=it|ch|de|fi|be|dk|nl|no|se|pl|uk|ie|fr|lu|hu`: country, taken from the line ID prefix
+- `?country=it|ch|de|fi|be|dk|nl|no|se|pl|uk|ie|fr|lu|hu|cz`: country, taken from the line ID prefix
 - `?type=metro|light`: line type
 - `?operator=atm-milano`: operator slug, as listed by `/operators`
 
@@ -227,7 +250,8 @@ src/
 │   ├── ireland.ts     # Irish Rail API scraper
 │   ├── france.ts      # French SNCF (Navitia) API scraper
 │   ├── luxembourg.ts  # Mobiliteit.lu departures (CFL rail)
-│   └── hungary.ts     # MÁV ticketing timetable (jegy.mav.hu) arrivals and departures
+│   ├── hungary.ts     # MÁV ticketing timetable (jegy.mav.hu) arrivals and departures
+│   └── czech.ts       # Czech Správa železnic scraper (HTML parsing)
 ├── analytics.ts   # Cloudflare Analytics Engine integration for visits and provider metrics
 ├── provider-probes.ts # Hourly scheduled check of every provider
 ├── provider-status.ts # Provider health and latency queries

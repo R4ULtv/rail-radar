@@ -17,6 +17,7 @@ import { scrapePolandTrains } from "./poland";
 import { scrapeFranceTrains } from "./france";
 import { scrapeLuxembourgTrains } from "./luxembourg";
 import { scrapeHungaryTrains } from "./hungary";
+import { scrapeCzechTrains } from "./czech";
 
 export * from "./core";
 
@@ -42,6 +43,7 @@ const scrapers: Partial<Record<CountryCode, ScrapeFn>> = {
   fr: scrapeFranceTrains,
   lu: scrapeLuxembourgTrains,
   hu: scrapeHungaryTrains,
+  cz: scrapeCzechTrains,
 };
 
 // Hidden countries (see HIDDEN_COUNTRIES) keep their scraper here but are not served.

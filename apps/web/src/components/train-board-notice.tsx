@@ -1,5 +1,22 @@
 import { Button } from "@repo/ui/components/button";
 
+export function EmptyTrainBoard({
+  type,
+  info,
+  hasError,
+}: {
+  type: "arrivals" | "departures";
+  info: string | null;
+  hasError: boolean;
+}) {
+  return (
+    <div className="px-4 py-8 text-center text-sm text-muted-foreground">
+      {info ??
+        (hasError ? `No ${type} were listed in the last received update.` : `No ${type} scheduled`)}
+    </div>
+  );
+}
+
 type TrainBoardNoticeProps = {
   hasSnapshot: boolean;
   isValidating: boolean;

@@ -31,11 +31,14 @@ export function cloudflareStaticAdapter(mode: string): Adapter {
       await cleanBuildOutputDir(root);
       await writeAssets({ root, sourceDirectory: join(root, "build") });
       await writeWorkerConfig({ root, config: result.data.worker });
-      await writeRootConfig(
+      await writeRootConfig({
         root,
-        { accountId: result.data.accountId, complianceRegion: result.data.complianceRegion },
-        context,
-      );
+        settings: {
+          accountId: result.data.accountId,
+          complianceRegion: result.data.complianceRegion,
+        },
+        buildContext: context,
+      });
     },
   };
 }

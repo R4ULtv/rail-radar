@@ -91,7 +91,7 @@ const screens = [
     name: "map",
     alt: "The Rail Radar app showing train stations on a street map of Milan.",
     title: "Every station on the map",
-    description: "23,000+ stations in 15 countries, on a simple or street map.",
+    description: "26,000+ stations in 16 countries, on a simple or street map.",
   },
   {
     name: "departures",
@@ -124,7 +124,7 @@ const mobileFeatures = [
     icon: RouteIcon,
     title: "Metro and tram lines at every stop",
     description:
-      "Each station lists the metro, light rail and tram lines that serve it, in 14 countries. Open a line to see its track on the map and every stop in order, then tap a stop to jump to it.",
+      "Each station lists the metro, light rail and tram lines that serve it, in 16 countries. Open a line to see its track on the map and every stop in order, then tap a stop to jump to it.",
   },
   {
     icon: BookmarkIcon,

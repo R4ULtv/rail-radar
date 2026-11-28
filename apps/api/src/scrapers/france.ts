@@ -1,38 +1,37 @@
 import type { Train } from "@repo/data";
 
-import {
-  STATUS_WINDOW_MS,
-  ScraperError,
-  type ScrapeResult,
-  statusFromWindow,
-  stripCountryPrefix,
-} from "./core";
+import frStationCodes from "./codes/fr-codes.json";
+import { STATUS_WINDOW_MS, ScraperError, type ScrapeResult, statusFromWindow } from "./core";
 import { fetchJsonWithTimeout } from "./fetch";
+import { getSiriStopCalls, type SiriStopCall } from "./france-siri";
 
 const SNCF_BASE_URL = "https://api.navitia.io/v1/coverage/sncf";
 const PARIS_TZ = "Europe/Paris";
 const RECENT_WINDOW_MS = STATUS_WINDOW_MS;
 const TRAIN_LIMIT = 24;
 
-// Convert FR station ID to its 8-digit UIC code (e.g. "FR686006" -> "87686006").
-function convertFranceStationId(stationId: string): string {
-  const numericPart = stripCountryPrefix(stationId);
-  return `87${numericPart}`;
-}
+// Navitia merges SNCF and Île-de-France Mobilités stop places under either namespace.
+const stopAreas: Readonly<Record<string, string>> = frStationCodes;
 
-// SNCF (Navitia) addresses stations as stop_area:SNCF:<UIC>. If SNCF changes
-// the prefix this is the only line that needs to move.
-function buildStopAreaId(stationId: string): string {
-  return `stop_area:SNCF:${convertFranceStationId(stationId)}`;
-}
+function buildSncfUrl(
+  stationId: string,
+  type: "arrivals" | "departures",
+  fromDatetime: string,
+): string {
+  const stopArea = stopAreas[stationId];
+  if (!stopArea) throw new ScraperError("SNCF has no board for this station.", 404);
 
-function buildSncfUrl(stationId: string, arrivals: boolean, fromDatetime: string): string {
-  const endpoint = arrivals ? "arrivals" : "departures";
-  const stopArea = encodeURIComponent(buildStopAreaId(stationId));
-  return (
-    `${SNCF_BASE_URL}/stop_areas/${stopArea}/${endpoint}` +
-    `?data_freshness=realtime&count=${TRAIN_LIMIT}&disable_geojson=true&from_datetime=${fromDatetime}`
-  );
+  const params = new URLSearchParams({
+    data_freshness: "realtime",
+    count: String(TRAIN_LIMIT),
+    disable_geojson: "true",
+    from_datetime: fromDatetime,
+  });
+  // Combined stop areas include Métro and bus platforms. Filter before Navitia limits the board.
+  for (const mode of ["Metro", "Bus", "Coach", "Car", "Bike", "BikeSharingService"]) {
+    params.append("forbidden_uris[]", `physical_mode:${mode}`);
+  }
+  return `${SNCF_BASE_URL}/stop_areas/${encodeURIComponent(stopArea)}/${type}?${params.toString()}`;
 }
 
 // Navitia response types (only the fields we use)
@@ -47,6 +46,73 @@ interface DisplayInformations {
   links?: NavitiaLink[];
 }
 
+const SNCF_NETWORK_BRANDS = new Map([
+  ["atlantique", "TGV INOUI"],
+  ["est", "TGV INOUI"],
+  ["nord", "TGV INOUI"],
+  ["sud est", "TGV INOUI"],
+  ["france espagne", "TGV INOUI"],
+  ["tgv italie", "TGV INOUI"],
+  ["alleo", "DB SNCF"],
+  ["lyria", "TGV Lyria"],
+  ["thalys", "Eurostar"],
+  ["intercites nantes", "Intercités"],
+  ["lignes d'amenagement du territoire", "Intercités"],
+  ["lignes de nuit", "Intercités"],
+  ["palito", "Intercités"],
+  ["paris clermont", "Intercités"],
+  ["transversale sud", "Intercités"],
+  ["ter auvergne rhone alpes", "TER Auvergne-Rhône-Alpes"],
+  ["ter grand est", "Fluo Grand Est"],
+  ["ter nouvelle aquitaine", "TER Nouvelle-Aquitaine"],
+  ["ter provence alpes cote d'azur", "ZOU !"],
+  ["ratp cap arc sud et ouest", "RATP"],
+]);
+
+const SNCF_COMMERCIAL_BRANDS = new Map([
+  ["intercites", "Intercités"],
+  ["tgv inoui", "TGV INOUI"],
+  ["tgv lyria", "TGV Lyria"],
+  ["lyria", "TGV Lyria"],
+  ["ouigo", "OUIGO"],
+  ["ouigo train classique", "OUIGO"],
+  ["ter", "TER"],
+  ["rer", "RER"],
+  ["transilien", "Transilien"],
+  ["train transilien", "Transilien"],
+  ["eurostar", "Eurostar"],
+  ["thalys", "Eurostar"],
+]);
+
+function brandKey(name: string): string {
+  return name
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/\p{M}/gu, "")
+    .replace(/’/g, "'")
+    .replace(/[\s-]+/g, " ");
+}
+
+function getBrand(info: DisplayInformations): string {
+  const network = info.network?.trim() || "";
+  const key = brandKey(network);
+  const commercialMode = info.commercial_mode?.trim() || "";
+
+  // The NeTEx catalogue files the Léman Express lines under TER Auvergne-Rhône-Alpes.
+  if (key === "ter auvergne rhone alpes" && /^L[1-7]$/.test(info.code?.trim() ?? "")) {
+    return "Léman Express";
+  }
+
+  const brand = SNCF_NETWORK_BRANDS.get(key);
+  if (brand) return brand;
+  if (key.startsWith("ter ")) return "TER";
+  if (network && key !== "sncf") return network;
+
+  return (
+    SNCF_COMMERCIAL_BRANDS.get(brandKey(commercialMode)) ?? (network || commercialMode || "SNCF")
+  );
+}
+
 // Short category labels for trains with no line code (long-distance services).
 const PHYSICAL_MODE_LABELS: Record<string, string> = {
   "Train grande vitesse": "TGV",
@@ -57,13 +123,30 @@ const PHYSICAL_MODE_LABELS: Record<string, string> = {
 };
 
 // SNCF's "sncf" coverage also serves replacement buses/coaches — keep rail only.
-const NON_RAIL_MODES = new Set(["Bus", "Autocar", "Car", "Bike", "BikeSharingService"]);
+const NON_RAIL_MODES = new Set(["Métro", "Bus", "Autocar", "Car", "Bike", "BikeSharingService"]);
 
-// brand = operator/network; category = the line of the train (RER B, Transilien
-// H, TER K13) when present, otherwise the service type (TGV, TER, …).
-function getCategory(info: DisplayInformations): string | null {
+// NeTEx gives long-distance lines internal codes such as "001B" that passengers never see.
+const INTERNAL_LINE_CODE = /^\d{3}[A-Z]$/;
+
+const BRAND_CATEGORIES = new Map([
+  ["TGV INOUI", "TGV"],
+  ["TGV Lyria", "TGV"],
+  ["Intercités", "IC"],
+]);
+
+function getBrandCategory(info: DisplayInformations, brand: string): string | null {
+  if (brand !== "OUIGO") return BRAND_CATEGORIES.get(brand) ?? null;
+  // OUIGO Train Classique runs on the classic network. SNCF files it as Intercités or local rail.
+  const classic =
+    info.commercial_mode === "Intercités" || info.physical_mode === "Train Transilien";
+  return classic ? null : "TGV";
+}
+
+// Use the passenger-facing line code when present and fall back to the brand or physical mode.
+function getCategory(info: DisplayInformations, brand: string): string | null {
   const line = info.code?.trim();
-  if (line) return line;
+  if (line && !INTERNAL_LINE_CODE.test(line)) return line;
+  if (line) return getBrandCategory(info, brand);
   const mode = info.physical_mode;
   return (mode && PHYSICAL_MODE_LABELS[mode]) ?? mode ?? null;
 }
@@ -73,16 +156,19 @@ interface StopDateTime {
   base_departure_date_time?: string;
   arrival_date_time?: string;
   base_arrival_date_time?: string;
+  // "realtime" only when Navitia applied a live update to this trip.
+  data_freshness?: string;
+  links?: NavitiaLink[];
 }
 
 interface NavitiaLink {
+  rel?: string;
   type: string;
   id: string;
 }
 
 interface StopPoint {
-  // Static platform from the GTFS feed (stops.txt platform_code), not a live track
-  // assignment — populated only where SNCF models per-platform stop_points.
+  // Available when the source models individual platforms.
   platform_code?: string | null;
 }
 
@@ -104,6 +190,7 @@ interface Disruption {
 }
 
 interface SncfBoardResponse {
+  origins?: { id: string; name: string }[];
   departures?: Passage[];
   arrivals?: Passage[];
   disruptions?: Disruption[];
@@ -136,17 +223,19 @@ function naiveMs(parts: NaiveParts): number {
   return Date.UTC(parts.year, parts.month - 1, parts.day, parts.hour, parts.minute, parts.second);
 }
 
+const PARIS_FORMAT = new Intl.DateTimeFormat("en-GB", {
+  timeZone: PARIS_TZ,
+  year: "numeric",
+  month: "2-digit",
+  day: "2-digit",
+  hour: "2-digit",
+  minute: "2-digit",
+  second: "2-digit",
+  hour12: false,
+});
+
 function parisNaiveParts(date: Date): NaiveParts {
-  const parts = new Intl.DateTimeFormat("en-GB", {
-    timeZone: PARIS_TZ,
-    year: "numeric",
-    month: "2-digit",
-    day: "2-digit",
-    hour: "2-digit",
-    minute: "2-digit",
-    second: "2-digit",
-    hour12: false,
-  }).formatToParts(date);
+  const parts = PARIS_FORMAT.formatToParts(date);
   const get = (type: string) => Number(parts.find((p) => p.type === type)?.value ?? "0");
   return {
     year: get("year"),
@@ -173,27 +262,51 @@ function formatLocalTime(value: string | undefined): string {
   return `${value.slice(9, 11)}:${value.slice(11, 13)}`;
 }
 
-function calculateDelay(scheduled?: string, realtime?: string): number | null {
-  if (!scheduled || !realtime) return null;
-  const diff = Math.round(
-    (naiveMs(parseNavitiaDateTime(realtime)) - naiveMs(parseNavitiaDateTime(scheduled))) / 60000,
-  );
+function calculateDelay(scheduledMs: number | null, actualMs: number | null): number | null {
+  if (scheduledMs === null || actualMs === null) return null;
+  const diff = Math.round((actualMs - scheduledMs) / 60000);
   return diff > 0 ? diff : null;
 }
 
-function getStatus(
-  realtime: string | undefined,
-  nowMs: number,
-  arrivals: boolean,
-): Train["status"] {
-  if (!realtime) return null;
-  const actualMs = naiveMs(parseNavitiaDateTime(realtime));
-  return statusFromWindow(actualMs, nowMs, RECENT_WINDOW_MS, arrivals ? "arrivals" : "departures");
+interface SiriUpdate {
+  // Paris wall-clock "naive" ms, or null when SNCF has no reliable prediction.
+  expectedMs: number | null;
+  platform: string | null;
+  cancelled: boolean;
+}
+
+// SIRI uses absolute times. Key each call by train number and aimed Paris wall-clock time,
+// which identifies the trip on this board.
+function indexSiriCalls(calls: SiriStopCall[], arrivals: boolean): Map<string, SiriUpdate> {
+  const index = new Map<string, SiriUpdate>();
+  for (const call of calls) {
+    const time = arrivals ? call.arrival : call.departure;
+    if (!time) continue;
+    const aimedMs = naiveMs(parisNaiveParts(new Date(time.aimedAt)));
+    const update: SiriUpdate = {
+      expectedMs:
+        time.expectedAt === null ? null : naiveMs(parisNaiveParts(new Date(time.expectedAt))),
+      platform: time.platform,
+      cancelled: call.cancelled,
+    };
+    for (const trainNumber of call.trainNumbers) index.set(`${trainNumber}@${aimedMs}`, update);
+  }
+  return index;
 }
 
 // Navitia formats directions as "Name (City)" — drop the trailing parenthetical.
 function cleanPlace(name: string): string {
   return name.replace(/\s*\([^)]*\)\s*$/, "").trim();
+}
+
+function getTrainNumber(info: DisplayInformations, destination: string, category: string | null) {
+  // IDFM publishes mission codes in the headsign. NeTEx can repeat the destination there.
+  const rawHeadsign = info.headsign?.trim() ?? "";
+  const headsign = cleanPlace(rawHeadsign) === destination ? "" : rawHeadsign;
+  if (headsign && headsign !== category) return headsign;
+
+  const tripNumber = info.trip_short_name?.trim() ?? "";
+  return tripNumber && cleanPlace(tripNumber) !== destination ? tripNumber : headsign;
 }
 
 function stripHtml(text: string): string {
@@ -216,14 +329,19 @@ export async function scrapeFranceTrains(
   const arrivals = type === "arrivals";
   const nowMs = naiveMs(parisNaiveParts(new Date()));
   const fromDatetime = toNavitiaString(nowMs - RECENT_WINDOW_MS);
-  const url = buildSncfUrl(stationId, arrivals, fromDatetime);
+  const url = buildSncfUrl(stationId, type, fromDatetime);
 
-  const { data, fetchMs } = await fetchJsonWithTimeout<SncfBoardResponse>(url, "French", {
-    headers: {
-      // Navitia uses HTTP Basic auth with the API key as the username (empty password).
-      Authorization: `Basic ${btoa(`${apiKey}:`)}`,
-    },
-  });
+  // Navitia applies SNCF's live feed to only some trips. SNCF's own SIRI feed fills the gaps.
+  const [{ data, fetchMs }, siriCalls] = await Promise.all([
+    fetchJsonWithTimeout<SncfBoardResponse>(url, "French", {
+      headers: {
+        // Navitia uses HTTP Basic auth with the API key as the username (empty password).
+        Authorization: `Basic ${btoa(`${apiKey}:`)}`,
+      },
+    }),
+    getSiriStopCalls(stationId),
+  ]);
+  const siriUpdates = indexSiriCalls(siriCalls, arrivals);
   const passages = ((arrivals ? data.arrivals : data.departures) ?? []).filter(
     (p) => !NON_RAIL_MODES.has(p.display_informations.physical_mode ?? ""),
   );
@@ -232,25 +350,36 @@ export async function scrapeFranceTrains(
     (data.disruptions ?? []).map((d) => [d.id, d]),
   );
 
+  const originsById = new Map(arrivals ? data.origins?.map(({ id, name }) => [id, name]) : []);
+
   const trains: Train[] = passages.map((passage) => {
     const info = passage.display_informations;
-    const category = getCategory(info);
-    // headsign is the passenger-facing mission code (RER/Transilien) or train
-    // number; for TER it duplicates the line code, so fall back to the real
-    // train number there.
-    const headsign = info.headsign ?? "";
-    const trainNumber =
-      !headsign || headsign === category ? (info.trip_short_name ?? headsign) : headsign;
-    const scheduled = arrivals
-      ? passage.stop_date_time.base_arrival_date_time
-      : passage.stop_date_time.base_departure_date_time;
-    const realtime = arrivals
-      ? passage.stop_date_time.arrival_date_time
-      : passage.stop_date_time.departure_date_time;
+    const times = passage.stop_date_time;
+    const brand = getBrand(info);
+    const category = getCategory(info, brand);
+    const destination = cleanPlace(info.direction ?? "");
+    const scheduled = arrivals ? times.base_arrival_date_time : times.base_departure_date_time;
+    const realtime = arrivals ? times.arrival_date_time : times.departure_date_time;
+    const scheduledMs = scheduled ? naiveMs(parseNavitiaDateTime(scheduled)) : null;
+    // Transilien trips can carry a paired number such as "129602-129603".
+    const tripNumbers = info.trip_short_name?.split("-").map((n) => n.trim()) ?? [];
+    const siri =
+      scheduledMs === null
+        ? undefined
+        : tripNumbers
+            .map((n) => siriUpdates.get(`${n}@${scheduledMs}`))
+            .find((update) => update !== undefined);
+    // Base-schedule times are only the timetable. Show no delay or live status for them.
+    const navitiaLiveMs =
+      times.data_freshness === "realtime" && realtime
+        ? naiveMs(parseNavitiaDateTime(realtime))
+        : null;
+    const actualMs = siri?.expectedMs ?? navitiaLiveMs;
 
-    // The passage and its display informations often link the same disruption.
+    const stopLinks = [...(info.links ?? []), ...(times.links ?? [])];
+    // Navitia can link the same disruption in several places.
     const linkedIds = new Set(
-      [...(passage.links ?? []), ...(info.links ?? [])]
+      [...(passage.links ?? []), ...stopLinks]
         .filter((link) => link.type === "disruption")
         .map((link) => link.id),
     );
@@ -258,7 +387,8 @@ export async function scrapeFranceTrains(
       .map((id) => disruptionsById.get(id))
       .filter((d): d is Disruption => Boolean(d));
 
-    const cancelled = linked.some((d) => d.severity?.effect === "NO_SERVICE");
+    const cancelled =
+      siri?.cancelled === true || linked.some((d) => d.severity?.effect === "NO_SERVICE");
     // Separate disruptions can also carry the same text.
     const messages = [
       ...new Set(
@@ -270,23 +400,28 @@ export async function scrapeFranceTrains(
     ];
 
     const train: Train = {
-      brand: info.network ?? info.commercial_mode ?? "SNCF",
+      brand,
       category,
-      trainNumber,
-      scheduledTime: formatLocalTime(scheduled),
-      delay: cancelled ? null : calculateDelay(scheduled, realtime),
-      platform: passage.stop_point?.platform_code?.trim() || null,
-      status: cancelled ? "cancelled" : getStatus(realtime, nowMs, arrivals),
+      trainNumber: getTrainNumber(info, destination, category),
+      scheduledTime: formatLocalTime(scheduled ?? realtime),
+      delay: cancelled ? null : calculateDelay(scheduledMs, actualMs),
+      platform: siri?.platform || passage.stop_point?.platform_code?.trim() || null,
+      status: cancelled
+        ? "cancelled"
+        : actualMs === null
+          ? null
+          : statusFromWindow(actualMs, nowMs, RECENT_WINDOW_MS, type),
       info: messages.length > 0 ? messages.join("; ") : null,
     };
 
     if (arrivals) {
-      // Navitia's `display_informations.direction` is the vehicle's terminus,
-      // not the true origin. The route name ("Paris Est - Strasbourg") is a
-      // line-pair, not trip-direction, so it's also unreliable. Leave origin
-      // unset rather than show a false origin.
+      const originLink = stopLinks.find(
+        (link) => link.type === "stop_area" && link.rel === "origins",
+      );
+      const origin = originLink && originsById.get(originLink.id);
+      if (origin) train.origin = origin;
     } else {
-      train.destination = cleanPlace(info.direction);
+      train.destination = destination;
     }
 
     return train;
