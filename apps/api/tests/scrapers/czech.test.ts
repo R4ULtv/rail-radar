@@ -5,10 +5,15 @@ import { stationById } from "@repo/data/stations";
 import { getProviderByStationId } from "../../src/analytics";
 import { getScraperForStation, ScraperError } from "../../src/scrapers";
 import { scrapeCzechTrains } from "../../src/scrapers/czech";
-import { freezeTime, mockFetch, textResponse, type FetchMock } from "../helpers";
+import { captureLogs, freezeTime, mockFetch, textResponse, type FetchMock } from "../helpers";
 import { request } from "../helpers/app";
 
 const BOARD = "/cestujici/infotabule?station=5453613";
+const PRAGUE_BOARD = "/cestujici/infotabule?station=5457076";
+// The board portlet on Prague's HTTP 200 error page.
+const temporarilyUnavailable = `<div id="p_p_id_tabule_WAR_szdc_boards_web_">
+  <div class="portlet-body"><div class="alert alert-error">Tabule je momentálně nedostupný.</div></div>
+</div>`;
 const ID = "_tabule_WAR_szdc_boards_web_:tabsForm:tabview";
 // Infotabule returns this single-tab view for catalogued stations such as Třebívlice.
 const picker = (extraTab = "") => `<div id="${ID}">
@@ -239,6 +244,43 @@ describe("Czech station boards", () => {
     const result = await scrapeCzechTrains("CZ5453613");
     expect(result.trains).toEqual([]);
     expect(result.info).toContain("no live departures board");
+    expect(fetchMock.requests).toHaveLength(1);
+  });
+
+  it.each(["arrivals", "departures"] as const)(
+    "recovers Prague %s after a temporary board outage",
+    async (type) => {
+      fetchMock
+        .once(PRAGUE_BOARD, textResponse(temporarilyUnavailable))
+        .on(PRAGUE_BOARD, textResponse(board()));
+      const { response, env } = await request(`/stations/CZ5457076?type=${type}`);
+      expect(response.status).toBe(200);
+      expect(await response.json()).toMatchObject({
+        trains: [type === "arrivals" ? { origin: "Praha hl.n." } : { destination: "Brno hl.n." }],
+      });
+      expect(fetchMock.requests.map((r) => r.headers.get("User-Agent"))).toEqual([
+        expect.stringContaining("RailRadar"),
+        expect.stringContaining("RailRadar"),
+      ]);
+      expect(env.PROVIDER_ANALYTICS.writeDataPoint).toHaveBeenCalledTimes(1);
+    },
+  );
+
+  it("reports one provider failure when the Prague board is still unavailable after retry", async () => {
+    captureLogs();
+    fetchMock.on(PRAGUE_BOARD, textResponse(temporarilyUnavailable));
+    const { response, env } = await request("/stations/CZ5457076?type=departures");
+    expect(response.status).toBe(503);
+    expect(await response.json()).toMatchObject({
+      error: expect.stringContaining("temporarily unavailable"),
+    });
+    expect(fetchMock.requests).toHaveLength(2);
+    expect(env.PROVIDER_ANALYTICS.writeDataPoint).toHaveBeenCalledTimes(1);
+    expect(env.PROVIDER_ANALYTICS.writeDataPoint).toHaveBeenCalledWith({
+      blobs: ["spravazeleznic", "live", "error", "departures", "CZ5457076", "cz"],
+      doubles: [expect.any(Number), 503],
+      indexes: ["spravazeleznic"],
+    });
   });
 
   it.each(["arrivals", "departures"] as const)(
@@ -283,6 +325,7 @@ describe("Czech station boards", () => {
       statusCode: 502,
       timing: { fetchMs: expect.any(Number) },
     });
+    expect(fetchMock.requests).toHaveLength(1);
   });
 
   it("rejects malformed identities before fetching", async () => {
