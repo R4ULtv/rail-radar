@@ -50,6 +50,7 @@ const timeZones: Record<CountryCode, string> = {
   pl: "Europe/Warsaw",
   fr: "Europe/Paris",
   hu: "Europe/Budapest",
+  cz: "Europe/Prague",
 };
 
 const weekdays: readonly Weekday[] = ["mon", "tue", "wed", "thu", "fri", "sat", "sun"];

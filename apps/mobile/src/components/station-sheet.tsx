@@ -521,7 +521,7 @@ const LiveBoard = memo(function LiveBoard({
 
   const notices = data ? (
     <>
-      {data.info ? <StationInfo key={type} info={data.info} /> : null}
+      {data.info && trains.length > 0 ? <StationInfo key={type} info={data.info} /> : null}
       {error ? <StaleBoardNotice isOnline={isOnline} onRetry={retry} /> : null}
     </>
   ) : null;
@@ -579,7 +579,10 @@ const LiveBoard = memo(function LiveBoard({
     emptyContent = (
       <View>
         <Text className="px-4 py-8 text-center text-sm text-muted" onLayout={onFirstItemLayout}>
-          {error ? `No ${type} were listed in the last received update.` : `No ${type} scheduled`}
+          {data.info ||
+            (error
+              ? `No ${type} were listed in the last received update.`
+              : `No ${type} scheduled`)}
         </Text>
       </View>
     );

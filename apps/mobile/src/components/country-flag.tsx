@@ -6,6 +6,7 @@ import { Image, type ImageSourcePropType } from "react-native";
 const flags: Record<CountryCode, ImageSourcePropType> = {
   be: require("../../assets/generated/flags/be.png"),
   ch: require("../../assets/generated/flags/ch.png"),
+  cz: require("../../assets/generated/flags/cz.png"),
   de: require("../../assets/generated/flags/de.png"),
   dk: require("../../assets/generated/flags/dk.png"),
   fi: require("../../assets/generated/flags/fi.png"),

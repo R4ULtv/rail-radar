@@ -12,7 +12,7 @@ paid app. Buying it supports the project and keeps the website free for everyone
 
 - **Live departures and arrivals.** Tap a station to see its trains with their operators' logos,
   updated every 30 seconds, wherever the official sources provide them.
-- **22,000+ stations across 14 countries**, the same coverage as the website, with the railway
+- **26,000+ stations across 16 countries**, the same coverage as the website, with the railway
   lines drawn on the map.
 - **Instant search, even offline.** Every station is stored on the phone, and results appear from
   the first letter, with saved and recent stations first and nearby stations before distant ones.

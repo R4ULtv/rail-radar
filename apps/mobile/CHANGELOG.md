@@ -6,6 +6,12 @@ the commit they were built from.
 
 ## [Unreleased]
 
+### Added
+
+- Czech stations are available on the map and in offline search, with live arrivals and departures
+  where Správa železnic provides them. Explore Prague metro lines A, B and C and Liberec tram 11
+  with their stops, tracks and operator logos.
+
 ## [0.7.1] (14) – 2026-11-12
 
 ### Added
